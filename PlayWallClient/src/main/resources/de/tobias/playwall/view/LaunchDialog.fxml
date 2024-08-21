@@ -25,7 +25,6 @@
                                 VBox.vgrow="ALWAYS"/>
                         <Button fx:id="importProject" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308"
                                 mnemonicParsing="false" text="%launch.button.import" VBox.vgrow="ALWAYS"/>
-                        <Label fx:id="cloudLabel" graphicTextGap="8.0"/>
                     </children>
                 </VBox>
             </children>

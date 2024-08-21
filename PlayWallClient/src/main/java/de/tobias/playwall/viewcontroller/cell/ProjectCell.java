@@ -16,7 +16,7 @@ import java.nio.file.Path;
 
 public class ProjectCell extends ListCell<ProjectReference>
 {
-	private transient ProjectReference ref;
+	private ProjectReference ref;
 
 	@Override
 	protected void updateItem(ProjectReference ref, boolean empty)

@@ -3,7 +3,6 @@ package de.tobias.playwall.viewcontroller;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
-import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.Strings;
 import de.tobias.playwall.project.ProjectReference;
@@ -39,17 +38,11 @@ public class LaunchDialog extends NVC
 	private Button newProjectButton;
 	@FXML
 	private Button importProjectButton;
-	@FXML
-	private Button convertProjectButton;
 
 	@FXML
 	private Button openButton;
 	@FXML
 	private Button deleteButton;
-
-	@FXML
-	private Label cloudLabel;
-	private FontIcon cloudIcon;
 
 	public LaunchDialog(Stage stage)
 	{
