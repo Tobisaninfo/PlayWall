@@ -1,22 +1,18 @@
 package de.tobias.playwall;
 
+import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.viewcontroller.LaunchDialog;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class PlayWallMain extends Application
 {
 	@Override
-	public void start(Stage stage) throws IOException
+	public void start(Stage stage)
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(PlayWallMain.class.getResource("mainView.fxml"));
-		Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-		stage.setTitle("PlayWall");
-		stage.setScene(scene);
-		stage.show();
+		Localization.setDelegate(new PlayPadLocalizationDelegate());
+		Localization.load();
+		new LaunchDialog(stage);
 	}
 
 	public static void main(String[] args)

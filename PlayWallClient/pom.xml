@@ -33,6 +33,11 @@
             <version>${javafx.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
             <version>${controlsfx.version}</version>
@@ -48,6 +53,19 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libUtils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libLogger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libJfx</artifactId>
         </dependency>
     </dependencies>
 
@@ -71,7 +89,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>de.tobias.playwall.playwall/de.tobias.playwall.playwall.PlayWallMain</mainClass>
+                            <mainClass>de.tobias.playwall/de.tobias.playwall.PlayWallMain</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -84,4 +102,27 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>release</id>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

@@ -1,9 +1,10 @@
-module de.tobias.playwall.playwall {
-    requires javafx.controls;
-    requires javafx.fxml;
+open module de.tobias.playwall {
+	requires de.thecodelabs.libLogger;
+	requires de.thecodelabs.libJfx;
+	requires de.thecodelabs.libUtils;
+	requires javafx.fxml;
+	requires javafx.controls;
 
-    requires org.controlsfx.controls;
-
-    opens de.tobias.playwall to javafx.fxml;
-    exports de.tobias.playwall;
+	exports de.tobias.playwall;
+	exports de.tobias.playwall.project;
 }

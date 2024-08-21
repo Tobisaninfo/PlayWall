@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<HBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox alignment="CENTER" prefHeight="389.0" prefWidth="346.0" spacing="7.0">
+            <children>
+                <ImageView fx:id="imageView" fitHeight="144.0" fitWidth="140.0" layoutX="80.0" layoutY="14.0"
+                           pickOnBounds="true" preserveRatio="true"/>
+                <Label fx:id="infoLabel" alignment="CENTER" layoutX="24.0" layoutY="212.0" prefHeight="39.0"
+                       prefWidth="310.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="266.0"
+                       AnchorPane.topAnchor="212.0">
+                    <font>
+                        <Font size="25.0"/>
+                    </font>
+                </Label>
+                <VBox alignment="BOTTOM_LEFT" layoutX="109.0" layoutY="259.0" spacing="14.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Button fx:id="newProjectButton" layoutX="115.0" layoutY="259.0"
+                                maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%launch.button.new"
+                                VBox.vgrow="ALWAYS"/>
+                        <Button fx:id="importProject" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" text="%launch.button.import" VBox.vgrow="ALWAYS"/>
+                        <Label fx:id="cloudLabel" graphicTextGap="8.0"/>
+                    </children>
+                </VBox>
+            </children>
+            <HBox.margin>
+                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+            </HBox.margin>
+        </VBox>
+        <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+            <children>
+                <ListView id="projectList" styleClass="dark-list" fx:id="projectListView" fixedCellSize="40.0"
+                          VBox.vgrow="ALWAYS"/>
+                <HBox spacing="14.0">
+                    <children>
+                        <Button fx:id="deleteButton" layoutX="494.0" layoutY="305.0" maxWidth="1.7976931348623157E308"
+                                minHeight="35.0" mnemonicParsing="false" text="%launch.button.delete"
+                                HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="openButton" layoutX="568.0" layoutY="305.0" maxWidth="1.7976931348623157E308"
+                                minHeight="35.0" mnemonicParsing="false" text="%launch.button.open"
+                                AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" HBox.hgrow="ALWAYS"/>
+                    </children>
+                    <padding>
+                        <Insets bottom="14.0" left="14.0" right="14.0"/>
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</HBox>
