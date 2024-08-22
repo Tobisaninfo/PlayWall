@@ -1,0 +1,17 @@
+name: "PlayWall"
+version: "${project.version}"
+build: ${project.build.code}
+identifier: "de.tobias.playwall.v8"
+date: "${project.versionDate}"
+
+main: "de.tobias.playwall.PlayWallMain"
+author: "Tobias Ullerich"
+
+basePath: "PlayWall"
+
+serverBaseURL: "https://playwall.thecodelabs.de/files"
+
+userInfo:
+  website: "https://playwall.thecodelabs.de/"
+  repository: "https://thecodelabs.de/PlayWall/PlayWallDesktop"
+  changelogURL: "https://playwall.thecodelabs.de/php/roadmap.php"
