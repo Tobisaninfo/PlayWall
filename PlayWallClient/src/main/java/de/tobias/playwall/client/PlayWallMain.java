@@ -6,17 +6,28 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class PlayWallMain extends Application
 {
-	@Override
-	public void start(Stage stage)
+	private static final String ICON_PATH = "de/tobias/playwall/client/logo/icon_small.png";
+	private Image stageIcon = null;
+
+
+	public static void main(String[] args)
 	{
-		new LaunchDialog(stage);
+		Localization.setDelegate(new PlayPadLocalizationDelegate());
+		Localization.load();
+
+		ApplicationUtils.addAppListener(PlayWallMain::applicationWillStart);
+		App app = ApplicationUtils.registerMainApplication(PlayWallMain.class);
+
+		app.start(args);
 	}
 
 	private static void applicationWillStart(App app)
@@ -36,14 +47,17 @@ public class PlayWallMain extends Application
 	}
 
 
-	public static void main(String[] args)
+	@Override
+	public void init()
 	{
-		Localization.setDelegate(new PlayPadLocalizationDelegate());
-		Localization.load();
+		stageIcon = new Image(ICON_PATH);
+		Alerts.getInstance().setDefaultIcon(stageIcon);
+	}
 
-		ApplicationUtils.addAppListener(PlayWallMain::applicationWillStart);
-		App app = ApplicationUtils.registerMainApplication(PlayWallMain.class);
-
-		app.start(args);
+	@Override
+	public void start(Stage stage)
+	{
+		stage.getIcons().add(stageIcon);
+		new LaunchDialog(stage);
 	}
 }
