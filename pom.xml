@@ -11,7 +11,14 @@
 
     <modules>
         <module>PlayWallClient</module>
+        <module>PlayWallServer</module>
     </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.3</version>
+    </parent>
 
     <properties>
         <project.build.code>1</project.build.code>
