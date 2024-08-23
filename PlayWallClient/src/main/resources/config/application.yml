@@ -1,8 +1,8 @@
 name: "PlayWall"
-version: "${project.version}"
-build: ${project.build.code}
+version: "@project.version@"
+build: @project.build.code@
 identifier: "de.tobias.playwall.v8"
-date: "${project.versionDate}"
+date: "@project.versionDate@"
 
 main: "de.tobias.playwall.client.PlayWallMain"
 author: "Tobias Ullerich"
