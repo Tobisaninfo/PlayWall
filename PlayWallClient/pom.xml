@@ -103,7 +103,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>de.tobias.playwall/de.tobias.playwall.PlayWallMain</mainClass>
+                            <mainClass>de.tobias.playwall.client/de.tobias.playwall.client.PlayWallMain</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

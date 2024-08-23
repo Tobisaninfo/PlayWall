@@ -1,13 +1,13 @@
-package de.tobias.playwall.viewcontroller;
+package de.tobias.playwall.client.viewcontroller;
 
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playwall.Strings;
-import de.tobias.playwall.project.ProjectReference;
-import de.tobias.playwall.project.ProjectReferenceMock;
-import de.tobias.playwall.viewcontroller.cell.ProjectCell;
+import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.project.ProjectReference;
+import de.tobias.playwall.client.project.ProjectReferenceMock;
+import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,7 +24,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
 
 public class LaunchDialog extends NVC
 {
-	static final String IMAGE = "de/tobias/playwall/logo/Logo-large.png";
+	static final String IMAGE = "de/tobias/playwall/client/logo/Logo-large.png";
 
 	@FXML
 	private Label infoLabel;
@@ -46,7 +46,7 @@ public class LaunchDialog extends NVC
 
 	public LaunchDialog(Stage stage)
 	{
-		load("de/tobias/playwall/view", "LaunchDialog", Localization.getBundle());
+		load("de/tobias/playwall/client/view", "LaunchDialog", Localization.getBundle());
 		setProjectListValues();
 
 		applyViewControllerToStage(stage);

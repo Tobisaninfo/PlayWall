@@ -1,4 +1,4 @@
-package de.tobias.playwall;
+package de.tobias.playwall.client;
 
 import de.thecodelabs.logger.FileOutputOption;
 import de.thecodelabs.logger.LogLevelFilter;
@@ -7,7 +7,7 @@ import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playwall.viewcontroller.LaunchDialog;
+import de.tobias.playwall.client.viewcontroller.LaunchDialog;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

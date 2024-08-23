@@ -1,8 +1,8 @@
-package de.tobias.playwall.viewcontroller.cell;
+package de.tobias.playwall.client.viewcontroller.cell;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playwall.project.ProjectReference;
+import de.tobias.playwall.client.project.ProjectReference;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;

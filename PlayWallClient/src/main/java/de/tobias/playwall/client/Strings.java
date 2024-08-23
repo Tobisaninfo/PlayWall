@@ -1,4 +1,4 @@
-package de.tobias.playwall;
+package de.tobias.playwall.client;
 
 public class Strings {
 

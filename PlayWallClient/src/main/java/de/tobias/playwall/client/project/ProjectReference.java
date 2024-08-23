@@ -1,4 +1,4 @@
-package de.tobias.playwall.project;
+package de.tobias.playwall.client.project;
 
 import java.nio.file.Path;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package de.tobias.playwall;
+package de.tobias.playwall.client;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;

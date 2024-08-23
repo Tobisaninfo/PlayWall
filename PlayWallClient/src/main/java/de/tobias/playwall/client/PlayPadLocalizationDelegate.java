@@ -1,4 +1,4 @@
-package de.tobias.playwall;
+package de.tobias.playwall.client;
 
 import de.thecodelabs.utils.util.Localization;
 
@@ -10,7 +10,7 @@ public class PlayPadLocalizationDelegate implements Localization.LocalizationDel
 	public String[] getBaseResources()
 	{
 		return new String[]{
-				"de/tobias/playwall/localization/",
+				"de/tobias/playwall/client/localization/",
 		};
 	}
 

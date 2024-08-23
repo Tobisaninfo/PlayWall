@@ -1,4 +1,4 @@
-package de.tobias.playwall.project;
+package de.tobias.playwall.client.project;
 
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
