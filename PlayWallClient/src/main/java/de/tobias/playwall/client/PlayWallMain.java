@@ -8,6 +8,7 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -50,6 +51,9 @@ public class PlayWallMain extends Application
 	@Override
 	public void init()
 	{
+		Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
+		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
+
 		stageIcon = new Image(ICON_PATH);
 		Alerts.getInstance().setDefaultIcon(stageIcon);
 	}
