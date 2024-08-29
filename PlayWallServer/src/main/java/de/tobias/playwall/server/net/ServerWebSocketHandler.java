@@ -2,6 +2,7 @@ package de.tobias.playwall.server.net;
 
 import com.google.gson.Gson;
 import de.tobias.playwall.common.net.Message;
+import de.tobias.playwall.common.net.MessageType;
 import de.tobias.playwall.common.net.project.ProjectEventMessageType;
 import de.tobias.playwall.common.net.project.ProjectMessage;
 import de.tobias.playwall.common.utils.GsonUtils;
@@ -37,35 +38,42 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		try
 		{
-			Message parsedMessage = GSON.fromJson(message.getPayload(), Message.class);
-			switch(parsedMessage.getScope())
+			final Message parsedMessage = GSON.fromJson(message.getPayload(), Message.class);
+
+			if(parsedMessage.getMessageType() == MessageType.REQUEST_RESPONSE)
 			{
-				case PROJECT:
-					System.out.println(message);
+				switch(parsedMessage.getScope())
+				{
+					case PROJECT:
+						System.out.println(parsedMessage);
 
-					final ProjectMessage response = new ProjectMessage(ProjectEventMessageType.LIST_PROJECTS_RESPONSE);
-					response.addPayload(ProjectEventMessageType.ListProjectsProperties.PROJECTS, List.of("abc", "def"));
+						final ProjectMessage response = new ProjectMessage(parsedMessage.getMessageId(), ProjectEventMessageType.LIST_PROJECTS);
+						response.addPayload(ProjectEventMessageType.ListProjectsProperties.PROJECTS, List.of("abc", "def"));
 
-					final TextMessage textResponse = new TextMessage(GSON.toJson(response));
+						final TextMessage textResponse = new TextMessage(GSON.toJson(response));
 
-					for(WebSocketSession webSocketSession : SESSIONS)
-					{
-						if(webSocketSession.isOpen())
+						for(WebSocketSession webSocketSession : SESSIONS)
 						{
-							try
+							if(webSocketSession.isOpen())
 							{
-								webSocketSession.sendMessage(textResponse);
-							}
-							catch(IOException e)
-							{
-								e.printStackTrace();
+								try
+								{
+									webSocketSession.sendMessage(textResponse);
+								}
+								catch(IOException e)
+								{
+									e.printStackTrace();
+								}
 							}
 						}
-					}
 
-					break;
-				default:
-					throw new RuntimeException("Unknown scope: " + parsedMessage.getScope());
+						break;
+					default:
+						throw new RuntimeException("Unknown scope: " + parsedMessage.getScope());
+				}
+			}
+			else {
+				throw new RuntimeException("Unknown message type: " + parsedMessage.getMessageType());
 			}
 		}
 		catch(Exception e)

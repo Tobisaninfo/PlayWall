@@ -54,11 +54,6 @@ public class PlayWallMain extends Application
 			Logger.setFileOutput(FileOutputOption.COMBINED);
 		}
 		Logger.info("Logging initialized (Running in LogLevel: {0})", Logger.getLevelFilter().toString());
-
-		ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
-		socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
-
-		socket.send(new ProjectMessage(ProjectEventMessageType.LIST_PROJECTS_REQUEST));
 	}
 
 	@Override

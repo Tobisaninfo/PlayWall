@@ -5,14 +5,38 @@ import com.google.gson.*;
 import de.tobias.playwall.common.utils.GsonUtils;
 
 import java.lang.reflect.Type;
+import java.util.UUID;
 
 @SuppressWarnings("rawtypes")
 public abstract class Message
 {
 	private static final Gson GSON = GsonUtils.gson();
 
+	private UUID messageId;
+	private MessageType messageType;
+
 	private Scope scope;
 	protected JsonObject object;
+
+	public UUID getMessageId()
+	{
+		return messageId;
+	}
+
+	public void setMessageId(UUID messageId)
+	{
+		this.messageId = messageId;
+	}
+
+	public MessageType getMessageType()
+	{
+		return messageType;
+	}
+
+	public void setMessageType(MessageType messageType)
+	{
+		this.messageType = messageType;
+	}
 
 	public boolean containsKey(Enum key)
 	{
@@ -173,7 +197,9 @@ public abstract class Message
 	public String toString()
 	{
 		return "Message{" +
-				"scope=" + scope +
+				"messageId=" + messageId +
+				", messageType=" + messageType +
+				", scope=" + scope +
 				", object=" + object +
 				'}';
 	}

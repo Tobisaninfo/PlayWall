@@ -2,8 +2,13 @@ package de.tobias.playwall.client.net;
 
 import com.google.gson.Gson;
 import de.thecodelabs.logger.Logger;
+import de.tobias.playwall.client.net.responsehandler.ResponseHandler;
+import de.tobias.playwall.client.net.responsehandler.ResponseHandlerService;
 import de.tobias.playwall.common.net.Message;
+import de.tobias.playwall.common.net.MessageType;
+import de.tobias.playwall.common.net.RequestResponseMessage;
 import de.tobias.playwall.common.net.WebSocketCloseStatus;
+import de.tobias.playwall.common.net.project.ProjectMessage;
 import de.tobias.playwall.common.utils.GsonUtils;
 
 import java.net.URI;
@@ -12,6 +17,7 @@ import java.net.http.WebSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -110,15 +116,34 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		try
 		{
-			Logger.debug("Receive: " + data);
-			Message message = GSON.fromJson(data, Message.class);
-			switch(message.getScope())
+			Logger.debug("Received: " + data);
+			final Message message = GSON.fromJson(data, Message.class);
+
+			if(message.getMessageType() == MessageType.REQUEST_RESPONSE)
 			{
-				case PROJECT:
-					Logger.info("Received: " + message);
-					break;
-				default:
-					throw new RuntimeException("Unknown scope: " + message.getScope());
+				final Optional<Message> requestMessageOptional = MessageQueue.getInstance().dequeue(message.getMessageId());
+				if(requestMessageOptional.isPresent())
+				{
+					switch(message.getScope())
+					{
+						case PROJECT:
+							final ProjectMessage projectMessage = (ProjectMessage) message;
+
+							final Optional<ResponseHandler> responseHandlerOptional = ResponseHandlerService.getInstance().getResponseHandler(projectMessage.getEventMessageType());
+							if(responseHandlerOptional.isPresent())
+							{
+								responseHandlerOptional.get().handleResponse(projectMessage);
+							}
+
+							break;
+						default:
+							throw new RuntimeException("Unknown scope: " + message.getScope());
+					}
+				}
+			}
+			else
+			{
+				throw new RuntimeException("Unknown message type: " + message.getMessageType());
 			}
 		}
 		catch(Exception e)
@@ -162,6 +187,7 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 
 	public boolean send(Message message)
 	{
+		MessageQueue.getInstance().enqueue(message);
 		return send(GSON.toJson(message));
 	}
 

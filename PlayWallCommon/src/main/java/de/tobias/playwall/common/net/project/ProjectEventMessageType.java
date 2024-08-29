@@ -4,8 +4,7 @@ import de.tobias.playwall.common.net.EventType;
 
 public enum ProjectEventMessageType implements EventType
 {
-	LIST_PROJECTS_REQUEST,
-	LIST_PROJECTS_RESPONSE;
+	LIST_PROJECTS;
 
 	public enum ListProjectsProperties
 	{
