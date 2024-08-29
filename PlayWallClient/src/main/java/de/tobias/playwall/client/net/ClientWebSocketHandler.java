@@ -8,7 +8,6 @@ import de.tobias.playwall.common.net.Message;
 import de.tobias.playwall.common.net.MessageType;
 import de.tobias.playwall.common.net.RequestResponseMessage;
 import de.tobias.playwall.common.net.WebSocketCloseStatus;
-import de.tobias.playwall.common.net.project.ProjectMessage;
 import de.tobias.playwall.common.utils.GsonUtils;
 
 import java.net.URI;
@@ -124,21 +123,9 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 				final Optional<Message> requestMessageOptional = MessageQueue.getInstance().dequeue(message.getMessageId());
 				if(requestMessageOptional.isPresent())
 				{
-					switch(message.getScope())
-					{
-						case PROJECT:
-							final ProjectMessage projectMessage = (ProjectMessage) message;
-
-							final Optional<ResponseHandler> responseHandlerOptional = ResponseHandlerService.getInstance().getResponseHandler(projectMessage.getEventMessageType());
-							if(responseHandlerOptional.isPresent())
-							{
-								responseHandlerOptional.get().handleResponse(projectMessage);
-							}
-
-							break;
-						default:
-							throw new RuntimeException("Unknown scope: " + message.getScope());
-					}
+					final RequestResponseMessage parsedMessage = (RequestResponseMessage) message;
+					final Optional<ResponseHandler> responseHandlerOptional = ResponseHandlerService.getInstance().getResponseHandler(parsedMessage.getEventMessageType());
+					responseHandlerOptional.ifPresent(responseHandler -> responseHandler.handleResponse(parsedMessage));
 				}
 			}
 			else

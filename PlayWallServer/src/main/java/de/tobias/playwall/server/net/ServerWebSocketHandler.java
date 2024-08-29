@@ -3,8 +3,9 @@ package de.tobias.playwall.server.net;
 import com.google.gson.Gson;
 import de.tobias.playwall.common.net.Message;
 import de.tobias.playwall.common.net.MessageType;
+import de.tobias.playwall.common.net.RequestResponseMessage;
+import de.tobias.playwall.common.net.Scope;
 import de.tobias.playwall.common.net.project.ProjectEventMessageType;
-import de.tobias.playwall.common.net.project.ProjectMessage;
 import de.tobias.playwall.common.utils.GsonUtils;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -47,7 +48,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 					case PROJECT:
 						System.out.println(parsedMessage);
 
-						final ProjectMessage response = new ProjectMessage(parsedMessage.getMessageId(), ProjectEventMessageType.LIST_PROJECTS);
+						final RequestResponseMessage<ProjectEventMessageType> response = new RequestResponseMessage<>(Scope.PROJECT, parsedMessage.getMessageId(), ProjectEventMessageType.LIST_PROJECTS);
 						response.addPayload(ProjectEventMessageType.ListProjectsProperties.PROJECTS, List.of("abc", "def"));
 
 						final TextMessage textResponse = new TextMessage(GSON.toJson(response));

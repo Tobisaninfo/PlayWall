@@ -1,7 +1,8 @@
 package de.tobias.playwall.client.net.responsehandler;
 
-import de.tobias.playwall.common.net.project.ProjectMessage;
+import de.tobias.playwall.common.net.RequestResponseMessage;
+import de.tobias.playwall.common.net.project.ProjectEventMessageType;
 
-public interface ProjectResponseHandler extends ResponseHandler<ProjectMessage>
+public interface ProjectResponseHandler extends ResponseHandler<RequestResponseMessage<ProjectEventMessageType>>
 {
 }

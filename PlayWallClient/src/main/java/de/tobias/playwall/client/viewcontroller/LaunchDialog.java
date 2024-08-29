@@ -1,7 +1,5 @@
 package de.tobias.playwall.client.viewcontroller;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
@@ -14,8 +12,9 @@ import de.tobias.playwall.client.net.responsehandler.ResponseHandlerService;
 import de.tobias.playwall.client.project.ProjectReference;
 import de.tobias.playwall.client.project.ProjectReferenceMock;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
+import de.tobias.playwall.common.net.RequestResponseMessage;
+import de.tobias.playwall.common.net.Scope;
 import de.tobias.playwall.common.net.project.ProjectEventMessageType;
-import de.tobias.playwall.common.net.project.ProjectMessage;
 import de.tobias.playwall.common.utils.MapUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -101,7 +100,7 @@ public class LaunchDialog extends NVC implements ProjectResponseHandler
 
 			ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
 			socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
-			socket.send(new ProjectMessage(UUID.randomUUID(), ProjectEventMessageType.LIST_PROJECTS));
+			socket.send(new RequestResponseMessage<>(Scope.PROJECT, UUID.randomUUID(), ProjectEventMessageType.LIST_PROJECTS));
 		});
 	}
 
@@ -117,15 +116,18 @@ public class LaunchDialog extends NVC implements ProjectResponseHandler
 	}
 
 	@Override
-	public void handleResponse(ProjectMessage response)
+	public void handleResponse(RequestResponseMessage<ProjectEventMessageType> response)
 	{
-		final ArrayList<String> list = response.getArray(ProjectEventMessageType.ListProjectsProperties.PROJECTS, ArrayList.class);
+		if(response.getEventMessageType() == ProjectEventMessageType.LIST_PROJECTS)
+		{
+			final ArrayList<String> list = response.getArray(ProjectEventMessageType.ListProjectsProperties.PROJECTS, ArrayList.class);
 
-		final List<ProjectReferenceMock> projects = list.stream()
-				.map(s -> new ProjectReferenceMock(UUID.randomUUID(), s))
-				.sorted(Comparator.comparing(ProjectReferenceMock::getName))
-				.toList();
+			final List<ProjectReferenceMock> projects = list.stream()
+					.map(s -> new ProjectReferenceMock(UUID.randomUUID(), s))
+					.sorted(Comparator.comparing(ProjectReferenceMock::getName))
+					.toList();
 
-		projectListView.getItems().setAll(projects);
+			projectListView.getItems().setAll(projects);
+		}
 	}
 }
