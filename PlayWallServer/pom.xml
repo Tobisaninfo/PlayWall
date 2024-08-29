@@ -33,6 +33,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>de.tobias.playwall</groupId>
+            <artifactId>PlayWallCommon</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>PlayWallCommon</module>
         <module>PlayWallClient</module>
         <module>PlayWallServer</module>
     </modules>
@@ -32,9 +33,6 @@
         <jlibs.version>3.2.0</jlibs.version>
     </properties>
 
-    <dependencies>
-    </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -47,6 +45,12 @@
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+    </dependencies>
 
     <repositories>
         <repository>

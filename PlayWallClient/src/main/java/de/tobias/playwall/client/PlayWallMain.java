@@ -9,10 +9,19 @@ import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
+import de.tobias.playwall.client.net.ClientWebSocketHandler;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
+import de.tobias.playwall.common.net.project.ProjectEventMessageType;
+import de.tobias.playwall.common.net.project.ProjectMessage;
+import de.tobias.playwall.common.utils.MapUtils;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.util.UUID;
+
+import static de.tobias.playwall.common.utils.MapUtils.entry;
+
 
 public class PlayWallMain extends Application
 {
@@ -45,8 +54,12 @@ public class PlayWallMain extends Application
 			Logger.setFileOutput(FileOutputOption.COMBINED);
 		}
 		Logger.info("Logging initialized (Running in LogLevel: {0})", Logger.getLevelFilter().toString());
-	}
 
+		ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
+		socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
+
+		socket.send(new ProjectMessage(ProjectEventMessageType.LIST_PROJECTS_REQUEST));
+	}
 
 	@Override
 	public void init()

@@ -67,6 +67,11 @@
             <groupId>de.thecodelabs</groupId>
             <artifactId>libJfx</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.tobias.playwall</groupId>
+            <artifactId>PlayWallCommon</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

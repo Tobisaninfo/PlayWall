@@ -2,6 +2,7 @@ package de.tobias.playwall.client.viewcontroller;
 
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
