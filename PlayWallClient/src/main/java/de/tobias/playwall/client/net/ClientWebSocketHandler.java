@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
@@ -27,7 +28,8 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 	private final ObjectMapper objectMapper;
 	private final MessageQueue messageQueue;
 
-	private final HttpClient httpClient = HttpClient.newBuilder().executor(Executors.newFixedThreadPool(THREAD_COUNT)).build();
+	private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
+	private final HttpClient httpClient = HttpClient.newBuilder().executor(executorService).build();
 	private WebSocket ws;
 
 	private final List<WebSocketListener> listeners;
@@ -73,6 +75,9 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 		ws.sendClose(WebSocket.NORMAL_CLOSURE, "Client closed connection");
 		ws.abort();
 		ws = null;
+
+		httpClient.close();
+		executorService.close();
 	}
 
 	public static void shutdown()

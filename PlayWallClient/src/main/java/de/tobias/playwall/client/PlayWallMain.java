@@ -6,9 +6,11 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
+import de.tobias.playwall.client.net.ClientWebSocketHandler;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -63,5 +65,12 @@ public class PlayWallMain extends Application
 	{
 		stage.getIcons().add(stageIcon);
 		new LaunchDialog(stage);
+	}
+
+	@Override
+	public void stop() throws Exception
+	{
+		ClientWebSocketHandler.shutdown();
+		Worker.shutdown();
 	}
 }
