@@ -42,4 +42,9 @@ public class ProjectReferenceMock implements ProjectReference
 	{
 		return Set.of();
 	}
+
+	public UUID getUuid()
+	{
+		return uuid;
+	}
 }

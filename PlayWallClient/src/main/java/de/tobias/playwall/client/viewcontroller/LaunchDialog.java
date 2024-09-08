@@ -7,15 +7,11 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.net.ClientWebSocketHandler;
+import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.project.ProjectReference;
 import de.tobias.playwall.client.project.ProjectReferenceMock;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
-import de.tobias.playwall.common.net.project.ProjectDeleteRequest;
-import de.tobias.playwall.common.net.project.ProjectDeleteResponse;
-import de.tobias.playwall.common.net.project.ProjectListRequest;
-import de.tobias.playwall.common.net.project.ProjectListResponse;
-import de.tobias.playwall.common.utils.MapUtils;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,12 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-
 import static de.thecodelabs.utils.util.Localization.getString;
-import static de.tobias.playwall.common.utils.MapUtils.entry;
 
 public class LaunchDialog extends NVC
 {
@@ -54,8 +45,11 @@ public class LaunchDialog extends NVC
 	@FXML
 	private Button deleteButton;
 
-	public LaunchDialog(Stage stage)
+	private final Client client;
+
+	public LaunchDialog(Stage stage, Client client)
 	{
+		this.client = client;
 		load("de/tobias/playwall/client/view", "LaunchDialog", Localization.getBundle());
 		applyViewControllerToStage(stage);
 	}
@@ -94,31 +88,24 @@ public class LaunchDialog extends NVC
 			}
 			else if(mouseEvent.getButton().equals(MouseButton.SECONDARY))
 			{
-				ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
 				Worker.runLater(() -> {
-					socket.send(new ProjectDeleteRequest(UUID.randomUUID()), (ProjectDeleteResponse response) -> {
+					client.deleteProject((ProjectReferenceMock) projectListView.getSelectionModel().getSelectedItem(), (response) -> {
 						if(response.isSuccess())
 						{
-							// TODO: Refresh project list
 							Logger.debug("Refresh project list");
+							fetchProjects();
 						}
 					});
 				});
 			}
 		});
 
-		Worker.runLater(() -> {
-			ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
-			socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
-			socket.send(new ProjectListRequest(), (ProjectListResponse res) -> {
-				final List<ProjectReferenceMock> projects = res.getProjects().stream()
-						.map(s -> new ProjectReferenceMock(UUID.randomUUID(), s.name()))
-						.sorted(Comparator.comparing(ProjectReferenceMock::getName))
-						.toList();
+		Worker.runLater(this::fetchProjects);
+	}
 
-				projectListView.getItems().setAll(projects);
-			});
-		});
+	private void fetchProjects()
+	{
+		client.getProjects(projects -> Platform.runLater(() -> projectListView.getItems().setAll(projects)));
 	}
 
 	@Override
