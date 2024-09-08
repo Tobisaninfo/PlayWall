@@ -5,7 +5,9 @@ import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.project.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -16,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ServerWebSocketHandler extends TextWebSocketHandler
@@ -27,7 +30,15 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception
 	{
+		log.debug("Client connection established to {}", session.getRemoteAddress());
 		SESSIONS.add(session);
+	}
+
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception
+	{
+		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
+		SESSIONS.remove(session);
 	}
 
 	@Override
