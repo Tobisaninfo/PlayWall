@@ -113,11 +113,8 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 			Logger.debug("Received: " + data);
 			final BaseMessage message = objectMapper.readValue(data, BaseMessage.class);
 
-			if(message instanceof ProjectListResponse projectListResponse)
-			{
-				final Optional<Consumer<BaseMessage>> callback = messageQueue.dequeueCallback(projectListResponse.getMessageId());
-				callback.ifPresent(consumer -> consumer.accept(projectListResponse));
-			}
+			final Optional<Consumer<BaseMessage>> callback = messageQueue.dequeueCallback(message.getMessageId());
+			callback.ifPresent(consumer -> consumer.accept(message));
 		}
 		catch(Exception e)
 		{

@@ -2,9 +2,7 @@ package de.tobias.playwall.server.net;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.net.BaseMessage;
-import de.tobias.playwall.common.net.project.ProjectListRequest;
-import de.tobias.playwall.common.net.project.ProjectListResponse;
-import de.tobias.playwall.common.net.project.ProjectMetadata;
+import de.tobias.playwall.common.net.project.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
@@ -38,30 +36,36 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 		{
 			final BaseMessage parsedMessage = objectMapper.readValue(message.getPayload(), BaseMessage.class);
 
-
+			final BaseMessage responseMessage;
 			if(parsedMessage instanceof ProjectListRequest request)
 			{
-				System.out.println(request);
-
-				final ProjectListResponse projectListResponse = new ProjectListResponse(request.getMessageId(), List.of(
+				responseMessage = new ProjectListResponse(request.getMessageId(), List.of(
 						new ProjectMetadata("abc", LocalDateTime.now()),
 						new ProjectMetadata("def", LocalDateTime.now())
 				));
+			}
+			else if(parsedMessage instanceof ProjectDeleteRequest request)
+			{
+				responseMessage = new ProjectDeleteResponse(request.getMessageId(), true);
+			}
+			else
+			{
+				throw new IllegalArgumentException("Cannot handle request message type " + parsedMessage.getClass().getSimpleName());
+			}
 
-				final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(projectListResponse));
+			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessage));
 
-				for(WebSocketSession webSocketSession : SESSIONS)
+			for(WebSocketSession webSocketSession : SESSIONS)
+			{
+				if(webSocketSession.isOpen())
 				{
-					if(webSocketSession.isOpen())
+					try
 					{
-						try
-						{
-							webSocketSession.sendMessage(textResponse);
-						}
-						catch(IOException e)
-						{
-							e.printStackTrace();
-						}
+						webSocketSession.sendMessage(textResponse);
+					}
+					catch(IOException e)
+					{
+						e.printStackTrace();
 					}
 				}
 			}

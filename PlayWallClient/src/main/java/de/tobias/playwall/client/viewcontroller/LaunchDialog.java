@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
@@ -10,6 +11,8 @@ import de.tobias.playwall.client.net.ClientWebSocketHandler;
 import de.tobias.playwall.client.project.ProjectReference;
 import de.tobias.playwall.client.project.ProjectReferenceMock;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
+import de.tobias.playwall.common.net.project.ProjectDeleteRequest;
+import de.tobias.playwall.common.net.project.ProjectDeleteResponse;
 import de.tobias.playwall.common.net.project.ProjectListRequest;
 import de.tobias.playwall.common.net.project.ProjectListResponse;
 import de.tobias.playwall.common.utils.MapUtils;
@@ -83,11 +86,24 @@ public class LaunchDialog extends NVC
 		// Mouse Double Click on list
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
-					mouseEvent.getClickCount() == 2 &&
-					!projectListView.getSelectionModel().isEmpty())
+			   mouseEvent.getClickCount() == 2 &&
+			   !projectListView.getSelectionModel().isEmpty())
 			{
 				// TODO
 				// launchProject(getSelectedProject());
+			}
+			else if(mouseEvent.getButton().equals(MouseButton.SECONDARY))
+			{
+				ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
+				Worker.runLater(() -> {
+					socket.send(new ProjectDeleteRequest(UUID.randomUUID(), UUID.randomUUID()), (ProjectDeleteResponse response) -> {
+						if(response.isSuccess())
+						{
+							// TODO: Refresh project list
+							Logger.debug("Refresh project list");
+						}
+					});
+				});
 			}
 		});
 
