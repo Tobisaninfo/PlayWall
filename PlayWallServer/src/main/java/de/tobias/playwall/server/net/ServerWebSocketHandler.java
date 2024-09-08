@@ -1,32 +1,29 @@
 package de.tobias.playwall.server.net;
 
-import com.google.gson.Gson;
-import de.tobias.playwall.common.net.Message;
-import de.tobias.playwall.common.net.MessageType;
-import de.tobias.playwall.common.net.RequestResponseMessage;
-import de.tobias.playwall.common.net.Scope;
-import de.tobias.playwall.common.net.project.ProjectEventMessageType;
-import de.tobias.playwall.common.utils.GsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tobias.playwall.common.net.BaseMessage;
+import de.tobias.playwall.common.net.project.ProjectListRequest;
+import de.tobias.playwall.common.net.project.ProjectListResponse;
+import de.tobias.playwall.common.net.project.ProjectMetadata;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+@Service
+@AllArgsConstructor
 public class ServerWebSocketHandler extends TextWebSocketHandler
 {
-	private static final Gson GSON;
 	private static final Set<WebSocketSession> SESSIONS = new HashSet<>();
 
-	static
-	{
-		GSON = GsonUtils.gson();
-	}
-
+	private final ObjectMapper objectMapper;
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception
@@ -39,42 +36,34 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		try
 		{
-			final Message parsedMessage = GSON.fromJson(message.getPayload(), Message.class);
+			final BaseMessage parsedMessage = objectMapper.readValue(message.getPayload(), BaseMessage.class);
 
-			if(parsedMessage.getMessageType() == MessageType.REQUEST_RESPONSE)
+
+			if(parsedMessage instanceof ProjectListRequest request)
 			{
-				switch(parsedMessage.getScope())
+				System.out.println(request);
+
+				final ProjectListResponse projectListResponse = new ProjectListResponse(request.getMessageId(), List.of(
+						new ProjectMetadata("abc", LocalDateTime.now()),
+						new ProjectMetadata("def", LocalDateTime.now())
+				));
+
+				final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(projectListResponse));
+
+				for(WebSocketSession webSocketSession : SESSIONS)
 				{
-					case PROJECT:
-						System.out.println(parsedMessage);
-
-						final RequestResponseMessage<ProjectEventMessageType> response = new RequestResponseMessage<>(Scope.PROJECT, parsedMessage.getMessageId(), ProjectEventMessageType.LIST_PROJECTS);
-						response.addPayload(ProjectEventMessageType.ListProjectsProperties.PROJECTS, List.of("abc", "def"));
-
-						final TextMessage textResponse = new TextMessage(GSON.toJson(response));
-
-						for(WebSocketSession webSocketSession : SESSIONS)
+					if(webSocketSession.isOpen())
+					{
+						try
 						{
-							if(webSocketSession.isOpen())
-							{
-								try
-								{
-									webSocketSession.sendMessage(textResponse);
-								}
-								catch(IOException e)
-								{
-									e.printStackTrace();
-								}
-							}
+							webSocketSession.sendMessage(textResponse);
 						}
-
-						break;
-					default:
-						throw new RuntimeException("Unknown scope: " + parsedMessage.getScope());
+						catch(IOException e)
+						{
+							e.printStackTrace();
+						}
+					}
 				}
-			}
-			else {
-				throw new RuntimeException("Unknown message type: " + parsedMessage.getMessageType());
 			}
 		}
 		catch(Exception e)

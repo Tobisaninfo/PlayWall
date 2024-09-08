@@ -9,4 +9,9 @@ open module de.tobias.playwall.client {
 	requires com.google.gson;
 
 	exports de.tobias.playwall.client.project;
+
+	requires com.fasterxml.jackson.core;
+	requires com.fasterxml.jackson.annotation;
+	requires com.fasterxml.jackson.databind;
+	requires com.fasterxml.jackson.datatype.jsr310;
 }

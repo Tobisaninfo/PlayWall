@@ -1,14 +1,11 @@
 package de.tobias.playwall.client.net;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.logger.Logger;
-import de.tobias.playwall.client.net.responsehandler.ResponseHandler;
-import de.tobias.playwall.client.net.responsehandler.ResponseHandlerService;
-import de.tobias.playwall.common.net.Message;
-import de.tobias.playwall.common.net.MessageType;
-import de.tobias.playwall.common.net.RequestResponseMessage;
+import de.tobias.playwall.common.net.BaseMessage;
 import de.tobias.playwall.common.net.WebSocketCloseStatus;
-import de.tobias.playwall.common.utils.GsonUtils;
+import de.tobias.playwall.common.net.project.ProjectListResponse;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -21,19 +18,16 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+// TODO: Singleton
 public class ClientWebSocketHandler implements WebSocket.Listener
 {
 	private static final int THREAD_COUNT = 6;
 	private static ClientWebSocketHandler instance;
 
-	private static final Gson GSON;
+	private final ObjectMapper objectMapper;
+	private final MessageQueue messageQueue;
 
-	static
-	{
-		GSON = GsonUtils.gson();
-	}
-
-	private static HttpClient httpClient = HttpClient.newBuilder().executor(Executors.newFixedThreadPool(THREAD_COUNT)).build();
+	private final HttpClient httpClient = HttpClient.newBuilder().executor(Executors.newFixedThreadPool(THREAD_COUNT)).build();
 	private WebSocket ws;
 
 	private final List<WebSocketListener> listeners;
@@ -41,6 +35,8 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 	private ClientWebSocketHandler()
 	{
 		this.listeners = new ArrayList<>();
+		this.objectMapper = new ObjectMapper().findAndRegisterModules();
+		this.messageQueue = MessageQueue.getInstance();
 	}
 
 	public static ClientWebSocketHandler getInstance()
@@ -85,7 +81,6 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 		{
 			instance.disconnect();
 		}
-		httpClient = null;
 	}
 
 	@Override
@@ -116,21 +111,12 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 		try
 		{
 			Logger.debug("Received: " + data);
-			final Message message = GSON.fromJson(data, Message.class);
+			final BaseMessage message = objectMapper.readValue(data, BaseMessage.class);
 
-			if(message.getMessageType() == MessageType.REQUEST_RESPONSE)
+			if(message instanceof ProjectListResponse projectListResponse)
 			{
-				final Optional<Message> requestMessageOptional = MessageQueue.getInstance().dequeue(message.getMessageId());
-				if(requestMessageOptional.isPresent())
-				{
-					final RequestResponseMessage parsedMessage = (RequestResponseMessage) message;
-					final Optional<ResponseHandler> responseHandlerOptional = ResponseHandlerService.getInstance().getResponseHandler(parsedMessage.getEventMessageType());
-					responseHandlerOptional.ifPresent(responseHandler -> responseHandler.handleResponse(parsedMessage));
-				}
-			}
-			else
-			{
-				throw new RuntimeException("Unknown message type: " + message.getMessageType());
+				final Optional<Consumer<BaseMessage>> callback = messageQueue.dequeueCallback(projectListResponse.getMessageId());
+				callback.ifPresent(consumer -> consumer.accept(projectListResponse));
 			}
 		}
 		catch(Exception e)
@@ -172,10 +158,18 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 		return ws != null;
 	}
 
-	public boolean send(Message message)
+	public <T extends BaseMessage> boolean send(BaseMessage message, Consumer<T> onResponse)
 	{
-		MessageQueue.getInstance().enqueue(message);
-		return send(GSON.toJson(message));
+		MessageQueue.getInstance().enqueueCallback(message, onResponse);
+		try
+		{
+			return send(objectMapper.writeValueAsString(message));
+		}
+		catch(JsonProcessingException e)
+		{
+			Logger.error(e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	public boolean send(String data)

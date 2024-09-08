@@ -3,5 +3,6 @@ open module de.tobias.playwall.common {
 	exports de.tobias.playwall.common.utils;
 	exports de.tobias.playwall.common.net.project;
 
-	requires com.google.gson;
+	requires com.fasterxml.jackson.annotation;
+	requires static lombok;
 }

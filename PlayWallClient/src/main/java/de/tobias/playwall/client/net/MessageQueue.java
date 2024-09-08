@@ -1,12 +1,14 @@
 package de.tobias.playwall.client.net;
 
-import de.tobias.playwall.common.net.Message;
+import de.tobias.playwall.common.net.BaseMessage;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
+// TODO: Singleton
 public class MessageQueue
 {
 	private static MessageQueue instance;
@@ -20,19 +22,15 @@ public class MessageQueue
 		return instance;
 	}
 
-	private final List<Message> messagesQueue = new LinkedList<>();
+	private final Map<UUID, Consumer<BaseMessage>> messagesQueue = new HashMap<>();
 
-	public void enqueue(Message message)
+	public void enqueueCallback(BaseMessage message, Consumer<? extends BaseMessage> callback)
 	{
-		messagesQueue.add(message);
+		messagesQueue.put(message.getMessageId(), (Consumer<BaseMessage>) callback);
 	}
 
-	public Optional<Message> dequeue(UUID id)
+	public Optional<Consumer<BaseMessage>> dequeueCallback(UUID id)
 	{
-		final Optional<Message> res = messagesQueue.stream()
-				.filter(message -> message.getMessageId().equals(id))
-				.findAny();
-		res.ifPresent(messagesQueue::remove);
-		return res;
+		return Optional.ofNullable(messagesQueue.get(id));
 	}
 }

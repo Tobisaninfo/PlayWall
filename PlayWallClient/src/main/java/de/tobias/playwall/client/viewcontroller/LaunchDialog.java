@@ -7,14 +7,11 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.net.ClientWebSocketHandler;
-import de.tobias.playwall.client.net.responsehandler.ProjectResponseHandler;
-import de.tobias.playwall.client.net.responsehandler.ResponseHandlerService;
 import de.tobias.playwall.client.project.ProjectReference;
 import de.tobias.playwall.client.project.ProjectReferenceMock;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
-import de.tobias.playwall.common.net.RequestResponseMessage;
-import de.tobias.playwall.common.net.Scope;
-import de.tobias.playwall.common.net.project.ProjectEventMessageType;
+import de.tobias.playwall.common.net.project.ProjectListRequest;
+import de.tobias.playwall.common.net.project.ProjectListResponse;
 import de.tobias.playwall.common.utils.MapUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,7 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +29,7 @@ import java.util.UUID;
 import static de.thecodelabs.utils.util.Localization.getString;
 import static de.tobias.playwall.common.utils.MapUtils.entry;
 
-public class LaunchDialog extends NVC implements ProjectResponseHandler
+public class LaunchDialog extends NVC
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/Logo-large.png";
 
@@ -96,11 +92,16 @@ public class LaunchDialog extends NVC implements ProjectResponseHandler
 		});
 
 		Worker.runLater(() -> {
-			ResponseHandlerService.getInstance().addResponseHandler(ProjectEventMessageType.LIST_PROJECTS, this);
-
 			ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
 			socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
-			socket.send(new RequestResponseMessage<>(Scope.PROJECT, UUID.randomUUID(), ProjectEventMessageType.LIST_PROJECTS));
+			socket.send(new ProjectListRequest(UUID.randomUUID()), (ProjectListResponse res) -> {
+				final List<ProjectReferenceMock> projects = res.getProjects().stream()
+						.map(s -> new ProjectReferenceMock(UUID.randomUUID(), s.name()))
+						.sorted(Comparator.comparing(ProjectReferenceMock::getName))
+						.toList();
+
+				projectListView.getItems().setAll(projects);
+			});
 		});
 	}
 
@@ -113,21 +114,5 @@ public class LaunchDialog extends NVC implements ProjectResponseHandler
 		stage.setHeight(400);
 		stage.centerOnScreen();
 		stage.show();
-	}
-
-	@Override
-	public void handleResponse(RequestResponseMessage<ProjectEventMessageType> response)
-	{
-		if(response.getEventMessageType() == ProjectEventMessageType.LIST_PROJECTS)
-		{
-			final ArrayList<String> list = response.getArray(ProjectEventMessageType.ListProjectsProperties.PROJECTS, ArrayList.class);
-
-			final List<ProjectReferenceMock> projects = list.stream()
-					.map(s -> new ProjectReferenceMock(UUID.randomUUID(), s))
-					.sorted(Comparator.comparing(ProjectReferenceMock::getName))
-					.toList();
-
-			projectListView.getItems().setAll(projects);
-		}
 	}
 }
