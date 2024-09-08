@@ -3,9 +3,10 @@ package de.tobias.playwall.server.net;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.common.net.project.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -13,78 +14,86 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+@SuppressWarnings({"java:S3740", "rawtypes", "unchecked"})
 public class ServerWebSocketHandler extends TextWebSocketHandler
 {
 	private static final Set<WebSocketSession> SESSIONS = new HashSet<>();
 
 	private final ObjectMapper objectMapper;
+	private final List<RequestHandler> requestHandlers;
 
 	@Override
-	public void afterConnectionEstablished(WebSocketSession session) throws Exception
+	public void afterConnectionEstablished(WebSocketSession session)
 	{
 		log.debug("Client connection established to {}", session.getRemoteAddress());
 		SESSIONS.add(session);
 	}
 
 	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception
+	public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status)
 	{
 		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
 		SESSIONS.remove(session);
 	}
 
 	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception
+	protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message)
 	{
 		try
 		{
 			final RequestMessage parsedMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
 
-			final ResponseMessage responseMessage;
-			if(parsedMessage instanceof ProjectListRequest request)
-			{
-				responseMessage = new ProjectListResponse(request.getMessageId(), List.of(
-						new ProjectMetadata("abc", LocalDateTime.now()),
-						new ProjectMetadata("def", LocalDateTime.now())
-				));
-			}
-			else if(parsedMessage instanceof ProjectDeleteRequest request)
-			{
-				responseMessage = new ProjectDeleteResponse(request.getMessageId(), true);
-			}
-			else
+			final Optional<RequestHandler> requestHandlerOptional = getRequestHandler(parsedMessage.getClass());
+			if(requestHandlerOptional.isEmpty())
 			{
 				throw new IllegalArgumentException("Cannot handle request message type " + parsedMessage.getClass().getSimpleName());
 			}
 
-			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessage));
+			final RequestHandler requestHandler = requestHandlerOptional.get();
+			final Optional<ResponseMessage> responseMessageOptional = requestHandler.handleRequest(parsedMessage);
 
-			for(WebSocketSession webSocketSession : SESSIONS)
+			if(responseMessageOptional.isPresent())
 			{
-				if(webSocketSession.isOpen())
-				{
-					try
-					{
-						webSocketSession.sendMessage(textResponse);
-					}
-					catch(IOException e)
-					{
-						e.printStackTrace();
-					}
-				}
+				final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessageOptional.get()));
+				sendToClients(textResponse, List.of(session));
 			}
 		}
 		catch(Exception e)
 		{
-			System.err.println(e);
+			log.error("Error processing request", e);
 		}
+	}
+
+	private static void sendToClients(TextMessage textResponse, List<WebSocketSession> sessions)
+	{
+		for(WebSocketSession webSocketSession : sessions)
+		{
+			if(webSocketSession.isOpen())
+			{
+				try
+				{
+					webSocketSession.sendMessage(textResponse);
+				}
+				catch(IOException e)
+				{
+					log.error("Error on sending message", e);
+				}
+			}
+		}
+	}
+
+	private Optional<RequestHandler> getRequestHandler(Class<? extends RequestMessage> requestClass)
+	{
+		return requestHandlers.stream().filter(handler -> {
+			final RequestHandlerTyped annotation = AnnotationUtils.findAnnotation(handler.getClass(), RequestHandlerTyped.class);
+			return Objects.equals(requireNonNull(annotation).value(), requestClass);
+		}).findAny();
 	}
 }
