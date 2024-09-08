@@ -17,7 +17,6 @@
         <junit.version>5.10.2</junit.version>
         <javafx.version>21</javafx.version>
         <controlsfx.version>11.2.1</controlsfx.version>
-        <maven-compiler.version>3.13.0</maven-compiler.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
     </properties>
 
@@ -93,11 +92,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler.version}</version>
-                <configuration>
-                    <source>21</source>
-                    <target>21</target>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
