@@ -1,16 +1,9 @@
 package de.tobias.playwall.common.net.project;
 
-import de.tobias.playwall.common.net.BaseMessage;
-import lombok.AccessLevel;
+import de.tobias.playwall.common.net.RequestMessage;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ProjectListRequest extends BaseMessage
+@NoArgsConstructor
+public class ProjectListRequest extends RequestMessage
 {
-	public ProjectListRequest(UUID messageId)
-	{
-		super(messageId);
-	}
 }

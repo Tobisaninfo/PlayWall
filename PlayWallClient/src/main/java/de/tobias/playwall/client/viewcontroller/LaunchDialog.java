@@ -96,7 +96,7 @@ public class LaunchDialog extends NVC
 			{
 				ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
 				Worker.runLater(() -> {
-					socket.send(new ProjectDeleteRequest(UUID.randomUUID(), UUID.randomUUID()), (ProjectDeleteResponse response) -> {
+					socket.send(new ProjectDeleteRequest(UUID.randomUUID()), (ProjectDeleteResponse response) -> {
 						if(response.isSuccess())
 						{
 							// TODO: Refresh project list
@@ -110,7 +110,7 @@ public class LaunchDialog extends NVC
 		Worker.runLater(() -> {
 			ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
 			socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
-			socket.send(new ProjectListRequest(UUID.randomUUID()), (ProjectListResponse res) -> {
+			socket.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 				final List<ProjectReferenceMock> projects = res.getProjects().stream()
 						.map(s -> new ProjectReferenceMock(UUID.randomUUID(), s.name()))
 						.sorted(Comparator.comparing(ProjectReferenceMock::getName))

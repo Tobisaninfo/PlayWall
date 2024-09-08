@@ -3,9 +3,9 @@ package de.tobias.playwall.client.net;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.logger.Logger;
-import de.tobias.playwall.common.net.BaseMessage;
+import de.tobias.playwall.common.net.RequestMessage;
+import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.WebSocketCloseStatus;
-import de.tobias.playwall.common.net.project.ProjectListResponse;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -111,9 +111,9 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 		try
 		{
 			Logger.debug("Received: " + data);
-			final BaseMessage message = objectMapper.readValue(data, BaseMessage.class);
+			final ResponseMessage message = objectMapper.readValue(data, ResponseMessage.class);
 
-			final Optional<Consumer<BaseMessage>> callback = messageQueue.dequeueCallback(message.getMessageId());
+			final Optional<Consumer<ResponseMessage>> callback = messageQueue.dequeueCallback(message.getMessageId());
 			callback.ifPresent(consumer -> consumer.accept(message));
 		}
 		catch(Exception e)
@@ -155,7 +155,7 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 		return ws != null;
 	}
 
-	public <T extends BaseMessage> boolean send(BaseMessage message, Consumer<T> onResponse)
+	public <T extends ResponseMessage> boolean send(RequestMessage message, Consumer<T> onResponse)
 	{
 		MessageQueue.getInstance().enqueueCallback(message, onResponse);
 		try

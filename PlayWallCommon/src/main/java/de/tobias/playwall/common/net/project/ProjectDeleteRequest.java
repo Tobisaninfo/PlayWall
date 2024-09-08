@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.net.project;
 
-import de.tobias.playwall.common.net.BaseMessage;
+import de.tobias.playwall.common.net.RequestMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +11,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ProjectDeleteRequest extends BaseMessage
+public class ProjectDeleteRequest extends RequestMessage
 {
 	private UUID projectId;
 
-	public ProjectDeleteRequest(UUID messageId, UUID projectId)
+	public ProjectDeleteRequest(UUID projectId)
 	{
-		super(messageId);
 		this.projectId = projectId;
 	}
 }

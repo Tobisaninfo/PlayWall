@@ -1,7 +1,8 @@
 package de.tobias.playwall.server.net;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.net.BaseMessage;
+import de.tobias.playwall.common.net.RequestMessage;
+import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.project.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,9 +35,9 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		try
 		{
-			final BaseMessage parsedMessage = objectMapper.readValue(message.getPayload(), BaseMessage.class);
+			final RequestMessage parsedMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
 
-			final BaseMessage responseMessage;
+			final ResponseMessage responseMessage;
 			if(parsedMessage instanceof ProjectListRequest request)
 			{
 				responseMessage = new ProjectListResponse(request.getMessageId(), List.of(

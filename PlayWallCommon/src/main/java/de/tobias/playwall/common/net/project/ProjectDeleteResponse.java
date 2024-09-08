@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.net.project;
 
-import de.tobias.playwall.common.net.BaseMessage;
+import de.tobias.playwall.common.net.ResponseMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ProjectDeleteResponse extends BaseMessage
+public class ProjectDeleteResponse extends ResponseMessage
 {
 	private boolean success;
 

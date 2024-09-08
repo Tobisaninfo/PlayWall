@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.net;
 
-import de.tobias.playwall.common.net.BaseMessage;
+import de.tobias.playwall.common.net.RequestMessage;
+import de.tobias.playwall.common.net.ResponseMessage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,14 +23,14 @@ public class MessageQueue
 		return instance;
 	}
 
-	private final Map<UUID, Consumer<BaseMessage>> messagesQueue = new HashMap<>();
+	private final Map<UUID, Consumer<ResponseMessage>> messagesQueue = new HashMap<>();
 
-	public void enqueueCallback(BaseMessage message, Consumer<? extends BaseMessage> callback)
+	public void enqueueCallback(RequestMessage message, Consumer<? extends ResponseMessage> callback)
 	{
-		messagesQueue.put(message.getMessageId(), (Consumer<BaseMessage>) callback);
+		messagesQueue.put(message.getMessageId(), (Consumer<ResponseMessage>) callback);
 	}
 
-	public Optional<Consumer<BaseMessage>> dequeueCallback(UUID id)
+	public Optional<Consumer<ResponseMessage>> dequeueCallback(UUID id)
 	{
 		return Optional.ofNullable(messagesQueue.get(id));
 	}

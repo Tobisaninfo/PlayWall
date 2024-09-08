@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.net.project;
 
-import de.tobias.playwall.common.net.BaseMessage;
+import de.tobias.playwall.common.net.ResponseMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ProjectListResponse extends BaseMessage
+public class ProjectListResponse extends ResponseMessage
 {
 	private List<ProjectMetadata> projects;
 
