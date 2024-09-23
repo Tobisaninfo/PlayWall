@@ -3,6 +3,7 @@ package de.tobias.playwall.client.project;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
+import lombok.Getter;
 
 import java.nio.file.Path;
 import java.util.Set;
@@ -10,12 +11,13 @@ import java.util.UUID;
 
 public class ProjectReferenceMock implements ProjectReference
 {
-	private final UUID uuid;
+	@Getter
+	private final UUID id;
 	private final String name;
 
 	public ProjectReferenceMock(UUID uuid, String name)
 	{
-		this.uuid = uuid;
+		this.id = uuid;
 		this.name = name;
 	}
 
@@ -27,7 +29,7 @@ public class ProjectReferenceMock implements ProjectReference
 
 	public String getFileName()
 	{
-		return uuid + ProjectReference.FILE_EXTENSION;
+		return id + ProjectReference.FILE_EXTENSION;
 	}
 
 	@Override
@@ -43,8 +45,4 @@ public class ProjectReferenceMock implements ProjectReference
 		return Set.of();
 	}
 
-	public UUID getUuid()
-	{
-		return uuid;
-	}
 }

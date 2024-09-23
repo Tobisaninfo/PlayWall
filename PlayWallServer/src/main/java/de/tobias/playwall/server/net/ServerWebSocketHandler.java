@@ -67,6 +67,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 		}
 		catch(Exception e)
 		{
+			// TODO: Return Error Messages
 			log.error("Error processing request", e);
 		}
 	}

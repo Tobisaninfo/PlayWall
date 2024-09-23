@@ -1,7 +1,7 @@
 package de.tobias.playwall.common.net.project;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
-public record ProjectMetadata(String name, LocalDateTime lastEditDateTime)
+public record ProjectMetadata(UUID id, String name)
 {
 }

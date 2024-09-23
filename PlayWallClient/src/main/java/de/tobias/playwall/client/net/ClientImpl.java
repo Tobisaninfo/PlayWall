@@ -8,7 +8,6 @@ import de.tobias.playwall.common.net.project.ProjectListResponse;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class ClientImpl implements Client {
@@ -25,7 +24,7 @@ public class ClientImpl implements Client {
 	{
 		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 			callback.accept(res.getProjects().stream()
-					.map(s -> new ProjectReferenceMock(UUID.randomUUID(), s.name()))
+					.map(s -> new ProjectReferenceMock(s.id(), s.name()))
 					.sorted(Comparator.comparing(ProjectReferenceMock::getName))
 					.toList());
 		});
@@ -34,6 +33,6 @@ public class ClientImpl implements Client {
 	@Override
 	public void deleteProject(ProjectReferenceMock mock, Consumer<ProjectDeleteResponse> callback)
 	{
-		clientWebSocketHandler.send(new ProjectDeleteRequest(mock.getUuid()), callback);
+		clientWebSocketHandler.send(new ProjectDeleteRequest(mock.getId()), callback);
 	}
 }

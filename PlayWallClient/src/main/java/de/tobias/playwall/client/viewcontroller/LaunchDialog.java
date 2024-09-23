@@ -89,7 +89,7 @@ public class LaunchDialog extends NVC
 			else if(mouseEvent.getButton().equals(MouseButton.SECONDARY))
 			{
 				Worker.runLater(() -> {
-					client.deleteProject((ProjectReferenceMock) projectListView.getSelectionModel().getSelectedItem(), (response) -> {
+					client.deleteProject((ProjectReferenceMock) projectListView.getSelectionModel().getSelectedItem(), response -> {
 						if(response.isSuccess())
 						{
 							Logger.debug("Refresh project list");
