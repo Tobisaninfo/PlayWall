@@ -27,6 +27,8 @@
         <jackson.version>2.18.1</jackson.version>
         <lombok.version>1.18.34</lombok.version>
 
+        <mapstruct.version>1.6.3</mapstruct.version>
+
         <maven-compiler.version>3.13.0</maven-compiler.version>
 
         <junit.version>5.10.2</junit.version>
