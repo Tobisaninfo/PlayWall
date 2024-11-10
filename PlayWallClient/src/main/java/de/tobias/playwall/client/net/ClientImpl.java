@@ -13,20 +13,21 @@ import java.util.function.Consumer;
 
 public class ClientImpl implements Client
 {
+	private final ClientWebSocketHandler clientWebSocketHandler;
+	private final ProjectMetadataMapper projectMetadataMapper;
 
-	public ClientImpl(ClientWebSocketHandler clientWebSocketHandler)
+	public ClientImpl(ClientWebSocketHandler clientWebSocketHandler, ProjectMetadataMapper projectMetadataMapper)
 	{
 		this.clientWebSocketHandler = clientWebSocketHandler;
+		this.projectMetadataMapper = projectMetadataMapper;
 	}
-
-	private final ClientWebSocketHandler clientWebSocketHandler;
 
 	@Override
 	public void getProjects(Consumer<List<ProjectMetadataDao>> callback)
 	{
 		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 			callback.accept(res.getProjects().stream()
-					.map(dto -> new ProjectMetadataMapper().projectMetadataDtoToProjectMapperDao(dto))
+					.map(projectMetadataMapper::projectMetadataDtoToProjectMapperDao)
 					.sorted(Comparator.comparing(ProjectMetadataDao::name))
 					.toList());
 		});

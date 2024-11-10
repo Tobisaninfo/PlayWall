@@ -10,6 +10,8 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
+import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
+import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.ClientImpl;
 import de.tobias.playwall.client.net.ClientWebSocketHandler;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
@@ -73,7 +75,11 @@ public class PlayWallMain extends Application
 		socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
 
 		stage.getIcons().add(stageIcon);
-		new LaunchDialog(stage, new ClientImpl(socket));
+		new LaunchDialog(stage, createClient(socket));
+	}
+
+	private Client createClient(ClientWebSocketHandler socket) {
+		return new ClientImpl(socket, new ProjectMetadataMapper());
 	}
 
 	@Override
