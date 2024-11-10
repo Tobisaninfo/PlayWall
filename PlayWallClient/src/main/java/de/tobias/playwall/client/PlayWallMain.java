@@ -13,16 +13,10 @@ import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.ClientImpl;
-import de.tobias.playwall.client.net.ClientWebSocketHandler;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
-import de.tobias.playwall.common.utils.MapUtils;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.util.UUID;
-
-import static de.tobias.playwall.common.utils.MapUtils.entry;
 
 
 public class PlayWallMain extends Application
@@ -30,6 +24,7 @@ public class PlayWallMain extends Application
 	private static final String ICON_PATH = "de/tobias/playwall/client/logo/icon_small.png";
 	private Image stageIcon = null;
 
+	private Client client;
 
 	public static void main(String[] args)
 	{
@@ -64,6 +59,9 @@ public class PlayWallMain extends Application
 		Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
+		client = createClient();
+		client.connect();
+
 		stageIcon = new Image(ICON_PATH);
 		Alerts.getInstance().setDefaultIcon(stageIcon);
 	}
@@ -71,21 +69,18 @@ public class PlayWallMain extends Application
 	@Override
 	public void start(Stage stage)
 	{
-		final ClientWebSocketHandler socket = ClientWebSocketHandler.getInstance();
-		socket.connect(MapUtils.create(entry("clientId", UUID.randomUUID().toString())));
-
 		stage.getIcons().add(stageIcon);
-		new LaunchDialog(stage, createClient(socket));
-	}
-
-	private Client createClient(ClientWebSocketHandler socket) {
-		return new ClientImpl(socket, new ProjectMetadataMapper());
+		new LaunchDialog(stage, client);
 	}
 
 	@Override
-	public void stop() throws Exception
+	public void stop()
 	{
-		ClientWebSocketHandler.shutdown();
+		client.disconnect();
 		Worker.shutdown();
+	}
+
+	private Client createClient() {
+		return new ClientImpl(new ProjectMetadataMapper());
 	}
 }

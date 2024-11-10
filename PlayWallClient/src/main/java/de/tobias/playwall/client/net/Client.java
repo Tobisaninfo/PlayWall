@@ -8,6 +8,10 @@ import java.util.function.Consumer;
 
 public interface Client
 {
+	void connect();
+
+	void disconnect();
+
 	void getProjects(Consumer<List<ProjectMetadataDao>> callback);
 
 	void deleteProject(ProjectMetadataDao mock, Consumer<ProjectDeleteResponse> callback);

@@ -19,11 +19,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-// TODO: Singleton
-public class ClientWebSocketHandler implements WebSocket.Listener
+class ClientWebSocketHandler implements WebSocket.Listener
 {
 	private static final int THREAD_COUNT = 6;
-	private static ClientWebSocketHandler instance;
 
 	private final ObjectMapper objectMapper;
 	private final MessageQueue messageQueue;
@@ -34,20 +32,11 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 
 	private final List<WebSocketListener> listeners;
 
-	private ClientWebSocketHandler()
+	ClientWebSocketHandler()
 	{
 		this.listeners = new ArrayList<>();
 		this.objectMapper = new ObjectMapper().findAndRegisterModules();
 		this.messageQueue = MessageQueue.getInstance();
-	}
-
-	public static ClientWebSocketHandler getInstance()
-	{
-		if(instance == null)
-		{
-			instance = new ClientWebSocketHandler();
-		}
-		return instance;
 	}
 
 	public void connect(Map<String, String> headers)
@@ -78,14 +67,6 @@ public class ClientWebSocketHandler implements WebSocket.Listener
 
 		httpClient.close();
 		executorService.close();
-	}
-
-	public static void shutdown()
-	{
-		if(instance != null)
-		{
-			instance.disconnect();
-		}
 	}
 
 	@Override
