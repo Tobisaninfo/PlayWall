@@ -18,7 +18,7 @@ public class ProjectRepository
 	private final PathProvider pathProvider;
 	private final ObjectMapper mapper;
 
-	public List<ProjectMetadataModel> getAllProjectMetadata() throws IOException
+	public List<ProjectMetadata> getAllProjectMetadata() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig("projects.json");
 		return mapper.readValue(Files.newBufferedReader(path), new TypeReference<>()

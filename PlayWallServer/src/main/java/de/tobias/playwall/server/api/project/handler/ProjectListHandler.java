@@ -3,7 +3,7 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.project.ProjectListRequest;
 import de.tobias.playwall.common.net.project.ProjectListResponse;
-import de.tobias.playwall.common.net.project.ProjectMetadata;
+import de.tobias.playwall.common.net.project.ProjectMetadataDto;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -22,7 +22,7 @@ public class ProjectListHandler implements RequestHandler<ProjectListRequest>
 	public Optional<ResponseMessage> handleRequest(ProjectListRequest requestMessage) throws IOException
 	{
 		return Optional.of(new ProjectListResponse(requestMessage.getMessageId(), repository.getAllProjectMetadata().stream()
-				.map(project -> new ProjectMetadata(project.getId(), project.getName()))
+				.map(project -> new ProjectMetadataDto(project.getId(), project.getName()))
 				.toList()));
 	}
 }

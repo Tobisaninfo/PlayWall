@@ -2,6 +2,6 @@ package de.tobias.playwall.common.net.project;
 
 import java.util.UUID;
 
-public record ProjectMetadata(UUID id, String name)
+public record ProjectMetadataDto(UUID id, String name)
 {
 }

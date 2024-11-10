@@ -9,7 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class ProjectMetadataModel
+public class ProjectMetadata
 {
 	private UUID id;
 	private String name;

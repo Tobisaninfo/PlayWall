@@ -14,9 +14,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ProjectListResponse extends ResponseMessage
 {
-	private List<ProjectMetadata> projects;
+	private List<ProjectMetadataDto> projects;
 
-	public ProjectListResponse(UUID messageId, List<ProjectMetadata> projects)
+	public ProjectListResponse(UUID messageId, List<ProjectMetadataDto> projects)
 	{
 		super(messageId);
 		this.projects = projects;
