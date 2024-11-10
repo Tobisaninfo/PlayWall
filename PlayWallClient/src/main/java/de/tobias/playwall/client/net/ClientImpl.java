@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.net;
 
-import de.tobias.playwall.client.project.ProjectReferenceMock;
+import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
+import de.tobias.playwall.client.model.project.ProjectMetadataDao;
 import de.tobias.playwall.common.api.project.ProjectDeleteRequest;
 import de.tobias.playwall.common.api.project.ProjectDeleteResponse;
 import de.tobias.playwall.common.api.project.ProjectListRequest;
@@ -10,7 +11,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ClientImpl implements Client {
+public class ClientImpl implements Client
+{
 
 	public ClientImpl(ClientWebSocketHandler clientWebSocketHandler)
 	{
@@ -20,19 +22,19 @@ public class ClientImpl implements Client {
 	private final ClientWebSocketHandler clientWebSocketHandler;
 
 	@Override
-	public void getProjects(Consumer<List<ProjectReferenceMock>> callback)
+	public void getProjects(Consumer<List<ProjectMetadataDao>> callback)
 	{
 		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 			callback.accept(res.getProjects().stream()
-					.map(s -> new ProjectReferenceMock(s.id(), s.name()))
-					.sorted(Comparator.comparing(ProjectReferenceMock::getName))
+					.map(dto -> new ProjectMetadataMapper().projectMetadataDtoToProjectMapperDao(dto))
+					.sorted(Comparator.comparing(ProjectMetadataDao::name))
 					.toList());
 		});
 	}
 
 	@Override
-	public void deleteProject(ProjectReferenceMock mock, Consumer<ProjectDeleteResponse> callback)
+	public void deleteProject(ProjectMetadataDao mock, Consumer<ProjectDeleteResponse> callback)
 	{
-		clientWebSocketHandler.send(new ProjectDeleteRequest(mock.getId()), callback);
+		clientWebSocketHandler.send(new ProjectDeleteRequest(mock.id()), callback);
 	}
 }

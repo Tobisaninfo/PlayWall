@@ -7,9 +7,8 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.model.project.ProjectMetadataDao;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.project.ProjectReference;
-import de.tobias.playwall.client.project.ProjectReferenceMock;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,7 +32,7 @@ public class LaunchDialog extends NVC
 	private ImageView imageView;
 
 	@FXML
-	private ListView<ProjectReference> projectListView;
+	private ListView<ProjectMetadataDao> projectListView;
 
 	@FXML
 	private Button newProjectButton;
@@ -57,9 +56,9 @@ public class LaunchDialog extends NVC
 	@Override
 	public void init()
 	{
-		App app = ApplicationUtils.getApplication();
+		final App app = ApplicationUtils.getApplication();
 
-		// Setup launchscreen labels and image
+		// Setup launch screen labels and image
 		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		imageView.setImage(new Image(IMAGE));
 
@@ -89,7 +88,7 @@ public class LaunchDialog extends NVC
 			else if(mouseEvent.getButton().equals(MouseButton.SECONDARY))
 			{
 				Worker.runLater(() -> {
-					client.deleteProject((ProjectReferenceMock) projectListView.getSelectionModel().getSelectedItem(), response -> {
+					client.deleteProject(projectListView.getSelectionModel().getSelectedItem(), response -> {
 						if(response.isSuccess())
 						{
 							Logger.debug("Refresh project list");
