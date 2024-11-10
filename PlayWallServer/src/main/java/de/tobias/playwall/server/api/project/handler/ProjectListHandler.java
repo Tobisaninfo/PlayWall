@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.common.net.project.ProjectListRequest;
-import de.tobias.playwall.common.net.project.ProjectListResponse;
+import de.tobias.playwall.common.api.project.ProjectListRequest;
+import de.tobias.playwall.common.api.project.ProjectListResponse;
 import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.net.RequestHandler;

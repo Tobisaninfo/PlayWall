@@ -1,4 +1,4 @@
-package de.tobias.playwall.common.net.project;
+package de.tobias.playwall.common.api.project;
 
 import de.tobias.playwall.common.net.ResponseMessage;
 import lombok.AccessLevel;
@@ -6,18 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ProjectDeleteResponse extends ResponseMessage
+public class ProjectListResponse extends ResponseMessage
 {
-	private boolean success;
+	private List<ProjectMetadataDto> projects;
 
-	public ProjectDeleteResponse(UUID messageId, boolean success)
+	public ProjectListResponse(UUID messageId, List<ProjectMetadataDto> projects)
 	{
 		super(messageId);
-		this.success = success;
+		this.projects = projects;
 	}
 }

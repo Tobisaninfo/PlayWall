@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.common.net.project.ProjectDeleteRequest;
-import de.tobias.playwall.common.net.project.ProjectDeleteResponse;
+import de.tobias.playwall.common.api.project.ProjectDeleteRequest;
+import de.tobias.playwall.common.api.project.ProjectDeleteResponse;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 

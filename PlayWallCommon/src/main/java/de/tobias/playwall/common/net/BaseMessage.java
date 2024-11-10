@@ -3,10 +3,10 @@ package de.tobias.playwall.common.net;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import de.tobias.playwall.common.net.project.ProjectDeleteRequest;
-import de.tobias.playwall.common.net.project.ProjectDeleteResponse;
-import de.tobias.playwall.common.net.project.ProjectListRequest;
-import de.tobias.playwall.common.net.project.ProjectListResponse;
+import de.tobias.playwall.common.api.project.ProjectDeleteRequest;
+import de.tobias.playwall.common.api.project.ProjectDeleteResponse;
+import de.tobias.playwall.common.api.project.ProjectListRequest;
+import de.tobias.playwall.common.api.project.ProjectListResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

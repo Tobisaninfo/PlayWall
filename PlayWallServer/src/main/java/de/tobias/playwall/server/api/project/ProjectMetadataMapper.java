@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
-import de.tobias.playwall.common.net.project.ProjectMetadataDto;
+import de.tobias.playwall.common.api.project.ProjectMetadataDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

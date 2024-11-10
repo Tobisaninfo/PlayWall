@@ -1,4 +1,4 @@
-package de.tobias.playwall.common.net.project;
+package de.tobias.playwall.common.api.project;
 
 import lombok.Builder;
 
