@@ -12,12 +12,12 @@ import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Region;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static de.thecodelabs.utils.util.Localization.getString;
@@ -64,6 +64,7 @@ public class LaunchDialog extends NVC
 
 		openButton.setDisable(true);
 		deleteButton.setDisable(true);
+		deleteButton.setOnAction(event -> onDeleteButton());
 
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
@@ -79,8 +80,8 @@ public class LaunchDialog extends NVC
 		// Mouse Double Click on list
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
-			   mouseEvent.getClickCount() == 2 &&
-			   !projectListView.getSelectionModel().isEmpty())
+					mouseEvent.getClickCount() == 2 &&
+					!projectListView.getSelectionModel().isEmpty())
 			{
 				// TODO
 				// launchProject(getSelectedProject());
@@ -88,7 +89,7 @@ public class LaunchDialog extends NVC
 			else if(mouseEvent.getButton().equals(MouseButton.SECONDARY))
 			{
 				Worker.runLater(() -> {
-					client.deleteProject(projectListView.getSelectionModel().getSelectedItem(), response -> {
+					client.deleteProject(getSelectedProject(), response -> {
 						if(response.isSuccess())
 						{
 							Logger.debug("Refresh project list");
@@ -102,9 +103,48 @@ public class LaunchDialog extends NVC
 		Worker.runLater(this::fetchProjects);
 	}
 
+	private void onDeleteButton()
+	{
+		final ProjectMetadataDao selectedProject = getSelectedProject();
+		if(selectedProject == null)
+		{
+			return;
+		}
+
+		final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_MANAGER_DELETE_CONTENT, selectedProject.name()));
+		alert.initOwner(getContainingWindow());
+		alert.initModality(Modality.WINDOW_MODAL);
+		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
+		{
+			// TODO show progress indicator
+			client.deleteProject(selectedProject, deleteResponse -> {
+				if(deleteResponse.isSuccess())
+				{
+					fetchProjects();
+				}
+				else
+				{
+					showErrorMessage(getString(Strings.ERROR_PROJECT_DELETE, "Error deleting project " + selectedProject.name()));
+				}
+			});
+		});
+	}
+
 	private void fetchProjects()
 	{
 		client.getProjects(projects -> Platform.runLater(() -> projectListView.getItems().setAll(projects)));
+	}
+
+	/**
+	 * Returns the selected project from the list view
+	 *
+	 * @return Project
+	 */
+	private ProjectMetadataDao getSelectedProject()
+	{
+		return projectListView.getSelectionModel().getSelectedItem();
 	}
 
 	@Override
