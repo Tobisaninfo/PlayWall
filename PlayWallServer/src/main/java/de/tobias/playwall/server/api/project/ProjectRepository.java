@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.storage.PathProvider;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ProjectRepository
@@ -26,6 +28,12 @@ public class ProjectRepository
 	void loadProjects() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig("projects.json");
+		if(!Files.exists(path))
+		{
+			log.debug("No projects.json found, creating empty file in: \"{}\"", path);
+			saveProjects();
+		}
+
 		projects = mapper.readValue(Files.newBufferedReader(path), new TypeReference<>()
 		{
 		});
