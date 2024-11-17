@@ -8,6 +8,7 @@ import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class ProjectDeleteHandler implements RequestHandler<ProjectDeleteRequest
 	private final ProjectRepository projectRepository;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectDeleteRequest requestMessage)
+	public Optional<ResponseMessage> handleRequest(ProjectDeleteRequest requestMessage) throws IOException
 	{
 		final boolean success = projectRepository.deleteProject(requestMessage.getProjectId());
 		return Optional.of(new ProjectDeleteResponse(requestMessage.getMessageId(), success));

@@ -51,8 +51,13 @@ public class ProjectRepository
 		return projects;
 	}
 
-	public boolean deleteProject(UUID id)
+	public boolean deleteProject(UUID id) throws IOException
 	{
-		return projects.removeIf(project -> project.getId().equals(id));
+		final boolean isSuccess = projects.removeIf(project -> project.getId().equals(id));
+		if(isSuccess)
+		{
+			saveProjects();
+		}
+		return isSuccess;
 	}
 }
