@@ -34,6 +34,7 @@ public class ProjectRepository
 	void saveProjects() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig("projects.json");
+		Files.createDirectories(path.getParent());
 		mapper.writeValue(Files.newBufferedWriter(path), projects);
 	}
 
