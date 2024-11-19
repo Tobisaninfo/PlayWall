@@ -105,7 +105,8 @@ public class LaunchDialog extends NVC
 		}
 
 		final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_MANAGER_DELETE_CONTENT, selectedProject.name()));
+		alert.setTitle(getString(Strings.UI_DIALOG_PROJECT_DELETE_TITLE, selectedProject.name()));
+		alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_DELETE_CONTENT, selectedProject.name()));
 		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
