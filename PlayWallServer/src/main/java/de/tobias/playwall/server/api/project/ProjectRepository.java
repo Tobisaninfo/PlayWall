@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -59,5 +60,30 @@ public class ProjectRepository
 			saveProjects();
 		}
 		return isSuccess;
+	}
+
+	public Optional<ProjectMetadata> addProject(String name) throws IOException
+	{
+		final Optional<ProjectMetadata> existingProjectOptional = getProjectByName(name);
+		if(existingProjectOptional.isPresent())
+		{
+			return Optional.empty();
+		}
+
+		final ProjectMetadata newProject = new ProjectMetadata(UUID.randomUUID(), name);
+		projects.add(newProject);
+		saveProjects();
+
+		return Optional.of(newProject);
+	}
+
+	public Optional<ProjectMetadata> getProjectById(UUID id)
+	{
+		return projects.stream().filter(project -> project.getId().equals(id)).findFirst();
+	}
+
+	private Optional<ProjectMetadata> getProjectByName(String name)
+	{
+		return projects.stream().filter(project -> project.getName().equals(name)).findFirst();
 	}
 }

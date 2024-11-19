@@ -10,6 +10,8 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.model.project.ProjectMetadataDao;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
+import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
+import de.tobias.playwall.common.api.project.ProjectMetadataDto;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +21,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 
@@ -65,6 +69,8 @@ public class LaunchDialog extends NVC
 		openButton.setDisable(true);
 		deleteButton.setDisable(true);
 		deleteButton.setOnAction(event -> onDeleteButton());
+
+		newProjectButton.setOnAction(event -> onNewProjectButton());
 
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
@@ -130,6 +136,16 @@ public class LaunchDialog extends NVC
 				}
 			});
 		});
+	}
+
+	private void onNewProjectButton()
+	{
+		final ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow(), client);
+		final Optional<ProjectMetadataDto> projectOptional = dialog.showAndWait();
+		if(projectOptional.isPresent())
+		{
+			fetchProjects();
+		}
 	}
 
 	private void fetchProjects()

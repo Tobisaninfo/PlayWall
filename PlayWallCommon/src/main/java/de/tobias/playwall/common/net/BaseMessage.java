@@ -3,10 +3,7 @@ package de.tobias.playwall.common.net;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import de.tobias.playwall.common.api.project.ProjectDeleteRequest;
-import de.tobias.playwall.common.api.project.ProjectDeleteResponse;
-import de.tobias.playwall.common.api.project.ProjectListRequest;
-import de.tobias.playwall.common.api.project.ProjectListResponse;
+import de.tobias.playwall.common.api.project.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +17,8 @@ import java.util.UUID;
 		@JsonSubTypes.Type(value = ProjectListResponse.class, name = "ProjectListResponse"),
 		@JsonSubTypes.Type(value = ProjectDeleteRequest.class, name = "ProjectDeleteRequest"),
 		@JsonSubTypes.Type(value = ProjectDeleteResponse.class, name = "ProjectDeleteResponse"),
+		@JsonSubTypes.Type(value = ProjectAddRequest.class, name = "ProjectAddRequest"),
+		@JsonSubTypes.Type(value = ProjectAddResponse.class, name = "ProjectAddResponse"),
 })
 @Getter
 @Setter
