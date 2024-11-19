@@ -7,5 +7,5 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ProjectMetadataMapper
 {
-	ProjectMetadataDto projectMetadataToProjectMapperDto(ProjectMetadata project);
+	ProjectMetadataDto projectMetadataToProjectMetadataDto(ProjectMetadata project);
 }

@@ -49,7 +49,7 @@ public class ClientImpl implements Client
 	{
 		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 			callback.accept(res.getProjects().stream()
-					.map(projectMetadataMapper::projectMetadataDtoToProjectMapperDao)
+					.map(projectMetadataMapper::projectMetadataDtoToProjectMetadataDao)
 					.sorted(Comparator.comparing(ProjectMetadataDao::name))
 					.toList());
 		});

@@ -5,7 +5,7 @@ import de.tobias.playwall.common.api.project.ProjectMetadataDto;
 
 public class ProjectMetadataMapper
 {
-	public ProjectMetadataDao projectMetadataDtoToProjectMapperDao(ProjectMetadataDto project)
+	public ProjectMetadataDao projectMetadataDtoToProjectMetadataDao(ProjectMetadataDto project)
 	{
 		return new ProjectMetadataDao(project.id(), project.name());
 	}

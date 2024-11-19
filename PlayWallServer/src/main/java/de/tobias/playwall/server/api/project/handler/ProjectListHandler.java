@@ -23,7 +23,7 @@ public class ProjectListHandler implements RequestHandler<ProjectListRequest>
 	{
 		return Optional.of(new ProjectListResponse(requestMessage.getMessageId(), repository.getAllProjectMetadata()
 				.stream()
-				.map(mapper::projectMetadataToProjectMapperDto)
+				.map(mapper::projectMetadataToProjectMetadataDto)
 				.toList()));
 	}
 }
