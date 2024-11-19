@@ -56,8 +56,8 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public void deleteProject(ProjectMetadataDao mock, Consumer<ProjectDeleteResponse> callback)
+	public void deleteProject(ProjectMetadataDao project, Consumer<ProjectDeleteResponse> callback)
 	{
-		clientWebSocketHandler.send(new ProjectDeleteRequest(mock.id()), callback);
+		clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()), callback);
 	}
 }

@@ -14,5 +14,5 @@ public interface Client
 
 	void getProjects(Consumer<List<ProjectMetadataDao>> callback);
 
-	void deleteProject(ProjectMetadataDao mock, Consumer<ProjectDeleteResponse> callback);
+	void deleteProject(ProjectMetadataDao project, Consumer<ProjectDeleteResponse> callback);
 }
