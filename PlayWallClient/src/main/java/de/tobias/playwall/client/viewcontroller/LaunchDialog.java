@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.viewcontroller;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
@@ -91,18 +90,6 @@ public class LaunchDialog extends NVC
 			{
 				// TODO
 				// launchProject(getSelectedProject());
-			}
-			else if(mouseEvent.getButton().equals(MouseButton.SECONDARY))
-			{
-				Worker.runLater(() -> {
-					client.deleteProject(getSelectedProject(), response -> {
-						if(response.isSuccess())
-						{
-							Logger.debug("Refresh project list");
-							fetchProjects();
-						}
-					});
-				});
 			}
 		});
 
