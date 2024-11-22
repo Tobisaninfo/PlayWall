@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -70,11 +71,39 @@ public class ProjectRepository
 			return Optional.empty();
 		}
 
-		final ProjectMetadata newProject = new ProjectMetadata(UUID.randomUUID(), name);
+		final ProjectMetadata newProject = ProjectMetadata.builder()
+				.id(UUID.randomUUID())
+				.name(name)
+				.pages(new ArrayList<>())
+				.build();
 		projects.add(newProject);
 		saveProjects();
 
 		return Optional.of(newProject);
+	}
+
+	public Optional<PageMetadata> addPage(UUID projectId, String name) throws IOException
+	{
+		final Optional<ProjectMetadata> projectOptional = getProjectById(projectId);
+		if(projectOptional.isEmpty())
+		{
+			return Optional.empty();
+		}
+
+		final ProjectMetadata project = projectOptional.get();
+		final int nextPagePosition = project.getPages().size();
+
+		final PageMetadata page = PageMetadata.builder()
+				.id(UUID.randomUUID())
+				.name(name)
+				.position(nextPagePosition)
+				.pads(new ArrayList<>())
+				.build();
+
+		project.getPages().add(page);
+		saveProjects();
+
+		return Optional.of(page);
 	}
 
 	public Optional<ProjectMetadata> getProjectById(UUID id)

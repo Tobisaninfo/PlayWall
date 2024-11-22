@@ -19,6 +19,8 @@ import java.util.UUID;
 		@JsonSubTypes.Type(value = ProjectDeleteResponse.class, name = "ProjectDeleteResponse"),
 		@JsonSubTypes.Type(value = ProjectAddRequest.class, name = "ProjectAddRequest"),
 		@JsonSubTypes.Type(value = ProjectAddResponse.class, name = "ProjectAddResponse"),
+		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectAddPageRequest"),
+		@JsonSubTypes.Type(value = ProjectAddPageResponse.class, name = "ProjectAddPageResponse"),
 })
 @Getter
 @Setter
