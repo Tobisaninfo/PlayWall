@@ -2,7 +2,7 @@ package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
-import de.tobias.playwall.client.model.project.ProjectMetadataDao;
+import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.utils.MapUtils;
 
@@ -42,12 +42,12 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public void getProjects(Consumer<List<ProjectMetadataDao>> callback)
+	public void getProjects(Consumer<List<Project>> callback)
 	{
 		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 			callback.accept(res.getProjects().stream()
 					.map(projectMetadataMapper::projectMetadataDtoToProjectMetadataDao)
-					.sorted(Comparator.comparing(ProjectMetadataDao::name))
+					.sorted(Comparator.comparing(Project::name))
 					.toList());
 		});
 	}
@@ -59,7 +59,7 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public void deleteProject(ProjectMetadataDao project, Consumer<ProjectDeleteResponse> callback)
+	public void deleteProject(Project project, Consumer<ProjectDeleteResponse> callback)
 	{
 		clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()), callback);
 	}

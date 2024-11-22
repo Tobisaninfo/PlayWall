@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.cell;
 
-import de.tobias.playwall.client.model.project.ProjectMetadataDao;
+import de.tobias.playwall.client.model.project.Project;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -8,12 +8,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class ProjectCell extends ListCell<ProjectMetadataDao>
+public class ProjectCell extends ListCell<Project>
 {
-	private ProjectMetadataDao ref;
+	private Project ref;
 
 	@Override
-	protected void updateItem(ProjectMetadataDao ref, boolean empty)
+	protected void updateItem(Project ref, boolean empty)
 	{
 		super.updateItem(ref, empty);
 		if(!empty)
