@@ -10,7 +10,6 @@ import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
-import de.tobias.playwall.common.api.project.ProjectMetadataDto;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -129,7 +128,7 @@ public class LaunchDialog extends NVC
 	private void onNewProjectButton()
 	{
 		final ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow(), client);
-		final Optional<ProjectMetadataDto> projectOptional = dialog.showAndWait();
+		final Optional<Project> projectOptional = dialog.showAndWait();
 		if(projectOptional.isPresent())
 		{
 			fetchProjects();

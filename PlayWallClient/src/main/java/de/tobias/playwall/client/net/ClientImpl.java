@@ -9,6 +9,7 @@ import de.tobias.playwall.common.utils.MapUtils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static de.tobias.playwall.common.utils.MapUtils.entry;
@@ -46,16 +47,17 @@ public class ClientImpl implements Client
 	{
 		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 			callback.accept(res.getProjects().stream()
-					.map(projectMetadataMapper::projectMetadataDtoToProjectMetadataDao)
+					.map(projectMetadataMapper::projectMetadataDtoToProject)
 					.sorted(Comparator.comparing(Project::name))
 					.toList());
 		});
 	}
 
 	@Override
-	public void addProject(String name, Consumer<ProjectAddResponse> callback)
+	public void addProject(String name, BiConsumer<Boolean, Project> callback)
 	{
-		clientWebSocketHandler.send(new ProjectAddRequest(name), callback);
+		clientWebSocketHandler.send(new ProjectAddRequest(name), (ProjectAddResponse res) ->
+				callback.accept(res.isSuccess(), projectMetadataMapper.projectMetadataDtoToProject(res.getProject())));
 	}
 
 	@Override
