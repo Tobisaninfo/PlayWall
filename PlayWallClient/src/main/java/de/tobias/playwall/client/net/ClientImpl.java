@@ -9,8 +9,6 @@ import de.tobias.playwall.common.utils.MapUtils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static de.tobias.playwall.common.utils.MapUtils.entry;
 
@@ -43,26 +41,31 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public void getProjects(Consumer<List<ProjectMetadata>> callback)
+	public List<ProjectMetadata> getProjects()
 	{
-		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
-			callback.accept(res.getProjects().stream()
-					.map(projectMetadataMapper::projectMetadataDtoToProjectMetadata)
-					.sorted(Comparator.comparing(ProjectMetadata::name))
-					.toList());
-		});
+		final ProjectListResponse response = clientWebSocketHandler.send(new ProjectListRequest());
+		return response.getProjects().stream()
+				.map(projectMetadataMapper::projectMetadataDtoToProjectMetadata)
+				.sorted(Comparator.comparing(ProjectMetadata::name))
+				.toList();
 	}
 
 	@Override
-	public void addProject(String name, BiConsumer<Boolean, ProjectMetadata> callback)
+	public ProjectMetadata addProject(String name)
 	{
-		clientWebSocketHandler.send(new ProjectAddRequest(name), (ProjectAddResponse res) ->
-				callback.accept(res.isSuccess(), projectMetadataMapper.projectMetadataDtoToProjectMetadata(res.getProject())));
+		final ProjectAddResponse response = clientWebSocketHandler.send(new ProjectAddRequest(name));
+		if (!response.isSuccess()) {
+			throw new RuntimeException("Failed to add project " + name);
+		}
+		return projectMetadataMapper.projectMetadataDtoToProjectMetadata(response.getProject());
 	}
 
 	@Override
-	public void deleteProject(ProjectMetadata project, Consumer<ProjectDeleteResponse> callback)
+	public void deleteProject(ProjectMetadata project)
 	{
-		clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()), callback);
+		final ProjectDeleteResponse response = clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()));
+		if (!response.isSuccess()) {
+			throw new RuntimeException("Failed to delete project " + project.name());
+		}
 	}
 }

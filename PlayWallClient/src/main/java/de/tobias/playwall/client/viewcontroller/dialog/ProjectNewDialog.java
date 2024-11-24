@@ -72,19 +72,16 @@ public class ProjectNewDialog extends NVC
 	private void finishButtonHandler(ActionEvent event)
 	{
 		final String name = nameTextField.getText();
-		client.addProject(name, (isSuccess, responseProject) ->
+		try
 		{
-			if(isSuccess)
-			{
-				project = responseProject;
-			}
-			else
-			{
-				System.out.println(Localization.getString(Strings.ERROR_PROJECT_NAME_ALREADY_EXISTS));
-			}
+			project = client.addProject(name);
+		}
+		catch(RuntimeException e)
+		{
+			System.out.println(Localization.getString(Strings.ERROR_PROJECT_NAME_ALREADY_EXISTS));
+		}
 
-			Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
-		});
+		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
 	}
 
 	@FXML

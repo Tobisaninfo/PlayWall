@@ -24,19 +24,20 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	private static final int THREAD_COUNT = 6;
 
 	private final ObjectMapper objectMapper;
-	private final MessageQueue messageQueue;
+	private final ResponseQueue messageQueue;
 
 	private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
 	private final HttpClient httpClient = HttpClient.newBuilder().executor(executorService).build();
 	private WebSocket ws;
 
+	private final Object lock = new Object();
 	private final List<WebSocketListener> listeners;
 
 	ClientWebSocketHandler()
 	{
 		this.listeners = new ArrayList<>();
 		this.objectMapper = new ObjectMapper().findAndRegisterModules();
-		this.messageQueue = MessageQueue.getInstance();
+		this.messageQueue = ResponseQueue.getInstance();
 	}
 
 	public void connect(Map<String, String> headers)
@@ -99,8 +100,12 @@ class ClientWebSocketHandler implements WebSocket.Listener
 			Logger.debug("Received: " + data);
 			final ResponseMessage message = objectMapper.readValue(data, ResponseMessage.class);
 
-			final Optional<Consumer<ResponseMessage>> callback = messageQueue.dequeueCallback(message.getMessageId());
-			callback.ifPresent(consumer -> consumer.accept(message));
+			synchronized(lock)
+			{
+				messageQueue.enqueueResponse(message.getMessageId(), message);
+				Logger.trace("NotifyAll");
+				lock.notifyAll();
+			}
 		}
 		catch(Exception e)
 		{
@@ -141,16 +146,30 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		return ws != null;
 	}
 
-	public <T extends ResponseMessage> boolean send(RequestMessage message, Consumer<T> onResponse)
+	public synchronized <T extends ResponseMessage> T send(RequestMessage message)
 	{
-		MessageQueue.getInstance().enqueueCallback(message, onResponse);
 		try
 		{
-			return send(objectMapper.writeValueAsString(message));
+			synchronized(lock) {
+				send(objectMapper.writeValueAsString(message));
+
+				Optional<ResponseMessage> messageOptional;
+				while((messageOptional = ResponseQueue.getInstance().dequeueResponse(message.getMessageId())).isEmpty())
+				{
+					Logger.trace("Waiting for response for message id " + message.getMessageId());
+					lock.wait(100L);
+				}
+				Logger.debug("Return response for message id " + message.getMessageId());
+				return (T) messageOptional.get();
+			}
 		}
 		catch(JsonProcessingException e)
 		{
 			Logger.error(e);
+			throw new RuntimeException(e);
+		}
+		catch(InterruptedException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}
@@ -162,7 +181,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 			return false;
 		}
 
-		Logger.debug("Send: " + data);
+		Logger.trace("Send: " + data);
 		ws.sendText(data, true);
 		return true;
 	}

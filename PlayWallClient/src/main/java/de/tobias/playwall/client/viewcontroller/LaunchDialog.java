@@ -112,16 +112,15 @@ public class LaunchDialog extends NVC
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 		{
 			// TODO show progress indicator
-			client.deleteProject(selectedProject, deleteResponse -> {
-				if(deleteResponse.isSuccess())
-				{
-					fetchProjects();
-				}
-				else
-				{
-					showErrorMessage(getString(Strings.ERROR_PROJECT_DELETE, "Error deleting project " + selectedProject.name()));
-				}
-			});
+			try
+			{
+				client.deleteProject(selectedProject);
+				fetchProjects();
+			}
+			catch(RuntimeException e)
+			{
+				showErrorMessage(getString(Strings.ERROR_PROJECT_DELETE, "Error deleting project " + selectedProject.name()));
+			}
 		});
 	}
 
@@ -137,7 +136,7 @@ public class LaunchDialog extends NVC
 
 	private void fetchProjects()
 	{
-		client.getProjects(projects -> Platform.runLater(() -> projectListView.getItems().setAll(projects)));
+		Platform.runLater(() -> projectListView.getItems().setAll(client.getProjects()));
 	}
 
 	/**
