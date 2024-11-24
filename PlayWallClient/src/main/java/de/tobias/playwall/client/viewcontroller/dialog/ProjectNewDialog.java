@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.dialog;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -78,7 +79,7 @@ public class ProjectNewDialog extends NVC
 		}
 		catch(RuntimeException e)
 		{
-			System.out.println(Localization.getString(Strings.ERROR_PROJECT_NAME_ALREADY_EXISTS));
+			Logger.error(Localization.getString(Strings.ERROR_PROJECT_NAME_ALREADY_EXISTS));
 		}
 
 		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));

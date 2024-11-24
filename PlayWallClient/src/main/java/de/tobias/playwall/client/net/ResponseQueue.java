@@ -21,15 +21,15 @@ public class ResponseQueue
 		return instance;
 	}
 
-	private final Map<UUID, ResponseMessage> responseQueue = new HashMap<>();
+	private final Map<UUID, ResponseMessage> responseQueueMap = new HashMap<>();
 
 	public void enqueueResponse(UUID requestId, ResponseMessage response)
 	{
-		responseQueue.put(requestId, response);
+		responseQueueMap.put(requestId, response);
 	}
 
 	public Optional<ResponseMessage> dequeueResponse(UUID id)
 	{
-		return Optional.ofNullable(responseQueue.get(id));
+		return Optional.ofNullable(responseQueueMap.get(id));
 	}
 }

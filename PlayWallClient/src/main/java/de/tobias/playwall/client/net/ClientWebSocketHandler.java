@@ -170,6 +170,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		}
 		catch(InterruptedException e)
 		{
+			Thread.currentThread().interrupt();
 			throw new RuntimeException(e);
 		}
 	}
