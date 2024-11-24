@@ -24,7 +24,7 @@ public class ProjectRepository
 	private final PathProvider pathProvider;
 	private final ObjectMapper mapper;
 
-	private List<ProjectMetadata> projects;
+	private List<Project> projects;
 
 	@PostConstruct
 	void loadProjects() throws IOException
@@ -48,7 +48,7 @@ public class ProjectRepository
 		mapper.writeValue(Files.newBufferedWriter(path), projects);
 	}
 
-	public List<ProjectMetadata> getAllProjectMetadata()
+	public List<Project> getAllProjectMetadata()
 	{
 		return projects;
 	}
@@ -63,15 +63,15 @@ public class ProjectRepository
 		return isSuccess;
 	}
 
-	public Optional<ProjectMetadata> addProject(String name) throws IOException
+	public Optional<Project> addProject(String name) throws IOException
 	{
-		final Optional<ProjectMetadata> existingProjectOptional = getProjectByName(name);
+		final Optional<Project> existingProjectOptional = getProjectByName(name);
 		if(existingProjectOptional.isPresent())
 		{
 			return Optional.empty();
 		}
 
-		final ProjectMetadata newProject = ProjectMetadata.builder()
+		final Project newProject = Project.builder()
 				.id(UUID.randomUUID())
 				.name(name)
 				.pages(new ArrayList<>())
@@ -82,18 +82,18 @@ public class ProjectRepository
 		return Optional.of(newProject);
 	}
 
-	public Optional<PageMetadata> addPage(UUID projectId, String name) throws IOException
+	public Optional<Page> addPage(UUID projectId, String name) throws IOException
 	{
-		final Optional<ProjectMetadata> projectOptional = getProjectById(projectId);
+		final Optional<Project> projectOptional = getProjectById(projectId);
 		if(projectOptional.isEmpty())
 		{
 			return Optional.empty();
 		}
 
-		final ProjectMetadata project = projectOptional.get();
+		final Project project = projectOptional.get();
 		final int nextPagePosition = project.getPages().size();
 
-		final PageMetadata page = PageMetadata.builder()
+		final Page page = Page.builder()
 				.id(UUID.randomUUID())
 				.name(name)
 				.position(nextPagePosition)
@@ -106,12 +106,12 @@ public class ProjectRepository
 		return Optional.of(page);
 	}
 
-	public Optional<ProjectMetadata> getProjectById(UUID id)
+	public Optional<Project> getProjectById(UUID id)
 	{
 		return projects.stream().filter(project -> project.getId().equals(id)).findFirst();
 	}
 
-	private Optional<ProjectMetadata> getProjectByName(String name)
+	private Optional<Project> getProjectByName(String name)
 	{
 		return projects.stream().filter(project -> project.getName().equals(name)).findFirst();
 	}

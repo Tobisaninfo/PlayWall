@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.model.project;
 
-import de.tobias.playwall.common.api.project.PadStatus;
+import de.tobias.playwall.common.api.project.model.PadStatus;
 
 import java.util.UUID;
 

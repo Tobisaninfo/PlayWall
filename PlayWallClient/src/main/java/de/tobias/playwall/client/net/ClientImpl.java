@@ -2,7 +2,7 @@ package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
-import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.utils.MapUtils;
 
@@ -43,25 +43,25 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public void getProjects(Consumer<List<Project>> callback)
+	public void getProjects(Consumer<List<ProjectMetadata>> callback)
 	{
 		clientWebSocketHandler.send(new ProjectListRequest(), (ProjectListResponse res) -> {
 			callback.accept(res.getProjects().stream()
-					.map(projectMetadataMapper::projectMetadataDtoToProject)
-					.sorted(Comparator.comparing(Project::name))
+					.map(projectMetadataMapper::projectMetadataDtoToProjectMetadata)
+					.sorted(Comparator.comparing(ProjectMetadata::name))
 					.toList());
 		});
 	}
 
 	@Override
-	public void addProject(String name, BiConsumer<Boolean, Project> callback)
+	public void addProject(String name, BiConsumer<Boolean, ProjectMetadata> callback)
 	{
 		clientWebSocketHandler.send(new ProjectAddRequest(name), (ProjectAddResponse res) ->
-				callback.accept(res.isSuccess(), projectMetadataMapper.projectMetadataDtoToProject(res.getProject())));
+				callback.accept(res.isSuccess(), projectMetadataMapper.projectMetadataDtoToProjectMetadata(res.getProject())));
 	}
 
 	@Override
-	public void deleteProject(Project project, Consumer<ProjectDeleteResponse> callback)
+	public void deleteProject(ProjectMetadata project, Consumer<ProjectDeleteResponse> callback)
 	{
 		clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()), callback);
 	}

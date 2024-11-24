@@ -4,7 +4,7 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -28,7 +28,7 @@ public class ProjectNewDialog extends NVC
 
 	private final Client client;
 
-	private Project project;
+	private ProjectMetadata project;
 
 	public ProjectNewDialog(Window owner, Client client)
 	{
@@ -62,7 +62,7 @@ public class ProjectNewDialog extends NVC
 		stage.setMaxWidth(560);
 	}
 
-	public Optional<Project> showAndWait()
+	public Optional<ProjectMetadata> showAndWait()
 	{
 		getStageContainer().ifPresent(NVCStage::showAndWait);
 		return Optional.ofNullable(project);

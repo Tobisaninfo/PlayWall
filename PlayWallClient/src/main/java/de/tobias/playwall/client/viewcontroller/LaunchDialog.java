@@ -6,7 +6,7 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
@@ -34,7 +34,7 @@ public class LaunchDialog extends NVC
 	private ImageView imageView;
 
 	@FXML
-	private ListView<Project> projectListView;
+	private ListView<ProjectMetadata> projectListView;
 
 	@FXML
 	private Button newProjectButton;
@@ -97,7 +97,7 @@ public class LaunchDialog extends NVC
 
 	private void onDeleteButton()
 	{
-		final Project selectedProject = getSelectedProject();
+		final ProjectMetadata selectedProject = getSelectedProject();
 		if(selectedProject == null)
 		{
 			return;
@@ -128,7 +128,7 @@ public class LaunchDialog extends NVC
 	private void onNewProjectButton()
 	{
 		final ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow(), client);
-		final Optional<Project> projectOptional = dialog.showAndWait();
+		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait();
 		if(projectOptional.isPresent())
 		{
 			fetchProjects();
@@ -145,7 +145,7 @@ public class LaunchDialog extends NVC
 	 *
 	 * @return Project
 	 */
-	private Project getSelectedProject()
+	private ProjectMetadata getSelectedProject()
 	{
 		return projectListView.getSelectionModel().getSelectedItem();
 	}

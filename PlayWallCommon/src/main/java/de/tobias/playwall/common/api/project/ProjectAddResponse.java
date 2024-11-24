@@ -1,5 +1,6 @@
 package de.tobias.playwall.common.api.project;
 
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import lombok.AccessLevel;
 import lombok.Getter;

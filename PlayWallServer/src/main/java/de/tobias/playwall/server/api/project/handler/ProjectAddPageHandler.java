@@ -3,7 +3,7 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.project.ProjectAddPageRequest;
 import de.tobias.playwall.common.api.project.ProjectAddPageResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.server.api.project.PageMetadata;
+import de.tobias.playwall.server.api.project.Page;
 import de.tobias.playwall.server.api.project.PageMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.net.RequestHandler;
@@ -23,7 +23,7 @@ public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageReque
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectAddPageRequest requestMessage) throws IOException
 	{
-		final Optional<PageMetadata> pageOptional = projectRepository.addPage(requestMessage.getProjectId(), requestMessage.getName());
+		final Optional<Page> pageOptional = projectRepository.addPage(requestMessage.getProjectId(), requestMessage.getName());
 		if(pageOptional.isPresent())
 		{
 			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), true, mapper.pageMetadataToPageMetadataDto(pageOptional.get())));

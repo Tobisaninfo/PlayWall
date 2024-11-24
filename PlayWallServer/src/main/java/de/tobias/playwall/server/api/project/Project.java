@@ -10,9 +10,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class ProjectMetadata
+public class Project
 {
 	private UUID id;
 	private String name;
-	private List<PageMetadata> pages;
+	private List<Page> pages;
 }
