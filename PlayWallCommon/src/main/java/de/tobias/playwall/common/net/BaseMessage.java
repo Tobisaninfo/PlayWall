@@ -21,6 +21,7 @@ import java.util.UUID;
 		@JsonSubTypes.Type(value = ProjectAddResponse.class, name = "ProjectAddResponse"),
 		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectAddPageRequest"),
 		@JsonSubTypes.Type(value = ProjectAddPageResponse.class, name = "ProjectAddPageResponse"),
+		@JsonSubTypes.Type(value = ErrorMessage.class, name = "ErrorMessage"),
 })
 @Getter
 @Setter

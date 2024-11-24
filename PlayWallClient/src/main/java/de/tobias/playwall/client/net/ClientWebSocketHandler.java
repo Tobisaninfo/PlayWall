@@ -3,6 +3,8 @@ package de.tobias.playwall.client.net;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.logger.Logger;
+import de.tobias.playwall.client.PlayWallApiException;
+import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.WebSocketCloseStatus;
@@ -146,11 +148,12 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		return ws != null;
 	}
 
-	public synchronized <T extends ResponseMessage> T send(RequestMessage message)
+	public synchronized <T extends ResponseMessage> T send(RequestMessage message) throws PlayWallApiException
 	{
 		try
 		{
-			synchronized(lock) {
+			synchronized(lock)
+			{
 				send(objectMapper.writeValueAsString(message));
 
 				Optional<ResponseMessage> messageOptional;
@@ -160,7 +163,13 @@ class ClientWebSocketHandler implements WebSocket.Listener
 					lock.wait(100L);
 				}
 				Logger.debug("Return response for message id " + message.getMessageId());
-				return (T) messageOptional.get();
+				final ResponseMessage responseMessage = messageOptional.get();
+				if(responseMessage instanceof ErrorMessage errorMessage)
+				{
+					throw new PlayWallApiException(errorMessage.getMessage(), errorMessage.getError());
+				}
+
+				return (T) responseMessage;
 			}
 		}
 		catch(JsonProcessingException e)

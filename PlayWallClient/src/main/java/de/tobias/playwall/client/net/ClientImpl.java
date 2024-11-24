@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
+import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.*;
@@ -41,7 +42,7 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public List<ProjectMetadata> getProjects()
+	public List<ProjectMetadata> getProjects() throws PlayWallApiException
 	{
 		final ProjectListResponse response = clientWebSocketHandler.send(new ProjectListRequest());
 		return response.getProjects().stream()
@@ -51,20 +52,22 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public ProjectMetadata addProject(String name)
+	public ProjectMetadata addProject(String name) throws PlayWallApiException
 	{
 		final ProjectAddResponse response = clientWebSocketHandler.send(new ProjectAddRequest(name));
-		if (!response.isSuccess()) {
+		if(!response.isSuccess())
+		{
 			throw new RuntimeException("Failed to add project " + name);
 		}
 		return projectMetadataMapper.projectMetadataDtoToProjectMetadata(response.getProject());
 	}
 
 	@Override
-	public void deleteProject(ProjectMetadata project)
+	public void deleteProject(ProjectMetadata project) throws PlayWallApiException
 	{
 		final ProjectDeleteResponse response = clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()));
-		if (!response.isSuccess()) {
+		if(!response.isSuccess())
+		{
 			throw new RuntimeException("Failed to delete project " + project.name());
 		}
 	}

@@ -1,8 +1,11 @@
 package de.tobias.playwall.server.net;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.server.api.PlayWallServerException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -44,12 +47,12 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	}
 
 	@Override
-	protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message)
+	protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws JsonProcessingException
 	{
+		final RequestMessage parsedMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
+
 		try
 		{
-			final RequestMessage parsedMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
-
 			final Optional<RequestHandler> requestHandlerOptional = getRequestHandler(parsedMessage.getClass());
 			if(requestHandlerOptional.isEmpty())
 			{
@@ -65,10 +68,16 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 				sendToClients(textResponse, List.of(session));
 			}
 		}
-		catch(Exception e)
+		catch(PlayWallServerException e)
+		{
+			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), e.getError());
+			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
+			sendToClients(textResponse, List.of(session));
+		}
+		catch(IOException e)
 		{
 			// TODO: Return Error Messages
-			log.error("Error processing request", e);
+			log.error("Error processing re}quest", e);
 		}
 	}
 

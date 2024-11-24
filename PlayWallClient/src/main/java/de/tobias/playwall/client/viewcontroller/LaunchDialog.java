@@ -5,6 +5,7 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
@@ -117,8 +118,9 @@ public class LaunchDialog extends NVC
 				client.deleteProject(selectedProject);
 				fetchProjects();
 			}
-			catch(RuntimeException e)
+			catch(PlayWallApiException e)
 			{
+				// TODO: alert
 				showErrorMessage(getString(Strings.ERROR_PROJECT_DELETE, "Error deleting project " + selectedProject.name()));
 			}
 		});
@@ -136,7 +138,16 @@ public class LaunchDialog extends NVC
 
 	private void fetchProjects()
 	{
-		Platform.runLater(() -> projectListView.getItems().setAll(client.getProjects()));
+		Platform.runLater(() -> {
+			try
+			{
+				projectListView.getItems().setAll(client.getProjects());
+			}
+			catch(PlayWallApiException e)
+			{
+				throw new RuntimeException(e);
+			}
+		});
 	}
 
 	/**

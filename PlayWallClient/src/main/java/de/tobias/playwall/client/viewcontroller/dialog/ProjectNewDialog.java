@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
@@ -77,9 +78,10 @@ public class ProjectNewDialog extends NVC
 		{
 			project = client.addProject(name);
 		}
-		catch(RuntimeException e)
+		catch(PlayWallApiException e)
 		{
-			Logger.error(Localization.getString(Strings.ERROR_PROJECT_NAME_ALREADY_EXISTS));
+			// TODO: alert
+			Logger.error(Localization.getString(e.getMessage()));
 		}
 
 		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
