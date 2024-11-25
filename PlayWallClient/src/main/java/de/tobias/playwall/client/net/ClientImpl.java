@@ -61,10 +61,6 @@ public class ClientImpl implements Client
 	@Override
 	public void deleteProject(ProjectMetadata project) throws PlayWallApiException
 	{
-		final ProjectDeleteResponse response = clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()));
-		if(!response.isSuccess())
-		{
-			throw new RuntimeException("Failed to delete project " + project.name());
-		}
+		clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()));
 	}
 }

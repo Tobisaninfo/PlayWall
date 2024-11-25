@@ -1,20 +1,17 @@
 package de.tobias.playwall.common.api.project;
 
-import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.common.api.ServerError;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
-@Setter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ProjectDeleteResponse extends ResponseMessage
+public class ProjectNotExistsError extends ServerError
 {
-	public ProjectDeleteResponse(UUID messageId)
-	{
-		super(messageId);
-	}
+	private UUID projectId;
 }
