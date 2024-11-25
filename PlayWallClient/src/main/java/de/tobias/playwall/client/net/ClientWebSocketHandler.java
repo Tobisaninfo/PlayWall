@@ -26,7 +26,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	private static final int THREAD_COUNT = 6;
 
 	private final ObjectMapper objectMapper;
-	private final ResponseQueue messageQueue;
+	private final ResponseQueue responseQueue;
 
 	private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
 	private final HttpClient httpClient = HttpClient.newBuilder().executor(executorService).build();
@@ -39,7 +39,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		this.listeners = new ArrayList<>();
 		this.objectMapper = new ObjectMapper().findAndRegisterModules();
-		this.messageQueue = ResponseQueue.getInstance();
+		this.responseQueue = new ResponseQueue();
 	}
 
 	public void connect(Map<String, String> headers)
@@ -104,7 +104,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 
 			synchronized(lock)
 			{
-				messageQueue.enqueueResponse(message.getMessageId(), message);
+				responseQueue.enqueueResponse(message.getMessageId(), message);
 				Logger.trace("NotifyAll");
 				lock.notifyAll();
 			}
@@ -157,7 +157,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 				send(objectMapper.writeValueAsString(message));
 
 				Optional<ResponseMessage> messageOptional;
-				while((messageOptional = ResponseQueue.getInstance().dequeueResponse(message.getMessageId())).isEmpty())
+				while((messageOptional = this.responseQueue.dequeueResponse(message.getMessageId())).isEmpty())
 				{
 					Logger.trace("Waiting for response for message id " + message.getMessageId());
 					lock.wait(100L);
