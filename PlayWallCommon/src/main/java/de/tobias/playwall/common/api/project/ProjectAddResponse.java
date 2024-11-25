@@ -14,13 +14,11 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ProjectAddResponse extends ResponseMessage
 {
-	private boolean success;
 	private ProjectMetadataDto project;
 
-	public ProjectAddResponse(UUID messageId, boolean success, ProjectMetadataDto project)
+	public ProjectAddResponse(UUID messageId, ProjectMetadataDto project)
 	{
 		super(messageId);
-		this.success = success;
 		this.project = project;
 	}
 }

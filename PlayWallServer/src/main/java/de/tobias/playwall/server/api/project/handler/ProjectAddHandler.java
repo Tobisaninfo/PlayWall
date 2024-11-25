@@ -29,7 +29,7 @@ public class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
 		final Optional<Project> projectOptional = projectRepository.addProject(requestMessage.getName());
 		if(projectOptional.isPresent())
 		{
-			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), true, mapper.projectToProjectMetadataDto(projectOptional.get())));
+			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectToProjectMetadataDto(projectOptional.get())));
 		}
 		else
 		{

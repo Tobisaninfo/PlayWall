@@ -55,10 +55,6 @@ public class ClientImpl implements Client
 	public ProjectMetadata addProject(String name) throws PlayWallApiException
 	{
 		final ProjectAddResponse response = clientWebSocketHandler.send(new ProjectAddRequest(name));
-		if(!response.isSuccess())
-		{
-			throw new RuntimeException("Failed to add project " + name);
-		}
 		return projectMetadataMapper.projectMetadataDtoToProjectMetadata(response.getProject());
 	}
 
