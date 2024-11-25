@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.common.api.project.ProjectDeleteRequest;
 import de.tobias.playwall.common.api.project.ProjectDeleteResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
@@ -11,7 +12,6 @@ import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -30,6 +30,6 @@ public class ProjectDeleteHandler implements RequestHandler<ProjectDeleteRequest
 		}
 
 		final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
-		throw new PlayWallServerException(MessageFormat.format("Es existiert kein Projekt mit der ID \"{0}\".", requestMessage.getProjectId()), error);
+		throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
 	}
 }

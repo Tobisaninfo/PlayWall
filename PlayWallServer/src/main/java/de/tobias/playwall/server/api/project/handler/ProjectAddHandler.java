@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.common.api.project.ProjectAddRequest;
 import de.tobias.playwall.common.api.project.ProjectAddResponse;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
@@ -13,7 +14,6 @@ import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
 		else
 		{
 			final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(requestMessage.getName());
-			throw new PlayWallServerException(MessageFormat.format("Das Projekt mit dem Namen \"{0}\" kann nicht angelegt werden, da bereits ein Projekt mit diesem Namen existiert.", requestMessage.getName()), error);
+			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getName()), error);
 		}
 	}
 }

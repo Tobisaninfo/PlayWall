@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
@@ -120,8 +121,8 @@ public class LaunchDialog extends NVC
 			}
 			catch(PlayWallApiException e)
 			{
-				// TODO: alert
-				showErrorMessage(getString(Strings.ERROR_PROJECT_DELETE, "Error deleting project " + selectedProject.name()));
+				Logger.error(e.getMessage());
+				showErrorMessage(e.getMessage());
 			}
 		});
 	}

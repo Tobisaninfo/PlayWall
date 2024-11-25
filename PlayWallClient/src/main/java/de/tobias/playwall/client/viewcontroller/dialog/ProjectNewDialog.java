@@ -80,8 +80,8 @@ public class ProjectNewDialog extends NVC
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: alert
-			Logger.error(Localization.getString(e.getMessage()));
+			Logger.error(e.getMessage());
+			showErrorMessage(e.getMessage());
 		}
 
 		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
