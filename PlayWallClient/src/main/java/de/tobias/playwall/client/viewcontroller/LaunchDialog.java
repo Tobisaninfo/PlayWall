@@ -146,7 +146,8 @@ public class LaunchDialog extends NVC
 			}
 			catch(PlayWallApiException e)
 			{
-				throw new RuntimeException(e);
+				Logger.error(e.getMessage());
+				showErrorMessage(e.getMessage());
 			}
 		});
 	}
