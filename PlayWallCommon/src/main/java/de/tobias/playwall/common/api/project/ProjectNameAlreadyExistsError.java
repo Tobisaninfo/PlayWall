@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class ProjectNameAlreadyExists extends ServerError
+public class ProjectNameAlreadyExistsError extends ServerError
 {
 	private String projectName;
 }
