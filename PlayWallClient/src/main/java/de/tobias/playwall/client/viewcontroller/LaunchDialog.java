@@ -115,7 +115,7 @@ public class LaunchDialog extends NVC
 			// TODO show progress indicator
 			try
 			{
-				client.deleteProject(selectedProject);
+				client.deleteProject(selectedProject.id());
 				fetchProjects();
 			}
 			catch(PlayWallApiException e)

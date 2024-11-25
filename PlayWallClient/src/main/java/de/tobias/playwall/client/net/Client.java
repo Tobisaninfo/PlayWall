@@ -17,7 +17,7 @@ public interface Client
 
 	ProjectMetadata addProject(String name) throws PlayWallApiException;
 
-	void deleteProject(ProjectMetadata project) throws PlayWallApiException;
+	void deleteProject(UUID projectId) throws PlayWallApiException;
 
 	Page addPage(UUID projectId, String name) throws PlayWallApiException;
 }

@@ -63,9 +63,9 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public void deleteProject(ProjectMetadata project) throws PlayWallApiException
+	public void deleteProject(UUID projectId) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()));
+		clientWebSocketHandler.send(new ProjectDeleteRequest(projectId));
 	}
 
 	@Override
