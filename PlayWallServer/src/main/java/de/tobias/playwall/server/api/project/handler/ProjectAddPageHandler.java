@@ -2,7 +2,9 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.ProjectAddPageRequest;
 import de.tobias.playwall.common.api.project.ProjectAddPageResponse;
+import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.Page;
 import de.tobias.playwall.server.api.project.PageMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectRepository;
@@ -11,6 +13,7 @@ import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -21,17 +24,15 @@ public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageReque
 	private final PageMetadataMapper mapper;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectAddPageRequest requestMessage) throws IOException
+	public Optional<ResponseMessage> handleRequest(ProjectAddPageRequest requestMessage) throws IOException, PlayWallServerException
 	{
 		final Optional<Page> pageOptional = projectRepository.addPage(requestMessage.getProjectId(), requestMessage.getName());
-		if(pageOptional.isPresent())
+		if(pageOptional.isEmpty())
 		{
-			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), true, mapper.pageMetadataToPageMetadataDto(pageOptional.get())));
+			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
+			throw new PlayWallServerException(MessageFormat.format("Es existiert kein Projekt mit der ID \"{0}\".", requestMessage.getProjectId()), error);
 		}
-		else
-		{
-			// TODO: handle project does not exist or general error
-			return Optional.empty();
-		}
+
+		return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageMetadataToPageMetadataDto(pageOptional.get())));
 	}
 }

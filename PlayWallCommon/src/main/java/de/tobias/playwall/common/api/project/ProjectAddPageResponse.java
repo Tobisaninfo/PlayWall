@@ -14,13 +14,11 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ProjectAddPageResponse extends ResponseMessage
 {
-	private boolean success;
 	private PageDto page;
 
-	public ProjectAddPageResponse(UUID messageId, boolean success, PageDto page)
+	public ProjectAddPageResponse(UUID messageId, PageDto page)
 	{
 		super(messageId);
-		this.success = success;
 		this.page = page;
 	}
 }

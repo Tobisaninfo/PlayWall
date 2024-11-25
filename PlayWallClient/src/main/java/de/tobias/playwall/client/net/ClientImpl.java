@@ -2,7 +2,9 @@ package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
+import de.tobias.playwall.client.mapper.PageMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
+import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.utils.MapUtils;
@@ -16,12 +18,14 @@ import static de.tobias.playwall.common.utils.MapUtils.entry;
 public class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
+	private final PageMapper pageMapper;
 
 	private ClientWebSocketHandler clientWebSocketHandler;
 
-	public ClientImpl(ProjectMetadataMapper projectMetadataMapper)
+	public ClientImpl(ProjectMetadataMapper projectMetadataMapper, PageMapper pageMapper)
 	{
 		this.projectMetadataMapper = projectMetadataMapper;
+		this.pageMapper = pageMapper;
 	}
 
 	@Override
@@ -62,5 +66,12 @@ public class ClientImpl implements Client
 	public void deleteProject(ProjectMetadata project) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new ProjectDeleteRequest(project.id()));
+	}
+
+	@Override
+	public Page addPage(UUID projectId, String name) throws PlayWallApiException
+	{
+		final ProjectAddPageResponse response = clientWebSocketHandler.send(new ProjectAddPageRequest(projectId, name));
+		return pageMapper.pageDtoToPage(response.getPage());
 	}
 }
