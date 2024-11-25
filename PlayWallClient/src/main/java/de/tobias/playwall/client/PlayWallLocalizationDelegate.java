@@ -4,7 +4,7 @@ import de.thecodelabs.utils.util.Localization;
 
 import java.util.Locale;
 
-public class PlayPadLocalizationDelegate implements Localization.LocalizationDelegate
+public class PlayWallLocalizationDelegate implements Localization.LocalizationDelegate
 {
 	@Override
 	public String[] getBaseResources()

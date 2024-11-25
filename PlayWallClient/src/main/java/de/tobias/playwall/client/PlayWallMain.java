@@ -30,7 +30,7 @@ public class PlayWallMain extends Application
 
 	public static void main(String[] args)
 	{
-		Localization.setDelegate(new PlayPadLocalizationDelegate());
+		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
 
 		ApplicationUtils.addAppListener(PlayWallMain::applicationWillStart);
