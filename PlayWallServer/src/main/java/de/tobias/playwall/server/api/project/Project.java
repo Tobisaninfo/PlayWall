@@ -14,5 +14,7 @@ public class Project
 {
 	private UUID id;
 	private String name;
+	private int numberOfHorizontalPads;
+	private int numberOfVerticalPads;
 	private List<Page> pages;
 }

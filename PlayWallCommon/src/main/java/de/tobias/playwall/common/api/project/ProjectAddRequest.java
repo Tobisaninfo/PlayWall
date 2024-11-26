@@ -10,4 +10,6 @@ import lombok.*;
 public class ProjectAddRequest extends RequestMessage
 {
 	private String name;
+	private int numberOfHorizontalPads;
+	private int numberOVerticalPads;
 }

@@ -17,14 +17,14 @@ public class ProjectMapper
 		this.pageMapper = pageMapper;
 	}
 
-	public Project projectDtoToProject(ProjectDto project)
+	public Project projectDtoToProject(ProjectDto projectDto)
 	{
 		final List<Page> pages = new ArrayList<>();
-		for(PageDto pagedto : project.pages())
+		for(PageDto pagedto : projectDto.pages())
 		{
 			pages.add(this.pageMapper.pageDtoToPage(pagedto));
 		}
 
-		return new Project(project.id(), project.name(), pages);
+		return new Project(projectDto.id(), projectDto.name(), projectDto.numberOfHorizontalPads(), projectDto.numberOfVerticalPads(), pages);
 	}
 }

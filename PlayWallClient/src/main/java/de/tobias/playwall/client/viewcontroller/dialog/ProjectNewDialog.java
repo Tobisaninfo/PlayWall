@@ -12,6 +12,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,8 +23,15 @@ import java.util.Optional;
 
 public class ProjectNewDialog extends NVC
 {
+	private static final int MIN_NUMBER_OF_PADS_PER_AXIS = 3;
+	private static final int MAX_NUMBER_OF_PADS_PER_AXIS = 10;
+
 	@FXML
 	private TextField nameTextField;
+	@FXML
+	private Spinner<Integer> spinnerNumberOfHorizontalPads;
+	@FXML
+	private Spinner<Integer> spinnerNumberOfVerticalPads;
 	@FXML
 	private Button finishButton;
 	@FXML
@@ -47,6 +56,9 @@ public class ProjectNewDialog extends NVC
 	{
 		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(c.trim().isEmpty()));
 		finishButton.setDisable(true);
+
+		spinnerNumberOfHorizontalPads.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_NUMBER_OF_PADS_PER_AXIS, MAX_NUMBER_OF_PADS_PER_AXIS, 6));
+		spinnerNumberOfVerticalPads.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_NUMBER_OF_PADS_PER_AXIS, MAX_NUMBER_OF_PADS_PER_AXIS, 4));
 	}
 
 	@Override
@@ -74,9 +86,12 @@ public class ProjectNewDialog extends NVC
 	private void finishButtonHandler(ActionEvent event)
 	{
 		final String name = nameTextField.getText();
+		final int numberOfHorizontalPads = spinnerNumberOfHorizontalPads.getValue();
+		final int numberOfVerticalPads = spinnerNumberOfVerticalPads.getValue();
+
 		try
 		{
-			project = client.addProject(name);
+			project = client.addProject(name, numberOfHorizontalPads, numberOfVerticalPads);
 		}
 		catch(PlayWallApiException e)
 		{

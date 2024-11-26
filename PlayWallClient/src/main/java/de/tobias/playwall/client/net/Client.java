@@ -15,7 +15,7 @@ public interface Client
 
 	List<ProjectMetadata> getProjects() throws PlayWallApiException;
 
-	ProjectMetadata addProject(String name) throws PlayWallApiException;
+	ProjectMetadata addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws PlayWallApiException;
 
 	void deleteProject(UUID projectId) throws PlayWallApiException;
 

@@ -63,7 +63,7 @@ public class ProjectRepository
 		return isSuccess;
 	}
 
-	public Optional<Project> addProject(String name) throws IOException
+	public Optional<Project> addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException
 	{
 		final Optional<Project> existingProjectOptional = getProjectByName(name);
 		if(existingProjectOptional.isPresent())
@@ -74,6 +74,8 @@ public class ProjectRepository
 		final Project newProject = Project.builder()
 				.id(UUID.randomUUID())
 				.name(name)
+				.numberOfHorizontalPads(numberOfHorizontalPads)
+				.numberOfVerticalPads(numberOfVerticalPads)
 				.pages(new ArrayList<>())
 				.build();
 		projects.add(newProject);

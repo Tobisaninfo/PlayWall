@@ -26,7 +26,7 @@ public class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectAddRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject(requestMessage.getName());
+		final Optional<Project> projectOptional = projectRepository.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
 		if(projectOptional.isPresent())
 		{
 			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectToProjectMetadataDto(projectOptional.get())));

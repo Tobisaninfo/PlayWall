@@ -56,9 +56,9 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public ProjectMetadata addProject(String name) throws PlayWallApiException
+	public ProjectMetadata addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws PlayWallApiException
 	{
-		final ProjectAddResponse response = clientWebSocketHandler.send(new ProjectAddRequest(name));
+		final ProjectAddResponse response = clientWebSocketHandler.send(new ProjectAddRequest(name, numberOfHorizontalPads, numberOfVerticalPads));
 		return projectMetadataMapper.projectMetadataDtoToProjectMetadata(response.getProject());
 	}
 
