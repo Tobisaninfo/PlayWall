@@ -152,9 +152,12 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		try
 		{
+			final String data = objectMapper.writeValueAsString(message);
+			Logger.debug("Sending: " + data);
+
 			synchronized(lock)
 			{
-				send(objectMapper.writeValueAsString(message));
+				send(data);
 
 				Optional<ResponseMessage> messageOptional;
 				while((messageOptional = this.responseQueue.dequeueResponse(message.getMessageId())).isEmpty())

@@ -50,6 +50,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws JsonProcessingException
 	{
 		final RequestMessage parsedMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
+		log.debug("Received: {}", message.getPayload());
 
 		try
 		{
@@ -83,6 +84,8 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 
 	private static void sendToClients(TextMessage textResponse, List<WebSocketSession> sessions)
 	{
+		log.debug("Sending: {}", textResponse.getPayload());
+
 		for(WebSocketSession webSocketSession : sessions)
 		{
 			if(webSocketSession.isOpen())
