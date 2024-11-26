@@ -1,15 +1,15 @@
 package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.common.api.project.model.PadStatus;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 @Builder
+@ToString
+@EqualsAndHashCode
 public class Pad
 {
 	private UUID id;

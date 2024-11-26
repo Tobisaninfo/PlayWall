@@ -1,8 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +8,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@ToString
+@EqualsAndHashCode
 public class Project
 {
 	private UUID id;

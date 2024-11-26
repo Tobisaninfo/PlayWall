@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.storage.PathProvider;
 import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProjectRepository
 {
 	private final PathProvider pathProvider;
@@ -46,6 +46,12 @@ public class ProjectRepository
 		final Path path = pathProvider.getPathForConfig("projects.json");
 		Files.createDirectories(path.getParent());
 		mapper.writeValue(Files.newBufferedWriter(path), projects);
+	}
+
+	void clearProjects() throws IOException
+	{
+		this.projects = new ArrayList<>();
+		saveProjects();
 	}
 
 	public List<Project> getAllProjectMetadata()
