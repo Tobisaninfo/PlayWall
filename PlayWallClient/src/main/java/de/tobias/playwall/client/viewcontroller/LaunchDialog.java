@@ -68,9 +68,6 @@ public class LaunchDialog extends NVC
 
 		openButton.setDisable(true);
 		deleteButton.setDisable(true);
-		deleteButton.setOnAction(event -> onDeleteButton());
-
-		newProjectButton.setOnAction(event -> onNewProjectButton());
 
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
@@ -97,6 +94,7 @@ public class LaunchDialog extends NVC
 		Worker.runLater(this::fetchProjects);
 	}
 
+	@FXML
 	private void onDeleteButton()
 	{
 		final ProjectMetadata selectedProject = getSelectedProject();
@@ -127,6 +125,7 @@ public class LaunchDialog extends NVC
 		});
 	}
 
+	@FXML
 	private void onNewProjectButton()
 	{
 		final ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow(), client);
@@ -135,6 +134,11 @@ public class LaunchDialog extends NVC
 		{
 			fetchProjects();
 		}
+	}
+
+	@FXML
+	private void onOpenButton()
+	{
 	}
 
 	private void fetchProjects()
