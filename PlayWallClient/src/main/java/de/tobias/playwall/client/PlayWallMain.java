@@ -62,7 +62,7 @@ public class PlayWallMain extends Application
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
 		client = createClient();
-		client.connect();
+		client.connectWithRetries(10);
 
 		stageIcon = new Image(ICON_PATH);
 		Alerts.getInstance().setDefaultIcon(stageIcon);

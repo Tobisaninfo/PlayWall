@@ -40,6 +40,40 @@ public class ClientImpl implements Client
 	}
 
 	@Override
+	public void connectWithRetries(int numberOfRetries)
+	{
+		for(int i = 1; i <= numberOfRetries; i++)
+		{
+			Logger.info("Connect to server with client id {0} (Attempt: {1}/{2})", UUID.randomUUID().toString(), i, numberOfRetries);
+			try
+			{
+				connect();
+				return;
+			}
+			catch(Exception e)
+			{
+				if(i == numberOfRetries)
+				{
+					throw e;
+				}
+
+				Logger.error("Failed to connect to the PlayWall server", e);
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch(InterruptedException ex)
+				{
+					Thread.currentThread().interrupt();
+					throw new RuntimeException(e);
+				}
+			}
+		}
+
+		throw new RuntimeException("Could not connect to server");
+	}
+
+	@Override
 	public void disconnect()
 	{
 		clientWebSocketHandler.disconnect();

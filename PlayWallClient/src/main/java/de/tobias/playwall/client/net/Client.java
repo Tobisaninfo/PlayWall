@@ -11,6 +11,8 @@ public interface Client
 {
 	void connect();
 
+	void connectWithRetries(int numberOfRetries);
+
 	void disconnect();
 
 	List<ProjectMetadata> getProjects() throws PlayWallApiException;
