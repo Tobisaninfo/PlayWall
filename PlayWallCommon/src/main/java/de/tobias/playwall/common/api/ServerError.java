@@ -3,6 +3,7 @@ package de.tobias.playwall.common.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.tobias.playwall.common.api.project.PageNotExistsError;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 
@@ -12,7 +13,8 @@ import java.util.stream.Collectors;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "$type")
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = ProjectNameAlreadyExistsError.class, name = "ProjectNameAlreadyExistsError"),
-		@JsonSubTypes.Type(value = ProjectNotExistsError.class, name = "ProjectNotExistsError")
+		@JsonSubTypes.Type(value = ProjectNotExistsError.class, name = "ProjectNotExistsError"),
+		@JsonSubTypes.Type(value = PageNotExistsError.class, name = "PageNotExistsError")
 })
 public class ServerError
 {

@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class ProjectRepositoryTest
@@ -109,13 +110,13 @@ class ProjectRepositoryTest
 	}
 
 	@Test
-	void test_addPage() throws IOException
+	void test_addPage() throws IOException, ProjectNotExistsException
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
 
-		final Optional<Page> pageOptional = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
 
-		assertThat(pageOptional).isPresent().get()
+		assertThat(page)
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
 				.containsExactly(0, "New Page", List.of());
 
@@ -125,7 +126,7 @@ class ProjectRepositoryTest
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
 				.pages(List.of(Page.builder()
-						.id(pageOptional.get().getId())
+						.id(page.getId())
 						.position(0)
 						.name("New Page")
 						.pads(List.of())
@@ -133,5 +134,150 @@ class ProjectRepositoryTest
 				.build();
 
 		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+	}
+
+	@Test
+	void test_addPage_unknownProject()
+	{
+		assertThatThrownBy(() -> {
+			projectRepository.addPage(UUID.randomUUID(), "New Page");
+		}).isInstanceOf(ProjectNotExistsException.class);
+	}
+
+	@Test
+	void test_renamePage() throws IOException, ProjectNotExistsException, PageNotExistsException
+	{
+		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+
+		final Page newPage = projectRepository.renamePage(projectOptional.get().getId(), page.getId(), "Updated Page Name");
+
+		assertThat(newPage)
+				.extracting(Page::getPosition, Page::getName, Page::getPads)
+				.containsExactly(0, "Updated Page Name", List.of());
+
+		final Project expected = Project.builder()
+				.id(projectOptional.get().getId())
+				.name("New Project")
+				.numberOfHorizontalPads(6)
+				.numberOfVerticalPads(5)
+				.pages(List.of(Page.builder()
+						.id(page.getId())
+						.position(0)
+						.name("Updated Page Name")
+						.pads(List.of())
+						.build()))
+				.build();
+
+		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+	}
+
+	@Test
+	void test_renamePage_unknownProject()
+	{
+		assertThatThrownBy(() -> {
+			projectRepository.renamePage(UUID.randomUUID(), UUID.randomUUID(), "Updated Page Name");
+		}).isInstanceOf(ProjectNotExistsException.class);
+	}
+
+	@Test
+	void test_renamePage_unknownPage() throws IOException
+	{
+		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+
+		assertThatThrownBy(() -> {
+			projectRepository.renamePage(projectOptional.get().getId(), UUID.randomUUID(), "Updated Page Name");
+		}).isInstanceOf(PageNotExistsException.class);
+	}
+
+	@Test
+	void test_deletePage() throws IOException, ProjectNotExistsException
+	{
+		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+
+		final boolean isSuccess = projectRepository.deletePage(projectOptional.get().getId(), page.getId());
+
+		assertThat(isSuccess).isTrue();
+
+		final Project expected = Project.builder()
+				.id(projectOptional.get().getId())
+				.name("New Project")
+				.numberOfHorizontalPads(6)
+				.numberOfVerticalPads(5)
+				.pages(List.of())
+				.build();
+
+		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+	}
+
+	@Test
+	void test_deletePage_unknownProject()
+	{
+		assertThatThrownBy(() -> {
+			projectRepository.deletePage(UUID.randomUUID(), UUID.randomUUID());
+		}).isInstanceOf(ProjectNotExistsException.class);
+	}
+
+	@Test
+	void test_deletePage_unknownPage() throws IOException, ProjectNotExistsException
+	{
+		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+
+		final boolean isSuccess = projectRepository.deletePage(projectOptional.get().getId(), UUID.randomUUID());
+
+		assertThat(isSuccess).isFalse();
+	}
+
+	@Test
+	void test_duplicatePage() throws IOException, ProjectNotExistsException, PageNotExistsException
+	{
+		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+
+		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+		final Page newPage = projectRepository.duplicatePage(projectOptional.get().getId(), page.getId(), "Duplicated Page");
+
+		assertThat(newPage)
+				.extracting(Page::getPosition, Page::getName, Page::getPads)
+				.containsExactly(1, "Duplicated Page", List.of());
+
+		final Project expected = Project.builder()
+				.id(projectOptional.get().getId())
+				.name("New Project")
+				.numberOfHorizontalPads(6)
+				.numberOfVerticalPads(5)
+				.pages(List.of(Page.builder()
+								.id(page.getId())
+								.position(0)
+								.name("New Page")
+								.pads(List.of())
+								.build(),
+						Page.builder()
+								.id(newPage.getId())
+								.position(1)
+								.name("Duplicated Page")
+								.pads(List.of())
+								.build()))
+				.build();
+
+		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+	}
+
+	@Test
+	void test_duplicatePage_unknownProject()
+	{
+		assertThatThrownBy(() -> {
+			projectRepository.duplicatePage(UUID.randomUUID(), UUID.randomUUID(), "Duplicated Page");
+		}).isInstanceOf(ProjectNotExistsException.class);
+	}
+
+	@Test
+	void test_duplicatePage_unknownPage() throws IOException
+	{
+		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+
+		assertThatThrownBy(() -> {
+			projectRepository.duplicatePage(projectOptional.get().getId(), UUID.randomUUID(), "Duplicated Page");
+		}).isInstanceOf(PageNotExistsException.class);
 	}
 }

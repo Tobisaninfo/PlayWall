@@ -22,4 +22,10 @@ public interface Client
 	void deleteProject(UUID projectId) throws PlayWallApiException;
 
 	Page addPage(UUID projectId, String name) throws PlayWallApiException;
+
+	Page renamePage(UUID projectId, UUID pageId, String newName) throws PlayWallApiException;
+
+	void deletePage(UUID projectId, UUID pageId) throws PlayWallApiException;
+
+	Page duplicatePage(UUID projectId, UUID pageId, String name) throws PlayWallApiException;
 }

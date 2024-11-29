@@ -1,13 +1,12 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playwall.common.api.project.ProjectAddPageRequest;
-import de.tobias.playwall.common.api.project.ProjectAddPageResponse;
+import de.tobias.playwall.common.api.project.PageNotExistsError;
+import de.tobias.playwall.common.api.project.ProjectDeletePageRequest;
+import de.tobias.playwall.common.api.project.ProjectDeletePageResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.Page;
-import de.tobias.playwall.server.api.project.PageMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.net.RequestHandler;
@@ -18,25 +17,29 @@ import java.io.IOException;
 import java.util.Optional;
 
 @AllArgsConstructor
-@RequestHandlerTyped(ProjectAddPageRequest.class)
-public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageRequest>
+@RequestHandlerTyped(ProjectDeletePageRequest.class)
+public class ProjectDeletePageHandler implements RequestHandler<ProjectDeletePageRequest>
 {
 	private final ProjectRepository projectRepository;
-	private final PageMetadataMapper mapper;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectAddPageRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<ResponseMessage> handleRequest(ProjectDeletePageRequest requestMessage) throws IOException, PlayWallServerException
 	{
 		try
 		{
-			final Page page = projectRepository.addPage(requestMessage.getProjectId(), requestMessage.getName());
-			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageMetadataToPageMetadataDto(page)));
+			final boolean success = projectRepository.deletePage(requestMessage.getProjectId(), requestMessage.getPageId());
+			if(success)
+			{
+				return Optional.of(new ProjectDeletePageResponse(requestMessage.getMessageId()));
+			}
+
+			final PageNotExistsError error = new PageNotExistsError(requestMessage.getProjectId(), requestMessage.getPageId());
+			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
 		}
 		catch(ProjectNotExistsException e)
 		{
 			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
-
 		}
 	}
 }

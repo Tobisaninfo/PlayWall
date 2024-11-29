@@ -90,12 +90,12 @@ public class ProjectRepository
 		return Optional.of(newProject);
 	}
 
-	public Optional<Page> addPage(UUID projectId, String name) throws IOException
+	public Page addPage(UUID projectId, String name) throws IOException, ProjectNotExistsException
 	{
 		final Optional<Project> projectOptional = getProjectById(projectId);
 		if(projectOptional.isEmpty())
 		{
-			return Optional.empty();
+			throw new ProjectNotExistsException();
 		}
 
 		final Project project = projectOptional.get();
@@ -111,7 +111,83 @@ public class ProjectRepository
 		project.getPages().add(page);
 		saveProjects();
 
-		return Optional.of(page);
+		return page;
+	}
+
+	public Page renamePage(UUID projectId, UUID pageId, String newName) throws IOException, ProjectNotExistsException, PageNotExistsException
+	{
+		final Optional<Project> projectOptional = getProjectById(projectId);
+		if(projectOptional.isEmpty())
+		{
+			throw new ProjectNotExistsException();
+		}
+		final Project project = projectOptional.get();
+
+		final Optional<Page> pageOptional = project.getPageById(pageId);
+		if(pageOptional.isEmpty())
+		{
+			throw new PageNotExistsException();
+		}
+		final Page page = pageOptional.get();
+		page.setName(newName);
+
+		saveProjects();
+
+		return page;
+	}
+
+	public Page duplicatePage(UUID projectId, UUID pageId, String name) throws IOException, ProjectNotExistsException, PageNotExistsException
+	{
+		final Optional<Project> projectOptional = getProjectById(projectId);
+		if(projectOptional.isEmpty())
+		{
+			throw new ProjectNotExistsException();
+		}
+		final Project project = projectOptional.get();
+
+		final Optional<Page> pageOptional = project.getPageById(pageId);
+		if(pageOptional.isEmpty())
+		{
+			throw new PageNotExistsException();
+		}
+		final Page page = pageOptional.get();
+
+		final List<Pad> newPads = page.getPads().stream()
+				.map(pad -> Pad.builder()
+						.id(UUID.randomUUID())
+						.name(pad.getName())
+						.position(pad.getPosition())
+						.build())
+				.toList();
+
+		final int nextPagePosition = project.getPages().size();
+		final Page newPage = Page.builder()
+				.id(UUID.randomUUID())
+				.name(name)
+				.position(nextPagePosition)
+				.pads(newPads)
+				.build();
+
+		project.getPages().add(newPage);
+		saveProjects();
+
+		return newPage;
+	}
+
+	public boolean deletePage(UUID projectId, UUID pageId) throws IOException, ProjectNotExistsException
+	{
+		final Optional<Project> projectOptional = getProjectById(projectId);
+		if(projectOptional.isEmpty())
+		{
+			throw new ProjectNotExistsException();
+		}
+
+		final boolean isSuccess = projectOptional.get().getPages().removeIf(page -> page.getId().equals(pageId));
+		if(isSuccess)
+		{
+			saveProjects();
+		}
+		return isSuccess;
 	}
 
 	public Optional<Project> getProjectById(UUID id)
