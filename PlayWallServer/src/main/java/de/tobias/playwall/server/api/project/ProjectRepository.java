@@ -2,6 +2,9 @@ package de.tobias.playwall.server.api.project;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tobias.playwall.server.api.project.model.Pad;
+import de.tobias.playwall.server.api.project.model.Page;
+import de.tobias.playwall.server.api.project.model.Project;
 import de.tobias.playwall.server.storage.PathProvider;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,7 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.api.project.model.Page;
+import de.tobias.playwall.server.api.project.model.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
