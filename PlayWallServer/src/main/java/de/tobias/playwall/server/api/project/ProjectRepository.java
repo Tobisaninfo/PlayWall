@@ -95,7 +95,7 @@ public class ProjectRepository
 		final Optional<Project> projectOptional = getProjectById(projectId);
 		if(projectOptional.isEmpty())
 		{
-			throw new ProjectNotExistsException();
+			throw new ProjectNotExistsException(projectId);
 		}
 
 		final Project project = projectOptional.get();
@@ -119,14 +119,14 @@ public class ProjectRepository
 		final Optional<Project> projectOptional = getProjectById(projectId);
 		if(projectOptional.isEmpty())
 		{
-			throw new ProjectNotExistsException();
+			throw new ProjectNotExistsException(projectId);
 		}
 		final Project project = projectOptional.get();
 
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
 		{
-			throw new PageNotExistsException();
+			throw new PageNotExistsException(projectId, pageId);
 		}
 		final Page page = pageOptional.get();
 		page.setName(newName);
@@ -141,14 +141,14 @@ public class ProjectRepository
 		final Optional<Project> projectOptional = getProjectById(projectId);
 		if(projectOptional.isEmpty())
 		{
-			throw new ProjectNotExistsException();
+			throw new ProjectNotExistsException(projectId);
 		}
 		final Project project = projectOptional.get();
 
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
 		{
-			throw new PageNotExistsException();
+			throw new PageNotExistsException(projectId, pageId);
 		}
 		final Page page = pageOptional.get();
 
@@ -179,7 +179,7 @@ public class ProjectRepository
 		final Optional<Project> projectOptional = getProjectById(projectId);
 		if(projectOptional.isEmpty())
 		{
-			throw new ProjectNotExistsException();
+			throw new ProjectNotExistsException(projectId);
 		}
 
 		final boolean isSuccess = projectOptional.get().getPages().removeIf(page -> page.getId().equals(pageId));
