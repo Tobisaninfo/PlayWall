@@ -139,6 +139,15 @@ public class LaunchDialog extends NVC
 	@FXML
 	private void onOpenButton()
 	{
+		try
+		{
+			client.launchProject(getSelectedProject().id());
+		}
+		catch(PlayWallApiException e)
+		{
+			Logger.error(e.getMessage());
+			showErrorMessage(e.getMessage());
+		}
 	}
 
 	private void fetchProjects()

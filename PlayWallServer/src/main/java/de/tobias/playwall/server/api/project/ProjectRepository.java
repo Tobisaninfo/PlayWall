@@ -95,13 +95,7 @@ public class ProjectRepository
 
 	public Page addPage(UUID projectId, String name) throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = getProjectById(projectId);
-		if(projectOptional.isEmpty())
-		{
-			throw new ProjectNotExistsException(projectId);
-		}
-
-		final Project project = projectOptional.get();
+		final Project project = getProjectById(projectId);
 		final int nextPagePosition = project.getPages().size();
 
 		final Page page = Page.builder()
@@ -119,13 +113,7 @@ public class ProjectRepository
 
 	public Page renamePage(UUID projectId, UUID pageId, String newName) throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Optional<Project> projectOptional = getProjectById(projectId);
-		if(projectOptional.isEmpty())
-		{
-			throw new ProjectNotExistsException(projectId);
-		}
-		final Project project = projectOptional.get();
-
+		final Project project = getProjectById(projectId);
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
 		{
@@ -141,13 +129,7 @@ public class ProjectRepository
 
 	public Page duplicatePage(UUID projectId, UUID pageId, String name) throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Optional<Project> projectOptional = getProjectById(projectId);
-		if(projectOptional.isEmpty())
-		{
-			throw new ProjectNotExistsException(projectId);
-		}
-		final Project project = projectOptional.get();
-
+		final Project project = getProjectById(projectId);
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
 		{
@@ -179,13 +161,8 @@ public class ProjectRepository
 
 	public boolean deletePage(UUID projectId, UUID pageId) throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = getProjectById(projectId);
-		if(projectOptional.isEmpty())
-		{
-			throw new ProjectNotExistsException(projectId);
-		}
-
-		final boolean isSuccess = projectOptional.get().getPages().removeIf(page -> page.getId().equals(pageId));
+		final Project project = getProjectById(projectId);
+		final boolean isSuccess = project.getPages().removeIf(page -> page.getId().equals(pageId));
 		if(isSuccess)
 		{
 			saveProjects();
@@ -193,9 +170,9 @@ public class ProjectRepository
 		return isSuccess;
 	}
 
-	public Optional<Project> getProjectById(UUID id)
+	public Project getProjectById(UUID id) throws ProjectNotExistsException
 	{
-		return projects.stream().filter(project -> project.getId().equals(id)).findFirst();
+		return projects.stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
 	}
 
 	private Optional<Project> getProjectByName(String name)

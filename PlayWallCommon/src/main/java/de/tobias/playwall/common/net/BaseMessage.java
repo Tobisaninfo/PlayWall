@@ -22,11 +22,13 @@ import java.util.UUID;
 		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectAddPageRequest"),
 		@JsonSubTypes.Type(value = ProjectAddPageResponse.class, name = "ProjectAddPageResponse"),
 		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectRenamePageRequest"),
-		@JsonSubTypes.Type(value = ProjectAddPageResponse.class, name = "ProjectRenamePageResponse"),
+		@JsonSubTypes.Type(value = ProjectRenamePageResponse.class, name = "ProjectRenamePageResponse"),
 		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectDuplicatePageRequest"),
-		@JsonSubTypes.Type(value = ProjectAddPageResponse.class, name = "ProjectDuplicatePageResponse"),
+		@JsonSubTypes.Type(value = ProjectDuplicatePageResponse.class, name = "ProjectDuplicatePageResponse"),
 		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectDeletePageRequest"),
-		@JsonSubTypes.Type(value = ProjectAddPageResponse.class, name = "ProjectDeletePageResponse"),
+		@JsonSubTypes.Type(value = ProjectDeletePageResponse.class, name = "ProjectDeletePageResponse"),
+		@JsonSubTypes.Type(value = ProjectLaunchRequest.class, name = "ProjectLaunchRequest"),
+		@JsonSubTypes.Type(value = ProjectLaunchResponse.class, name = "ProjectLaunchResponse"),
 		@JsonSubTypes.Type(value = ErrorMessage.class, name = "ErrorMessage"),
 })
 @Getter

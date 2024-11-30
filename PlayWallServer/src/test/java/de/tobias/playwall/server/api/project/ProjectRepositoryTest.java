@@ -79,10 +79,10 @@ class ProjectRepositoryTest
 	}
 
 	@Test
-	void test_getProjectById() throws IOException
+	void test_getProjectById() throws IOException, ProjectNotExistsException
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
-		final UUID projectId = projectOptional.get().getId();
+		final UUID projectId = projectOptional.orElseThrow().getId();
 
 		final Project expected = Project.builder()
 				.id(projectId)
@@ -92,20 +92,20 @@ class ProjectRepositoryTest
 				.pages(List.of())
 				.build();
 
-		assertThat(projectRepository.getProjectById(projectId)).isPresent().get().isEqualTo(expected);
+		assertThat(projectRepository.getProjectById(projectId)).isEqualTo(expected);
 	}
 
 	@Test
 	void test_getProjectById_noMatch()
 	{
-		assertThat(projectRepository.getProjectById(UUID.randomUUID())).isEmpty();
+		assertThatThrownBy(() -> projectRepository.getProjectById(UUID.randomUUID())).isInstanceOf(ProjectNotExistsException.class);
 	}
 
 	@Test
 	void test_deleteProject() throws IOException
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
-		final UUID projectId = projectOptional.get().getId();
+		final UUID projectId = projectOptional.orElseThrow().getId();
 
 		assertThat(projectRepository.deleteProject(projectId)).isTrue();
 		assertThat(projectRepository.getAllProjectMetadata()).isEmpty();
@@ -116,7 +116,7 @@ class ProjectRepositoryTest
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
 
-		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
 		assertThat(page)
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
@@ -150,7 +150,7 @@ class ProjectRepositoryTest
 	void test_renamePage() throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
-		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
 		final Page newPage = projectRepository.renamePage(projectOptional.get().getId(), page.getId(), "Updated Page Name");
 
@@ -188,7 +188,7 @@ class ProjectRepositoryTest
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
 
 		assertThatThrownBy(() -> {
-			projectRepository.renamePage(projectOptional.get().getId(), UUID.randomUUID(), "Updated Page Name");
+			projectRepository.renamePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Updated Page Name");
 		}).isInstanceOf(PageNotExistsException.class);
 	}
 
@@ -196,7 +196,7 @@ class ProjectRepositoryTest
 	void test_deletePage() throws IOException, ProjectNotExistsException
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
-		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
 		final boolean isSuccess = projectRepository.deletePage(projectOptional.get().getId(), page.getId());
 
@@ -226,7 +226,7 @@ class ProjectRepositoryTest
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
 
-		final boolean isSuccess = projectRepository.deletePage(projectOptional.get().getId(), UUID.randomUUID());
+		final boolean isSuccess = projectRepository.deletePage(projectOptional.orElseThrow().getId(), UUID.randomUUID());
 
 		assertThat(isSuccess).isFalse();
 	}
@@ -236,7 +236,7 @@ class ProjectRepositoryTest
 	{
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
 
-		final Page page = projectRepository.addPage(projectOptional.get().getId(), "New Page");
+		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 		final Page newPage = projectRepository.duplicatePage(projectOptional.get().getId(), page.getId(), "Duplicated Page");
 
 		assertThat(newPage)
@@ -279,7 +279,7 @@ class ProjectRepositoryTest
 		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
 
 		assertThatThrownBy(() -> {
-			projectRepository.duplicatePage(projectOptional.get().getId(), UUID.randomUUID(), "Duplicated Page");
+			projectRepository.duplicatePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Duplicated Page");
 		}).isInstanceOf(PageNotExistsException.class);
 	}
 }

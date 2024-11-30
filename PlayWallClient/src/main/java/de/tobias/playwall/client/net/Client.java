@@ -21,6 +21,8 @@ public interface Client
 
 	void deleteProject(UUID projectId) throws PlayWallApiException;
 
+	void launchProject(UUID projectId) throws PlayWallApiException;
+
 	Page addPage(UUID projectId, String name) throws PlayWallApiException;
 
 	Page renamePage(UUID projectId, UUID pageId, String newName) throws PlayWallApiException;
