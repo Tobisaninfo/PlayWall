@@ -2,8 +2,6 @@ package de.tobias.playwall.server.api.project;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.server.api.project.model.Pad;
-import de.tobias.playwall.server.api.project.model.Page;
 import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import de.tobias.playwall.server.storage.PathProvider;
 import jakarta.annotation.PostConstruct;
@@ -29,7 +27,7 @@ public class ProjectMetadataRepository
 	private final PathProvider pathProvider;
 	private final ObjectMapper mapper;
 
-	private List<ProjectMetadata> allProjectsMetadata;
+	private List<ProjectMetadata> allProjectsMetadata = new ArrayList<>();
 
 	@PostConstruct
 	void loadAllProjectsMetadata() throws IOException
@@ -74,111 +72,32 @@ public class ProjectMetadataRepository
 		return isSuccess;
 	}
 
-	public Optional<ProjectMetadata> addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException
+	public ProjectMetadata addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException, ProjectNameAlreadyExistsException
 	{
-		final Optional<ProjectMetadata> existingProjectOptional = getProjectByName(name);
+		final Optional<ProjectMetadata> existingProjectOptional = getProjectMetadataByName(name);
 		if(existingProjectOptional.isPresent())
 		{
-			return Optional.empty();
+			throw new ProjectNameAlreadyExistsException(name);
 		}
 
-		final ProjectMetadata newProject = ProjectMetadata.builder()
+		final ProjectMetadata newProjectMetadata = ProjectMetadata.builder()
 				.id(UUID.randomUUID())
 				.name(name)
 				.numberOfHorizontalPads(numberOfHorizontalPads)
 				.numberOfVerticalPads(numberOfVerticalPads)
-				.pages(new ArrayList<>())
 				.build();
-		allProjectsMetadata.add(newProject);
+		allProjectsMetadata.add(newProjectMetadata);
 		saveProjects();
 
-		return Optional.of(newProject);
+		return newProjectMetadata;
 	}
 
-	public Page addPage(UUID projectId, String name) throws IOException, ProjectNotExistsException
-	{
-		final ProjectMetadata project = getProjectById(projectId);
-		final int nextPagePosition = project.getPages().size();
-
-		final Page page = Page.builder()
-				.id(UUID.randomUUID())
-				.name(name)
-				.position(nextPagePosition)
-				.pads(new ArrayList<>())
-				.build();
-
-		project.getPages().add(page);
-		saveProjects();
-
-		return page;
-	}
-
-	public Page renamePage(UUID projectId, UUID pageId, String newName) throws IOException, ProjectNotExistsException, PageNotExistsException
-	{
-		final ProjectMetadata project = getProjectById(projectId);
-		final Optional<Page> pageOptional = project.getPageById(pageId);
-		if(pageOptional.isEmpty())
-		{
-			throw new PageNotExistsException(projectId, pageId);
-		}
-		final Page page = pageOptional.get();
-		page.setName(newName);
-
-		saveProjects();
-
-		return page;
-	}
-
-	public Page duplicatePage(UUID projectId, UUID pageId, String name) throws IOException, ProjectNotExistsException, PageNotExistsException
-	{
-		final ProjectMetadata project = getProjectById(projectId);
-		final Optional<Page> pageOptional = project.getPageById(pageId);
-		if(pageOptional.isEmpty())
-		{
-			throw new PageNotExistsException(projectId, pageId);
-		}
-		final Page page = pageOptional.get();
-
-		final List<Pad> newPads = page.getPads().stream()
-				.map(pad -> Pad.builder()
-						.id(UUID.randomUUID())
-						.name(pad.getName())
-						.position(pad.getPosition())
-						.mediaPaths(pad.getMediaPaths())
-						.build())
-				.toList();
-
-		final int nextPagePosition = project.getPages().size();
-		final Page newPage = Page.builder()
-				.id(UUID.randomUUID())
-				.name(name)
-				.position(nextPagePosition)
-				.pads(newPads)
-				.build();
-
-		project.getPages().add(newPage);
-		saveProjects();
-
-		return newPage;
-	}
-
-	public boolean deletePage(UUID projectId, UUID pageId) throws IOException, ProjectNotExistsException
-	{
-		final ProjectMetadata project = getProjectById(projectId);
-		final boolean isSuccess = project.getPages().removeIf(page -> page.getId().equals(pageId));
-		if(isSuccess)
-		{
-			saveProjects();
-		}
-		return isSuccess;
-	}
-
-	public ProjectMetadata getProjectById(UUID id) throws ProjectNotExistsException
+	ProjectMetadata getProjectMetadataById(UUID id) throws ProjectNotExistsException
 	{
 		return allProjectsMetadata.stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
 	}
 
-	private Optional<ProjectMetadata> getProjectByName(String name)
+	Optional<ProjectMetadata> getProjectMetadataByName(String name)
 	{
 		return allProjectsMetadata.stream().filter(project -> project.getName().equals(name)).findFirst();
 	}

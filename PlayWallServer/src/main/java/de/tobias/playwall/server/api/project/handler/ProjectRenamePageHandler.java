@@ -9,8 +9,8 @@ import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PageMetadataMapper;
 import de.tobias.playwall.server.api.project.PageNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.api.project.model.Page;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @RequestHandlerTyped(ProjectRenamePageRequest.class)
 public class ProjectRenamePageHandler implements RequestHandler<ProjectRenamePageRequest>
 {
-	private final ProjectMetadataRepository projectMetadataRepository;
+	private final ProjectService projectService;
 	private final PageMetadataMapper mapper;
 
 	@Override
@@ -31,7 +31,7 @@ public class ProjectRenamePageHandler implements RequestHandler<ProjectRenamePag
 	{
 		try
 		{
-			final Page page = projectMetadataRepository.renamePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getNewName());
+			final Page page = projectService.renamePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getNewName());
 			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageMetadataToPageMetadataDto(page)));
 		}
 		catch(ProjectNotExistsException e)

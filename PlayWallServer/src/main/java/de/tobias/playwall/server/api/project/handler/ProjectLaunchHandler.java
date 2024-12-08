@@ -6,9 +6,9 @@ import de.tobias.playwall.common.api.project.ProjectLaunchResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
-import de.tobias.playwall.server.api.project.model.ProjectMetadata;
+import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.api.project.model.Project;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequestHandlerTyped(ProjectLaunchRequest.class)
 public class ProjectLaunchHandler implements RequestHandler<ProjectLaunchRequest>
 {
-	private final ProjectMetadataRepository projectMetadataRepository;
+	private final ProjectService projectService;
 	private final ProjectController projectController;
 
 	@Override
@@ -29,7 +29,7 @@ public class ProjectLaunchHandler implements RequestHandler<ProjectLaunchRequest
 	{
 		try
 		{
-			final ProjectMetadata project = projectMetadataRepository.getProjectById(requestMessage.getProjectId());
+			final Project project = projectService.getProjectById(requestMessage.getProjectId());
 			projectController.loadProject(project);
 		}
 		catch(ProjectNotExistsException e)

@@ -7,8 +7,8 @@ import de.tobias.playwall.common.api.project.ProjectDeletePageResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
@@ -20,14 +20,14 @@ import java.util.Optional;
 @RequestHandlerTyped(ProjectDeletePageRequest.class)
 public class ProjectDeletePageHandler implements RequestHandler<ProjectDeletePageRequest>
 {
-	private final ProjectMetadataRepository projectMetadataRepository;
+	private final ProjectService projectService;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectDeletePageRequest requestMessage) throws IOException, PlayWallServerException
 	{
 		try
 		{
-			final boolean success = projectMetadataRepository.deletePage(requestMessage.getProjectId(), requestMessage.getPageId());
+			final boolean success = projectService.deletePage(requestMessage.getProjectId(), requestMessage.getPageId());
 			if(success)
 			{
 				return Optional.of(new ProjectDeletePageResponse(requestMessage.getMessageId()));

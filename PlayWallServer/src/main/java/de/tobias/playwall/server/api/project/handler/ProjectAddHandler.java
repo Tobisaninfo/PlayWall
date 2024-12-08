@@ -7,7 +7,8 @@ import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
-import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
+import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
+import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -20,18 +21,18 @@ import java.util.Optional;
 @RequestHandlerTyped(ProjectAddRequest.class)
 public class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
 {
-	private final ProjectMetadataRepository projectMetadataRepository;
+	private final ProjectService projectService;
 	private final ProjectMetadataMapper mapper;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectAddRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
-		if(projectOptional.isPresent())
+		try
 		{
-			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectMetadataToProjectMetadataDto(projectOptional.get())));
+			final ProjectMetadata projectMetadata = projectService.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
+			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectMetadataToProjectMetadataDto(projectMetadata)));
 		}
-		else
+		catch(ProjectNameAlreadyExistsException e)
 		{
 			final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(requestMessage.getName());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getName()), error);
