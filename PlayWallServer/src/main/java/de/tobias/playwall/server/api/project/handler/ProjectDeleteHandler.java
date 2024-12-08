@@ -6,7 +6,7 @@ import de.tobias.playwall.common.api.project.ProjectDeleteResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.ProjectRepository;
+import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
@@ -18,12 +18,12 @@ import java.util.Optional;
 @RequestHandlerTyped(ProjectDeleteRequest.class)
 public class ProjectDeleteHandler implements RequestHandler<ProjectDeleteRequest>
 {
-	private final ProjectRepository projectRepository;
+	private final ProjectMetadataRepository projectMetadataRepository;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectDeleteRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		final boolean success = projectRepository.deleteProject(requestMessage.getProjectId());
+		final boolean success = projectMetadataRepository.deleteProject(requestMessage.getProjectId());
 		if(success)
 		{
 			return Optional.of(new ProjectDeleteResponse(requestMessage.getMessageId()));

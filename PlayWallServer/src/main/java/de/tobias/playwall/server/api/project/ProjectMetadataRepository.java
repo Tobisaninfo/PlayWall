@@ -22,49 +22,51 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProjectRepository
+public class ProjectMetadataRepository
 {
+	private static final String PROJECTS_FILENAME = "projects.json";
+
 	private final PathProvider pathProvider;
 	private final ObjectMapper mapper;
 
-	private List<Project> projects;
+	private List<Project> allProjectsMetadata;
 
 	@PostConstruct
-	void loadProjects() throws IOException
+	void loadAllProjectsMetadata() throws IOException
 	{
-		final Path path = pathProvider.getPathForConfig("projects.json");
+		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		if(!Files.exists(path))
 		{
 			log.debug("No projects.json found, creating empty file in: \"{}\"", path);
 			saveProjects();
 		}
 
-		projects = mapper.readValue(Files.newBufferedReader(path), new TypeReference<>()
+		allProjectsMetadata = mapper.readValue(Files.newBufferedReader(path), new TypeReference<>()
 		{
 		});
 	}
 
-	void saveProjects() throws IOException
+	private void saveProjects() throws IOException
 	{
-		final Path path = pathProvider.getPathForConfig("projects.json");
+		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
-		mapper.writeValue(Files.newBufferedWriter(path), projects);
+		mapper.writeValue(Files.newBufferedWriter(path), allProjectsMetadata);
 	}
 
 	void clearProjects() throws IOException
 	{
-		this.projects = new ArrayList<>();
+		this.allProjectsMetadata = new ArrayList<>();
 		saveProjects();
 	}
 
 	public List<Project> getAllProjectMetadata()
 	{
-		return projects;
+		return allProjectsMetadata;
 	}
 
 	public boolean deleteProject(UUID id) throws IOException
 	{
-		final boolean isSuccess = projects.removeIf(project -> project.getId().equals(id));
+		final boolean isSuccess = allProjectsMetadata.removeIf(project -> project.getId().equals(id));
 		if(isSuccess)
 		{
 			saveProjects();
@@ -87,7 +89,7 @@ public class ProjectRepository
 				.numberOfVerticalPads(numberOfVerticalPads)
 				.pages(new ArrayList<>())
 				.build();
-		projects.add(newProject);
+		allProjectsMetadata.add(newProject);
 		saveProjects();
 
 		return Optional.of(newProject);
@@ -173,11 +175,11 @@ public class ProjectRepository
 
 	public Project getProjectById(UUID id) throws ProjectNotExistsException
 	{
-		return projects.stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
+		return allProjectsMetadata.stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
 	}
 
 	private Optional<Project> getProjectByName(String name)
 	{
-		return projects.stream().filter(project -> project.getName().equals(name)).findFirst();
+		return allProjectsMetadata.stream().filter(project -> project.getName().equals(name)).findFirst();
 	}
 }

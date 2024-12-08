@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-class ProjectRepositoryTest
+class ProjectMetadataRepositoryTest
 {
 //	@TestConfiguration
 //	public static class TestConfig
@@ -25,7 +25,7 @@ class ProjectRepositoryTest
 //		@Primary
 //		public PathProvider pathProvider() throws IOException
 //		{
-//			final Path tempFolder = Files.createTempDirectory("ProjectRepositoryTest").toAbsolutePath();
+//			final Path tempFolder = Files.createTempDirectory("ProjectMetadataRepositoryTest").toAbsolutePath();
 //			final PathProvider mock = mock(PathProvider.class);
 //			when(mock.getPathForConfig(any())).thenReturn(tempFolder.resolve("projects.json"));
 //			return mock;
@@ -35,22 +35,22 @@ class ProjectRepositoryTest
 	@BeforeEach
 	void beforeEach() throws IOException
 	{
-		projectRepository.clearProjects();
+		projectMetadataRepository.clearProjects();
 	}
 
 	@Autowired
-	private ProjectRepository projectRepository;
+	private ProjectMetadataRepository projectMetadataRepository;
 
 	@Test
 	void test_noProjects()
 	{
-		assertThat(projectRepository.getAllProjectMetadata()).isEmpty();
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).isEmpty();
 	}
 
 	@Test
 	void test_addProject() throws IOException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 
 		assertThat(projectOptional).isPresent().get()
 				.extracting(Project::getName, Project::getNumberOfHorizontalPads, Project::getNumberOfVerticalPads, Project::getPages)
@@ -64,24 +64,24 @@ class ProjectRepositoryTest
 				.pages(List.of())
 				.build();
 
-		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).containsExactly(expected);
 	}
 
 	@Test
 	void test_addProject_nameAlreadyExist() throws IOException
 	{
-		projectRepository.addProject("New Project", 6, 5);
+		projectMetadataRepository.addProject("New Project", 6, 5);
 
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 4, 3);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 4, 3);
 
 		assertThat(projectOptional).isEmpty();
-		assertThat(projectRepository.getAllProjectMetadata()).hasSize(1);
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).hasSize(1);
 	}
 
 	@Test
 	void test_getProjectById() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 		final UUID projectId = projectOptional.orElseThrow().getId();
 
 		final Project expected = Project.builder()
@@ -92,31 +92,31 @@ class ProjectRepositoryTest
 				.pages(List.of())
 				.build();
 
-		assertThat(projectRepository.getProjectById(projectId)).isEqualTo(expected);
+		assertThat(projectMetadataRepository.getProjectById(projectId)).isEqualTo(expected);
 	}
 
 	@Test
 	void test_getProjectById_noMatch()
 	{
-		assertThatThrownBy(() -> projectRepository.getProjectById(UUID.randomUUID())).isInstanceOf(ProjectNotExistsException.class);
+		assertThatThrownBy(() -> projectMetadataRepository.getProjectById(UUID.randomUUID())).isInstanceOf(ProjectNotExistsException.class);
 	}
 
 	@Test
 	void test_deleteProject() throws IOException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 		final UUID projectId = projectOptional.orElseThrow().getId();
 
-		assertThat(projectRepository.deleteProject(projectId)).isTrue();
-		assertThat(projectRepository.getAllProjectMetadata()).isEmpty();
+		assertThat(projectMetadataRepository.deleteProject(projectId)).isTrue();
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).isEmpty();
 	}
 
 	@Test
 	void test_addPage() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 
-		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
+		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
 		assertThat(page)
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
@@ -135,24 +135,24 @@ class ProjectRepositoryTest
 						.build()))
 				.build();
 
-		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).containsExactly(expected);
 	}
 
 	@Test
 	void test_addPage_unknownProject()
 	{
 		assertThatThrownBy(() -> {
-			projectRepository.addPage(UUID.randomUUID(), "New Page");
+			projectMetadataRepository.addPage(UUID.randomUUID(), "New Page");
 		}).isInstanceOf(ProjectNotExistsException.class);
 	}
 
 	@Test
 	void test_renamePage() throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
-		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
-		final Page newPage = projectRepository.renamePage(projectOptional.get().getId(), page.getId(), "Updated Page Name");
+		final Page newPage = projectMetadataRepository.renamePage(projectOptional.get().getId(), page.getId(), "Updated Page Name");
 
 		assertThat(newPage)
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
@@ -171,34 +171,34 @@ class ProjectRepositoryTest
 						.build()))
 				.build();
 
-		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).containsExactly(expected);
 	}
 
 	@Test
 	void test_renamePage_unknownProject()
 	{
 		assertThatThrownBy(() -> {
-			projectRepository.renamePage(UUID.randomUUID(), UUID.randomUUID(), "Updated Page Name");
+			projectMetadataRepository.renamePage(UUID.randomUUID(), UUID.randomUUID(), "Updated Page Name");
 		}).isInstanceOf(ProjectNotExistsException.class);
 	}
 
 	@Test
 	void test_renamePage_unknownPage() throws IOException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 
 		assertThatThrownBy(() -> {
-			projectRepository.renamePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Updated Page Name");
+			projectMetadataRepository.renamePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Updated Page Name");
 		}).isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
 	void test_deletePage() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
-		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
-		final boolean isSuccess = projectRepository.deletePage(projectOptional.get().getId(), page.getId());
+		final boolean isSuccess = projectMetadataRepository.deletePage(projectOptional.get().getId(), page.getId());
 
 		assertThat(isSuccess).isTrue();
 
@@ -210,23 +210,23 @@ class ProjectRepositoryTest
 				.pages(List.of())
 				.build();
 
-		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).containsExactly(expected);
 	}
 
 	@Test
 	void test_deletePage_unknownProject()
 	{
 		assertThatThrownBy(() -> {
-			projectRepository.deletePage(UUID.randomUUID(), UUID.randomUUID());
+			projectMetadataRepository.deletePage(UUID.randomUUID(), UUID.randomUUID());
 		}).isInstanceOf(ProjectNotExistsException.class);
 	}
 
 	@Test
 	void test_deletePage_unknownPage() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 
-		final boolean isSuccess = projectRepository.deletePage(projectOptional.orElseThrow().getId(), UUID.randomUUID());
+		final boolean isSuccess = projectMetadataRepository.deletePage(projectOptional.orElseThrow().getId(), UUID.randomUUID());
 
 		assertThat(isSuccess).isFalse();
 	}
@@ -234,10 +234,10 @@ class ProjectRepositoryTest
 	@Test
 	void test_duplicatePage() throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 
-		final Page page = projectRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
-		final Page newPage = projectRepository.duplicatePage(projectOptional.get().getId(), page.getId(), "Duplicated Page");
+		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
+		final Page newPage = projectMetadataRepository.duplicatePage(projectOptional.get().getId(), page.getId(), "Duplicated Page");
 
 		assertThat(newPage)
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
@@ -262,24 +262,24 @@ class ProjectRepositoryTest
 								.build()))
 				.build();
 
-		assertThat(projectRepository.getAllProjectMetadata()).containsExactly(expected);
+		assertThat(projectMetadataRepository.getAllProjectMetadata()).containsExactly(expected);
 	}
 
 	@Test
 	void test_duplicatePage_unknownProject()
 	{
 		assertThatThrownBy(() -> {
-			projectRepository.duplicatePage(UUID.randomUUID(), UUID.randomUUID(), "Duplicated Page");
+			projectMetadataRepository.duplicatePage(UUID.randomUUID(), UUID.randomUUID(), "Duplicated Page");
 		}).isInstanceOf(ProjectNotExistsException.class);
 	}
 
 	@Test
 	void test_duplicatePage_unknownPage() throws IOException
 	{
-		final Optional<Project> projectOptional = projectRepository.addProject("New Project", 6, 5);
+		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
 
 		assertThatThrownBy(() -> {
-			projectRepository.duplicatePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Duplicated Page");
+			projectMetadataRepository.duplicatePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Duplicated Page");
 		}).isInstanceOf(PageNotExistsException.class);
 	}
 }

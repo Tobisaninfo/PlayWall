@@ -7,8 +7,8 @@ import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PageMetadataMapper;
+import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.api.project.model.Page;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequestHandlerTyped(ProjectAddPageRequest.class)
 public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageRequest>
 {
-	private final ProjectRepository projectRepository;
+	private final ProjectMetadataRepository projectMetadataRepository;
 	private final PageMetadataMapper mapper;
 
 	@Override
@@ -29,7 +29,7 @@ public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageReque
 	{
 		try
 		{
-			final Page page = projectRepository.addPage(requestMessage.getProjectId(), requestMessage.getName());
+			final Page page = projectMetadataRepository.addPage(requestMessage.getProjectId(), requestMessage.getName());
 			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageMetadataToPageMetadataDto(page)));
 		}
 		catch(ProjectNotExistsException e)

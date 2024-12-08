@@ -9,8 +9,8 @@ import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PageMetadataMapper;
 import de.tobias.playwall.server.api.project.PageNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.api.project.model.Page;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @RequestHandlerTyped(ProjectDuplicatePageRequest.class)
 public class ProjectDuplicatePageHandler implements RequestHandler<ProjectDuplicatePageRequest>
 {
-	private final ProjectRepository projectRepository;
+	private final ProjectMetadataRepository projectMetadataRepository;
 	private final PageMetadataMapper mapper;
 
 	@Override
@@ -31,7 +31,7 @@ public class ProjectDuplicatePageHandler implements RequestHandler<ProjectDuplic
 	{
 		try
 		{
-			final Page page = projectRepository.duplicatePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getName());
+			final Page page = projectMetadataRepository.duplicatePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getName());
 			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageMetadataToPageMetadataDto(page)));
 		}
 		catch(ProjectNotExistsException e)
