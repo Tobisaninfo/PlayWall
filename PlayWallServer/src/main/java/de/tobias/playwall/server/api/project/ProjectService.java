@@ -35,17 +35,6 @@ public class ProjectService
 		return false;
 	}
 
-	void clearProjects() throws IOException
-	{
-		final List<ProjectMetadata> allProjectMetadata = projectMetadataRepository.getAllProjectMetadata();
-
-		projectMetadataRepository.clearProjects();
-		for(ProjectMetadata projectMetadata : allProjectMetadata)
-		{
-			projectRepository.deleteProject(projectMetadata.getId());
-		}
-	}
-
 	public Project getProjectById(UUID id) throws IOException, ProjectNotExistsException
 	{
 		return projectRepository.loadProject(id);
