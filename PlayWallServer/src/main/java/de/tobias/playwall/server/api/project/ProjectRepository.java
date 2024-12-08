@@ -142,6 +142,7 @@ public class ProjectRepository
 						.id(UUID.randomUUID())
 						.name(pad.getName())
 						.position(pad.getPosition())
+						.mediaPaths(pad.getMediaPaths())
 						.build())
 				.toList();
 
