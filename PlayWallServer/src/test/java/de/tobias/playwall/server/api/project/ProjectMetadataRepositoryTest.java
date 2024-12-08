@@ -1,33 +1,42 @@
 package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.server.api.project.model.ProjectMetadata;
+import de.tobias.playwall.server.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class ProjectMetadataRepositoryTest
 {
-//	@TestConfiguration
-//	public static class TestConfig
-//	{
-//		@Bean
-//		@Primary
-//		public PathProvider pathProvider() throws IOException
-//		{
-//			final Path tempFolder = Files.createTempDirectory("ProjectMetadataRepositoryTest").toAbsolutePath();
-//			final PathProvider mock = mock(PathProvider.class);
-//			when(mock.getPathForConfig(any())).thenReturn(tempFolder.resolve("projects.json"));
-//			return mock;
-//		}
-//	}
+	@TestConfiguration
+	public static class TestConfig
+	{
+		@Bean
+		@Primary
+		public PathProvider pathProvider() throws IOException
+		{
+			final Path tempFolder = Files.createTempDirectory("ProjectMetadataRepositoryTest").toAbsolutePath();
+			final PathProvider mock = mock(PathProvider.class);
+			when(mock.getPathForConfig(any())).thenReturn(tempFolder.resolve("projects.json"));
+			return mock;
+		}
+	}
 
 	@BeforeEach
 	void beforeEach() throws IOException

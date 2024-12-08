@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import de.tobias.playwall.server.storage.PathProvider;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,6 @@ public class ProjectMetadataRepository
 
 	private List<ProjectMetadata> allProjectsMetadata = new ArrayList<>();
 
-	@PostConstruct
 	void loadAllProjectsMetadata() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);

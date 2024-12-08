@@ -9,6 +9,7 @@ import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RequestHandlerTyped(ProjectListRequest.class)
@@ -19,7 +20,7 @@ public class ProjectListHandler implements RequestHandler<ProjectListRequest>
 	private final ProjectMetadataMapper mapper;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectListRequest requestMessage)
+	public Optional<ResponseMessage> handleRequest(ProjectListRequest requestMessage) throws IOException
 	{
 		return Optional.of(new ProjectListResponse(requestMessage.getMessageId(), projectService.getAllProjectMetadata()
 				.stream()

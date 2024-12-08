@@ -18,8 +18,9 @@ public class ProjectService
 	private final ProjectMetadataRepository projectMetadataRepository;
 	private final ProjectRepository projectRepository;
 
-	public List<ProjectMetadata> getAllProjectMetadata()
+	public List<ProjectMetadata> getAllProjectMetadata() throws IOException
 	{
+		projectMetadataRepository.loadAllProjectsMetadata();
 		return projectMetadataRepository.getAllProjectMetadata();
 	}
 
