@@ -1,9 +1,7 @@
 package de.tobias.playwall.common.net;
 
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import de.tobias.playwall.common.api.project.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,26 +9,10 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "$type")
-@JsonSubTypes({
-		@JsonSubTypes.Type(value = ProjectListRequest.class, name = "ProjectListRequest"),
-		@JsonSubTypes.Type(value = ProjectListResponse.class, name = "ProjectListResponse"),
-		@JsonSubTypes.Type(value = ProjectDeleteRequest.class, name = "ProjectDeleteRequest"),
-		@JsonSubTypes.Type(value = ProjectDeleteResponse.class, name = "ProjectDeleteResponse"),
-		@JsonSubTypes.Type(value = ProjectAddRequest.class, name = "ProjectAddRequest"),
-		@JsonSubTypes.Type(value = ProjectAddResponse.class, name = "ProjectAddResponse"),
-		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectAddPageRequest"),
-		@JsonSubTypes.Type(value = ProjectAddPageResponse.class, name = "ProjectAddPageResponse"),
-		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectRenamePageRequest"),
-		@JsonSubTypes.Type(value = ProjectRenamePageResponse.class, name = "ProjectRenamePageResponse"),
-		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectDuplicatePageRequest"),
-		@JsonSubTypes.Type(value = ProjectDuplicatePageResponse.class, name = "ProjectDuplicatePageResponse"),
-		@JsonSubTypes.Type(value = ProjectAddPageRequest.class, name = "ProjectDeletePageRequest"),
-		@JsonSubTypes.Type(value = ProjectDeletePageResponse.class, name = "ProjectDeletePageResponse"),
-		@JsonSubTypes.Type(value = ProjectLaunchRequest.class, name = "ProjectLaunchRequest"),
-		@JsonSubTypes.Type(value = ProjectLaunchResponse.class, name = "ProjectLaunchResponse"),
-		@JsonSubTypes.Type(value = ErrorMessage.class, name = "ErrorMessage"),
-})
+@JsonTypeInfo(
+		use = JsonTypeInfo.Id.CLASS,
+		include = JsonTypeInfo.As.PROPERTY,
+		property = "@class")
 @Getter
 @Setter
 @NoArgsConstructor

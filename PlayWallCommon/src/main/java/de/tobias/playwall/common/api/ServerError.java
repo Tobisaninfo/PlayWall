@@ -1,21 +1,15 @@
 package de.tobias.playwall.common.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import de.tobias.playwall.common.api.project.PageNotExistsError;
-import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "$type")
-@JsonSubTypes({
-		@JsonSubTypes.Type(value = ProjectNameAlreadyExistsError.class, name = "ProjectNameAlreadyExistsError"),
-		@JsonSubTypes.Type(value = ProjectNotExistsError.class, name = "ProjectNotExistsError"),
-		@JsonSubTypes.Type(value = PageNotExistsError.class, name = "PageNotExistsError")
-})
+@JsonTypeInfo(
+		use = JsonTypeInfo.Id.CLASS,
+		include = JsonTypeInfo.As.PROPERTY,
+		property = "@class")
 public class ServerError
 {
 	private static final String PATTERN_CAMEL_CASE = "(?<!^)(?=[A-Z])";
