@@ -86,8 +86,7 @@ public class LaunchDialog extends NVC
 					mouseEvent.getClickCount() == 2 &&
 					!projectListView.getSelectionModel().isEmpty())
 			{
-				// TODO
-				// launchProject(getSelectedProject());
+				onOpenButton();
 			}
 		});
 
