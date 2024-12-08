@@ -6,9 +6,9 @@ import de.tobias.playwall.common.api.project.ProjectAddResponse;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.ProjectMapper;
+import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
-import de.tobias.playwall.server.api.project.model.Project;
+import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
@@ -21,15 +21,15 @@ import java.util.Optional;
 public class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
 {
 	private final ProjectMetadataRepository projectMetadataRepository;
-	private final ProjectMapper mapper;
+	private final ProjectMetadataMapper mapper;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectAddRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
 		if(projectOptional.isPresent())
 		{
-			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectToProjectMetadataDto(projectOptional.get())));
+			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectMetadataToProjectMetadataDto(projectOptional.get())));
 		}
 		else
 		{

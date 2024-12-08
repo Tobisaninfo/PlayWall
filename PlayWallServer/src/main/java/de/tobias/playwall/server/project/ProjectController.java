@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.project;
 
-import de.tobias.playwall.server.api.project.model.Project;
+import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ import java.util.UUID;
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ProjectController
 {
-	private Project loadedProject;
+	private ProjectMetadata loadedProject;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
-	public void loadProject(Project project)
+	public void loadProject(ProjectMetadata project)
 	{
 		unloadPads();
 		loadedProject = project;

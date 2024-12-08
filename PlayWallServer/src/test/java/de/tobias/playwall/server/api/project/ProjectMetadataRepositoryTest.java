@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.server.api.project.model.Page;
-import de.tobias.playwall.server.api.project.model.Project;
+import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +50,15 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_addProject() throws IOException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
 		assertThat(projectOptional).isPresent().get()
-				.extracting(Project::getName, Project::getNumberOfHorizontalPads, Project::getNumberOfVerticalPads, Project::getPages)
-				.containsExactly("New Project", 6, 5, List.of());
+				.extracting(ProjectMetadata::getName, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads, ProjectMetadata::getPages)
+				.containsExactly("New ProjectMetadata", 6, 5, List.of());
 
-		final Project expected = Project.builder()
+		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectOptional.get().getId())
-				.name("New Project")
+				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
 				.pages(List.of())
@@ -70,9 +70,9 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_addProject_nameAlreadyExist() throws IOException
 	{
-		projectMetadataRepository.addProject("New Project", 6, 5);
+		projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 4, 3);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 4, 3);
 
 		assertThat(projectOptional).isEmpty();
 		assertThat(projectMetadataRepository.getAllProjectMetadata()).hasSize(1);
@@ -81,12 +81,12 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_getProjectById() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 		final UUID projectId = projectOptional.orElseThrow().getId();
 
-		final Project expected = Project.builder()
+		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectId)
-				.name("New Project")
+				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
 				.pages(List.of())
@@ -104,7 +104,7 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_deleteProject() throws IOException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 		final UUID projectId = projectOptional.orElseThrow().getId();
 
 		assertThat(projectMetadataRepository.deleteProject(projectId)).isTrue();
@@ -114,7 +114,7 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_addPage() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
 		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
@@ -122,9 +122,9 @@ class ProjectMetadataRepositoryTest
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
 				.containsExactly(0, "New Page", List.of());
 
-		final Project expected = Project.builder()
+		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectOptional.get().getId())
-				.name("New Project")
+				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
 				.pages(List.of(Page.builder()
@@ -149,7 +149,7 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_renamePage() throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
 		final Page newPage = projectMetadataRepository.renamePage(projectOptional.get().getId(), page.getId(), "Updated Page Name");
@@ -158,9 +158,9 @@ class ProjectMetadataRepositoryTest
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
 				.containsExactly(0, "Updated Page Name", List.of());
 
-		final Project expected = Project.builder()
+		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectOptional.get().getId())
-				.name("New Project")
+				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
 				.pages(List.of(Page.builder()
@@ -185,7 +185,7 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_renamePage_unknownPage() throws IOException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
 		assertThatThrownBy(() -> {
 			projectMetadataRepository.renamePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Updated Page Name");
@@ -195,16 +195,16 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_deletePage() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 
 		final boolean isSuccess = projectMetadataRepository.deletePage(projectOptional.get().getId(), page.getId());
 
 		assertThat(isSuccess).isTrue();
 
-		final Project expected = Project.builder()
+		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectOptional.get().getId())
-				.name("New Project")
+				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
 				.pages(List.of())
@@ -224,7 +224,7 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_deletePage_unknownPage() throws IOException, ProjectNotExistsException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
 		final boolean isSuccess = projectMetadataRepository.deletePage(projectOptional.orElseThrow().getId(), UUID.randomUUID());
 
@@ -234,7 +234,7 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_duplicatePage() throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
 		final Page page = projectMetadataRepository.addPage(projectOptional.orElseThrow().getId(), "New Page");
 		final Page newPage = projectMetadataRepository.duplicatePage(projectOptional.get().getId(), page.getId(), "Duplicated Page");
@@ -243,9 +243,9 @@ class ProjectMetadataRepositoryTest
 				.extracting(Page::getPosition, Page::getName, Page::getPads)
 				.containsExactly(1, "Duplicated Page", List.of());
 
-		final Project expected = Project.builder()
+		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectOptional.get().getId())
-				.name("New Project")
+				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
 				.pages(List.of(Page.builder()
@@ -276,7 +276,7 @@ class ProjectMetadataRepositoryTest
 	@Test
 	void test_duplicatePage_unknownPage() throws IOException
 	{
-		final Optional<Project> projectOptional = projectMetadataRepository.addProject("New Project", 6, 5);
+		final Optional<ProjectMetadata> projectOptional = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
 		assertThatThrownBy(() -> {
 			projectMetadataRepository.duplicatePage(projectOptional.orElseThrow().getId(), UUID.randomUUID(), "Duplicated Page");

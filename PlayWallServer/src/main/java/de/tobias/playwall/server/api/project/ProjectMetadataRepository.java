@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.api.project.model.Pad;
 import de.tobias.playwall.server.api.project.model.Page;
-import de.tobias.playwall.server.api.project.model.Project;
+import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import de.tobias.playwall.server.storage.PathProvider;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class ProjectMetadataRepository
 	private final PathProvider pathProvider;
 	private final ObjectMapper mapper;
 
-	private List<Project> allProjectsMetadata;
+	private List<ProjectMetadata> allProjectsMetadata;
 
 	@PostConstruct
 	void loadAllProjectsMetadata() throws IOException
@@ -59,7 +59,7 @@ public class ProjectMetadataRepository
 		saveProjects();
 	}
 
-	public List<Project> getAllProjectMetadata()
+	public List<ProjectMetadata> getAllProjectMetadata()
 	{
 		return allProjectsMetadata;
 	}
@@ -74,15 +74,15 @@ public class ProjectMetadataRepository
 		return isSuccess;
 	}
 
-	public Optional<Project> addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException
+	public Optional<ProjectMetadata> addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException
 	{
-		final Optional<Project> existingProjectOptional = getProjectByName(name);
+		final Optional<ProjectMetadata> existingProjectOptional = getProjectByName(name);
 		if(existingProjectOptional.isPresent())
 		{
 			return Optional.empty();
 		}
 
-		final Project newProject = Project.builder()
+		final ProjectMetadata newProject = ProjectMetadata.builder()
 				.id(UUID.randomUUID())
 				.name(name)
 				.numberOfHorizontalPads(numberOfHorizontalPads)
@@ -97,7 +97,7 @@ public class ProjectMetadataRepository
 
 	public Page addPage(UUID projectId, String name) throws IOException, ProjectNotExistsException
 	{
-		final Project project = getProjectById(projectId);
+		final ProjectMetadata project = getProjectById(projectId);
 		final int nextPagePosition = project.getPages().size();
 
 		final Page page = Page.builder()
@@ -115,7 +115,7 @@ public class ProjectMetadataRepository
 
 	public Page renamePage(UUID projectId, UUID pageId, String newName) throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Project project = getProjectById(projectId);
+		final ProjectMetadata project = getProjectById(projectId);
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
 		{
@@ -131,7 +131,7 @@ public class ProjectMetadataRepository
 
 	public Page duplicatePage(UUID projectId, UUID pageId, String name) throws IOException, ProjectNotExistsException, PageNotExistsException
 	{
-		final Project project = getProjectById(projectId);
+		final ProjectMetadata project = getProjectById(projectId);
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
 		{
@@ -164,7 +164,7 @@ public class ProjectMetadataRepository
 
 	public boolean deletePage(UUID projectId, UUID pageId) throws IOException, ProjectNotExistsException
 	{
-		final Project project = getProjectById(projectId);
+		final ProjectMetadata project = getProjectById(projectId);
 		final boolean isSuccess = project.getPages().removeIf(page -> page.getId().equals(pageId));
 		if(isSuccess)
 		{
@@ -173,12 +173,12 @@ public class ProjectMetadataRepository
 		return isSuccess;
 	}
 
-	public Project getProjectById(UUID id) throws ProjectNotExistsException
+	public ProjectMetadata getProjectById(UUID id) throws ProjectNotExistsException
 	{
 		return allProjectsMetadata.stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
 	}
 
-	private Optional<Project> getProjectByName(String name)
+	private Optional<ProjectMetadata> getProjectByName(String name)
 	{
 		return allProjectsMetadata.stream().filter(project -> project.getName().equals(name)).findFirst();
 	}

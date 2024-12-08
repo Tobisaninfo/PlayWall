@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class Project
+public class ProjectMetadata
 {
 	private UUID id;
 	private String name;

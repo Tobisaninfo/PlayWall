@@ -2,14 +2,14 @@ package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.common.api.project.model.ProjectDto;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
-import de.tobias.playwall.server.api.project.model.Project;
+import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface ProjectMapper
+public interface ProjectMetadataMapper
 {
-	ProjectDto projectToProjectDto(Project project);
+	ProjectDto projectMetadataToProjectDto(ProjectMetadata project);
 
-	ProjectMetadataDto projectToProjectMetadataDto(Project project);
+	ProjectMetadataDto projectMetadataToProjectMetadataDto(ProjectMetadata project);
 }

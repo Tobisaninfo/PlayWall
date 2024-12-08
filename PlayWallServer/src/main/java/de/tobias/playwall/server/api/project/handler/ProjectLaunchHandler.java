@@ -8,7 +8,7 @@ import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
-import de.tobias.playwall.server.api.project.model.Project;
+import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
@@ -29,7 +29,7 @@ public class ProjectLaunchHandler implements RequestHandler<ProjectLaunchRequest
 	{
 		try
 		{
-			final Project project = projectMetadataRepository.getProjectById(requestMessage.getProjectId());
+			final ProjectMetadata project = projectMetadataRepository.getProjectById(requestMessage.getProjectId());
 			projectController.loadProject(project);
 		}
 		catch(ProjectNotExistsException e)
