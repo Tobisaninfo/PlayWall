@@ -21,7 +21,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProjectRepository
+class ProjectRepository
 {
 	private static final String FILE_EXTENSION = ".json";
 
@@ -48,13 +48,13 @@ public class ProjectRepository
 		mapper.writeValue(Files.newBufferedWriter(path), project);
 	}
 
-	public boolean deleteProject(UUID id) throws IOException
+	boolean deleteProject(UUID id) throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(id + FILE_EXTENSION);
 		return Files.deleteIfExists(path);
 	}
 
-	public Page addPage(UUID id, String name) throws IOException, ProjectNotExistsException
+	Page addPage(UUID id, String name) throws IOException, ProjectNotExistsException
 	{
 		final Project project = loadProject(id);
 		final int nextPagePosition = project.getPages().size();
@@ -72,7 +72,7 @@ public class ProjectRepository
 		return page;
 	}
 
-	public Page renamePage(UUID id, UUID pageId, String newName) throws IOException, PageNotExistsException, ProjectNotExistsException
+	Page renamePage(UUID id, UUID pageId, String newName) throws IOException, PageNotExistsException, ProjectNotExistsException
 	{
 		final Project project = loadProject(id);
 		final Optional<Page> pageOptional = project.getPageById(pageId);
@@ -88,7 +88,7 @@ public class ProjectRepository
 		return page;
 	}
 
-	public Page duplicatePage(UUID id, UUID pageId, String name) throws IOException, PageNotExistsException, ProjectNotExistsException
+	Page duplicatePage(UUID id, UUID pageId, String name) throws IOException, PageNotExistsException, ProjectNotExistsException
 	{
 		final Project project = loadProject(id);
 		final Optional<Page> pageOptional = project.getPageById(pageId);
@@ -121,7 +121,7 @@ public class ProjectRepository
 		return newPage;
 	}
 
-	public boolean deletePage(UUID id, UUID pageId) throws IOException, ProjectNotExistsException
+	boolean deletePage(UUID id, UUID pageId) throws IOException, ProjectNotExistsException
 	{
 		final Project project = loadProject(id);
 		final boolean isSuccess = project.getPages().removeIf(page -> page.getId().equals(pageId));
