@@ -95,7 +95,7 @@ public class ProjectMetadataRepository
 		return allProjectsMetadata.stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
 	}
 
-	Optional<ProjectMetadata> getProjectMetadataByName(String name)
+	private Optional<ProjectMetadata> getProjectMetadataByName(String name)
 	{
 		return allProjectsMetadata.stream().filter(project -> project.getName().equals(name)).findFirst();
 	}

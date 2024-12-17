@@ -44,7 +44,7 @@ public class ClientImpl implements Client
 	{
 		for(int i = 1; i <= numberOfRetries; i++)
 		{
-			Logger.info("Connect to server with client id {0} (Attempt: {1}/{2})", UUID.randomUUID().toString(), i, numberOfRetries);
+			Logger.info("Connect to server (Attempt: {0}/{1})", i, numberOfRetries);
 			try
 			{
 				connect();
