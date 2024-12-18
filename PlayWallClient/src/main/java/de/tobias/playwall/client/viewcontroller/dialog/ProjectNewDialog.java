@@ -6,8 +6,10 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,6 +66,9 @@ public class ProjectNewDialog extends NVC
 	@Override
 	public void initStage(Stage stage)
 	{
+		final Styleable styleable = DI.instance().getInstance(Styleable.class);
+		styleable.applyToStage(stage);
+
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		stage.setTitle(Localization.getString(Strings.UI_DIALOG_NEW_PROJECT_TITLE));

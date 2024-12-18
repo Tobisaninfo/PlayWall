@@ -1,0 +1,36 @@
+/* @formatter:off */
+
+.pad-icon${#class} {
+	-fx-text-fill: ${#buttonColor};
+}
+
+.pad-playbar${#class} .track {
+	-fx-background-radius: 2px;
+	-fx-base: ${#playbarTrackColor};
+	-fx-background-color: ${#playbarTrackColor}AA;
+}
+
+.pad-playbar${#class} .bar {
+	-fx-background-insets: 0 0 0 0;
+	-fx-padding: 0.25em;
+
+	-fx-background-color: ${#playbarBarColor};
+}
+
+.pad${#class} {
+	-fx-background-color: ${#padColor};
+}
+
+.pad-cue-in${#class} {
+	-fx-background-color: ${#padCueInColor};
+}
+
+.pad-info${#class} {
+	-fx-text-fill: ${#fontColor};
+	-fx-font-size: ${#infoFontSize};
+}
+
+.pad-title${#class} {
+	-fx-text-fill: ${#fontColor};
+	-fx-font-size: ${#titleFontSize};
+}

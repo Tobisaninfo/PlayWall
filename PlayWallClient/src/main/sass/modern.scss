@@ -1,0 +1,169 @@
+
+@import "components/button";
+@import "components/menu-button";
+@import "components/combobox";
+@import "components/checkbox";
+@import "components/scrollbar";
+@import "components/textfield";
+@import "components/radiobutton";
+@import "components/slider";
+@import "components/tabs";
+@import "components/notification-pane";
+@import "components/menu";
+@import "components/toggle-button";
+@import "components/list";
+@import "components/dark-list";
+@import "components/progress-bar";
+@import "components/dialog";
+@import "components/treeview";
+@import "components/tableview";
+
+@font-face {
+	font-family: "Lato";
+	src: url("Lato/Lato-Regular.ttf");
+}
+
+@font-face {
+	font-family: "Lato";
+	font-weight: bold;
+	src: url("Lato/Lato-Bold.ttf");
+}
+
+/**
+Default elements
+ */
+
+.root {
+	-fx-base: rgb(20, 20, 20);
+	-fx-font-family: Lato sans-serif;
+}
+
+.list-view {
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	-fx-background-insets: 0;
+	-fx-padding: 0;
+}
+
+.tool-bar {
+	-fx-background-color: #333333;
+	-fx-border-width: 1px 0 1px 0;
+	-fx-border-color: #222222;
+}
+
+.fonticon {
+	-fx-text-fill: white;
+}
+
+.toggle-button:selected .fonticon {
+	-fx-text-fill: #333333;
+}
+
+/**
+PlayPad Elements
+ */
+
+.pad:drag {
+	-fx-opacity: 0.8;
+}
+
+.text-field:error {
+	-fx-text-box-border: red;
+	-fx-focus-color: red;
+}
+
+.live-label {
+	-fx-text-fill: red !important;
+}
+
+.pad-grid {
+	-fx-background-color: rgb(60, 60, 60);
+
+	-fx-hgap: 7px;
+	-fx-vgap: 7px;
+
+	-fx-padding: 6px;
+}
+
+.pad {
+	-fx-background-radius: 5px;
+}
+
+.pad-cue-in {
+	-fx-background-radius: 5px;
+}
+
+.pad-root {
+	-fx-spacing: 4px;
+	-fx-padding: 5 5 5 5;
+}
+
+.pad-button-box {
+	-fx-spacing: 0px;
+}
+
+.pad-info {
+	-fx-text-fill: white;
+	-fx-font-size: 15px;
+}
+
+.pad-button {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+}
+
+.pad-button:hover {
+	-fx-background-color: #00000030;
+}
+
+.pad-notfound {
+	-fx-text-fill: red !important;
+}
+
+.fonticon-notfound:pressed {
+	-fx-text-fill: lightgray;
+}
+
+.current-page-button {
+	-fx-background-color: #dbdbdb !important;
+	-fx-text-fill: #333333 !important;
+}
+
+.volume-item {
+	-fx-text-fill: white !important;
+}
+
+.progress-indicator {
+	-fx-progress-color: white;
+}
+
+.progress-indicator .percentage {
+	-fx-fill: white;
+}
+
+
+/*
+	Custom classes
+ */
+
+.title {
+	-fx-font-size: 50;
+	-fx-font-weight: bold;
+}
+
+.subtitle {
+	-fx-font-size: 25;
+	-fx-font-weight: lighter;
+}
+
+
+.projectname {
+	-fx-font-size: 14px;
+	-fx-text-fill: #FFFFFF;
+	-fx-font-weight: bold;
+}
+
+.profilename {
+	-fx-font-size: 10px;
+	-fx-text-fill: #DDDDDD;
+}

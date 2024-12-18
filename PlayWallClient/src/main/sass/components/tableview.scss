@@ -1,0 +1,60 @@
+@import "variables";
+
+.table-view {
+	-fx-table-header-border-color: -fx-box-border;
+	-fx-table-cell-border-color: $component-border-color;
+}
+
+.table-row-cell {
+	-fx-background: -fx-control-inner-background;
+	-fx-background-color: $component-background-color;
+	-fx-text-fill: $component-text-color;
+}
+
+.table-row-cell:odd {
+	-fx-background: $component-background-color-odd !important;
+}
+
+.table-cell {
+	-fx-background-color: null;
+	-fx-border-color: transparent -fx-table-cell-border-color transparent transparent;
+	-fx-text-fill: $component-text-color;
+}
+
+.table-cell:deactivated {
+	-fx-text-fill: $component-text-color-deactivated !important;
+}
+
+.table-view > .virtual-flow > .clipped-container > .sheet > .table-row-cell .table-cell:selected {
+	-fx-background-color: -fx-table-cell-border-color, -fx-background;
+	-fx-background-insets: 0, 0 0 1 0;
+}
+
+/* This is the area behind the column headers. An ideal place to specify background
+   and border colors for the whole area (not individual column-header's). */
+.table-view .column-header-background {
+	-fx-background-color: $component-background-color-dark;
+	-fx-background-insets: 0, 1;
+}
+
+/* The column header row is made up of a number of column-header, one for each
+   TableColumn, and a 'filler' area that extends from the right-most column
+   to the edge of the tableview, or up to the 'column control' button. */
+.table-view .column-header,
+.table-view .filler,
+.table-view > .column-header-background > .show-hide-columns-button,
+.table-view:constrained-resize .filler {
+	-fx-background-color: $component-background-color-dark;
+	-fx-background-insets: 0, 0 1 1 0, 1 2 2 1;
+	-fx-font-weight: bold;
+	-fx-size: 2em;
+	-fx-text-fill: -fx-selection-bar-text;
+	-fx-padding: 0.166667em;
+}
+
+.table-view .column-header .label {
+	-fx-text-fill: $component-text-color;
+}
+.table-row-cell:selected {
+	-fx-background-color: $component-focus-background-color;
+}

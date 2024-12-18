@@ -1,0 +1,45 @@
+.text-field:error {
+	-fx-border-color: red !important;
+}
+
+.color-view-item {
+	-fx-stroke: black;
+	-fx-stroke-width: 2;
+	-fx-arc-height: 7.5;
+	-fx-arc-width: 7.5;
+}
+
+.color-view-item:hover {
+	-fx-stroke: DARKRED;
+}
+
+.color-view-item:pressed {
+	-fx-stroke: RED;
+}
+
+.dnd-file-option {
+	-fx-text-fill: white;
+}
+
+.dnd-file-option:drag {
+	-fx-text-fill: white;
+	-fx-border-width: 2px;
+	-fx-border-color: white;
+	-fx-border-radius: 10px;
+}
+
+.plugin-headline {
+	-fx-font-size: 20px;
+}
+
+.headline {
+	-fx-font-size: 16px;
+	-fx-font-weight: bold;
+}
+
+/*About Dialog*/
+.about-headline {
+	-fx-underline: true;
+	-fx-font-size: 30px;
+	-fx-font-weight: bold;
+}

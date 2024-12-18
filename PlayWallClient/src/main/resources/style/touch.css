@@ -1,0 +1,34 @@
+.menu .label {
+	-fx-font-size: 20px;
+	-fx-padding: 10px;
+}
+
+.label {
+	-fx-font-size: 18px;
+}
+
+.button {
+	-fx-font-size: 1.5em !important;
+}
+
+.slider .track {
+	-fx-pref-height: 15px;
+}
+
+.slider .thumb {
+	-fx-pref-height: 22px;
+	-fx-pref-width: 22px;
+}
+
+.close-button > .graphic {
+	-fx-background-color: white;
+	-fx-scale-shape: false;
+	-fx-padding: 1;
+
+	-fx-min-height: 35px;
+	-fx-min-width: 50px;
+
+	-fx-scale-x: 1.8;
+	-fx-scale-y: 1.8;
+	-fx-shape: "M395.992,296.758l1.794-1.794l7.292,7.292l-1.795,1.794 L395.992,296.758z M403.256,294.992l1.794,1.794l-7.292,7.292l-1.794-1.795 L403.256,294.992z";
+}

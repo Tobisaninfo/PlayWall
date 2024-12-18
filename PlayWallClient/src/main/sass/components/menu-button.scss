@@ -1,0 +1,19 @@
+@import "variables";
+
+.menu-button {
+	-fx-background-color: $component-background-color;
+	-fx-text-fill: $component-text-color;
+	-fx-background-radius: 3px;
+	-fx-border-width: 0;
+	-fx-pref-height: 30px;
+
+	&:hover {
+		-fx-background-color: $component-hover-background-color;
+		-fx-text-fill: $component-text-color !important;
+	}
+
+	&:default {
+		-fx-background-color: $component-focus-background-color;
+		-fx-text-fill: $component-text-color !important;
+	}
+}

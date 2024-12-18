@@ -10,12 +10,15 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
+import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.mapper.PadMapper;
 import de.tobias.playwall.client.mapper.PageMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.ClientImpl;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
+import de.tobias.playwall.client.viewcontroller.style.ModernStyle;
+import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -30,6 +33,8 @@ public class PlayWallMain extends Application
 
 	public static void main(String[] args)
 	{
+		DI.instance().registerLazySingleton(Styleable.class, di -> new ModernStyle());
+
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
 

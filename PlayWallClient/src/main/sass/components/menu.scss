@@ -1,0 +1,20 @@
+@import "variables";
+
+.menu-bar {
+	-fx-background-color: #333333;
+
+	.menu-button {
+		-fx-background-color: #333333;
+	}
+
+	.menu:showing, .menu:hover {
+		-fx-background-color: $component-focus-background-color;
+		-fx-background-radius: 0px;
+	}
+}
+
+.menu-item {
+	&:selected, &:focused {
+		-fx-background-color: $component-focus-background-color;
+	}
+}

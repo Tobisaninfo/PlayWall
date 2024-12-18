@@ -17,6 +17,8 @@
         <junit.version>5.10.2</junit.version>
         <javafx.version>21</javafx.version>
         <controlsfx.version>11.2.1</controlsfx.version>
+
+        <sass-maven-plugin.version>3.7.2</sass-maven-plugin.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
     </properties>
 
@@ -93,6 +95,25 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>nl.geodienstencentrum.maven</groupId>
+                <artifactId>sass-maven-plugin</artifactId>
+                <version>${sass-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>translate-css</id>
+                        <goals>
+                            <goal>update-stylesheets</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <destination>target/classes/style</destination>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>

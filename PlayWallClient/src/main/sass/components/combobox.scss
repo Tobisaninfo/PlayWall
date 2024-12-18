@@ -1,0 +1,46 @@
+@import "variables";
+
+.combo-box {
+	-fx-background-color: $component-background-color;
+	-fx-background-radius: 3px;
+
+
+	.list-cell {
+		-fx-background-color: #6d6d6d;
+		-fx-text-fill: $component-text-color;
+		-fx-pref-height: 30px;
+	}
+
+	.list-cell:hover {
+		-fx-background-color: $component-hover-background-color;
+	}
+
+	.list-cell:selected {
+		-fx-background-color: $component-focus-background-color;
+	}
+
+	&:editable .arrow-button {
+		-fx-background-color: $component-background-color;
+	}
+
+	.text-input {
+		-fx-border-color: $component-border-color;
+		-fx-border-width: $component-border-width;
+		-fx-border-radius: $component-border-radius;
+
+		-fx-background-color: $textfield-background;
+
+		-fx-text-fill: $component-text-color;
+		-fx-prompt-text-fill: $textfield-prompt-color;
+
+		-fx-font-size: $textfield-font-size;
+	}
+}
+
+.combo-box > .list-cell {
+	-fx-font-weight: bold;
+}
+
+.combo-box > .list-cell:selected {
+	-fx-background-color: $component-background-color;
+}

@@ -1,0 +1,28 @@
+@import "variables";
+
+.radio-button {
+	.radio {
+		-fx-background-color: transparent;
+		-fx-background-insets: 1;
+		-fx-border-color: #CCCCCC;
+		-fx-border-radius: 30px;
+		-fx-border-width: 2px;
+	}
+
+	.dot {
+		-fx-background-color: transparent;
+		-fx-background-insets: 0 0 0 0 0, 0;
+		-fx-padding: 0.333333em;
+		-fx-shape: "M-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0";
+		-fx-scale-x: 1.5;
+		-fx-scale-y: 1.5;
+	}
+
+	&:selected .radio {
+		-fx-background-color: #3E4251;
+	}
+
+	&:selected .dot {
+		-fx-background-color: #CCCCCC;
+	}
+}

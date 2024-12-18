@@ -1,0 +1,22 @@
+@import "variables";
+
+.notification-pane {
+	-fx-background-color: rgb(29, 56, 87);
+}
+
+.notification-pane.top .notification-bar > .pane {
+	-fx-background-color: rgb(29, 56, 87);
+	-fx-effect: none;
+	-fx-border-width: 0 0 2px 0;
+	-fx-border-color: rgb(85, 85, 85);
+}
+
+.notification-pane .notification-bar > .pane .label {
+	-fx-padding: 0 0 0 14px;
+	-fx-text-fill: #CCCCCC;
+}
+
+.notification-pane .notification-bar > .pane .close-button:hover {
+	-fx-background-color: $component-hover-background-color;
+	-fx-text-fill: $component-text-color !important;
+}

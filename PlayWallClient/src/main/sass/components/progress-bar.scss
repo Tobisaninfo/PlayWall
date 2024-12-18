@@ -1,0 +1,16 @@
+@import "variables";
+
+.progress-bar {
+	.track {
+		-fx-background-radius: 2px;
+		-fx-base: $component-background-color;
+		-fx-background-color: $component-background-color;
+	}
+
+	.bar {
+		-fx-background-insets: 0 0 0 0;
+		-fx-padding: 0.25em;
+
+		-fx-background-color: #EEEEEE;
+	}
+}
