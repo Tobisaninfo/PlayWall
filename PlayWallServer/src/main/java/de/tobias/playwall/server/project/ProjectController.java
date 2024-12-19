@@ -3,6 +3,7 @@ package de.tobias.playwall.server.project;
 import de.tobias.playwall.server.api.project.model.Project;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class ProjectController
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
+	@Async
 	public void loadProject(Project project)
 	{
 		unloadPads();
