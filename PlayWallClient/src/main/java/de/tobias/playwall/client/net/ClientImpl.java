@@ -2,6 +2,7 @@ package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
+import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.mapper.PageMapper;
 import de.tobias.playwall.client.mapper.ProjectMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
@@ -25,11 +26,11 @@ public class ClientImpl implements Client
 
 	private ClientWebSocketHandler clientWebSocketHandler;
 
-	public ClientImpl(ProjectMetadataMapper projectMetadataMapper, ProjectMapper projectMapper, PageMapper pageMapper)
+	public ClientImpl()
 	{
-		this.projectMetadataMapper = projectMetadataMapper;
-		this.projectMapper = projectMapper;
-		this.pageMapper = pageMapper;
+		this.projectMetadataMapper = DI.instance().getInstance(ProjectMetadataMapper.class);
+		this.projectMapper = DI.instance().getInstance(ProjectMapper.class);
+		this.pageMapper = DI.instance().getInstance(PageMapper.class);
 	}
 
 	@Override

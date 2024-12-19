@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.mapper;
 
+import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.common.api.project.model.PageDto;
@@ -13,10 +14,10 @@ public class ProjectMapper
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final PageMapper pageMapper;
 
-	public ProjectMapper(ProjectMetadataMapper projectMetadataMapper, PageMapper pageMapper)
+	public ProjectMapper()
 	{
-		this.projectMetadataMapper = projectMetadataMapper;
-		this.pageMapper = pageMapper;
+		this.projectMetadataMapper = DI.instance().getInstance(ProjectMetadataMapper.class);
+		this.pageMapper = DI.instance().getInstance(PageMapper.class);
 	}
 
 	public Project projectDtoToProject(ProjectDto projectDto)

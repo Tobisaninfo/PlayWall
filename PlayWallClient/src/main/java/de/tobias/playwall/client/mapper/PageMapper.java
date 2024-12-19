@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.mapper;
 
+import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.common.api.project.model.PadDto;
@@ -12,9 +13,9 @@ public class PageMapper
 {
 	private final PadMapper padMapper;
 
-	public PageMapper(PadMapper padMapper)
+	public PageMapper()
 	{
-		this.padMapper = padMapper;
+		this.padMapper = DI.instance().getInstance(PadMapper.class);
 	}
 
 	public Page pageDtoToPage(PageDto page)

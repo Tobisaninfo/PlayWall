@@ -34,7 +34,12 @@ public class PlayWallMain extends Application
 
 	public static void main(String[] args)
 	{
+		DI.instance().registerLazySingleton(Client.class, di -> new ClientImpl());
 		DI.instance().registerLazySingleton(Styleable.class, di -> new ModernStyle());
+		DI.instance().registerLazySingleton(ProjectMapper.class, di -> new ProjectMapper());
+		DI.instance().registerLazySingleton(ProjectMetadataMapper.class, di -> new ProjectMetadataMapper());
+		DI.instance().registerLazySingleton(PageMapper.class, di -> new PageMapper());
+		DI.instance().registerLazySingleton(PadMapper.class, di -> new PadMapper());
 
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
@@ -67,7 +72,7 @@ public class PlayWallMain extends Application
 		Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
-		client = createClient();
+		client = DI.instance().getInstance(Client.class);
 		client.connectWithRetries(10);
 
 		stageIcon = new Image(ICON_PATH);
@@ -86,9 +91,5 @@ public class PlayWallMain extends Application
 	{
 		client.disconnect();
 		Worker.shutdown();
-	}
-
-	private Client createClient() {
-		return new ClientImpl(new ProjectMetadataMapper(), new ProjectMapper(new ProjectMetadataMapper(), new PageMapper(new PadMapper())), new PageMapper(new PadMapper()));
 	}
 }
