@@ -28,9 +28,9 @@ public class ClientImpl implements Client
 
 	public ClientImpl()
 	{
-		this.projectMetadataMapper = DI.instance().getInstance(ProjectMetadataMapper.class);
-		this.projectMapper = DI.instance().getInstance(ProjectMapper.class);
-		this.pageMapper = DI.instance().getInstance(PageMapper.class);
+		this.projectMetadataMapper = DI.instance().get(ProjectMetadataMapper.class);
+		this.projectMapper = DI.instance().get(ProjectMapper.class);
+		this.pageMapper = DI.instance().get(PageMapper.class);
 	}
 
 	@Override

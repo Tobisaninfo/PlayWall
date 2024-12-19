@@ -16,8 +16,8 @@ public class ProjectMapper
 
 	public ProjectMapper()
 	{
-		this.projectMetadataMapper = DI.instance().getInstance(ProjectMetadataMapper.class);
-		this.pageMapper = DI.instance().getInstance(PageMapper.class);
+		this.projectMetadataMapper = DI.instance().get(ProjectMetadataMapper.class);
+		this.pageMapper = DI.instance().get(PageMapper.class);
 	}
 
 	public Project projectDtoToProject(ProjectDto projectDto)

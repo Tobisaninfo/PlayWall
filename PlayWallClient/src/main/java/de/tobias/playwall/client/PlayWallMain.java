@@ -72,7 +72,7 @@ public class PlayWallMain extends Application
 		Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
-		client = DI.instance().getInstance(Client.class);
+		client = DI.instance().get(Client.class);
 		client.connectWithRetries(10);
 
 		stageIcon = new Image(ICON_PATH);

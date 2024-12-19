@@ -15,7 +15,7 @@ public class PageMapper
 
 	public PageMapper()
 	{
-		this.padMapper = DI.instance().getInstance(PadMapper.class);
+		this.padMapper = DI.instance().get(PadMapper.class);
 	}
 
 	public Page pageDtoToPage(PageDto page)

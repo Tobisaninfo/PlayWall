@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@SuppressWarnings("java:S6548")
 public class DI
 {
 	private final Map<Class<?>, Function<DI, ?>> supplier;
@@ -33,7 +34,7 @@ public class DI
 
 	public <T> void registerLazySingleton(Class<T> clazz, Function<DI, T> function)
 	{
-		supplier.put(clazz, (di) -> {
+		supplier.put(clazz, di -> {
 			if(objectCache.containsKey(clazz))
 			{
 				return objectCache.get(clazz);
@@ -44,7 +45,8 @@ public class DI
 		});
 	}
 
-	public <T> T getInstance(Class<T> clazz) {
+	@SuppressWarnings("unchecked")
+	public <T> T get(Class<T> clazz) {
 		return (T) supplier.get(clazz).apply(this);
 	}
 }

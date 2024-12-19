@@ -181,7 +181,7 @@ public class LaunchDialog extends NVC
 	@Override
 	public void initStage(Stage stage)
 	{
-		final Styleable styleable = DI.instance().getInstance(Styleable.class);
+		final Styleable styleable = DI.instance().get(Styleable.class);
 		styleable.applyToStage(stage);
 
 		stage.setTitle(getString(Strings.UI_DIALOG_LAUNCH_TITLE));
