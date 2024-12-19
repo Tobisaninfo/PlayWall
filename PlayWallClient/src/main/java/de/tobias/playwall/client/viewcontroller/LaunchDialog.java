@@ -9,11 +9,11 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.di.DI;
+import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
-import de.tobias.playwall.client.viewcontroller.style.ModernStyle;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -143,7 +143,8 @@ public class LaunchDialog extends NVC
 	{
 		try
 		{
-			client.launchProject(getSelectedProject().id());
+			final Project project = client.launchProject(getSelectedProject().id());
+			Logger.info("Launched project " + project.metadata().name());
 		}
 		catch(PlayWallApiException e)
 		{

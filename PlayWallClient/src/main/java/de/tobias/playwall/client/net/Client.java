@@ -2,6 +2,7 @@ package de.tobias.playwall.client.net;
 
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.model.project.Page;
+import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface Client
 
 	void deleteProject(UUID projectId) throws PlayWallApiException;
 
-	void launchProject(UUID projectId) throws PlayWallApiException;
+	Project launchProject(UUID projectId) throws PlayWallApiException;
 
 	Page addPage(UUID projectId, String name) throws PlayWallApiException;
 

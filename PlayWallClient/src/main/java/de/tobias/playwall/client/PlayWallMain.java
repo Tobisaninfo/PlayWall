@@ -13,6 +13,7 @@ import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.mapper.PadMapper;
 import de.tobias.playwall.client.mapper.PageMapper;
+import de.tobias.playwall.client.mapper.ProjectMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.ClientImpl;
@@ -88,6 +89,6 @@ public class PlayWallMain extends Application
 	}
 
 	private Client createClient() {
-		return new ClientImpl(new ProjectMetadataMapper(), new PageMapper(new PadMapper()));
+		return new ClientImpl(new ProjectMetadataMapper(), new ProjectMapper(new ProjectMetadataMapper(), new PageMapper(new PadMapper())), new PageMapper(new PadMapper()));
 	}
 }

@@ -10,10 +10,12 @@ import java.util.List;
 
 public class ProjectMapper
 {
+	private final ProjectMetadataMapper projectMetadataMapper;
 	private final PageMapper pageMapper;
 
-	public ProjectMapper(PageMapper pageMapper)
+	public ProjectMapper(ProjectMetadataMapper projectMetadataMapper, PageMapper pageMapper)
 	{
+		this.projectMetadataMapper = projectMetadataMapper;
 		this.pageMapper = pageMapper;
 	}
 
@@ -25,6 +27,6 @@ public class ProjectMapper
 			pages.add(this.pageMapper.pageDtoToPage(pagedto));
 		}
 
-		return new Project(projectDto.id(), projectDto.name(), projectDto.numberOfHorizontalPads(), projectDto.numberOfVerticalPads(), pages);
+		return new Project(projectMetadataMapper.projectMetadataDtoToProjectMetadata(projectDto.metadata()), pages);
 	}
 }

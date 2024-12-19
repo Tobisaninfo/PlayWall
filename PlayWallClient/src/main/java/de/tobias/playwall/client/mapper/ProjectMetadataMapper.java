@@ -7,6 +7,6 @@ public class ProjectMetadataMapper
 {
 	public ProjectMetadata projectMetadataDtoToProjectMetadata(ProjectMetadataDto project)
 	{
-		return new ProjectMetadata(project.id(), project.name());
+		return new ProjectMetadata(project.id(), project.name(), project.numberOfHorizontalPads(), project.numberOfVerticalPads());
 	}
 }

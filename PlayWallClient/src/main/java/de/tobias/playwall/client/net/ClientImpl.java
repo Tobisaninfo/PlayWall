@@ -3,8 +3,10 @@ package de.tobias.playwall.client.net;
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.mapper.PageMapper;
+import de.tobias.playwall.client.mapper.ProjectMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.model.project.Page;
+import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.utils.MapUtils;
@@ -18,13 +20,15 @@ import static de.tobias.playwall.common.utils.MapUtils.entry;
 public class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
+	private final ProjectMapper projectMapper;
 	private final PageMapper pageMapper;
 
 	private ClientWebSocketHandler clientWebSocketHandler;
 
-	public ClientImpl(ProjectMetadataMapper projectMetadataMapper, PageMapper pageMapper)
+	public ClientImpl(ProjectMetadataMapper projectMetadataMapper, ProjectMapper projectMapper, PageMapper pageMapper)
 	{
 		this.projectMetadataMapper = projectMetadataMapper;
+		this.projectMapper = projectMapper;
 		this.pageMapper = pageMapper;
 	}
 
@@ -103,9 +107,10 @@ public class ClientImpl implements Client
 	}
 
 	@Override
-	public void launchProject(UUID projectId) throws PlayWallApiException
+	public Project launchProject(UUID projectId) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new ProjectLaunchRequest(projectId));
+		final ProjectLaunchResponse response = clientWebSocketHandler.send(new ProjectLaunchRequest(projectId));
+		return projectMapper.projectDtoToProject(response.getProject());
 	}
 
 	@Override
