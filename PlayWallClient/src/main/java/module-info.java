@@ -13,5 +13,7 @@ open module de.tobias.playwall.client {
 	requires com.fasterxml.jackson.databind;
 	requires com.fasterxml.jackson.datatype.jsr310;
 
+	requires io.github.classgraph;
+
 	requires static lombok;
 }

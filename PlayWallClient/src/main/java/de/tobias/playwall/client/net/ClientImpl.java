@@ -2,6 +2,7 @@ package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
+import de.tobias.playwall.client.di.Component;
 import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.mapper.PageMapper;
 import de.tobias.playwall.client.mapper.ProjectMapper;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 import static de.tobias.playwall.common.utils.MapUtils.entry;
 
+@Component(superclass = Client.class)
 public class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;

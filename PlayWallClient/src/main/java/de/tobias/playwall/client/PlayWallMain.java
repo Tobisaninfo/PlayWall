@@ -10,19 +10,19 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
+import de.tobias.playwall.client.di.Component;
 import de.tobias.playwall.client.di.DI;
-import de.tobias.playwall.client.mapper.PadMapper;
-import de.tobias.playwall.client.mapper.PageMapper;
-import de.tobias.playwall.client.mapper.ProjectMapper;
-import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.net.ClientImpl;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
-import de.tobias.playwall.client.viewcontroller.style.ModernStyle;
-import de.tobias.playwall.client.viewcontroller.style.Styleable;
+import io.github.classgraph.*;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.function.Function;
 
 
 public class PlayWallMain extends Application
@@ -34,12 +34,7 @@ public class PlayWallMain extends Application
 
 	public static void main(String[] args)
 	{
-		DI.instance().registerLazySingleton(Client.class, di -> new ClientImpl());
-		DI.instance().registerLazySingleton(Styleable.class, di -> new ModernStyle());
-		DI.instance().registerLazySingleton(ProjectMapper.class, di -> new ProjectMapper());
-		DI.instance().registerLazySingleton(ProjectMetadataMapper.class, di -> new ProjectMetadataMapper());
-		DI.instance().registerLazySingleton(PageMapper.class, di -> new PageMapper());
-		DI.instance().registerLazySingleton(PadMapper.class, di -> new PadMapper());
+		setupDependencies();
 
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
@@ -48,6 +43,54 @@ public class PlayWallMain extends Application
 		App app = ApplicationUtils.registerMainApplication(PlayWallMain.class);
 
 		app.start(args);
+	}
+
+	private static void setupDependencies()
+	{
+		final String basePackage = PlayWallMain.class.getPackage().getName();
+		final String componentAnnotation = Component.class.getName();
+
+		try(ScanResult scanResult = new ClassGraph().verbose().enableAllInfo()
+				.acceptPackages(basePackage).scan())
+		{
+			for(ClassInfo componentClassInfo : scanResult.getClassesWithAnnotation(componentAnnotation))
+			{
+				final Class<?> loadedClass = componentClassInfo.loadClass();
+
+				final AnnotationInfo annotationInfo = componentClassInfo.getAnnotationInfo(componentAnnotation);
+				final List<AnnotationParameterValue> annotationValues = annotationInfo.getParameterValues();
+
+				Class superclass = ((AnnotationClassRef) annotationValues.get(0).getValue()).loadClass();
+				if(superclass.equals(Object.class))
+				{
+					superclass = loadedClass;
+				}
+
+				boolean singleton = (boolean) annotationValues.get(1).getValue();
+
+				final Function<DI, ?> loadFunction = di -> {
+					try
+					{
+						return loadedClass.getConstructor().newInstance();
+					}
+					catch(NoSuchMethodException | InstantiationException | IllegalAccessException |
+						  InvocationTargetException e)
+					{
+						Logger.error(MessageFormat.format("Cannot register component {0}", loadedClass), e);
+						throw new RuntimeException(e);
+					}
+				};
+
+				if(singleton)
+				{
+					DI.instance().registerLazySingleton(superclass, loadFunction);
+				}
+				else
+				{
+					DI.instance().registerLazy(superclass, loadFunction);
+				}
+			}
+		}
 	}
 
 	private static void applicationWillStart(App app)

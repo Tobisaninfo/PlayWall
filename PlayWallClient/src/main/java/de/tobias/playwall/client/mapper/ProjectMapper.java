@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.mapper;
 
+import de.tobias.playwall.client.di.Component;
 import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
@@ -9,6 +10,7 @@ import de.tobias.playwall.common.api.project.model.ProjectDto;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ProjectMapper
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
