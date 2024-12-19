@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
-import de.tobias.playwall.common.net.ErrorMessage;
-import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.common.net.WebSocketCloseStatus;
+import de.tobias.playwall.common.net.*;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -100,13 +97,18 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		try
 		{
 			Logger.debug("Received: " + data);
-			final ResponseMessage message = objectMapper.readValue(data, ResponseMessage.class);
+			final BaseMessage message = objectMapper.readValue(data, BaseMessage.class);
 
-			synchronized(lock)
+			if (message instanceof ResponseMessage responseMessage)
 			{
-				responseQueue.enqueueResponse(message.getMessageId(), message);
-				Logger.trace("NotifyAll");
-				lock.notifyAll();
+				synchronized(lock)
+				{
+					responseQueue.enqueueResponse(responseMessage.getMessageId(), responseMessage);
+					Logger.trace("NotifyAll");
+					lock.notifyAll();
+				}
+			} else if (message instanceof UpdateMessage updateMessage) {
+
 			}
 		}
 		catch(Exception e)
@@ -165,7 +167,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 					Logger.trace("Waiting for response for message id " + message.getMessageId());
 					lock.wait(100L);
 				}
-				Logger.debug("Return response for message id " + message.getMessageId());
+				Logger.trace("Return response for message id " + message.getMessageId());
 				final ResponseMessage responseMessage = messageOptional.get();
 				if(responseMessage instanceof ErrorMessage errorMessage)
 				{

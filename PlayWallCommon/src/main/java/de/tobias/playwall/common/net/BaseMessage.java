@@ -17,8 +17,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-abstract sealed class BaseMessage
-		permits RequestMessage, ResponseMessage
+public abstract sealed class BaseMessage
+		permits RequestMessage, ResponseMessage, UpdateMessage
 {
 	private UUID messageId;
 }
