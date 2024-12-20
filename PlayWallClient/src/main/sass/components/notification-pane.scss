@@ -16,6 +16,10 @@
 	-fx-text-fill: #CCCCCC;
 }
 
+.notification-pane .notification-bar > .pane .close-button {
+	-fx-alignment: center;
+}
+
 .notification-pane .notification-bar > .pane .close-button:hover {
 	-fx-background-color: $component-hover-background-color;
 	-fx-text-fill: $component-text-color !important;

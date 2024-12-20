@@ -4,4 +4,9 @@ import java.util.List;
 
 public record Project(ProjectMetadata metadata, List<Page> pages)
 {
+	public Page getPage(int position) {
+		return pages.stream().findFirst()
+				.filter(page -> page.position() == position)
+				.orElse(null);
+	}
 }

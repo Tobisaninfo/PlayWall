@@ -16,7 +16,6 @@ import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
 import io.github.classgraph.*;
 import javafx.application.Application;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,9 +26,6 @@ import java.util.function.Function;
 
 public class PlayWallMain extends Application
 {
-	private static final String ICON_PATH = "de/tobias/playwall/client/logo/icon_small.png";
-	private Image stageIcon = null;
-
 	private Client client;
 
 	public static void main(String[] args)
@@ -118,14 +114,13 @@ public class PlayWallMain extends Application
 		client = DI.instance().get(Client.class);
 		client.connectWithRetries(10);
 
-		stageIcon = new Image(ICON_PATH);
-		Alerts.getInstance().setDefaultIcon(stageIcon);
+		loadAppIcon();
 	}
 
 	@Override
 	public void start(Stage stage)
 	{
-		stage.getIcons().add(stageIcon);
+		stage.getIcons().add(DI.instance().get(AppIconProvider.class).getStageIcon());
 		new LaunchDialog(stage, client);
 	}
 
@@ -134,5 +129,10 @@ public class PlayWallMain extends Application
 	{
 		client.disconnect();
 		Worker.shutdown();
+	}
+
+	private void loadAppIcon() {
+		final AppIconProvider iconProvider = DI.instance().get(AppIconProvider.class);
+		Alerts.getInstance().setDefaultIcon(iconProvider.getStageIcon());
 	}
 }

@@ -5,6 +5,7 @@ import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
@@ -14,6 +15,7 @@ import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
+import de.tobias.playwall.client.viewcontroller.main.MainViewController;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -145,6 +147,12 @@ public class LaunchDialog extends NVC
 		{
 			final Project project = client.launchProject(getSelectedProject().id());
 			Logger.info("Launched project " + project.metadata().name());
+
+			new MainViewController((nvc) -> {
+				getStageContainer().ifPresent(NVCStage::close);
+				nvc.showStage();
+				((MainViewController) nvc).openProject(project);
+			});
 		}
 		catch(PlayWallApiException e)
 		{
