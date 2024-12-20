@@ -6,14 +6,12 @@ import de.tobias.playwall.server.api.project.model.ProjectMetadata;
 import de.tobias.playwall.server.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,28 +20,18 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class ProjectRepositoryTest
 {
-	@TestConfiguration
-	public static class TestConfig
-	{
-		@Bean
-		@Primary
-		public PathProvider pathProvider() throws IOException
-		{
-			final Path tempFolder = Files.createTempDirectory("ProjectMetadataRepositoryTest").toAbsolutePath();
-			final PathProvider mock = mock(PathProvider.class);
-			when(mock.getPathForConfig(any())).thenAnswer(i -> tempFolder.resolve((String) i.getArguments()[0]));
-			return mock;
-		}
-	}
-
 	private static final UUID PROJECT_ID = UUID.randomUUID();
 
+	@TempDir
+	private Path tempDir;
+
+	@MockitoBean
+	private PathProvider pathProvider;
 
 	@Autowired
 	private ProjectRepository projectRepository;
@@ -51,6 +39,8 @@ class ProjectRepositoryTest
 	@BeforeEach
 	void beforeEach() throws IOException
 	{
+		when(pathProvider.getPathForConfig(any())).thenAnswer(i -> tempDir.resolve((String) i.getArguments()[0]));
+
 		projectRepository.deleteProject(PROJECT_ID);
 		projectRepository.saveProject(getProject());
 	}
