@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.function.Function;
 
 
@@ -46,23 +45,24 @@ public class PlayWallMain extends Application
 		final String basePackage = PlayWallMain.class.getPackage().getName();
 		final String componentAnnotation = Component.class.getName();
 
-		try(ScanResult scanResult = new ClassGraph().verbose().enableAllInfo()
-				.acceptPackages(basePackage).scan())
+		try(ScanResult scanResult = new ClassGraph()
+				.verbose()
+				.enableAllInfo()
+				.acceptPackages(basePackage)
+				.scan())
 		{
 			for(ClassInfo componentClassInfo : scanResult.getClassesWithAnnotation(componentAnnotation))
 			{
 				final Class<?> loadedClass = componentClassInfo.loadClass();
 
 				final AnnotationInfo annotationInfo = componentClassInfo.getAnnotationInfo(componentAnnotation);
-				final List<AnnotationParameterValue> annotationValues = annotationInfo.getParameterValues();
+				final AnnotationParameterValueList annotationValues = annotationInfo.getParameterValues();
 
-				Class superclass = ((AnnotationClassRef) annotationValues.get(0).getValue()).loadClass();
+				Class superclass = ((AnnotationClassRef) annotationValues.get("superclass").getValue()).loadClass();
 				if(superclass.equals(Object.class))
 				{
 					superclass = loadedClass;
 				}
-
-				boolean singleton = (boolean) annotationValues.get(1).getValue();
 
 				final Function<DI, ?> loadFunction = di -> {
 					try
@@ -77,7 +77,8 @@ public class PlayWallMain extends Application
 					}
 				};
 
-				if(singleton)
+				boolean isSingleton = (boolean) annotationValues.get("singleton").getValue();
+				if(isSingleton)
 				{
 					DI.instance().registerLazySingleton(superclass, loadFunction);
 				}
