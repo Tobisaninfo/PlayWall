@@ -9,4 +9,9 @@ public record Project(ProjectMetadata metadata, List<Page> pages)
 				.filter(page -> page.position() == position)
 				.orElse(null);
 	}
+
+	public Pad getPad(PadIndex index) {
+		final Page page = getPage(index.getPagePosition());
+		return page.getPad(index.getId());
+	}
 }

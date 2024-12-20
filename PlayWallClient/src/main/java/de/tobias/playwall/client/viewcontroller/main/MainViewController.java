@@ -9,9 +9,11 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.AppIconProvider;
 import de.tobias.playwall.client.di.DI;
+import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.utils.Size;
+import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.fxml.FXML;
@@ -35,7 +37,7 @@ public class MainViewController extends NVC
 
 	private SnackBar notificationPane;
 
-	private List<PadView> currentPads;
+	private final List<PadView> padViews = new ArrayList<>();
 
 	private Project project;
 
@@ -129,8 +131,6 @@ public class MainViewController extends NVC
 
 	private void initializePadViews(int columns, int rows)
 	{
-		currentPads = new ArrayList<>();
-
 		// Table
 		padGridPane.getColumnConstraints().clear();
 		double xPercentage = 1.0 / columns;
@@ -147,11 +147,42 @@ public class MainViewController extends NVC
 			c.setPercentHeight(yPercentage * 100);
 			padGridPane.getRowConstraints().add(c);
 		}
+
+		// Pads - Remove alte PadViews, falls noch welche vorhanden
+		if (!padViews.isEmpty())
+			removePadViews();
+
+		// Neue PadViews
+		for (int y = 0; y < rows; y++) {
+			for (int x = 0; x < columns; x++) {
+				PadView padView = new DesktopPadView(); // TODO
+				padGridPane.add(padView.getRootNode(), x, y);
+				padViews.add(padView);
+			}
+		}
+	}
+
+	private void removePadViews() {
+		padViews.forEach(view ->
+		{
+			padGridPane.getChildren().remove(view.getRootNode());
+			// mainLayout.recyclePadView(view); // TODO
+		});
+		padViews.clear();
 	}
 
 	public void showPage(int position)
 	{
 		final Page page = this.project.getPage(position);
+		final int padNumberPerPage = project.metadata().numberOfHorizontalPads() * project.metadata().numberOfVerticalPads();
 
+		for (int i = 0; i < padNumberPerPage; i++) {
+			if (padViews.size() > i) {
+				PadView view = padViews.get(i);
+				Pad pad = page.getPad(i);
+
+				view.setContentView(pad);
+			}
+		}
 	}
 }
