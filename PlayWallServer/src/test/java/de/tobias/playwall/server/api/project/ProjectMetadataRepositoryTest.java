@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
-import de.tobias.playwall.server.api.project.model.ProjectMetadata;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

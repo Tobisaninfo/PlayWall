@@ -11,7 +11,7 @@ import de.tobias.playwall.server.api.project.PageMetadataMapper;
 import de.tobias.playwall.server.api.project.PageNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
-import de.tobias.playwall.server.api.project.model.Page;
+import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.project.PadLoadedUpdate;
-import de.tobias.playwall.server.api.project.model.Pad;
+import de.tobias.playwall.server.common.model.project.Pad;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 

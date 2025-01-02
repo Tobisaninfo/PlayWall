@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.project;
 
-import de.tobias.playwall.server.api.project.model.Project;
+import de.tobias.playwall.server.common.model.project.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;

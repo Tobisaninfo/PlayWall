@@ -13,6 +13,7 @@
         <module>PlayWallCommon</module>
         <module>PlayWallClient</module>
         <module>PlayWallServer</module>
+        <module>PlayWallServerCommon</module>
     </modules>
 
     <properties>

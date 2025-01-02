@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
-import de.tobias.playwall.server.api.project.model.ProjectMetadata;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

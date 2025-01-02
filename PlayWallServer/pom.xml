@@ -61,6 +61,11 @@
             <artifactId>PlayWallCommon</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>de.tobias.playwall</groupId>
+            <artifactId>PlayWallServerCommon</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

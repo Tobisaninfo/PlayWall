@@ -1,4 +1,4 @@
-package de.tobias.playwall.server.api.project.model;
+package de.tobias.playwall.server.common.model.project;
 
 import lombok.*;
 

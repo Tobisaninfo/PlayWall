@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.project;
 
-import de.tobias.playwall.server.api.project.model.Page;
-import de.tobias.playwall.server.api.project.model.Project;
-import de.tobias.playwall.server.api.project.model.ProjectMetadata;
+import de.tobias.playwall.server.common.model.project.Page;
+import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
