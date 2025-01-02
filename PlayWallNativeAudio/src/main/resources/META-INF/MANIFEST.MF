@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: . NativeAudio/jni4net.j-0.8.8.0.jar NativeAudio/NativeAudio.j4n.jar
+

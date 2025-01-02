@@ -1,0 +1,48 @@
+package de.tobias.playwall.nativeaudio.audio.mac;
+
+import de.tobias.playwall.nativeaudio.audio.mac.delegate.AVAudioPlayerBridgeDelegate;
+import de.tobias.playwall.nativeaudio.audio.windows.NativeAudioWinHandler;
+import de.tobias.playwall.server.common.audio.AudioCapability;
+import de.tobias.playwall.server.common.audio.AudioHandler;
+import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
+import de.tobias.playwall.server.common.pad.content.PadContent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class NativeAudioMacHandlerFactory extends AudioHandlerFactory
+{
+	private final List<NativeAudioMacHandler> handlers = new ArrayList<>();
+	private final AVAudioPlayerBridgeDelegate bridgeDelegate = new AVAudioPlayerBridgeDelegate(this);
+
+	public Optional<NativeAudioMacHandler> getHandlerByBridge(AVAudioPlayerBridge bridge)
+	{
+		return handlers.stream().filter(handler -> handler.getBridge().equals(bridge)).findFirst();
+	}
+
+	public NativeAudioMacHandlerFactory(String type)
+	{
+		super(type);
+	}
+
+	@Override
+	public AudioHandler createAudioHandler(PadContent content)
+	{
+		NativeAudioMacHandler nativeAudioMacHandler = new NativeAudioMacHandler(content);
+		nativeAudioMacHandler.getBridge().setDelegate(bridgeDelegate);
+		handlers.add(nativeAudioMacHandler);
+		return nativeAudioMacHandler;
+	}
+
+	@Override
+	public boolean isFeatureAvailable(AudioCapability audioCapability)
+	{
+		for(Class<?> clazz : NativeAudioWinHandler.class.getInterfaces())
+		{
+			if(clazz.equals(audioCapability.getAudioFeature()))
+				return true;
+		}
+		return false;
+	}
+}
