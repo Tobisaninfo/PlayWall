@@ -9,6 +9,6 @@ public class PadMapper
 {
 	public Pad padDtoToPad(PadDto pad)
 	{
-		return new Pad(pad.id(), pad.name(), pad.position(), pad.status(), pad.mediaPaths());
+		return new Pad(pad.id(), pad.name(), pad.position(), pad.status(), pad.mediaPaths(), pad.isLoop(), pad.volume());
 	}
 }

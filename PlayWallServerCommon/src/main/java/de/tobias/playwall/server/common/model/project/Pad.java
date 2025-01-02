@@ -18,4 +18,6 @@ public class Pad
 	private String name;
 	private PadStatus status;
 	private List<String> mediaPaths;
+	private Boolean isLoop;
+	private Double volume;
 }

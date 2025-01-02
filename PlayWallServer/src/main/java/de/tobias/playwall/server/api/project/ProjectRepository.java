@@ -104,6 +104,8 @@ class ProjectRepository
 						.name(pad.getName())
 						.position(pad.getPosition())
 						.mediaPaths(pad.getMediaPaths())
+						.isLoop(pad.getIsLoop())
+						.volume(pad.getVolume())
 						.build())
 				.toList();
 
