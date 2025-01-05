@@ -18,6 +18,7 @@ import java.util.UUID;
 public class ProjectController
 {
 	private final ApplicationContext context;
+	private final PadControllerFactory padControllerFactory;
 	private Project loadedProject;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
@@ -40,7 +41,7 @@ public class ProjectController
 	{
 		loadedProject.getPages().stream()
 				.flatMap(page -> page.getPads().stream())
-				.forEach(pad -> padControllers.put(pad.getId(), new PadController(context, pad)));
+				.forEach(pad -> padControllers.put(pad.getId(), padControllerFactory.createPadController(context, pad)));
 
 		padControllers.values().forEach(PadController::load);
 	}
