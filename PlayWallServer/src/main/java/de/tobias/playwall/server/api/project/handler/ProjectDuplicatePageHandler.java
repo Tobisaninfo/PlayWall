@@ -7,7 +7,7 @@ import de.tobias.playwall.common.api.project.ProjectDuplicatePageRequest;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.PageMetadataMapper;
+import de.tobias.playwall.server.api.project.PageMapper;
 import de.tobias.playwall.server.api.project.PageNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class ProjectDuplicatePageHandler implements RequestHandler<ProjectDuplicatePageRequest>
 {
 	private final ProjectService projectService;
-	private final PageMetadataMapper mapper;
+	private final PageMapper mapper;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectDuplicatePageRequest requestMessage) throws IOException, PlayWallServerException
@@ -32,7 +32,7 @@ public class ProjectDuplicatePageHandler implements RequestHandler<ProjectDuplic
 		try
 		{
 			final Page page = projectService.duplicatePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getName());
-			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageMetadataToPageMetadataDto(page)));
+			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
 		catch(ProjectNotExistsException e)
 		{

@@ -9,8 +9,8 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface PadMetadataMapper
+public interface PadMapper
 {
 	@SubclassMapping(target = AudioPadDto.class, source = AudioPad.class)
-	PadDto padMetadataToPadMetadataDto(Pad pad);
+	PadDto padToPadDto(Pad pad);
 }

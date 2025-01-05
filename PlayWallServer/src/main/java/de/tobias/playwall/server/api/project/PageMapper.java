@@ -5,8 +5,8 @@ import de.tobias.playwall.server.common.model.project.Page;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {PadMetadataMapper.class})
-public interface PageMetadataMapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {PadMapper.class})
+public interface PageMapper
 {
-	PageDto pageMetadataToPageMetadataDto(Page page);
+	PageDto pageToPageDto(Page page);
 }

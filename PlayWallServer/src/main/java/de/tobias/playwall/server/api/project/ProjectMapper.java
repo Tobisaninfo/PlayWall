@@ -5,7 +5,7 @@ import de.tobias.playwall.server.common.model.project.Project;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {PageMetadataMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {PageMapper.class})
 public interface ProjectMapper
 {
 	ProjectDto projectToProjectDto(Project project);

@@ -6,7 +6,7 @@ import de.tobias.playwall.common.api.project.ProjectAddPageResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.PageMetadataMapper;
+import de.tobias.playwall.server.api.project.PageMapper;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Page;
@@ -22,7 +22,7 @@ import java.util.Optional;
 public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageRequest>
 {
 	private final ProjectService projectService;
-	private final PageMetadataMapper mapper;
+	private final PageMapper mapper;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectAddPageRequest requestMessage) throws IOException, PlayWallServerException
@@ -30,7 +30,7 @@ public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageReque
 		try
 		{
 			final Page page = projectService.addPage(requestMessage.getProjectId(), requestMessage.getName());
-			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageMetadataToPageMetadataDto(page)));
+			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
 		catch(ProjectNotExistsException e)
 		{
