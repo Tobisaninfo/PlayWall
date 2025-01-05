@@ -50,7 +50,8 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 	@Override
 	public void play()
 	{
-		bridge.setLoop(getContent().getPad().getIsLoop());
+		// TODO
+//		bridge.setLoop(getContent().getPad().getIsLoop());
 		bridge.play();
 	}
 

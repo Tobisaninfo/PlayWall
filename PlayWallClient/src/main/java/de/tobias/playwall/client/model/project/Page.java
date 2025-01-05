@@ -7,6 +7,6 @@ public record Page(UUID id, String name, Integer position, List<Pad> pads)
 {
 	public Pad getPad(int position)
 	{
-		return pads.stream().filter(p -> p.position() == position).findFirst().orElse(null);
+		return pads.stream().filter(p -> p.getPosition() == position).findFirst().orElse(null);
 	}
 }

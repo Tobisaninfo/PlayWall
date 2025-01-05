@@ -53,12 +53,13 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 						{
 							if(!handler.audioHandler.isPlaying())
 							{
-								if(!pad.getIsLoop())
-								{
-									// Remove from Loop and Stop
-									iterator.remove();
-									pad.setStatus(PadStatus.EOF);
-								}
+								// TODO
+//								if(!pad.getIsLoop())
+//								{
+//									// Remove from Loop and Stop
+//									iterator.remove();
+//									pad.setStatus(PadStatus.EOF);
+//								}
 							}
 						}
 
@@ -97,7 +98,8 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 	@Override
 	public void play()
 	{
-		audioHandler.setLoop(getContent().getPad().getIsLoop());
+		// TODO
+//		audioHandler.setLoop(getContent().getPad().getIsLoop());
 
 		audioHandler.play();
 

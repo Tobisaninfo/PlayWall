@@ -122,7 +122,7 @@ public class DesktopPadView implements PadView
 		preview.getChildren().clear();
 		if(pad != null)
 		{
-			preview.getChildren().add(new Text(pad.name()));
+			preview.getChildren().add(new Text(pad.getName()));
 		}
 	}
 }

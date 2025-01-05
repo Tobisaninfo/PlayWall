@@ -13,16 +13,17 @@ public interface Durationable
 
 	default Duration getRemaining(Pad pad)
 	{
-		if(!pad.getIsLoop())
-		{
-			final Duration position = getPosition();
-			final Duration duration = getDuration();
-
-			if(position != null && duration != null)
-			{
-				return duration.minus(position);
-			}
-		}
+		// TODO
+//		if(!pad.getIsLoop())
+//		{
+//			final Duration position = getPosition();
+//			final Duration duration = getDuration();
+//
+//			if(position != null && duration != null)
+//			{
+//				return duration.minus(position);
+//			}
+//		}
 		return null;
 	}
 }

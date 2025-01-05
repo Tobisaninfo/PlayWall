@@ -99,14 +99,7 @@ class ProjectRepository
 		final Page page = pageOptional.get();
 
 		final List<Pad> newPads = page.getPads().stream()
-				.map(pad -> Pad.builder()
-						.id(UUID.randomUUID())
-						.name(pad.getName())
-						.position(pad.getPosition())
-						.mediaPaths(pad.getMediaPaths())
-						.isLoop(pad.getIsLoop())
-						.volume(pad.getVolume())
-						.build())
+				.map(Pad::copy)
 				.toList();
 
 		final int nextPagePosition = project.getPages().size();
