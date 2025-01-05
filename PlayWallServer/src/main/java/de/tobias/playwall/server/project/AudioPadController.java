@@ -21,4 +21,16 @@ public class AudioPadController extends PadController
 	{
 
 	}
+
+	@Override
+	public void play(boolean withFadeIn)
+	{
+
+	}
+
+	@Override
+	public boolean stop()
+	{
+		return false;
+	}
 }

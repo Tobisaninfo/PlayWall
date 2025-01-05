@@ -30,4 +30,8 @@ public abstract class PadController
 	}
 
 	protected abstract void _unload();
+
+	public abstract void play(boolean withFadeIn);
+
+	public abstract boolean stop();
 }
