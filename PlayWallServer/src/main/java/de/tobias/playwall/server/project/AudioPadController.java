@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 
 public class AudioPadController extends PadController
 {
-	public AudioPadController(ApplicationContext context, Pad pad)
+	protected AudioPadController(ApplicationContext context, Pad pad)
 	{
 		super(context, pad);
 	}

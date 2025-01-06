@@ -1,7 +1,6 @@
 package de.tobias.playwall.server.common.model.project;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import de.tobias.playwall.common.api.project.model.PadStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -23,7 +22,6 @@ public abstract sealed class Pad permits AudioPad
 	private UUID id;
 	private Integer position;
 	private String name;
-	private PadStatus status;
 	private List<String> mediaPaths;
 
 	public abstract Pad copy();

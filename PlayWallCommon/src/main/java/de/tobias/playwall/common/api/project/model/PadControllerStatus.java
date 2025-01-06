@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.api.project.model;
 
-public enum PadStatus
+public enum PadControllerStatus
 {
 	EMPTY,
 	READY,

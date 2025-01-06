@@ -1,6 +1,5 @@
 package de.tobias.playwall.nativeaudio.audio.mac.delegate;
 
-import de.tobias.playwall.common.api.project.model.PadStatus;
 import de.tobias.playwall.nativeaudio.audio.mac.AVAudioPlayerBridge;
 import de.tobias.playwall.nativeaudio.audio.mac.NativeAudioMacHandler;
 import de.tobias.playwall.nativeaudio.audio.mac.NativeAudioMacHandlerFactory;
@@ -28,7 +27,8 @@ public class AVAudioPlayerBridgeDelegate implements AVAudioPlayerBridge.NativeAu
 			PadContent content = handler.getContent();
 			if(content != null)
 			{
-				content.getPad().setStatus(PadStatus.EOF);
+				// TODO
+//				content.getPad().setStatus(PadControllerStatus.EOF);
 			}
 		});
 	}

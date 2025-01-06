@@ -1,7 +1,6 @@
 package de.tobias.playwall.nativeaudio.audio.mac;
 
 import de.thecodelabs.utils.threading.Worker;
-import de.tobias.playwall.common.api.project.model.PadStatus;
 import de.tobias.playwall.server.common.DurationHelper;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.Peakable;
@@ -109,7 +108,8 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 				setOutputDevice("Output Device Name");
 
 				duration = DurationHelper.convertMillisToDuration(bridge.getDuration());
-				getContent().getPad().setStatus(PadStatus.READY);
+				// TODO
+//				getContent().getPad().setStatus(PadControllerStatus.READY);
 				getContent().updateVolume();
 			}
 		});

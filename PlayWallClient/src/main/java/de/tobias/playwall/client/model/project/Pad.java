@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.model.project;
 
-import de.tobias.playwall.common.api.project.model.PadStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +19,5 @@ public abstract sealed class Pad permits AudioPad
 	private UUID id;
 	private Integer position;
 	private String name;
-	private PadStatus status;
 	private List<String> mediaPaths;
 }

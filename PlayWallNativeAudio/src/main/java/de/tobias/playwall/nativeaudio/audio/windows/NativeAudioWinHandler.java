@@ -1,6 +1,5 @@
 package de.tobias.playwall.nativeaudio.audio.windows;
 
-import de.tobias.playwall.common.api.project.model.PadStatus;
 import de.tobias.playwall.server.common.DurationHelper;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.Seekable;
@@ -58,7 +57,7 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 //								{
 //									// Remove from Loop and Stop
 //									iterator.remove();
-//									pad.setStatus(PadStatus.EOF);
+//									pad.setStatus(PadControllerStatus.EOF);
 //								}
 							}
 						}
@@ -178,7 +177,8 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 		setOutputDevice("1/2 - PC Sound (GIGAPort HD Audio driver)");
 
 		duration = DurationHelper.convertMillisToDuration(audioHandler.getDuration());
-		getContent().getPad().setStatus(PadStatus.READY);
+		// TODO
+//		getContent().getPad().setStatus(PadControllerStatus.READY);
 	}
 
 	@Override

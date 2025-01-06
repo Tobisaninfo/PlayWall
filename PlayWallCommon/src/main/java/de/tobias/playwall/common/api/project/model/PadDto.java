@@ -22,7 +22,6 @@ public abstract sealed class PadDto permits AudioPadDto
 	private UUID id;
 	private Integer position;
 	private String name;
-	private PadStatus status;
 	private List<String> mediaPaths;
 }
 
