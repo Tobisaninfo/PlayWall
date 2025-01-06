@@ -2,9 +2,10 @@ package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.project.PadController;
+import de.tobias.playwall.server.common.project.Pauseable;
 import org.springframework.context.ApplicationContext;
 
-public class AudioPadController extends PadController
+public class AudioPadController extends PadController implements Pauseable
 {
 	protected AudioPadController(ApplicationContext context, Pad pad)
 	{
@@ -30,8 +31,15 @@ public class AudioPadController extends PadController
 	}
 
 	@Override
+	public void pause()
+	{
+
+	}
+
+	@Override
 	public boolean stop()
 	{
 		return false;
 	}
+
 }
