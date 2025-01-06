@@ -1,6 +1,4 @@
-package de.tobias.playwall.nativeaudio.plugin.loader;
-
-import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
+package de.tobias.playwall.nativeaudio.loader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,11 +12,6 @@ public interface AudioModuleLoader
 	 * Load the native resources
 	 */
 	void preInit() throws IOException;
-
-	/**
-	 * Init the audio interface
-	 */
-	AudioHandlerFactory init();
 
 	default Path copyResource(Path resourceFolder, String packageName, String file) throws IOException
 	{

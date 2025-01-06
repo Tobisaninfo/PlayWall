@@ -1,5 +1,8 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.server.audio.AudioHandlerFactory;
+import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.common.project.Pauseable;
@@ -7,39 +10,49 @@ import org.springframework.context.ApplicationContext;
 
 public class AudioPadController extends PadController implements Pauseable
 {
-	protected AudioPadController(ApplicationContext context, Pad pad)
+	private final AudioHandlerFactory audioHandlerFactory;
+	private AudioHandler audioHandler;
+
+	protected AudioPadController(ApplicationContext context, Pad pad, AudioHandlerFactory audioHandlerFactory)
 	{
 		super(context, pad);
+		this.audioHandlerFactory = audioHandlerFactory;
 	}
 
 	@Override
 	protected void _load()
 	{
+		audioHandler = audioHandlerFactory.createAudioHandler(this);
+		audioHandler.loadMedia();
 
+		// TODO: set volume
 	}
 
 	@Override
 	protected void _unload()
 	{
-
+		setStatus(PadControllerStatus.STOP);
+		audioHandler.unloadMedia();
 	}
 
 	@Override
 	public void play(boolean withFadeIn)
 	{
-
+		audioHandler.play();
+		setStatus(PadControllerStatus.PLAY);
 	}
 
 	@Override
 	public void pause()
 	{
-
+		audioHandler.pause();
+		setStatus(PadControllerStatus.PAUSE);
 	}
 
 	@Override
-	public boolean stop()
+	public void stop()
 	{
-		return false;
+		audioHandler.stop();
+		setStatus(PadControllerStatus.STOP);
 	}
-
 }

@@ -1,7 +1,4 @@
-package de.tobias.playwall.nativeaudio.plugin.loader;
-
-import de.tobias.playwall.nativeaudio.audio.mac.NativeAudioMacHandlerFactory;
-import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
+package de.tobias.playwall.nativeaudio.loader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,12 +34,6 @@ public class MacAudioImplLoader implements AudioModuleLoader
 		{
 			throw new RuntimeException("Failed to pre-initialize MacAudioImplLoader", e);
 		}
-	}
-
-	@Override
-	public AudioHandlerFactory init()
-	{
-		return new NativeAudioMacHandlerFactory("NativeAudio");
 	}
 }
 

@@ -1,8 +1,6 @@
-package de.tobias.playwall.nativeaudio.plugin.loader;
+package de.tobias.playwall.nativeaudio.loader;
 
 import de.tobias.playwall.nativeaudio.Jni4NetBridgeInitializer;
-import de.tobias.playwall.nativeaudio.audio.windows.NativeAudioWinHandlerFactory;
-import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 
 import java.io.IOException;
 
@@ -21,12 +19,6 @@ public class WindowsAudioImplLoader implements AudioModuleLoader
 				"NativeAudio.dll",
 				"NAudio.dll"
 		);
-	}
-
-	@Override
-	public AudioHandlerFactory init()
-	{
-		return new NativeAudioWinHandlerFactory("NativeAudio");
 	}
 }
 
