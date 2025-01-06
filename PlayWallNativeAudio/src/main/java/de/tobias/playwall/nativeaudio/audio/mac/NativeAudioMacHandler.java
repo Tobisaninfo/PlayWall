@@ -106,7 +106,7 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 			if(isLoaded)
 			{
 				// TODO get output device name from settings
-				setOutputDevice("Output Device Name");
+				setOutputDevice("USB Audio Device");
 
 				duration = DurationHelper.convertMillisToDuration(bridge.getDuration());
 				getController().setStatus(PadControllerStatus.READY);
@@ -167,9 +167,9 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 		}
 
 		final Optional<String> first = Stream.of(devices)
-				.filter(device -> device.getName().equals(name))
-				.map(AudioDevice::getId)
+				.filter(device -> device.name().equals(name))
+				.map(AudioDevice::id)
 				.findFirst();
-		first.ifPresent(s -> bridge.setCurrentAudioDevice(s));
+		first.ifPresent(bridge::setCurrentAudioDevice);
 	}
 }

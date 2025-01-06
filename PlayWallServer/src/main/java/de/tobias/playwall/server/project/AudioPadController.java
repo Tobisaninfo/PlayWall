@@ -8,6 +8,9 @@ import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.common.project.Pauseable;
 import org.springframework.context.ApplicationContext;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class AudioPadController extends PadController implements Pauseable
 {
 	private final AudioHandlerFactory audioHandlerFactory;
@@ -23,7 +26,8 @@ public class AudioPadController extends PadController implements Pauseable
 	protected void _load()
 	{
 		audioHandler = audioHandlerFactory.createAudioHandler(this);
-		audioHandler.loadMedia();
+		// TODO: Check for file existences
+		audioHandler.loadMedia(pad.getMediaPaths().stream().map(Paths::get).toArray(Path[]::new));
 
 		// TODO: set volume
 	}
