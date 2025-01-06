@@ -4,7 +4,7 @@ package de.tobias.playwall.nativeaudio.audio.windows;
 import de.tobias.playwall.server.common.audio.AudioCapability;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
-import de.tobias.playwall.server.common.pad.content.PadContent;
+import de.tobias.playwall.server.common.project.PadController;
 
 public class NativeAudioWinHandlerFactory extends AudioHandlerFactory
 {
@@ -14,9 +14,9 @@ public class NativeAudioWinHandlerFactory extends AudioHandlerFactory
 	}
 
 	@Override
-	public AudioHandler createAudioHandler(PadContent content)
+	public AudioHandler createAudioHandler(PadController padController)
 	{
-		return new NativeAudioWinHandler(content);
+		return new NativeAudioWinHandler(padController);
 	}
 
 	@Override

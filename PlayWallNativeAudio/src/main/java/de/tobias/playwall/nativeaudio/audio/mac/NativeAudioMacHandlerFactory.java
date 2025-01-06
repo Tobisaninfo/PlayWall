@@ -5,7 +5,7 @@ import de.tobias.playwall.nativeaudio.audio.windows.NativeAudioWinHandler;
 import de.tobias.playwall.server.common.audio.AudioCapability;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
-import de.tobias.playwall.server.common.pad.content.PadContent;
+import de.tobias.playwall.server.common.project.PadController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,9 @@ public class NativeAudioMacHandlerFactory extends AudioHandlerFactory
 	}
 
 	@Override
-	public AudioHandler createAudioHandler(PadContent content)
+	public AudioHandler createAudioHandler(PadController padController)
 	{
-		NativeAudioMacHandler nativeAudioMacHandler = new NativeAudioMacHandler(content);
+		NativeAudioMacHandler nativeAudioMacHandler = new NativeAudioMacHandler(padController);
 		nativeAudioMacHandler.getBridge().setDelegate(bridgeDelegate);
 		handlers.add(nativeAudioMacHandler);
 		return nativeAudioMacHandler;

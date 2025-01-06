@@ -1,23 +1,23 @@
 package de.tobias.playwall.server.common.audio;
 
 
-import de.tobias.playwall.server.common.pad.content.PadContent;
+import de.tobias.playwall.server.common.project.PadController;
 
 import java.nio.file.Path;
 import java.time.Duration;
 
 public abstract class AudioHandler
 {
-	private PadContent content;
+	private PadController padController;
 
-	public AudioHandler(PadContent content)
+	public AudioHandler(PadController padController)
 	{
-		this.content = content;
+		this.padController = padController;
 	}
 
-	public PadContent getContent()
+	public PadController getController()
 	{
-		return content;
+		return padController;
 	}
 
 	/**

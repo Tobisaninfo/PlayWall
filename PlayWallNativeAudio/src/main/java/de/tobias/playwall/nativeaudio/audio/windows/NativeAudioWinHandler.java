@@ -1,11 +1,12 @@
 package de.tobias.playwall.nativeaudio.audio.windows;
 
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.server.common.DurationHelper;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.Seekable;
 import de.tobias.playwall.server.common.audio.Soundcardable;
 import de.tobias.playwall.server.common.model.project.Pad;
-import de.tobias.playwall.server.common.pad.content.PadContent;
+import de.tobias.playwall.server.common.project.PadController;
 import nativeaudio.NativeAudio;
 
 import java.nio.file.Path;
@@ -46,7 +47,7 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 					for(Iterator<NativeAudioWinHandler> iterator = playedHandlers.iterator(); iterator.hasNext(); )
 					{
 						NativeAudioWinHandler handler = iterator.next();
-						Pad pad = handler.getContent().getPad();
+						Pad pad = handler.getController().getPad();
 
 						if(handler.audioHandler != null)
 						{
@@ -57,7 +58,7 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 //								{
 //									// Remove from Loop and Stop
 //									iterator.remove();
-//									pad.setStatus(PadControllerStatus.EOF);
+//									handler.getController().setStatus(PadControllerStatus.EOF);
 //								}
 							}
 						}
@@ -87,9 +88,9 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 		positionThread.start();
 	}
 
-	NativeAudioWinHandler(PadContent content)
+	NativeAudioWinHandler(PadController padController)
 	{
-		super(content);
+		super(padController);
 		duration = Duration.ZERO;
 		position = Duration.ZERO;
 	}
@@ -177,8 +178,7 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 		setOutputDevice("1/2 - PC Sound (GIGAPort HD Audio driver)");
 
 		duration = DurationHelper.convertMillisToDuration(audioHandler.getDuration());
-		// TODO
-//		getContent().getPad().setStatus(PadControllerStatus.READY);
+		getController().setStatus(PadControllerStatus.READY);
 	}
 
 	@Override

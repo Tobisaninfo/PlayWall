@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.server.common.model.project.Pad;
+import de.tobias.playwall.server.common.project.PadController;
 import org.springframework.context.ApplicationContext;
 
 public class AudioPadController extends PadController

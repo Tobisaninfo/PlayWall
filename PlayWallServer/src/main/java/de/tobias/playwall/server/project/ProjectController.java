@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.common.project.PadController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;

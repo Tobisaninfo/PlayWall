@@ -1,11 +1,12 @@
 package de.tobias.playwall.nativeaudio.audio.mac.delegate;
 
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.nativeaudio.audio.mac.AVAudioPlayerBridge;
 import de.tobias.playwall.nativeaudio.audio.mac.NativeAudioMacHandler;
 import de.tobias.playwall.nativeaudio.audio.mac.NativeAudioMacHandlerFactory;
 import de.tobias.playwall.server.common.DurationHelper;
 import de.tobias.playwall.server.common.audio.Peakable;
-import de.tobias.playwall.server.common.pad.content.PadContent;
+import de.tobias.playwall.server.common.project.PadController;
 
 import java.util.Optional;
 
@@ -24,11 +25,10 @@ public class AVAudioPlayerBridgeDelegate implements AVAudioPlayerBridge.NativeAu
 	{
 		Optional<NativeAudioMacHandler> nativeAudioMacHandler = factory.getHandlerByBridge(bridge);
 		nativeAudioMacHandler.ifPresent(handler -> {
-			PadContent content = handler.getContent();
-			if(content != null)
+			PadController padController = handler.getController();
+			if(padController != null)
 			{
-				// TODO
-//				content.getPad().setStatus(PadControllerStatus.EOF);
+				padController.setStatus(PadControllerStatus.EOF);
 			}
 		});
 	}

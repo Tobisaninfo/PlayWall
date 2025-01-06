@@ -1,4 +1,4 @@
-package de.tobias.playwall.server.project;
+package de.tobias.playwall.server.common.project;
 
 import de.tobias.playwall.common.api.project.PadLoadedUpdate;
 import de.tobias.playwall.common.api.project.model.PadControllerStatus;
@@ -24,7 +24,7 @@ public abstract class PadController
 		this.status = PadControllerStatus.EMPTY;
 	}
 
-	void load()
+	public void load()
 	{
 		log.debug("Loading Pad {}", pad.getId());
 		_load();
@@ -34,7 +34,7 @@ public abstract class PadController
 
 	protected abstract void _load();
 
-	void unload()
+	public void unload()
 	{
 		log.debug("Unload Pad {}", pad.getId());
 		_unload();

@@ -26,8 +26,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <spring-boot-dependencies.version>3.4.1</spring-boot-dependencies.version>
+        <spring-context.version>6.2.1</spring-context.version>
         <jackson.version>2.18.2</jackson.version>
         <lombok.version>1.18.36</lombok.version>
+        <slf4j-api.version>2.0.16</slf4j-api.version>
 
         <mapstruct.version>1.6.3</mapstruct.version>
 

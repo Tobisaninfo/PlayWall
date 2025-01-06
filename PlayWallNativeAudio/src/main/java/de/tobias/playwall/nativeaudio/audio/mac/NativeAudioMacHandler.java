@@ -1,12 +1,13 @@
 package de.tobias.playwall.nativeaudio.audio.mac;
 
 import de.thecodelabs.utils.threading.Worker;
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.server.common.DurationHelper;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.Peakable;
 import de.tobias.playwall.server.common.audio.Seekable;
 import de.tobias.playwall.server.common.audio.Soundcardable;
-import de.tobias.playwall.server.common.pad.content.PadContent;
+import de.tobias.playwall.server.common.project.PadController;
 import lombok.Setter;
 
 import java.nio.file.Path;
@@ -28,9 +29,9 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 
 	private final AVAudioPlayerBridge bridge;
 
-	NativeAudioMacHandler(PadContent content)
+	NativeAudioMacHandler(PadController padController)
 	{
-		super(content);
+		super(padController);
 
 		bridge = new AVAudioPlayerBridge();
 
@@ -108,9 +109,9 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 				setOutputDevice("Output Device Name");
 
 				duration = DurationHelper.convertMillisToDuration(bridge.getDuration());
+				getController().setStatus(PadControllerStatus.READY);
 				// TODO
-//				getContent().getPad().setStatus(PadControllerStatus.READY);
-				getContent().updateVolume();
+//				getController().updateVolume();
 			}
 		});
 	}
