@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public interface AudioModuleLoader
 {
@@ -29,7 +30,7 @@ public interface AudioModuleLoader
 			{
 				throw new IOException("Resource not found: " + packageName + file);
 			}
-			Files.copy(inputStream, dest);
+			Files.copy(inputStream, dest, StandardCopyOption.REPLACE_EXISTING);
 		}
 
 		return dest;
