@@ -16,9 +16,9 @@ import java.util.Objects;
 public class Jni4NetBridgeInitializer
 {
 	private static final String[] RESOURCE_DLLS = {
-			"jni4net.n-0.8.8.0.dll",
-			"jni4net.n.w32.v40-0.8.8.0.dll",
-			"jni4net.n.w64.v40-0.8.8.0.dll",
+			"jni4net.n-0.8.9.0.dll",
+			"jni4net.n.w32.v40-0.8.9.0.dll",
+			"jni4net.n.w64.v40-0.8.9.0.dll",
 	};
 
 	private static boolean loaded;

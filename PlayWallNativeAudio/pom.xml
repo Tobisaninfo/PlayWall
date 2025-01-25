@@ -90,7 +90,7 @@
     <repositories>
         <repository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/Releases</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -100,7 +100,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/Snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
