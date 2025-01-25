@@ -84,9 +84,11 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
 			sendToClients(textResponse, List.of(session));
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
-			// TODO: Return Error Messages
+			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), null);
+			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
+			sendToClients(textResponse, List.of(session));
 			log.error("Error processing request", e);
 		}
 	}
