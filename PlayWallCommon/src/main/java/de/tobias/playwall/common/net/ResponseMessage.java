@@ -8,7 +8,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public non-sealed class ResponseMessage extends BaseMessage
 {
-	protected ResponseMessage(UUID messageId)
+	public ResponseMessage(UUID messageId)
 	{
 		super(messageId);
 	}

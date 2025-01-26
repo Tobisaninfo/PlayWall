@@ -3,7 +3,10 @@ package de.tobias.playwall.client.viewcontroller.main.desktop;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
+import de.tobias.playwall.client.PlayWallApiException;
+import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.model.project.Pad;
+import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
 import javafx.geometry.Pos;
@@ -49,6 +52,8 @@ public class DesktopPadView implements PadView
 	private BusyView busyView;
 
 	private Label cueInLayer;
+
+	private Pad pad;
 
 	public DesktopPadView()
 	{
@@ -106,6 +111,18 @@ public class DesktopPadView implements PadView
 		// Button HBOX
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
+		buttonBox.getChildren().addAll(playButton);
+		playButton.setOnAction(e -> {
+			try
+			{
+				DI.instance().get(Client.class).play(pad.getId());
+			}
+			catch(PlayWallApiException ex)
+			{
+				throw new RuntimeException(ex);
+			}
+		});
+
 		root.getChildren().addAll(infoBox, preview, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
 	}
@@ -119,6 +136,8 @@ public class DesktopPadView implements PadView
 	@Override
 	public void setContentView(Pad pad)
 	{
+		this.pad = pad;
+
 		preview.getChildren().clear();
 		if(pad != null)
 		{

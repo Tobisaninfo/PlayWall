@@ -72,11 +72,16 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 			final RequestHandler requestHandler = requestHandlerOptional.get();
 			final Optional<ResponseMessage> responseMessageOptional = requestHandler.handleRequest(parsedMessage);
 
+			final TextMessage textResponse;
 			if(responseMessageOptional.isPresent())
 			{
-				final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessageOptional.get()));
-				sendToClients(textResponse, List.of(session));
+				textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessageOptional.get()));
 			}
+			else
+			{
+				textResponse = new TextMessage(objectMapper.writeValueAsString(new ResponseMessage(parsedMessage.getMessageId())));
+			}
+			sendToClients(textResponse, List.of(session));
 		}
 		catch(PlayWallServerException e)
 		{

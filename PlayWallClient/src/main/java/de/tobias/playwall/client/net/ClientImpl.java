@@ -142,4 +142,10 @@ public class ClientImpl implements Client
 		final ProjectDuplicatePageResponse response = clientWebSocketHandler.send(new ProjectDuplicatePageRequest(projectId, pageId, name));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
+
+	@Override
+	public void play(UUID padId) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadPlayRequest(padId));
+	}
 }

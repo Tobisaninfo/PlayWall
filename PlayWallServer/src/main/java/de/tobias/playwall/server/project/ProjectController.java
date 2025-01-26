@@ -2,6 +2,7 @@ package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.project.PadController;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -20,6 +21,7 @@ public class ProjectController
 {
 	private final ApplicationContext context;
 	private final PadControllerFactory padControllerFactory;
+	@Getter
 	private Project loadedProject;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
@@ -45,5 +47,9 @@ public class ProjectController
 				.forEach(pad -> padControllers.put(pad.getId(), padControllerFactory.createPadController(context, pad)));
 
 		padControllers.values().forEach(PadController::load);
+	}
+
+	public PadController getController(UUID padId) {
+		return padControllers.get(padId);
 	}
 }
