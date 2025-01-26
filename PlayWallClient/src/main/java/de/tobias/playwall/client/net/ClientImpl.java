@@ -72,12 +72,12 @@ public class ClientImpl implements Client
 				catch(InterruptedException ex)
 				{
 					Thread.currentThread().interrupt();
-					throw new RuntimeException(e);
+					throw new ServerConnectionException(e);
 				}
 			}
 		}
 
-		throw new RuntimeException("Could not connect to server");
+		throw new ServerConnectionException("Could not connect to server");
 	}
 
 	@Override

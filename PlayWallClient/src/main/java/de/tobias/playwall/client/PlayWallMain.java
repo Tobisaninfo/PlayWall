@@ -40,6 +40,7 @@ public class PlayWallMain extends Application
 		app.start(args);
 	}
 
+	@SuppressWarnings({"java:S112", "java:S3740", "unchecked", "rawtypes"})
 	private static void setupDependencies()
 	{
 		final String basePackage = PlayWallMain.class.getPackage().getName();

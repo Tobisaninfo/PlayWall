@@ -3,6 +3,8 @@ package de.tobias.playwall.nativeaudio;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.sf.jni4net.Bridge;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Objects;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Jni4NetBridgeInitializer
 {
 	private static final String[] RESOURCE_DLLS = {

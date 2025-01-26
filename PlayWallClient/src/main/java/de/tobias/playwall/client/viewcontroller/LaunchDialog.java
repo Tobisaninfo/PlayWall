@@ -148,7 +148,7 @@ public class LaunchDialog extends NVC
 			final Project project = client.launchProject(getSelectedProject().id());
 			Logger.info("Launched project " + project.metadata().name());
 
-			new MainViewController((nvc) -> {
+			new MainViewController(nvc -> {
 				getStageContainer().ifPresent(NVCStage::close);
 				nvc.showStage();
 				((MainViewController) nvc).openProject(project);

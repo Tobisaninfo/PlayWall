@@ -4,10 +4,12 @@ public class AVAudioPlayerBridge {
 
 	private long nativePointer;
 
+	@SuppressWarnings("java:S1144")
 	private long getNativePointer() {
 		return nativePointer;
 	}
 
+	@SuppressWarnings("java:S1144")
 	private void setNativePointer(long nativePointer) {
 		this.nativePointer = nativePointer;
 	}
