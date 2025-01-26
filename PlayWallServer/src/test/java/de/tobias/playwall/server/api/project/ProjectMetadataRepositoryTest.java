@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,9 @@ class ProjectMetadataRepositoryTest
 {
 	@TempDir
 	private Path tempDir;
+
+	@MockitoBean
+	private AudioHandlerFactory audioHandlerFactory;
 
 	@MockitoBean
 	private PathProvider pathProvider;
