@@ -1,5 +1,7 @@
 package de.tobias.playwall.nativeaudio.audio.mac;
 
+import de.tobias.playwall.nativeaudio.audio.mac.delegate.NativeAudioDelegate;
+
 public class AVAudioPlayerBridge {
 
 	private long nativePointer;
@@ -20,6 +22,8 @@ public class AVAudioPlayerBridge {
 	}
 
 	private static native void initialize();
+
+	private NativeAudioDelegate delegate;
 
 	public AVAudioPlayerBridge() {
 		init();
@@ -53,9 +57,12 @@ public class AVAudioPlayerBridge {
 
 	public native void setRate(double rate);
 
-	public static native AudioDevice[] getAudioDevices();
-
 	public native void setCurrentAudioDevice(String id);
+
+	public void setDelegate(NativeAudioDelegate delegate)
+	{
+		this.delegate = delegate;
+	}
 
 	/*
 	Delegate methods
@@ -77,19 +84,5 @@ public class AVAudioPlayerBridge {
 		if (delegate != null) {
 			delegate.onFinish(this);
 		}
-	}
-
-	private NativeAudioDelegate delegate;
-
-	public void setDelegate(NativeAudioDelegate delegate) {
-		this.delegate = delegate;
-	}
-
-	public interface NativeAudioDelegate {
-		void onFinish(AVAudioPlayerBridge bridge);
-
-		void onPeakMeter(AVAudioPlayerBridge bridge, float left, float right);
-
-		void onPositionChanged(AVAudioPlayerBridge bridge, double position);
 	}
 }

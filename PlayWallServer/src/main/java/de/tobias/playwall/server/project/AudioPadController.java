@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.project.model.PadControllerStatus;
-import de.tobias.playwall.server.audio.AudioHandlerFactory;
+import de.tobias.playwall.server.audio.PlatformAudioHandlerFactory;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.project.PadController;
@@ -13,10 +13,10 @@ import java.nio.file.Paths;
 
 public class AudioPadController extends PadController implements Pauseable
 {
-	private final AudioHandlerFactory audioHandlerFactory;
+	private final PlatformAudioHandlerFactory audioHandlerFactory;
 	private AudioHandler audioHandler;
 
-	protected AudioPadController(ApplicationContext context, Pad pad, AudioHandlerFactory audioHandlerFactory)
+	protected AudioPadController(ApplicationContext context, Pad pad, PlatformAudioHandlerFactory audioHandlerFactory)
 	{
 		super(context, pad);
 		this.audioHandlerFactory = audioHandlerFactory;

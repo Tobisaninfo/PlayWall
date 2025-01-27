@@ -1,6 +1,7 @@
 package de.tobias.playwall.nativeaudio.loader;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +33,7 @@ public class MacAudioImplLoader implements AudioModuleLoader
 		}
 		catch(IOException e)
 		{
-			throw new RuntimeException("Failed to pre-initialize MacAudioImplLoader", e);
+			throw new UncheckedIOException("Failed to pre-initialize MacAudioImplLoader", e);
 		}
 	}
 }

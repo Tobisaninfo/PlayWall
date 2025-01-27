@@ -12,8 +12,6 @@ import lombok.Setter;
 
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class NativeAudioMacHandler extends AudioHandler implements Peakable, Seekable, Soundcardable
 {
@@ -132,8 +130,10 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 		{
 			rightPeak = level;
 		}
-
-		throw new IllegalArgumentException("Unsupported channel: " + channel);
+		else
+		{
+			throw new IllegalArgumentException("Unsupported channel: " + channel);
+		}
 	}
 
 	@Override
@@ -156,20 +156,10 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 		return audioLevel(channel);
 	}
 
-	private AudioDevice[] devices;
-
 	@Override
 	public void setOutputDevice(String name)
 	{
-		if(devices == null)
-		{
-			devices = AVAudioPlayerBridge.getAudioDevices();
-		}
-
-		final Optional<String> first = Stream.of(devices)
-				.filter(device -> device.name().equals(name))
-				.map(AudioDevice::id)
-				.findFirst();
-		first.ifPresent(bridge::setCurrentAudioDevice);
+		final String deviceId = AVAudioBridge.getDeviceIdForDeviceName(name);
+		bridge.setCurrentAudioDevice(deviceId);
 	}
 }
