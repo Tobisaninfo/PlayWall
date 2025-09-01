@@ -2,7 +2,7 @@ package de.tobias.playwall.server.audio;
 
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.nativeaudio.loader.AudioModuleLoader;
-import de.tobias.playwall.nativeaudio.loader.MacAudioImplLoader;
+import de.tobias.playwall.nativeaudio.loader.RustAudioImplLoader;
 import de.tobias.playwall.nativeaudio.loader.WindowsAudioImplLoader;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -25,7 +25,7 @@ public class PlatformAudioHandlerFactory
 		final AudioModuleLoader loader = switch(OS.getType())
 		{
 			case Windows -> new WindowsAudioImplLoader();
-			case MacOSX -> new MacAudioImplLoader();
+			case MacOSX -> new RustAudioImplLoader();
 			default -> throw new IllegalArgumentException("Unsupported OS type " + OS.getType());
 		};
 

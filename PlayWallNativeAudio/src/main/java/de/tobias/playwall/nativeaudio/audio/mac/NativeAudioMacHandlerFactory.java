@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Conditional(OperatingSystemConditions.MacOSCondition.class)
 @RequiredArgsConstructor
-@Service
+//@Service
 public class NativeAudioMacHandlerFactory implements AudioHandlerFactory
 {
 	private final AVAudioBridgeHolder bridgeHolder;
