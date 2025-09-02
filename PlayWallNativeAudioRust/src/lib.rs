@@ -1,14 +1,16 @@
 #![allow(non_snake_case)]
 
+mod playback;
+
 use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
 use jni::sys::{jlong, jstring};
 use jni::{JNIEnv, JavaVM};
 use rodio::source::Buffered;
-use rodio::{Decoder, OutputStream, OutputStreamBuilder, Sink, Source};
+use rodio::{Decoder, OutputStream, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
 use std::str::FromStr;
-use tracing::{debug, error, info, trace, warn};
+use tracing::{debug, trace};
 use tracing_subscriber;
 
 struct RustBridge {
@@ -121,63 +123,6 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
             trace!("Loaded media");
         });
     }
-}
-
-#[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_playNative(
-    mut env: JNIEnv,
-    obj: JObject,
-) {
-    with_bridge(&mut env, obj, |bridge| {
-        if bridge.audio_stream_handler.is_none() {
-            let stream_handler = OutputStreamBuilder::from_default_device()
-                .unwrap()
-                .open_stream()
-                .unwrap();
-            let sink = Sink::connect_new(stream_handler.mixer());
-
-            let shared_source: Buffered<Decoder<BufReader<File>>> = bridge.source.clone().unwrap();
-            sink.append(shared_source);
-            bridge.setAudioHandlerStream(AudioStreamHandler {
-                stream_handler,
-                sink,
-            });
-            trace!("Play (from new audio handler)");
-        } else {
-            let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
-            if sink.empty() {
-                let shared_source: Buffered<Decoder<BufReader<File>>> =
-                    bridge.source.clone().unwrap();
-                sink.append(shared_source);
-                trace!("Play (from existing audio handler)");
-            } else {
-                sink.play();
-                trace!("Play (from existing audio handler, already playing)");
-            }
-        }
-    });
-}
-
-#[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_pauseNative(
-    mut env: JNIEnv,
-    obj: JObject,
-) {
-    with_bridge(&mut env, obj, |bridge| {
-        bridge.audio_stream_handler.as_ref().unwrap().sink.pause();
-        trace!("Pause");
-    });
-}
-
-#[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_stopNative(
-    mut env: JNIEnv,
-    obj: JObject,
-) {
-    with_bridge(&mut env, obj, |bridge| {
-        bridge.audio_stream_handler.as_ref().unwrap().sink.stop();
-        trace!("Stop");
-    });
 }
 
 fn with_bridge<T>(env: &mut JNIEnv, this: JObject, f: impl FnOnce(&mut RustBridge) -> T) -> T {
