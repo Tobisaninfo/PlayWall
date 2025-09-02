@@ -34,14 +34,18 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public void pause()
 	{
-
+		pauseNative();
 	}
+
+	private native void pauseNative();
 
 	@Override
 	public void stop()
 	{
-
+		stopNative();
 	}
+
+	private native void stopNative();
 
 	@Override
 	public Duration getPosition()

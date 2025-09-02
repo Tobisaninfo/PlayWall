@@ -105,19 +105,49 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
     obj: JObject,
 ) {
     with_bridge(&mut env, obj, |bridge| {
+        if bridge.audio_stream_handler.is_none() {
+            let stream_handler = OutputStreamBuilder::from_default_device()
+                .unwrap()
+                .open_stream()
+                .unwrap();
+            let sink = Sink::connect_new(stream_handler.mixer());
 
-        let stream_handler = OutputStreamBuilder::from_default_device()
-            .unwrap()
-            .open_stream()
-            .unwrap();
-        let sink = Sink::connect_new(stream_handler.mixer());
+            let shared_source: Buffered<Decoder<BufReader<File>>> = bridge.source.clone().unwrap();
+            sink.append(shared_source);
+            bridge.setAudioHandlerStream(AudioStreamHandler {
+                stream_handler,
+                sink,
+            });
+        } else {
+            let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
+            if sink.empty() {
+                let shared_source: Buffered<Decoder<BufReader<File>>> =
+                    bridge.source.clone().unwrap();
+                sink.append(shared_source);
+            } else {
+                sink.play();
+            }
+        }
+    });
+}
 
-        let shared_source: Buffered<Decoder<BufReader<File>>> = bridge.source.clone().unwrap();
-        sink.append(shared_source);
-        bridge.setAudioHandlerStream(AudioStreamHandler {
-            stream_handler,
-            sink
-        });
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_pauseNative(
+    mut env: JNIEnv,
+    obj: JObject,
+) {
+    with_bridge(&mut env, obj, |bridge| {
+        bridge.audio_stream_handler.as_ref().unwrap().sink.pause();
+    });
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_stopNative(
+    mut env: JNIEnv,
+    obj: JObject,
+) {
+    with_bridge(&mut env, obj, |bridge| {
+        bridge.audio_stream_handler.as_ref().unwrap().sink.stop();
     });
 }
 
