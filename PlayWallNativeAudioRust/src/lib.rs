@@ -1,12 +1,15 @@
 #![allow(non_snake_case)]
 
-use jni::objects::{GlobalRef, JObject, JString, JValue};
+use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
 use jni::sys::{jlong, jstring};
 use jni::{JNIEnv, JavaVM};
 use rodio::source::Buffered;
 use rodio::{Decoder, OutputStream, OutputStreamBuilder, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
+use std::str::FromStr;
+use tracing::{debug, error, info, trace, warn};
+use tracing_subscriber;
 
 struct RustBridge {
     java_obj: GlobalRef,
@@ -39,6 +42,26 @@ struct AudioStreamHandler {
 }
 
 #[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_initSystem(
+    mut env: JNIEnv,
+    _class: JClass,
+    logLevel: jstring,
+) {
+    unsafe {
+        let j_string = JString::from_raw(logLevel);
+        let log_level_str: String = env
+            .get_string(&j_string)
+            .expect("Couldn't get java string")
+            .into();
+
+        tracing_subscriber::fmt()
+            .with_max_level(tracing::Level::from_str(&log_level_str).unwrap())
+            .init();
+        debug!("Initialized rust audio component");
+    }
+}
+
+#[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_createNativeInstance(
     mut env: JNIEnv,
     this: JObject,
@@ -47,11 +70,11 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
     let jvm = env.get_java_vm().unwrap();
 
     let bridge = Box::new(RustBridge::new(global_ref, jvm));
-
     let ptr = Box::into_raw(bridge) as jlong;
 
     env.set_field(&this, "nativePointer", "J", JValue::Long(ptr))
         .unwrap();
+    trace!("Created bridge with ptr: {}", ptr);
 }
 
 #[unsafe(no_mangle)]
@@ -71,6 +94,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
         }
         env.set_field(&this, "nativePointer", "J", JValue::Long(0))
             .unwrap();
+        trace!("Destroyed bridge with ptr: {}", ptr);
     }
 }
 
@@ -86,15 +110,15 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
             .get_string(&j_string)
             .expect("Couldn't get java string")
             .into();
-        println!("Path: {}", path_str);
+        debug!("Load path: {}", path_str);
 
         let file = File::open(path_str).unwrap(); // oder "sound.mp3", je nach Format
         let reader = BufReader::new(file);
 
         let source = Decoder::new(reader).unwrap().buffered();
-
         with_bridge(&mut env, obj, |bridge| {
             bridge.setSource(source);
+            trace!("Loaded media");
         });
     }
 }
@@ -118,14 +142,17 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
                 stream_handler,
                 sink,
             });
+            trace!("Play (from new audio handler)");
         } else {
             let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
             if sink.empty() {
                 let shared_source: Buffered<Decoder<BufReader<File>>> =
                     bridge.source.clone().unwrap();
                 sink.append(shared_source);
+                trace!("Play (from existing audio handler)");
             } else {
                 sink.play();
+                trace!("Play (from existing audio handler, already playing)");
             }
         }
     });
@@ -138,6 +165,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 ) {
     with_bridge(&mut env, obj, |bridge| {
         bridge.audio_stream_handler.as_ref().unwrap().sink.pause();
+        trace!("Pause");
     });
 }
 
@@ -148,6 +176,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 ) {
     with_bridge(&mut env, obj, |bridge| {
         bridge.audio_stream_handler.as_ref().unwrap().sink.stop();
+        trace!("Stop");
     });
 }
 

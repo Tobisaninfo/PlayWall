@@ -1,5 +1,8 @@
 package de.tobias.playwall.nativeaudio.loader;
 
+import de.tobias.playwall.nativeaudio.audio.rust.NativeAudioRustHandler;
+import de.tobias.playwall.nativeaudio.audio.rust.RustLogLevel;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -28,6 +31,7 @@ public class RustAudioImplLoader implements AudioModuleLoader
 			{
 				Path dest = copyResource(resourceFolder, ASSETS, "libPlayWallNativeAudioRust.dylib");
 				System.load(dest.toString());
+				NativeAudioRustHandler.initSystem(RustLogLevel.DEBUG); // TODO: make configurable
 				loaded = true;
 			}
 		}

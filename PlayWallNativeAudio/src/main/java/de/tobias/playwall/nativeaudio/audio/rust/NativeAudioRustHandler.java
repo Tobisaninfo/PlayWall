@@ -21,6 +21,12 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 		log.trace("Created new NativeAudioRustHandler with handle {}", nativePointer);
 	}
 
+	public static void initSystem(RustLogLevel logLevel) {
+		initSystem(logLevel.getLevel());
+	}
+
+	private static native void initSystem(String logLevel);
+
 	private native long createNativeInstance();
 
 	@Override
