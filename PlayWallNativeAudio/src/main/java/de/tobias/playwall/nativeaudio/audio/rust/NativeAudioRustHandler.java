@@ -32,10 +32,10 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public void play()
 	{
-		playNative();
+		playNative(true); // TODO Use pad settings
 	}
 
-	private native void playNative();
+	private native void playNative(boolean loop);
 
 	@Override
 	public void pause()

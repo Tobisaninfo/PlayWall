@@ -2,7 +2,8 @@ use std::fs::File;
 use std::io::BufReader;
 use jni::JNIEnv;
 use jni::objects::JObject;
-use rodio::{Decoder, OutputStreamBuilder, Sink};
+use jni::sys::jboolean;
+use rodio::{Decoder, OutputStreamBuilder, Sink, Source};
 use rodio::source::Buffered;
 use tracing::trace;
 use crate::{with_bridge, AudioStreamHandler};
@@ -11,6 +12,7 @@ use crate::{with_bridge, AudioStreamHandler};
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_playNative(
     mut env: JNIEnv,
     obj: JObject,
+    looping: jboolean,
 ) {
     with_bridge(&mut env, obj, |bridge| {
         if bridge.audio_stream_handler.is_none() {
@@ -21,7 +23,11 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
             let sink = Sink::connect_new(stream_handler.mixer());
 
             let shared_source: Buffered<Decoder<BufReader<File>>> = bridge.source.clone().unwrap();
-            sink.append(shared_source);
+            if looping == 1{
+                sink.append(shared_source.repeat_infinite());
+            } else {
+                sink.append(shared_source);
+            }
             bridge.setAudioHandlerStream(AudioStreamHandler {
                 stream_handler,
                 sink,
