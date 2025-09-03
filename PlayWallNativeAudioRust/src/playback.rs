@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::BufReader;
 use jni::JNIEnv;
 use jni::objects::JObject;
-use jni::sys::jboolean;
+use jni::sys::{jboolean, jdouble};
 use rodio::{Decoder, OutputStreamBuilder, Sink, Source};
 use rodio::source::Buffered;
 use tracing::trace;
@@ -66,6 +66,18 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 ) {
     with_bridge(&mut env, obj, |bridge| {
         bridge.audio_stream_handler.as_ref().unwrap().sink.stop();
+        trace!("Stop");
+    });
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_setVolumeNative(
+    mut env: JNIEnv,
+    obj: JObject,
+    volume: jdouble
+) {
+    with_bridge(&mut env, obj, |bridge| {
+        bridge.audio_stream_handler.as_ref().unwrap().sink.set_volume(volume as f32);
         trace!("Stop");
     });
 }

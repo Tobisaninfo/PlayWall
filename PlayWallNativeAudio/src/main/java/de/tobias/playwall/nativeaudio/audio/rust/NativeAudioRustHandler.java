@@ -68,8 +68,13 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public void setVolume(double volume)
 	{
-
+		if (volume < 0 || volume > 1) {
+			throw new IllegalArgumentException("Volume must be between 0 and 1");
+		}
+		setVolumeNative(volume);
 	}
+
+	private native void setVolumeNative(double volume);
 
 	@Override
 	public boolean isMediaLoaded()
