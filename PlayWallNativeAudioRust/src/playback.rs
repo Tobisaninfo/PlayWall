@@ -27,29 +27,25 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
                 .open_stream()
                 .unwrap();
             let sink = Sink::connect_new(stream_handler.mixer());
-
+            bridge.setAudioHandlerStream(AudioStreamHandler {
+                stream_handler,
+                sink,
+            });
+            trace!("Init default output stream and sink");
+        }
+        
+        let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
+        if sink.empty() {
             let shared_source: Buffered<Decoder<BufReader<File>>> = bridge.source.clone().unwrap();
             if looping == 1 {
                 sink.append(shared_source.repeat_infinite());
             } else {
                 sink.append(shared_source);
             }
-            bridge.setAudioHandlerStream(AudioStreamHandler {
-                stream_handler,
-                sink,
-            });
-            trace!("Play (from new audio handler)");
+            trace!("Play (from existing audio handler)");
         } else {
-            let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
-            if sink.empty() {
-                let shared_source: Buffered<Decoder<BufReader<File>>> =
-                    bridge.source.clone().unwrap();
-                sink.append(shared_source);
-                trace!("Play (from existing audio handler)");
-            } else {
-                sink.play();
-                trace!("Play (from existing audio handler, already playing)");
-            }
+            sink.play();
+            trace!("Play (from existing audio handler, already playing)");
         }
     });
 }
