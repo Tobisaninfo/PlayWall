@@ -21,7 +21,8 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 		log.trace("Created new NativeAudioRustHandler with handle {}", nativePointer);
 	}
 
-	public static void initSystem(RustLogLevel logLevel) {
+	public static void initSystem(RustLogLevel logLevel)
+	{
 		initSystem(logLevel.getLevel());
 	}
 
@@ -68,7 +69,8 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public void setVolume(double volume)
 	{
-		if (volume < 0 || volume > 1) {
+		if(volume < 0 || volume > 1)
+		{
 			throw new IllegalArgumentException("Volume must be between 0 and 1");
 		}
 		setVolumeNative(volume);
@@ -79,13 +81,16 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public boolean isMediaLoaded()
 	{
-		return false;
+		return isMediaLoadedNative();
 	}
+
+	private native boolean isMediaLoadedNative();
 
 	@Override
 	public void loadMedia(Path... paths)
 	{
-		if (paths.length != 1) {
+		if(paths.length != 1)
+		{
 			throw new IllegalArgumentException("Only one path is supported");
 		}
 		loadMediaNative(paths[0].toString());
@@ -96,8 +101,13 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public void unloadMedia()
 	{
-
+		if(isMediaLoaded())
+		{
+			unloadMediaNative();
+		}
 	}
+
+	private native void unloadMediaNative();
 
 	@Override
 	public void setOutputDevice(String name)

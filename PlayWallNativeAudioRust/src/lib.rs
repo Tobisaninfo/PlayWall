@@ -3,7 +3,7 @@
 mod playback;
 
 use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
-use jni::sys::{jlong, jstring};
+use jni::sys::{jboolean, jlong, jstring};
 use jni::{JNIEnv, JavaVM};
 use rodio::source::Buffered;
 use rodio::{Decoder, OutputStream, Sink, Source};
@@ -33,6 +33,11 @@ impl RustBridge {
     fn setSource(&mut self, source: Buffered<Decoder<BufReader<File>>>) {
         self.source = Some(source);
     }
+
+    fn clearSource(&mut self) {
+        self.source = None;
+    }
+
     fn setAudioHandlerStream(&mut self, audio_stream_handler: AudioStreamHandler) {
         self.audio_stream_handler = Some(audio_stream_handler);
     }
@@ -123,6 +128,28 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
             trace!("Loaded media");
         });
     }
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_unloadMediaNative(
+    mut env: JNIEnv,
+    obj: JObject,
+) {
+    with_bridge(&mut env, obj, |bridge| {
+        bridge.clearSource();
+        trace!("Unload media");
+    });
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_isMediaLoadedNative(
+    mut env: JNIEnv,
+    obj: JObject,
+) -> jboolean {
+    with_bridge(&mut env, obj, |bridge| {
+        trace!("Unload media");
+        return bridge.source.is_some() as jboolean;
+    })
 }
 
 fn with_bridge<T>(env: &mut JNIEnv, this: JObject, f: impl FnOnce(&mut RustBridge) -> T) -> T {
