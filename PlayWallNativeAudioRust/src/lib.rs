@@ -68,19 +68,42 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
     }
 }
 
+const NATIVE_POINTER_FIELD_NAME: &'static str = "nativePointer";
+const NATIVE_POINTER_FIELD_TYPE: &'static str = "J";
+
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_createNativeInstance(
     mut env: JNIEnv,
     this: JObject,
 ) {
+    if (env
+        .get_field(&this, NATIVE_POINTER_FIELD_NAME, NATIVE_POINTER_FIELD_TYPE)
+        .unwrap()
+        .j()
+        .unwrap())
+        != 0
+    {
+        env.throw_new(
+            "java/lang/IllegalStateException",
+            "Native instance already created",
+        )
+        .unwrap();
+        return;
+    }
+
     let global_ref = env.new_global_ref(&this).unwrap();
     let jvm = env.get_java_vm().unwrap();
 
     let bridge = Box::new(RustBridge::new(global_ref, jvm));
     let ptr = Box::into_raw(bridge) as jlong;
 
-    env.set_field(&this, "nativePointer", "J", JValue::Long(ptr))
-        .unwrap();
+    env.set_field(
+        &this,
+        NATIVE_POINTER_FIELD_NAME,
+        NATIVE_POINTER_FIELD_TYPE,
+        JValue::Long(ptr),
+    )
+    .unwrap();
     trace!("Created bridge with ptr: {}", ptr);
 }
 
@@ -90,7 +113,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
     this: JObject,
 ) {
     let ptr = env
-        .get_field(&this, "nativePointer", "J")
+        .get_field(&this, NATIVE_POINTER_FIELD_NAME, NATIVE_POINTER_FIELD_TYPE)
         .unwrap()
         .j()
         .unwrap();
@@ -99,8 +122,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
         unsafe {
             drop(Box::from_raw(ptr as *mut RustBridge));
         }
-        env.set_field(&this, "nativePointer", "J", JValue::Long(0))
-            .unwrap();
+        env.set_field(
+            &this,
+            NATIVE_POINTER_FIELD_NAME,
+            NATIVE_POINTER_FIELD_TYPE,
+            JValue::Long(0),
+        )
+        .unwrap();
         trace!("Destroyed bridge with ptr: {}", ptr);
     }
 }
@@ -117,16 +145,23 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
             .get_string(&j_string)
             .expect("Couldn't get java string")
             .into();
-        debug!("Load path: {}", path_str);
+        debug!("Load path: {}", &path_str);
 
-        let file = File::open(path_str).unwrap(); // oder "sound.mp3", je nach Format
-        let reader = BufReader::new(file);
+        if let Ok(file) = File::open(&path_str) {
+            let reader = BufReader::new(file);
 
-        let source = Decoder::new(reader).unwrap().buffered();
-        with_bridge(&mut env, obj, |bridge| {
-            bridge.setSource(source);
-            trace!("Loaded media");
-        });
+            let source = Decoder::new(reader).unwrap().buffered();
+            with_bridge(&mut env, obj, |_env, bridge| {
+                bridge.setSource(source);
+                trace!("Loaded media");
+            });
+        } else {
+            env.throw_new(
+                "java/io/FileNotFoundException",
+                format!("File not found: {}", &path_str),
+            )
+            .unwrap();
+        }
     }
 }
 
@@ -135,7 +170,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
     mut env: JNIEnv,
     obj: JObject,
 ) {
-    with_bridge(&mut env, obj, |bridge| {
+    with_bridge(&mut env, obj, |_env, bridge| {
         bridge.clearSource();
         trace!("Unload media");
     });
@@ -146,19 +181,29 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
     mut env: JNIEnv,
     obj: JObject,
 ) -> jboolean {
-    with_bridge(&mut env, obj, |bridge| {
+    with_bridge(&mut env, obj, |_env, bridge| {
         trace!("Unload media");
         return bridge.source.is_some() as jboolean;
     })
+    .unwrap()
 }
 
-fn with_bridge<T>(env: &mut JNIEnv, this: JObject, f: impl FnOnce(&mut RustBridge) -> T) -> T {
+fn with_bridge<T>(
+    env: &mut JNIEnv,
+    this: JObject,
+    f: impl FnOnce(&mut JNIEnv, &mut RustBridge) -> T,
+) -> Option<T> {
     let ptr = env
         .get_field(this, "nativePointer", "J")
         .unwrap()
         .j()
         .unwrap();
-    assert_ne!(ptr, 0, "Bridge not initialized");
-    let bridge: &mut RustBridge = unsafe { &mut *(ptr as *mut RustBridge) };
-    f(bridge)
+    if ptr == 0 {
+        env.throw_new("java/lang/IllegalStateException", "Bridge not initialized")
+            .unwrap();
+        None
+    } else {
+        let bridge: &mut RustBridge = unsafe { &mut *(ptr as *mut RustBridge) };
+        Some(f(env, bridge))
+    }
 }
