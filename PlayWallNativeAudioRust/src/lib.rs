@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
-mod playback;
 mod output_devices;
+mod playback;
 
 use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong, jstring};
@@ -11,6 +11,9 @@ use rodio::{Decoder, OutputStream, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
 use std::str::FromStr;
+use symphonia::core::io::MediaSourceStream;
+use symphonia::core::probe::Hint;
+use symphonia::default::get_probe;
 use tracing::{debug, trace};
 use tracing_subscriber;
 
@@ -18,6 +21,7 @@ struct RustBridge {
     java_obj: GlobalRef,
     jvm: JavaVM,
     source: Option<Buffered<Decoder<BufReader<File>>>>,
+    duration: Option<f64>,
     audio_stream_handler: Option<AudioStreamHandler>,
 }
 
@@ -27,12 +31,14 @@ impl RustBridge {
             java_obj,
             jvm,
             source: None,
+            duration: None,
             audio_stream_handler: None,
         }
     }
 
-    fn setSource(&mut self, source: Buffered<Decoder<BufReader<File>>>) {
+    fn setSource(&mut self, source: Buffered<Decoder<BufReader<File>>>, duration: f64) {
         self.source = Some(source);
+        self.duration = Some(duration);
     }
 
     fn clearSource(&mut self) {
@@ -151,9 +157,29 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
         if let Ok(file) = File::open(&path_str) {
             let reader = BufReader::new(file);
 
+            let mss = MediaSourceStream::new(
+                Box::new(File::open(&path_str).unwrap()),
+                Default::default(),
+            ); // TODO better file handling
+            let hint = Hint::new();
+            let probed = get_probe()
+                .format(&hint, mss, &Default::default(), &Default::default())
+                .unwrap();
+            let format = probed.format;
+
+            let track = format.default_track().unwrap();
+            let params = &track.codec_params;
+
+            let duration_seconds;
+            if let (Some(sample_rate), Some(n_frames)) = (params.sample_rate, params.n_frames) {
+                duration_seconds = (n_frames as f64 / sample_rate as f64);
+            } else {
+                duration_seconds = 0.0;
+            }
+
             let source = Decoder::new(reader).unwrap().buffered();
             with_bridge(&mut env, obj, |_env, bridge| {
-                bridge.setSource(source);
+                bridge.setSource(source, duration_seconds);
                 trace!("Loaded media");
             });
         } else {

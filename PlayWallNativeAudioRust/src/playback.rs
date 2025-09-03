@@ -1,7 +1,7 @@
 use crate::{AudioStreamHandler, with_bridge};
 use jni::JNIEnv;
 use jni::objects::JObject;
-use jni::sys::{jboolean, jdouble};
+use jni::sys::{jboolean, jdouble, jlong};
 use rodio::source::Buffered;
 use rodio::{Decoder, OutputStreamBuilder, Sink, Source};
 use std::fs::File;
@@ -33,7 +33,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
             });
             trace!("Init default output stream and sink");
         }
-        
+
         let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
         if sink.empty() {
             let shared_source: Buffered<Decoder<BufReader<File>>> = bridge.source.clone().unwrap();
@@ -73,6 +73,22 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_getDurationNative(
+    mut env: JNIEnv,
+    obj: JObject,
+) -> jlong {
+    with_bridge(&mut env, obj, |env, bridge| {
+        if bridge.source.is_none() {
+            env.throw_new("java/lang/IllegalStateException", "No media loaded")
+                .unwrap();
+            return 0;
+        }
+        return bridge.duration.unwrap().round() as jlong;
+    })
+    .unwrap()
+}
+
+#[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_setVolumeNative(
     mut env: JNIEnv,
     obj: JObject,
@@ -85,6 +101,6 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
             .unwrap()
             .sink
             .set_volume(volume as f32);
-        trace!("Stop");
+        trace!("Set volume to {}", volume);
     });
 }

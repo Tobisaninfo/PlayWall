@@ -63,8 +63,10 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public Duration getDuration()
 	{
-		return null;
+		return Duration.ofSeconds(getDurationNative());
 	}
+	
+	private native long getDurationNative();
 
 	@Override
 	public void setVolume(double volume)
