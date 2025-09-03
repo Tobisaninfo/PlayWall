@@ -112,8 +112,10 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	@Override
 	public void setOutputDevice(String name)
 	{
-
+		setOutputDeviceNative(name);
 	}
+
+	private native void setOutputDeviceNative(String name);
 
 	public static native AudioDevice[] getOutputDevices();
 }

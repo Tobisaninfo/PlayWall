@@ -1,8 +1,10 @@
 use jni::objects::{JClass, JObject, JString, JValue};
-use jni::sys::{jboolean, jint, jobjectArray, jsize};
+use jni::sys::{jboolean, jint, jobjectArray, jsize, jstring};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
-use rodio::DeviceTrait;
+use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
+use tracing::trace;
+use crate::{with_bridge, AudioStreamHandler};
 
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_getOutputDevices(
@@ -34,4 +36,37 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
         env.set_object_array_element(&result, index as jsize, java_audio_device).unwrap();
     }
     result.into_raw() as jobjectArray
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_setOutputDeviceNative(
+    mut env: JNIEnv,
+    object: JObject,
+    device_name: JString,
+) {
+    let device_name_str: String = env
+        .get_string(&device_name)
+        .expect("Couldn't get java string")
+        .into();
+
+    let host = rodio::cpal::default_host();
+    let device: Option<_> = host.output_devices().unwrap().find(|device| { device.name().unwrap() == device_name_str });
+
+    if device.is_none() {
+        env.throw_new("java/lang/IllegalArgumentException", format!("No output device found with name \"{}\"", device_name_str)).unwrap();
+        return;
+    }
+
+    with_bridge(&mut env, object, |env, bridge| {
+        let stream_handler = OutputStreamBuilder::from_device(device.unwrap())
+            .unwrap()
+            .open_stream()
+            .unwrap();
+        let sink = Sink::connect_new(stream_handler.mixer());
+        bridge.setAudioHandlerStream(AudioStreamHandler {
+            stream_handler,
+            sink,
+        });
+        trace!("Init output stream and sink for device {}", device_name_str);
+    });
 }
