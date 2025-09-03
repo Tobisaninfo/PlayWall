@@ -1,6 +1,7 @@
 #![allow(non_snake_case)]
 
 mod playback;
+mod output_devices;
 
 use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong, jstring};

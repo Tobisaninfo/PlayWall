@@ -114,4 +114,6 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	{
 
 	}
+
+	public static native AudioDevice[] getOutputDevices();
 }
