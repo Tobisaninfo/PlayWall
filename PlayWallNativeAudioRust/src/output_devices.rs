@@ -1,5 +1,5 @@
 use jni::objects::{JClass, JObject, JString, JValue};
-use jni::sys::{jboolean, jint, jobjectArray, jsize, jstring};
+use jni::sys::{jboolean, jint, jobjectArray, jsize};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
