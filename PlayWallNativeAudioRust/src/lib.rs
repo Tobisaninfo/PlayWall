@@ -213,7 +213,7 @@ fn with_bridge<T>(
     f: impl FnOnce(&mut JNIEnv, &mut RustBridge) -> T,
 ) -> Option<T> {
     let ptr = env
-        .get_field(this, "nativePointer", "J")
+        .get_field(this, NATIVE_POINTER_FIELD_NAME, NATIVE_POINTER_FIELD_TYPE)
         .unwrap()
         .j()
         .unwrap();
