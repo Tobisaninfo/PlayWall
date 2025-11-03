@@ -11,11 +11,11 @@
 
     <modules>
         <module>PlayWallCommon</module>
-        <module>PlayWallClient</module>
         <module>PlayWallServer</module>
         <module>PlayWallServerCommon</module>
         <module>PlayWallNativeAudio</module>
         <module>PlayWallNativeAudioRust</module>
+        <module>PlayWallClient</module>
     </modules>
 
     <properties>

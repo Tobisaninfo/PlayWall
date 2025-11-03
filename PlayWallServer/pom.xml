@@ -78,6 +78,37 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>de.tobias.playwall.server.PlayWallServerMain</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-repackaged-jar</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <copy file="${project.build.directory}/${project.build.finalName}.jar"
+                                      todir="../PlayWallClient/target/classes/server/"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -86,4 +117,83 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>custom-jdk</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>clean-custom-jdk-folder</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <delete dir="${project.build.directory}/custom-jdk"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+
+                            <execution>
+                                <id>create-custom-jdk</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <exec executable="${java.home}/bin/jlink">
+                                            <arg value="--module-path=${java.home}/jmods"/>
+                                            <arg value="--add-modules=java.base,java.logging,java.compiler,java.instrument,jdk.unsupported,java.desktop,java.management,java.naming,java.security.jgss"/>
+                                            <arg value="--output=${project.build.directory}/custom-jdk"/>
+                                            <arg value="--compress=2"/>
+                                            <arg value="--no-header-files"/>
+                                            <arg value="--no-man-pages"/>
+                                        </exec>
+                                        <chmod perm="755" dir="${project.build.directory}/custom-jdk/bin" includes="*"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+
+                            <execution>
+                                <id>zip-custom-jdk</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <zip destfile="${project.build.directory}/custom-jdk.zip">
+                                            <fileset dir="${project.build.directory}/custom-jdk"/>
+                                        </zip>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+
+                            <execution>
+                                <id>copy-custom-jdk</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <copy file="${project.build.directory}/custom-jdk.zip"
+                                              todir="../PlayWallClient/target/classes/server/"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
