@@ -1,0 +1,44 @@
+name: Maven Build (Windows & macOS, Java 25)
+
+on:
+  workflow_dispatch:  # Manuelles Triggern über GitHub UI
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }} with Java ${{ matrix.java }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        java: [25]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          cache: 'maven'
+
+      - name: Prepare Maven settings
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.m2"
+          sed -e "s|\${MAVEN_USERNAME}|${{ secrets.MAVEN_USERNAME }}|g" \
+              -e "s|\${MAVEN_PASSWORD}|${{ secrets.MAVEN_PASSWORD }}|g" \
+              .github/maven/settings.xml > "$HOME/.m2/settings.xml"
+
+      - name: Show Java Version
+        run: java -version
+
+      - name: Build with Maven
+        run: mvn --no-transfer-progress -P custom-jdk package
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: PlayWall-Client-${{ runner.os }}
+          path: PlayWallClient/target/**.jar
