@@ -35,10 +35,10 @@ jobs:
         run: java -version
 
       - name: Build with Maven
-        run: mvn --no-transfer-progress -P custom-jdk package
+        run: mvn --no-transfer-progress -P custom-jdk,build-aot-cache,package-executables package
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: PlayWall-Client-${{ runner.os }}
-          path: PlayWallClient/target/**.jar
+          path: PlayWallClient/target/installer/**
