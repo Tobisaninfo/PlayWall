@@ -154,7 +154,6 @@
                                             <arg value="--no-header-files"/>
                                             <arg value="--no-man-pages"/>
                                         </exec>
-                                        <chmod perm="755" dir="${project.build.directory}/custom-jdk/bin" includes="*"/>
                                     </target>
                                 </configuration>
                                 <goals>

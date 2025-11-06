@@ -19,6 +19,7 @@ import io.github.classgraph.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -175,7 +176,10 @@ public class PlayWallMain extends Application
 			IOUtils.copy(serverJarResource, serverJar);
 		}
 
-		ProcessBuilder processBuilder = new ProcessBuilder(jdkHome.toString() + "/bin/java", "-jar", serverJar.toString());
+		final File javaFile = new File(jdkHome.toString() + "/bin/java");
+		javaFile.setExecutable(true);
+
+		ProcessBuilder processBuilder = new ProcessBuilder(javaFile.getAbsolutePath(), "-jar", serverJar.toString());
 		processBuilder.directory(jdkHome.toFile());
 		processBuilder.start();
 	}
