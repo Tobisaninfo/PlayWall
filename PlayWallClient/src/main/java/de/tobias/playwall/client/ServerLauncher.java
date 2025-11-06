@@ -1,6 +1,8 @@
 package de.tobias.playwall.client;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.di.Component;
 
@@ -10,6 +12,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Component
 public class ServerLauncher
@@ -20,6 +23,7 @@ public class ServerLauncher
 	{
 		try
 		{
+			Logger.info("Server starting, checking files");
 			final Path resourceFolder = Paths.get(PlayWallMain.class.getProtectionDomain()
 					.getCodeSource()
 					.getLocation()
@@ -46,16 +50,19 @@ public class ServerLauncher
 
 			final File javaFile = javaExecutable.toFile();
 			javaFile.setExecutable(true);
+			Logger.debug("Set execute permission for: " + javaFile.getAbsolutePath());
 
-			ProcessBuilder processBuilder = new ProcessBuilder(javaFile.getAbsolutePath(), "-jar", serverJar.toString());
+			final Path loggingPath = ApplicationUtils.getApplication().getPath(PathType.LOG, "server.log");
+
+			final List<String> processCommand = List.of(javaFile.getAbsolutePath(), "-jar", serverJar.toString(), "--logging.file.name=" + loggingPath.toString());
+			Logger.info("Server command: " + String.join(" ", processCommand));
+			final ProcessBuilder processBuilder = new ProcessBuilder(processCommand);
 			processBuilder.directory(resourceFolder.toFile());
 			serverProcess = processBuilder.start();
+
+			Logger.info("Server started");
 		}
-		catch(URISyntaxException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch(IOException e)
+		catch(URISyntaxException | IOException e)
 		{
 			throw new RuntimeException(e);
 		}
