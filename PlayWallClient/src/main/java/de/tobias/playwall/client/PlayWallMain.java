@@ -123,7 +123,7 @@ public class PlayWallMain extends Application
 		}
 
 		client = DI.instance().get(Client.class);
-		client.connectWithRetries(10);
+		client.connectWithRetries(60);
 
 		loadAppIcon();
 	}
