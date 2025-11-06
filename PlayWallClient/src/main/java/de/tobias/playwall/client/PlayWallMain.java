@@ -6,7 +6,6 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
-import de.thecodelabs.utils.io.IOUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
@@ -19,17 +18,10 @@ import io.github.classgraph.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.function.Function;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 
 public class PlayWallMain extends Application
@@ -38,8 +30,6 @@ public class PlayWallMain extends Application
 
 	public static void main(String[] args)
 	{
-		setupDependencies();
-
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
 
@@ -119,17 +109,17 @@ public class PlayWallMain extends Application
 	@Override
 	public void init()
 	{
+		setupDependencies();
+
 		Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
-		try
+		final String[] args = ApplicationUtils.getApplication().getProgramArgs();
+		if (!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
 		{
-			prepareServerEnvironment();
-		}
-		catch(IOException e)
-		{
-			Logger.error(e);
-			throw new RuntimeException(e);
+			final ServerLauncher serverLauncher = DI.instance().get(ServerLauncher.class);
+			Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
+			serverLauncher.launchServer();
 		}
 
 		client = DI.instance().get(Client.class);
@@ -155,62 +145,5 @@ public class PlayWallMain extends Application
 	private void loadAppIcon() {
 		final AppIconProvider iconProvider = DI.instance().get(AppIconProvider.class);
 		Alerts.getInstance().setDefaultIcon(iconProvider.getStageIcon());
-	}
-
-	private static void prepareServerEnvironment() throws IOException
-	{
-		final InputStream customJdkResource = PlayWallMain.class.getClassLoader().getResourceAsStream("server/custom-jdk.zip");
-		final Path jdkHome = ApplicationUtils.getApplication().getPath(PathType.CACHE, "server", "jdk");
-		if (customJdkResource != null) {
-			Logger.info("Extracting custom JDK...");
-			if (Files.notExists(jdkHome)) {
-				Files.createDirectories(jdkHome);
-			}
-			unzip(customJdkResource, jdkHome);
-		}
-
-		final InputStream serverJarResource = PlayWallMain.class.getClassLoader().getResourceAsStream("server/PlayWallServer-8.0.0.jar");
-		final Path serverJar = ApplicationUtils.getApplication().getPath(PathType.CACHE, "server", "PlayWallServer-8.0.0.jar");
-		if (serverJarResource != null) {
-			Logger.info("Extracting PlayWallServer...");
-			IOUtils.copy(serverJarResource, serverJar);
-		}
-
-		final File javaFile = new File(jdkHome.toString() + "/bin/java");
-		javaFile.setExecutable(true);
-
-		ProcessBuilder processBuilder = new ProcessBuilder(javaFile.getAbsolutePath(), "-jar", serverJar.toString());
-		processBuilder.directory(jdkHome.toFile());
-		processBuilder.start();
-	}
-
-	private static void unzip(InputStream zipInputStream, Path targetDir) throws IOException
-	{
-		try (ZipInputStream zis = new ZipInputStream(zipInputStream)) {
-			ZipEntry entry;
-			while ((entry = zis.getNextEntry()) != null) {
-				Path newFile = targetDir.resolve(entry.getName()).normalize();
-
-				// Sicherheitscheck: Verhindert Pfad-Traversal
-				if (!newFile.startsWith(targetDir)) {
-					throw new IOException("Ungültiger ZIP-Eintrag: " + entry.getName());
-				}
-
-				if (entry.isDirectory()) {
-					Files.createDirectories(newFile);
-				} else {
-					Files.createDirectories(newFile.getParent());
-					Logger.debug("Extracting file: " + newFile);
-					try (OutputStream os = Files.newOutputStream(newFile)) {
-						byte[] buffer = new byte[4096];
-						int len;
-						while ((len = zis.read(buffer)) > 0) {
-							os.write(buffer, 0, len);
-						}
-					}
-				}
-				zis.closeEntry();
-			}
-		}
 	}
 }

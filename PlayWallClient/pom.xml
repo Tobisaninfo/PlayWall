@@ -124,7 +124,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <outputDirectory>${project.build.directory}/../build</outputDirectory>
+                    <outputDirectory>${project.build.directory}/build</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
@@ -211,7 +211,7 @@
                                     <goal>jpackage</goal>
                                 </goals>
                                 <configuration>
-                                    <input>${project.build.directory}/../build</input>
+                                    <input>${project.build.directory}/build</input>
                                     <destination>${project.build.directory}/installer</destination>
                                     <mainJar>${project.artifactId}-${project.version}.jar</mainJar>
                                     <mainClass>de.tobias.playwall.client.PlayWallMain</mainClass>
