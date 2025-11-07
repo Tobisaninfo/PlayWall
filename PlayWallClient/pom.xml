@@ -205,6 +205,25 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <version>2.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>generate-uuid</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <source>
+                                        import java.util.UUID
+                                        project.properties.setProperty("win.upgrade.uuid", UUID.randomUUID().toString())
+                                    </source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    <plugin>
                         <groupId>org.panteleyev</groupId>
                         <artifactId>jpackage-maven-plugin</artifactId>
                         <version>${jpackage-maven-plugin.version}</version>
@@ -233,6 +252,7 @@
                                     <winMenu>true</winMenu>
                                     <winShortcut>true</winShortcut>
                                     <winMenuGroup>PlayWall</winMenuGroup>
+                                    <winUpgradeUuid>${win.upgrade.uuid}</winUpgradeUuid>
                                 </configuration>
                             </execution>
                         </executions>
