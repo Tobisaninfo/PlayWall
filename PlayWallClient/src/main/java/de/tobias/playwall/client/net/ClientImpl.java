@@ -69,7 +69,7 @@ public class ClientImpl implements Client
 				{
 					Thread.sleep(1000);
 				}
-				catch(InterruptedException ex)
+				catch(InterruptedException _)
 				{
 					Thread.currentThread().interrupt();
 					throw new ServerConnectionException(e);

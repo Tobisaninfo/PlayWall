@@ -1,9 +1,10 @@
-package de.tobias.playwall.client;
+package de.tobias.playwall.client.launch;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
+import de.tobias.playwall.client.PlayWallMain;
 import de.tobias.playwall.client.di.Component;
 
 import java.io.File;
@@ -19,6 +20,7 @@ public class ServerLauncher
 {
 	private Process serverProcess;
 
+	@SuppressWarnings("java:S899")
 	public void launchServer()
 	{
 		try
@@ -32,13 +34,13 @@ public class ServerLauncher
 
 			if(Files.notExists(resourceFolder))
 			{
-				throw new RuntimeException("PlayWallServer not found");
+				throw new ServerLaunchException("PlayWallServer not found");
 			}
 
 			final Path jdkFolder = resourceFolder.resolve("PlayWallServer-jdk");
 			if(Files.notExists(jdkFolder))
 			{
-				throw new RuntimeException("PlayWallServer-jdk not found");
+				throw new ServerLaunchException("PlayWallServer-jdk not found");
 			}
 
 			Path javaExecutable = jdkFolder.resolve("bin").resolve(OS.isWindows() ? "java.exe" : "java");
@@ -46,7 +48,7 @@ public class ServerLauncher
 			final Path serverJar = resourceFolder.resolve("PlayWallServer-8.0.0.jar");
 			if(Files.notExists(serverJar))
 			{
-				throw new RuntimeException("PlayWallServer-8.0.0.jar not found");
+				throw new ServerLaunchException("PlayWallServer-8.0.0.jar not found");
 			}
 
 			final File javaFile = javaExecutable.toFile();
@@ -65,7 +67,7 @@ public class ServerLauncher
 		}
 		catch(URISyntaxException | IOException e)
 		{
-			throw new RuntimeException(e);
+			throw new ServerLaunchException("Cannot start server", e);
 		}
 	}
 
@@ -74,17 +76,20 @@ public class ServerLauncher
 		if(serverProcess != null && serverProcess.isAlive())
 		{
 			Logger.info("Server stopping...");
-			serverProcess.destroy(); // Sanft stoppen
+			serverProcess.destroy();
 			try
 			{
 				if(!serverProcess.waitFor(3, java.util.concurrent.TimeUnit.SECONDS))
 				{
 					Logger.info("Server not responding, force kill...");
-					serverProcess.destroyForcibly(); // Hart beenden
+					serverProcess.destroyForcibly();
 				}
 			}
-			catch(InterruptedException ignored)
+			catch(InterruptedException _)
 			{
+				Thread.currentThread().interrupt();
+				Logger.info("Server shutdown interrupted, forcing termination...");
+				serverProcess.destroyForcibly();
 			}
 			Logger.info("Server stopped");
 		}

@@ -10,19 +10,15 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.tobias.playwall.client.di.Component;
 import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.di.DiLoader;
+import de.tobias.playwall.client.launch.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
-import io.github.classgraph.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.lang.reflect.InvocationTargetException;
-import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.function.Function;
 
 
 public class PlayWallMain extends Application
