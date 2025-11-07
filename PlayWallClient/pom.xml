@@ -223,6 +223,9 @@
                                     <name>PlayWall</name>
                                     <appVersion>${project.version}</appVersion>
                                     <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
+                                    <javaOptions>
+                                        <javaOption>--enable-native-access=javafx.graphics</javaOption>
+                                    </javaOptions>
                                     <icon>${app.icon}</icon>
                                     <vendor>TheCodeLabs</vendor>
 
