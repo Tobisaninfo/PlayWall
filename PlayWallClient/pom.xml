@@ -132,6 +132,31 @@
 
     <profiles>
         <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.ico</app.icon>
+            </properties>
+        </profile>
+
+        <!-- macOS Build -->
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.icns</app.icon>
+            </properties>
+        </profile>
+
+        <profile>
             <id>package-executables</id>
 
             <dependencies>
@@ -218,6 +243,7 @@
                                     <name>PlayWall</name>
                                     <appVersion>${project.version}</appVersion>
                                     <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
+                                    <icon>${app.icon}</icon>
                                 </configuration>
                             </execution>
                         </executions>
