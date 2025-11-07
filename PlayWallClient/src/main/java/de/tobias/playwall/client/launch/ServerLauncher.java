@@ -7,12 +7,12 @@ import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.PlayWallMain;
 import de.tobias.playwall.client.di.Component;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -56,7 +56,15 @@ public class ServerLauncher
 
 			final Path loggingPath = ApplicationUtils.getApplication().getPath(PathType.LOG, "server.log");
 
-			final List<String> processCommand = List.of(javaExecutable.toAbsolutePath().toString(), "-jar", serverJar.toString(), "--logging.file.name=" + loggingPath.toString());
+			final List<String> jvmOptions = List.of("--enable-native-access=ALL-UNNAMED");
+			final List<String> programArguments = List.of("--logging.file.name=" + loggingPath.toString());
+
+			final List<String> processCommand = new ArrayList<>();
+			processCommand.add(javaExecutable.toAbsolutePath().toString());
+			processCommand.addAll(jvmOptions);
+			processCommand.add("-jar");
+			processCommand.add(serverJar.toString());
+			processCommand.addAll(programArguments);
 			Logger.info("Server command: " + String.join(" ", processCommand));
 
 			final ProcessBuilder processBuilder = new ProcessBuilder(processCommand);
