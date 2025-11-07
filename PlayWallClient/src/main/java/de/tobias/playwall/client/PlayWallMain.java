@@ -55,23 +55,31 @@ public class PlayWallMain extends Application
 	@Override
 	public void init()
 	{
-		DiLoader.setupDependencies();
-
-		Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
-		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
-
-		final String[] args = ApplicationUtils.getApplication().getProgramArgs();
-		if (!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
+		try
 		{
-			final ServerLauncher serverLauncher = DI.instance().get(ServerLauncher.class);
-			Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
-			serverLauncher.launchServer();
+			DiLoader.setupDependencies();
+
+			Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
+			Logger.info("Run Path: {0}", SystemUtils.getRunPath());
+
+			final String[] args = ApplicationUtils.getApplication().getProgramArgs();
+			if(!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
+			{
+				final ServerLauncher serverLauncher = DI.instance().get(ServerLauncher.class);
+				Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
+				serverLauncher.launchServer();
+			}
+
+			client = DI.instance().get(Client.class);
+			client.connectWithRetries(60);
+
+			loadAppIcon();
 		}
-
-		client = DI.instance().get(Client.class);
-		client.connectWithRetries(60);
-
-		loadAppIcon();
+		catch(Exception e)
+		{
+			Logger.error(e);
+			throw e;
+		}
 	}
 
 	@Override
@@ -89,7 +97,8 @@ public class PlayWallMain extends Application
 		Worker.shutdown();
 	}
 
-	private void loadAppIcon() {
+	private void loadAppIcon()
+	{
 		final AppIconProvider iconProvider = DI.instance().get(AppIconProvider.class);
 		Alerts.getInstance().setDefaultIcon(iconProvider.getStageIcon());
 	}
