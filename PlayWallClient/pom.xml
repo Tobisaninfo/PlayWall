@@ -189,7 +189,8 @@
                                 <!-- Default configuration for running with: mvn clean javafx:run -->
                                 <id>default-cli</id>
                                 <configuration>
-                                    <mainClass>de.tobias.playwall.client/de.tobias.playwall.client.PlayWallMain</mainClass>
+                                    <mainClass>de.tobias.playwall.client/de.tobias.playwall.client.PlayWallMain
+                                    </mainClass>
                                     <launcher>app</launcher>
                                     <jlinkZipName>app</jlinkZipName>
                                     <jlinkImageName>app</jlinkImageName>
@@ -244,6 +245,11 @@
                                     <appVersion>${project.version}</appVersion>
                                     <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
                                     <icon>${app.icon}</icon>
+
+                                    <!-- Windows specific -->
+                                    <winMenu>true</winMenu>
+                                    <winShortcut>true</winShortcut>
+                                    <winMenuGroup>PlayWall</winMenuGroup>
                                 </configuration>
                             </execution>
                         </executions>
