@@ -31,6 +31,7 @@ public class ServerLauncher
 							.getLocation()
 							.toURI()).getParent()
 					.resolve("server");
+			Logger.info("Server folder: " + resourceFolder.toAbsolutePath());
 
 			if(Files.notExists(resourceFolder))
 			{
@@ -43,22 +44,21 @@ public class ServerLauncher
 				throw new ServerLaunchException("PlayWallServer-jdk not found");
 			}
 
-			Path javaExecutable = jdkFolder.resolve("bin").resolve(OS.isWindows() ? "java.exe" : "java");
-
+			final Path javaExecutable = jdkFolder.resolve("bin").resolve(OS.isWindows() ? "java.exe" : "java");
 			final Path serverJar = resourceFolder.resolve("PlayWallServer-8.0.0.jar");
 			if(Files.notExists(serverJar))
 			{
 				throw new ServerLaunchException("PlayWallServer-8.0.0.jar not found");
 			}
 
-			final File javaFile = javaExecutable.toFile();
-			javaFile.setExecutable(true);
-			Logger.debug("Set execute permission for: " + javaFile.getAbsolutePath());
+			javaExecutable.toFile().setExecutable(true);
+			Logger.debug("Set execute permission for: " + javaExecutable.toAbsolutePath());
 
 			final Path loggingPath = ApplicationUtils.getApplication().getPath(PathType.LOG, "server.log");
 
-			final List<String> processCommand = List.of(javaFile.getAbsolutePath(), "-jar", serverJar.toString(), "--logging.file.name=" + loggingPath.toString());
+			final List<String> processCommand = List.of(javaExecutable.toAbsolutePath().toString(), "-jar", serverJar.toString(), "--logging.file.name=" + loggingPath.toString());
 			Logger.info("Server command: " + String.join(" ", processCommand));
+
 			final ProcessBuilder processBuilder = new ProcessBuilder(processCommand);
 			processBuilder.directory(resourceFolder.toFile());
 			serverProcess = processBuilder.start();
