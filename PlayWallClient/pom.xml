@@ -20,6 +20,8 @@
 
         <sass-maven-plugin.version>3.7.2</sass-maven-plugin.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
+        <jpackage-maven-plugin.version>1.7.1</jpackage-maven-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
     </properties>
 
     <dependencies>
@@ -122,7 +124,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <outputDirectory>${project.build.directory}/build</outputDirectory>
                 </configuration>
@@ -177,35 +179,12 @@
                 </dependency>
             </dependencies>
 
-
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.openjfx</groupId>
                         <artifactId>javafx-maven-plugin</artifactId>
                         <version>${javafx-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <!-- Default configuration for running with: mvn clean javafx:run -->
-                                <id>default-cli</id>
-                                <configuration>
-                                    <mainClass>de.tobias.playwall.client/de.tobias.playwall.client.PlayWallMain
-                                    </mainClass>
-                                    <launcher>app</launcher>
-                                    <jlinkZipName>app</jlinkZipName>
-                                    <jlinkImageName>app</jlinkImageName>
-                                    <noManPages>true</noManPages>
-                                    <stripDebug>true</stripDebug>
-                                    <noHeaderFiles>true</noHeaderFiles>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.openjfx</groupId>
-                        <artifactId>javafx-maven-plugin</artifactId>
-                        <version>0.0.8</version>
                         <executions>
                             <execution>
                                 <id>create-runtime-image</id>
@@ -228,7 +207,7 @@
                     <plugin>
                         <groupId>org.panteleyev</groupId>
                         <artifactId>jpackage-maven-plugin</artifactId>
-                        <version>1.7.1</version>
+                        <version>${jpackage-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>build-executable</id>
@@ -245,6 +224,7 @@
                                     <appVersion>${project.version}</appVersion>
                                     <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
                                     <icon>${app.icon}</icon>
+                                    <vendor>TheCodeLabs</vendor>
 
                                     <!-- Windows specific -->
                                     <winMenu>true</winMenu>
