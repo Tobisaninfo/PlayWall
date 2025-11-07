@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="PlayWallMain (Server)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="de.tobias.playwall.client.PlayWallMain" />
+    <module name="PlayWallClient" />
+    <option name="PROGRAM_PARAMETERS" value="--debug" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="de.tobias.playwall.client.launch.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
