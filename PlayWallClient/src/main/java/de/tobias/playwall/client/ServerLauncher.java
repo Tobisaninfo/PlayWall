@@ -25,12 +25,13 @@ public class ServerLauncher
 		{
 			Logger.info("Server starting, checking files");
 			final Path resourceFolder = Paths.get(PlayWallMain.class.getProtectionDomain()
-					.getCodeSource()
-					.getLocation()
-					.toURI()).getParent()
+							.getCodeSource()
+							.getLocation()
+							.toURI()).getParent()
 					.resolve("server");
 
-			if (Files.notExists(resourceFolder)) {
+			if(Files.notExists(resourceFolder))
+			{
 				throw new RuntimeException("PlayWallServer not found");
 			}
 
@@ -72,6 +73,7 @@ public class ServerLauncher
 	{
 		if(serverProcess != null && serverProcess.isAlive())
 		{
+			Logger.info("Server stopping...");
 			serverProcess.destroy(); // Sanft stoppen
 			try
 			{
@@ -84,6 +86,7 @@ public class ServerLauncher
 			catch(InterruptedException ignored)
 			{
 			}
+			Logger.info("Server stopped");
 		}
 	}
 }

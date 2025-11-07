@@ -138,6 +138,7 @@ public class PlayWallMain extends Application
 	@Override
 	public void stop()
 	{
+		// Server gets stopped via "Runtime.getRuntime().addShutdownHook()"
 		client.disconnect();
 		Worker.shutdown();
 	}
