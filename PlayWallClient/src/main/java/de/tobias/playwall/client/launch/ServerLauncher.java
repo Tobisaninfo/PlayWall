@@ -35,20 +35,22 @@ public class ServerLauncher
 
 			if(Files.notExists(resourceFolder))
 			{
-				throw new ServerLaunchException("PlayWallServer not found");
+				throw new ServerLaunchException(resourceFolder + " not found");
 			}
 
 			final Path jdkFolder = resourceFolder.resolve("PlayWallServer-jdk");
 			if(Files.notExists(jdkFolder))
 			{
-				throw new ServerLaunchException("PlayWallServer-jdk not found");
+				throw new ServerLaunchException(jdkFolder + " not found");
 			}
 
 			final Path javaExecutable = jdkFolder.resolve("bin").resolve(OS.isWindows() ? "java.exe" : "java");
-			final Path serverJar = resourceFolder.resolve("PlayWallServer-8.0.0.jar");
+
+			final String version = ApplicationUtils.getApplication().getInfo().getVersion();
+			final Path serverJar = resourceFolder.resolve("PlayWallServer-" + version + ".jar");
 			if(Files.notExists(serverJar))
 			{
-				throw new ServerLaunchException("PlayWallServer-8.0.0.jar not found");
+				throw new ServerLaunchException(serverJar + " not found");
 			}
 
 			javaExecutable.toFile().setExecutable(true);
