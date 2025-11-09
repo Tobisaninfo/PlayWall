@@ -2,6 +2,10 @@ package de.tobias.playwall.nativeaudio.loader;
 
 import de.tobias.playwall.nativeaudio.audio.rust.RustAudioHandler;
 import de.tobias.playwall.nativeaudio.audio.rust.RustLogLevel;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -9,12 +13,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class RustAudioImplLoader implements AudioModuleLoader
+@Service
+@RequiredArgsConstructor
+@Profile("!test")
+public class RustAudioLoader implements AudioModuleLoader
 {
 	private static final String ASSETS = "rust/";
 	private boolean loaded = false;
 
 	@Override
+	@PostConstruct
 	public void preInit()
 	{
 		// TODO

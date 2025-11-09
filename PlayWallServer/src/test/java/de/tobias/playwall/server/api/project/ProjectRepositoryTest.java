@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
-import de.tobias.playwall.server.audio.PlatformAudioHandlerFactory;
+import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
@@ -32,7 +32,7 @@ class ProjectRepositoryTest
 	private Path tempDir;
 
 	@MockitoBean
-	private PlatformAudioHandlerFactory audioHandlerFactory;
+	private AudioHandlerFactory audioHandlerFactory;
 
 	@MockitoBean
 	private PathProvider pathProvider;

@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.project;
 
-import de.tobias.playwall.server.audio.PlatformAudioHandlerFactory;
+import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPad;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.project.PadController;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PadControllerFactory
 {
-	private final PlatformAudioHandlerFactory audioHandlerFactory;
+	private final AudioHandlerFactory audioHandlerFactory;
 
 	public PadController createPadController(ApplicationContext context, Pad pad)
 	{
