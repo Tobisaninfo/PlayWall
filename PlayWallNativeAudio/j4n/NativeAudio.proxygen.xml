@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<jni4net-proxygen xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://jni4net.github.io/0.8.9.0/toolConfig.xsd">
-  <TargetDirJvm>.\jvm</TargetDirJvm>
-  <TargetDirClr>.\clr</TargetDirClr>
-  <AssemblyReference Assembly="NativeAudio.dll" Generate="true" />
-</jni4net-proxygen>
