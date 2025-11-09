@@ -4,7 +4,7 @@ import de.tobias.playwall.server.audio.PlatformAudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
-import de.tobias.playwall.server.storage.PathProvider;
+import de.tobias.playwall.server.common.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

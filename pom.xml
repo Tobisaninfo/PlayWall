@@ -27,7 +27,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <spring-boot-dependencies.version>3.5.7</spring-boot-dependencies.version>
-        <spring-context.version>6.2.10</spring-context.version>
         <jackson.version>2.20.0</jackson.version>
         <lombok.version>1.18.38</lombok.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
@@ -57,6 +56,13 @@
                 <version>${jackson.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

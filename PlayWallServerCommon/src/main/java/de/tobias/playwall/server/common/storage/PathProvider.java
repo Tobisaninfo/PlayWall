@@ -1,7 +1,7 @@
-package de.tobias.playwall.server.storage;
+package de.tobias.playwall.server.common.storage;
 
 import de.thecodelabs.utils.util.SystemUtils;
-import de.tobias.playwall.server.config.properties.PathProviderProperties;
+import de.tobias.playwall.server.common.config.properties.PathProviderProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

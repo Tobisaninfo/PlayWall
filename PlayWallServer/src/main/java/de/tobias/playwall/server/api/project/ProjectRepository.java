@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.storage.PathProvider;
+import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
