@@ -9,7 +9,7 @@ use std::io::BufReader;
 use tracing::trace;
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_playNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_playNative(
     mut env: JNIEnv,
     obj: JObject,
     looping: jboolean,
@@ -51,7 +51,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_pauseNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_pauseNative(
     mut env: JNIEnv,
     obj: JObject,
 ) {
@@ -62,7 +62,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_stopNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_stopNative(
     mut env: JNIEnv,
     obj: JObject,
 ) {
@@ -73,7 +73,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_getDurationNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getDurationNative(
     mut env: JNIEnv,
     obj: JObject,
 ) -> jlong {
@@ -89,7 +89,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_setVolumeNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_setVolumeNative(
     mut env: JNIEnv,
     obj: JObject,
     volume: jdouble,

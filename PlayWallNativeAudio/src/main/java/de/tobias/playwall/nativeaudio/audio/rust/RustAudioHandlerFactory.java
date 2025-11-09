@@ -7,11 +7,11 @@ import de.tobias.playwall.server.common.project.PadController;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NativeAudioWinHandlerFactory implements AudioHandlerFactory
+public class RustAudioHandlerFactory implements AudioHandlerFactory
 {
 	@Override
 	public AudioHandler createAudioHandler(PadController padController)
 	{
-		return new NativeAudioRustHandler(padController);
+		return new RustAudioHandler(padController);
 	}
 }

@@ -9,12 +9,12 @@ import java.nio.file.Path;
 import java.time.Duration;
 
 @Slf4j
-public class NativeAudioRustHandler extends AudioHandler implements Soundcardable
+public class RustAudioHandler extends AudioHandler implements Soundcardable
 {
 	@SuppressWarnings("unused")
 	private long nativePointer;
 
-	public NativeAudioRustHandler(PadController padController)
+	public RustAudioHandler(PadController padController)
 	{
 		super(padController);
 		createNativeInstance();
@@ -65,7 +65,7 @@ public class NativeAudioRustHandler extends AudioHandler implements Soundcardabl
 	{
 		return Duration.ofSeconds(getDurationNative());
 	}
-	
+
 	private native long getDurationNative();
 
 	@Override

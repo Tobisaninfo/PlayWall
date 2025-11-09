@@ -56,7 +56,7 @@ struct AudioStreamHandler {
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_initSystem(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_initSystem(
     mut env: JNIEnv,
     _class: JClass,
     logLevel: JString,
@@ -76,7 +76,7 @@ const NATIVE_POINTER_FIELD_NAME: &'static str = "nativePointer";
 const NATIVE_POINTER_FIELD_TYPE: &'static str = "J";
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_createNativeInstance(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_createNativeInstance(
     mut env: JNIEnv,
     this: JObject,
 ) {
@@ -112,7 +112,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_destroy(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_destroy(
     mut env: JNIEnv,
     this: JObject,
 ) {
@@ -138,7 +138,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_loadMediaNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_loadMediaNative(
     mut env: JNIEnv,
     obj: JObject,
     path: JString,
@@ -185,7 +185,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_unloadMediaNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_unloadMediaNative(
     mut env: JNIEnv,
     obj: JObject,
 ) {
@@ -196,7 +196,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_isMediaLoadedNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_isMediaLoadedNative(
     mut env: JNIEnv,
     obj: JObject,
 ) -> jboolean {

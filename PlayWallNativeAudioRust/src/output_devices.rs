@@ -7,7 +7,7 @@ use tracing::trace;
 use crate::{with_bridge, AudioStreamHandler};
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_getOutputDevices(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getOutputDevices(
     mut env: JNIEnv,
     _class: JClass,
 ) -> jobjectArray {
@@ -39,7 +39,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudi
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_NativeAudioRustHandler_setOutputDeviceNative(
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_setOutputDeviceNative(
     mut env: JNIEnv,
     object: JObject,
     device_name: JString,

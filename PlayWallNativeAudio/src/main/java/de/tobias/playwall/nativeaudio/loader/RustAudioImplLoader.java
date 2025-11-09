@@ -1,6 +1,6 @@
 package de.tobias.playwall.nativeaudio.loader;
 
-import de.tobias.playwall.nativeaudio.audio.rust.NativeAudioRustHandler;
+import de.tobias.playwall.nativeaudio.audio.rust.RustAudioHandler;
 import de.tobias.playwall.nativeaudio.audio.rust.RustLogLevel;
 
 import java.io.IOException;
@@ -31,13 +31,13 @@ public class RustAudioImplLoader implements AudioModuleLoader
 			{
 				Path dest = copyResource(resourceFolder, ASSETS, "libPlayWallNativeAudioRust.dylib");
 				System.load(dest.toString());
-				NativeAudioRustHandler.initSystem(RustLogLevel.DEBUG); // TODO: make configurable
+				RustAudioHandler.initSystem(RustLogLevel.DEBUG); // TODO: make configurable
 				loaded = true;
 			}
 		}
 		catch(IOException e)
 		{
-			throw new UncheckedIOException("Failed to pre-initialize MacAudioImplLoader", e);
+			throw new UncheckedIOException("Failed to pre-initialize RustAudioImplLoader", e);
 		}
 	}
 }
