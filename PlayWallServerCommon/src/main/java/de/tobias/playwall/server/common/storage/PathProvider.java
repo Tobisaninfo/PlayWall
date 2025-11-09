@@ -33,4 +33,9 @@ public class PathProvider
 	{
 		return getBaseDirectory().resolve("config").resolve(configFileName);
 	}
+
+	public Path getPathForNativeLibrary(String path)
+	{
+		return getBaseDirectory().resolve("Library").resolve("Native").resolve(path);
+	}
 }

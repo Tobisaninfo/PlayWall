@@ -1,44 +1,47 @@
 package de.tobias.playwall.nativeaudio.loader;
 
+import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.nativeaudio.audio.rust.RustAudioHandler;
 import de.tobias.playwall.nativeaudio.audio.rust.RustLogLevel;
+import de.tobias.playwall.server.common.storage.PathProvider;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Service
 @RequiredArgsConstructor
 @Profile("!test")
-public class RustAudioLoader implements AudioModuleLoader
+public class RustAudioLoader
 {
-	private static final String ASSETS = "rust/";
 	private boolean loaded = false;
 
-	@Override
+	private final PathProvider pathProvider;
+
 	@PostConstruct
-	public void preInit()
+	void preInit()
 	{
-		// TODO
-		Path resourceFolder = Paths.get(System.getProperty("user.home"));
+		final String nativeLibraryFilename = OS.isWindows() ? "PlayWallNativeAudioRust.dll" : "libPlayWallNativeAudioRust.dylib";
+		final Path destinationPath = pathProvider.getPathForNativeLibrary(nativeLibraryFilename);
 
 		try
 		{
-			if(Files.notExists(resourceFolder))
+			if(Files.notExists(destinationPath.getParent()))
 			{
-				Files.createDirectories(resourceFolder);
+				Files.createDirectories(destinationPath.getParent());
 			}
 
 			if(!loaded)
 			{
-				Path dest = copyResource(resourceFolder, ASSETS, "libPlayWallNativeAudioRust.dylib");
-				System.load(dest.toString());
+				copyResource("rust/" + nativeLibraryFilename, destinationPath);
+				System.load(destinationPath.toString());
 				RustAudioHandler.initSystem(RustLogLevel.DEBUG); // TODO: make configurable
 				loaded = true;
 			}
@@ -46,6 +49,18 @@ public class RustAudioLoader implements AudioModuleLoader
 		catch(IOException e)
 		{
 			throw new UncheckedIOException("Failed to pre-initialize RustAudioImplLoader", e);
+		}
+	}
+
+	private void copyResource(String source, Path destination) throws IOException
+	{
+		try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(source))
+		{
+			if(inputStream == null)
+			{
+				throw new IOException("Resource not found: " + source);
+			}
+			Files.copy(inputStream, destination, StandardCopyOption.REPLACE_EXISTING);
 		}
 	}
 }
