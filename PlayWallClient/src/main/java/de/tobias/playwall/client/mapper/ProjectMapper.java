@@ -16,7 +16,7 @@ public class ProjectMapper
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final PageMapper pageMapper;
 
-	public ProjectMapper()
+	ProjectMapper()
 	{
 		this.projectMetadataMapper = DI.instance().get(ProjectMetadataMapper.class);
 		this.pageMapper = DI.instance().get(PageMapper.class);

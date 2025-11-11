@@ -18,6 +18,7 @@ import io.github.classgraph.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.function.Function;
@@ -40,7 +41,7 @@ public class PlayWallMain extends Application
 		app.start(args);
 	}
 
-	@SuppressWarnings({"java:S112", "java:S3740", "unchecked", "rawtypes"})
+	@SuppressWarnings({"java:S112", "java:S3740", "java:S3011", "unchecked", "rawtypes"})
 	private static void setupDependencies()
 	{
 		final String basePackage = PlayWallMain.class.getPackage().getName();
@@ -68,12 +69,15 @@ public class PlayWallMain extends Application
 				final Function<DI, ?> loadFunction = di -> {
 					try
 					{
-						return loadedClass.getConstructor().newInstance();
+						final Constructor<?> constructor = loadedClass.getDeclaredConstructor();
+						constructor.setAccessible(true);
+						return constructor.newInstance();
 					}
 					catch(NoSuchMethodException | InstantiationException | IllegalAccessException |
 						  InvocationTargetException e)
 					{
-						Logger.error(MessageFormat.format("Cannot register component {0}", loadedClass), e);
+						Logger.error(MessageFormat.format("Cannot register component {0}", loadedClass));
+						Logger.error(e);
 						throw new RuntimeException(e);
 					}
 				};

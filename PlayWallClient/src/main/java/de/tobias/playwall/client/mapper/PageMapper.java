@@ -15,7 +15,7 @@ public class PageMapper
 {
 	private final PadMapper padMapper;
 
-	public PageMapper()
+	PageMapper()
 	{
 		this.padMapper = DI.instance().get(PadMapper.class);
 	}
