@@ -15,6 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
+        <mockito.version>5.20.0</mockito.version>
         <javafx.version>25</javafx.version>
         <controlsfx.version>11.2.1</controlsfx.version>
 
@@ -23,13 +24,15 @@
         <jpackage-maven-plugin.version>1.7.1</jpackage-maven-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 
-        <surefire.argLine>
+        <surefire.argLineBase>
             --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
             --add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED
             --add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
             --add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
             --enable-native-access=javafx.graphics
-        </surefire.argLine>
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+        </surefire.argLineBase>
+        <surefire.argLine>${surefire.argLineBase}</surefire.argLine>
     </properties>
 
     <dependencies>
@@ -106,7 +109,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.20.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -180,13 +183,9 @@
             <id>headless-ui-tests</id>
             <properties>
                 <surefire.argLine>
-                    --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-                    --add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED
-                    --add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
-                    --add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+                    ${surefire.argLineBase}
                     --add-opens=javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
                     --add-opens=javafx.base/com.sun.javafx.logging=ALL-UNNAMED
-                    --enable-native-access=javafx.graphics
                     -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw
                 </surefire.argLine>
             </properties>
