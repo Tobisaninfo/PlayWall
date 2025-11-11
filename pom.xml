@@ -11,11 +11,11 @@
 
     <modules>
         <module>PlayWallCommon</module>
-        <module>PlayWallClient</module>
         <module>PlayWallServer</module>
         <module>PlayWallServerCommon</module>
         <module>PlayWallNativeAudio</module>
         <module>PlayWallNativeAudioRust</module>
+        <module>PlayWallClient</module>
     </modules>
 
     <properties>
@@ -35,6 +35,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
 
         <maven-compiler.version>3.14.1</maven-compiler.version>
+        <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
 
         <junit.version>5.10.2</junit.version>
         <jlibs.version>3.2.0</jlibs.version>
@@ -95,7 +96,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler.version}</version>
                     <configuration>
-                        <release>21</release>
+                        <release>25</release>
                         <parameters>true</parameters>
                         <annotationProcessorPaths>
                             <path>

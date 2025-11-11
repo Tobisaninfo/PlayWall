@@ -14,19 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 class ClientWebSocketHandler implements WebSocket.Listener
 {
-	private static final int THREAD_COUNT = 6;
-
 	private final ObjectMapper objectMapper;
 	private final ResponseQueue responseQueue;
 
-	private final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
-	private final HttpClient httpClient = HttpClient.newBuilder().executor(executorService).build();
+	private final HttpClient httpClient = HttpClient.newBuilder().build();
 	private WebSocket ws;
 
 	private final Object lock = new Object();
@@ -66,7 +61,6 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		ws = null;
 
 		httpClient.close();
-		executorService.close();
 	}
 
 	@Override

@@ -33,7 +33,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
 
 public class LaunchDialog extends NVC
 {
-	static final String IMAGE = "de/tobias/playwall/client/logo/Logo-large.png";
+	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
 
 	@FXML
 	private Label infoLabel;

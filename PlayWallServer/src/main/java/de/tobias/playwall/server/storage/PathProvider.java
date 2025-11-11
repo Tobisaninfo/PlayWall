@@ -33,4 +33,9 @@ public class PathProvider
 	{
 		return getBaseDirectory().resolve("config").resolve(configFileName);
 	}
+
+	public Path getPathFor(String path)
+	{
+		return getBaseDirectory().resolve(path);
+	}
 }

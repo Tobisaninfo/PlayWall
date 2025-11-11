@@ -20,6 +20,8 @@
 
         <sass-maven-plugin.version>3.7.2</sass-maven-plugin.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
+        <jpackage-maven-plugin.version>1.7.1</jpackage-maven-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
     </properties>
 
     <dependencies>
@@ -119,50 +121,144 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>${javafx-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
-                        <id>default-cli</id>
-                        <configuration>
-                            <mainClass>de.tobias.playwall.client/de.tobias.playwall.client.PlayWallMain</mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
-                            <noManPages>true</noManPages>
-                            <stripDebug>true</stripDebug>
-                            <noHeaderFiles>true</noHeaderFiles>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/build</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.ico</app.icon>
+            </properties>
+        </profile>
+
+        <!-- macOS Build -->
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.icns</app.icon>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>package-executables</id>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.fusesource.jansi</groupId>
+                    <artifactId>jansi</artifactId>
+                    <version>1.18-module</version>
+                </dependency>
+                <dependency>
+                    <groupId>net.java.dev.jna</groupId>
+                    <artifactId>jna</artifactId>
+                    <version>5.5.0-module</version>
+                </dependency>
+                <dependency>
+                    <groupId>net.java.dev.jna</groupId>
+                    <artifactId>jna-platform</artifactId>
+                    <version>5.5.0-module</version>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openjfx</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <version>${javafx-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>create-runtime-image</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>jlink</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>de.tobias.playwall.client.PlayWallMain</mainClass>
+                                    <stripDebug>true</stripDebug>
+                                    <compress>2</compress>
+                                    <noHeaderFiles>true</noHeaderFiles>
+                                    <noManPages>true</noManPages>
+                                    <launcher>PlayWall</launcher>
+                                    <jlinkImageName>PlayWallClient</jlinkImageName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <version>2.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>generate-uuid</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <source>
+                                        import java.util.UUID
+                                        project.properties.setProperty("win.upgrade.uuid", UUID.randomUUID().toString())
+                                    </source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>                    <plugin>
+                        <groupId>org.panteleyev</groupId>
+                        <artifactId>jpackage-maven-plugin</artifactId>
+                        <version>${jpackage-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>build-executable</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jpackage</goal>
+                                </goals>
+                                <configuration>
+                                    <input>${project.build.directory}/build</input>
+                                    <destination>${project.build.directory}/installer</destination>
+                                    <mainJar>${project.artifactId}-${project.version}.jar</mainJar>
+                                    <mainClass>de.tobias.playwall.client.PlayWallMain</mainClass>
+                                    <name>PlayWall</name>
+                                    <appVersion>${project.version}</appVersion>
+                                    <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
+                                    <javaOptions>
+                                        <javaOption>--enable-native-access=javafx.graphics</javaOption>
+                                    </javaOptions>
+                                    <icon>${app.icon}</icon>
+                                    <vendor>TheCodeLabs</vendor>
+
+                                    <!-- Windows specific -->
+                                    <winMenu>true</winMenu>
+                                    <winShortcut>true</winShortcut>
+                                    <winMenuGroup>PlayWall</winMenuGroup>
+                                    <winUpgradeUuid>${win.upgrade.uuid}</winUpgradeUuid>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
