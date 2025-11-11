@@ -81,20 +81,20 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 			{
 				textResponse = new TextMessage(objectMapper.writeValueAsString(new ResponseMessage(parsedMessage.getMessageId())));
 			}
-			sendToClients(textResponse, List.of(session));
+			sendToClients(textResponse, List.of(session)); // TODO: Do not send to all clients, only updates should be sent to all clients
 		}
 		catch(PlayWallServerException e)
 		{
 			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), e.getError());
 			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
-			sendToClients(textResponse, List.of(session));
+			sendToClients(textResponse, List.of(session)); // TODO: Do not send to all clients
 		}
 		catch(Exception e)
 		{
 			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), null);
 			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
 			sendToClients(textResponse, List.of(session));
-			log.error("Error processing request", e);
+			log.error("Error processing request", e); // TODO: Do not send to all clients
 		}
 	}
 

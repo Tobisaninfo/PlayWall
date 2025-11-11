@@ -6,6 +6,7 @@ import io.github.classgraph.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.function.Function;
@@ -13,7 +14,7 @@ import java.util.function.Function;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DiLoader
 {
-	@SuppressWarnings({"java:S112", "java:S3740", "unchecked", "rawtypes"})
+	@SuppressWarnings({"java:S112", "java:S3011", "java:S3740", "unchecked", "rawtypes"})
 	public static void setupDependencies()
 	{
 		final long start = System.currentTimeMillis();
@@ -40,15 +41,18 @@ public final class DiLoader
 					superclass = loadedClass;
 				}
 
-				final Function<DI, ?> loadFunction = di -> {
+				final Function<DI, ?> loadFunction = _ -> {
 					try
 					{
-						return loadedClass.getConstructor().newInstance();
+						final Constructor<?> constructor = loadedClass.getDeclaredConstructor();
+						constructor.setAccessible(true);
+						return constructor.newInstance();
 					}
 					catch(NoSuchMethodException | InstantiationException | IllegalAccessException |
 						  InvocationTargetException e)
 					{
-						Logger.error(MessageFormat.format("Cannot register component {0}", loadedClass), e);
+						Logger.error(MessageFormat.format("Cannot register component {0}", loadedClass));
+						Logger.error(e);
 						throw new RuntimeException(e);
 					}
 				};

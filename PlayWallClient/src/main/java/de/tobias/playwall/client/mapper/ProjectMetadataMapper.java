@@ -3,8 +3,11 @@ package de.tobias.playwall.client.mapper;
 import de.tobias.playwall.client.di.Component;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Component
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ProjectMetadataMapper
 {
 	public ProjectMetadata projectMetadataDtoToProjectMetadata(ProjectMetadataDto project)

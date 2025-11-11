@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Objects;
 
 @Getter
 @Component
@@ -21,7 +22,7 @@ public class AppIconProvider
 	{
 		this.stageIcon = new Image(ICON_PATH);
 		try {
-			stageIconData = IOUtils.inputStreamToByteArray(getClass().getClassLoader().getResourceAsStream(ICON_PATH));
+			stageIconData = IOUtils.inputStreamToByteArray(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(ICON_PATH)));
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}

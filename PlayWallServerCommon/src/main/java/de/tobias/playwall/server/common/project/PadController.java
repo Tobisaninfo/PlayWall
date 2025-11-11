@@ -27,21 +27,21 @@ public abstract class PadController
 	public void load()
 	{
 		log.debug("Loading Pad {}", pad.getId());
-		_load();
+		loadInternal();
 		status = PadControllerStatus.READY;
 		context.publishEvent(new PadLoadedUpdate(pad.getId()));
 	}
 
-	protected abstract void _load();
+	protected abstract void loadInternal();
 
 	public void unload()
 	{
 		log.debug("Unload Pad {}", pad.getId());
-		_unload();
+		unloadInternal();
 		status = PadControllerStatus.EMPTY;
 	}
 
-	protected abstract void _unload();
+	protected abstract void unloadInternal();
 
 	public abstract void play(boolean withFadeIn);
 

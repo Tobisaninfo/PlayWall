@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class PlayWallServerException extends Exception
 {
-	private final ServerError error;
+	private final transient ServerError error;
 
 	public PlayWallServerException(String message, ServerError error)
 	{

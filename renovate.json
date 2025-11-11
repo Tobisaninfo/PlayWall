@@ -1,0 +1,21 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "labels": [
+        "dependencies"
+    ],
+    "assignees": [
+        "tobias"
+    ],
+    "packageRules": [
+        {
+            "matchManagers": [
+                "maven"
+            ],
+            "matchUpdateTypes": [
+                "patch"
+            ],
+            "matchCurrentVersion": "!/^0/",
+            "automerge": true
+        }
+    ]
+}

@@ -5,8 +5,11 @@ import de.tobias.playwall.client.model.project.AudioPad;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.common.api.project.model.AudioPadDto;
 import de.tobias.playwall.common.api.project.model.PadDto;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Component
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class PadMapper
 {
 	public Pad padDtoToPad(PadDto pad)

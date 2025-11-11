@@ -23,7 +23,7 @@ public class AudioPadController extends PadController implements Pauseable
 	}
 
 	@Override
-	protected void _load()
+	protected void loadInternal()
 	{
 		audioHandler = audioHandlerFactory.createAudioHandler(this);
 		// TODO: Check for file existences
@@ -33,7 +33,7 @@ public class AudioPadController extends PadController implements Pauseable
 	}
 
 	@Override
-	protected void _unload()
+	protected void unloadInternal()
 	{
 		setStatus(PadControllerStatus.STOP);
 		audioHandler.unloadMedia();

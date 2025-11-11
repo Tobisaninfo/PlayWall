@@ -12,6 +12,6 @@ public record Project(ProjectMetadata metadata, List<Page> pages)
 
 	public Pad getPad(PadIndex index) {
 		final Page page = getPage(index.getPagePosition());
-		return page.getPad(index.getId());
+		return page.getPad(index.id());
 	}
 }
