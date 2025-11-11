@@ -26,11 +26,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.util.Optional;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 
+@Getter(AccessLevel.PACKAGE)
 public class LaunchDialog extends NVC
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
@@ -76,8 +79,7 @@ public class LaunchDialog extends NVC
 
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
-		projectListView.setId("list");
-		projectListView.setCellFactory(list -> new ProjectCell());
+		projectListView.setCellFactory(_ -> new ProjectCell());
 
 		// List selection listener
 		projectListView.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
