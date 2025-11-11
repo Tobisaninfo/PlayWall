@@ -7,16 +7,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ResponseQueue
+class ResponseQueue
 {
 	private final Map<UUID, ResponseMessage> responseQueueMap = new HashMap<>();
 
-	public void enqueueResponse(UUID requestId, ResponseMessage response)
+	void enqueueResponse(UUID requestId, ResponseMessage response)
 	{
 		responseQueueMap.put(requestId, response);
 	}
 
-	public Optional<ResponseMessage> dequeueResponse(UUID id)
+	Optional<ResponseMessage> dequeueResponse(UUID id)
 	{
 		return Optional.ofNullable(responseQueueMap.get(id));
 	}
