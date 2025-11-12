@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -75,7 +77,19 @@ public final class DiLoader
 							}
 						}
 
-						return injectConstructor.newInstance(params);
+						final Object instance = injectConstructor.newInstance(params);
+
+						// Prepare fields
+						for(Field field : getAllFields(instance.getClass()))
+						{
+							if(field.isAnnotationPresent(InjectField.class))
+							{
+								field.setAccessible(true);
+								field.set(instance, di.get(field.getType()));
+							}
+						}
+
+						return instance;
 					}
 					catch(Exception e)
 					{
@@ -99,5 +113,18 @@ public final class DiLoader
 			}
 		}
 		Logger.info("Dependency injection setup took {0}ms", System.currentTimeMillis() - start);
+	}
+
+	private static List<Field> getAllFields(Class<?> type)
+	{
+		final List<Field> fields = new ArrayList<>();
+		Class<?> current = type;
+
+		while(current != null && current != Object.class)
+		{
+			fields.addAll(Arrays.asList(current.getDeclaredFields()));
+			current = current.getSuperclass();
+		}
+		return fields;
 	}
 }

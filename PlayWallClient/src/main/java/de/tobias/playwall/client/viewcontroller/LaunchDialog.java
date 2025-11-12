@@ -4,12 +4,10 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
-import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.di.InjectConstructor;
 import de.tobias.playwall.client.di.ViewController;
 import de.tobias.playwall.client.model.project.Project;
@@ -18,7 +16,6 @@ import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
-import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -37,7 +34,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController
-public class LaunchDialog extends NVC
+public class LaunchDialog extends BaseNVC
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
 
@@ -194,7 +191,6 @@ public class LaunchDialog extends NVC
 	@Override
 	public void initStage(Stage stage)
 	{
-		final Styleable styleable = DI.instance().get(Styleable.class);
 		styleable.applyToStage(stage);
 
 		stage.setTitle(getString(Strings.UI_DIALOG_LAUNCH_TITLE));
