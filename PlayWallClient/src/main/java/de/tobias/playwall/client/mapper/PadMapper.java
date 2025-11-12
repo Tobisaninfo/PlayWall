@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.mapper;
 
-import de.tobias.playwall.client.di.Component;
+import de.tobias.playwall.client.di.Service;
 import de.tobias.playwall.client.model.project.AudioPad;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.common.api.project.model.AudioPadDto;
@@ -8,7 +8,7 @@ import de.tobias.playwall.common.api.project.model.PadDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@Component
+@Service
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class PadMapper
 {

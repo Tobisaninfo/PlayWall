@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.mapper;
 
-import de.tobias.playwall.client.di.Component;
+import de.tobias.playwall.client.di.Service;
 import de.tobias.playwall.client.di.InjectConstructor;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 @AllArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
 public class PageMapper
 {

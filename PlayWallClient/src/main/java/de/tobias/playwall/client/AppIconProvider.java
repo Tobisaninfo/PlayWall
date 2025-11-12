@@ -1,7 +1,7 @@
 package de.tobias.playwall.client;
 
 import de.thecodelabs.utils.io.IOUtils;
-import de.tobias.playwall.client.di.Component;
+import de.tobias.playwall.client.di.Service;
 import javafx.scene.image.Image;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import java.io.UncheckedIOException;
 import java.util.Objects;
 
 @Getter
-@Component
+@Service
 public class AppIconProvider
 {
 	private static final String ICON_PATH = "de/tobias/playwall/client/logo/icon_small.png";

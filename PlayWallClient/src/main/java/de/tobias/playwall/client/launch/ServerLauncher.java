@@ -5,7 +5,7 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.PlayWallMain;
-import de.tobias.playwall.client.di.Component;
+import de.tobias.playwall.client.di.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class ServerLauncher
 {
 	private Process serverProcess;

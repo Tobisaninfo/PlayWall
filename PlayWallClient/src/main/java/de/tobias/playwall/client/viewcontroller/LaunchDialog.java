@@ -9,9 +9,9 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.di.Component;
 import de.tobias.playwall.client.di.DI;
 import de.tobias.playwall.client.di.InjectConstructor;
+import de.tobias.playwall.client.di.ViewController;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
@@ -36,7 +36,7 @@ import java.util.Optional;
 import static de.thecodelabs.utils.util.Localization.getString;
 
 @Getter(AccessLevel.PACKAGE)
-@Component(singleton = false)
+@ViewController
 public class LaunchDialog extends NVC
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";

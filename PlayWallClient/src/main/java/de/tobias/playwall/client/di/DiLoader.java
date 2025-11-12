@@ -6,9 +6,11 @@ import io.github.classgraph.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -20,7 +22,7 @@ public final class DiLoader
 		final long start = System.currentTimeMillis();
 
 		final String basePackage = PlayWallMain.class.getPackage().getName();
-		final String componentAnnotation = Component.class.getName();
+		final List<Class<? extends Annotation>> annotations = List.of(Service.class, ViewController.class);
 
 		try(ScanResult scanResult = new ClassGraph()
 				.enableAnnotationInfo()
@@ -28,11 +30,11 @@ public final class DiLoader
 				.acceptPackages(basePackage)
 				.scan())
 		{
-			for(ClassInfo componentClassInfo : scanResult.getClassesWithAnnotation(componentAnnotation))
+			for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
 			{
-				final Class<?> loadedClass = componentClassInfo.loadClass();
+				final Class<?> loadedClass = classInfo.loadClass();
 
-				final AnnotationInfo annotationInfo = componentClassInfo.getAnnotationInfo(componentAnnotation);
+				final AnnotationInfo annotationInfo = annotations.stream().filter(classInfo::hasAnnotation).map(classInfo::getAnnotationInfo).findFirst().orElseThrow();
 				final AnnotationParameterValueList annotationValues = annotationInfo.getParameterValues();
 
 				Class superclass = ((AnnotationClassRef) annotationValues.get("superclass").getValue()).loadClass();

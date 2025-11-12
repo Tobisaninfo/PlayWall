@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Component
+public @interface ViewController
 {
 	Class<?> superclass() default Object.class;
 
-	boolean singleton() default true;
+	boolean singleton() default false;
 }

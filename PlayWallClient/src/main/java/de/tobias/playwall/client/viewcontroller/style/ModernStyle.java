@@ -1,9 +1,9 @@
 package de.tobias.playwall.client.viewcontroller.style;
 
-import de.tobias.playwall.client.di.Component;
+import de.tobias.playwall.client.di.Service;
 import javafx.stage.Stage;
 
-@Component(superclass = Styleable.class)
+@Service(superclass = Styleable.class)
 public class ModernStyle implements Styleable
 {
 	@Override
