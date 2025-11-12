@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.20.0</mockito.version>
-        <javafx.version>25</javafx.version>
+        <javafx.version>25.0.1</javafx.version>
         <controlsfx.version>11.2.2</controlsfx.version>
 
         <sass-maven-plugin.version>3.7.2</sass-maven-plugin.version>
