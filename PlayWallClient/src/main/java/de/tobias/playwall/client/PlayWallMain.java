@@ -86,7 +86,8 @@ public class PlayWallMain extends Application
 	public void start(Stage stage)
 	{
 		stage.getIcons().add(DI.instance().get(AppIconProvider.class).getStageIcon());
-		new LaunchDialog(stage, client);
+		final LaunchDialog launchDialog = DI.instance().get(LaunchDialog.class);
+		launchDialog.applyViewControllerToStage(stage);
 	}
 
 	@Override

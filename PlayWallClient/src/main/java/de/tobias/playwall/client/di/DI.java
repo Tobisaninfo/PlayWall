@@ -47,6 +47,11 @@ public class DI
 
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> clazz) {
-		return (T) supplier.get(clazz).apply(this);
+		final Function<DI, ?> function = supplier.get(clazz);
+		if(function == null)
+		{
+			throw new IllegalArgumentException("No component found for \"" + clazz.getName() + "\"");
+		}
+		return (T) function.apply(this);
 	}
 }

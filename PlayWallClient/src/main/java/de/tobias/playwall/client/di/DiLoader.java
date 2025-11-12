@@ -7,8 +7,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -41,24 +41,51 @@ public final class DiLoader
 					superclass = loadedClass;
 				}
 
-				final Function<DI, ?> loadFunction = _ -> {
+				final Constructor<?> injectConstructor = Arrays.stream(loadedClass.getDeclaredConstructors())
+						.filter(c -> c.isAnnotationPresent(InjectConstructor.class))
+						.findFirst()
+						.orElseGet(() -> {
+							try
+							{
+								return loadedClass.getDeclaredConstructor();
+							}
+							catch(NoSuchMethodException e)
+							{
+								throw new RuntimeException("No suitable constructor found for " + loadedClass, e);
+							}
+						});
+
+				injectConstructor.setAccessible(true);
+
+				final Function<DI, ?> loadFunction = di -> {
 					try
 					{
-						final Constructor<?> constructor = loadedClass.getDeclaredConstructor();
-						constructor.setAccessible(true);
-						return constructor.newInstance();
+						final Class<?>[] paramTypes = injectConstructor.getParameterTypes();
+						final Object[] params = new Object[paramTypes.length];
+
+						for(int i = 0; i < paramTypes.length; i++)
+						{
+							params[i] = di.get(paramTypes[i]);
+							if(params[i] == null)
+							{
+								throw new RuntimeException("Missing dependency: " + paramTypes[i].getName() +
+														   " for " + loadedClass.getName());
+							}
+						}
+
+						return injectConstructor.newInstance(params);
 					}
-					catch(NoSuchMethodException | InstantiationException | IllegalAccessException |
-						  InvocationTargetException e)
+					catch(Exception e)
 					{
-						Logger.error(MessageFormat.format("Cannot register component {0}", loadedClass));
+						Logger.error(MessageFormat.format("Cannot instantiate component {0}", loadedClass));
 						Logger.error(e);
 						throw new RuntimeException(e);
 					}
 				};
 
-				Logger.debug("Registering component {0}", superclass);
 				boolean isSingleton = (boolean) annotationValues.get("singleton").getValue();
+				Logger.debug("Registering component {0}", superclass);
+
 				if(isSingleton)
 				{
 					DI.instance().registerLazySingleton(superclass, loadFunction);

@@ -3,7 +3,7 @@ package de.tobias.playwall.client.net;
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.di.Component;
-import de.tobias.playwall.client.di.DI;
+import de.tobias.playwall.client.di.InjectConstructor;
 import de.tobias.playwall.client.mapper.PageMapper;
 import de.tobias.playwall.client.mapper.ProjectMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
@@ -12,6 +12,8 @@ import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.utils.MapUtils;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Comparator;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.UUID;
 import static de.tobias.playwall.common.utils.MapUtils.entry;
 
 @Component(superclass = Client.class)
+@RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
 public class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
@@ -27,13 +30,6 @@ public class ClientImpl implements Client
 	private final PageMapper pageMapper;
 
 	private ClientWebSocketHandler clientWebSocketHandler;
-
-	public ClientImpl()
-	{
-		this.projectMetadataMapper = DI.instance().get(ProjectMetadataMapper.class);
-		this.projectMapper = DI.instance().get(ProjectMapper.class);
-		this.pageMapper = DI.instance().get(PageMapper.class);
-	}
 
 	@Override
 	public void connect()
