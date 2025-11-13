@@ -14,7 +14,7 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 							   Constructor<T> injectConstructor) implements Function<AppContext, T>
 {
 	@Override
-	public T apply(AppContext di)
+	public T apply(AppContext context)
 	{
 		try
 		{
@@ -22,11 +22,11 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 			final Object[] params = new Object[paramTypes.length];
 			for(int i = 0; i < paramTypes.length; i++)
 			{
-				params[i] = di.get(paramTypes[i]);
+				params[i] = context.get(paramTypes[i]);
 			}
 
 			final T instance = injectConstructor.newInstance(params);
-			injectFields(di, instance);
+			injectFields(context, instance);
 			return instance;
 		}
 		catch(Exception e)
@@ -36,14 +36,14 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 	}
 
 	@SuppressWarnings("java:S3011")
-	private static <T> void injectFields(AppContext di, T instance) throws IllegalAccessException
+	private static <T> void injectFields(AppContext context, T instance) throws IllegalAccessException
 	{
 		for(Field field : ReflectionUtils.getAllFields(instance.getClass()))
 		{
 			if(field.isAnnotationPresent(InjectField.class))
 			{
 				field.setAccessible(true);
-				field.set(instance, di.get(field.getType()));
+				field.set(instance, context.get(field.getType()));
 			}
 		}
 	}

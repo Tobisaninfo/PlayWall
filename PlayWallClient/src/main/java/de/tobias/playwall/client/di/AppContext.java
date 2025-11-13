@@ -23,12 +23,12 @@ public class AppContext
 
 	public <T> void registerLazySingleton(Class<T> clazz, Function<AppContext, T> function)
 	{
-		supplier.put(clazz, di -> {
+		supplier.put(clazz, context -> {
 			if(objectCache.containsKey(clazz))
 			{
 				return objectCache.get(clazz);
 			}
-			final T instance = function.apply(di);
+			final T instance = function.apply(context);
 			objectCache.put(clazz, instance);
 			return instance;
 		});
