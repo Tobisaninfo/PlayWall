@@ -16,6 +16,7 @@
         <module>PlayWallNativeAudio</module>
         <module>PlayWallNativeAudioRust</module>
         <module>PlayWallClient</module>
+        <module>coverage</module>
     </modules>
 
     <properties>
@@ -41,6 +42,13 @@
         <jlibs.version>3.2.0</jlibs.version>
 
         <jni4net.j.version>0.8.9.0</jni4net.j.version>
+
+        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+
+        <pwd>.</pwd>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${pwd}/coverage/target/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencyManagement>
