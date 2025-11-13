@@ -1,4 +1,4 @@
-package de.tobias.playwall.server.config.properties;
+package de.tobias.playwall.server.common.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

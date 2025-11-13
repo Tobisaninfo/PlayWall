@@ -1,0 +1,2 @@
+src/main/resources/rust/*.dylib
+src/main/resources/rust/*.dll
