@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.config;
 
-import de.tobias.playwall.server.storage.PathProvider;
+import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.system.ApplicationPid;
