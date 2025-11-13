@@ -45,9 +45,9 @@
 
         <jni4net.j.version>0.8.9.0</jni4net.j.version>
 
-        <pwd>.</pwd>
+        <cwd>.</cwd>
         <sonar.coverage.jacoco.xmlReportPaths>
-            ${pwd}/coverage/target/site/jacoco-aggregate/jacoco.xml
+            ${cwd}/coverage/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
