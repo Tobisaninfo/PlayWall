@@ -2,7 +2,7 @@ package de.tobias.playwall.client.di.loader;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallMain;
-import de.tobias.playwall.client.di.DI;
+import de.tobias.playwall.client.di.AppContext;
 import de.tobias.playwall.client.di.InjectConstructor;
 import de.tobias.playwall.client.di.Service;
 import de.tobias.playwall.client.di.ViewController;
@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class DiLoader
+public final class AppContextLoader
 {
 	@SuppressWarnings({"java:S3011", "unchecked", "rawtypes"})
-	public static void setupDependencies()
+	public static void setupDependencies(AppContext appContext)
 	{
 		final long start = System.currentTimeMillis();
 
@@ -51,15 +51,15 @@ public final class DiLoader
 
 				boolean isSingleton = (boolean) annotationValues.get("singleton").getValue();
 
-				final Function<DI, ?> loadFunction = new ComponentInitializer<>(loadedClass, injectConstructor);
+				final Function<AppContext, ?> loadFunction = new ComponentInitializer<>(loadedClass, injectConstructor);
 				if(isSingleton)
 				{
-					DI.instance().registerLazySingleton(superclass, loadFunction);
+					appContext.registerLazySingleton(superclass, loadFunction);
 					Logger.debug("Registering singleton component {0}", superclass);
 				}
 				else
 				{
-					DI.instance().registerLazy(superclass, loadFunction);
+					appContext.registerLazy(superclass, loadFunction);
 					Logger.debug("Registering component {0}", superclass);
 				}
 			}

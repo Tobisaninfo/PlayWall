@@ -8,7 +8,7 @@ import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.AppIconProvider;
-import de.tobias.playwall.client.di.DI;
+import de.tobias.playwall.client.di.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
@@ -70,10 +70,10 @@ public class MainViewController extends NVC
 	@Override
 	public void initStage(Stage stage)
 	{
-		final Styleable styleable = DI.instance().get(Styleable.class);
+		final Styleable styleable = AppContextHolder.getInstance().get(Styleable.class);
 		styleable.applyToStage(stage);
 
-		stage.getIcons().add(DI.instance().get(AppIconProvider.class).getStageIcon());
+		stage.getIcons().add(AppContextHolder.getInstance().get(AppIconProvider.class).getStageIcon());
 		stage.setTitle(getWindowTitle("-", "-"));
 		stage.show();
 	}

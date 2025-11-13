@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.di.loader;
 
 import de.tobias.playwall.client.di.ComponentInitializationException;
-import de.tobias.playwall.client.di.DI;
+import de.tobias.playwall.client.di.AppContext;
 import de.tobias.playwall.client.di.InjectField;
 import de.tobias.playwall.client.di.ReflectionUtils;
 
@@ -10,10 +10,11 @@ import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.function.Function;
 
-record ComponentInitializer<T>(Class<T> loadedClass, Constructor<T> injectConstructor) implements Function<DI, T>
+record ComponentInitializer<T>(Class<T> loadedClass,
+							   Constructor<T> injectConstructor) implements Function<AppContext, T>
 {
 	@Override
-	public T apply(DI di)
+	public T apply(AppContext di)
 	{
 		try
 		{
@@ -35,7 +36,7 @@ record ComponentInitializer<T>(Class<T> loadedClass, Constructor<T> injectConstr
 	}
 
 	@SuppressWarnings("java:S3011")
-	private static <T> void injectFields(DI di, T instance) throws IllegalAccessException
+	private static <T> void injectFields(AppContext di, T instance) throws IllegalAccessException
 	{
 		for(Field field : ReflectionUtils.getAllFields(instance.getClass()))
 		{

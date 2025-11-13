@@ -10,8 +10,9 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.tobias.playwall.client.di.DI;
-import de.tobias.playwall.client.di.loader.DiLoader;
+import de.tobias.playwall.client.di.AppContext;
+import de.tobias.playwall.client.di.AppContextHolder;
+import de.tobias.playwall.client.di.loader.AppContextLoader;
 import de.tobias.playwall.client.launch.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
@@ -57,7 +58,9 @@ public class PlayWallMain extends Application
 	{
 		try
 		{
-			DiLoader.setupDependencies();
+			final AppContext appContext = new AppContext();
+			AppContextLoader.setupDependencies(appContext);
+			AppContextHolder.setInstance(appContext);
 
 			Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
 			Logger.info("Run Path: {0}", SystemUtils.getRunPath());
@@ -65,12 +68,12 @@ public class PlayWallMain extends Application
 			final String[] args = ApplicationUtils.getApplication().getProgramArgs();
 			if(!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
 			{
-				final ServerLauncher serverLauncher = DI.instance().get(ServerLauncher.class);
+				final ServerLauncher serverLauncher = appContext.get(ServerLauncher.class);
 				Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
 				serverLauncher.launchServer();
 			}
 
-			client = DI.instance().get(Client.class);
+			client = appContext.get(Client.class);
 			client.connectWithRetries(60);
 
 			loadAppIcon();
@@ -87,8 +90,8 @@ public class PlayWallMain extends Application
 	{
 		try
 		{
-			stage.getIcons().add(DI.instance().get(AppIconProvider.class).getStageIcon());
-			final LaunchDialog launchDialog = DI.instance().get(LaunchDialog.class);
+			stage.getIcons().add(AppContextHolder.getInstance().get(AppIconProvider.class).getStageIcon());
+			final LaunchDialog launchDialog = AppContextHolder.getInstance().get(LaunchDialog.class);
 			launchDialog.applyViewControllerToStage(stage);
 		}
 		catch(Exception e)
@@ -107,7 +110,7 @@ public class PlayWallMain extends Application
 
 	private void loadAppIcon()
 	{
-		final AppIconProvider iconProvider = DI.instance().get(AppIconProvider.class);
+		final AppIconProvider iconProvider = AppContextHolder.getInstance().get(AppIconProvider.class);
 		Alerts.getInstance().setDefaultIcon(iconProvider.getStageIcon());
 	}
 }

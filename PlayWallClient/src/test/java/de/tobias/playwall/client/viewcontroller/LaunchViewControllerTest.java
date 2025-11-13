@@ -7,8 +7,9 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallLocalizationDelegate;
 import de.tobias.playwall.client.PlayWallMain;
-import de.tobias.playwall.client.di.DI;
-import de.tobias.playwall.client.di.loader.DiLoader;
+import de.tobias.playwall.client.di.AppContext;
+import de.tobias.playwall.client.di.AppContextHolder;
+import de.tobias.playwall.client.di.loader.AppContextLoader;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.utils.ScreenshotOnFailure;
@@ -46,13 +47,16 @@ class LaunchViewControllerTest
 		Logger.setFileOutput(FileOutputOption.DISABLED);
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
-		DiLoader.setupDependencies();
+
+		final AppContext context = new AppContext();
+		AppContextLoader.setupDependencies(context);
+		AppContextHolder.setInstance(context);
 
 		client = mock(Client.class);
 		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4)));
-		DI.instance().registerLazySingleton(Client.class, _ -> client);
+		context.registerLazySingleton(Client.class, _ -> client);
 
-		launchDialog = DI.instance().get(LaunchDialog.class);
+		launchDialog = context.get(LaunchDialog.class);
 		launchDialog.applyViewControllerToStage(stage);
 	}
 

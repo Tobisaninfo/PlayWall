@@ -4,7 +4,7 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
 import de.tobias.playwall.client.PlayWallApiException;
-import de.tobias.playwall.client.di.DI;
+import de.tobias.playwall.client.di.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.view.pad.control.*;
@@ -115,7 +115,7 @@ public class DesktopPadView implements PadView
 		playButton.setOnAction(e -> {
 			try
 			{
-				DI.instance().get(Client.class).play(pad.getId());
+				AppContextHolder.getInstance().get(Client.class).play(pad.getId());
 			}
 			catch(PlayWallApiException ex)
 			{

@@ -5,34 +5,23 @@ import java.util.Map;
 import java.util.function.Function;
 
 @SuppressWarnings("java:S6548")
-public class DI
+public class AppContext
 {
-	private final Map<Class<?>, Function<DI, ?>> supplier;
+	private final Map<Class<?>, Function<AppContext, ?>> supplier;
 	private final Map<Class<?>, Object> objectCache;
 
-	private static DI containerInstance;
-
-	private DI()
+	public AppContext()
 	{
 		supplier = new HashMap<>();
 		objectCache = new HashMap<>();
 	}
 
-	public static DI instance()
-	{
-		if(containerInstance == null)
-		{
-			containerInstance = new DI();
-		}
-		return containerInstance;
-	}
-
-	public <T> void registerLazy(Class<T> clazz, Function<DI, T> function)
+	public <T> void registerLazy(Class<T> clazz, Function<AppContext, T> function)
 	{
 		supplier.put(clazz, function);
 	}
 
-	public <T> void registerLazySingleton(Class<T> clazz, Function<DI, T> function)
+	public <T> void registerLazySingleton(Class<T> clazz, Function<AppContext, T> function)
 	{
 		supplier.put(clazz, di -> {
 			if(objectCache.containsKey(clazz))
@@ -47,7 +36,7 @@ public class DI
 
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> clazz) {
-		final Function<DI, ?> function = supplier.get(clazz);
+		final Function<AppContext, ?> function = supplier.get(clazz);
 		if(function == null)
 		{
 			throw new ComponentNotFoundException("No component found for \"" + clazz.getName() + "\"");
