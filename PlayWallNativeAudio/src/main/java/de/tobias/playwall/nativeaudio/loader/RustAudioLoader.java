@@ -21,7 +21,7 @@ import java.nio.file.StandardCopyOption;
 @Profile("!test")
 public class RustAudioLoader
 {
-	private boolean loaded = false;
+	private boolean isLoaded = false;
 
 	private final PathProvider pathProvider;
 
@@ -38,12 +38,12 @@ public class RustAudioLoader
 				Files.createDirectories(destinationPath.getParent());
 			}
 
-			if(!loaded)
+			if(!isLoaded)
 			{
 				copyResource("rust/" + nativeLibraryFilename, destinationPath);
 				System.load(destinationPath.toString());
 				RustAudioHandler.initSystem(RustLogLevel.DEBUG); // TODO: make configurable
-				loaded = true;
+				isLoaded = true;
 			}
 		}
 		catch(IOException e)
