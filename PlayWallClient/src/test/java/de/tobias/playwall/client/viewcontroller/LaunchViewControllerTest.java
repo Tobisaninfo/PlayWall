@@ -8,7 +8,7 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallLocalizationDelegate;
 import de.tobias.playwall.client.PlayWallMain;
 import de.tobias.playwall.client.di.DI;
-import de.tobias.playwall.client.di.DiLoader;
+import de.tobias.playwall.client.di.loader.DiLoader;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.utils.ScreenshotOnFailure;

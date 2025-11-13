@@ -50,7 +50,7 @@ public class DI
 		final Function<DI, ?> function = supplier.get(clazz);
 		if(function == null)
 		{
-			throw new IllegalArgumentException("No component found for \"" + clazz.getName() + "\"");
+			throw new ComponentNotFoundException("No component found for \"" + clazz.getName() + "\"");
 		}
 		return (T) function.apply(this);
 	}

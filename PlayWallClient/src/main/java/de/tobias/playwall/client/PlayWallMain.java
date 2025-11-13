@@ -11,7 +11,7 @@ import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playwall.client.di.DI;
-import de.tobias.playwall.client.di.DiLoader;
+import de.tobias.playwall.client.di.loader.DiLoader;
 import de.tobias.playwall.client.launch.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
