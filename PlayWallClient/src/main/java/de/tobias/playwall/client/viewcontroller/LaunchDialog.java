@@ -163,7 +163,7 @@ public class LaunchDialog extends BaseNVC
 		}
 	}
 
-	private void fetchProjects()
+	void fetchProjects()
 	{
 		Platform.runLater(() -> {
 			try

@@ -1,59 +1,37 @@
 package de.tobias.playwall.client.viewcontroller;
 
-import de.thecodelabs.logger.FileOutputOption;
-import de.thecodelabs.logger.LogLevelFilter;
-import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.application.ApplicationUtils;
-import de.thecodelabs.utils.util.Localization;
-import de.tobias.playwall.client.PlayWallLocalizationDelegate;
-import de.tobias.playwall.client.PlayWallMain;
 import de.tobias.playwall.client.di.AppContext;
 import de.tobias.playwall.client.di.AppContextHolder;
-import de.tobias.playwall.client.di.loader.AppContextLoader;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.utils.ScreenshotOnFailure;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.robot.Motion;
+import org.testfx.util.WaitForAsyncUtils;
 
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-@ExtendWith(ApplicationExtension.class)
-@ExtendWith(ScreenshotOnFailure.class)
-class LaunchViewControllerTest
+class LaunchViewControllerTest extends AbstractViewControllerTest
 {
 	private Client client;
 	private LaunchDialog launchDialog;
 
 	private static final UUID PROJECT_ID = UUID.randomUUID();
+	public static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4);
 
 	@Start
-	private void start(Stage stage) throws Exception
+	private void start(Stage stage)
 	{
-		ApplicationUtils.registerMainApplication(PlayWallMain.class);
-		Logger.init(Paths.get("."));
-		Logger.setLevelFilter(LogLevelFilter.DEBUG);
-		Logger.setFileOutput(FileOutputOption.DISABLED);
-		Localization.setDelegate(new PlayWallLocalizationDelegate());
-		Localization.load();
-
-		final AppContext context = new AppContext();
-		AppContextLoader.setupDependencies(context);
-		AppContextHolder.setInstance(context);
+		final AppContext context = AppContextHolder.getInstance();
 
 		client = mock(Client.class);
-		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4)));
 		context.registerLazySingleton(Client.class, _ -> client);
 
 		launchDialog = context.get(LaunchDialog.class);
@@ -61,14 +39,32 @@ class LaunchViewControllerTest
 	}
 
 	@Test
-	void testProjectListDisplayAllProjects(FxRobot robot)
+	void testProjectListDisplayAllProjects() throws Exception
 	{
+		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4)));
+		launchDialog.fetchProjects();
+		WaitForAsyncUtils.waitForFxEvents();
+
 		assertThat(launchDialog.getProjectListView()).hasExactlyNumItems(1);
+	}
+
+	@Test
+	void testProjectListDisplayPlaceholder() throws Exception
+	{
+		when(client.getProjects()).thenReturn(List.of());
+		launchDialog.fetchProjects();
+		WaitForAsyncUtils.waitForFxEvents();
+
+		assertThat(launchDialog.getProjectListView()).hasExactlyNumItems(0);
 	}
 
 	@Test
 	void testProjectDelete(FxRobot robot) throws Exception
 	{
+		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
+		launchDialog.fetchProjects();
+		WaitForAsyncUtils.waitForFxEvents();
+
 		final Node cell = launchDialog.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
 		robot.clickOn(cell, Motion.DEFAULT);
 		robot.clickOn(launchDialog.getDeleteButton());
