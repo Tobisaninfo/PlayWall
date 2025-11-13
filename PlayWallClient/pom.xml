@@ -22,7 +22,7 @@
         <sass-maven-plugin.version>3.7.2</sass-maven-plugin.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
         <jpackage-maven-plugin.version>1.7.1</jpackage-maven-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
 
         <surefire.argLineBase>
             --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
