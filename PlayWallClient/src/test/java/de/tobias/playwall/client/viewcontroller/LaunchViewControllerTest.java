@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.viewcontroller;
 
-import de.tobias.playwall.client.di.AppContext;
-import de.tobias.playwall.client.di.AppContextHolder;
+import de.tobias.playwall.client.appcontext.AppContext;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import javafx.scene.Node;

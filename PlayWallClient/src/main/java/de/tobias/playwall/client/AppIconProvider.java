@@ -1,7 +1,7 @@
 package de.tobias.playwall.client;
 
 import de.thecodelabs.utils.io.IOUtils;
-import de.tobias.playwall.client.di.Service;
+import de.tobias.playwall.client.appcontext.Service;
 import javafx.scene.image.Image;
 import lombok.Getter;
 

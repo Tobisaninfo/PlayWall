@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.di;
+package de.tobias.playwall.client.appcontext;
 
 import java.util.HashMap;
 import java.util.Map;

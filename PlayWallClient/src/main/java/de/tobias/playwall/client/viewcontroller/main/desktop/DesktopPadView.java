@@ -4,7 +4,7 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
 import de.tobias.playwall.client.PlayWallApiException;
-import de.tobias.playwall.client.di.AppContextHolder;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.view.pad.control.*;

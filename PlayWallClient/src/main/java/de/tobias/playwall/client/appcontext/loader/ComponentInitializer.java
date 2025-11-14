@@ -1,9 +1,9 @@
-package de.tobias.playwall.client.di.loader;
+package de.tobias.playwall.client.appcontext.loader;
 
-import de.tobias.playwall.client.di.ComponentInitializationException;
-import de.tobias.playwall.client.di.AppContext;
-import de.tobias.playwall.client.di.InjectField;
-import de.tobias.playwall.client.di.ReflectionUtils;
+import de.tobias.playwall.client.appcontext.ComponentInitializationException;
+import de.tobias.playwall.client.appcontext.AppContext;
+import de.tobias.playwall.client.appcontext.InjectField;
+import de.tobias.playwall.client.appcontext.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

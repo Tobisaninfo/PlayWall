@@ -5,7 +5,7 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.PlayWallMain;
-import de.tobias.playwall.client.di.Service;
+import de.tobias.playwall.client.appcontext.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

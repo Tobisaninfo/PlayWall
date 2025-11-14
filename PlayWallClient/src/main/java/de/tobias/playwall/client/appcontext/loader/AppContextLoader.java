@@ -1,11 +1,11 @@
-package de.tobias.playwall.client.di.loader;
+package de.tobias.playwall.client.appcontext.loader;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallMain;
-import de.tobias.playwall.client.di.AppContext;
-import de.tobias.playwall.client.di.InjectConstructor;
-import de.tobias.playwall.client.di.Service;
-import de.tobias.playwall.client.di.ViewController;
+import de.tobias.playwall.client.appcontext.AppContext;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
+import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.appcontext.ViewController;
 import io.github.classgraph.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

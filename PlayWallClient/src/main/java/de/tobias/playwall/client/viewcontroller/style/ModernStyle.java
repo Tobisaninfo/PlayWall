@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.style;
 
-import de.tobias.playwall.client.di.Service;
+import de.tobias.playwall.client.appcontext.Service;
 import javafx.stage.Stage;
 
 @Service(superclass = Styleable.class)
