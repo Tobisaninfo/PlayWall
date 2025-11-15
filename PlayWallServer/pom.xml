@@ -48,17 +48,17 @@
         <dependency>
             <groupId>de.tobias.playwall</groupId>
             <artifactId>PlayWallCommon</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>de.tobias.playwall</groupId>
             <artifactId>PlayWallServerCommon</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>de.tobias.playwall</groupId>
             <artifactId>PlayWallNativeAudio</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
