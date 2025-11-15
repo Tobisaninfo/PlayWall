@@ -216,4 +216,16 @@
             </snapshots>
         </repository>
     </repositories>
+    <distributionManagement>
+        <repository>
+            <id>release</id>
+            <name>TheCodeLabs-release</name>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>TheCodeLabs-snapshots</name>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
