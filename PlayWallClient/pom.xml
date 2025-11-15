@@ -315,7 +315,7 @@
                                     <mainJar>${project.artifactId}-${project.version}.jar</mainJar>
                                     <mainClass>de.tobias.playwall.client.PlayWallMain</mainClass>
                                     <name>PlayWall</name>
-                                    <appVersion>${project.version}</appVersion>
+                                    <appVersion>${revision-version}</appVersion>
                                     <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
                                     <javaOptions>
                                         <javaOption>--enable-native-access=javafx.graphics</javaOption>
@@ -347,7 +347,7 @@
                                     <artifacts>
                                         <artifact>
                                             <file>
-                                                ${project.build.directory}/installer/PlayWall-${project.version}.${installer.extension}
+                                                ${project.build.directory}/installer/PlayWall-${revision-version}.${installer.extension}
                                             </file>
                                             <type>${installer.extension}</type>
                                             <classifier>installer</classifier>
