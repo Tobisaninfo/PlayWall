@@ -212,6 +212,7 @@
             </activation>
             <properties>
                 <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.ico</app.icon>
+                <installer.extension>exe</installer.extension>
             </properties>
         </profile>
 
@@ -225,6 +226,7 @@
             </activation>
             <properties>
                 <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.icns</app.icon>
+                <installer.extension>dmg</installer.extension>
             </properties>
         </profile>
 
@@ -325,6 +327,31 @@
                                     <winShortcut>true</winShortcut>
                                     <winMenuGroup>PlayWall</winMenuGroup>
                                     <winUpgradeUuid>${win.upgrade.uuid}</winUpgradeUuid>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.4.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-artifact</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>attach-artifact</goal>
+                                </goals>
+                                <configuration>
+                                    <artifacts>
+                                        <artifact>
+                                            <file>
+                                                ${project.build.directory}/installer/PlayWall-${project.version}.${installer.extension}
+                                            </file>
+                                            <type>${installer.extension}</type>
+                                            <classifier>installer</classifier>
+                                        </artifact>
+                                    </artifacts>
                                 </configuration>
                             </execution>
                         </executions>
