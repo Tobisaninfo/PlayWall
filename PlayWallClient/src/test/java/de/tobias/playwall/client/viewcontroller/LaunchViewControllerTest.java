@@ -30,9 +30,8 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	private void start(Stage stage)
 	{
 		final AppContext context = AppContextHolder.getInstance();
-
-		client = mock(Client.class);
-		context.registerLazySingleton(Client.class, _ -> client);
+		context.registerLazySingleton(Client.class, _ -> mock(Client.class));
+		client = context.get(Client.class);
 
 		launchDialog = context.get(LaunchDialog.class);
 		launchDialog.applyViewControllerToStage(stage);
