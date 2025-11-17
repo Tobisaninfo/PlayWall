@@ -12,7 +12,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
-import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
@@ -56,10 +56,10 @@ public class LaunchDialog extends BaseNVC
 	@FXML
 	private Button deleteButton;
 
-	private final Client client;
+	private final FluentClient client;
 
 	@InjectConstructor
-	LaunchDialog(Client client)
+	LaunchDialog(FluentClient client)
 	{
 		this.client = client;
 		load("de/tobias/playwall/client/view", "LaunchDialog", Localization.getBundle());
@@ -120,7 +120,7 @@ public class LaunchDialog extends BaseNVC
 			// TODO show progress indicator
 			try
 			{
-				client.deleteProject(selectedProject.id());
+				client.project(selectedProject.id()).delete();
 				fetchProjects();
 			}
 			catch(PlayWallApiException e)
@@ -147,7 +147,7 @@ public class LaunchDialog extends BaseNVC
 	{
 		try
 		{
-			final Project project = client.launchProject(getSelectedProject().id());
+			final Project project = client.project(getSelectedProject().id()).launch();
 			Logger.info("Launched project " + project.metadata().name());
 
 			new MainViewController(nvc -> {
@@ -168,7 +168,7 @@ public class LaunchDialog extends BaseNVC
 		Platform.runLater(() -> {
 			try
 			{
-				projectListView.getItems().setAll(client.getProjects());
+				projectListView.getItems().setAll(client.projects().list());
 			}
 			catch(PlayWallApiException e)
 			{

@@ -8,13 +8,12 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 public class AppEnvironmentSetup implements BeforeEachCallback
 {
 	@Override
-	public void beforeEach(ExtensionContext extensionContext) throws Exception
+	public void beforeEach(ExtensionContext extensionContext)
 	{
 		ApplicationUtils.registerMainApplication(PlayWallMain.class);
 		Localization.setDelegate(new PlayWallLocalizationDelegate());

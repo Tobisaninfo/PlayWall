@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.Service;
 @Service
 public class TestConstructorDependencyNotRegistered
 {
+	// Missing component annotation
 	public static class Dependency
 	{
 

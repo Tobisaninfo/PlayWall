@@ -8,7 +8,7 @@ import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
-import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -39,11 +39,11 @@ public class ProjectNewDialog extends NVC
 	@FXML
 	private Button cancelButton;
 
-	private final Client client;
+	private final FluentClient client;
 
 	private ProjectMetadata project;
 
-	public ProjectNewDialog(Window owner, Client client)
+	public ProjectNewDialog(Window owner, FluentClient client)
 	{
 		this.client = client;
 		load("de/tobias/playwall/client/view/dialog", "NewProjectDialog", Localization.getBundle());
@@ -96,7 +96,7 @@ public class ProjectNewDialog extends NVC
 
 		try
 		{
-			project = client.addProject(name, numberOfHorizontalPads, numberOfVerticalPads);
+			project = client.projects().add(name, numberOfHorizontalPads, numberOfVerticalPads);
 		}
 		catch(PlayWallApiException e)
 		{
