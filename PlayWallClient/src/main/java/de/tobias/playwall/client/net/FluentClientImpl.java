@@ -16,7 +16,7 @@ import java.util.UUID;
 @SuppressWarnings("ClassCanBeRecord")
 @Service(superclass = FluentClient.class)
 @RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
-public class FluentClientImpl implements FluentClient
+class FluentClientImpl implements FluentClient
 {
 	private final Client delegate;
 

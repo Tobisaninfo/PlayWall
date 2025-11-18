@@ -35,7 +35,7 @@ public final class AppContextLoader
 
 		try(ScanResult scanResult = new ClassGraph()
 				.enableAnnotationInfo()
-				.enableClassInfo()
+				.ignoreClassVisibility()
 				.acceptPackages(basePackages)
 				.rejectPackages(rejectPackages)
 				.scan())

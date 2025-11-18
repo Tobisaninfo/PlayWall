@@ -23,7 +23,7 @@ import static de.tobias.playwall.common.utils.MapUtils.entry;
 
 @Service(superclass = Client.class)
 @RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
-public class ClientImpl implements Client
+class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
