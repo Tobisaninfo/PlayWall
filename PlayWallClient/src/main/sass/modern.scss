@@ -1,3 +1,13 @@
+@font-face {
+  font-family: "Lato";
+  src: url("Lato/Lato-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Lato";
+  font-weight: bold;
+  src: url("Lato/Lato-Bold.ttf");
+}
 
 @import "components/button";
 @import "components/menu-button";
@@ -17,17 +27,6 @@
 @import "components/dialog";
 @import "components/treeview";
 @import "components/tableview";
-
-@font-face {
-	font-family: "Lato";
-	src: url("Lato/Lato-Regular.ttf");
-}
-
-@font-face {
-	font-family: "Lato";
-	font-weight: bold;
-	src: url("Lato/Lato-Bold.ttf");
-}
 
 /**
 Default elements
