@@ -20,4 +20,5 @@ open module de.tobias.playwall.client {
 	requires io.github.classgraph;
 
 	requires static lombok;
+	requires javafx.graphics;
 }

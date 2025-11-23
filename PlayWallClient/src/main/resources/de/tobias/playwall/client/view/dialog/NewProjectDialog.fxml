@@ -1,46 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="500.0" spacing="14.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <HBox alignment="CENTER_LEFT" spacing="14.0">
-            <children>
-                <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%ui.dialog.project.create.label.name" />
-                <TextField fx:id="nameTextField" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            </children>
-        </HBox>
-      <Label text="%ui.dialog.project.create.label.numberOfPads">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </Label>
-      <HBox alignment="CENTER_LEFT" spacing="14.0">
-         <children>
-            <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%ui.dialog.project.create.label.numberOfHorizontalPads" />
-            <Spinner fx:id="spinnerNumberOfHorizontalPads" prefWidth="75.0" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" spacing="14.0">
-         <children>
-            <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%ui.dialog.project.create.label.numberOfVerticalPads" />
-            <Spinner fx:id="spinnerNumberOfVerticalPads" prefWidth="75.0" />
-         </children>
-      </HBox>
-        <HBox prefWidth="500.0" VBox.vgrow="ALWAYS" />
-        <Separator valignment="BOTTOM" VBox.vgrow="ALWAYS" />
-        <HBox alignment="BOTTOM_RIGHT" spacing="14.0">
-            <children>
-                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonHandler" prefWidth="130.0" text="%ui.dialog.project.create.button.cancel" />
-                <Button fx:id="finishButton" defaultButton="true" mnemonicParsing="false" onAction="#finishButtonHandler" prefWidth="130.0" text="%ui.dialog.project.create.button.finish" />
-            </children>
-        </HBox>
-    </children>
+<?import javafx.scene.layout.VBox?>
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="500.0" spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <padding>
         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
     </padding>
