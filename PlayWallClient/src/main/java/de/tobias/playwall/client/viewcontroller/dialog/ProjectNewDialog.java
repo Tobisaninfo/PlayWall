@@ -3,6 +3,7 @@ package de.tobias.playwall.client.viewcontroller.dialog;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.AppIconProvider;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
