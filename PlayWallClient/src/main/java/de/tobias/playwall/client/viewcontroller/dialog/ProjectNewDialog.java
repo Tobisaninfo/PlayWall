@@ -112,6 +112,7 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 		stage.setMinHeight(380);
 
 		stage.setMaxWidth(560);
+		stage.setMaxHeight(380);
 	}
 
 	@Override
