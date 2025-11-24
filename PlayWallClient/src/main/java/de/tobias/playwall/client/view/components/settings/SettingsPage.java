@@ -5,6 +5,8 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -57,5 +59,15 @@ public class SettingsPage extends VBox
 	public void disableButtonSave(boolean disable)
 	{
 		this.buttonSave.setDisable(disable);
+	}
+
+	public void setOnCancelAction(EventHandler<ActionEvent> handler)
+	{
+		this.buttonCancel.setOnAction(handler);
+	}
+
+	public void setOnSaveAction(EventHandler<ActionEvent> handler)
+	{
+		this.buttonSave.setOnAction(handler);
 	}
 }

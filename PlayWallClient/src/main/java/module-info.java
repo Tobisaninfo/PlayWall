@@ -21,4 +21,5 @@ open module de.tobias.playwall.client {
 
 	requires static lombok;
 	requires javafx.graphics;
+	requires javafx.base;
 }
