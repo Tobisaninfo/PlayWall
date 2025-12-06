@@ -18,7 +18,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.io.IOException;
 import java.util.*;
 
 import static java.util.Objects.requireNonNull;
@@ -98,7 +97,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 		}
 	}
 
-	private static void sendToClients(TextMessage textResponse, Collection<WebSocketSession> sessions)
+	private synchronized static void sendToClients(TextMessage textResponse, Collection<WebSocketSession> sessions)
 	{
 		log.debug("Sending: {}", textResponse.getPayload());
 
@@ -110,9 +109,9 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 				{
 					webSocketSession.sendMessage(textResponse);
 				}
-				catch(IOException e)
+				catch(Exception e)
 				{
-					log.error("Error on sending message", e);
+					log.error("Error on sending message: {}", textResponse.getPayload(), e);
 				}
 			}
 		}
