@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Profile("!test")
 public class ApplicationPidWriter
 {
-
 	private final PathProvider provider;
 	private final AtomicBoolean created = new AtomicBoolean(false);
 

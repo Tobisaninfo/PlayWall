@@ -23,7 +23,7 @@ public class PadPlayHandler implements RequestHandler<PadPlayRequest>
 	@Override
 	public Optional<ResponseMessage> handleRequest(PadPlayRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		final PadController controller = projectController.getController(requestMessage.getPadId());
+		final PadController controller = projectController.getPadController(requestMessage.getPadId());
 		if(controller == null)
 		{
 			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());

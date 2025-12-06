@@ -93,8 +93,8 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 		{
 			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), null);
 			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
-			sendToClients(textResponse, List.of(session));
-			log.error("Error processing request", e); // TODO: Do not send to all clients
+			sendToClients(textResponse, List.of(session));  // TODO: Do not send to all clients
+			log.error("Error processing request", e);
 		}
 	}
 
