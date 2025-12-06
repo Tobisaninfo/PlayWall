@@ -104,18 +104,27 @@ public class DesktopPadView implements PadView
 		// Buttons
 		// TODO: Event handler
 		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), (_) -> {
-		try
-		{
-			AppContextHolder.getInstance().get(Client.class).play(pad.getId());
-		}
-		catch(PlayWallApiException ex)
-		{
-			throw new RuntimeException(ex);
-		}
+			try
+			{
+				AppContextHolder.getInstance().get(Client.class).play(pad.getId());
+			}
+			catch(PlayWallApiException ex)
+			{
+				throw new RuntimeException(ex);
+			}
 		});
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), null);
 		nextButton = new PadButton(new FontIcon(FontAwesomeType.STEP_FORWARD), null);
-		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), null);
+		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), (_) -> {
+			try
+			{
+				AppContextHolder.getInstance().get(Client.class).stop(pad.getId());
+			}
+			catch(PlayWallApiException ex)
+			{
+				throw new RuntimeException(ex);
+			}
+		});
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), null);
 		settingsButton = new PadButton(new FontIcon(FontAwesomeType.COG), null);
 
@@ -130,7 +139,7 @@ public class DesktopPadView implements PadView
 		// Button HBOX
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
-		buttonBox.getChildren().addAll(playButton);
+		buttonBox.getChildren().addAll(playButton, stopButton);
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);

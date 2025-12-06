@@ -2,8 +2,8 @@ package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
-import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
+import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.mapper.PageMapper;
 import de.tobias.playwall.client.mapper.ProjectMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
@@ -143,5 +143,11 @@ class ClientImpl implements Client
 	public void play(UUID padId) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new PadPlayRequest(padId));
+	}
+
+	@Override
+	public void stop(UUID padId) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadStopRequest(padId));
 	}
 }

@@ -33,4 +33,6 @@ public interface Client
 	Page duplicatePage(UUID projectId, UUID pageId, String name) throws PlayWallApiException;
 
 	void play(UUID padId) throws PlayWallApiException;
+
+	void stop(UUID padId) throws PlayWallApiException;
 }
