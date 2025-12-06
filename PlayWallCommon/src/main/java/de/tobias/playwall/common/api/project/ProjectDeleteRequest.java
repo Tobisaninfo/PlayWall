@@ -9,6 +9,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
+@ToString(callSuper = true)
 public class ProjectDeleteRequest extends RequestMessage
 {
 	private UUID projectId;

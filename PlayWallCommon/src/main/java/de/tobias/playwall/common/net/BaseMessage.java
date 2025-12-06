@@ -2,10 +2,7 @@ package de.tobias.playwall.common.net;
 
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public abstract sealed class BaseMessage
 		permits RequestMessage, ResponseMessage, UpdateMessage
 {

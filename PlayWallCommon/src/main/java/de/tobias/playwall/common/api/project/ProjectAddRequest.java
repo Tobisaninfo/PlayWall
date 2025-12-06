@@ -7,6 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
+@ToString(callSuper = true)
 public class ProjectAddRequest extends RequestMessage
 {
 	private String name;
