@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
-public interface PadProvider
+public interface PadViewProvider
 {
 	PadView createNewPadView();
 }

@@ -134,7 +134,7 @@ public class DesktopPadView implements PadView
 	}
 
 	@Override
-	public void setContentView(Pad pad)
+	public void updateFromPad(Pad pad)
 	{
 		this.pad = pad;
 

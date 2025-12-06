@@ -9,11 +9,13 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.AppIconProvider;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
+import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.utils.Size;
-import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
+import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadViewProvider;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.fxml.FXML;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+@ViewController
 public class MainViewController extends NVC
 {
 	@FXML
@@ -35,14 +38,20 @@ public class MainViewController extends NVC
 	@FXML
 	private AnchorPane gridContainer;
 
+	private PadViewProvider padViewProvider;
 	private SnackBar notificationPane;
 
 	private final List<PadView> padViews = new ArrayList<>();
 
 	private Project project;
 
-	public MainViewController(Consumer<NVC> onFinish)
+	@InjectConstructor
+	public MainViewController(DesktopPadViewProvider padViewProvider)
 	{
+		this.padViewProvider = padViewProvider;
+	}
+
+	public void loadView(Consumer<NVC> onFinish) {
 		load("de/tobias/playwall/client/view/main", "MainView", Localization.getBundle(), e ->
 		{
 			NVCStage stage = e.applyViewControllerToStage();
@@ -74,13 +83,13 @@ public class MainViewController extends NVC
 		styleable.applyToStage(stage);
 
 		stage.getIcons().add(AppContextHolder.getInstance().get(AppIconProvider.class).getStageIcon());
-		stage.setTitle(getWindowTitle("-", "-"));
+		stage.setTitle(getWindowTitle("-"));
 		stage.show();
 	}
 
-	private static String getWindowTitle(String projectName, String profileName)
+	private static String getWindowTitle(String projectName)
 	{
-		return Localization.getString("ui.window.main.title", projectName, profileName);
+		return Localization.getString("ui.window.main.title", projectName);
 	}
 
 	private boolean closeRequest()
@@ -98,7 +107,8 @@ public class MainViewController extends NVC
 			minWidth = 500;
 		}
 
-		return new Size(minWidth, minHeight + (OS.isMacOS() ? 100 : 150));
+		final int menuAndToolbarHeight = OS.isMacOS() ? 100 : 150;
+		return new Size(minWidth, minHeight + menuAndToolbarHeight);
 	}
 
 	private void updateWindowProperties(Project project)
@@ -109,7 +119,7 @@ public class MainViewController extends NVC
 		stage.setMinWidth(minSize.width());
 		stage.setMinHeight(minSize.height());
 
-		stage.setTitle(getWindowTitle(project.metadata().name(), "-")); // TODO: Profile name
+		stage.setTitle(getWindowTitle(project.metadata().name()));
 	}
 
 	private Stage getStage()
@@ -159,7 +169,7 @@ public class MainViewController extends NVC
 		{
 			for(int x = 0; x < columns; x++)
 			{
-				PadView padView = new DesktopPadView(); // TODO
+				final PadView padView = padViewProvider.createNewPadView();
 				padGridPane.add(padView.getRootNode(), x, y);
 				padViews.add(padView);
 			}
@@ -171,25 +181,21 @@ public class MainViewController extends NVC
 		padViews.forEach(view ->
 		{
 			padGridPane.getChildren().remove(view.getRootNode());
-			// mainLayout.recyclePadView(view); // TODO
 		});
 		padViews.clear();
 	}
 
-	public void showPage(int position)
+	public void showPage(int pageNumber)
 	{
-		final Page page = this.project.getPage(position);
+		final Page page = this.project.getPage(pageNumber);
 		final int padNumberPerPage = project.metadata().numberOfHorizontalPads() * project.metadata().numberOfVerticalPads();
 
 		for(int i = 0; i < padNumberPerPage; i++)
 		{
-			if(padViews.size() > i)
-			{
-				PadView view = padViews.get(i);
-				Pad pad = page.getPad(i);
+			final PadView view = padViews.get(i);
+			final Pad pad = page.getPad(i);
 
-				view.setContentView(pad);
-			}
+			view.updateFromPad(pad);
 		}
 	}
 }

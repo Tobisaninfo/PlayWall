@@ -8,6 +8,7 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Project;
@@ -150,7 +151,7 @@ public class LaunchDialog extends BaseNVC
 			final Project project = client.project(getSelectedProject().id()).launch();
 			Logger.info("Launched project " + project.metadata().name());
 
-			new MainViewController(nvc -> {
+			AppContextHolder.getInstance().get(MainViewController.class).loadView(nvc -> {
 				getStageContainer().ifPresent(NVCStage::close);
 				nvc.showStage();
 				((MainViewController) nvc).openProject(project);

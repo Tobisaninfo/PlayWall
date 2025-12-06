@@ -7,5 +7,5 @@ public interface PadView
 {
 	Node getRootNode();
 
-	void setContentView(Pad pad);
+	void updateFromPad(Pad pad);
 }
