@@ -42,6 +42,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             } else {
                 sink.append(shared_source);
             }
+            sink.play();
             trace!("Play (from existing audio handler)");
         } else {
             sink.play();
