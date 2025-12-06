@@ -38,7 +38,8 @@ public class MainViewController extends BaseNVC
 	@FXML
 	private AnchorPane gridContainer;
 
-	private PadViewProvider padViewProvider;
+	private final PadViewProvider padViewProvider;
+
 	private SnackBar notificationPane;
 
 	private final List<PadView> padViews = new ArrayList<>();
@@ -46,7 +47,7 @@ public class MainViewController extends BaseNVC
 	private Project project;
 
 	@InjectConstructor
-	public MainViewController(DesktopPadViewProvider padViewProvider)
+	MainViewController(DesktopPadViewProvider padViewProvider)
 	{
 		this.padViewProvider = padViewProvider;
 	}

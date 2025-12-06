@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
+import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.common.net.*;
 
 import java.net.URI;
@@ -16,6 +19,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 
+@Service
 class ClientWebSocketHandler implements WebSocket.Listener
 {
 	private final ObjectMapper objectMapper;
@@ -27,8 +31,12 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	private final Object lock = new Object();
 	private final List<WebSocketListener> listeners;
 
-	ClientWebSocketHandler()
+	private final UpdateMessageEventHandler updateMessageEventHandler;
+
+	@InjectConstructor
+	ClientWebSocketHandler(UpdateMessageEventHandler updateMessageEventHandler)
 	{
+		this.updateMessageEventHandler = updateMessageEventHandler;
 		this.listeners = new ArrayList<>();
 		this.objectMapper = new ObjectMapper().findAndRegisterModules();
 		this.responseQueue = new ResponseQueue();
@@ -104,7 +112,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 			}
 			else if(message instanceof UpdateMessage updateMessage)
 			{
-				// TODO
+				updateMessageEventHandler.fireEvent(updateMessage);
 			}
 		}
 		catch(Exception e)

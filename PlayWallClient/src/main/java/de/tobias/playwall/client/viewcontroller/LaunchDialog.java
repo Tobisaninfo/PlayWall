@@ -11,12 +11,14 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
+import de.tobias.playwall.client.viewcontroller.main.ProjectLoadListener;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -58,17 +60,21 @@ public class LaunchDialog extends BaseNVC
 	private Button deleteButton;
 
 	private final FluentClient client;
+	private final UpdateMessageEventHandler eventHandler;
 
 	@InjectConstructor
-	LaunchDialog(FluentClient client)
+	LaunchDialog(FluentClient client, UpdateMessageEventHandler eventHandler)
 	{
 		this.client = client;
+		this.eventHandler = eventHandler;
 		load("de/tobias/playwall/client/view", "LaunchDialog", Localization.getBundle());
 	}
 
 	@Override
 	public void init()
 	{
+		eventHandler.registerListener(new ProjectLoadListener());
+
 		final App app = ApplicationUtils.getApplication();
 
 		// Setup launch screen labels and image

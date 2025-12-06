@@ -29,7 +29,7 @@ class ClientImpl implements Client
 	private final ProjectMapper projectMapper;
 	private final PageMapper pageMapper;
 
-	private ClientWebSocketHandler clientWebSocketHandler;
+	private final ClientWebSocketHandler clientWebSocketHandler;
 
 	@Override
 	public void connect()
@@ -37,7 +37,6 @@ class ClientImpl implements Client
 		final String clientId = UUID.randomUUID().toString();
 		Logger.info("Connect to server with client id {0}", clientId);
 
-		clientWebSocketHandler = new ClientWebSocketHandler();
 		clientWebSocketHandler.connect(MapUtils.create(entry("clientId", clientId)));
 		Logger.info("Connected");
 	}
