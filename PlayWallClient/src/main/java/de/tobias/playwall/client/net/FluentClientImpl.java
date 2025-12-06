@@ -146,6 +146,13 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public void pause() throws PlayWallApiException
+		{
+			delegate.pause(padId);
+		}
+
+
+		@Override
 		public void stop() throws PlayWallApiException
 		{
 			delegate.stop(padId);

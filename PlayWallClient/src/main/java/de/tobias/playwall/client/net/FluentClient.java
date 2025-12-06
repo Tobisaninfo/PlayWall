@@ -56,6 +56,8 @@ public interface FluentClient
 	{
 		void play() throws PlayWallApiException;
 
+		void pause() throws PlayWallApiException;
+
 		void stop() throws PlayWallApiException;
 	}
 

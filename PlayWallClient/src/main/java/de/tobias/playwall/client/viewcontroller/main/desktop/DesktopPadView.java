@@ -107,7 +107,7 @@ public class DesktopPadView implements PadView
 		// Buttons
 		// TODO: Event handler
 		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), this::onPlayAction);
-		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), null);
+		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), this::onPauseAction);
 		nextButton = new PadButton(new FontIcon(FontAwesomeType.STEP_FORWARD), null);
 		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), this::onStopyAction);
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), null);
@@ -124,7 +124,7 @@ public class DesktopPadView implements PadView
 		// Button HBOX
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
-		buttonBox.getChildren().addAll(playButton, stopButton);
+		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton);
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
@@ -151,6 +151,19 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.play();
+		}
+		catch(PlayWallApiException ex)
+		{
+			// TODO: error handling
+			throw new RuntimeException(ex);
+		}
+	}
+
+	private void onPauseAction(ActionEvent event)
+	{
+		try
+		{
+			padBuilder.pause();
 		}
 		catch(PlayWallApiException ex)
 		{

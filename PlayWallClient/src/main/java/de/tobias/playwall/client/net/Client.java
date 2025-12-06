@@ -34,5 +34,7 @@ public interface Client
 
 	void play(UUID padId) throws PlayWallApiException;
 
+	void pause(UUID padId) throws PlayWallApiException;
+
 	void stop(UUID padId) throws PlayWallApiException;
 }
