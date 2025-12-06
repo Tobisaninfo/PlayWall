@@ -15,9 +15,9 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.utils.Size;
+import de.tobias.playwall.client.viewcontroller.BaseNVC;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadViewProvider;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
-import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.fxml.FXML;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @ViewController
-public class MainViewController extends NVC
+public class MainViewController extends BaseNVC
 {
 	@FXML
 	private VBox headerBox;
@@ -79,7 +79,6 @@ public class MainViewController extends NVC
 	@Override
 	public void initStage(Stage stage)
 	{
-		final Styleable styleable = AppContextHolder.getInstance().get(Styleable.class);
 		styleable.applyToStage(stage);
 
 		stage.getIcons().add(AppContextHolder.getInstance().get(AppIconProvider.class).getStageIcon());

@@ -17,12 +17,12 @@ public class PadButton extends Button implements PadIndexable
 
 	private final ObjectProperty<PadIndex> indexProperty;
 
-	public PadButton(FontIcon icon, EventHandler<ActionEvent> value)
+	public PadButton(FontIcon icon, EventHandler<ActionEvent> onAction)
 	{
 		super("", icon);
 
 		setFocusTraversable(false);
-		setOnAction(value);
+		setOnAction(onAction);
 
 		indexProperty = new SimpleObjectProperty<>();
 		indexProperty.addListener(new StyleIndexListener(this, STYLE_CLASS_PAD_BUTTON, STYLE_CLASS_PAD_BUTTON_INDEX));

@@ -8,7 +8,6 @@ import javafx.scene.Node;
 
 public class StyleIndexListener implements ChangeListener<PadIndex>
 {
-
 	private final Node node;
 	private final String[] styleClasses;
 

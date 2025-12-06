@@ -18,7 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import static de.tobias.playwall.client.view.pad.control.PadStyleClasses.*;
 
@@ -33,8 +33,8 @@ public class DesktopPadView implements PadView
 	private HBox infoBox;
 	private Label timeLabel;
 
-	private HBox preview;
-	// private IPadContentView previewContent;
+	private HBox previewBox;
+	private Label namePreviewLabel;
 
 	private FontIcon notFoundLabel;
 
@@ -80,9 +80,19 @@ public class DesktopPadView implements PadView
 
 		infoBox = new PadHBox(5);
 
-		preview = PadHBox.deepStyled(STYLE_CLASS_PAD_TITLE, STYLE_CLASS_PAD_TITLE_INDEX);
-		HBox.setHgrow(preview, Priority.ALWAYS);
-		VBox.setVgrow(preview, Priority.ALWAYS);
+		previewBox = PadHBox.deepStyled(STYLE_CLASS_PAD_TITLE, STYLE_CLASS_PAD_TITLE_INDEX);
+		HBox.setHgrow(previewBox, Priority.ALWAYS);
+		VBox.setVgrow(previewBox, Priority.ALWAYS);
+
+		namePreviewLabel = new Label();
+		namePreviewLabel.setWrapText(true);
+		namePreviewLabel.setAlignment(Pos.CENTER);
+		namePreviewLabel.setTextAlignment(TextAlignment.CENTER);
+		namePreviewLabel.setMaxHeight(Double.MAX_VALUE);
+		namePreviewLabel.prefWidthProperty().bind(previewBox.widthProperty());
+		VBox.setVgrow(namePreviewLabel, Priority.ALWAYS);
+
+		previewBox.getChildren().add(namePreviewLabel);
 
 		HBox.setHgrow(timeLabel, Priority.ALWAYS);
 		timeLabel.setMaxWidth(Double.MAX_VALUE);
@@ -93,7 +103,16 @@ public class DesktopPadView implements PadView
 
 		// Buttons
 		// TODO: Event handler
-		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), null);
+		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), (_) -> {
+		try
+		{
+			AppContextHolder.getInstance().get(Client.class).play(pad.getId());
+		}
+		catch(PlayWallApiException ex)
+		{
+			throw new RuntimeException(ex);
+		}
+		});
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), null);
 		nextButton = new PadButton(new FontIcon(FontAwesomeType.STEP_FORWARD), null);
 		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), null);
@@ -112,18 +131,8 @@ public class DesktopPadView implements PadView
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
 		buttonBox.getChildren().addAll(playButton);
-		playButton.setOnAction(e -> {
-			try
-			{
-				AppContextHolder.getInstance().get(Client.class).play(pad.getId());
-			}
-			catch(PlayWallApiException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-		});
 
-		root.getChildren().addAll(infoBox, preview, playBar, buttonBox);
+		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
 	}
 
@@ -138,10 +147,9 @@ public class DesktopPadView implements PadView
 	{
 		this.pad = pad;
 
-		preview.getChildren().clear();
 		if(pad != null)
 		{
-			preview.getChildren().add(new Text(pad.getName()));
+			namePreviewLabel.setText(pad.getName());
 		}
 	}
 }

@@ -2,7 +2,6 @@ package de.tobias.playwall.client.viewcontroller.style;
 
 public class ModernStyleSizeHelper
 {
-
 	private static final double MIN_WIDTH = 140;
 	private static final double MIN_HEIGHT = 115;
 

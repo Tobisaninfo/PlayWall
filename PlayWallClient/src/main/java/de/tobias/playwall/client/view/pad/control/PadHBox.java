@@ -14,7 +14,6 @@ import java.util.List;
 
 public class PadHBox extends HBox implements PadIndexable
 {
-
 	private final ObjectProperty<PadIndex> indexProperty;
 	private final List<StyleIndexListener> styleListeners = new LinkedList<>();
 
