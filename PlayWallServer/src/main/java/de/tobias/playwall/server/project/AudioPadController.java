@@ -5,13 +5,12 @@ import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.project.PadController;
-import de.tobias.playwall.server.common.project.Pauseable;
 import org.springframework.context.ApplicationContext;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class AudioPadController extends PadController implements Pauseable
+public class AudioPadController extends PadController
 {
 	private final AudioHandlerFactory audioHandlerFactory;
 	private AudioHandler audioHandler;

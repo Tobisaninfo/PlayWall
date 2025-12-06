@@ -45,5 +45,8 @@ public abstract class PadController
 
 	public abstract void play(boolean withFadeIn);
 
+	public abstract void pause();
+
 	public abstract void stop();
+
 }

@@ -1,7 +1,6 @@
 package de.tobias.playwall.nativeaudio.audio.rust;
 
 import de.tobias.playwall.server.common.audio.AudioHandler;
-import de.tobias.playwall.server.common.audio.Soundcardable;
 import de.tobias.playwall.server.common.project.PadController;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,7 +8,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 
 @Slf4j
-public class RustAudioHandler extends AudioHandler implements Soundcardable
+public class RustAudioHandler extends AudioHandler
 {
 	@SuppressWarnings("unused")
 	private long nativePointer;

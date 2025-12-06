@@ -74,4 +74,10 @@ public abstract class AudioHandler
 	 * Unload Media to cleanup resources.
 	 */
 	public abstract void unloadMedia();
+
+	/**
+	 * Sets the audio device.
+	 * @param name audio device name
+	 */
+	public abstract void setOutputDevice(String name);
 }
