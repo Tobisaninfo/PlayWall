@@ -18,17 +18,20 @@ public class PadHBox extends HBox implements PadIndexable
 	private final ObjectProperty<PadIndex> indexProperty;
 	private final List<StyleIndexListener> styleListeners = new LinkedList<>();
 
-	public static PadHBox deepStyled(String... styleClasses) {
+	public static PadHBox deepStyled(String... styleClasses)
+	{
 		PadHBox padHBox = new PadHBox(styleClasses);
 
 		padHBox.getChildren().addListener((InvalidationListener) observable -> {
-			for (StyleIndexListener listener : padHBox.styleListeners) {
+			for(StyleIndexListener listener : padHBox.styleListeners)
+			{
 				padHBox.indexProperty.removeListener(listener);
 			}
 
 			padHBox.styleListeners.clear();
 
-			for (Node child : padHBox.getChildren()) {
+			for(Node child : padHBox.getChildren())
+			{
 				StyleIndexListener listener = new StyleIndexListener(child, styleClasses);
 				padHBox.indexProperty.addListener(listener);
 				padHBox.styleListeners.add(listener);
@@ -40,21 +43,25 @@ public class PadHBox extends HBox implements PadIndexable
 		return padHBox;
 	}
 
-	public PadHBox(String... styleClasses) {
+	public PadHBox(String... styleClasses)
+	{
 		this(0, styleClasses);
 	}
 
-	public PadHBox(double spacing, String... styleClasses) {
+	public PadHBox(double spacing, String... styleClasses)
+	{
 		super(spacing);
 		indexProperty = new SimpleObjectProperty<>();
 		indexProperty.addListener(new StyleIndexListener(this, styleClasses));
 	}
 
-	public PadIndex getIndex() {
+	public PadIndex getIndex()
+	{
 		return indexProperty.get();
 	}
 
-	public void setIndex(PadIndex index) {
+	public void setIndex(PadIndex index)
+	{
 		indexProperty.set(index);
 	}
 }

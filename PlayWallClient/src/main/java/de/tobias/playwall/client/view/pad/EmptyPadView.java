@@ -7,9 +7,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class EmptyPadView extends Label {
+public class EmptyPadView extends Label
+{
 
-	public EmptyPadView(Pane parent) {
+	public EmptyPadView(Pane parent)
+	{
 		super("");
 		setWrapText(true);
 		setAlignment(Pos.CENTER);

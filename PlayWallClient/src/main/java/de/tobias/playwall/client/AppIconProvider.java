@@ -21,9 +21,12 @@ public class AppIconProvider
 	public AppIconProvider()
 	{
 		this.stageIcon = new Image(ICON_PATH);
-		try {
+		try
+		{
 			stageIconData = IOUtils.inputStreamToByteArray(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(ICON_PATH)));
-		} catch (IOException e) {
+		}
+		catch(IOException e)
+		{
 			throw new UncheckedIOException(e);
 		}
 	}

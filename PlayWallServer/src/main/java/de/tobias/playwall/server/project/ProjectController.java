@@ -49,7 +49,8 @@ public class ProjectController
 		padControllers.values().forEach(PadController::load);
 	}
 
-	public PadController getController(UUID padId) {
+	public PadController getController(UUID padId)
+	{
 		return padControllers.get(padId);
 	}
 }

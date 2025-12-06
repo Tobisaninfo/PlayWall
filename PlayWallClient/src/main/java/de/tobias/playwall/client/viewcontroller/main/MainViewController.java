@@ -134,7 +134,8 @@ public class MainViewController extends NVC
 		// Table
 		padGridPane.getColumnConstraints().clear();
 		double xPercentage = 1.0 / columns;
-		for (int i = 0; i < columns; i++) {
+		for(int i = 0; i < columns; i++)
+		{
 			ColumnConstraints c = new ColumnConstraints();
 			c.setPercentWidth(xPercentage * 100);
 			padGridPane.getColumnConstraints().add(c);
@@ -142,19 +143,22 @@ public class MainViewController extends NVC
 
 		padGridPane.getRowConstraints().clear();
 		double yPercentage = 1.0 / rows;
-		for (int i = 0; i < rows; i++) {
+		for(int i = 0; i < rows; i++)
+		{
 			RowConstraints c = new RowConstraints();
 			c.setPercentHeight(yPercentage * 100);
 			padGridPane.getRowConstraints().add(c);
 		}
 
 		// Pads - Remove alte PadViews, falls noch welche vorhanden
-		if (!padViews.isEmpty())
+		if(!padViews.isEmpty())
 			removePadViews();
 
 		// Neue PadViews
-		for (int y = 0; y < rows; y++) {
-			for (int x = 0; x < columns; x++) {
+		for(int y = 0; y < rows; y++)
+		{
+			for(int x = 0; x < columns; x++)
+			{
 				PadView padView = new DesktopPadView(); // TODO
 				padGridPane.add(padView.getRootNode(), x, y);
 				padViews.add(padView);
@@ -162,7 +166,8 @@ public class MainViewController extends NVC
 		}
 	}
 
-	private void removePadViews() {
+	private void removePadViews()
+	{
 		padViews.forEach(view ->
 		{
 			padGridPane.getChildren().remove(view.getRootNode());
@@ -176,8 +181,10 @@ public class MainViewController extends NVC
 		final Page page = this.project.getPage(position);
 		final int padNumberPerPage = project.metadata().numberOfHorizontalPads() * project.metadata().numberOfVerticalPads();
 
-		for (int i = 0; i < padNumberPerPage; i++) {
-			if (padViews.size() > i) {
+		for(int i = 0; i < padNumberPerPage; i++)
+		{
+			if(padViews.size() > i)
+			{
 				PadView view = padViews.get(i);
 				Pad pad = page.getPad(i);
 

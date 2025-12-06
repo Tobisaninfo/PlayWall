@@ -8,7 +8,8 @@ public interface Displayable
 
 	StringProperty displayProperty();
 
-	default Node getGraphics() {
+	default Node getGraphics()
+	{
 		return null;
 	}
 }

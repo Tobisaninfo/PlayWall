@@ -4,13 +4,15 @@ import java.util.List;
 
 public record Project(ProjectMetadata metadata, List<Page> pages)
 {
-	public Page getPage(int position) {
+	public Page getPage(int position)
+	{
 		return pages.stream().findFirst()
 				.filter(page -> page.position() == position)
 				.orElse(null);
 	}
 
-	public Pad getPad(PadIndex index) {
+	public Pad getPad(PadIndex index)
+	{
 		final Page page = getPage(index.getPagePosition());
 		return page.getPad(index.id());
 	}

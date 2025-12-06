@@ -93,7 +93,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 			Logger.debug("Received: " + data);
 			final BaseMessage message = objectMapper.readValue(data, BaseMessage.class);
 
-			if (message instanceof ResponseMessage responseMessage)
+			if(message instanceof ResponseMessage responseMessage)
 			{
 				synchronized(lock)
 				{
@@ -101,7 +101,9 @@ class ClientWebSocketHandler implements WebSocket.Listener
 					Logger.trace("NotifyAll");
 					lock.notifyAll();
 				}
-			} else if (message instanceof UpdateMessage updateMessage) {
+			}
+			else if(message instanceof UpdateMessage updateMessage)
+			{
 
 			}
 		}

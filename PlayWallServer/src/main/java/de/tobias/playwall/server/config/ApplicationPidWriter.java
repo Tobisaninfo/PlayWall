@@ -15,14 +15,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Component
 @AllArgsConstructor
 @Profile("!test")
-public class ApplicationPidWriter {
+public class ApplicationPidWriter
+{
 
 	private final PathProvider provider;
 	private final AtomicBoolean created = new AtomicBoolean(false);
 
 	@EventListener
-	public void onStarted(ApplicationStartedEvent event) {
-		if (created.compareAndSet(false, true))
+	public void onStarted(ApplicationStartedEvent event)
+	{
+		if(created.compareAndSet(false, true))
 		{
 			final File pidFile = provider.getPathFor("application.pid").toFile();
 			try

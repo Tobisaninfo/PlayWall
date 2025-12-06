@@ -35,7 +35,8 @@ public class AppContext
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T get(Class<T> clazz) {
+	public <T> T get(Class<T> clazz)
+	{
 		final Function<AppContext, ?> function = supplier.get(clazz);
 		if(function == null)
 		{

@@ -17,16 +17,19 @@ public class PadLabel extends Label implements PadIndexable
 	private final ObjectProperty<PadIndex> indexProperty;
 	private StyleIndexListener graphicsListener;
 
-	public static PadLabel empty(String... styleClasses) {
+	public static PadLabel empty(String... styleClasses)
+	{
 		return new PadLabel("", styleClasses);
 	}
 
-	public PadLabel(FontIcon icon, String... styleClasses) {
+	public PadLabel(FontIcon icon, String... styleClasses)
+	{
 		this("", styleClasses);
 		setGraphic(icon);
 	}
 
-	public PadLabel(String text, String... styleClasses) {
+	public PadLabel(String text, String... styleClasses)
+	{
 		super(text);
 
 		indexProperty = new SimpleObjectProperty<>();
@@ -34,7 +37,8 @@ public class PadLabel extends Label implements PadIndexable
 		initStyleGraphicsListener();
 
 		graphicProperty().addListener(observable -> {
-			if (graphicsListener != null) {
+			if(graphicsListener != null)
+			{
 				indexProperty.removeListener(graphicsListener);
 				graphicsListener = null;
 
@@ -43,18 +47,22 @@ public class PadLabel extends Label implements PadIndexable
 		});
 	}
 
-	private void initStyleGraphicsListener() {
-		if (getGraphic() != null) {
+	private void initStyleGraphicsListener()
+	{
+		if(getGraphic() != null)
+		{
 			graphicsListener = new StyleIndexListener(getGraphic(), STYLE_CLASS_PAD_ICON, STYLE_CLASS_PAD_ICON_INDEX);
 			indexProperty.addListener(graphicsListener);
 		}
 	}
 
-	public PadIndex getIndex() {
+	public PadIndex getIndex()
+	{
 		return indexProperty.get();
 	}
 
-	public void setIndex(PadIndex index) {
+	public void setIndex(PadIndex index)
+	{
 		indexProperty.set(index);
 	}
 }
