@@ -134,9 +134,27 @@ class FluentClientImpl implements FluentClient
 		}
 	}
 
-	@Override
-	public void play(UUID padId) throws PlayWallApiException
+	@AllArgsConstructor
+	private class PadBuilderImpl implements PadBuilder
 	{
-		delegate.play(padId);
+		private final UUID padId;
+
+		@Override
+		public void play() throws PlayWallApiException
+		{
+			delegate.play(padId);
+		}
+
+		@Override
+		public void stop() throws PlayWallApiException
+		{
+			delegate.stop(padId);
+		}
+	}
+
+	@Override
+	public PadBuilder pad(UUID padId)
+	{
+		return new PadBuilderImpl(padId);
 	}
 }

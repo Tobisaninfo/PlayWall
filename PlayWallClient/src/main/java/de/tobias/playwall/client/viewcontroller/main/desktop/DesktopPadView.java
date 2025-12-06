@@ -6,9 +6,10 @@ import de.thecodelabs.utils.ui.scene.BusyView;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -53,10 +54,12 @@ public class DesktopPadView implements PadView
 
 	private Label cueInLayer;
 
-	private Pad pad;
+	private final FluentClient fluentClient;
+	private FluentClient.PadBuilder padBuilder;
 
 	public DesktopPadView()
 	{
+		fluentClient = AppContextHolder.getInstance().get(FluentClient.class);
 		setupView();
 	}
 
@@ -103,28 +106,10 @@ public class DesktopPadView implements PadView
 
 		// Buttons
 		// TODO: Event handler
-		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), (_) -> {
-			try
-			{
-				AppContextHolder.getInstance().get(Client.class).play(pad.getId());
-			}
-			catch(PlayWallApiException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-		});
+		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), this::onPlayAction);
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), null);
 		nextButton = new PadButton(new FontIcon(FontAwesomeType.STEP_FORWARD), null);
-		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), (_) -> {
-			try
-			{
-				AppContextHolder.getInstance().get(Client.class).stop(pad.getId());
-			}
-			catch(PlayWallApiException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-		});
+		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), this::onStopyAction);
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), null);
 		settingsButton = new PadButton(new FontIcon(FontAwesomeType.COG), null);
 
@@ -154,11 +139,36 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateFromPad(Pad pad)
 	{
-		this.pad = pad;
-
 		if(pad != null)
 		{
+			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
+		}
+	}
+
+	private void onPlayAction(ActionEvent event)
+	{
+		try
+		{
+			padBuilder.play();
+		}
+		catch(PlayWallApiException ex)
+		{
+			// TODO: error handling
+			throw new RuntimeException(ex);
+		}
+	}
+
+	private void onStopyAction(ActionEvent event)
+	{
+		try
+		{
+			padBuilder.stop();
+		}
+		catch(PlayWallApiException ex)
+		{
+			// TODO: error handling
+			throw new RuntimeException(ex);
 		}
 	}
 }

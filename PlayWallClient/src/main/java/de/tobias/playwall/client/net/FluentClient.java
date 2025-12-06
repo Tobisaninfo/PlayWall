@@ -52,5 +52,12 @@ public interface FluentClient
 		Page duplicate(String name) throws PlayWallApiException;
 	}
 
-	void play(UUID padId) throws PlayWallApiException;
+	interface PadBuilder
+	{
+		void play() throws PlayWallApiException;
+
+		void stop() throws PlayWallApiException;
+	}
+
+	PadBuilder pad(UUID padId);
 }
