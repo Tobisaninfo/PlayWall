@@ -3,9 +3,10 @@ use jni::JNIEnv;
 use jni::objects::JObject;
 use jni::sys::{jboolean, jdouble, jlong};
 use rodio::source::Buffered;
-use rodio::{Decoder, OutputStreamBuilder, Sink, Source};
+use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
+use rodio::cpal::traits::HostTrait;
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -15,14 +16,27 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     looping: jboolean,
 ) {
     with_bridge(&mut env, obj, |env, bridge| {
-        if bridge.source.is_none() {
+        if bridge.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
             return;
         }
 
         if bridge.audio_stream_handler.is_none() {
-            let stream_handler = OutputStreamBuilder::from_default_device()
+            let host = rodio::cpal::default_host();
+            let device = if let Some(ref name) = bridge.device_name {
+                host.output_devices().unwrap().find(|d| d.name().unwrap_or_default() == *name)
+            } else {
+                None
+            };
+
+            let stream_builder = if let Some(d) = device {
+                OutputStreamBuilder::from_device(d)
+            } else {
+                OutputStreamBuilder::from_default_device()
+            };
+
+            let stream_handler = stream_builder
                 .unwrap()
                 .open_stream()
                 .unwrap();
@@ -31,16 +45,20 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 stream_handler,
                 sink,
             });
-            trace!("Init default output stream and sink");
+            trace!("Init output stream and sink (recreated)");
         }
 
         let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
         if sink.empty() {
-            let shared_source: Buffered<Decoder<BufReader<File>>> = bridge.source.clone().unwrap();
+            let path = bridge.media_path.as_ref().unwrap();
+            let file = File::open(path).expect("Failed to open file");
+            let reader = BufReader::new(file);
+            let source = Decoder::new(reader).expect("Failed to create decoder");
+
             if looping == 1 {
-                sink.append(shared_source.repeat_infinite());
+                sink.append(source.buffered().repeat_infinite());
             } else {
-                sink.append(shared_source);
+                sink.append(source);
             }
             sink.play();
             trace!("Play (from existing audio handler)");
@@ -68,7 +86,10 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
 ) {
     with_bridge(&mut env, obj, |_env, bridge| {
-        bridge.audio_stream_handler.as_ref().unwrap().sink.stop();
+        if let Some(handler) = bridge.audio_stream_handler.take() {
+            handler.sink.stop();
+            // handler will be dropped from memory to free resources
+        }
         trace!("Stop");
     });
 }
@@ -79,7 +100,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
 ) -> jlong {
     with_bridge(&mut env, obj, |env, bridge| {
-        if bridge.source.is_none() {
+        if bridge.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
             return 0;
