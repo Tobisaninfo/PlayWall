@@ -2,11 +2,10 @@ use crate::{AudioStreamHandler, with_bridge};
 use jni::JNIEnv;
 use jni::objects::JObject;
 use jni::sys::{jboolean, jdouble, jlong};
-use rodio::source::Buffered;
+use rodio::cpal::traits::HostTrait;
 use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
-use rodio::cpal::traits::HostTrait;
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -51,13 +50,14 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
         if sink.empty() {
             let path = bridge.media_path.as_ref().unwrap();
-            let file = File::open(path).expect("Failed to open file");
-            let reader = BufReader::new(file);
-            let source = Decoder::new(reader).expect("Failed to create decoder");
 
             if looping == 1 {
-                sink.append(source.buffered().repeat_infinite());
+                let source = LoopingSource::new(path.clone());
+                sink.append(source);
             } else {
+                let file = File::open(path).expect("Failed to open file");
+                let reader = BufReader::new(file);
+                let source = Decoder::new(reader).expect("Failed to create decoder");
                 sink.append(source);
             }
             sink.play();
@@ -125,4 +125,57 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             .set_volume(volume as f32);
         trace!("Set volume to {}", volume);
     });
+}
+
+struct LoopingSource {
+    path: String,
+    current_source: Box<dyn Source<Item=f32> + Send>,
+}
+
+impl LoopingSource {
+    fn new(path: String) -> Self {
+        let file = File::open(&path).expect("Failed to open file for looping");
+        let reader = BufReader::new(file);
+        let source = Decoder::new(reader).expect("Failed to create decoder for looping");
+        Self {
+            path,
+            current_source: Box::new(source),
+        }
+    }
+}
+
+impl Iterator for LoopingSource {
+    type Item = f32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if let Some(sample) = self.current_source.next() {
+            return Some(sample);
+        }
+
+        let file = File::open(&self.path).ok()?;
+        let reader = BufReader::new(file);
+        if let Ok(source) = Decoder::new(reader) {
+            self.current_source = Box::new(source);
+            self.current_source.next()
+        } else {
+            None
+        }
+    }
+}
+
+impl Source for LoopingSource {
+    fn current_span_len(&self) -> Option<usize> {
+        self.current_source.current_span_len()
+    }
+
+    fn channels(&self) -> u16 {
+        self.current_source.channels()
+    }
+
+    fn sample_rate(&self) -> u32 {
+        self.current_source.sample_rate()
+    }
+    fn total_duration(&self) -> Option<std::time::Duration> {
+        None
+    }
 }
