@@ -38,6 +38,7 @@ public class SystemTrayHandler
 		popup.addSeparator();
 
 		final MenuItem exitItem = new MenuItem("Beenden");
+		exitItem.addActionListener(e -> System.exit(0));
 		popup.add(exitItem);
 
 		final Image image = Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource(ICON_PATH));
