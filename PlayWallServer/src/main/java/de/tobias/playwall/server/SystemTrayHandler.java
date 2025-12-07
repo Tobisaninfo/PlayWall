@@ -63,6 +63,11 @@ public class SystemTrayHandler
 
 	public void setNumberOfConnectedClients(int numberOfClients)
 	{
+		if(clientItem == null)
+		{
+			return;
+		}
+
 		clientItem.setLabel(MessageFormat.format("{0} Verbundene Clients", numberOfClients));
 	}
 }

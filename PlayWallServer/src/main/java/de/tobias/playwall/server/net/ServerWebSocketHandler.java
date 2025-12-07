@@ -6,6 +6,7 @@ import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.UpdateMessage;
+import de.tobias.playwall.server.SystemTrayHandler;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 
 	private final ObjectMapper objectMapper;
 	private final List<RequestHandler> requestHandlers;
+	private final SystemTrayHandler systemTrayHandler;
 
 	@EventListener(UpdateMessage.class)
 	void handleUpdateMessageEvents(UpdateMessage message) throws JsonProcessingException
@@ -45,6 +47,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		log.debug("Client connection established to {}", session.getRemoteAddress());
 		SESSIONS.add(session);
+		systemTrayHandler.setNumberOfConnectedClients(SESSIONS.size());
 	}
 
 	@Override
@@ -52,6 +55,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
 		SESSIONS.remove(session);
+		systemTrayHandler.setNumberOfConnectedClients(SESSIONS.size());
 	}
 
 	@Override
