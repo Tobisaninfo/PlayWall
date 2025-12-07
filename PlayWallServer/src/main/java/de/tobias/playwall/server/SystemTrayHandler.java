@@ -1,5 +1,6 @@
 package de.tobias.playwall.server;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
@@ -10,11 +11,14 @@ import java.text.MessageFormat;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class SystemTrayHandler
 {
 	private static final String ICON_PATH = "de/tobias/playwall/server/logo/icon_small.png";
 
 	private MenuItem clientItem;
+
+	private final AppInfo appInfo;
 
 	@EventListener(ApplicationStartedEvent.class)
 	public void onApplicationStarted(ApplicationStartedEvent event)
@@ -27,7 +31,7 @@ public class SystemTrayHandler
 
 		final PopupMenu popup = new PopupMenu();
 
-		final MenuItem aboutItem = new MenuItem("PlayWall Server v8.0.0");
+		final MenuItem aboutItem = new MenuItem(MessageFormat.format("PlayWall Server v{0}", appInfo.getVersion()));
 		popup.add(aboutItem);
 
 		popup.addSeparator();
