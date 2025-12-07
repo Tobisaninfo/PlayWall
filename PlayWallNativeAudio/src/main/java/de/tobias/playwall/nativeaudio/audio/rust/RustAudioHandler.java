@@ -32,7 +32,7 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public void play()
 	{
-		playNative(true); // TODO Use pad settings
+		playNative(false); // TODO Use pad settings
 	}
 
 	private native void playNative(boolean loop);
