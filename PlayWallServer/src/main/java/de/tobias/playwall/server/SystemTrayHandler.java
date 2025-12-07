@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.text.MessageFormat;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -16,7 +17,7 @@ public class SystemTrayHandler
 {
 	private static final String ICON_PATH = "de/tobias/playwall/server/logo/icon_small.png";
 
-	private MenuItem clientItem;
+	private Menu clientMenu;
 
 	private final AppInfo appInfo;
 
@@ -36,8 +37,8 @@ public class SystemTrayHandler
 
 		popup.addSeparator();
 
-		clientItem = new MenuItem("0 Verbundene Clients");
-		popup.add(clientItem);
+		clientMenu = new Menu("0 Verbundene Clients");
+		popup.add(clientMenu);
 
 		popup.addSeparator();
 
@@ -61,13 +62,19 @@ public class SystemTrayHandler
 		}
 	}
 
-	public void setNumberOfConnectedClients(int numberOfClients)
+	public void updateConnectedClients(List<String> clientAddresses)
 	{
-		if(clientItem == null)
+		if(clientMenu == null)
 		{
 			return;
 		}
 
-		clientItem.setLabel(MessageFormat.format("{0} Verbundene Clients", numberOfClients));
+		clientMenu.setLabel(MessageFormat.format("{0} Verbundene Clients", clientAddresses.size()));
+		clientMenu.removeAll();
+
+		for(String clientAddress : clientAddresses)
+		{
+			clientMenu.add(new MenuItem(clientAddress));
+		}
 	}
 }

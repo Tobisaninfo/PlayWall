@@ -19,6 +19,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.net.InetSocketAddress;
+import java.text.MessageFormat;
 import java.util.*;
 
 import static java.util.Objects.requireNonNull;
@@ -47,7 +49,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		log.debug("Client connection established to {}", session.getRemoteAddress());
 		SESSIONS.add(session);
-		systemTrayHandler.setNumberOfConnectedClients(SESSIONS.size());
+		updateSystemTray();
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
 		SESSIONS.remove(session);
-		systemTrayHandler.setNumberOfConnectedClients(SESSIONS.size());
+		updateSystemTray();
 	}
 
 	@Override
@@ -127,5 +129,21 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 			final RequestHandlerTyped annotation = AnnotationUtils.findAnnotation(handler.getClass(), RequestHandlerTyped.class);
 			return Objects.equals(requireNonNull(annotation).value(), requestClass);
 		}).findAny();
+	}
+
+	private void updateSystemTray()
+	{
+		systemTrayHandler.updateConnectedClients(SESSIONS
+				.stream()
+				.map(s -> {
+					final InetSocketAddress remoteAddress = s.getRemoteAddress();
+					if(remoteAddress == null)
+					{
+						return "Unbekannt";
+					}
+
+					return MessageFormat.format("{0}:{1}", remoteAddress.getAddress().getHostAddress(), remoteAddress.getPort());
+				})
+				.toList());
 	}
 }
