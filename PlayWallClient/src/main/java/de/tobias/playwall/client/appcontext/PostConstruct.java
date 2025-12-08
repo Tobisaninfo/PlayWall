@@ -5,19 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface ViewController
+public @interface PostConstruct
 {
-	Class<?> superclass() default Object.class;
-
-	boolean singleton() default false;
-
-	boolean autoload() default true;
-
-	String path();
-
-	String view();
-
-	boolean applyToStage() default true;
 }

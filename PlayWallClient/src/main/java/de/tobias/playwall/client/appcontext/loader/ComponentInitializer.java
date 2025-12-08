@@ -1,13 +1,13 @@
 package de.tobias.playwall.client.appcontext.loader;
 
-import de.tobias.playwall.client.appcontext.ComponentInitializationException;
-import de.tobias.playwall.client.appcontext.AppContext;
-import de.tobias.playwall.client.appcontext.InjectField;
-import de.tobias.playwall.client.appcontext.ReflectionUtils;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.appcontext.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.function.Function;
 
@@ -21,6 +21,8 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 		{
 			final T instance = constructInstance(context);
 			injectFields(context, instance);
+			loadView(instance);
+			executePostConstruct(instance);
 			return instance;
 		}
 		catch(Exception e)
@@ -49,6 +51,37 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 			{
 				field.setAccessible(true);
 				field.set(instance, context.get(field.getType()));
+			}
+		}
+	}
+
+	private void loadView(T instance)
+	{
+		final Class<?> instanceClass = instance.getClass();
+		if(instanceClass.isAnnotationPresent(ViewController.class))
+		{
+			final ViewController annotation = instanceClass.getAnnotation(ViewController.class);
+			if(annotation.autoload())
+			{
+				final NVC nvc = (NVC) instance;
+				nvc.load(annotation.path(), annotation.view(), Localization.getBundle());
+				if(annotation.applyToStage())
+				{
+					nvc.applyViewControllerToStage();
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("java:S3011")
+	private void executePostConstruct(T instance) throws InvocationTargetException, IllegalAccessException
+	{
+		for(Method method : ReflectionUtils.getAllMethods(instance.getClass()))
+		{
+			if(method.isAnnotationPresent(PostConstruct.class))
+			{
+				method.setAccessible(true);
+				method.invoke(instance);
 			}
 		}
 	}

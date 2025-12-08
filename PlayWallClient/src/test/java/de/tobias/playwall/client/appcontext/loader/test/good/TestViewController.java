@@ -5,7 +5,7 @@ import de.tobias.playwall.client.appcontext.InjectField;
 import de.tobias.playwall.client.appcontext.ViewController;
 import lombok.Getter;
 
-@ViewController
+@ViewController(path = "", view = "")
 @Getter
 public class TestViewController
 {

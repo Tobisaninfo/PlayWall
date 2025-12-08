@@ -5,7 +5,6 @@ import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
-import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -36,7 +35,7 @@ import java.util.Optional;
 import static de.thecodelabs.utils.util.Localization.getString;
 
 @Getter(AccessLevel.PACKAGE)
-@ViewController
+@ViewController(path = "de/tobias/playwall/client/view", view = "LaunchDialog", applyToStage = false)
 public class LaunchDialog extends BaseNVC
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
@@ -67,7 +66,6 @@ public class LaunchDialog extends BaseNVC
 	{
 		this.client = client;
 		this.eventHandler = eventHandler;
-		load("de/tobias/playwall/client/view", "LaunchDialog", Localization.getBundle());
 	}
 
 	@Override
@@ -105,6 +103,19 @@ public class LaunchDialog extends BaseNVC
 		});
 
 		Worker.runLater(this::fetchProjects);
+	}
+
+	@Override
+	public void initStage(Stage stage)
+	{
+		styleable.applyToStage(stage);
+
+		stage.setTitle(getString(Strings.UI_DIALOG_LAUNCH_TITLE));
+		stage.setResizable(false);
+		stage.setWidth(650);
+		stage.setHeight(400);
+		stage.centerOnScreen();
+		stage.show();
 	}
 
 	@FXML
@@ -193,18 +204,5 @@ public class LaunchDialog extends BaseNVC
 	private ProjectMetadata getSelectedProject()
 	{
 		return projectListView.getSelectionModel().getSelectedItem();
-	}
-
-	@Override
-	public void initStage(Stage stage)
-	{
-		styleable.applyToStage(stage);
-
-		stage.setTitle(getString(Strings.UI_DIALOG_LAUNCH_TITLE));
-		stage.setResizable(false);
-		stage.setWidth(650);
-		stage.setHeight(400);
-		stage.centerOnScreen();
-		stage.show();
 	}
 }
