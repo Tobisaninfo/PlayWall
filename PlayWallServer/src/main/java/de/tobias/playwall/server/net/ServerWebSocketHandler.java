@@ -6,6 +6,7 @@ import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.UpdateMessage;
+import de.tobias.playwall.server.SystemTrayHandler;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.net.InetSocketAddress;
+import java.text.MessageFormat;
 import java.util.*;
 
 import static java.util.Objects.requireNonNull;
@@ -32,6 +35,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 
 	private final ObjectMapper objectMapper;
 	private final List<RequestHandler> requestHandlers;
+	private final SystemTrayHandler systemTrayHandler;
 
 	@EventListener(UpdateMessage.class)
 	void handleUpdateMessageEvents(UpdateMessage message) throws JsonProcessingException
@@ -45,6 +49,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		log.debug("Client connection established to {}", session.getRemoteAddress());
 		SESSIONS.add(session);
+		updateSystemTray();
 	}
 
 	@Override
@@ -52,6 +57,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	{
 		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
 		SESSIONS.remove(session);
+		updateSystemTray();
 	}
 
 	@Override
@@ -123,5 +129,21 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 			final RequestHandlerTyped annotation = AnnotationUtils.findAnnotation(handler.getClass(), RequestHandlerTyped.class);
 			return Objects.equals(requireNonNull(annotation).value(), requestClass);
 		}).findAny();
+	}
+
+	private void updateSystemTray()
+	{
+		systemTrayHandler.updateConnectedClients(SESSIONS
+				.stream()
+				.map(s -> {
+					final InetSocketAddress remoteAddress = s.getRemoteAddress();
+					if(remoteAddress == null)
+					{
+						return "Unbekannt";
+					}
+
+					return MessageFormat.format("{0}:{1}", remoteAddress.getAddress().getHostAddress(), remoteAddress.getPort());
+				})
+				.toList());
 	}
 }
