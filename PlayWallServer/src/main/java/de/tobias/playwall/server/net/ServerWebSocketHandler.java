@@ -103,7 +103,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 		}
 	}
 
-	private synchronized static void sendToClients(TextMessage textResponse, Collection<WebSocketSession> sessions)
+	private static synchronized void sendToClients(TextMessage textResponse, Collection<WebSocketSession> sessions)
 	{
 		log.debug("Sending: {}", textResponse.getPayload());
 

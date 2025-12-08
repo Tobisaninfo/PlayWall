@@ -32,6 +32,6 @@ public class UpdateMessageEventHandler
 			return;
 		}
 
-		listenersForMessage.forEach((listener) -> listener.onUpdateMessage(updateMessage));
+		listenersForMessage.forEach(listener -> listener.onUpdateMessage(updateMessage));
 	}
 }

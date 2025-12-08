@@ -3,6 +3,7 @@ package de.tobias.playwall.common.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 		use = JsonTypeInfo.Id.CLASS,
 		include = JsonTypeInfo.As.PROPERTY,
 		property = "@class")
-public class ServerError
+public class ServerError implements Serializable
 {
 	private static final String PATTERN_CAMEL_CASE = "(?<!^)(?=[A-Z])";
 
