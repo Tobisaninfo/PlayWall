@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -64,7 +65,19 @@ public class ApplicationLoadingViewController extends BaseNVC
 				Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
 				serverLauncher.launchServer();
 			}
-			client.connectWithRetries(60, this::updateLoadingLabel);
+			try
+			{
+				client.connectWithRetries(60, this::updateLoadingLabel);
+			}
+			catch(Exception e)
+			{
+				Logger.error(e);
+				Platform.runLater(() -> {
+					showErrorMessage(Localization.getString("ui.application_loading.error", e.getMessage()));
+					System.exit(0);
+				});
+				return;
+			}
 
 			Platform.runLater(() -> {
 				closeStage();
