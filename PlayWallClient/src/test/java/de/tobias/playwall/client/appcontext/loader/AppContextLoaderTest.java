@@ -23,7 +23,7 @@ class AppContextLoaderTest
 	void testSetupDependenciesGoodCase()
 	{
 		final AppContext context = new AppContext(AppContext.Environment.TESTING);
-		AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.good");
+		AppContextLoader.setupDependencies(new AppContextLoaderRequest().withAppContext(context).withBasePackages("de.tobias.playwall.client.appcontext.loader.test.good"));
 
 		// Check singleton
 		assertThat(context.get(TestSingleton.class)).isNotNull()
@@ -49,7 +49,8 @@ class AppContextLoaderTest
 	void testSetupDependenciesInjectConstructorNotPresent()
 	{
 		final AppContext context = new AppContext(AppContext.Environment.TESTING);
-		assertThatThrownBy(() -> AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.inject.constructor.wrong"))
+		final AppContextLoaderRequest request = new AppContextLoaderRequest().withAppContext(context).withBasePackages("de.tobias.playwall.client.appcontext.loader.test.inject.constructor.wrong");
+		assertThatThrownBy(() -> AppContextLoader.setupDependencies(request))
 				.isInstanceOf(ComponentInitializationException.class)
 				.hasMessage("No suitable constructor found for class %s", TestConstructorWrong.class.getName())
 				.hasCauseInstanceOf(NoSuchMethodException.class);
@@ -59,7 +60,7 @@ class AppContextLoaderTest
 	void testSetupDependenciesInjectConstructorDependencyNotRegistered()
 	{
 		final AppContext context = new AppContext(AppContext.Environment.TESTING);
-		AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.inject.constructor.dependencyMissing");
+		AppContextLoader.setupDependencies(new AppContextLoaderRequest().withAppContext(context).withBasePackages("de.tobias.playwall.client.appcontext.loader.test.inject.constructor.dependencyMissing"));
 		assertThatThrownBy(() -> context.get(TestConstructorDependencyNotRegistered.class))
 				.isInstanceOf(ComponentInitializationException.class)
 				.hasMessage("Cannot instantiate component class %s", TestConstructorDependencyNotRegistered.class.getName());
@@ -69,7 +70,7 @@ class AppContextLoaderTest
 	void testSetupDependenciesInjectFieldDependencyNotRegistered()
 	{
 		final AppContext context = new AppContext(AppContext.Environment.TESTING);
-		AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.inject.field.dependencyMissing");
+		AppContextLoader.setupDependencies(new AppContextLoaderRequest().withAppContext(context).withBasePackages("de.tobias.playwall.client.appcontext.loader.test.inject.field.dependencyMissing"));
 		assertThatThrownBy(() -> context.get(TestFieldDependencyNotRegistered.class))
 				.isInstanceOf(ComponentInitializationException.class)
 				.hasMessage("Cannot instantiate component class %s", TestFieldDependencyNotRegistered.class.getName());

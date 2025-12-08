@@ -18,26 +18,22 @@ public final class AppContextLoader
 {
 	public static void setupDependencies(AppContext appContext)
 	{
-		setupDependencies(appContext, PlayWallMain.class.getPackage().getName());
-	}
-
-	public static void setupDependencies(AppContext appContext, String basePackages)
-	{
-		setupDependencies(appContext, new String[]{basePackages}, new String[]{});
+		setupDependencies(new AppContextLoaderRequest().withAppContext(appContext).withBasePackages(PlayWallMain.class.getPackage().getName()));
 	}
 
 	@SuppressWarnings({"java:S3011", "unchecked", "rawtypes"})
-	public static void setupDependencies(AppContext appContext, String[] basePackages, String[] rejectPackages) // TODO: Builder Method
+	public static void setupDependencies(AppContextLoaderRequest request)
 	{
 		final long start = System.currentTimeMillis();
+		final AppContext appContext = request.getAppContext();
 
 		final List<Class<? extends Annotation>> annotations = List.of(Service.class, ViewController.class);
 
 		try(ScanResult scanResult = new ClassGraph()
 				.enableAnnotationInfo()
 				.ignoreClassVisibility()
-				.acceptPackages(basePackages)
-				.rejectPackages(rejectPackages)
+				.acceptPackages(request.getBasePackages())
+				.rejectPackages(request.getRejectPackages())
 				.scan())
 		{
 			for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
