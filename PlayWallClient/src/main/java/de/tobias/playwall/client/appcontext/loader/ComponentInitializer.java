@@ -80,7 +80,7 @@ public class ComponentInitializer<T> implements Function<AppContext, T>
 
 	protected void applyViewToStage(AppContext context, ViewController annotation, NVC nvc)
 	{
-		if(annotation.applyToStage())
+		if(annotation.applyToStage() && context.getEnvironment() != AppContext.Environment.GUI_TESTING)
 		{
 			nvc.applyViewControllerToStage();
 		}
