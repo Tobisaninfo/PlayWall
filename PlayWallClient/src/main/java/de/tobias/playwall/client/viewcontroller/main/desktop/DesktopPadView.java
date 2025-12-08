@@ -76,10 +76,10 @@ public class DesktopPadView implements PadView
 		indexLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 		timeLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 
-		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.REDO));
-		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.LINK));
+		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID));
+		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.LINK_SOLID));
 		playlistLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
-		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE));
+		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID));
 
 		infoBox = new PadHBox(5);
 
@@ -106,15 +106,15 @@ public class DesktopPadView implements PadView
 
 		// Buttons
 		// TODO: Event handler
-		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), this::onPlayAction);
-		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), this::onPauseAction);
-		nextButton = new PadButton(new FontIcon(FontAwesomeType.STEP_FORWARD), null);
-		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), this::onStopyAction);
-		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), null);
-		settingsButton = new PadButton(new FontIcon(FontAwesomeType.COG), null);
+		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY_SOLID), this::onPlayAction);
+		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE_SOLID), this::onPauseAction);
+		nextButton = new PadButton(new FontIcon(FontAwesomeType.FORWARD_SOLID), null);
+		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP_SOLID), this::onStopyAction);
+		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN_SOLID), null);
+		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR_SOLID), null);
 
 		// Not Found Label
-		notFoundLabel = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
+		notFoundLabel = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
 		notFoundLabel.getStyleClass().clear();
 		notFoundLabel.setOpacity(0.75);
 		notFoundLabel.setSize(80);

@@ -64,7 +64,7 @@ public class ProjectNewDialog extends NVC
 	}
 
 	@Override
-	public void initStage(Stage stage)
+	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		final Styleable styleable = AppContextHolder.getInstance().get(Styleable.class);
 		styleable.applyToStage(stage);

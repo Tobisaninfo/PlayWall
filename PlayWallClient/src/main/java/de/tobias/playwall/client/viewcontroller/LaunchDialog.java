@@ -106,7 +106,7 @@ public class LaunchDialog extends BaseNVC
 	}
 
 	@Override
-	public void initStage(Stage stage)
+	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		styleable.applyToStage(stage);
 
@@ -168,11 +168,10 @@ public class LaunchDialog extends BaseNVC
 			final Project project = client.project(getSelectedProject().id()).launch();
 			Logger.info("Launched project " + project.metadata().name());
 
-			AppContextHolder.getInstance().get(MainViewController.class).loadView(nvc -> {
-				getStageContainer().ifPresent(NVCStage::close);
-				nvc.showStage();
-				((MainViewController) nvc).openProject(project);
-			});
+			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
+			controller.showStage();
+			controller.openProject(project);
+			closeStage();
 		}
 		catch(PlayWallApiException e)
 		{

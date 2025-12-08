@@ -2,6 +2,7 @@ package de.tobias.playwall.client.viewcontroller;
 
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
@@ -47,7 +48,7 @@ public class ApplicationLoadingViewController extends BaseNVC
 	}
 
 	@Override
-	protected void initStage(Stage stage)
+	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		stage.initStyle(StageStyle.UNDECORATED);
 		styleable.applyToStage(stage);

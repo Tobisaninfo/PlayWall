@@ -52,20 +52,14 @@ public class MainViewController extends BaseNVC
 		this.padViewProvider = padViewProvider;
 	}
 
-	public void loadView(Consumer<NVC> onFinish)
-	{
-		getStageContainer().ifPresent(stage -> stage.addCloseHook(this::closeRequest));
-		onFinish.accept(this);
-	}
-
 	@Override
-	public void init()
+	protected void init()
 	{
 		padGridPane.getStyleClass().add("pad-grid");
 
-		notificationPane = new SnackBar(padGridPane, new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE));
+		notificationPane = new SnackBar(padGridPane, new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID));
 		final Action closeAction = new Action(event -> notificationPane.hide());
-		closeAction.setGraphic(new FontIcon(FontAwesomeType.TIMES));
+		closeAction.setGraphic(new FontIcon(FontAwesomeType.CROSS_SOLID));
 		notificationPane.getActions().add(closeAction);
 		notificationPane.setCloseButtonVisible(false);
 		gridContainer.getChildren().add(notificationPane);
@@ -73,8 +67,9 @@ public class MainViewController extends BaseNVC
 	}
 
 	@Override
-	public void initStage(Stage stage)
+	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
+		stageContainer.addCloseHook(this::closeRequest);
 		styleable.applyToStage(stage);
 
 		stage.getIcons().add(AppContextHolder.getInstance().get(AppIconProvider.class).getStageIcon());
