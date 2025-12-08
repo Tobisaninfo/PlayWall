@@ -13,21 +13,17 @@ import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
-import de.tobias.playwall.client.launch.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.viewcontroller.LaunchDialog;
+import de.tobias.playwall.client.viewcontroller.ApplicationLoadingViewController;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import java.util.Arrays;
 
 
 public class PlayWallMain extends Application
 {
-	private Client client;
-
 	public static void main(String[] args)
 	{
+		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logger.error(e));
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
 
@@ -54,22 +50,12 @@ public class PlayWallMain extends Application
 		try
 		{
 			final AppContext appContext = new AppContext();
+			appContext.registerLazySingleton(App.class, _ -> ApplicationUtils.getApplication());
 			AppContextLoader.setupDependencies(appContext);
 			AppContextHolder.setInstance(appContext);
 
 			Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
 			Logger.info("Run Path: {0}", SystemUtils.getRunPath());
-
-			final String[] args = ApplicationUtils.getApplication().getProgramArgs();
-			if(!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
-			{
-				final ServerLauncher serverLauncher = appContext.get(ServerLauncher.class);
-				Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
-				serverLauncher.launchServer();
-			}
-
-			client = appContext.get(Client.class);
-			client.connectWithRetries(60);
 
 			loadAppIcon();
 		}
@@ -86,8 +72,10 @@ public class PlayWallMain extends Application
 		try
 		{
 			stage.getIcons().add(AppContextHolder.getInstance().get(AppIconProvider.class).getStageIcon());
-			final LaunchDialog launchDialog = AppContextHolder.getInstance().get(LaunchDialog.class);
-			launchDialog.applyViewControllerToStage(stage);
+
+			final ApplicationLoadingViewController viewController = AppContextHolder.getInstance().get(ApplicationLoadingViewController.class);
+			viewController.applyViewControllerToStage(stage);
+			viewController.showStage();
 		}
 		catch(Exception e)
 		{
@@ -98,9 +86,16 @@ public class PlayWallMain extends Application
 	@Override
 	public void stop()
 	{
-		// Server gets stopped via "Runtime.getRuntime().addShutdownHook()"
-		client.disconnect();
-		Worker.shutdown();
+		try
+		{
+			// Server gets stopped via "Runtime.getRuntime().addShutdownHook()"
+			AppContextHolder.getInstance().get(Client.class).disconnect();
+			Worker.shutdown();
+		}
+		catch(Exception e)
+		{
+			Logger.error(e);
+		}
 	}
 
 	private void loadAppIcon()

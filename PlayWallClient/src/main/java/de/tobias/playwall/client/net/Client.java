@@ -10,9 +10,14 @@ import java.util.UUID;
 
 public interface Client
 {
+	interface ConnectingListener
+	{
+		void onFailure(int currentTry, int maximumNumberOfTries);
+	}
+
 	void connect();
 
-	void connectWithRetries(int numberOfRetries);
+	void connectWithRetries(int numberOfRetries, ConnectingListener listener);
 
 	void disconnect();
 

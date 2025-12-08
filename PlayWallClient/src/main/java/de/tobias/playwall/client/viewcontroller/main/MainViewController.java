@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-@ViewController
+@ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 public class MainViewController extends BaseNVC
 {
 	@FXML
@@ -52,15 +52,10 @@ public class MainViewController extends BaseNVC
 		this.padViewProvider = padViewProvider;
 	}
 
-	public void loadView(Consumer<NVC> onFinish) {
-		load("de/tobias/playwall/client/view/main", "MainView", Localization.getBundle(), e ->
-		{
-			NVCStage stage = e.applyViewControllerToStage();
-			stage.addCloseHook(this::closeRequest);
-
-			// Init with existing stage
-			onFinish.accept(e);
-		});
+	public void loadView(Consumer<NVC> onFinish)
+	{
+		getStageContainer().ifPresent(stage -> stage.addCloseHook(this::closeRequest));
+		onFinish.accept(this);
 	}
 
 	@Override

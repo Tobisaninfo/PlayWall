@@ -42,7 +42,7 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public void connectWithRetries(int numberOfRetries)
+	public void connectWithRetries(int numberOfRetries, ConnectingListener listener)
 	{
 		for(int i = 1; i <= numberOfRetries; i++)
 		{
@@ -54,6 +54,7 @@ class ClientImpl implements Client
 			}
 			catch(Exception e)
 			{
+				listener.onFailure(i, numberOfRetries);
 				if(i == numberOfRetries)
 				{
 					throw e;

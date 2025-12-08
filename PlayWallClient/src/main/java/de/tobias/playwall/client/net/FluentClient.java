@@ -12,7 +12,7 @@ public interface FluentClient
 {
 	void connect();
 
-	void connectWithRetries(int numberOfRetries);
+	void connectWithRetries(int numberOfRetries, Client.ConnectingListener listener);
 
 	void disconnect();
 

@@ -27,9 +27,9 @@ class FluentClientImpl implements FluentClient
 	}
 
 	@Override
-	public void connectWithRetries(int numberOfRetries)
+	public void connectWithRetries(int numberOfRetries, Client.ConnectingListener listener)
 	{
-		delegate.connectWithRetries(numberOfRetries);
+		delegate.connectWithRetries(numberOfRetries, listener);
 	}
 
 	@Override
