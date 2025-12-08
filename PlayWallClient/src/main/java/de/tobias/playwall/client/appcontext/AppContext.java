@@ -1,5 +1,7 @@
 package de.tobias.playwall.client.appcontext;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -7,11 +9,20 @@ import java.util.function.Function;
 @SuppressWarnings("java:S6548")
 public class AppContext
 {
+	public enum Environment
+	{
+		TESTING, GUI_TESTING, PRODUCTION
+	}
+
 	private final Map<Class<?>, Function<AppContext, ?>> supplier;
 	private final Map<Class<?>, Object> objectCache;
 
-	public AppContext()
+	@Getter
+	private final Environment environment;
+
+	public AppContext(Environment environment)
 	{
+		this.environment = environment;
 		supplier = new HashMap<>();
 		objectCache = new HashMap<>();
 	}

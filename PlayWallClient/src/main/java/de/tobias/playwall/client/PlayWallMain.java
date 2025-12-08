@@ -49,8 +49,8 @@ public class PlayWallMain extends Application
 	{
 		try
 		{
-			final AppContext appContext = new AppContext();
-			appContext.registerLazySingleton(App.class, _ -> ApplicationUtils.getApplication());
+			final AppContext appContext = new AppContext(AppContext.Environment.PRODUCTION);
+			appContext.registerLazySingleton(App.class, _ -> ApplicationUtils.getApplication()); // TODO: Not available in tests
 			AppContextLoader.setupDependencies(appContext);
 			AppContextHolder.setInstance(appContext);
 

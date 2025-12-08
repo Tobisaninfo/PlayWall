@@ -21,7 +21,7 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 		{
 			final T instance = constructInstance(context);
 			injectFields(context, instance);
-			loadView(instance);
+			loadView(instance, context);
 			executePostConstruct(instance);
 			return instance;
 		}
@@ -55,7 +55,7 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 		}
 	}
 
-	private void loadView(T instance)
+	private void loadView(T instance, AppContext context)
 	{
 		final Class<?> instanceClass = instance.getClass();
 		if(instanceClass.isAnnotationPresent(ViewController.class))
@@ -65,7 +65,7 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 			{
 				final NVC nvc = (NVC) instance;
 				nvc.load(annotation.path(), annotation.view(), Localization.getBundle());
-				if(annotation.applyToStage())
+				if(annotation.applyToStage() && context.getEnvironment() != AppContext.Environment.GUI_TESTING)
 				{
 					nvc.applyViewControllerToStage();
 				}

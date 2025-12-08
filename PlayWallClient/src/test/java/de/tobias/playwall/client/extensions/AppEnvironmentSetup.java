@@ -19,7 +19,7 @@ public class AppEnvironmentSetup implements BeforeEachCallback
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
 
-		final AppContext context = new AppContext();
+		final AppContext context = new AppContext(AppContext.Environment.GUI_TESTING);
 		AppContextLoader.setupDependencies(
 				context,
 				new String[]{PlayWallMain.class.getPackage().getName()},

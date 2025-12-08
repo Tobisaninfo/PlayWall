@@ -18,7 +18,7 @@ class AppContextTest
 	@Test
 	void testRegisterLazy()
 	{
-		AppContext context = new AppContext();
+		AppContext context = new AppContext(AppContext.Environment.TESTING);
 		context.registerLazy(Test1.class, _ -> new Test1());
 
 		assertThat(context.get(Test1.class)).isNotNull().isNotSameAs(context.get(Test1.class));
@@ -27,7 +27,7 @@ class AppContextTest
 	@Test
 	void testRegisterLazyWithMultipleClasses()
 	{
-		AppContext context = new AppContext();
+		AppContext context = new AppContext(AppContext.Environment.TESTING);
 		context.registerLazy(Test1.class, _ -> new Test1());
 		context.registerLazy(Test2.class, _ -> new Test2());
 
@@ -38,7 +38,7 @@ class AppContextTest
 	@Test
 	void testRegisterLazySingleton()
 	{
-		AppContext context = new AppContext();
+		AppContext context = new AppContext(AppContext.Environment.TESTING);
 		context.registerLazySingleton(Test1.class, _ -> new Test1());
 
 		assertThat(context.get(Test1.class)).isNotNull().isSameAs(context.get(Test1.class));
@@ -47,7 +47,7 @@ class AppContextTest
 	@Test
 	void testGetWithUnregisteredClass()
 	{
-		AppContext context = new AppContext();
+		AppContext context = new AppContext(AppContext.Environment.TESTING);
 
 		assertThatThrownBy(() -> context.get(Test1.class))
 				.isInstanceOf(ComponentNotFoundException.class)

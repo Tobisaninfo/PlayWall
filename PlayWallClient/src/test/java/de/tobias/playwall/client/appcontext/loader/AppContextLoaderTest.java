@@ -22,7 +22,7 @@ class AppContextLoaderTest
 	@Test
 	void testSetupDependenciesGoodCase()
 	{
-		final AppContext context = new AppContext();
+		final AppContext context = new AppContext(AppContext.Environment.TESTING);
 		AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.good");
 
 		// Check singleton
@@ -48,7 +48,7 @@ class AppContextLoaderTest
 	@Test
 	void testSetupDependenciesInjectConstructorNotPresent()
 	{
-		final AppContext context = new AppContext();
+		final AppContext context = new AppContext(AppContext.Environment.TESTING);
 		assertThatThrownBy(() -> AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.inject.constructor.wrong"))
 				.isInstanceOf(ComponentInitializationException.class)
 				.hasMessage("No suitable constructor found for class %s", TestConstructorWrong.class.getName())
@@ -58,7 +58,7 @@ class AppContextLoaderTest
 	@Test
 	void testSetupDependenciesInjectConstructorDependencyNotRegistered()
 	{
-		final AppContext context = new AppContext();
+		final AppContext context = new AppContext(AppContext.Environment.TESTING);
 		AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.inject.constructor.dependencyMissing");
 		assertThatThrownBy(() -> context.get(TestConstructorDependencyNotRegistered.class))
 				.isInstanceOf(ComponentInitializationException.class)
@@ -68,7 +68,7 @@ class AppContextLoaderTest
 	@Test
 	void testSetupDependenciesInjectFieldDependencyNotRegistered()
 	{
-		final AppContext context = new AppContext();
+		final AppContext context = new AppContext(AppContext.Environment.TESTING);
 		AppContextLoader.setupDependencies(context, "de.tobias.playwall.client.appcontext.loader.test.inject.field.dependencyMissing");
 		assertThatThrownBy(() -> context.get(TestFieldDependencyNotRegistered.class))
 				.isInstanceOf(ComponentInitializationException.class)
