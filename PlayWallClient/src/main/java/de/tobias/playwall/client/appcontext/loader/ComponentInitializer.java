@@ -11,9 +11,17 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.function.Function;
 
-record ComponentInitializer<T>(Class<T> loadedClass,
-							   Constructor<T> injectConstructor) implements Function<AppContext, T>
+public class ComponentInitializer<T> implements Function<AppContext, T>
 {
+	private final Class<T> loadedClass;
+	private final Constructor<T> injectConstructor;
+
+	protected ComponentInitializer(Class<T> loadedClass, Constructor<T> injectConstructor)
+	{
+		this.loadedClass = loadedClass;
+		this.injectConstructor = injectConstructor;
+	}
+
 	@Override
 	public T apply(AppContext context)
 	{
@@ -65,11 +73,16 @@ record ComponentInitializer<T>(Class<T> loadedClass,
 			{
 				final NVC nvc = (NVC) instance;
 				nvc.load(annotation.path(), annotation.view(), Localization.getBundle());
-				if(annotation.applyToStage() && context.getEnvironment() != AppContext.Environment.GUI_TESTING)
-				{
-					nvc.applyViewControllerToStage();
-				}
+				applyViewToStage(context, annotation, nvc);
 			}
+		}
+	}
+
+	protected void applyViewToStage(AppContext context, ViewController annotation, NVC nvc)
+	{
+		if(annotation.applyToStage())
+		{
+			nvc.applyViewControllerToStage();
 		}
 	}
 

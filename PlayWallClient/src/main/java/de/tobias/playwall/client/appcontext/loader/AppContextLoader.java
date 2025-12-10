@@ -38,7 +38,7 @@ public final class AppContextLoader
 		{
 			for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
 			{
-				final Class<?> loadedClass = classInfo.loadClass();
+				final Class loadedClass = classInfo.loadClass();
 
 				final AnnotationInfo annotationInfo = annotations.stream().filter(classInfo::hasAnnotation).map(classInfo::getAnnotationInfo).findFirst().orElseThrow();
 				final AnnotationParameterValueList annotationValues = annotationInfo.getParameterValues();
@@ -54,7 +54,7 @@ public final class AppContextLoader
 
 				boolean isSingleton = (boolean) annotationValues.get("singleton").getValue();
 
-				final Function<AppContext, ?> loadFunction = new ComponentInitializer<>(loadedClass, injectConstructor);
+				final Function<AppContext, ?> loadFunction = request.getComponentInitializer().create(loadedClass, injectConstructor);
 				if(isSingleton)
 				{
 					appContext.registerLazySingleton(superclass, loadFunction);
