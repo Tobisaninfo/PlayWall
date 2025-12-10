@@ -6,6 +6,7 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.*;
+import de.tobias.playwall.client.launch.ServerLaunchException;
 import de.tobias.playwall.client.launch.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
 import javafx.application.Platform;
@@ -59,34 +60,61 @@ public class ApplicationLoadingViewController extends BaseNVC
 	void initializeApplication()
 	{
 		Worker.runLater(() -> {
+			String errorMessage = null;
+
 			final String[] args = app.getProgramArgs();
 			if(!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
 			{
 				Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
-				serverLauncher.launchServer();
+				try
+				{
+					serverLauncher.launchServer();
+				}
+				catch(ServerLaunchException.NotFoundException e)
+				{
+					errorMessage = Localization.getString("ui.application_loading.error.server.not_found", e.getPath());
+				}
+				catch(ServerLaunchException.PortInUseException e)
+				{
+					errorMessage = Localization.getString("ui.application_loading.error.server.port_in_use", 10023); // TODO: Port hard coded
+				}
+				catch(ServerLaunchException.GenericStartupException e)
+				{
+					errorMessage = Localization.getString("ui.application_loading.error.server.generic", e.getMessage());
+				}
 			}
-			try
+			if(errorMessage == null)
 			{
-				client.connectWithRetries(60, this::updateLoadingLabel);
+				try
+				{
+					client.connectWithRetries(60, this::updateLoadingLabel);
+				}
+				catch(Exception e)
+				{
+					Logger.error(e);
+					errorMessage = Localization.getString("ui.application_loading.error.connect", e.getMessage());
+				}
 			}
-			catch(Exception e)
+
+			if(errorMessage != null)
 			{
-				Logger.error(e);
+				final String finalErrorMessage = errorMessage;
 				Platform.runLater(() -> {
-					showErrorMessage(Localization.getString("ui.application_loading.error", e.getMessage()));
+					showErrorMessage(finalErrorMessage);
 					if(AppContextHolder.getInstance().getEnvironment() != AppContext.Environment.GUI_TESTING)
 					{
 						System.exit(0);
 					}
 				});
-				return;
 			}
-
-			Platform.runLater(() -> {
-				closeStage();
-				final LaunchDialog dialog = AppContextHolder.getInstance().get(LaunchDialog.class);
-				dialog.showStage();
-			});
+			else
+			{
+				Platform.runLater(() -> {
+					closeStage();
+					final LaunchDialog dialog = AppContextHolder.getInstance().get(LaunchDialog.class);
+					dialog.showStage();
+				});
+			}
 		});
 	}
 

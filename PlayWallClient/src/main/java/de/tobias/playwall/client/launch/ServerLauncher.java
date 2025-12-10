@@ -7,13 +7,16 @@ import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.PlayWallMain;
 import de.tobias.playwall.client.appcontext.Service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class ServerLauncher
@@ -35,13 +38,13 @@ public class ServerLauncher
 
 			if(Files.notExists(resourceFolder))
 			{
-				throw new ServerLaunchException(resourceFolder + " not found");
+				throw new ServerLaunchException.NotFoundException(resourceFolder);
 			}
 
 			final Path jdkFolder = resourceFolder.resolve("PlayWallServer-jdk");
 			if(Files.notExists(jdkFolder))
 			{
-				throw new ServerLaunchException(jdkFolder + " not found");
+				throw new ServerLaunchException.NotFoundException(jdkFolder);
 			}
 
 			final Path javaExecutable = jdkFolder.resolve("bin").resolve(OS.isWindows() ? "java.exe" : "java");
@@ -50,7 +53,7 @@ public class ServerLauncher
 			final Path serverJar = resourceFolder.resolve("PlayWallServer-" + version + ".jar");
 			if(Files.notExists(serverJar))
 			{
-				throw new ServerLaunchException(serverJar + " not found");
+				throw new ServerLaunchException.NotFoundException(serverJar);
 			}
 
 			javaExecutable.toFile().setExecutable(true);
@@ -71,13 +74,45 @@ public class ServerLauncher
 
 			final ProcessBuilder processBuilder = new ProcessBuilder(processCommand);
 			processBuilder.directory(resourceFolder.toFile());
+			processBuilder.redirectErrorStream(true);
 			serverProcess = processBuilder.start();
 
-			Logger.info("Server started");
+			Logger.info("Server starting");
+
+			captchaLoggingOutput();
 		}
 		catch(URISyntaxException | IOException e)
 		{
-			throw new ServerLaunchException("Cannot start server", e);
+			throw new ServerLaunchException.GenericStartupException("Cannot start server", e);
+		}
+	}
+
+	private void captchaLoggingOutput() throws IOException
+	{
+		boolean started = false;
+		final Pattern readyPattern = Pattern.compile("Started PlayWallServerMain .*");
+		final Pattern portUsedPattern = Pattern.compile("Web server failed to start\\. Port \\d+ was already in use\\.");
+		try(BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream())))
+		{
+			String line;
+			while((line = reader.readLine()) != null)
+			{
+				if(readyPattern.matcher(line).find())
+				{
+					started = true;
+					Logger.info("Server successfully started");
+					break;
+				}
+				if(portUsedPattern.matcher(line).find())
+				{
+					throw new ServerLaunchException.PortInUseException();
+				}
+			}
+		}
+
+		if(!started)
+		{
+			throw new ServerLaunchException.GenericStartupException();
 		}
 	}
 
