@@ -75,4 +75,13 @@ class AppContextLoaderTest
 				.isInstanceOf(ComponentInitializationException.class)
 				.hasMessage("Cannot instantiate component class %s", TestFieldDependencyNotRegistered.class.getName());
 	}
+
+	@Test
+	void testSetupDependenciesPostConstruct()
+	{
+		final AppContext context = new AppContext(AppContext.Environment.TESTING);
+		AppContextLoader.setupDependencies(new AppContextLoaderRequest().withAppContext(context).withBasePackages("de.tobias.playwall.client.appcontext.loader.test.good"));
+
+		assertThat(context.get(TestViewController.class).isLoaded()).isTrue();
+	}
 }
