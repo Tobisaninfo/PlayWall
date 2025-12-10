@@ -37,16 +37,18 @@ class ApplicationLoadingViewControllerTest extends AbstractViewControllerTest
 		}
 	}
 
-	private ApplicationLoadingViewController controller;
-
-	private LaunchDialog launchDialog;
+	private AppContext context;
+	private final LaunchDialog launchDialog = mock(LaunchDialog.class);
 	private final Client client = mock(StubClient.class);
 	private final ServerLauncher serverLauncher = mock(ServerLauncher.class);
-	private AppContext context;
+
+	private ApplicationLoadingViewController controller;
+	private Stage stage;
 
 	@Start
 	private void start(Stage stage)
 	{
+		this.stage = stage;
 		context = AppContextHolder.getInstance();
 		context.registerLazy(Stage.class, _ -> stage);
 
@@ -58,9 +60,7 @@ class ApplicationLoadingViewControllerTest extends AbstractViewControllerTest
 		context.registerLazySingleton(App.class, _ -> app);
 
 		context.registerLazySingleton(ServerLauncher.class, _ -> serverLauncher);
-
 		context.registerLazySingleton(Client.class, _ -> client);
-		launchDialog = mock(LaunchDialog.class);
 		context.registerLazy(LaunchDialog.class, _ -> launchDialog);
 	}
 
@@ -71,7 +71,7 @@ class ApplicationLoadingViewControllerTest extends AbstractViewControllerTest
 
 		Platform.runLater(() -> {
 			controller = context.get(ApplicationLoadingViewController.class);
-			context.get(Stage.class).show();
+			stage.show();
 		});
 
 		WaitForAsyncUtils.waitForFxEvents();
@@ -101,7 +101,7 @@ class ApplicationLoadingViewControllerTest extends AbstractViewControllerTest
 
 		Platform.runLater(() -> {
 			controller = context.get(ApplicationLoadingViewController.class);
-			context.get(Stage.class).show();
+			stage.show();
 		});
 
 		WaitForAsyncUtils.waitForFxEvents();

@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -20,29 +21,34 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 
 class LaunchViewControllerTest extends AbstractViewControllerTest
 {
-	private Client client;
-	private LaunchDialog launchDialog;
-
 	private static final UUID PROJECT_ID = UUID.randomUUID();
 	public static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4);
+
+	private AppContext context;
+	private final Client client = mock(Client.class);
+
+	private LaunchDialog launchDialog;
+	private Stage stage;
 
 	@Start
 	private void start(Stage stage)
 	{
-		final AppContext context = AppContextHolder.getInstance();
-		context.registerLazySingleton(Stage.class, _ -> stage);
-		context.registerLazySingleton(Client.class, _ -> mock(Client.class));
-		client = context.get(Client.class);
+		this.stage = stage;
+		context = AppContextHolder.getInstance();
+		context.registerLazy(Stage.class, _ -> stage);
 
-		launchDialog = context.get(LaunchDialog.class);
-		stage.show();
+		context.registerLazySingleton(Client.class, _ -> client);
 	}
 
 	@Test
 	void testProjectListDisplayAllProjects() throws Exception
 	{
 		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4)));
-		launchDialog.fetchProjects();
+
+		Platform.runLater(() -> {
+			launchDialog = context.get(LaunchDialog.class);
+			stage.show();
+		});
 		WaitForAsyncUtils.waitForFxEvents();
 
 		assertThat(launchDialog.getProjectListView()).hasExactlyNumItems(1);
@@ -52,7 +58,11 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	void testProjectListDisplayPlaceholder() throws Exception
 	{
 		when(client.getProjects()).thenReturn(List.of());
-		launchDialog.fetchProjects();
+
+		Platform.runLater(() -> {
+			launchDialog = context.get(LaunchDialog.class);
+			stage.show();
+		});
 		WaitForAsyncUtils.waitForFxEvents();
 
 		assertThat(launchDialog.getProjectListView()).hasExactlyNumItems(0);
@@ -62,7 +72,11 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	void testProjectDelete(FxRobot robot) throws Exception
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
-		launchDialog.fetchProjects();
+
+		Platform.runLater(() -> {
+			launchDialog = context.get(LaunchDialog.class);
+			stage.show();
+		});
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final Node cell = launchDialog.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
