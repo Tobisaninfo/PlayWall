@@ -112,7 +112,7 @@ class ApplicationLoadingViewControllerTest extends AbstractViewControllerTest
 		verify(serverLauncher).launchServer();
 
 		assertThat(robot.lookup(".label.content").queryLabeled()).hasText("PlayWall konnte nicht gestartet werden. \n(Fehler: Cannot connect to server)");
-		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		robot.clickOn(robot.lookup("Beenden").lookup(".button").queryButton());
 
 		// Verify launch dialog gets opened
 		verify(launchDialog, never()).showStage();

@@ -2,7 +2,10 @@ package de.tobias.playwall.client.viewcontroller;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.*;
@@ -11,13 +14,18 @@ import de.tobias.playwall.client.launch.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "ApplicationLoadingView", applyToStage = false)
@@ -61,6 +69,7 @@ public class ApplicationLoadingViewController extends BaseNVC
 	{
 		Worker.runLater(() -> {
 			String errorMessage = null;
+			boolean showLogFolderButton = false;
 
 			final String[] args = app.getProgramArgs();
 			if(!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
@@ -81,6 +90,7 @@ public class ApplicationLoadingViewController extends BaseNVC
 				catch(ServerLaunchException.GenericStartupException e)
 				{
 					errorMessage = Localization.getString("ui.application_loading.error.server.generic", e.getMessage());
+					showLogFolderButton = true;
 				}
 			}
 			if(errorMessage == null)
@@ -99,8 +109,22 @@ public class ApplicationLoadingViewController extends BaseNVC
 			if(errorMessage != null)
 			{
 				final String finalErrorMessage = errorMessage;
+				final boolean finalShowLogFolderButton = showLogFolderButton;
 				Platform.runLater(() -> {
-					showErrorMessage(finalErrorMessage);
+					final Alert alert = Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, finalErrorMessage);
+					alert.getButtonTypes().clear();
+					if(finalShowLogFolderButton)
+					{
+						alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.button.show_log"), ButtonBar.ButtonData.HELP));
+					}
+					alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.button.exit"), ButtonBar.ButtonData.OK_DONE));
+					getStageContainer().ifPresent(nvcStage -> alert.initOwner(nvcStage.getStage()));
+					alert.initModality(Modality.WINDOW_MODAL);
+					final Optional<ButtonType> response = alert.showAndWait();
+					if(response.filter(button -> button.getButtonData() == ButtonBar.ButtonData.HELP).isPresent())
+					{
+						NativeApplication.sharedInstance().showFileInFileViewer(app.getPath(PathType.LOG));
+					}
 					if(AppContextHolder.getInstance().getEnvironment() != AppContext.Environment.GUI_TESTING)
 					{
 						System.exit(0);
