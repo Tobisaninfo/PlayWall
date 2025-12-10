@@ -5,10 +5,7 @@ import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.appcontext.InjectConstructor;
-import de.tobias.playwall.client.appcontext.PostConstruct;
-import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.appcontext.*;
 import de.tobias.playwall.client.launch.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
 import javafx.application.Platform;
@@ -16,9 +13,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.util.Arrays;
 
+@Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "ApplicationLoadingView", applyToStage = false)
 public class ApplicationLoadingViewController extends BaseNVC
 {
@@ -51,7 +51,7 @@ public class ApplicationLoadingViewController extends BaseNVC
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
-		stage.initStyle(StageStyle.UNDECORATED);
+		stageContainer.initStyle(StageStyle.UNDECORATED);
 		styleable.applyToStage(stage);
 	}
 
@@ -74,7 +74,10 @@ public class ApplicationLoadingViewController extends BaseNVC
 				Logger.error(e);
 				Platform.runLater(() -> {
 					showErrorMessage(Localization.getString("ui.application_loading.error", e.getMessage()));
-					System.exit(0);
+					if(AppContextHolder.getInstance().getEnvironment() != AppContext.Environment.GUI_TESTING)
+					{
+						System.exit(0);
+					}
 				});
 				return;
 			}
