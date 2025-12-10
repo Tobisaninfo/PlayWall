@@ -24,6 +24,7 @@ public class AppEnvironmentSetup implements BeforeEachCallback
 		AppContextLoader.setupDependencies(
 				new AppContextLoaderRequest()
 						.withAppContext(context)
+						.withComponentInitializer(TestComponentInitializer::new)
 						.withBasePackages(PlayWallMain.class.getPackage().getName())
 						.withRejectPackages("de.tobias.playwall.client.appcontext.loader.test")
 		);

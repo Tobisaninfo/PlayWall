@@ -115,7 +115,6 @@ public class LaunchDialog extends BaseNVC
 		stage.setWidth(650);
 		stage.setHeight(400);
 		stage.centerOnScreen();
-		stage.show();
 	}
 
 	@FXML
