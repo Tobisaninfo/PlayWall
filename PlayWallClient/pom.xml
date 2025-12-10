@@ -20,6 +20,7 @@
             --add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
             --add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
             --enable-native-access=javafx.graphics
+            --enable-native-access=de.thecodelabs.libJfx
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
         </surefire.argLineBase>
         <surefire.argLine>${surefire.argLineBase}</surefire.argLine>
@@ -307,6 +308,7 @@
                                     <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
                                     <javaOptions>
                                         <javaOption>--enable-native-access=javafx.graphics</javaOption>
+                                        <javaOption>--enable-native-access=de.thecodelabs.libJfx</javaOption>
                                     </javaOptions>
                                     <icon>${app.icon}</icon>
                                     <vendor>TheCodeLabs</vendor>
