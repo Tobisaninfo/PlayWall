@@ -22,15 +22,34 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "ApplicationLoadingView", applyToStage = false)
 public class ApplicationLoadingViewController extends BaseNVC
 {
+	@SuppressWarnings("java:S2094")
+	private abstract static sealed class LoadingResult
+	{
+	}
+
+	private static final class SuccessResult extends LoadingResult
+	{
+	}
+
+	@AllArgsConstructor
+	private static final class FailureResult extends LoadingResult
+	{
+		String errorMessage;
+		Throwable throwable;
+		boolean showLogFolderButton;
+	}
+
 	@FXML
 	private Label titleLabel;
 	@FXML
@@ -68,9 +87,7 @@ public class ApplicationLoadingViewController extends BaseNVC
 	void initializeApplication()
 	{
 		Worker.runLater(() -> {
-			String errorMessage = null;
-			boolean showLogFolderButton = false;
-
+			LoadingResult result = null;
 			final String[] args = app.getProgramArgs();
 			if(!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
 			{
@@ -81,59 +98,57 @@ public class ApplicationLoadingViewController extends BaseNVC
 				}
 				catch(ServerLaunchException.NotFoundException e)
 				{
-					errorMessage = Localization.getString("ui.application_loading.error.server.not_found", e.getPath());
+					result = new FailureResult(Localization.getString("ui.application_loading.error.server.not_found", e.getPath()), e, false);
 				}
 				catch(ServerLaunchException.PortInUseException e)
 				{
-					errorMessage = Localization.getString("ui.application_loading.error.server.port_in_use", 10023); // TODO: Port hard coded
+					result = new FailureResult(Localization.getString("ui.application_loading.error.server.port_in_use", 10023), e, false);
 				}
 				catch(ServerLaunchException.GenericStartupException e)
 				{
-					errorMessage = Localization.getString("ui.application_loading.error.server.generic", e.getMessage());
-					showLogFolderButton = true;
+					result = new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.generic", e.getMessage()), 10023), e, true);
 				}
 			}
-			if(errorMessage == null)
+			if(result != null)
 			{
 				try
 				{
 					client.connectWithRetries(60, this::updateLoadingLabel);
+					result = new SuccessResult();
 				}
 				catch(Exception e)
 				{
-					Logger.error(e);
-					errorMessage = Localization.getString("ui.application_loading.error.connect", e.getMessage());
+					result = new FailureResult(Localization.getString("ui.application_loading.error.connect", e.getMessage()), e, false);
 				}
 			}
 
-			if(errorMessage != null)
+			switch(Objects.requireNonNull(result))
 			{
-				final String finalErrorMessage = errorMessage;
-				final boolean finalShowLogFolderButton = showLogFolderButton;
-				Platform.runLater(() -> {
-					final Alert alert = Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, finalErrorMessage);
-					alert.getButtonTypes().clear();
-					if(finalShowLogFolderButton)
-					{
-						alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.button.show_log"), ButtonBar.ButtonData.HELP));
-					}
-					alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.button.exit"), ButtonBar.ButtonData.OK_DONE));
-					getStageContainer().ifPresent(nvcStage -> alert.initOwner(nvcStage.getStage()));
-					alert.initModality(Modality.WINDOW_MODAL);
-					final Optional<ButtonType> response = alert.showAndWait();
-					if(response.filter(button -> button.getButtonData() == ButtonBar.ButtonData.HELP).isPresent())
-					{
-						NativeApplication.sharedInstance().showFileInFileViewer(app.getPath(PathType.LOG));
-					}
-					if(AppContextHolder.getInstance().getEnvironment() != AppContext.Environment.GUI_TESTING)
-					{
-						System.exit(0);
-					}
-				});
-			}
-			else
-			{
-				Platform.runLater(() -> {
+				case FailureResult failureResult ->
+				{
+					Logger.error(failureResult.throwable);
+					Platform.runLater(() -> {
+						final Alert alert = Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, failureResult.errorMessage);
+						alert.getButtonTypes().clear();
+						if(failureResult.showLogFolderButton)
+						{
+							alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.button.show_log"), ButtonBar.ButtonData.HELP));
+						}
+						alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.button.exit"), ButtonBar.ButtonData.OK_DONE));
+						getStageContainer().ifPresent(nvcStage -> alert.initOwner(nvcStage.getStage()));
+						alert.initModality(Modality.WINDOW_MODAL);
+						final Optional<ButtonType> response = alert.showAndWait();
+						if(response.filter(button -> button.getButtonData() == ButtonBar.ButtonData.HELP).isPresent())
+						{
+							NativeApplication.sharedInstance().showFileInFileViewer(app.getPath(PathType.LOG));
+						}
+						if(AppContextHolder.getInstance().getEnvironment() != AppContext.Environment.GUI_TESTING)
+						{
+							System.exit(0);
+						}
+					});
+				}
+				case SuccessResult _ -> Platform.runLater(() -> {
 					closeStage();
 					final LaunchDialog dialog = AppContextHolder.getInstance().get(LaunchDialog.class);
 					dialog.showStage();
