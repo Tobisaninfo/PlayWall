@@ -39,16 +39,11 @@ public class PlayWallMain extends Application
 
 	private static void applicationWillStart(App app)
 	{
-		Logger.init(app.getPath(PathType.LOG));
+		Logger.init(app.getPath(PathType.LOG), app.isDebug() ? FileOutputOption.DISABLED : FileOutputOption.COMBINED);
 		if(app.isDebug())
 		{
 			Logger.setLevelFilter(LogLevelFilter.DEBUG);
-			Logger.setFileOutput(FileOutputOption.DISABLED);
 			Logger.addFilter(message -> !message.getCaller().getClassName().contains("org.apache.commons.logging.impl.SLF4JLog"));
-		}
-		else
-		{
-			Logger.setFileOutput(FileOutputOption.COMBINED);
 		}
 		Logger.info("Logging initialized (Running in LogLevel: {0})", Logger.getLevelFilter().toString());
 	}
