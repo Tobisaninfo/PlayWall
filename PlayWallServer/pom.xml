@@ -39,6 +39,20 @@
             <groupId>de.thecodelabs</groupId>
             <artifactId>libUtils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libJfx</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.controlsfx</groupId>
+                    <artifactId>controlsfx</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

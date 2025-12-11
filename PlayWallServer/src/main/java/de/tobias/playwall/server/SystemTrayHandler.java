@@ -1,5 +1,7 @@
 package de.tobias.playwall.server;
 
+import de.thecodelabs.utils.application.system.NativeApplication;
+import de.thecodelabs.utils.util.OS;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -28,6 +30,10 @@ public class SystemTrayHandler
 		{
 			log.debug("SystemTray is not supported");
 			return;
+		}
+		if(OS.isMacOS())
+		{
+			NativeApplication.sharedInstance().setDockIconHidden(true);
 		}
 
 		final PopupMenu popup = new PopupMenu();
