@@ -1,11 +1,13 @@
-package de.tobias.playwall.client.viewcontroller;
+package de.tobias.playwall.client.viewcontroller.launch;
 
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.launch.ServerLauncher;
+import de.tobias.playwall.client.server.ServerLauncher;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
+import de.tobias.playwall.client.viewcontroller.LaunchDialog;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
@@ -22,7 +24,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-class ApplicationLoadingViewControllerTest extends AbstractViewControllerTest
+class ApplicationLaunchViewControllerTest extends AbstractViewControllerTest
 {
 	private abstract static class StubClient implements Client
 	{
@@ -91,6 +93,7 @@ class ApplicationLoadingViewControllerTest extends AbstractViewControllerTest
 				.untilAsserted(() -> assertThat(controller.getLoadingLabel()).hasText("Verbindungsaufbau... (2 / 10)"));
 
 		// Verify launch dialog gets opened
+		WaitForAsyncUtils.waitForFxEvents();
 		verify(launchDialog).showStage();
 	}
 

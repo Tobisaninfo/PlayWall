@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.launch;
+package de.tobias.playwall.client.server;
 
 import lombok.Getter;
 
