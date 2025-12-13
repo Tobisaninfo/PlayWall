@@ -6,8 +6,10 @@ import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.PlayWallMain;
 import de.tobias.playwall.client.appcontext.Service;
+import lombok.SneakyThrows;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -79,7 +81,11 @@ public class ServerLauncher
 
 			Logger.info("Server starting");
 
-			captchaLoggingOutput();
+			awaitServerStartUp();
+
+			final Thread thread = new Thread(this::printServerLog);
+			thread.setDaemon(true);
+			thread.start();
 		}
 		catch(URISyntaxException | IOException e)
 		{
@@ -87,32 +93,56 @@ public class ServerLauncher
 		}
 	}
 
-	private void captchaLoggingOutput() throws IOException
+	private void awaitServerStartUp() throws IOException
 	{
 		boolean started = false;
 		final Pattern readyPattern = Pattern.compile("Started PlayWallServerMain .*");
 		final Pattern portUsedPattern = Pattern.compile("Web server failed to start\\. Port \\d+ was already in use\\.");
-		try(BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream())))
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream()));
+		String line;
+		while((line = reader.readLine()) != null)
 		{
-			String line;
-			while((line = reader.readLine()) != null)
+			if(readyPattern.matcher(line).find())
 			{
-				if(readyPattern.matcher(line).find())
-				{
-					started = true;
-					Logger.info("Server successfully started");
-					break;
-				}
-				if(portUsedPattern.matcher(line).find())
-				{
-					throw new ServerLaunchException.PortInUseException();
-				}
+				started = true;
+				Logger.info("Server successfully started");
+				break;
+			}
+			if(portUsedPattern.matcher(line).find())
+			{
+				throw new ServerLaunchException.PortInUseException();
 			}
 		}
 
 		if(!started)
 		{
 			throw new ServerLaunchException.GenericStartupException();
+		}
+	}
+
+	@SneakyThrows
+	private void printServerLog()
+	{
+		try(BufferedWriter writer = Files.newBufferedWriter(ApplicationUtils.getApplication().getPath(PathType.LOG, "client_server.log")))
+		{
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream())))
+			{
+				String line;
+				while((line = reader.readLine()) != null)
+				{
+					writer.write(line);
+					writer.newLine();
+					writer.flush();
+				}
+			}
+			catch(IOException e)
+			{
+				Logger.error(e);
+			}
+			serverProcess.waitFor();
+			writer.write("Server exit code " + serverProcess.exitValue());
+			writer.newLine();
 		}
 	}
 
