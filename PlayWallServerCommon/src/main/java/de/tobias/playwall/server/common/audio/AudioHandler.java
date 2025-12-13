@@ -10,7 +10,7 @@ public abstract class AudioHandler
 {
 	private PadController padController;
 
-	public AudioHandler(PadController padController)
+	protected AudioHandler(PadController padController)
 	{
 		this.padController = padController;
 	}

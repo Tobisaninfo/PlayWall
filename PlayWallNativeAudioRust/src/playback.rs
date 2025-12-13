@@ -24,7 +24,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         if bridge.audio_stream_handler.is_none() {
             let host = rodio::cpal::default_host();
             let device = if let Some(ref name) = bridge.device_name {
-                host.output_devices().unwrap().find(|d| d.name().unwrap_or_default() == *name)
+                host.output_devices()
+                    .unwrap()
+                    .find(|d| d.name().unwrap_or_default() == *name)
             } else {
                 None
             };
@@ -35,10 +37,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 OutputStreamBuilder::from_default_device()
             };
 
-            let stream_handler = stream_builder
-                .unwrap()
-                .open_stream()
-                .unwrap();
+            let stream_handler = stream_builder.unwrap().open_stream().unwrap();
             let sink = Sink::connect_new(stream_handler.mixer());
             bridge.setAudioHandlerStream(AudioStreamHandler {
                 stream_handler,
