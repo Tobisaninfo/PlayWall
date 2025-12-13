@@ -69,10 +69,9 @@ public class MainViewController extends BaseNVC
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
+		super.initStage(stageContainer, stage);
 		stageContainer.addCloseHook(this::closeRequest);
-		styleable.applyToStage(stage);
 
-		stage.getIcons().add(AppContextHolder.getInstance().get(AppIconProvider.class).getStageIcon());
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
 	}

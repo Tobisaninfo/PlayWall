@@ -108,7 +108,7 @@ public class LaunchDialog extends BaseNVC
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
-		styleable.applyToStage(stage);
+		super.initStage(stageContainer, stage);
 
 		stage.setTitle(getString(Strings.UI_DIALOG_LAUNCH_TITLE));
 		stage.setResizable(false);

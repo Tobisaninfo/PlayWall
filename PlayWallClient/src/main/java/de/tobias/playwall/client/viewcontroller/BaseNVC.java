@@ -1,11 +1,24 @@
 package de.tobias.playwall.client.viewcontroller;
 
 import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.tobias.playwall.client.AppIconProvider;
 import de.tobias.playwall.client.appcontext.InjectField;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
+import javafx.stage.Stage;
 
 public class BaseNVC extends NVC
 {
 	@InjectField
 	protected Styleable styleable;
+
+	@InjectField
+	protected AppIconProvider iconProvider;
+
+	@Override
+	protected void initStage(NVCStage stageContainer, Stage stage)
+	{
+		styleable.applyToStage(stage);
+		stage.getIcons().add(iconProvider.getStageIcon());
+	}
 }

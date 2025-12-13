@@ -51,8 +51,8 @@ public class ApplicationLoadingViewController extends BaseNVC
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
+		super.initStage(stageContainer, stage);
 		stageContainer.initStyle(StageStyle.UNDECORATED);
-		styleable.applyToStage(stage);
 	}
 
 	@PostConstruct
