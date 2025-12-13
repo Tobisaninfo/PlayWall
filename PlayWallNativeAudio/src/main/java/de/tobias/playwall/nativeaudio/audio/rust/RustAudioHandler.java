@@ -54,6 +54,14 @@ public class RustAudioHandler extends AudioHandler
 	private native void stopNative();
 
 	@Override
+	public boolean isPlaying()
+	{
+		return isPlayingNative();
+	}
+
+	private native boolean isPlayingNative();
+
+	@Override
 	public Duration getPosition()
 	{
 		return null;

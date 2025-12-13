@@ -99,6 +99,28 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 }
 
 #[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_isPlayingNative(
+    mut env: JNIEnv,
+    obj: JObject,
+) -> jboolean {
+    with_bridge(&mut env, obj, |_env, bridge| {
+        return if (bridge.audio_stream_handler.as_ref().is_some()) {
+            let paused = bridge
+                .audio_stream_handler
+                .as_ref()
+                .unwrap()
+                .sink
+                .is_paused();
+            let is_empty = bridge.audio_stream_handler.as_ref().unwrap().sink.empty();
+            (!paused && !is_empty) as jboolean
+        } else {
+            false as jboolean
+        };
+    })
+        .unwrap()
+}
+
+#[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getDurationNative(
     mut env: JNIEnv,
     obj: JObject,

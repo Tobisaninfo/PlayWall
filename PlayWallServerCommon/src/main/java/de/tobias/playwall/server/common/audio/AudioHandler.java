@@ -36,6 +36,13 @@ public abstract class AudioHandler
 	public abstract void stop();
 
 	/**
+	 * Return true if the current media is playing.
+	 *
+	 * @return true if playing
+	 */
+	public abstract boolean isPlaying();
+
+	/**
 	 * Get the current play position of the current player.
 	 *
 	 * @return current position
