@@ -13,7 +13,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class RustAudioLoaderExtension implements BeforeAllCallback
 {
 	private static final AtomicBoolean isLoaded = new AtomicBoolean(false);
-	private final String nativeLibraryFilename = OS.isWindows() ? "PlayWallNativeAudioRust.dll" : "libPlayWallNativeAudioRust.dylib";
+	private final String nativeLibraryFilename = switch(OS.getType())
+	{
+		case Windows -> "PlayWallNativeAudioRust.dll";
+		case MacOSX -> "libPlayWallNativeAudioRust.dylib";
+		case Linux -> "libPlayWallNativeAudioRust.so";
+		case Other -> throw new UnsupportedOperationException();
+	};
 
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception
