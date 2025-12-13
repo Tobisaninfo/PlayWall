@@ -75,8 +75,12 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
 ) {
     with_bridge(&mut env, obj, |_env, bridge| {
-        bridge.audio_stream_handler.as_ref().unwrap().sink.pause();
-        trace!("Pause");
+        if (bridge.audio_stream_handler.as_ref().is_some()) {
+            bridge.audio_stream_handler.as_ref().unwrap().sink.pause();
+            trace!("Pause");
+        } else {
+            trace!("No audio handler to pause, skipping");
+        }
     });
 }
 
@@ -117,13 +121,17 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     volume: jdouble,
 ) {
     with_bridge(&mut env, obj, |_env, bridge| {
-        bridge
-            .audio_stream_handler
-            .as_ref()
-            .unwrap()
-            .sink
-            .set_volume(volume as f32);
-        trace!("Set volume to {}", volume);
+        if (bridge.audio_stream_handler.as_ref().is_some()) {
+            bridge
+                .audio_stream_handler
+                .as_ref()
+                .unwrap()
+                .sink
+                .set_volume(volume as f32);
+            trace!("Set volume to {}", volume);
+        } else {
+            trace!("No audio handler to set volume, skipping");
+        }
     });
 }
 
