@@ -8,7 +8,7 @@ color:
   detail: "CYAN"
   message: "RESET"
 
-dateFormatterPattern: "dd.MM.YY HH:mm:ss"
+dateFormatterPattern: "YYYY-MM-dd HH:mm:ss"
 
 defaultOutLevel: "DEBUG"
 defaultErrLevel: "ERROR"
