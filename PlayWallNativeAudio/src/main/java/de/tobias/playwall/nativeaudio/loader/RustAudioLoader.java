@@ -28,7 +28,13 @@ public class RustAudioLoader
 	@PostConstruct
 	void preInit()
 	{
-		final String nativeLibraryFilename = OS.isWindows() ? "PlayWallNativeAudioRust.dll" : "libPlayWallNativeAudioRust.dylib";
+		final String nativeLibraryFilename = switch(OS.getType())
+		{
+			case Windows -> "PlayWallNativeAudioRust.dll";
+			case MacOSX -> "libPlayWallNativeAudioRust.dylib";
+			case Linux -> "libPlayWallNativeAudioRust.so";
+			case Other -> throw new UnsupportedOperationException();
+		};
 		final Path destinationPath = pathProvider.getPathForNativeLibrary(nativeLibraryFilename);
 
 		try
