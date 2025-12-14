@@ -99,10 +99,13 @@ public class ServerLauncher
 		final Pattern readyPattern = Pattern.compile("Started PlayWallServerMain .*");
 		final Pattern portUsedPattern = Pattern.compile("Web server failed to start\\. Port \\d+ was already in use\\.");
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream()));
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream()));
+		final List<String> lines = new ArrayList<>();
+
 		String line;
 		while((line = reader.readLine()) != null)
 		{
+			lines.add(line);
 			if(readyPattern.matcher(line).find())
 			{
 				started = true;
@@ -117,6 +120,7 @@ public class ServerLauncher
 
 		if(!started)
 		{
+			Logger.error("Server failed to start: \n" + String.join("\n", lines));
 			throw new ServerLaunchException.GenericStartupException();
 		}
 	}
