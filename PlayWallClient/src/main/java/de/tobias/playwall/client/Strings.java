@@ -14,4 +14,25 @@ public class Strings
 	public static final String UI_DIALOG_PROJECT_DELETE_TITLE = "ui.dialog.project.delete.title";
 	public static final String UI_DIALOG_PROJECT_DELETE_CONTENT = "ui.dialog.project.delete.content";
 	public static final String UI_PLACEHOLDER_PROJECT = "ui.placeholder.project";
+
+	public static final String UI_MENU_FILE = "ui.menu.file";
+	public static final String UI_MENU_FILE_NEW_PROJECT = "ui.menu.file.new.project";
+	public static final String UI_MENU_FILE_RECENT_PROJECT = "ui.menu.file.recent.projects";
+	public static final String UI_MENU_FILE_MANAGE_PROJECTS = "ui.menu.file.manage.projects";
+	public static final String UI_MENU_FILE_SAVE_PROJECT = "ui.menu.file.save.project";
+	public static final String UI_MENU_FILE_SETTINGS = "ui.menu.file.settings";
+
+	public static final String UI_MENU_EDIT = "ui.menu.edit";
+	public static final String UI_MENU_EDIT_SEARCH = "ui.menu.edit.search";
+	public static final String UI_MENU_EDIT_REPLACE_MEDIA = "ui.menu.edit.replace.media";
+
+	public static final String UI_MENU_VIEW = "ui.menu.view";
+	public static final String UI_MENU_VIEW_FOREGROUND = "ui.menu.view.foreground";
+	public static final String UI_MENU_VIEW_FULLSCREEN = "ui.menu.view.fullscreen";
+	public static final String UI_MENU_VIEW_TOUCH_MODE_ENABLE = "ui.menu.view.touch.mode.enable";
+	public static final String UI_MENU_VIEW_TOUCH_MODE_DISABLE = "ui.menu.view.touch.mode.disable";
+
+	public static final String UI_MENU_INFO = "ui.menu.info";
+	public static final String UI_MENU_INFO_ABOUT = "ui.menu.info.about";
+	public static final String UI_MENU_INFO_UPDATES = "ui.menu.info.updates";
 }

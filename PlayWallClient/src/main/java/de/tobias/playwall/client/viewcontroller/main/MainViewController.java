@@ -8,6 +8,7 @@ import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.AppIconProvider;
+import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -214,13 +215,13 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuFile()
 	{
-		final MenuItem menuItemNewProject = new MenuItem("Neues Projekt...");
-		final Menu menuRecentProject = new Menu("Zuletzt verwendete Projekte");
-		final MenuItem menuItemManageProject = new MenuItem("Projekte verwalten...");
-		final MenuItem menuItemSaveProject = new MenuItem("Projekt speichern");
-		final MenuItem menuItemSettings = new MenuItem("Einstellungen...");
+		final MenuItem menuItemNewProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_NEW_PROJECT));
+		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT));
+		final MenuItem menuItemManageProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_MANAGE_PROJECTS));
+		final MenuItem menuItemSaveProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SAVE_PROJECT));
+		final MenuItem menuItemSettings = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SETTINGS));
 
-		final Menu menu = new Menu("Datei");
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
 		menu.getItems().addAll(
 				menuItemNewProject,
 				menuRecentProject,
@@ -235,10 +236,10 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuEdit()
 	{
-		final MenuItem menuItemSearch = new MenuItem("Kacheln suchen");
-		final MenuItem menuItemReplaceMedia = new MenuItem("Medien ersetzen...");
+		final MenuItem menuItemSearch = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_SEARCH));
+		final MenuItem menuItemReplaceMedia = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_REPLACE_MEDIA));
 
-		final Menu menu = new Menu("Bearbeiten");
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
 				menuItemSearch,
 				new SeparatorMenuItem(),
@@ -250,11 +251,11 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuView()
 	{
-		final MenuItem menuItemForeground = new MenuItem("Fenster im Vordergrund");
-		final MenuItem menuItemFullscreen = new MenuItem("Vollbild");
-		final MenuItem menuItemTouchMode = new MenuItem("Touchmodus aktivieren");
+		final MenuItem menuItemForeground = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FOREGROUND));
+		final MenuItem menuItemFullscreen = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FULLSCREEN));
+		final MenuItem menuItemTouchMode = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE));
 
-		final Menu menu = new Menu("Ansicht");
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_VIEW));
 		menu.getItems().addAll(
 				menuItemForeground,
 				menuItemFullscreen,
@@ -267,10 +268,10 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuInfo()
 	{
-		final MenuItem menuItemAbout = new MenuItem("Über PlayWall");
-		final MenuItem menuItemUpdates = new MenuItem("Nach Updates suchen");
+		final MenuItem menuItemAbout = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_ABOUT));
+		final MenuItem menuItemUpdates = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_UPDATES));
 
-		final Menu menu = new Menu("Info");
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_INFO));
 		menu.getItems().addAll(
 				menuItemAbout,
 				new SeparatorMenuItem(),
