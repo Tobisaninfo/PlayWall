@@ -19,6 +19,10 @@ import de.tobias.playwall.client.viewcontroller.BaseNVC;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadViewProvider;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
@@ -64,6 +68,8 @@ public class MainViewController extends BaseNVC
 		notificationPane.setCloseButtonVisible(false);
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
+
+		headerBox.getChildren().add(createMenu());
 	}
 
 	@Override
@@ -186,5 +192,91 @@ public class MainViewController extends BaseNVC
 
 			view.updateFromPad(pad);
 		}
+	}
+
+	private MenuBar createMenu()
+	{
+		final Menu menuFile = createMenuFile();
+		final Menu menuEdit = createMenuEdit();
+		final Menu menuView = createMenuView();
+		final Menu menuInfo = createMenuInfo();
+
+		// TODO: enable as soon as implemented
+		menuFile.getItems().forEach(item -> item.setDisable(true));
+		menuView.getItems().forEach(item -> item.setDisable(true));
+		menuEdit.getItems().forEach(item -> item.setDisable(true));
+		menuInfo.getItems().forEach(item -> item.setDisable(true));
+
+		final MenuBar menuBar = new MenuBar();
+		menuBar.getMenus().addAll(menuFile, menuEdit, menuView, menuInfo);
+		return menuBar;
+	}
+
+	private Menu createMenuFile()
+	{
+		final MenuItem menuItemNewProject = new MenuItem("Neues Projekt...");
+		final Menu menuRecentProject = new Menu("Zuletzt verwendete Projekte");
+		final MenuItem menuItemManageProject = new MenuItem("Projekte verwalten...");
+		final MenuItem menuItemSaveProject = new MenuItem("Projekt speichern");
+		final MenuItem menuItemSettings = new MenuItem("Einstellungen...");
+
+		final Menu menu = new Menu("Datei");
+		menu.getItems().addAll(
+				menuItemNewProject,
+				menuRecentProject,
+				menuItemManageProject,
+				menuItemSaveProject,
+				new SeparatorMenuItem(),
+				menuItemSettings
+		);
+
+		return menu;
+	}
+
+	private Menu createMenuEdit()
+	{
+		final MenuItem menuItemSearch = new MenuItem("Kacheln suchen");
+		final MenuItem menuItemReplaceMedia = new MenuItem("Medien ersetzen...");
+
+		final Menu menu = new Menu("Bearbeiten");
+		menu.getItems().addAll(
+				menuItemSearch,
+				new SeparatorMenuItem(),
+				menuItemReplaceMedia
+		);
+
+		return menu;
+	}
+
+	private Menu createMenuView()
+	{
+		final MenuItem menuItemForeground = new MenuItem("Fenster im Vordergrund");
+		final MenuItem menuItemFullscreen = new MenuItem("Vollbild");
+		final MenuItem menuItemTouchMode = new MenuItem("Touchmodus aktivieren");
+
+		final Menu menu = new Menu("Ansicht");
+		menu.getItems().addAll(
+				menuItemForeground,
+				menuItemFullscreen,
+				new SeparatorMenuItem(),
+				menuItemTouchMode
+		);
+
+		return menu;
+	}
+
+	private Menu createMenuInfo()
+	{
+		final MenuItem menuItemAbout = new MenuItem("Über PlayWall");
+		final MenuItem menuItemUpdates = new MenuItem("Nach Updates suchen");
+
+		final Menu menu = new Menu("Info");
+		menu.getItems().addAll(
+				menuItemAbout,
+				new SeparatorMenuItem(),
+				menuItemUpdates
+		);
+
+		return menu;
 	}
 }
