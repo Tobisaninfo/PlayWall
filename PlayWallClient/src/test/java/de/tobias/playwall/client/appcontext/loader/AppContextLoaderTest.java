@@ -9,7 +9,7 @@ import de.tobias.playwall.client.appcontext.loader.test.good.TestViewController;
 import de.tobias.playwall.client.appcontext.loader.test.inject.constructor.wrong.TestConstructorWrong;
 import de.tobias.playwall.client.appcontext.loader.test.inject.constructor.dependencyMissing.TestConstructorDependencyNotRegistered;
 import de.tobias.playwall.client.appcontext.loader.test.inject.field.dependencyMissing.TestFieldDependencyNotRegistered;
-import de.tobias.playwall.client.extenions.LoggerSetup;
+import de.tobias.playwall.client.extensions.LoggerSetup;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

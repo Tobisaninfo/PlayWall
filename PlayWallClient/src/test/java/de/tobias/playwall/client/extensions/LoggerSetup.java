@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.extenions;
+package de.tobias.playwall.client.extensions;
 
 import de.thecodelabs.logger.FileOutputOption;
 import de.thecodelabs.logger.LogLevelFilter;

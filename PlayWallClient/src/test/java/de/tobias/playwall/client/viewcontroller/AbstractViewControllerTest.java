@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.viewcontroller;
 
-import de.tobias.playwall.client.extenions.AppEnvironmentSetup;
-import de.tobias.playwall.client.extenions.LoggerSetup;
+import de.tobias.playwall.client.extensions.AppEnvironmentSetup;
+import de.tobias.playwall.client.extensions.LoggerSetup;
 import de.tobias.playwall.client.utils.ScreenshotOnFailure;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
