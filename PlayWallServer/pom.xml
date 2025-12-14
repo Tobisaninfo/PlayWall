@@ -153,7 +153,7 @@
                                             <arg value="--module-path=${java.home}/jmods"/>
                                             <arg value="--add-modules=java.base,java.logging,java.compiler,java.instrument,jdk.unsupported,java.desktop,java.management,java.naming,java.security.jgss,java.sql"/>
                                             <arg value="--output=${project.build.directory}/../../PlayWallClient/target/build/server/PlayWallServer-jdk"/>
-                                            <arg value="--compress=2"/>
+                                            <arg value="--compress=zip-6"/>
                                             <arg value="--no-header-files"/>
                                             <arg value="--no-man-pages"/>
                                         </exec>
