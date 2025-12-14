@@ -67,6 +67,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             stream_handler,
             sink,
         });
+        bridge.device_name = Some(device_name_str.clone());
         trace!("Init output stream and sink for device {}", device_name_str);
     });
 }

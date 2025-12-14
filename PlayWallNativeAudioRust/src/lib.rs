@@ -20,9 +20,10 @@ use tracing_subscriber;
 struct RustBridge {
     java_obj: GlobalRef,
     jvm: JavaVM,
-    source: Option<Buffered<Decoder<BufReader<File>>>>,
+    media_path: Option<String>,
     duration: Option<f64>,
     audio_stream_handler: Option<AudioStreamHandler>,
+    device_name: Option<String>,
 }
 
 impl RustBridge {
@@ -30,19 +31,21 @@ impl RustBridge {
         Self {
             java_obj,
             jvm,
-            source: None,
+            media_path: None,
             duration: None,
             audio_stream_handler: None,
+            device_name: None,
         }
     }
 
-    fn setSource(&mut self, source: Buffered<Decoder<BufReader<File>>>, duration: f64) {
-        self.source = Some(source);
+    fn setMedia(&mut self, path: String, duration: f64) {
+        self.media_path = Some(path);
         self.duration = Some(duration);
     }
 
-    fn clearSource(&mut self) {
-        self.source = None;
+    fn clearMedia(&mut self) {
+        self.media_path = None;
+        self.duration = None;
     }
 
     fn setAudioHandlerStream(&mut self, audio_stream_handler: AudioStreamHandler) {
@@ -172,7 +175,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
         let source = Decoder::new(reader).unwrap().buffered();
         with_bridge(&mut env, obj, |_env, bridge| {
-            bridge.setSource(source, duration_seconds);
+            bridge.setMedia(path_str, duration_seconds);
             trace!("Loaded media");
         });
     } else {
@@ -190,7 +193,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
 ) {
     with_bridge(&mut env, obj, |_env, bridge| {
-        bridge.clearSource();
+        bridge.clearMedia();
         trace!("Unload media");
     });
 }
@@ -202,7 +205,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 ) -> jboolean {
     with_bridge(&mut env, obj, |_env, bridge| {
         trace!("Unload media");
-        return bridge.source.is_some() as jboolean;
+        return bridge.media_path.is_some() as jboolean;
     })
     .unwrap()
 }

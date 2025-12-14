@@ -10,7 +10,7 @@ public abstract class AudioHandler
 {
 	private PadController padController;
 
-	public AudioHandler(PadController padController)
+	protected AudioHandler(PadController padController)
 	{
 		this.padController = padController;
 	}
@@ -34,6 +34,13 @@ public abstract class AudioHandler
 	 * Stop the audio stream.
 	 */
 	public abstract void stop();
+
+	/**
+	 * Return true if the current media is playing.
+	 *
+	 * @return true if playing
+	 */
+	public abstract boolean isPlaying();
 
 	/**
 	 * Get the current play position of the current player.
