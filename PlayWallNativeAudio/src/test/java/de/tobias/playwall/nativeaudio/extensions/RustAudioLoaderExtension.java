@@ -1,4 +1,4 @@
-package de.tobias.playwall.nativeaudio.exitensions;
+package de.tobias.playwall.nativeaudio.extensions;
 
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.nativeaudio.audio.rust.RustAudioHandler;

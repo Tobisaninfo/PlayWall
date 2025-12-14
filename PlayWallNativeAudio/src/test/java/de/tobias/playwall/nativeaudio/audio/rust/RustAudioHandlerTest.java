@@ -1,6 +1,6 @@
 package de.tobias.playwall.nativeaudio.audio.rust;
 
-import de.tobias.playwall.nativeaudio.exitensions.RustAudioLoaderExtension;
+import de.tobias.playwall.nativeaudio.extensions.RustAudioLoaderExtension;
 import de.tobias.playwall.server.common.project.PadController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
