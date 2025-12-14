@@ -2,7 +2,8 @@
   <configuration default="false" name="PlayWallMain (Server)" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="de.tobias.playwall.client.PlayWallMain" />
     <module name="PlayWallClient" />
-    <option name="PROGRAM_PARAMETERS" value="--debug" />
+    <option name="PROGRAM_PARAMETERS"
+            value="--debug --server-path=$ProjectFileDir$/PlayWallClient/target/build/server"/>
     <option name="VM_PARAMETERS"
             value="--enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx"/>
     <extension name="coverage">

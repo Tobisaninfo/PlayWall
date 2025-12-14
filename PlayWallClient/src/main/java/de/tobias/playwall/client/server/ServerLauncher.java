@@ -4,8 +4,10 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
-import de.tobias.playwall.client.PlayWallMain;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.io.BufferedReader;
@@ -15,14 +17,16 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = {@InjectConstructor})
 public class ServerLauncher
 {
+	private final ServerPathLookup serverPathLookup;
+
 	private Process serverProcess;
 
 	@SuppressWarnings("java:S899")
@@ -31,11 +35,7 @@ public class ServerLauncher
 		try
 		{
 			Logger.info("Server starting, checking files");
-			final Path resourceFolder = Paths.get(PlayWallMain.class.getProtectionDomain()
-							.getCodeSource()
-							.getLocation()
-							.toURI()).getParent()
-					.resolve("server");
+			Path resourceFolder = serverPathLookup.getServerInstallationFolder();
 			Logger.info("Server folder: " + resourceFolder.toAbsolutePath());
 
 			if(Files.notExists(resourceFolder))

@@ -44,6 +44,7 @@
         <javafx.version>25.0.1</javafx.version>
         <controlsfx.version>11.2.3</controlsfx.version>
         <classgraph.version>4.8.184</classgraph.version>
+        <commons-cli.version>1.11.0</commons-cli.version>
 
         <!-- Testing -->
         <junit.version>5.14.1</junit.version>
