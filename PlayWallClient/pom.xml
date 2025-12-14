@@ -24,6 +24,10 @@
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
         </surefire.argLineBase>
         <surefire.argLine>${surefire.argLineBase}</surefire.argLine>
+        <failsafe.argLineBase>
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+        </failsafe.argLineBase>
+        <failsafe.argLine>${failsafe.argLineBase}</failsafe.argLine>
     </properties>
 
     <dependencyManagement>
@@ -190,7 +194,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <argLine>${surefire.argLine}</argLine>
+                    <argLine>${failsafe.argLine}</argLine>
                 </configuration>
                 <executions>
                     <execution>
@@ -227,6 +231,21 @@
                         <configuration>
                             <argLine>${surefire.argLine} ${surefire.argLineJacoco}</argLine>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <argLine>${failsafe.argLine} ${failsafe.argLineJacoco}</argLine>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

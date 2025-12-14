@@ -192,6 +192,18 @@
                                     <propertyName>surefire.argLineJacoco</propertyName>
                                 </configuration>
                             </execution>
+
+                            <execution>
+                                <id>prepare-agent-integration</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <destFile>${project.build.directory}/jacoco-it.exec</destFile>
+                                    <propertyName>failsafe.argLineJacoco</propertyName>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
