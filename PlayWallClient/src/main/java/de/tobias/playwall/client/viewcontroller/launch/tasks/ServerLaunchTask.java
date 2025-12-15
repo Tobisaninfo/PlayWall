@@ -36,11 +36,11 @@ public class ServerLaunchTask extends LaunchTask
 			}
 			catch(ServerLaunchException.PortInUseException e)
 			{
-				return new FailureResult(Localization.getString("ui.application_loading.error.server.port_in_use", 10023), e, false);
+				return new FailureResult(Localization.getString("ui.application_loading.error.server.port_in_use", 10023), e, false);  // TODO: Port hard coded
 			}
 			catch(ServerLaunchException.GenericStartupException e)
 			{
-				return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.generic", e.getMessage()), 10023), e, true);
+				return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.generic", e.getMessage())), e, true);
 			}
 		}
 		return new SuccessResult();
