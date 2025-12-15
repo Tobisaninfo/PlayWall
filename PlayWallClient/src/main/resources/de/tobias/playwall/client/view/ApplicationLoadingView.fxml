@@ -4,9 +4,7 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-
+<?import javafx.scene.layout.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0"
             prefWidth="700.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -21,7 +19,7 @@
               AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0">
             <children>
                 <ProgressIndicator/>
-                <Label fx:id="loadingLabel" text="Loading ..."/>
+                <Label fx:id="loadingLabel"/>
             </children>
         </HBox>
         <Label fx:id="titleLabel" layoutX="25.0" layoutY="29.0" styleClass="title" text="PlayWall"

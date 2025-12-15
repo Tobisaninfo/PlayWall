@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.server.ServerLaunchException;
 import de.tobias.playwall.client.server.ServerLauncher;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,8 @@ public class ServerLaunchTask extends LaunchTask
 	@Override
 	public LaunchResult launch(Label progressLabel)
 	{
+		Platform.runLater(() -> progressLabel.setText(Localization.getString("ui.application_loading")));
+
 		if(!commandLineOptions.hasOption(CommandLineOptions.STANDALONE))
 		{
 			Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
