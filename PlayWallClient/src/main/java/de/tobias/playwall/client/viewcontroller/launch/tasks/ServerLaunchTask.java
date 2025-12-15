@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.viewcontroller.launch.tasks;
 
-import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.server.ServerLaunchException;
@@ -10,20 +10,17 @@ import javafx.scene.control.Label;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
-import java.util.Arrays;
-
 @Service
 @AllArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = {@InjectConstructor})
 public class ServerLaunchTask extends LaunchTask
 {
-	private final App app;
 	private final ServerLauncher serverLauncher;
+	private final CommandLineOptions commandLineOptions;
 
 	@Override
 	public LaunchResult launch(Label progressLabel)
 	{
-		final String[] args = app.getProgramArgs();
-		if(!(args != null && args.length != 0 && Arrays.binarySearch(args, "--standalone") >= 0))
+		if(!commandLineOptions.hasOption(CommandLineOptions.STANDALONE))
 		{
 			Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
 			try
