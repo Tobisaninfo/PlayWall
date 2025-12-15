@@ -5,7 +5,6 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.appcontext.Service;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.cli.*;
 import org.apache.commons.cli.help.HelpFormatter;
@@ -39,11 +38,8 @@ public class CommandLineOptions
 		}
 		catch(ParseException _)
 		{
-			String header = "Do something useful with an input file";
-			String footer = "Please report issues at https://example.com/issues";
-
 			HelpFormatter formatter = HelpFormatter.builder().get();
-			formatter.printHelp("myapp", header, options, footer, true);
+			formatter.printHelp(app.getInfo().getName(), null, options, null, true);
 		}
 	}
 
