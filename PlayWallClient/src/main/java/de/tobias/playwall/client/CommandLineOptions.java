@@ -46,7 +46,7 @@ public class CommandLineOptions
 
 	public boolean hasOption(Option option)
 	{
-		return cmd.hasOption(option.getOpt());
+		return cmd.hasOption(option);
 	}
 
 	public String getOptionValue(Option option)
