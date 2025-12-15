@@ -40,6 +40,7 @@ public class CommandLineOptions
 		{
 			HelpFormatter formatter = HelpFormatter.builder().get();
 			formatter.printHelp(app.getInfo().getName(), null, options, null, true);
+			System.exit(1);
 		}
 	}
 
