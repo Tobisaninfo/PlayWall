@@ -20,6 +20,7 @@ public class Strings
 	public static final String UI_MENU_FILE_RECENT_PROJECT = "ui.menu.file.recent.projects";
 	public static final String UI_MENU_FILE_MANAGE_PROJECTS = "ui.menu.file.manage.projects";
 	public static final String UI_MENU_FILE_SAVE_PROJECT = "ui.menu.file.save.project";
+	public static final String UI_MENU_FILE_PROJECT_SETTINGS = "ui.menu.file.project.settings";
 	public static final String UI_MENU_FILE_SETTINGS = "ui.menu.file.settings";
 
 	public static final String UI_MENU_EDIT = "ui.menu.edit";

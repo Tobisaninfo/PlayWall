@@ -211,10 +211,11 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuFile()
 	{
-		final MenuItem menuItemNewProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_NEW_PROJECT), new FontIcon(FontAwesomeType.PLUS_SOLID));
+		final MenuItem menuItemNewProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_NEW_PROJECT), new FontIcon(FontAwesomeType.FOLDER_PLUS_SOLID));
 		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), new FontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
-		final MenuItem menuItemManageProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_MANAGE_PROJECTS), new FontIcon(FontAwesomeType.SLIDERS_SOLID));
+		final MenuItem menuItemManageProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_MANAGE_PROJECTS), new FontIcon(FontAwesomeType.FOLDER_TREE_SOLID));
 		final MenuItem menuItemSaveProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SAVE_PROJECT), new FontIcon(FontAwesomeType.FLOPPY_DISK_SOLID));
+		final MenuItem menuItemProjectSettings = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_PROJECT_SETTINGS), new FontIcon(FontAwesomeType.FILE_PEN_SOLID));
 		final MenuItem menuItemSettings = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SETTINGS), new FontIcon(FontAwesomeType.GEAR_SOLID));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
@@ -223,6 +224,8 @@ public class MainViewController extends BaseNVC
 				menuRecentProject,
 				menuItemManageProject,
 				menuItemSaveProject,
+				new SeparatorMenuItem(),
+				menuItemProjectSettings,
 				new SeparatorMenuItem(),
 				menuItemSettings
 		);
@@ -233,7 +236,7 @@ public class MainViewController extends BaseNVC
 	private Menu createMenuEdit()
 	{
 		final MenuItem menuItemSearch = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_SEARCH), new FontIcon(FontAwesomeType.MAGNIFYING_GLASS_SOLID));
-		final MenuItem menuItemReplaceMedia = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_REPLACE_MEDIA), new FontIcon(FontAwesomeType.FILE_SOLID));
+		final MenuItem menuItemReplaceMedia = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_REPLACE_MEDIA), new FontIcon(FontAwesomeType.FILE_AUDIO_SOLID));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
