@@ -33,7 +33,8 @@ public class ServerLaunchTask extends LaunchTask
 			}
 			catch(ServerLaunchException.NotFoundException e)
 			{
-				return new FailureResult(Localization.getString("ui.application_loading.error.server.not_found", e.getPath()), e, false);
+				final String path = e.getPath().toString();
+				return new FailureResult(Localization.getString("ui.application_loading.error.server.not_found", path.replace("\\", "/")), e, false);
 			}
 			catch(ServerLaunchException.PortInUseException e)
 			{
