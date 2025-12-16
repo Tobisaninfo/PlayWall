@@ -19,6 +19,7 @@
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
         </surefire.argLineBase>
         <surefire.argLine>${surefire.argLineBase}</surefire.argLine>
+        <surefire.skip>true</surefire.skip>
     </properties>
 
     <dependencies>
@@ -68,12 +69,19 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>${surefire.argLine}</argLine>
+                    <skip>${surefire.skip}</skip>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
+        <profile>
+            <id>audio-tests</id>
+            <properties>
+                <surefire.skip>false</surefire.skip>
+            </properties>
+        </profile>
         <profile>
             <id>code-coverage</id>
             <build>
