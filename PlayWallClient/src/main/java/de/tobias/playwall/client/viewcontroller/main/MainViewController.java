@@ -1,15 +1,12 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
-import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
-import de.tobias.playwall.client.AppIconProvider;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
@@ -30,7 +27,6 @@ import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 public class MainViewController extends BaseNVC
@@ -215,11 +211,11 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuFile()
 	{
-		final MenuItem menuItemNewProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_NEW_PROJECT));
-		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT));
-		final MenuItem menuItemManageProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_MANAGE_PROJECTS));
-		final MenuItem menuItemSaveProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SAVE_PROJECT));
-		final MenuItem menuItemSettings = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SETTINGS));
+		final MenuItem menuItemNewProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_NEW_PROJECT), new FontIcon(FontAwesomeType.PLUS_SOLID));
+		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), new FontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
+		final MenuItem menuItemManageProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_MANAGE_PROJECTS), new FontIcon(FontAwesomeType.SLIDERS_SOLID));
+		final MenuItem menuItemSaveProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SAVE_PROJECT), new FontIcon(FontAwesomeType.FLOPPY_DISK_SOLID));
+		final MenuItem menuItemSettings = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SETTINGS), new FontIcon(FontAwesomeType.GEAR_SOLID));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
 		menu.getItems().addAll(
@@ -236,8 +232,8 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuEdit()
 	{
-		final MenuItem menuItemSearch = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_SEARCH));
-		final MenuItem menuItemReplaceMedia = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_REPLACE_MEDIA));
+		final MenuItem menuItemSearch = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_SEARCH), new FontIcon(FontAwesomeType.MAGNIFYING_GLASS_SOLID));
+		final MenuItem menuItemReplaceMedia = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_REPLACE_MEDIA), new FontIcon(FontAwesomeType.FILE_SOLID));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
@@ -251,9 +247,9 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuView()
 	{
-		final MenuItem menuItemForeground = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FOREGROUND));
-		final MenuItem menuItemFullscreen = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FULLSCREEN));
-		final MenuItem menuItemTouchMode = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE));
+		final MenuItem menuItemForeground = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FOREGROUND), new FontIcon(FontAwesomeType.THUMBTACK_SOLID));
+		final MenuItem menuItemFullscreen = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FULLSCREEN), new FontIcon(FontAwesomeType.EXPAND_SOLID));
+		final MenuItem menuItemTouchMode = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE), new FontIcon(FontAwesomeType.HAND_POINTER_SOLID));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_VIEW));
 		menu.getItems().addAll(
@@ -268,8 +264,8 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuInfo()
 	{
-		final MenuItem menuItemAbout = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_ABOUT));
-		final MenuItem menuItemUpdates = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_UPDATES));
+		final MenuItem menuItemAbout = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_ABOUT), new FontIcon(FontAwesomeType.INFO_SOLID));
+		final MenuItem menuItemUpdates = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_UPDATES), new FontIcon(FontAwesomeType.ARROWS_ROTATE_SOLID));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_INFO));
 		menu.getItems().addAll(
