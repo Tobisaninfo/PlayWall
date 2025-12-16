@@ -25,6 +25,7 @@ class ServerLauncherIT
 {
 	private final CommandLineOptions options = Mockito.mock(CommandLineOptions.class);
 
+	private ServerLauncherProperties serverLauncherProperties;
 	private ServerLauncher serverLauncher;
 	private Client client;
 
@@ -36,6 +37,8 @@ class ServerLauncherIT
 
 		when(options.hasOption(CommandLineOptions.SERVER_PATH)).thenReturn(true);
 		when(options.getOptionValue(CommandLineOptions.SERVER_PATH)).thenReturn(Paths.get("target/build/server").toAbsolutePath().toString());
+
+		serverLauncherProperties = ServerLauncherProperties.builder().storagePath(Paths.get("./target").toAbsolutePath().toString()).build();
 
 		serverLauncher = context.get(ServerLauncher.class);
 		client = context.get(Client.class);
@@ -51,7 +54,7 @@ class ServerLauncherIT
 	@SuppressWarnings("java:S2699")
 	void testLaunchServerSuccessful()
 	{
-		serverLauncher.launchServer();
+		serverLauncher.launchServer(serverLauncherProperties);
 
 		client.connect();
 	}
@@ -61,7 +64,7 @@ class ServerLauncherIT
 	{
 		try(var _ = new ServerSocket(10023))
 		{
-			Assertions.assertThatThrownBy(() -> serverLauncher.launchServer())
+			Assertions.assertThatThrownBy(() -> serverLauncher.launchServer(serverLauncherProperties))
 					.isInstanceOf(ServerLaunchException.PortInUseException.class);
 		}
 	}
@@ -70,7 +73,7 @@ class ServerLauncherIT
 	void testLaunchServerFolderNotFound()
 	{
 		when(options.getOptionValue(CommandLineOptions.SERVER_PATH)).thenReturn("target/build");
-		Assertions.assertThatThrownBy(() -> serverLauncher.launchServer())
+		Assertions.assertThatThrownBy(() -> serverLauncher.launchServer(serverLauncherProperties))
 				.isInstanceOf(ServerLaunchException.NotFoundException.class);
 	}
 }

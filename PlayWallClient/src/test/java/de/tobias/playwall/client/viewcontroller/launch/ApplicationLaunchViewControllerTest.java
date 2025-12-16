@@ -81,7 +81,7 @@ class ApplicationLaunchViewControllerTest extends AbstractViewControllerTest
 		assertThat(controller.getVersionLabel()).hasText("0.0.1");
 
 		// Verify server launch
-		verify(serverLauncher).launchServer();
+		verify(serverLauncher).launchServer(any());
 
 		// Verify client connection
 		await()
@@ -112,7 +112,7 @@ class ApplicationLaunchViewControllerTest extends AbstractViewControllerTest
 		assertThat(controller.getVersionLabel()).hasText("0.0.1");
 
 		// Verify server launch
-		verify(serverLauncher).launchServer();
+		verify(serverLauncher).launchServer(any());
 
 		assertThat(robot.lookup(".label.content").queryLabeled()).hasText("PlayWall konnte nicht gestartet werden. \n(Fehler: Cannot connect to server)");
 		robot.clickOn(robot.lookup("Beenden").lookup(".button").queryButton());

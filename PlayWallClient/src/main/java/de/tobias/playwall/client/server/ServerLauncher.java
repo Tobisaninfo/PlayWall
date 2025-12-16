@@ -30,7 +30,7 @@ public class ServerLauncher
 	private Process serverProcess;
 
 	@SuppressWarnings("java:S899")
-	public void launchServer()
+	public void launchServer(ServerLauncherProperties properties)
 	{
 		try
 		{
@@ -64,7 +64,12 @@ public class ServerLauncher
 			final Path loggingPath = ApplicationUtils.getApplication().getPath(PathType.LOG, "server.log");
 
 			final List<String> jvmOptions = List.of("--enable-native-access=ALL-UNNAMED");
-			final List<String> programArguments = List.of("--logging.file.name=" + loggingPath.toString());
+			final List<String> programArguments = new ArrayList<>();
+			programArguments.add("--logging.file.name=" + loggingPath.toString());
+			if(properties.getStoragePath() != null)
+			{
+				programArguments.add("--de.tobias.playwall.path-provider.base-directory-template=" + properties.getStoragePath());
+			}
 
 			final List<String> processCommand = new ArrayList<>();
 			processCommand.add(javaExecutable.toAbsolutePath().toString());

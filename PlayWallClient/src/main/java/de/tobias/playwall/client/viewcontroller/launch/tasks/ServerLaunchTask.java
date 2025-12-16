@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.server.ServerLaunchException;
 import de.tobias.playwall.client.server.ServerLauncher;
+import de.tobias.playwall.client.server.ServerLauncherProperties;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import lombok.AccessLevel;
@@ -28,7 +29,7 @@ public class ServerLaunchTask extends LaunchTask
 			Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
 			try
 			{
-				serverLauncher.launchServer();
+				serverLauncher.launchServer(ServerLauncherProperties.builder().build());
 			}
 			catch(ServerLaunchException.NotFoundException e)
 			{
