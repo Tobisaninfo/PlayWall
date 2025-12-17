@@ -7,7 +7,7 @@ import lombok.Getter;
 public abstract class LaunchTask
 {
 	@SuppressWarnings("java:S2094")
-	public abstract static sealed class LaunchResult permits SuccessResult, FailureResult
+	public abstract static sealed class LaunchResult
 	{
 	}
 

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
 
 @Service
 class ClientWebSocketHandler implements WebSocket.Listener
@@ -29,7 +28,6 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	private WebSocket ws;
 
 	private final Object lock = new Object();
-	private final List<WebSocketListener> listeners;
 
 	private final UpdateMessageEventHandler updateMessageEventHandler;
 
@@ -37,7 +35,6 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	ClientWebSocketHandler(UpdateMessageEventHandler updateMessageEventHandler)
 	{
 		this.updateMessageEventHandler = updateMessageEventHandler;
-		this.listeners = new ArrayList<>();
 		this.objectMapper = new ObjectMapper().findAndRegisterModules();
 		this.responseQueue = new ResponseQueue();
 	}
@@ -203,20 +200,5 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		Logger.trace("Send: " + data);
 		ws.sendText(data, true);
 		return true;
-	}
-
-	public void addListener(WebSocketListener webSocketListener)
-	{
-		this.listeners.add(webSocketListener);
-	}
-
-	public void removeListener(WebSocketListener webSocketListener)
-	{
-		this.listeners.remove(webSocketListener);
-	}
-
-	private void dispatch(Consumer<WebSocketListener> consumer)
-	{
-		this.listeners.forEach(consumer);
 	}
 }

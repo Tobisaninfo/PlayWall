@@ -87,12 +87,12 @@ public class LaunchDialog extends BaseNVC
 		projectListView.setCellFactory(_ -> new ProjectCell());
 
 		// List selection listener
-		projectListView.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
+		projectListView.getSelectionModel().selectedItemProperty().addListener((_, _, c) -> {
 			openButton.setDisable(c == null);
 			deleteButton.setDisable(c == null);
 		});
 
-		// Mouse Double Click on list
+		// Mouse Double Click on the list
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
 					mouseEvent.getClickCount() == 2 &&
@@ -132,9 +132,8 @@ public class LaunchDialog extends BaseNVC
 		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
+		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
 		{
-			// TODO show progress indicator
 			try
 			{
 				client.project(selectedProject.id()).delete();

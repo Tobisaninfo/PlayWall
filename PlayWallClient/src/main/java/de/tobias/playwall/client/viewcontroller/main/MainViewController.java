@@ -1,14 +1,11 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
-import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
-import de.tobias.playwall.client.AppIconProvider;
-import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
@@ -25,7 +22,6 @@ import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 public class MainViewController extends BaseNVC
