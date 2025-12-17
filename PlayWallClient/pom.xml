@@ -22,6 +22,7 @@
             --enable-native-access=javafx.graphics
             --enable-native-access=de.thecodelabs.libJfx
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+            -Duser.language=de -Duser.country=DE
         </surefire.argLineBase>
         <surefire.argLine>${surefire.argLineBase}</surefire.argLine>
         <failsafe.argLineBase>
