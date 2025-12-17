@@ -29,18 +29,17 @@ public class ProjectLaunchHandler implements RequestHandler<ProjectLaunchRequest
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectLaunchRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		final Project project;
 		try
 		{
-			project = projectService.getProjectById(requestMessage.getProjectId());
+			final Project project = projectService.getProjectById(requestMessage.getProjectId());
 			projectController.loadProject(project);
+
+			return Optional.of(new ProjectLaunchResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project)));
 		}
-		catch(ProjectNotExistsException e)
+		catch(ProjectNotExistsException _)
 		{
 			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
 		}
-
-		return Optional.of(new ProjectLaunchResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project)));
 	}
 }

@@ -36,7 +36,7 @@ public class ProjectDeletePageHandler implements RequestHandler<ProjectDeletePag
 			final PageNotExistsError error = new PageNotExistsError(requestMessage.getProjectId(), requestMessage.getPageId());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
 		}
-		catch(ProjectNotExistsException e)
+		catch(ProjectNotExistsException _)
 		{
 			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);

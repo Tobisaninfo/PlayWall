@@ -9,11 +9,10 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.common.net.*;
 
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.WebSocket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
@@ -146,11 +145,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		Logger.error(error);
 	}
 
-	public boolean isInitialized()
-	{
-		return ws != null;
-	}
-
+	@SuppressWarnings({"unchecked", "java:S112"})
 	public synchronized <T extends ResponseMessage> T send(RequestMessage message) throws PlayWallApiException
 	{
 		try
@@ -181,7 +176,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		catch(JsonProcessingException e)
 		{
 			Logger.error(e);
-			throw new RuntimeException(e);
+			throw new UncheckedIOException(e);
 		}
 		catch(InterruptedException e)
 		{

@@ -34,13 +34,13 @@ public class ProjectDuplicatePageHandler implements RequestHandler<ProjectDuplic
 			final Page page = projectService.duplicatePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getName());
 			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
-		catch(ProjectNotExistsException e)
+		catch(ProjectNotExistsException _)
 		{
 			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
 
 		}
-		catch(PageNotExistsException e)
+		catch(PageNotExistsException _)
 		{
 			final PageNotExistsError error = new PageNotExistsError(requestMessage.getProjectId(), requestMessage.getPageId());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);

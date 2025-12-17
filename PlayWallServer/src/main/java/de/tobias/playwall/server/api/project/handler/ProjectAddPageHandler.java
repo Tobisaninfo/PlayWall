@@ -32,11 +32,10 @@ public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageReque
 			final Page page = projectService.addPage(requestMessage.getProjectId(), requestMessage.getName());
 			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
-		catch(ProjectNotExistsException e)
+		catch(ProjectNotExistsException _)
 		{
 			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
-
 		}
 	}
 }

@@ -1,7 +1,10 @@
 package de.tobias.playwall.server.common;
 
+import lombok.NoArgsConstructor;
+
 import java.time.Duration;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class DurationHelper
 {
 	public static Duration convertSecondsToDuration(double seconds)

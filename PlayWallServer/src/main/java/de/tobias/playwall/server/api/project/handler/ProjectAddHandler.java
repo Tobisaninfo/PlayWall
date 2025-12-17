@@ -32,7 +32,7 @@ public class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
 			final ProjectMetadata projectMetadata = projectService.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
 			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectMetadataToProjectMetadataDto(projectMetadata)));
 		}
-		catch(ProjectNameAlreadyExistsException e)
+		catch(ProjectNameAlreadyExistsException _)
 		{
 			final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(requestMessage.getName());
 			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getName()), error);

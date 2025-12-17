@@ -163,10 +163,7 @@ public class MainViewController extends BaseNVC
 
 	private void removePadViews()
 	{
-		padViews.forEach(view ->
-		{
-			padGridPane.getChildren().remove(view.getRootNode());
-		});
+		padViews.forEach(view -> padGridPane.getChildren().remove(view.getRootNode()));
 		padViews.clear();
 	}
 
