@@ -1,14 +1,16 @@
 package de.tobias.playwall.client.viewcontroller.dialog;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
+import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.viewcontroller.BaseNVC;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -23,7 +25,8 @@ import javafx.stage.Window;
 
 import java.util.Optional;
 
-public class ProjectNewDialog extends NVC
+@ViewController(path = "de/tobias/playwall/client/view/dialog", view = "NewProjectDialog")
+public class ProjectNewDialog extends BaseNVC
 {
 	private static final int MIN_NUMBER_OF_PADS_PER_AXIS = 3;
 	private static final int MAX_NUMBER_OF_PADS_PER_AXIS = 10;
@@ -43,14 +46,10 @@ public class ProjectNewDialog extends NVC
 
 	private ProjectMetadata project;
 
-	public ProjectNewDialog(Window owner, FluentClient client)
+	@InjectConstructor
+	public ProjectNewDialog(FluentClient client)
 	{
 		this.client = client;
-		load("de/tobias/playwall/client/view/dialog", "NewProjectDialog", Localization.getBundle());
-
-		NVCStage nvcStage = applyViewControllerToStage();
-		nvcStage.initOwner(owner);
-		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 	}
 
 	@Override
@@ -81,9 +80,9 @@ public class ProjectNewDialog extends NVC
 		stage.setMaxWidth(560);
 	}
 
-	public Optional<ProjectMetadata> showAndWait()
+	public Optional<ProjectMetadata> showAndWait(Window owner)
 	{
-		getStageContainer().ifPresent(NVCStage::showAndWait);
+		getStageContainer().ifPresent(nvcStage -> nvcStage.initOwner(owner).showAndWait());
 		return Optional.ofNullable(project);
 	}
 

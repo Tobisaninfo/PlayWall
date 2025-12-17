@@ -151,8 +151,8 @@ public class LaunchDialog extends BaseNVC
 	@FXML
 	private void onNewProjectButton()
 	{
-		final ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow(), client);
-		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait();
+		final ProjectNewDialog dialog = AppContextHolder.getInstance().get(ProjectNewDialog.class);
+		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(getContainingWindow());
 		if(projectOptional.isPresent())
 		{
 			fetchProjects();
