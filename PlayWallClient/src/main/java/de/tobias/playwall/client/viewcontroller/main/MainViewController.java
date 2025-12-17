@@ -213,12 +213,12 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuFile()
 	{
-		final MenuItem menuItemNewProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_NEW_PROJECT), createFontIcon(FontAwesomeType.FOLDER_PLUS_SOLID));
+		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID);
 		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
-		final MenuItem menuItemManageProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_MANAGE_PROJECTS), createFontIcon(FontAwesomeType.FOLDER_TREE_SOLID));
-		final MenuItem menuItemSaveProject = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SAVE_PROJECT), createFontIcon(FontAwesomeType.FLOPPY_DISK_SOLID));
-		final MenuItem menuItemProjectSettings = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_PROJECT_SETTINGS), createFontIcon(FontAwesomeType.FILE_PEN_SOLID));
-		final MenuItem menuItemSettings = new MenuItem(Localization.getString(Strings.UI_MENU_FILE_SETTINGS), createFontIcon(FontAwesomeType.GEAR_SOLID));
+		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID);
+		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID);
+		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID);
+		final MenuItem menuItemSettings = createMenuItem(Strings.UI_MENU_FILE_SETTINGS, FontAwesomeType.GEAR_SOLID);
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
 		menu.getItems().addAll(
@@ -237,8 +237,8 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuEdit()
 	{
-		final MenuItem menuItemSearch = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_SEARCH), createFontIcon(FontAwesomeType.MAGNIFYING_GLASS_SOLID));
-		final MenuItem menuItemReplaceMedia = new MenuItem(Localization.getString(Strings.UI_MENU_EDIT_REPLACE_MEDIA), createFontIcon(FontAwesomeType.FILE_AUDIO_SOLID));
+		final MenuItem menuItemSearch = createMenuItem(Strings.UI_MENU_EDIT_SEARCH, FontAwesomeType.MAGNIFYING_GLASS_SOLID);
+		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID);
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
@@ -252,9 +252,9 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuView()
 	{
-		final MenuItem menuItemForeground = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FOREGROUND), createFontIcon(FontAwesomeType.THUMBTACK_SOLID));
-		final MenuItem menuItemFullscreen = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_FULLSCREEN), createFontIcon(FontAwesomeType.EXPAND_SOLID));
-		final MenuItem menuItemTouchMode = new MenuItem(Localization.getString(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE), createFontIcon(FontAwesomeType.HAND_POINTER_SOLID));
+		final MenuItem menuItemForeground = createMenuItem(Strings.UI_MENU_VIEW_FOREGROUND, FontAwesomeType.THUMBTACK_SOLID);
+		final MenuItem menuItemFullscreen = createMenuItem(Strings.UI_MENU_VIEW_FULLSCREEN, FontAwesomeType.EXPAND_SOLID);
+		final MenuItem menuItemTouchMode = createMenuItem(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE, FontAwesomeType.HAND_POINTER_SOLID);
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_VIEW));
 		menu.getItems().addAll(
@@ -269,8 +269,8 @@ public class MainViewController extends BaseNVC
 
 	private Menu createMenuInfo()
 	{
-		final MenuItem menuItemAbout = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_ABOUT), createFontIcon(FontAwesomeType.CIRCLE_INFO_SOLID));
-		final MenuItem menuItemUpdates = new MenuItem(Localization.getString(Strings.UI_MENU_INFO_UPDATES), createFontIcon(FontAwesomeType.ARROWS_ROTATE_SOLID));
+		final MenuItem menuItemAbout = createMenuItem(Strings.UI_MENU_INFO_ABOUT, FontAwesomeType.CIRCLE_INFO_SOLID);
+		final MenuItem menuItemUpdates = createMenuItem(Strings.UI_MENU_INFO_UPDATES, FontAwesomeType.ARROWS_ROTATE_SOLID);
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_INFO));
 		menu.getItems().addAll(
@@ -280,6 +280,11 @@ public class MainViewController extends BaseNVC
 		);
 
 		return menu;
+	}
+
+	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType)
+	{
+		return new MenuItem(Localization.getString(localizationKey), createFontIcon(fontIconType));
 	}
 
 	private FontIcon createFontIcon(FontIconType fontIconType)
