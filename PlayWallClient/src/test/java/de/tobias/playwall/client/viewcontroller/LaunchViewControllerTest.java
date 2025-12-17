@@ -206,6 +206,8 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 		final Node cell = launchDialog.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
 		robot.clickOn(cell, Motion.DEFAULT);
 		robot.clickOn(launchDialog.getDeleteButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
 		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
 		verify(client).deleteProject(PROJECT_ID);
 	}
@@ -224,6 +226,8 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 		final Node cell = launchDialog.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
 		robot.clickOn(cell, Motion.DEFAULT);
 		robot.clickOn(launchDialog.getDeleteButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
 		robot.clickOn(robot.lookup("Abbrechen").lookup(".button").queryButton());
 		verify(client, never()).deleteProject(PROJECT_ID);
 	}
