@@ -36,4 +36,10 @@ public class Strings
 	public static final String UI_MENU_INFO = "ui.menu.info";
 	public static final String UI_MENU_INFO_ABOUT = "ui.menu.info.about";
 	public static final String UI_MENU_INFO_UPDATES = "ui.menu.info.updates";
+
+	// ui - dialog - about
+	public static final String UI_DIALOG_ABOUT_GRAPHICS = "ui.dialog.about.graphics";
+	public static final String UI_DIALOG_ABOUT_LIBRARIES = "ui.dialog.about.libraries";
+	public static final String UI_DIALOG_ABOUT_WEBSITE = "ui.dialog.about.website";
+	public static final String UI_DIALOG_ABOUT_CODE = "ui.dialog.about.code";
 }
