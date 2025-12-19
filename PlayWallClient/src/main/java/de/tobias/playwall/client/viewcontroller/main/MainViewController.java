@@ -8,6 +8,7 @@ import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
@@ -302,7 +303,7 @@ public class MainViewController extends BaseNVC
 
 	private void onMenuItemAbout(ActionEvent event)
 	{
-		final AboutDialog aboutDialog = new AboutDialog(getContainingWindow());
-		aboutDialog.showStage();
+		final AboutDialog aboutDialog = AppContextHolder.getInstance().get(AboutDialog.class);
+		aboutDialog.showStage(getContainingWindow());
 	}
 }

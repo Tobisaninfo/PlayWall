@@ -3,7 +3,6 @@ package de.tobias.playwall.client.viewcontroller.main;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.application.ApplicationUtils;
-import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -11,6 +10,8 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.viewcontroller.BaseNVC;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -19,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -29,7 +29,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class AboutDialog extends NVC
+@ViewController(path = "de/tobias/playwall/client/view/main", view = "AboutDialog")
+public class AboutDialog extends BaseNVC
 {
 	@FXML
 	private Label libsLabel;
@@ -54,17 +55,6 @@ public class AboutDialog extends NVC
 
 	@FXML
 	private Label graphicsLabel;
-
-	private final Window owner;
-
-	public AboutDialog(Window owner)
-	{
-		this.owner = owner;
-		load("de/tobias/playwall/client/view/main", "AboutDialog", Localization.getBundle());
-
-		applyViewControllerToStage().initOwner(owner).initModality(Modality.WINDOW_MODAL);
-		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
-	}
 
 	@Override
 	public void init()
@@ -124,6 +114,7 @@ public class AboutDialog extends NVC
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
+		addCloseKeyShortcut(stageContainer::close);
 
 		stage.setResizable(false);
 		stage.initStyle(StageStyle.TRANSPARENT);
@@ -131,15 +122,22 @@ public class AboutDialog extends NVC
 		stage.setWidth(650);
 		stage.setHeight(400);
 
+		stage.getScene().setFill(Color.TRANSPARENT);
+
+		final Styleable styleable = AppContextHolder.getInstance().get(Styleable.class);
+		styleable.applyToStage(stage);
+	}
+
+	public void showStage(Window owner)
+	{
+		final Stage stage = getStageContainer().orElseThrow().getStage();
+
 		final double centerXPosition = owner.getX() + owner.getWidth() / 2d;
 		final double centerYPosition = owner.getY() + owner.getHeight() / 2d;
 
 		stage.setX(centerXPosition - stage.getWidth() / 2d);
 		stage.setY(centerYPosition - stage.getHeight() / 2d);
 
-		stage.getScene().setFill(Color.TRANSPARENT);
-
-		final Styleable styleable = AppContextHolder.getInstance().get(Styleable.class);
-		styleable.applyToStage(stage);
+		getStageContainer().ifPresent(nvcStage -> nvcStage.initOwner(owner).show());
 	}
 }
