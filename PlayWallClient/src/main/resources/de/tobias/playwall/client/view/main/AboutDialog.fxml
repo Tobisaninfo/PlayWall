@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:id="rootPane" prefHeight="300.0" prefWidth="600.0"
+            style="-fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="14.0" style="-fx-base: #333333;" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../logo/icon_large.png"/>
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER_LEFT" spacing="7.0">
+                    <children>
+                        <Label styleClass="about-headline" text="%about.label.headline">
+                            <VBox.margin>
+                                <Insets bottom="14.0"/>
+                            </VBox.margin>
+                        </Label>
+                        <HBox spacing="14.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="%about.label.version" textAlignment="RIGHT"/>
+                                <Label fx:id="versionLabel" text="1.0.0"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="14.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="%about.label.author" textAlignment="RIGHT"/>
+                                <Label fx:id="authorLabel" text="Tobias Ullerich"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="14.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="%about.label.graphics"
+                                       textAlignment="RIGHT"/>
+                                <Label fx:id="graphicsLabel" text="Robert Goldmann"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="14.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="%about.label.platform" textAlignment="RIGHT"/>
+                                <Label fx:id="platformLabel" text="controlsfx" wrapText="true"/>
+                            </children>
+                        </HBox>
+
+                        <HBox fx:id="websiteContainer" spacing="14.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="%about.label.website" textAlignment="RIGHT"/>
+                            </children>
+                        </HBox>
+                        <HBox fx:id="codeContainer" spacing="14.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="%about.label.code" textAlignment="RIGHT"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="14.0">
+                            <children>
+                                <Label alignment="CENTER_RIGHT" minWidth="75.0" prefWidth="75.0" text="%about.label.libraries"
+                                       textAlignment="RIGHT"/>
+                                <Label fx:id="libsLabel" text="controlsfx" wrapText="true"/>
+                            </children>
+                        </HBox>
+                        <Label maxWidth="1.7976931348623157E308"
+                               text="%about.label.thanksgiving" wrapText="true">
+                            <VBox.margin>
+                                <Insets left="89.0"/>
+                            </VBox.margin>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+            </padding>
+        </HBox>
+    </children>
+</AnchorPane>

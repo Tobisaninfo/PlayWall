@@ -14,7 +14,14 @@
 }
 
 .menu-item {
+    -fx-font-size: 12px;
+
 	&:selected, &:focused {
 		-fx-background-color: $component-focus-background-color;
 	}
+
+    .icon {
+      -fx-font-size: 16px;
+      -fx-fill: white;
+    }
 }

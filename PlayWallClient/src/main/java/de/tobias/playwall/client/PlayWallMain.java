@@ -58,6 +58,8 @@ public class PlayWallMain extends Application
 			Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
 			loadAppIcon();
+
+			AppContextHolder.getInstance().get(FontLoader.class);
 		}
 		catch(Exception e)
 		{

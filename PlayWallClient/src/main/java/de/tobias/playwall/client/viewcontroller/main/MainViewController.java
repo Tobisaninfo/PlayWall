@@ -3,9 +3,12 @@ package de.tobias.playwall.client.viewcontroller.main;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.ui.icon.FontIconType;
 import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
+import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
@@ -15,13 +18,21 @@ import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.viewcontroller.BaseNVC;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadViewProvider;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 public class MainViewController extends BaseNVC
@@ -60,6 +71,8 @@ public class MainViewController extends BaseNVC
 		notificationPane.setCloseButtonVisible(false);
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
+
+		headerBox.getChildren().add(createMenu());
 	}
 
 	@Override
@@ -179,5 +192,115 @@ public class MainViewController extends BaseNVC
 
 			view.updateFromPad(pad);
 		}
+	}
+
+	private MenuBar createMenu()
+	{
+		final Menu menuFile = createMenuFile();
+		final Menu menuEdit = createMenuEdit();
+		final Menu menuView = createMenuView();
+		final Menu menuInfo = createMenuInfo();
+
+		// TODO: enable as soon as implemented
+		menuFile.getItems().forEach(item -> item.setDisable(true));
+		menuView.getItems().forEach(item -> item.setDisable(true));
+		menuEdit.getItems().forEach(item -> item.setDisable(true));
+
+		final MenuBar menuBar = new MenuBar();
+		menuBar.getMenus().addAll(menuFile, menuEdit, menuView, menuInfo);
+		return menuBar;
+	}
+
+	private Menu createMenuFile()
+	{
+		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID, Optional.empty());
+		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
+		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
+		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.empty());
+		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.empty());
+		final MenuItem menuItemSettings = createMenuItem(Strings.UI_MENU_FILE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.empty());
+
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
+		menu.getItems().addAll(
+				menuItemNewProject,
+				menuRecentProject,
+				menuItemManageProject,
+				menuItemSaveProject,
+				new SeparatorMenuItem(),
+				menuItemProjectSettings,
+				new SeparatorMenuItem(),
+				menuItemSettings
+		);
+
+		return menu;
+	}
+
+	private Menu createMenuEdit()
+	{
+		final MenuItem menuItemSearch = createMenuItem(Strings.UI_MENU_EDIT_SEARCH, FontAwesomeType.MAGNIFYING_GLASS_SOLID, Optional.empty());
+		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID, Optional.empty());
+
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
+		menu.getItems().addAll(
+				menuItemSearch,
+				new SeparatorMenuItem(),
+				menuItemReplaceMedia
+		);
+
+		return menu;
+	}
+
+	private Menu createMenuView()
+	{
+		final MenuItem menuItemForeground = createMenuItem(Strings.UI_MENU_VIEW_FOREGROUND, FontAwesomeType.THUMBTACK_SOLID, Optional.empty());
+		final MenuItem menuItemFullscreen = createMenuItem(Strings.UI_MENU_VIEW_FULLSCREEN, FontAwesomeType.EXPAND_SOLID, Optional.empty());
+		final MenuItem menuItemTouchMode = createMenuItem(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE, FontAwesomeType.HAND_POINTER_SOLID, Optional.empty());
+
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_VIEW));
+		menu.getItems().addAll(
+				menuItemForeground,
+				menuItemFullscreen,
+				new SeparatorMenuItem(),
+				menuItemTouchMode
+		);
+
+		return menu;
+	}
+
+	private Menu createMenuInfo()
+	{
+		final MenuItem menuItemAbout = createMenuItem(Strings.UI_MENU_INFO_ABOUT, FontAwesomeType.CIRCLE_INFO_SOLID, Optional.of(this::onMenuItemAbout));
+		final MenuItem menuItemUpdates = createMenuItem(Strings.UI_MENU_INFO_UPDATES, FontAwesomeType.ARROWS_ROTATE_SOLID, Optional.empty());
+
+		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_INFO));
+		menu.getItems().addAll(
+				menuItemAbout,
+				new SeparatorMenuItem(),
+				menuItemUpdates
+		);
+
+		return menu;
+	}
+
+	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType, Optional<EventHandler<ActionEvent>> eventHandler)
+	{
+		final MenuItem menuItem = new MenuItem(Localization.getString(localizationKey), createFontIcon(fontIconType));
+		eventHandler.ifPresent(menuItem::setOnAction);
+		return menuItem;
+	}
+
+	private FontIcon createFontIcon(FontIconType fontIconType)
+	{
+		final FontIcon icon = new FontIcon(fontIconType);
+		icon.setMinWidth(20.0);
+		icon.setAlignment(Pos.CENTER);
+
+		return icon;
+	}
+
+	private void onMenuItemAbout(ActionEvent event)
+	{
+		final AboutDialog aboutDialog = AppContextHolder.getInstance().get(AboutDialog.class);
+		aboutDialog.showStage(getContainingWindow());
 	}
 }

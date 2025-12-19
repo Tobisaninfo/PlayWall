@@ -5,7 +5,7 @@ identifier: "de.tobias.playwall.v8"
 date: "@project.versionDate@"
 
 main: "de.tobias.playwall.client.PlayWallMain"
-author: "Tobias Ullerich"
+author: "Tobias Ullerich, Robert Goldmann"
 
 basePath: "PlayWall"
 
@@ -13,5 +13,4 @@ serverBaseURL: "https://playwall.thecodelabs.de/files"
 
 userInfo:
   website: "https://playwall.thecodelabs.de/"
-  repository: "https://thecodelabs.de/PlayWall/PlayWallDesktop"
-  changelogURL: "https://playwall.thecodelabs.de/php/roadmap.php"
+  repository: "https://thecodelabs.de/PlayWall/PlayWall"

@@ -50,12 +50,12 @@ Default elements
 	-fx-border-color: #222222;
 }
 
-.fonticon {
-	-fx-text-fill: white;
+.icon {
+	-fx-fill: white;
 }
 
-.toggle-button:selected .fonticon {
-	-fx-text-fill: #333333;
+.toggle-button:selected .icon {
+	-fx-fill: #333333;
 }
 
 /**
@@ -119,8 +119,8 @@ PlayPad Elements
 	-fx-text-fill: red !important;
 }
 
-.fonticon-notfound:pressed {
-	-fx-text-fill: lightgray;
+.icon-notfound:pressed {
+	-fx-fill: lightgray;
 }
 
 .current-page-button {
@@ -165,4 +165,8 @@ PlayPad Elements
 .profilename {
 	-fx-font-size: 10px;
 	-fx-text-fill: #DDDDDD;
+}
+
+.icon {
+    -fx-font-family: "Font Awesome 7 Free Solid";
 }
