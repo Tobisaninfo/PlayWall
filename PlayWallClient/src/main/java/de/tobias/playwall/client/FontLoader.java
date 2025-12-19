@@ -1,5 +1,6 @@
 package de.tobias.playwall.client;
 
+import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.appcontext.Service;
 import javafx.scene.text.Font;
 import lombok.Getter;
@@ -9,9 +10,10 @@ import java.util.Objects;
 
 @Getter
 @Service
-public class FontLoader
+class FontLoader
 {
-	public FontLoader()
+	@PostConstruct
+	void init()
 	{
 		final URL resource = this.getClass().getClassLoader().getResource("fonts/fontawesome-webfont.ttf");
 		Font.loadFont(Objects.requireNonNull(resource).toExternalForm(), 16);
