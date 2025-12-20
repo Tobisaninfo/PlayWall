@@ -56,13 +56,6 @@ public class AboutDialog extends ModalBaseNVC<Void>
 	@Override
 	public void init()
 	{
-		final FontIcon icon = new FontIcon(FontAwesomeType.X_SOLID);
-		rootPane.getChildren().add(icon);
-		AnchorPane.setLeftAnchor(icon, 14.0);
-		AnchorPane.setTopAnchor(icon, 14.0);
-
-		icon.setOnMouseClicked(e -> getStageContainer().ifPresent(NVCStage::close));
-
 		final ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
 		versionLabel.setText(info.getVersion());
 		authorLabel.setText(info.getAuthor());
@@ -108,21 +101,19 @@ public class AboutDialog extends ModalBaseNVC<Void>
 	}
 
 	@Override
+	@SuppressWarnings("java:S1874")
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
 		addCloseKeyShortcut(stageContainer::close);
 
 		stage.setResizable(false);
-		stage.initStyle(StageStyle.TRANSPARENT);
+		stage.initStyle(StageStyle.EXTENDED);
 
 		stage.setWidth(650);
 		stage.setHeight(400);
 
 		stage.getScene().setFill(Color.TRANSPARENT);
-
-		final Styleable styleable = AppContextHolder.getInstance().get(Styleable.class);
-		styleable.applyToStage(stage);
 	}
 
 	@Override

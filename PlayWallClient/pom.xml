@@ -23,6 +23,7 @@
             --enable-native-access=de.thecodelabs.libJfx
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
             -Duser.language=de -Duser.country=DE
+            -Djavafx.enablePreview=true -Djavafx.suppressPreviewWarning=true
         </surefire.argLineBase>
         <surefire.argLine>${surefire.argLineBase}</surefire.argLine>
         <failsafe.argLineBase>
@@ -350,6 +351,8 @@
                                     <javaOptions>
                                         <javaOption>--enable-native-access=javafx.graphics</javaOption>
                                         <javaOption>--enable-native-access=de.thecodelabs.libJfx</javaOption>
+                                        <javaOption>-Djavafx.enablePreview=true</javaOption>
+                                        <javaOption>-Djavafx.suppressPreviewWarning=true</javaOption>
                                     </javaOptions>
                                     <icon>${app.icon}</icon>
                                     <vendor>TheCodeLabs</vendor>
