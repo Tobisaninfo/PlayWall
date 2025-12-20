@@ -56,7 +56,7 @@ class ProjectRepository
 
 	Page addPage(UUID id, String name) throws IOException, ProjectNotExistsException
 	{
-		final Project project = loadProject(id);
+		final Project project = loadProject(id); // TODO: Should it be persisted directly?
 		final int nextPagePosition = project.getPages().size();
 
 		final Page page = Page.builder()
