@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
@@ -156,6 +157,12 @@ class FluentClientImpl implements FluentClient
 		public void stop() throws PlayWallApiException
 		{
 			delegate.stop(padId);
+		}
+
+		@Override
+		public void newMedia(Path file) throws PlayWallApiException
+		{
+			delegate.newMedia(padId, file);
 		}
 	}
 

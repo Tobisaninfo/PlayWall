@@ -15,6 +15,7 @@ import de.tobias.playwall.common.utils.MapUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -155,5 +156,11 @@ class ClientImpl implements Client
 	public void stop(UUID padId) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new PadStopRequest(padId));
+	}
+
+	@Override
+	public void newMedia(UUID padId, Path file) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadNewMediaRequest(padId, file.toAbsolutePath().toString()));
 	}
 }
