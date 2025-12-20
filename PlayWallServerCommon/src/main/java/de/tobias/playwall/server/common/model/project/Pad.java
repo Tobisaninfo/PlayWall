@@ -1,10 +1,8 @@
 package de.tobias.playwall.server.common.model.project;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -13,16 +11,19 @@ import java.util.UUID;
 @EqualsAndHashCode
 @SuperBuilder
 @NoArgsConstructor
-@JsonTypeInfo(
-		use = JsonTypeInfo.Id.CLASS,
-		include = JsonTypeInfo.As.PROPERTY,
-		property = "@class")
-public abstract sealed class Pad permits AudioPad
+public class Pad
 {
 	private UUID id;
 	private Integer position;
 	private String name;
-	private List<String> mediaPaths;
+	private PadContent content;
 
-	public abstract Pad copy();
+	public Pad copy()
+	{
+		return Pad.builder()
+				.id(UUID.randomUUID())
+				.position(this.getPosition())
+				.name(this.getName())
+				.build();
+	}
 }

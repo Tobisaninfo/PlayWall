@@ -20,7 +20,7 @@ import java.util.UUID;
 public class ProjectController
 {
 	private final ApplicationContext context;
-	private final PadControllerFactory padControllerFactory;
+	private final PadContentControllerFactory padControllerFactory;
 	@Getter
 	private Project loadedProject;
 

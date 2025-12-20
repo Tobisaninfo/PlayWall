@@ -7,6 +7,7 @@ import de.tobias.playwall.common.api.project.PadNewMediaResponse;
 import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
@@ -16,7 +17,6 @@ import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -39,7 +39,7 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 		controller.unload();
 
 		final Pad pad = controller.getPad();
-		pad.setMediaPaths(List.of(requestMessage.getPath()));
+		((AudioPadContent) pad.getContent()).setMediaPath(requestMessage.getPath()); // TODO: Decision strategy
 		controller.load();
 
 		pad.setName(PathUtils.getFilenameWithoutExtension(Paths.get(requestMessage.getPath()).getFileName()));

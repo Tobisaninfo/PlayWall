@@ -6,13 +6,14 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @SuperBuilder
-public final class AudioPad extends Pad
+public abstract sealed class PadContent permits AudioPadContent
 {
-	private Boolean isLoop;
-	private Double volume;
 }

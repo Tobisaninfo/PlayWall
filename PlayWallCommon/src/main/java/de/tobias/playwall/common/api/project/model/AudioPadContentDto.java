@@ -9,8 +9,10 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
-public final class AudioPadDto extends PadDto
+public final class AudioPadContentDto extends PadContentDto
 {
-	private Boolean isLoop;
-	private Double volume;
+	private String mediaPath;
+
+	private boolean loop;
+	private double volume;
 }
