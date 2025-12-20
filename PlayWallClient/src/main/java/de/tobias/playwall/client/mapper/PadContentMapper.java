@@ -14,6 +14,10 @@ public class PadContentMapper
 {
 	public PadContent padContentDtoToPadContent(PadContentDto padContent)
 	{
+		if(padContent == null)
+		{
+			return null;
+		}
 		return switch(padContent)
 		{
 			case AudioPadContentDto audioPadDto -> AudioPadContent.builder()
