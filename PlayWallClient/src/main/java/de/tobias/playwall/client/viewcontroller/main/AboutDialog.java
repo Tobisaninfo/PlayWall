@@ -1,12 +1,13 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationInfo;
-import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
 import javafx.fxml.FXML;
@@ -19,6 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.awt.*;
 import java.io.IOException;
@@ -26,6 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+@Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "AboutDialog")
 public class AboutDialog extends ModalBaseNVC<Void>
 {
@@ -53,10 +57,19 @@ public class AboutDialog extends ModalBaseNVC<Void>
 	@FXML
 	private Label graphicsLabel;
 
+	private final App app;
+
+	@InjectConstructor
+	public AboutDialog(App app)
+	{
+		this.app = app;
+	}
+
 	@Override
 	public void init()
 	{
-		final ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
+		final ApplicationInfo info = app.getInfo();
+
 		versionLabel.setText(info.getVersion());
 		authorLabel.setText(info.getAuthor());
 		graphicsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_GRAPHICS));
@@ -70,7 +83,7 @@ public class AboutDialog extends ModalBaseNVC<Void>
 		websiteLink.setPadding(Insets.EMPTY);
 		websiteLink.setFocusTraversable(false);
 		websiteLink.setOnAction(e -> {
-			String url = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).website();
+			String url = app.getUserInfo(AppUserInfoStrings.class).website();
 			openWebsite(url);
 		});
 		websiteContainer.getChildren().add(websiteLink);
@@ -79,7 +92,7 @@ public class AboutDialog extends ModalBaseNVC<Void>
 		codeLink.setPadding(Insets.EMPTY);
 		codeLink.setFocusTraversable(false);
 		codeLink.setOnAction(e -> {
-			String url = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).repository();
+			String url = app.getUserInfo(AppUserInfoStrings.class).repository();
 			openWebsite(url);
 		});
 		codeContainer.getChildren().add(codeLink);

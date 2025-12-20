@@ -1,6 +1,8 @@
 package de.tobias.playwall.client.viewcontroller;
 
 import de.thecodelabs.utils.ui.NVCStage;
+import de.tobias.playwall.client.appcontext.AppContext;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -18,7 +20,10 @@ public abstract class ModalBaseNVC<T> extends BaseNVC
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
-		stage.initModality(Modality.WINDOW_MODAL);
+		if(AppContextHolder.getInstance().getEnvironment() != AppContext.Environment.GUI_TESTING)
+		{
+			stage.initModality(Modality.WINDOW_MODAL);
+		}
 		stageContainer.addCloseKeyShortcut(stageContainer::close);
 	}
 

@@ -43,7 +43,6 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	{
 		this.stage = stage;
 		context = AppContextHolder.getInstance();
-		context.registerLazySingleton(Stage.class, _ -> stage);
 		context.registerLazySingleton(MainViewController.class, _ -> mainViewController);
 		context.registerLazySingleton(ProjectNewDialog.class, _ -> projectNewDialog);
 		context.registerLazy(Stage.class, _ -> stage);
