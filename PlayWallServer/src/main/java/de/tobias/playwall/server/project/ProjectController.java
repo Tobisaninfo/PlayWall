@@ -44,7 +44,8 @@ public class ProjectController
 	{
 		loadedProject.getPages().stream()
 				.flatMap(page -> page.getPads().stream())
-				.forEach(pad -> padControllers.put(pad.getId(), padControllerFactory.createPadController(context, pad)));
+				.filter(pad -> pad.getContent() != null)
+				.forEach(pad -> padControllers.put(pad.getId(), padControllerFactory.createPadContentController(context, pad)));
 
 		padControllers.values().forEach(PadController::load);
 	}

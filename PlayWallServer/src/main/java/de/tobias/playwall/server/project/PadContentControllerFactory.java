@@ -14,7 +14,7 @@ public class PadContentControllerFactory
 {
 	private final AudioHandlerFactory audioHandlerFactory;
 
-	public PadController createPadController(ApplicationContext context, Pad pad)
+	public PadController createPadContentController(ApplicationContext context, Pad pad)
 	{
 		return switch(pad.getContent())
 		{
