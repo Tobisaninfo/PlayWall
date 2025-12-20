@@ -4,15 +4,11 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVCStage;
-import de.thecodelabs.utils.ui.icon.FontAwesomeType;
-import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.ViewController;
-import de.tobias.playwall.client.viewcontroller.BaseNVC;
-import de.tobias.playwall.client.viewcontroller.style.Styleable;
+import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
@@ -28,9 +24,10 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "AboutDialog")
-public class AboutDialog extends BaseNVC
+public class AboutDialog extends ModalBaseNVC<Void>
 {
 	@FXML
 	private Label libsLabel;
@@ -128,7 +125,8 @@ public class AboutDialog extends BaseNVC
 		styleable.applyToStage(stage);
 	}
 
-	public void showStage(Window owner)
+	@Override
+	public Optional<Void> showAndWait(Window owner)
 	{
 		final Stage stage = getStageContainer().orElseThrow().getStage();
 
@@ -138,6 +136,6 @@ public class AboutDialog extends BaseNVC
 		stage.setX(centerXPosition - stage.getWidth() / 2d);
 		stage.setY(centerYPosition - stage.getHeight() / 2d);
 
-		getStageContainer().ifPresent(nvcStage -> nvcStage.initOwner(owner).show());
+		return super.showAndWait(owner);
 	}
 }

@@ -11,6 +11,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.BaseNVC;
+import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -26,7 +27,7 @@ import javafx.stage.Window;
 import java.util.Optional;
 
 @ViewController(path = "de/tobias/playwall/client/view/dialog", view = "NewProjectDialog")
-public class ProjectNewDialog extends BaseNVC
+public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 {
 	private static final int MIN_NUMBER_OF_PADS_PER_AXIS = 3;
 	private static final int MAX_NUMBER_OF_PADS_PER_AXIS = 10;
@@ -65,10 +66,7 @@ public class ProjectNewDialog extends BaseNVC
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
-		final Styleable styleable = AppContextHolder.getInstance().get(Styleable.class);
-		styleable.applyToStage(stage);
-
-		stage.initModality(Modality.WINDOW_MODAL);
+		super.initStage(stageContainer, stage);
 
 		stage.setTitle(Localization.getString(Strings.UI_DIALOG_NEW_PROJECT_TITLE));
 		stage.setWidth(560);
@@ -80,10 +78,10 @@ public class ProjectNewDialog extends BaseNVC
 		stage.setMaxWidth(560);
 	}
 
-	public Optional<ProjectMetadata> showAndWait(Window owner)
+	@Override
+	protected ProjectMetadata getResultValue()
 	{
-		getStageContainer().ifPresent(nvcStage -> nvcStage.initOwner(owner).showAndWait());
-		return Optional.ofNullable(project);
+		return project;
 	}
 
 	@FXML
