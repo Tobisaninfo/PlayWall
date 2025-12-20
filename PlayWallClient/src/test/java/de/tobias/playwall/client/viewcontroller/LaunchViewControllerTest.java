@@ -27,7 +27,7 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 class LaunchViewControllerTest extends AbstractViewControllerTest
 {
 	private static final UUID PROJECT_ID = UUID.randomUUID();
-	public static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4);
+	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4);
 
 	private AppContext context;
 	private final Client client = mock(Client.class);
