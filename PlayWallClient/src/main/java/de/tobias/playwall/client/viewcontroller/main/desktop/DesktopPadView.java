@@ -3,6 +3,7 @@ package de.tobias.playwall.client.viewcontroller.main.desktop;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
@@ -11,6 +12,7 @@ import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
 import de.tobias.playwall.common.api.project.PadNewMediaResponse;
+import de.tobias.playwall.common.utils.FileFormats;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -27,7 +29,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 
 import static de.tobias.playwall.client.view.pad.control.PadStyleClasses.*;
@@ -200,7 +201,11 @@ public class DesktopPadView implements PadView
 	{
 		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
 		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-		fileChooser.setExtensionFilter(List.of(new FileChooser.ExtensionFilter("Audio", "*.mp3", "*.wav", "*.flac")));
+		fileChooser.setExtensionFilter(FileFormats.FILE_FORMATS.stream().map(format ->
+				new FileChooser.ExtensionFilter(
+						Localization.getString("FileFormat." + format.contentType().name()),
+						format.extensions().stream().map(ext -> "*." + ext).toList()
+				)).toList());
 		final Optional<Path> path = fileChooser.showOpenFile(owner);
 
 		if(path.isPresent())

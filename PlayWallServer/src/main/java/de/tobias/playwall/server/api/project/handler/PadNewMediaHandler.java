@@ -1,14 +1,14 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.thecodelabs.utils.io.PathUtils;
-import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.common.api.project.PadNewMediaRequest;
 import de.tobias.playwall.common.api.project.PadNewMediaResponse;
-import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.common.utils.FileFormats;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
+import de.tobias.playwall.server.common.model.project.PadContent;
 import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -16,6 +16,7 @@ import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -28,21 +29,26 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 	@Override
 	public Optional<ResponseMessage> handleRequest(PadNewMediaRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		final PadController controller = projectController.getPadController(requestMessage.getPadId());
-		if(controller == null)
+		final PadController oldController = projectController.getPadController(requestMessage.getPadId());
+		if(oldController != null)
 		{
-			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
-			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getPadId()), error);
+			oldController.stop();
+			oldController.unload();
 		}
 
-		controller.stop();
-		controller.unload();
+		final Path path = Paths.get(requestMessage.getPath());
+		final PadContent content = switch(FileFormats.getContentTypeForFile(path))
+		{
+			case AUDIO -> AudioPadContent.builder().mediaPath(path.toString()).build();
+		};
 
-		final Pad pad = controller.getPad();
-		((AudioPadContent) pad.getContent()).setMediaPath(requestMessage.getPath()); // TODO: Decision strategy
-		controller.load();
+		final Pad pad = projectController.getPad(requestMessage.getPadId());
+		pad.setContent(content);
 
-		pad.setName(PathUtils.getFilenameWithoutExtension(Paths.get(requestMessage.getPath()).getFileName()));
+		final PadController newPadController = projectController.createNewPadController(pad);
+		newPadController.load();
+
+		pad.setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
 
 		return Optional.of(new PadNewMediaResponse(requestMessage.getMessageId(), pad.getId(), pad.getName()));
 	}

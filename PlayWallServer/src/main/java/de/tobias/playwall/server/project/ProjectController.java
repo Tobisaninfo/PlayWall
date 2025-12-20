@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.project.PadController;
 import lombok.Getter;
@@ -45,7 +46,7 @@ public class ProjectController
 		loadedProject.getPages().stream()
 				.flatMap(page -> page.getPads().stream())
 				.filter(pad -> pad.getContent() != null)
-				.forEach(pad -> padControllers.put(pad.getId(), padControllerFactory.createPadContentController(context, pad)));
+				.forEach(this::createNewPadController);
 
 		padControllers.values().forEach(PadController::load);
 	}
@@ -53,5 +54,17 @@ public class ProjectController
 	public PadController getPadController(UUID padId)
 	{
 		return padControllers.get(padId);
+	}
+
+	public Pad getPad(UUID padId)
+	{
+		return loadedProject.getPad(padId);
+	}
+
+	public PadController createNewPadController(Pad pad)
+	{
+		final PadController controller = padControllerFactory.createPadContentController(context, pad);
+		padControllers.put(pad.getId(), controller);
+		return controller;
 	}
 }
