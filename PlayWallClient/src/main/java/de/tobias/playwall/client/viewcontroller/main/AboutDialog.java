@@ -29,6 +29,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
+
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "AboutDialog")
 public class AboutDialog extends ModalBaseNVC<Void>
@@ -121,7 +123,7 @@ public class AboutDialog extends ModalBaseNVC<Void>
 		addCloseKeyShortcut(stageContainer::close);
 
 		stage.setResizable(false);
-		stage.initStyle(StageStyle.EXTENDED);
+		stageContainer.initStyle(environment == GUI_TESTING ? StageStyle.UNDECORATED : StageStyle.EXTENDED);
 
 		stage.setWidth(650);
 		stage.setHeight(400);

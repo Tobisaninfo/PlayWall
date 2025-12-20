@@ -25,6 +25,8 @@ public class AppContext
 		this.environment = environment;
 		supplier = new HashMap<>();
 		objectCache = new HashMap<>();
+
+		registerLazySingleton(AppContext.Environment.class, (_) -> environment);
 	}
 
 	public <T> void registerLazy(Class<T> clazz, Function<AppContext, T> function)
