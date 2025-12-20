@@ -4,6 +4,7 @@ import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.common.api.project.PadNewMediaResponse;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -61,7 +62,7 @@ public interface FluentClient
 
 		void stop() throws PlayWallApiException;
 
-		void newMedia(Path file) throws PlayWallApiException;
+		PadNewMediaResponse newMedia(Path file) throws PlayWallApiException;
 	}
 
 	PadBuilder pad(UUID padId);

@@ -4,6 +4,7 @@ import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.common.api.project.PadNewMediaResponse;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -44,5 +45,5 @@ public interface Client
 
 	void stop(UUID padId) throws PlayWallApiException;
 
-	void newMedia(UUID padId, Path file) throws PlayWallApiException;
+	PadNewMediaResponse newMedia(UUID padId, Path file) throws PlayWallApiException;
 }

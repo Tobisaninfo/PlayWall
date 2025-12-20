@@ -10,6 +10,8 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
+import de.tobias.playwall.common.api.project.PadNewMediaResponse;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -63,6 +65,8 @@ public class DesktopPadView implements PadView
 
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
+
+	private Pad pad;
 
 	public DesktopPadView()
 	{
@@ -145,6 +149,7 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateFromPad(Pad pad)
 	{
+		this.pad = pad;
 		if(pad != null)
 		{
 			padBuilder = fluentClient.pad(pad.getId());
@@ -202,8 +207,9 @@ public class DesktopPadView implements PadView
 		{
 			try
 			{
-
-				padBuilder.newMedia(path.get());
+				final PadNewMediaResponse response = padBuilder.newMedia(path.get());
+				this.pad.setName(response.getNewName());
+				Platform.runLater(() -> updateFromPad(pad));
 			}
 			catch(PlayWallApiException ex)
 			{
