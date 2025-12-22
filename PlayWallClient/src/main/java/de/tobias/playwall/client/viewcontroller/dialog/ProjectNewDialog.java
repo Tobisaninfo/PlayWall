@@ -5,14 +5,11 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
-import de.tobias.playwall.client.viewcontroller.BaseNVC;
 import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
-import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,11 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-
-import java.util.Optional;
 
 @ViewController(path = "de/tobias/playwall/client/view/dialog", view = "NewProjectDialog")
 public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>

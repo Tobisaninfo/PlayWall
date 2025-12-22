@@ -1,10 +1,10 @@
+use crate::{with_bridge, AudioStreamHandler};
 use jni::objects::{JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jint, jobjectArray, jsize};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
 use tracing::trace;
-use crate::{with_bridge, AudioStreamHandler};
 
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getOutputDevices(
