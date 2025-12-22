@@ -44,6 +44,10 @@ public class ServerLaunchTask extends LaunchTask
 			{
 				return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.generic", e.getMessage())), e, true);
 			}
+			catch(ServerLaunchException.TimeoutException e)
+			{
+				return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.timeout")), e, true);
+			}
 		}
 		return new SuccessResult();
 	}

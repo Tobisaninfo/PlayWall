@@ -76,4 +76,12 @@ class ServerLauncherIT
 		Assertions.assertThatThrownBy(() -> serverLauncher.launchServer(serverLauncherProperties))
 				.isInstanceOf(ServerLaunchException.NotFoundException.class);
 	}
+
+	@Test
+	void testLaunchServerTimeout()
+	{
+		serverLauncherProperties = ServerLauncherProperties.builder().storagePath(Paths.get("./target").toAbsolutePath().toString()).startupTimeoutSeconds(1).build();
+		Assertions.assertThatThrownBy(() -> serverLauncher.launchServer(serverLauncherProperties))
+				.isInstanceOf(ServerLaunchException.TimeoutException.class);
+	}
 }

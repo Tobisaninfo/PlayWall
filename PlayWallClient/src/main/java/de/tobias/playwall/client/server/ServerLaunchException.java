@@ -36,6 +36,14 @@ public abstract class ServerLaunchException extends RuntimeException
 		}
 	}
 
+	public static class TimeoutException extends ServerLaunchException
+	{
+		public TimeoutException(Throwable cause)
+		{
+			super("Timeout for server startup reached", cause);
+		}
+	}
+
 	public static class GenericStartupException extends ServerLaunchException
 	{
 		public GenericStartupException()
@@ -48,6 +56,4 @@ public abstract class ServerLaunchException extends RuntimeException
 			super(message, cause);
 		}
 	}
-
-
 }

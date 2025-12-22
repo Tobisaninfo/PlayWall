@@ -19,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -86,7 +88,7 @@ public class ServerLauncher
 
 			Logger.info("Server starting");
 
-			awaitServerStartUp();
+			awaitServerStartUpWithTimeout(properties.getStartupTimeoutSeconds());
 
 			final Thread thread = new Thread(this::printServerLog);
 			thread.setDaemon(true);
@@ -98,7 +100,44 @@ public class ServerLauncher
 		}
 	}
 
-	private void awaitServerStartUp() throws IOException
+	@SuppressWarnings({"java:S112"})
+	private void awaitServerStartUpWithTimeout(Integer timeoutSeconds)
+	{
+		try(ExecutorService executor = Executors.newSingleThreadExecutor())
+		{
+			final Future<?> future = executor.submit(this::awaitServerStartUp);
+
+			try
+			{
+				future.get(Optional.ofNullable(timeoutSeconds).orElse(60), TimeUnit.SECONDS);
+			}
+			catch(TimeoutException e)
+			{
+				serverProcess.destroyForcibly();
+				throw new ServerLaunchException.TimeoutException(e);
+			}
+			catch(InterruptedException e)
+			{
+				Thread.currentThread().interrupt();
+				throw new RuntimeException(e);
+			}
+			catch(ExecutionException e)
+			{
+				if(e.getCause() instanceof ServerLaunchException serverLaunchException)
+				{
+					throw serverLaunchException;
+				}
+				throw new ServerLaunchException.GenericStartupException("Cannot start server", e);
+			}
+			finally
+			{
+				executor.shutdownNow();
+			}
+		}
+	}
+
+	@SneakyThrows
+	private void awaitServerStartUp()
 	{
 		boolean started = false;
 		final Pattern readyPattern = Pattern.compile("Started PlayWallServerMain .*");

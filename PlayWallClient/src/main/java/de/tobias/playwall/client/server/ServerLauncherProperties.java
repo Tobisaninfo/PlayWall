@@ -8,4 +8,5 @@ import lombok.Getter;
 public class ServerLauncherProperties
 {
 	private String storagePath;
+	private Integer startupTimeoutSeconds;
 }
