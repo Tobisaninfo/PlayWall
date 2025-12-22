@@ -31,6 +31,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 
@@ -98,7 +99,7 @@ public class LaunchDialog extends BaseNVC
 					mouseEvent.getClickCount() == 2 &&
 					!projectListView.getSelectionModel().isEmpty())
 			{
-				onOpenButton();
+				openProject(getSelectedProject().id());
 			}
 		});
 
@@ -155,15 +156,21 @@ public class LaunchDialog extends BaseNVC
 		if(projectOptional.isPresent())
 		{
 			fetchProjects();
+			openProject(projectOptional.get().id());
 		}
 	}
 
 	@FXML
 	private void onOpenButton()
 	{
+		openProject(getSelectedProject().id());
+	}
+
+	private void openProject(UUID id)
+	{
 		try
 		{
-			final Project project = client.project(getSelectedProject().id()).launch();
+			final Project project = client.project(id).launch();
 			Logger.info("Launched project " + project.metadata().name());
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
