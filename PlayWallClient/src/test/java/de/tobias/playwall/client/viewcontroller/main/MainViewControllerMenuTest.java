@@ -1,7 +1,5 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
-import de.thecodelabs.utils.application.App;
-import de.thecodelabs.utils.application.ApplicationInfo;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Project;
@@ -13,7 +11,8 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class MainViewControllerMenuTest extends AbstractViewControllerTest
 {
@@ -32,14 +31,6 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> stage);
 
 		project = loadProject("projects/project_1.json");
-
-		final App app = mock(App.class);
-		final ApplicationInfo appInfo = mock(ApplicationInfo.class);
-		when(appInfo.getName()).thenReturn("PlayWall");
-		when(appInfo.getVersion()).thenReturn("0.0.1");
-		when(appInfo.getAuthor()).thenReturn("Max Mustermann");
-		when(app.getInfo()).thenReturn(appInfo);
-		context.registerLazySingleton(App.class, _ -> app);
 	}
 
 	@Test
