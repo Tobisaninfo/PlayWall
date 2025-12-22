@@ -7,6 +7,8 @@ import javafx.application.Platform;
 import javafx.beans.DefaultProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,17 +20,18 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-import java.util.ResourceBundle;
-
 @DefaultProperty("items")
 public class SettingsPage extends VBox
 {
-	private final VBox vboxSettingsItems;
-	private final PlayWallButton buttonCancel;
-	private final PlayWallButton buttonSave;
+	private final VBox settingsItemsVbox;
+	private final PlayWallButton cancelButton;
+	private final PlayWallButton saveButton;
 
 	private final ObjectProperty<EventHandler<ActionEvent>> onSave = new SimpleObjectProperty<>();
 	private final ObjectProperty<EventHandler<ActionEvent>> onCancel = new SimpleObjectProperty<>();
+
+	private final StringProperty saveText = new SimpleStringProperty();
+	private final StringProperty cancelText = new SimpleStringProperty();
 
 	public SettingsPage()
 	{
@@ -36,44 +39,36 @@ public class SettingsPage extends VBox
 		setSpacing(ViewConstants.DEFAULT_SPACING);
 		setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 0, 0, ViewConstants.DEFAULT_SPACING));
 
-		this.vboxSettingsItems = new VBox();
-		this.vboxSettingsItems.setAlignment(Pos.TOP_LEFT);
-		this.vboxSettingsItems.setSpacing(ViewConstants.DEFAULT_SPACING);
-		this.vboxSettingsItems.setPadding(new Insets(0, ViewConstants.DEFAULT_SPACING, 0, ViewConstants.DEFAULT_SPACING));
+		this.settingsItemsVbox = new VBox();
+		this.settingsItemsVbox.setAlignment(Pos.TOP_LEFT);
+		this.settingsItemsVbox.setSpacing(ViewConstants.DEFAULT_SPACING);
+		this.settingsItemsVbox.setPadding(new Insets(0, ViewConstants.DEFAULT_SPACING, 0, ViewConstants.DEFAULT_SPACING));
 
 		final Region spacer = new Region();
 		VBox.setVgrow(spacer, Priority.ALWAYS);
 
-		this.buttonCancel = new PlayWallButton("", FontAwesomeType.XMARK_SOLID);
-		this.buttonSave = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
+		this.saveButton = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
+		this.saveButton.textProperty().bind(saveText);
+		this.saveButton.onActionProperty().bind(onSave);
 
-		this.buttonSave.onActionProperty().bind(onSave);
-		this.buttonCancel.onActionProperty().bind(onCancel);
+		this.cancelButton = new PlayWallButton("", FontAwesomeType.XMARK_SOLID);
+		this.cancelButton.textProperty().bind(cancelText);
+		this.cancelButton.onActionProperty().bind(onCancel);
 
-		final HBox boxButtons = new HBox(buttonCancel, buttonSave);
+		final HBox boxButtons = new HBox(cancelButton, saveButton);
 		boxButtons.setSpacing(ViewConstants.DEFAULT_SPACING);
 		boxButtons.setAlignment(Pos.CENTER_RIGHT);
 
-		getChildren().addAll(vboxSettingsItems, spacer, boxButtons);
+		getChildren().addAll(settingsItemsVbox, spacer, boxButtons);
 
 		VBox.setVgrow(this, Priority.ALWAYS);
 
-		Platform.runLater(this.buttonSave::requestFocus);
-	}
-
-	@SuppressWarnings("unused")
-	public void setResources(ResourceBundle resources)
-	{
-		if(resources != null)
-		{
-			this.buttonCancel.setText(resources.getString("ui.settings.button.cancel"));
-			this.buttonSave.setText(resources.getString("ui.settings.button.save"));
-		}
+		Platform.runLater(this.saveButton::requestFocus);
 	}
 
 	public ObservableList<Node> getItems()
 	{
-		return vboxSettingsItems.getChildren();
+		return settingsItemsVbox.getChildren();
 	}
 
 	public EventHandler<ActionEvent> getOnSave()
@@ -108,21 +103,51 @@ public class SettingsPage extends VBox
 
 	public void setButtonSaveText(String text)
 	{
-		this.buttonSave.setText(text);
+		this.saveButton.setText(text);
 	}
 
 	public void disableButtonSave(boolean disable)
 	{
-		this.buttonSave.setDisable(disable);
+		this.saveButton.setDisable(disable);
 	}
 
 	public void setOnCancelAction(EventHandler<ActionEvent> handler)
 	{
-		this.buttonCancel.setOnAction(handler);
+		this.cancelButton.setOnAction(handler);
 	}
 
 	public void setOnSaveAction(EventHandler<ActionEvent> handler)
 	{
-		this.buttonSave.setOnAction(handler);
+		this.saveButton.setOnAction(handler);
+	}
+
+	public String getSaveText()
+	{
+		return saveText.get();
+	}
+
+	public StringProperty saveTextProperty()
+	{
+		return saveText;
+	}
+
+	public void setSaveText(String saveText)
+	{
+		this.saveText.set(saveText);
+	}
+
+	public String getCancelText()
+	{
+		return cancelText.get();
+	}
+
+	public StringProperty cancelTextProperty()
+	{
+		return cancelText;
+	}
+
+	public void setCancelText(String cancelText)
+	{
+		this.cancelText.set(cancelText);
 	}
 }
