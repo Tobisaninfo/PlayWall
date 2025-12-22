@@ -46,7 +46,7 @@ public class ProjectMetadataRepository
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
-		mapper.writeValue(Files.newBufferedWriter(path), allProjectsMetadata);
+		mapper.writerWithView(ProjectMetadata.List.class).writeValue(Files.newBufferedWriter(path), allProjectsMetadata);
 	}
 
 	void clearProjects() throws IOException
