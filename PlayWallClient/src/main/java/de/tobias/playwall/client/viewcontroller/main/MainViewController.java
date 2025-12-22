@@ -183,7 +183,7 @@ public class MainViewController extends BaseNVC
 	public void showPage(int pageNumber)
 	{
 		final Page page = this.project.getPage(pageNumber);
-		final int padNumberPerPage = project.metadata().numberOfHorizontalPads() * project.metadata().numberOfVerticalPads();
+		final int padNumberPerPage = project.metadata().getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
 		{

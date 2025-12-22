@@ -82,7 +82,7 @@ public class ProjectService
 	{
 		for(Page page : project.getPages())
 		{
-			for(int position = 0; position < project.getMetadata().getNumberOfHorizontalPads() * project.getMetadata().getNumberOfVerticalPads(); position++)
+			for(int position = 0; position < project.getMetadata().getNumberOfPadsPerPage(); position++)
 			{
 				if(page.getPad(position) == null)
 				{
