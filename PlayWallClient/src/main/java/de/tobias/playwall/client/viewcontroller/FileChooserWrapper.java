@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller;
 
+import com.google.gson.JsonElement;
 import de.thecodelabs.utils.application.App;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.PostConstruct;
@@ -42,10 +43,10 @@ public class FileChooserWrapper
 	public Optional<Path> showOpenFile(Window owner)
 	{
 		// Last Folder
-		final Object openFolder = app.getUserDefaults().getData(OPEN_FOLDER);
+		final JsonElement openFolder = app.getUserDefaults().getData(OPEN_FOLDER);
 		if(openFolder != null)
 		{
-			File folder = new File(openFolder.toString());
+			File folder = new File(openFolder.getAsString());
 			if(folder.exists())
 			{
 				fileChooser.setInitialDirectory(folder);
