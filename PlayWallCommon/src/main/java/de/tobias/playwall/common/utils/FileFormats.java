@@ -22,7 +22,7 @@ public class FileFormats
 
 	public static PadContentType getContentTypeForFile(Path path)
 	{
-		final String extension = PathUtils.getFileExtension(path);
+		final String extension = PathUtils.getFileExtension(path).toLowerCase();
 		return FILE_FORMATS.stream().filter(format -> format.extensions().contains(extension)).findFirst().orElseThrow(() -> new IllegalArgumentException("Unsupported file extension " + extension)).contentType();
 	}
 }
