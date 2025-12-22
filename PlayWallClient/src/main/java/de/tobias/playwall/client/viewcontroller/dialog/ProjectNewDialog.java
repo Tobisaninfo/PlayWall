@@ -58,11 +58,11 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 	@Override
 	public void init()
 	{
-		final SettingsEntry settingsEntryName = new SettingsEntry(FontAwesomeType.EDIT, Localization.getString("ui.dialog.project.create.label.name"), 200);
+		final SettingsEntry settingsEntryName = new SettingsEntry(FontAwesomeType.PEN_TO_SQUARE_SOLID, Localization.getString("ui.dialog.project.create.label.name"), 200);
 		textFieldName = new TextField();
 		settingsEntryName.setContent(textFieldName);
 
-		final SettingsEntry settingsEntryNumberOfTiles = new SettingsEntry(FontAwesomeType.TABLE, Localization.getString("ui.dialog.project.create.label.numberOfPads"), 200);
+		final SettingsEntry settingsEntryNumberOfTiles = new SettingsEntry(FontAwesomeType.TABLE_SOLID, Localization.getString("ui.dialog.project.create.label.numberOfPads"), 200);
 
 		spinnerNumberOfHorizontalPads = new Spinner<>(MIN_NUMBER_OF_PADS_PER_AXIS, MAX_NUMBER_OF_PADS_PER_AXIS, 6);
 		final HBox hboxHorizontalPads = createHboxNumberOfPads("ui.dialog.project.create.label.numberOfHorizontalPads", spinnerNumberOfHorizontalPads);

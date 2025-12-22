@@ -38,8 +38,8 @@ public class SettingsPage extends VBox
 		VBox.setVgrow(spacer, Priority.ALWAYS);
 		getChildren().addAll(spacer);
 
-		this.buttonCancel = new PlayWallButton(Localization.getString("ui.settings.button.cancel"), FontAwesomeType.TIMES);
-		this.buttonSave = new PlayWallButton(Localization.getString("ui.settings.button.save"), FontAwesomeType.SAVE);
+		this.buttonCancel = new PlayWallButton(Localization.getString("ui.settings.button.cancel"), FontAwesomeType.CROSS_SOLID);
+		this.buttonSave = new PlayWallButton(Localization.getString("ui.settings.button.save"), FontAwesomeType.FLOPPY_DISK_SOLID);
 
 		final HBox boxButtons = new HBox(buttonCancel, buttonSave);
 		boxButtons.setSpacing(ViewConstants.DEFAULT_SPACING);

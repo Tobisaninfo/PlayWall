@@ -2,6 +2,7 @@ open module de.tobias.playwall.client {
 	requires de.thecodelabs.libLogger;
 	requires de.thecodelabs.libJfx;
 	requires de.thecodelabs.libUtils;
+	requires javafx.base;
 	requires javafx.fxml;
 	requires javafx.controls;
 	requires javafx.graphics;
@@ -20,6 +21,4 @@ open module de.tobias.playwall.client {
 	requires io.github.classgraph;
 
 	requires static lombok;
-	requires javafx.graphics;
-	requires javafx.base;
 }
