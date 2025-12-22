@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -149,5 +150,15 @@ public class SettingsPage extends VBox
 	public void setCancelText(String cancelText)
 	{
 		this.cancelText.set(cancelText);
+	}
+
+	public Button getCancelButton()
+	{
+		return cancelButton;
+	}
+
+	public Button getSaveButton()
+	{
+		return saveButton;
 	}
 }

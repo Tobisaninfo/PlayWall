@@ -14,7 +14,8 @@
     <padding>
         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
     </padding>
-    <SettingsPage onCancel="#cancelButtonHandler" onSave="#finishButtonHandler" saveText="%ui.settings.button.save"
+    <SettingsPage fx:id="settingsPage" onCancel="#cancelButtonHandler" onSave="#finishButtonHandler"
+                  saveText="%ui.settings.button.save"
                   cancelText="%ui.settings.button.cancel">
         <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="Name">
             <TextField fx:id="textFieldName" prefWidth="300"/>

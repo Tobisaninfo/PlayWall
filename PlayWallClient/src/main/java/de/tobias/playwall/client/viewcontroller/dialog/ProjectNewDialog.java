@@ -9,6 +9,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.settings.SettingsPage;
 import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -21,6 +22,8 @@ import javafx.stage.Stage;
 public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 {
 	@FXML
+	private SettingsPage settingsPage;
+	@FXML
 	private TextField textFieldName;
 	@FXML
 	private Spinner<Integer> spinnerNumberOfHorizontalPads;
@@ -32,9 +35,15 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 	private ProjectMetadata project;
 
 	@InjectConstructor
-	public ProjectNewDialog(FluentClient client)
+	ProjectNewDialog(FluentClient client)
 	{
 		this.client = client;
+	}
+
+	@Override
+	protected void init()
+	{
+		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
 	}
 
 	@Override
@@ -62,7 +71,6 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 	@FXML
 	private void finishButtonHandler(ActionEvent event)
 	{
-		// TODO: do not allow empty text
 		final String name = textFieldName.getText();
 		final int numberOfHorizontalPads = spinnerNumberOfHorizontalPads.getValue();
 		final int numberOfVerticalPads = spinnerNumberOfVerticalPads.getValue();
@@ -85,10 +93,4 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 	{
 		getStageContainer().ifPresent(NVCStage::close);
 	}
-
-	/* TODO
-	 * - FXML vs. code
-	 * - css vs. code
-	 * - font
-	 */
 }
