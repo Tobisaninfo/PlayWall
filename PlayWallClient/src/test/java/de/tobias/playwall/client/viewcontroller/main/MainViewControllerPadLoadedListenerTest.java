@@ -65,7 +65,7 @@ class MainViewControllerPadLoadedListenerTest extends AbstractViewControllerTest
 		assertThat(padView.getBusyView().getIndicator()).isVisible();
 		assertThat(padView.getBusyView().getIndicator().getParent().getParent()).isNotNull();
 
-		eventHandler.fireEvent(new PadLoadedUpdate(padId, false));
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Check if busy view is removed from node tree
