@@ -4,7 +4,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
 import de.tobias.playwall.client.viewcontroller.main.PadViewProvider;
 
-@Service
+@Service(superclass = PadViewProvider.class)
 public class DesktopPadViewProvider implements PadViewProvider
 {
 	@Override

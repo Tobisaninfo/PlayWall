@@ -156,6 +156,7 @@ public class DesktopPadView implements PadView
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
 		}
+		busyView.showProgress(false);
 	}
 
 	@Override

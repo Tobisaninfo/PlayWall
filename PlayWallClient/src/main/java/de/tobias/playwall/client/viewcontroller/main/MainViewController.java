@@ -12,12 +12,13 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.mapper.PadMapper;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.service.ProjectService;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.viewcontroller.BaseNVC;
-import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadViewProvider;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +31,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
+@RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
 public class MainViewController extends BaseNVC
 {
 	@FXML
@@ -49,6 +52,8 @@ public class MainViewController extends BaseNVC
 	private AnchorPane gridContainer;
 
 	private final PadViewProvider padViewProvider;
+	private final ProjectService projectService;
+	private final PadMapper padMapper;
 	private final UpdateMessageEventHandler eventHandler;
 
 	private PadUpdateListener padUpdateListener;
@@ -60,13 +65,6 @@ public class MainViewController extends BaseNVC
 
 	@Getter
 	private Project project;
-
-	@InjectConstructor
-	MainViewController(DesktopPadViewProvider padViewProvider, UpdateMessageEventHandler eventHandler)
-	{
-		this.padViewProvider = padViewProvider;
-		this.eventHandler = eventHandler;
-	}
 
 	@Override
 	protected void init()
@@ -83,9 +81,9 @@ public class MainViewController extends BaseNVC
 
 		headerBox.getChildren().add(createMenu());
 
-		padUpdateListener = new PadUpdateListener(this); // TODO: AppContext
+		padUpdateListener = new PadUpdateListener(projectService, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
-		padLoadedListener = new PadLoadedListener(this); // TODO: AppContext
+		padLoadedListener = new PadLoadedListener(this);
 		eventHandler.registerListener(padLoadedListener);
 	}
 
@@ -95,13 +93,16 @@ public class MainViewController extends BaseNVC
 		super.initStage(stageContainer, stage);
 		stageContainer.addCloseHook(this::closeRequest);
 
-		stage.setOnHidden(_ -> { // TODO: Extract
-			eventHandler.unregisterListener(padUpdateListener);
-			eventHandler.unregisterListener(padLoadedListener);
-		});
+		stage.setOnHidden(_ -> onWindowClosed());
 
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
+	}
+
+	private void onWindowClosed()
+	{
+		eventHandler.unregisterListener(padUpdateListener);
+		eventHandler.unregisterListener(padLoadedListener);
 	}
 
 	private static String getWindowTitle(String projectName)

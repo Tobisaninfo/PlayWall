@@ -46,7 +46,7 @@ public class FileChooserWrapper
 		final JsonElement openFolder = app.getUserDefaults().getData(OPEN_FOLDER);
 		if(openFolder != null)
 		{
-			File folder = new File(openFolder.getAsString());
+			final File folder = new File(openFolder.getAsString());
 			if(folder.exists())
 			{
 				fileChooser.setInitialDirectory(folder);

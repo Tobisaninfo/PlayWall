@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public final class Project
+public class Project
 {
 	private final ProjectMetadata metadata;
 	private final List<Page> pages;
@@ -34,7 +34,7 @@ public final class Project
 	{
 		return "Project[" +
 			   "metadata=" + metadata + ", " +
-			   "getPages=" + pages + ']';
+			   "pages=" + pages + ']';
 	}
 
 }
