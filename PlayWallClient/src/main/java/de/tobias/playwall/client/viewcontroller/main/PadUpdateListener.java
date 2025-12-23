@@ -1,7 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.appcontext.InjectField;
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.client.mapper.PadMapper;
 import de.tobias.playwall.client.model.project.Pad;

@@ -123,12 +123,12 @@ public class MainViewController extends BaseNVC
 	private void updateWindowProperties(Project project)
 	{
 		final Stage stage = getStage();
-		final Size minSize = computeMinStageSize(project.metadata().numberOfHorizontalPads(), project.metadata().numberOfVerticalPads());
+		final Size minSize = computeMinStageSize(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
 		stage.setMinWidth(minSize.width());
 		stage.setMinHeight(minSize.height());
 
-		stage.setTitle(getWindowTitle(project.metadata().name()));
+		stage.setTitle(getWindowTitle(project.getMetadata().name()));
 	}
 
 	private Stage getStage()
@@ -143,7 +143,7 @@ public class MainViewController extends BaseNVC
 		this.project = project;
 
 		updateWindowProperties(project);
-		initializePadViews(project.metadata().numberOfHorizontalPads(), project.metadata().numberOfVerticalPads());
+		initializePadViews(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
 		showPage(0);
 	}
@@ -194,7 +194,7 @@ public class MainViewController extends BaseNVC
 	public void showPage(int pageNumber)
 	{
 		final Page page = this.project.getPage(pageNumber);
-		final int padNumberPerPage = project.metadata().getNumberOfPadsPerPage();
+		final int padNumberPerPage = project.getMetadata().getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
 		{

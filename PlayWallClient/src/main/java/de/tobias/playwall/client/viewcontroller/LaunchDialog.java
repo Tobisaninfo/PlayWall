@@ -171,7 +171,7 @@ public class LaunchDialog extends BaseNVC
 		try
 		{
 			final Project project = client.project(id).launch();
-			Logger.info("Launched project " + project.metadata().name());
+			Logger.info("Launched project " + project.getMetadata().name());
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
 			controller.showStage();
