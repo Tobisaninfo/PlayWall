@@ -58,7 +58,7 @@ public class PlayWallIconOverviewMain extends Application
 	{
 		try
 		{
-			final MainViewController controller = new MainViewController(primaryStage, app);
+			final PlayWallIconOverviewMainViewController controller = new PlayWallIconOverviewMainViewController(primaryStage, app);
 			controller.showStage();
 		}
 		catch(Exception e)

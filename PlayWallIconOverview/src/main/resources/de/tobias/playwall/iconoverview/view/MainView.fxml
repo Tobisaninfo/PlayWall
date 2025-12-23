@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox alignment="TOP_CENTER" spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="labelTitle" text="Test" />
+      <Label text="Label" fx:id="labelTitle">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <TextField fx:id="textFieldSearch"/>
+      <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:id="listView" />
    </children>
-</HBox>
+   <padding>
+      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+   </padding>
+</VBox>
