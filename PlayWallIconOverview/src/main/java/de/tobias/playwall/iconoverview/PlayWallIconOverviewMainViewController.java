@@ -5,6 +5,9 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -54,6 +57,27 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		listView.setPlaceholder(new Label(getString("list.placeholder")));
 		listView.setCellFactory(_ -> new IconCell());
 
-		listView.getItems().addAll(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, "Save"));
+		final FilteredList<IconEntry> filteredData = new FilteredList<>(getData(), s -> true);
+
+		listView.setItems(filteredData);
+
+		textFieldSearch.textProperty().addListener((_, oldValue, newValue) -> {
+			if(newValue == null || newValue.isEmpty())
+			{
+				filteredData.setPredicate(s -> true);
+			}
+			else
+			{
+				final String newValueLowerCase = newValue.toLowerCase();
+				filteredData.setPredicate(s -> s.description().toLowerCase().contains(newValueLowerCase) || s.fontIconType().toString().toLowerCase().contains(newValueLowerCase));
+			}
+		});
+	}
+
+	private ObservableList<IconEntry> getData()
+	{
+		final ObservableList<IconEntry> data = FXCollections.observableArrayList();
+		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, "Save"));
+		return data;
 	}
 }
