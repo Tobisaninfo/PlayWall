@@ -40,14 +40,24 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 			oldController.stop();
 			oldController.unload();
 		}
+		final Pad pad = projectController.getPad(requestMessage.getPadId());
 
 		final Path path = Paths.get(requestMessage.getPath());
 		final PadContent content = switch(FileFormats.getContentTypeForFile(path))
 		{
-			case AUDIO -> AudioPadContent.builder().mediaPath(path.toString()).build();
+			case AUDIO ->
+			{
+				if(pad.getContent() != null && pad.getContent() instanceof AudioPadContent audioPadContent)
+				{
+					audioPadContent.setMediaPath(path.toString());
+					yield audioPadContent;
+				}
+				else
+				{
+					yield AudioPadContent.builder().mediaPath(path.toString()).build();
+				}
+			}
 		};
-
-		final Pad pad = projectController.getPad(requestMessage.getPadId());
 		pad.setContent(content);
 
 		final PadController newPadController = projectController.createNewPadController(pad);
