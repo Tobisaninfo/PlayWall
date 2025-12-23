@@ -1,0 +1,25 @@
+color:
+  enable: true
+  info: "GREEN"
+  warn: "YELLOW"
+  error: "RED"
+  time: "BLUE"
+  thread: "WHITE"
+  detail: "CYAN"
+  message: "RESET"
+
+dateFormatterPattern: "YYYY-MM-dd HH:mm:ss"
+
+defaultOutLevel: "DEBUG"
+defaultErrLevel: "ERROR"
+
+showShortPackageName: true
+showClassName: true
+showThreadName: true
+showMethodName: true
+showLineNumber: true
+
+ignoreStandardStream: false
+
+file:
+  out: "client.log"

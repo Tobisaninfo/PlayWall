@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.tobias.playwall</groupId>
+        <artifactId>PlayWall</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>PlayWallIconOverview</artifactId>
+
+    <properties>
+        <surefire.argLineBase>
+            --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+            --add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED
+            --add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
+            --add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+            --enable-native-access=javafx.graphics
+            --enable-native-access=de.thecodelabs.libJfx
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+            -Duser.language=de -Duser.country=DE
+            -Djavafx.enablePreview=true -Djavafx.suppressPreviewWarning=true
+        </surefire.argLineBase>
+        <surefire.argLine>${surefire.argLineBase}</surefire.argLine>
+        <failsafe.argLineBase>
+            -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+        </failsafe.argLineBase>
+        <failsafe.argLine>${failsafe.argLineBase}</failsafe.argLine>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>${controlsfx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libUtils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libLogger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libJfx</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

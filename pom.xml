@@ -16,6 +16,7 @@
         <module>PlayWallNativeAudio</module>
         <module>PlayWallServer</module>
         <module>PlayWallClient</module>
+        <module>PlayWallIconOverview</module>
         <module>coverage</module>
     </modules>
 

@@ -1,0 +1,8 @@
+name: "PlayWall Icon Overview"
+version: "@project.version@"
+build: @project.build.code@
+identifier: "de.tobias.playwall.v8"
+date: "@project.versionDate@"
+
+main: "de.tobias.playwall.client.PlayWallIconOverviewMain"
+author: "Tobias Ullerich, Robert Goldmann"

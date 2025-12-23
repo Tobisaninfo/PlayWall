@@ -1,12 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="PlayWallMain" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="de.tobias.playwall.client.PlayWallMain" />
-    <module name="PlayWallClient" />
-    <option name="PROGRAM_PARAMETERS" value="--debug --standalone" />
+  <configuration default="false" name="PlayWallIconOverviewMain" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="de.tobias.playwall.iconoverview.PlayWallIconOverviewMain" />
+    <module name="PlayWallIconOverview" />
     <option name="VM_PARAMETERS" value="--enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx -Djavafx.enablePreview=true -Djavafx.suppressPreviewWarning=true" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="de.tobias.playwall.client.launch.*" />
+        <option name="PATTERN" value="de.tobias.playwall.iconoverview.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
