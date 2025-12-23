@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.api.project;
 
-import de.tobias.playwall.common.net.UpdateMessage;
+import de.tobias.playwall.common.net.RequestMessage;
 import lombok.*;
 
 import java.util.UUID;
@@ -10,8 +10,8 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class PadLoadedUpdate extends UpdateMessage
+public class PadNewMediaRequest extends RequestMessage
 {
 	private UUID padId;
-	private boolean isLoaded;
+	private String path;
 }

@@ -1,13 +1,23 @@
 package de.tobias.playwall.client.model.project;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.List;
 
-public record Project(ProjectMetadata metadata, List<Page> pages)
+@Getter
+@AllArgsConstructor
+@ToString
+public class Project
 {
+	private final ProjectMetadata metadata;
+	private final List<Page> pages;
+
 	public Page getPage(int position)
 	{
 		return pages.stream().findFirst()
-				.filter(page -> page.position() == position)
+				.filter(page -> page.getPosition() == position)
 				.orElse(null);
 	}
 

@@ -7,5 +7,5 @@ public enum PadControllerStatus
 	PLAY,
 	PAUSE,
 	STOP,
-	EOF;
+	EOF
 }

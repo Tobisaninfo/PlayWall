@@ -22,4 +22,9 @@ public class ProjectMetadata
 	private String name;
 	private int numberOfHorizontalPads;
 	private int numberOfVerticalPads;
+
+	public int getNumberOfPadsPerPage()
+	{
+		return numberOfHorizontalPads * numberOfVerticalPads;
+	}
 }

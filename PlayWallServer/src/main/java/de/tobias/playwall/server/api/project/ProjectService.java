@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
@@ -49,6 +50,9 @@ public class ProjectService
 				.pages(new ArrayList<>())
 				.build();
 
+		project.getPages().add(Page.builder().id(UUID.randomUUID()).name("Page 1").position(0).pads(new ArrayList<>()).build()); // TODO: Move
+		fillProjectPagesWithEmptyPads(project);
+
 		projectRepository.saveProject(project);
 
 		return projectMetadata;
@@ -72,5 +76,20 @@ public class ProjectService
 	public boolean deletePage(UUID id, UUID pageId) throws IOException, ProjectNotExistsException
 	{
 		return projectRepository.deletePage(id, pageId);
+	}
+
+	public void fillProjectPagesWithEmptyPads(Project project)
+	{
+		for(Page page : project.getPages())
+		{
+			for(int position = 0; position < project.getMetadata().getNumberOfPadsPerPage(); position++)
+			{
+				if(page.getPad(position) == null)
+				{
+					final Pad pad = Pad.builder().id(UUID.randomUUID()).position(position).build();
+					page.getPads().add(pad);
+				}
+			}
+		}
 	}
 }

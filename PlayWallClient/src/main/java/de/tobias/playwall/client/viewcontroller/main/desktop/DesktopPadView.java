@@ -3,12 +3,15 @@ package de.tobias.playwall.client.viewcontroller.main.desktop;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
+import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
+import de.tobias.playwall.common.utils.FileFormats;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -20,9 +23,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
+import lombok.Getter;
+
+import java.nio.file.Path;
+import java.util.Optional;
 
 import static de.tobias.playwall.client.view.pad.control.PadStyleClasses.*;
 
+@Getter
 public class DesktopPadView implements PadView
 {
 	private Label indexLabel;
@@ -56,6 +66,9 @@ public class DesktopPadView implements PadView
 
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
+
+	@Getter
+	private Pad pad;
 
 	public DesktopPadView()
 	{
@@ -105,12 +118,11 @@ public class DesktopPadView implements PadView
 		playBar.prefWidthProperty().bind(root.widthProperty());
 
 		// Buttons
-		// TODO: Event handler
 		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY_SOLID), this::onPlayAction);
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE_SOLID), this::onPauseAction);
 		nextButton = new PadButton(new FontIcon(FontAwesomeType.FORWARD_SOLID), null);
-		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP_SOLID), this::onStopyAction);
-		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN_SOLID), null);
+		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP_SOLID), this::onStopAction);
+		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN_SOLID), this::onNewAction);
 		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR_SOLID), null);
 
 		// Not Found Label
@@ -124,7 +136,7 @@ public class DesktopPadView implements PadView
 		// Button HBOX
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
-		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton);
+		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton, newButton);
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
@@ -139,11 +151,19 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateFromPad(Pad pad)
 	{
+		this.pad = pad;
 		if(pad != null)
 		{
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
 		}
+		busyView.showProgress(false);
+	}
+
+	@Override
+	public void showLoading(boolean isLoading)
+	{
+		busyView.showProgress(isLoading);
 	}
 
 	private void onPlayAction(ActionEvent event)
@@ -172,7 +192,7 @@ public class DesktopPadView implements PadView
 		}
 	}
 
-	private void onStopyAction(ActionEvent event)
+	private void onStopAction(ActionEvent event)
 	{
 		try
 		{
@@ -182,6 +202,31 @@ public class DesktopPadView implements PadView
 		{
 			// TODO: error handling
 			throw new RuntimeException(ex);
+		}
+	}
+
+	private void onNewAction(ActionEvent event)
+	{
+		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
+		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
+		fileChooser.setExtensionFilter(FileFormats.FILE_FORMATS.stream().map(format ->
+				new FileChooser.ExtensionFilter(
+						Localization.getString("FileFormat." + format.contentType().name()),
+						format.extensions().stream().map(ext -> "*." + ext).toList()
+				)).toList());
+		final Optional<Path> path = fileChooser.showOpenFile(owner);
+
+		if(path.isPresent())
+		{
+			try
+			{
+				padBuilder.newMedia(path.get());
+			}
+			catch(PlayWallApiException ex)
+			{
+				// TODO: error handling
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 }

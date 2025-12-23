@@ -15,12 +15,7 @@
                     "id": "fc427184-2e55-4734-8148-5fb657963616",
                     "name": "Test Pad",
                     "position": 0,
-                    "content": {
-                        "@class": "de.tobias.playwall.common.api.project.model.AudioPadContentDto",
-                        "mediaPath": null,
-                        "loop": false,
-                        "volume": 1.0
-                    }
+                    "content": null
                 }
             ]
         }

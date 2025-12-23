@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.project.PadController;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -20,18 +22,19 @@ import java.util.UUID;
 public class ProjectController
 {
 	private final ApplicationContext context;
-	private final PadControllerFactory padControllerFactory;
+	private final PadContentControllerFactory padControllerFactory;
 	@Getter
 	private Project loadedProject;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
 	@Async
-	public void loadProject(Project project)
+	public CompletableFuture<Void> loadProject(Project project)
 	{
 		unloadPads();
 		loadedProject = project;
 		loadPads();
+		return CompletableFuture.completedFuture(null);
 	}
 
 	private void unloadPads()
@@ -44,7 +47,8 @@ public class ProjectController
 	{
 		loadedProject.getPages().stream()
 				.flatMap(page -> page.getPads().stream())
-				.forEach(pad -> padControllers.put(pad.getId(), padControllerFactory.createPadController(context, pad)));
+				.filter(pad -> pad.getContent() != null)
+				.forEach(this::createNewPadController);
 
 		padControllers.values().forEach(PadController::load);
 	}
@@ -52,5 +56,17 @@ public class ProjectController
 	public PadController getPadController(UUID padId)
 	{
 		return padControllers.get(padId);
+	}
+
+	public Pad getPad(UUID padId)
+	{
+		return loadedProject.getPad(padId);
+	}
+
+	public PadController createNewPadController(Pad pad)
+	{
+		final PadController controller = padControllerFactory.createPadContentController(context, pad);
+		padControllers.put(pad.getId(), controller);
+		return controller;
 	}
 }

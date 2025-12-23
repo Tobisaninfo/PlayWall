@@ -5,6 +5,7 @@ import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,8 @@ public interface FluentClient
 		void pause() throws PlayWallApiException;
 
 		void stop() throws PlayWallApiException;
+
+		void newMedia(Path file) throws PlayWallApiException;
 	}
 
 	PadBuilder pad(UUID padId);

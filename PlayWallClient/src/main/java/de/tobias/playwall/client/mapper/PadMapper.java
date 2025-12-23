@@ -1,29 +1,28 @@
 package de.tobias.playwall.client.mapper;
 
+import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
-import de.tobias.playwall.client.model.project.AudioPad;
 import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.common.api.project.model.AudioPadDto;
+import de.tobias.playwall.common.api.project.model.AudioPadContentDto;
 import de.tobias.playwall.common.api.project.model.PadDto;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
 public class PadMapper
 {
+	private final PadContentMapper padContentMapper;
+
 	public Pad padDtoToPad(PadDto pad)
 	{
-		return switch(pad)
-		{
-			case AudioPadDto audioPadDto -> AudioPad.builder()
-					.id(audioPadDto.getId())
-					.name(audioPadDto.getName())
-					.position(audioPadDto.getPosition())
-					.mediaPaths(audioPadDto.getMediaPaths())
-					.isLoop(audioPadDto.getIsLoop())
-					.volume(audioPadDto.getVolume())
-					.build();
-		};
+		return Pad.builder()
+				.id(pad.getId())
+				.name(pad.getName())
+				.position(pad.getPosition())
+				.content(padContentMapper.padContentDtoToPadContent(pad.getContent()))
+				.build();
 	}
 }

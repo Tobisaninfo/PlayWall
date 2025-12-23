@@ -16,4 +16,9 @@ public class Page
 	private Integer position;
 	private String name;
 	private List<Pad> pads;
+
+	public Pad getPad(int position)
+	{
+		return pads.stream().filter(p -> p.getPosition() == position).findFirst().orElse(null);
+	}
 }

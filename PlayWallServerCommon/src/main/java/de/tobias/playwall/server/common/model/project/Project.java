@@ -22,4 +22,12 @@ public class Project
 				.filter(page -> page.getId().equals(pageId))
 				.findFirst();
 	}
+
+	public Pad getPad(UUID padId)
+	{
+		return getPages().stream()
+				.flatMap(page -> page.getPads().stream())
+				.filter(pad -> pad.getId().equals(padId))
+				.findFirst().orElse(null);
+	}
 }

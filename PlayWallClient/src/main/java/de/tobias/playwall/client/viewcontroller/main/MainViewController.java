@@ -11,12 +11,14 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.mapper.PadMapper;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.service.ProjectService;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.viewcontroller.BaseNVC;
-import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadViewProvider;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,13 +30,17 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
+@RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
 public class MainViewController extends BaseNVC
 {
 	@FXML
@@ -46,18 +52,19 @@ public class MainViewController extends BaseNVC
 	private AnchorPane gridContainer;
 
 	private final PadViewProvider padViewProvider;
+	private final ProjectService projectService;
+	private final PadMapper padMapper;
+	private final UpdateMessageEventHandler eventHandler;
+
+	private PadUpdateListener padUpdateListener;
+	private PadLoadedListener padLoadedListener;
 
 	private SnackBar notificationPane;
 
 	private final List<PadView> padViews = new ArrayList<>();
 
+	@Getter
 	private Project project;
-
-	@InjectConstructor
-	MainViewController(DesktopPadViewProvider padViewProvider)
-	{
-		this.padViewProvider = padViewProvider;
-	}
 
 	@Override
 	protected void init()
@@ -73,6 +80,11 @@ public class MainViewController extends BaseNVC
 		setAnchor(notificationPane, 0, 0, 0, 0);
 
 		headerBox.getChildren().add(createMenu());
+
+		padUpdateListener = new PadUpdateListener(projectService, this, padMapper);
+		eventHandler.registerListener(padUpdateListener);
+		padLoadedListener = new PadLoadedListener(this);
+		eventHandler.registerListener(padLoadedListener);
 	}
 
 	@Override
@@ -81,8 +93,16 @@ public class MainViewController extends BaseNVC
 		super.initStage(stageContainer, stage);
 		stageContainer.addCloseHook(this::closeRequest);
 
+		stage.setOnHidden(_ -> onWindowClosed());
+
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
+	}
+
+	private void onWindowClosed()
+	{
+		eventHandler.unregisterListener(padUpdateListener);
+		eventHandler.unregisterListener(padLoadedListener);
 	}
 
 	private static String getWindowTitle(String projectName)
@@ -112,12 +132,12 @@ public class MainViewController extends BaseNVC
 	private void updateWindowProperties(Project project)
 	{
 		final Stage stage = getStage();
-		final Size minSize = computeMinStageSize(project.metadata().numberOfHorizontalPads(), project.metadata().numberOfVerticalPads());
+		final Size minSize = computeMinStageSize(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
 		stage.setMinWidth(minSize.width());
 		stage.setMinHeight(minSize.height());
 
-		stage.setTitle(getWindowTitle(project.metadata().name()));
+		stage.setTitle(getWindowTitle(project.getMetadata().name()));
 	}
 
 	private Stage getStage()
@@ -132,7 +152,7 @@ public class MainViewController extends BaseNVC
 		this.project = project;
 
 		updateWindowProperties(project);
-		initializePadViews(project.metadata().numberOfHorizontalPads(), project.metadata().numberOfVerticalPads());
+		initializePadViews(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
 		showPage(0);
 	}
@@ -183,7 +203,7 @@ public class MainViewController extends BaseNVC
 	public void showPage(int pageNumber)
 	{
 		final Page page = this.project.getPage(pageNumber);
-		final int padNumberPerPage = project.metadata().numberOfHorizontalPads() * project.metadata().numberOfVerticalPads();
+		final int padNumberPerPage = project.getMetadata().getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
 		{
@@ -192,6 +212,13 @@ public class MainViewController extends BaseNVC
 
 			view.updateFromPad(pad);
 		}
+	}
+
+	public PadView getPadViewForPadId(UUID padId)
+	{
+		return padViews.stream()
+				.filter(view -> view.getPad().getId().equals(padId))
+				.findFirst().orElse(null);
 	}
 
 	private MenuBar createMenu()

@@ -11,6 +11,14 @@
 
     <artifactId>PlayWallCommon</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libUtils</artifactId>
+        </dependency>
+
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
