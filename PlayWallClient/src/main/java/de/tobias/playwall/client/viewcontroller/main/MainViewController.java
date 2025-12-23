@@ -11,6 +11,7 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
@@ -33,6 +34,7 @@ import org.controlsfx.control.action.Action;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 public class MainViewController extends BaseNVC
@@ -46,6 +48,9 @@ public class MainViewController extends BaseNVC
 	private AnchorPane gridContainer;
 
 	private final PadViewProvider padViewProvider;
+	private final UpdateMessageEventHandler eventHandler;
+
+	private PadUpdateListener padUpdateListener;
 
 	private SnackBar notificationPane;
 
@@ -54,9 +59,10 @@ public class MainViewController extends BaseNVC
 	private Project project;
 
 	@InjectConstructor
-	MainViewController(DesktopPadViewProvider padViewProvider)
+	MainViewController(DesktopPadViewProvider padViewProvider, UpdateMessageEventHandler eventHandler)
 	{
 		this.padViewProvider = padViewProvider;
+		this.eventHandler = eventHandler;
 	}
 
 	@Override
@@ -73,6 +79,9 @@ public class MainViewController extends BaseNVC
 		setAnchor(notificationPane, 0, 0, 0, 0);
 
 		headerBox.getChildren().add(createMenu());
+
+		padUpdateListener = new PadUpdateListener(this); // TODO: AppContext
+		eventHandler.registerListener(padUpdateListener);
 	}
 
 	@Override
@@ -80,6 +89,8 @@ public class MainViewController extends BaseNVC
 	{
 		super.initStage(stageContainer, stage);
 		stageContainer.addCloseHook(this::closeRequest);
+
+		stage.setOnHidden(_ -> eventHandler.unregisterListener(padUpdateListener)); // TODO: Extract
 
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
@@ -192,6 +203,13 @@ public class MainViewController extends BaseNVC
 
 			view.updateFromPad(pad);
 		}
+	}
+
+	public PadView getPadViewForPadId(UUID padId)
+	{
+		return padViews.stream()
+				.filter(view -> view.getPad().getId().equals(padId))
+				.findFirst().orElse(null);
 	}
 
 	private MenuBar createMenu()

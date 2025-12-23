@@ -6,7 +6,6 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
-import de.tobias.playwall.common.api.project.PadNewMediaResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -161,9 +160,9 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public PadNewMediaResponse newMedia(Path file) throws PlayWallApiException
+		public void newMedia(Path file) throws PlayWallApiException
 		{
-			return delegate.newMedia(padId, file);
+			delegate.newMedia(padId, file);
 		}
 	}
 

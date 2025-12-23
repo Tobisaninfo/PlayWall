@@ -11,9 +11,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
-import de.tobias.playwall.common.api.project.PadNewMediaResponse;
 import de.tobias.playwall.common.utils.FileFormats;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -27,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import lombok.Getter;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -67,6 +66,7 @@ public class DesktopPadView implements PadView
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
 
+	@Getter
 	private Pad pad;
 
 	public DesktopPadView()
@@ -212,9 +212,7 @@ public class DesktopPadView implements PadView
 		{
 			try
 			{
-				final PadNewMediaResponse response = padBuilder.newMedia(path.get());
-				this.pad.setName(response.getNewName());
-				Platform.runLater(() -> updateFromPad(pad));
+				padBuilder.newMedia(path.get());
 			}
 			catch(PlayWallApiException ex)
 			{

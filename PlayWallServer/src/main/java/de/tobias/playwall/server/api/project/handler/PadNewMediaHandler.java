@@ -2,10 +2,11 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playwall.common.api.project.PadNewMediaRequest;
-import de.tobias.playwall.common.api.project.PadNewMediaResponse;
+import de.tobias.playwall.common.api.project.PadUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.utils.FileFormats;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.PadMapper;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
@@ -14,6 +15,7 @@ import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -25,6 +27,9 @@ import java.util.Optional;
 public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 {
 	private final ProjectController projectController;
+
+	private final ApplicationContext context;
+	private final PadMapper padMapper;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(PadNewMediaRequest requestMessage) throws IOException, PlayWallServerException
@@ -46,10 +51,12 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 		pad.setContent(content);
 
 		final PadController newPadController = projectController.createNewPadController(pad);
-		newPadController.load();
 
 		pad.setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
+		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
-		return Optional.of(new PadNewMediaResponse(requestMessage.getMessageId(), pad.getId(), pad.getName()));
+		newPadController.load();
+
+		return Optional.empty();
 	}
 }
