@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import static de.tobias.playwall.client.view.pad.control.PadStyleClasses.*;
 
+@Getter
 public class DesktopPadView implements PadView
 {
 	private Label indexLabel;
