@@ -52,6 +52,7 @@ public class MainViewController extends BaseNVC
 	private final UpdateMessageEventHandler eventHandler;
 
 	private PadUpdateListener padUpdateListener;
+	private PadLoadedListener padLoadedListener;
 
 	private SnackBar notificationPane;
 
@@ -84,6 +85,8 @@ public class MainViewController extends BaseNVC
 
 		padUpdateListener = new PadUpdateListener(this); // TODO: AppContext
 		eventHandler.registerListener(padUpdateListener);
+		padLoadedListener = new PadLoadedListener(this); // TODO: AppContext
+		eventHandler.registerListener(padLoadedListener);
 	}
 
 	@Override
@@ -92,7 +95,10 @@ public class MainViewController extends BaseNVC
 		super.initStage(stageContainer, stage);
 		stageContainer.addCloseHook(this::closeRequest);
 
-		stage.setOnHidden(_ -> eventHandler.unregisterListener(padUpdateListener)); // TODO: Extract
+		stage.setOnHidden(_ -> { // TODO: Extract
+			eventHandler.unregisterListener(padUpdateListener);
+			eventHandler.unregisterListener(padLoadedListener);
+		});
 
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();

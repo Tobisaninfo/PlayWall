@@ -28,10 +28,11 @@ public abstract class PadController
 
 	public void load()
 	{
+		context.publishEvent(new PadLoadedUpdate(pad.getId(), false));
 		log.debug("Loading Pad {}", pad.getId());
 		loadInternal();
 		status = PadControllerStatus.READY;
-		context.publishEvent(new PadLoadedUpdate(pad.getId()));
+		context.publishEvent(new PadLoadedUpdate(pad.getId(), true));
 	}
 
 	protected abstract void loadInternal();

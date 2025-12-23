@@ -14,15 +14,15 @@ import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.concurrent.Executor;
 
-@AllArgsConstructor
 @RequestHandlerTyped(PadNewMediaRequest.class)
 public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 {
@@ -30,6 +30,16 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 
 	private final ApplicationContext context;
 	private final PadMapper padMapper;
+
+	private final Executor asyncExecutor;
+
+	public PadNewMediaHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, @Qualifier("taskExecutor") Executor asyncExecutor)
+	{
+		this.projectController = projectController;
+		this.context = context;
+		this.padMapper = padMapper;
+		this.asyncExecutor = asyncExecutor;
+	}
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(PadNewMediaRequest requestMessage) throws IOException, PlayWallServerException
@@ -65,7 +75,8 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 		pad.setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
-		newPadController.load();
+		// Load pad async
+		asyncExecutor.execute(newPadController::load);
 
 		return Optional.empty();
 	}

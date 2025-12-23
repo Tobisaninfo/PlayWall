@@ -158,6 +158,12 @@ public class DesktopPadView implements PadView
 		}
 	}
 
+	@Override
+	public void showLoading(boolean loading)
+	{
+		busyView.showProgress(loading);
+	}
+
 	private void onPlayAction(ActionEvent event)
 	{
 		try

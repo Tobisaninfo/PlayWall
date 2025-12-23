@@ -10,4 +10,6 @@ public interface PadView
 	Pad getPad();
 
 	void updateFromPad(Pad pad);
+
+	void showLoading(boolean loading);
 }
