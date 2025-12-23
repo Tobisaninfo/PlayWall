@@ -2,11 +2,13 @@ package de.tobias.playwall.client.model.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class Project
 {
 	private final ProjectMetadata metadata;
@@ -28,13 +30,4 @@ public class Project
 		}
 		return null;
 	}
-
-	@Override
-	public String toString()
-	{
-		return "Project[" +
-			   "metadata=" + metadata + ", " +
-			   "pages=" + pages + ']';
-	}
-
 }

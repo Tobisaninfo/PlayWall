@@ -2,12 +2,14 @@ package de.tobias.playwall.client.model.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class Page
 {
 	private final UUID id;
@@ -19,15 +21,4 @@ public class Page
 	{
 		return pads.stream().filter(p -> p.getPosition() == position).findFirst().orElse(null);
 	}
-
-	@Override
-	public String toString()
-	{
-		return "Page[" +
-			   "id=" + id + ", " +
-			   "name=" + name + ", " +
-			   "position=" + position + ", " +
-			   "pads=" + pads + ']';
-	}
-
 }
