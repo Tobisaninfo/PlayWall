@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -28,11 +29,12 @@ public class ProjectController
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
 	@Async
-	public void loadProject(Project project)
+	public CompletableFuture<Void> loadProject(Project project)
 	{
 		unloadPads();
 		loadedProject = project;
 		loadPads();
+		return CompletableFuture.completedFuture(null);
 	}
 
 	private void unloadPads()

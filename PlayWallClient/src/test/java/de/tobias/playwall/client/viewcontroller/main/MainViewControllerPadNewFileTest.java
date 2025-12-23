@@ -62,7 +62,7 @@ class MainViewControllerPadNewFileTest extends AbstractViewControllerTest
 		});
 		WaitForAsyncUtils.waitForFxEvents();
 
-		Path path = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
+		final Path path = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		when(fileChooserWrapper.showOpenFile(any())).thenReturn(Optional.of(path));
 
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
