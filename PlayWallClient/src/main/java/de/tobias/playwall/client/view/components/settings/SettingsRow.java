@@ -4,24 +4,32 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.beans.DefaultProperty;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import lombok.Getter;
 
 @DefaultProperty("content")
-public class SettingsRow extends HBox
+public class SettingsRow extends GridPane
 {
 	private final Label labelName;
 	private final FontIcon fontIcon;
 
 	private final StringProperty title = new SimpleStringProperty();
 	private final ObjectProperty<FontAwesomeType> icon = new SimpleObjectProperty<>();
+
+	@Getter
+	private final ObservableList<Node> content = FXCollections.observableArrayList();
 
 	public SettingsRow()
 	{
@@ -34,14 +42,28 @@ public class SettingsRow extends HBox
 		fontIcon.setMouseTransparent(true);
 		fontIcon.setSize(16);
 
-		setAlignment(Pos.TOP_LEFT);
-		setSpacing(ViewConstants.DEFAULT_SPACING);
+		final HBox leftBox = new HBox(ViewConstants.DEFAULT_SPACING, fontIcon, labelName);
+		leftBox.setAlignment(Pos.CENTER_LEFT);
 
-		getChildren().addAll(fontIcon, labelName);
+		setVgap(ViewConstants.DEFAULT_SPACING);
+		setHgap(ViewConstants.DEFAULT_SPACING);
+		GridPane.setValignment(leftBox, VPos.TOP);
+
+		add(leftBox, 0, 0);
 
 		labelName.textProperty().bind(title);
-		icon.addListener((_, _, newIcon) -> {
-			fontIcon.setIcons(newIcon);
+		icon.addListener((_, _, newIcon) ->
+				fontIcon.setIcons(newIcon));
+
+		content.addListener((InvalidationListener) _ -> {
+			getChildren().removeIf(node -> {
+				Integer columnIndex = GridPane.getColumnIndex(node);
+				return columnIndex != null && columnIndex == 1;
+			});
+			for(int i = 0; i < content.size(); i++)
+			{
+				add(content.get(i), 1, i);
+			}
 		});
 	}
 
@@ -75,8 +97,4 @@ public class SettingsRow extends HBox
 		return icon;
 	}
 
-	public ObservableList<Node> getContent()
-	{
-		return getChildren();
-	}
 }

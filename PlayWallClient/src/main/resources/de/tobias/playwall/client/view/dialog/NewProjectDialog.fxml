@@ -10,9 +10,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="500.0" spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="500.0" spacing="14.0"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <padding>
-        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
     </padding>
     <SettingsPage fx:id="settingsPage" onCancel="#cancelButtonHandler" onSave="#finishButtonHandler"
                   saveText="%ui.settings.button.save"
@@ -24,20 +25,16 @@
         <Separator/>
 
         <SettingsRow icon="TABLE_SOLID" title="Anzahl Kacheln pro Seite">
-            <VBox spacing="14">
-                <children>
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label minWidth="75" prefWidth="75" text="Horizontal"/>
-                        <Spinner fx:id="spinnerNumberOfHorizontalPads" editable="true" initialValue="6" max="10"
-                                 min="3"/>
-                    </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="75" prefWidth="75" text="Horizontal"/>
+                <Spinner fx:id="spinnerNumberOfHorizontalPads" editable="true" initialValue="6" max="10"
+                         min="3"/>
+            </HBox>
 
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label minWidth="75" prefWidth="75" text="Vertikal"/>
-                        <Spinner fx:id="spinnerNumberOfVerticalPads" editable="true" initialValue="4" max="10" min="3"/>
-                    </HBox>
-                </children>
-            </VBox>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label minWidth="75" prefWidth="75" text="Vertikal"/>
+                <Spinner fx:id="spinnerNumberOfVerticalPads" editable="true" initialValue="4" max="10" min="3"/>
+            </HBox>
         </SettingsRow>
     </SettingsPage>
 </VBox>
