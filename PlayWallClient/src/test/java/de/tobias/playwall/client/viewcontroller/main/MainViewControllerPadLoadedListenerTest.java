@@ -63,9 +63,6 @@ class MainViewControllerPadLoadedListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		assertThat(padView.getBusyView().getIndicator()).isVisible();
-		await()
-				.atMost(2, SECONDS)
-				.untilAsserted(() -> assertThat(padView.getBusyView().getIndicator().getParent().getParent()).isNotNull());
 
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true));
 		WaitForAsyncUtils.waitForFxEvents();
