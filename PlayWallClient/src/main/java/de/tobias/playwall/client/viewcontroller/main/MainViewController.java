@@ -29,6 +29,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class MainViewController extends BaseNVC
 
 	private final List<PadView> padViews = new ArrayList<>();
 
+	@Getter
 	private Project project;
 
 	@InjectConstructor
