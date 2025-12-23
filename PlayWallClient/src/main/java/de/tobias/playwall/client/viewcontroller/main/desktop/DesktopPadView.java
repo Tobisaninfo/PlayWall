@@ -161,9 +161,9 @@ public class DesktopPadView implements PadView
 	}
 
 	@Override
-	public void showLoading(boolean loading)
+	public void showLoading(boolean isLoading)
 	{
-		busyView.showProgress(loading);
+		busyView.showProgress(isLoading);
 	}
 
 	private void onPlayAction(ActionEvent event)

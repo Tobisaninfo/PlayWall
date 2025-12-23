@@ -13,5 +13,5 @@ import java.util.UUID;
 public class PadLoadedUpdate extends UpdateMessage
 {
 	private UUID padId;
-	private boolean loaded;
+	private boolean isLoaded;
 }

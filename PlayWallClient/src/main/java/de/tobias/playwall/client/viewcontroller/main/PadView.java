@@ -11,5 +11,5 @@ public interface PadView
 
 	void updateFromPad(Pad pad);
 
-	void showLoading(boolean loading);
+	void showLoading(boolean isLoading);
 }
