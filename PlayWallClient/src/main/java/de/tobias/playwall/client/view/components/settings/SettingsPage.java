@@ -49,6 +49,7 @@ public class SettingsPage extends VBox
 		VBox.setVgrow(spacer, Priority.ALWAYS);
 
 		this.saveButton = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
+		this.saveButton.setDefaultButton(true);
 		this.saveButton.textProperty().bind(saveText);
 		this.saveButton.onActionProperty().bind(onSave);
 
