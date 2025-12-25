@@ -18,7 +18,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-@ViewController(path = "de/tobias/playwall/client/view/dialog", view = "NewProjectDialog")
+@ViewController(path = "de/tobias/playwall/client/view/dialog", view = "ProjectNewDialog")
 public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 {
 	@FXML
