@@ -1,6 +1,5 @@
 package de.tobias.playwall.server;
 
-import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.nativeaudio.NativeAudioModule;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +19,6 @@ public class PlayWallServerMain
 			System.setProperty("java.awt.headless", "false");
 			log.debug("Set system property 'java.awt.headless' to true");
 		}
-
-		Localization.setDelegate(new PlayWallLocalizationDelegate());
-		Localization.load();
 
 		SpringApplication.run(PlayWallServerMain.class, args);
 	}

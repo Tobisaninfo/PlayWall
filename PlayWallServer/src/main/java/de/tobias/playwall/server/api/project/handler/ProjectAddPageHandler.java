@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.common.api.project.ProjectAddPageRequest;
 import de.tobias.playwall.common.api.project.ProjectAddPageResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
@@ -13,6 +12,8 @@ import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageReque
 {
 	private final ProjectService projectService;
 	private final PageMapper mapper;
+	private final MessageSource messageSource;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectAddPageRequest requestMessage) throws IOException, PlayWallServerException
@@ -35,7 +37,7 @@ public class ProjectAddPageHandler implements RequestHandler<ProjectAddPageReque
 		catch(ProjectNotExistsException _)
 		{
 			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
-			throw new PlayWallServerException(Localization.getString(error.getLocalizationKey(), requestMessage.getProjectId()), error);
+			throw new PlayWallServerException(messageSource.getMessage(error.getLocalizationKey(), new Object[]{requestMessage.getProjectId()}, LocaleContextHolder.getLocale()), error);
 		}
 	}
 }
