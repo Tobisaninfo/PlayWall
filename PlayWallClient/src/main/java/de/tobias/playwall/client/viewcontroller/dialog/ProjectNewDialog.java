@@ -78,14 +78,13 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 		try
 		{
 			project = client.projects().add(name, numberOfHorizontalPads, numberOfVerticalPads);
+			Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
 		}
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e.getMessage());
 			showErrorMessage(e.getMessage());
 		}
-
-		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
 	}
 
 	@FXML
