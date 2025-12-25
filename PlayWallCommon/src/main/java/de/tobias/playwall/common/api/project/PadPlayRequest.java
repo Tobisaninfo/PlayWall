@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class PadPlayRequest extends RequestMessage
+public class PadPlayRequest extends RequestMessage implements PadIdRequest
 {
 	private UUID padId;
 }

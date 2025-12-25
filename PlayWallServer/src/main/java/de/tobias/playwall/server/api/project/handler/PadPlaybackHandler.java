@@ -1,0 +1,41 @@
+package de.tobias.playwall.server.api.project.handler;
+
+import de.tobias.playwall.common.api.project.PadIdRequest;
+import de.tobias.playwall.common.api.project.PadNotExistsError;
+import de.tobias.playwall.common.net.RequestMessage;
+import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.common.project.PadController;
+import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.project.ProjectController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
+import java.io.IOException;
+import java.util.Optional;
+
+abstract class PadPlaybackHandler<T extends RequestMessage & PadIdRequest> implements RequestHandler<T>
+{
+	@Autowired
+	protected ProjectController projectController;
+	@Autowired
+	protected MessageSource messageSource;
+
+	@Override
+	public Optional<ResponseMessage> handleRequest(T requestMessage) throws IOException, PlayWallServerException
+	{
+		final PadController controller = projectController.getPadController(requestMessage.getPadId());
+		if(controller == null)
+		{
+			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
+			throw new PlayWallServerException(messageSource.getMessage(error.getLocalizationKey(), new Object[]{requestMessage.getPadId()}, LocaleContextHolder.getLocale()), error);
+		}
+
+		handlePlayback(controller);
+
+		return Optional.empty();
+	}
+
+	abstract void handlePlayback(PadController controller);
+}
