@@ -17,8 +17,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 @ViewController(path = "de/tobias/playwall/client/view/dialog", view = "ProjectNewDialog")
+@Getter(AccessLevel.PACKAGE)
 public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 {
 	@FXML
@@ -30,8 +33,10 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 	@FXML
 	private Spinner<Integer> spinnerNumberOfVerticalPads;
 
+	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
 
+	@Getter(AccessLevel.NONE)
 	private ProjectMetadata project;
 
 	@InjectConstructor
