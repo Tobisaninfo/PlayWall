@@ -11,5 +11,6 @@ public class ModernStyle implements Styleable
 	{
 		stage.getScene().getStylesheets().add("style/style.css");
 		stage.getScene().getStylesheets().add("style/modern.css");
+		stage.getScene().getStylesheets().add("style/settings.css");
 	}
 }

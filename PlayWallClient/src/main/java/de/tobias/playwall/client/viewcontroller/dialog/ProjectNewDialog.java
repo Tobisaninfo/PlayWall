@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.viewcontroller.dialog;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
@@ -9,51 +10,47 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.settings.SettingsPage;
 import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import lombok.AccessLevel;
+import lombok.Getter;
 
-@ViewController(path = "de/tobias/playwall/client/view/dialog", view = "NewProjectDialog")
+@ViewController(path = "de/tobias/playwall/client/view/dialog", view = "ProjectNewDialog")
+@Getter(AccessLevel.PACKAGE)
 public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 {
-	private static final int MIN_NUMBER_OF_PADS_PER_AXIS = 3;
-	private static final int MAX_NUMBER_OF_PADS_PER_AXIS = 10;
-
 	@FXML
-	private TextField nameTextField;
+	private SettingsPage settingsPage;
+	@FXML
+	private TextField textFieldName;
 	@FXML
 	private Spinner<Integer> spinnerNumberOfHorizontalPads;
 	@FXML
 	private Spinner<Integer> spinnerNumberOfVerticalPads;
-	@FXML
-	private Button finishButton;
-	@FXML
-	private Button cancelButton;
 
+	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
 
+	@Getter(AccessLevel.NONE)
 	private ProjectMetadata project;
 
 	@InjectConstructor
-	public ProjectNewDialog(FluentClient client)
+	ProjectNewDialog(FluentClient client)
 	{
 		this.client = client;
 	}
 
 	@Override
-	public void init()
+	protected void init()
 	{
-		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(c.trim().isEmpty()));
-		finishButton.setDisable(true);
-
-		spinnerNumberOfHorizontalPads.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_NUMBER_OF_PADS_PER_AXIS, MAX_NUMBER_OF_PADS_PER_AXIS, 6));
-		spinnerNumberOfVerticalPads.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(MIN_NUMBER_OF_PADS_PER_AXIS, MAX_NUMBER_OF_PADS_PER_AXIS, 4));
+		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
 	}
 
 	@Override
@@ -69,6 +66,7 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 		stage.setMinHeight(380);
 
 		stage.setMaxWidth(560);
+		stage.setMaxHeight(380);
 	}
 
 	@Override
@@ -80,21 +78,20 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 	@FXML
 	private void finishButtonHandler(ActionEvent event)
 	{
-		final String name = nameTextField.getText();
+		final String name = textFieldName.getText();
 		final int numberOfHorizontalPads = spinnerNumberOfHorizontalPads.getValue();
 		final int numberOfVerticalPads = spinnerNumberOfVerticalPads.getValue();
 
 		try
 		{
 			project = client.projects().add(name, numberOfHorizontalPads, numberOfVerticalPads);
+			Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
 		}
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e.getMessage());
-			showErrorMessage(e.getMessage());
+			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
 		}
-
-		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
 	}
 
 	@FXML
