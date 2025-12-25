@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.viewcontroller.dialog;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
@@ -14,6 +15,7 @@ import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -88,7 +90,7 @@ public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e.getMessage());
-			showErrorMessage(e.getMessage());
+			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
