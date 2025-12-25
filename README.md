@@ -2,13 +2,6 @@
 
 ## Development
 
-### Native Audio
-
-
-#### MacOS
-
-- Generate header file for native methods `javac -h . de/tobias/playwall/nativeaudio/audio/mac/AVAudioPlayerBridge.java`
-
 ## How to use custom components in SceneBuilder
 
 - Open SceneBuilder
