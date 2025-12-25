@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
+import java.util.Locale;
+
 @Component
 class MessageSourceConfiguration
 {
@@ -14,6 +16,7 @@ class MessageSourceConfiguration
 		final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename("classpath:de/tobias/playwall/server/localization/");
 		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setDefaultLocale(Locale.GERMAN);
 		return messageSource;
 	}
 }
