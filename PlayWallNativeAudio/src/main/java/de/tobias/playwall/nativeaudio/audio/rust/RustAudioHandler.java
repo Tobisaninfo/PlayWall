@@ -96,13 +96,9 @@ public class RustAudioHandler extends AudioHandler
 	private native boolean isMediaLoadedNative();
 
 	@Override
-	public void loadMedia(Path... paths)
+	public void loadMedia(Path paths)
 	{
-		if(paths.length != 1)
-		{
-			throw new IllegalArgumentException("Only one path is supported");
-		}
-		loadMediaNative(paths[0].toString());
+		loadMediaNative(paths.toString());
 	}
 
 	private native void loadMediaNative(String path);

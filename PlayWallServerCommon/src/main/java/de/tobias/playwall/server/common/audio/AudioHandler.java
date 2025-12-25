@@ -75,7 +75,7 @@ public abstract class AudioHandler
 	 *
 	 * @param paths path to the audio files
 	 */
-	public abstract void loadMedia(Path... paths); // TODO: Multiple files?
+	public abstract void loadMedia(Path paths);
 
 	/**
 	 * Unload Media to cleanup resources.
