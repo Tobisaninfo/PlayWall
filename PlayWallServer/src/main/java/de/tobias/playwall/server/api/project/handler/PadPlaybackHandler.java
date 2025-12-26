@@ -8,7 +8,6 @@ import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -17,10 +16,14 @@ import java.util.Optional;
 
 abstract class PadPlaybackHandler<T extends RequestMessage & PadIdRequest> implements RequestHandler<T>
 {
-	@Autowired
-	protected ProjectController projectController;
-	@Autowired
-	protected MessageSource messageSource;
+	protected final ProjectController projectController;
+	protected final MessageSource messageSource;
+
+	PadPlaybackHandler(ProjectController projectController, MessageSource messageSource)
+	{
+		this.projectController = projectController;
+		this.messageSource = messageSource;
+	}
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(T requestMessage) throws IOException, PlayWallServerException

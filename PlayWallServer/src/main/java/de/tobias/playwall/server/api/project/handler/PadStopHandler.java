@@ -3,12 +3,18 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.project.PadStopRequest;
 import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
 
-@AllArgsConstructor
 @RequestHandlerTyped(PadStopRequest.class)
 public class PadStopHandler extends PadPlaybackHandler<PadStopRequest>
 {
+	public PadStopHandler(ProjectController projectController, MessageSource messageSource)
+	{
+		super(projectController, messageSource);
+	}
+
 	@Override
 	void handlePlayback(PadController controller)
 	{
