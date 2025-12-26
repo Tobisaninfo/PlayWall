@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @ToString
