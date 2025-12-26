@@ -15,6 +15,7 @@ import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 
 	private final Executor asyncExecutor;
 
-	public PadNewMediaHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, @Qualifier("taskExecutor") Executor asyncExecutor)
+	public PadNewMediaHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, @Qualifier(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME) Executor asyncExecutor)
 	{
 		this.projectController = projectController;
 		this.context = context;

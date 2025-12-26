@@ -9,11 +9,13 @@ import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.config.SyncAsyncConfig;
 import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
@@ -23,15 +25,14 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
+@Import(SyncAsyncConfig.class)
 class PadNewMediaHandlerTest
 {
 	@Autowired
@@ -78,11 +79,9 @@ class PadNewMediaHandlerTest
 				.hasSize(1)
 				.first()
 				.satisfies(event -> assertThat(event.getPad().getName()).isEqualTo("example_1"));
-		await()
-				.atMost(2, SECONDS)
-				.untilAsserted(() -> assertThat(applicationEvents.stream(PadLoadedUpdate.class))
-						.hasSize(2)
-						.allSatisfy(event -> assertThat(event.getPadId()).isEqualTo(padId)));
+		assertThat(applicationEvents.stream(PadLoadedUpdate.class))
+				.hasSize(2)
+				.allSatisfy(event -> assertThat(event.getPadId()).isEqualTo(padId));
 	}
 
 	@Test
@@ -109,10 +108,8 @@ class PadNewMediaHandlerTest
 				.hasSize(1)
 				.first()
 				.satisfies(event -> assertThat(event.getPad().getName()).isEqualTo("example_1"));
-		await()
-				.atMost(2, SECONDS)
-				.untilAsserted(() -> assertThat(applicationEvents.stream(PadLoadedUpdate.class))
-						.hasSize(2)
-						.allSatisfy(event -> assertThat(event.getPadId()).isEqualTo(padId)));
+		assertThat(applicationEvents.stream(PadLoadedUpdate.class))
+				.hasSize(2)
+				.allSatisfy(event -> assertThat(event.getPadId()).isEqualTo(padId));
 	}
 }
