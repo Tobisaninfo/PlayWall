@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -90,7 +91,7 @@ public class PlayWallIconOverviewMainViewController extends NVC
 			else
 			{
 				final String newValueLowerCase = newValue.toLowerCase();
-				filteredData.setPredicate(s -> s.description() != null && s.description().toLowerCase().contains(newValueLowerCase) || s.fontIconType().toString().toLowerCase().contains(newValueLowerCase));
+				filteredData.setPredicate(s -> s.getDescription().toLowerCase().contains(newValueLowerCase) || s.fontIconType().toString().toLowerCase().contains(newValueLowerCase));
 			}
 		});
 	}
@@ -111,7 +112,7 @@ public class PlayWallIconOverviewMainViewController extends NVC
 			try
 			{
 				final FontAwesomeType fontIconType = FontAwesomeType.valueOf(usedIconType);
-				data.add(new IconEntry(fontIconType, null, false));
+				data.add(new IconEntry(fontIconType, List.of()));
 			}
 			catch(IllegalArgumentException e)
 			{
@@ -127,27 +128,29 @@ public class PlayWallIconOverviewMainViewController extends NVC
 	private ObservableList<IconEntry> getDeclaredData()
 	{
 		final ObservableList<IconEntry> data = FXCollections.observableArrayList();
-		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, "Speichern Button", true));
+		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Speichern Button"))));
 
 		// pad
-		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, "Kachel wiederholen (Loop)", true));
-		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, "Kachel abspielen (Play)", true));
-		data.add(new IconEntry(FontAwesomeType.PAUSE_SOLID, "Kachel pausieren (Pause)", true));
-		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, "Kachel stoppen (Stop)", true));
+		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));
+		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"))));
+		data.add(new IconEntry(FontAwesomeType.PAUSE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel pausieren (Pause)"))));
+		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel stoppen (Stop)"))));
 
 		// menu
-		data.add(new IconEntry(FontAwesomeType.ARROWS_ROTATE_SOLID, "Menü - Nach Updates suchen", true));
-		data.add(new IconEntry(FontAwesomeType.CIRCLE_INFO_SOLID, "Menü - Über", true));
-		data.add(new IconEntry(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID, "Menü - Zuletzt verwendete Projekte", true));
-		data.add(new IconEntry(FontAwesomeType.EXPAND_SOLID, "Menü - Vollbild", true));
-		data.add(new IconEntry(FontAwesomeType.FILE_AUDIO_SOLID, "Menü - Medien ersetzen", true));
-		data.add(new IconEntry(FontAwesomeType.FILE_PEN_SOLID, "Menü - Projekteinstellungen", true));
-		data.add(new IconEntry(FontAwesomeType.FOLDER_PLUS_SOLID, "Menü - Neues Projekt", true));
-		data.add(new IconEntry(FontAwesomeType.FOLDER_TREE_SOLID, "Menü - Projekte verwalten", true));
-		data.add(new IconEntry(FontAwesomeType.HAND_POINTER_SOLID, "Menü - Touchmodus aktivieren", true));
-		data.add(new IconEntry(FontAwesomeType.MAGNIFYING_GLASS_SOLID, "Menü - Kacheln suchen", true));
-		data.add(new IconEntry(FontAwesomeType.GEAR_SOLID, "Menü - Einstellungen, Kachel - Einstellungen", true));
-		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SOLID, "Menü - im Vordergrund behalten", true));
+		data.add(new IconEntry(FontAwesomeType.ARROWS_ROTATE_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Nach Updates suchen"))));
+		data.add(new IconEntry(FontAwesomeType.CIRCLE_INFO_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Über"))));
+		data.add(new IconEntry(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Zuletzt verwendete Projekte"))));
+		data.add(new IconEntry(FontAwesomeType.EXPAND_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Vollbild"))));
+		data.add(new IconEntry(FontAwesomeType.FILE_AUDIO_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Medien ersetzen"))));
+		data.add(new IconEntry(FontAwesomeType.FILE_PEN_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Projekteinstellungen"))));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Neues Projekt"))));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_TREE_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Projekte verwalten"))));
+		data.add(new IconEntry(FontAwesomeType.HAND_POINTER_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Touchmodus aktivieren"))));
+		data.add(new IconEntry(FontAwesomeType.MAGNIFYING_GLASS_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Kacheln suchen"))));
+		data.add(new IconEntry(FontAwesomeType.GEAR_SOLID, List.of(
+				new IconUsage(IconUsageCategory.MENU, "Einstellungen"),
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen"))));
+		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "im Vordergrund behalten"))));
 
 		return data;
 	}
