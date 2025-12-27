@@ -1,7 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.ProjectDeleteRequest;
-import de.tobias.playwall.common.api.project.ProjectDeleteResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -28,7 +27,7 @@ public class ProjectDeleteHandler implements RequestHandler<ProjectDeleteRequest
 		final boolean success = projectService.deleteProjectById(requestMessage.getProjectId());
 		if(success)
 		{
-			return Optional.of(new ProjectDeleteResponse(requestMessage.getMessageId()));
+			return Optional.empty();
 		}
 
 		final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
