@@ -1,9 +1,9 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.PageNotExistsError;
-import de.tobias.playwall.common.api.project.ProjectAddPageResponse;
+import de.tobias.playwall.common.api.project.PageAddResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
-import de.tobias.playwall.common.api.project.ProjectRenamePageRequest;
+import de.tobias.playwall.common.api.project.PageRenameRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PageMapper;
@@ -21,20 +21,20 @@ import java.io.IOException;
 import java.util.Optional;
 
 @AllArgsConstructor
-@RequestHandlerTyped(ProjectRenamePageRequest.class)
-public class ProjectRenamePageHandler implements RequestHandler<ProjectRenamePageRequest>
+@RequestHandlerTyped(PageRenameRequest.class)
+public class PageRenameHandler implements RequestHandler<PageRenameRequest>
 {
 	private final ProjectService projectService;
 	private final PageMapper mapper;
 	private final MessageSource messageSource;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectRenamePageRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<ResponseMessage> handleRequest(PageRenameRequest requestMessage) throws IOException, PlayWallServerException
 	{
 		try
 		{
 			final Page page = projectService.renamePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getNewName());
-			return Optional.of(new ProjectAddPageResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
+			return Optional.of(new PageAddResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
 		catch(ProjectNotExistsException _)
 		{

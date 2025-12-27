@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class ProjectAddPageRequest extends RequestMessage
+public class PageAddRequest extends RequestMessage
 {
 	private UUID projectId;
 	private String name;

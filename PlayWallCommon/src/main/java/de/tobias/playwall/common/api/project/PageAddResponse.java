@@ -10,11 +10,11 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString(callSuper = true)
-public class ProjectAddPageResponse extends ResponseMessage
+public class PageAddResponse extends ResponseMessage
 {
 	private PageDto page;
 
-	public ProjectAddPageResponse(UUID messageId, PageDto page)
+	public PageAddResponse(UUID messageId, PageDto page)
 	{
 		super(messageId);
 		this.page = page;

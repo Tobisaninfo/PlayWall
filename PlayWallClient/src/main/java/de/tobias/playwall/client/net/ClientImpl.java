@@ -116,27 +116,27 @@ class ClientImpl implements Client
 	@Override
 	public Page addPage(UUID projectId, String name) throws PlayWallApiException
 	{
-		final ProjectAddPageResponse response = clientWebSocketHandler.send(new ProjectAddPageRequest(projectId, name));
+		final PageAddResponse response = clientWebSocketHandler.send(new PageAddRequest(projectId, name));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 
 	@Override
 	public Page renamePage(UUID projectId, UUID pageId, String newName) throws PlayWallApiException
 	{
-		final ProjectRenamePageResponse response = clientWebSocketHandler.send(new ProjectRenamePageRequest(projectId, pageId, newName));
+		final ProjectRenamePageResponse response = clientWebSocketHandler.send(new PageRenameRequest(projectId, pageId, newName));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 
 	@Override
 	public void deletePage(UUID projectId, UUID pageId) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new ProjectDeletePageRequest(projectId, pageId));
+		clientWebSocketHandler.send(new PageDeleteRequest(projectId, pageId));
 	}
 
 	@Override
 	public Page duplicatePage(UUID projectId, UUID pageId, String name) throws PlayWallApiException
 	{
-		final ProjectDuplicatePageResponse response = clientWebSocketHandler.send(new ProjectDuplicatePageRequest(projectId, pageId, name));
+		final ProjectDuplicatePageResponse response = clientWebSocketHandler.send(new PageDuplicateRequest(projectId, pageId, name));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 

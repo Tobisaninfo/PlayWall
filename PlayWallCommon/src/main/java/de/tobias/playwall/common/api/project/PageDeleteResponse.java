@@ -9,9 +9,9 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString(callSuper = true)
-public class ProjectDeletePageResponse extends ResponseMessage
+public class PageDeleteResponse extends ResponseMessage
 {
-	public ProjectDeletePageResponse(UUID messageId)
+	public PageDeleteResponse(UUID messageId)
 	{
 		super(messageId);
 	}
