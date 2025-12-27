@@ -65,11 +65,22 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		labelTitle.setText(app.getInfo().getName());
 
 		listView.setPlaceholder(new Label(getString("list.placeholder")));
-		listView.setCellFactory(_ -> new IconCell());
+		listView.setCellFactory(_ -> {
+			final IconCell iconCell = new IconCell();
+
+			iconCell.setOnMouseClicked(event -> {
+				if(event.getClickCount() == 2)
+				{
+					iconCell.onDoubleClick();
+				}
+			});
+
+			return iconCell;
+		});
 
 		final FilteredList<IconEntry> filteredData = new FilteredList<>(getData(), s -> true);
-
 		listView.setItems(filteredData);
+
 
 		textFieldSearch.textProperty().addListener((_, oldValue, newValue) -> {
 			if(newValue == null || newValue.isEmpty())

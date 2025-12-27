@@ -2,15 +2,20 @@ package de.tobias.playwall.iconoverview;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class IconCell extends ListCell<IconEntry>
 {
 	private IconEntry ref;
+	private Label labelName = new Label();
 
 	@Override
 	protected void updateItem(IconEntry ref, boolean empty)
@@ -38,7 +43,6 @@ public class IconCell extends ListCell<IconEntry>
 			fontIcon.setMinWidth(50);
 			fontIcon.setPrefWidth(50);
 
-			final Label labelName = new Label();
 			labelName.setText(ref.fontIconType().toString());
 			labelName.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
 			labelName.setMinWidth(250);
@@ -77,5 +81,25 @@ public class IconCell extends ListCell<IconEntry>
 
 			this.ref = ref;
 		}
+	}
+
+	public void onDoubleClick()
+	{
+		if(ref == null)
+		{
+			return;
+		}
+
+		final Clipboard clipboard = Clipboard.getSystemClipboard();
+		final ClipboardContent content = new ClipboardContent();
+		content.putString(ref.fontIconType().toString());
+		clipboard.setContent(content);
+
+		final String originalText = labelName.getText();
+
+		labelName.setText("Kopiert");
+		final PauseTransition delay = new PauseTransition(Duration.seconds(1));
+		delay.setOnFinished(_ -> labelName.setText(originalText));
+		delay.play();
 	}
 }
