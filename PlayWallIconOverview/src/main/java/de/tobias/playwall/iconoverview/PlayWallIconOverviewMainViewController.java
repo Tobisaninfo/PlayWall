@@ -55,9 +55,9 @@ public class PlayWallIconOverviewMainViewController extends NVC
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		stage.setTitle(app.getInfo().getName());
-		stage.setMinWidth(400);
+		stage.setMinWidth(500);
 		stage.setMinHeight(400);
-		stage.setWidth(800);
+		stage.setWidth(1000);
 		stage.setHeight(600);
 		stage.setResizable(true);
 		stage.centerOnScreen();

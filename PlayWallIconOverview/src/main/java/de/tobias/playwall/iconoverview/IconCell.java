@@ -9,6 +9,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -56,9 +57,10 @@ public class IconCell extends ListCell<IconEntry>
 			labelDescription.setStyle("-fx-font-size: 12px;");
 			labelDescription.setMinWidth(250);
 			labelDescription.setPrefWidth(250);
+			labelDescription.setMaxWidth(Double.MAX_VALUE);
+			HBox.setHgrow(labelDescription, Priority.ALWAYS);
 
 			rootBox.getChildren().addAll(fontIcon, labelName, labelDescription);
-
 
 			if(!ref.isDeclared())
 			{
