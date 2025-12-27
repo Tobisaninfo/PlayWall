@@ -78,11 +78,14 @@ public class IconCell extends ListCell<IconEntry>
 
 			if(ref.usages().isEmpty())
 			{
+				final HBox box = new HBox(7);
+				box.setAlignment(Pos.CENTER_LEFT);
+
 				final FontIcon warningIcon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
 				warningIcon.setColor(Color.web("#FF0000"));
 				warningIcon.setSize(15);
-				warningIcon.setMinWidth(25);
-				warningIcon.setPrefWidth(25);
+				warningIcon.setMinWidth(15);
+				warningIcon.setPrefWidth(15);
 
 				final Label labelWarning = new Label();
 				labelWarning.setText("Nicht deklariert");
@@ -90,7 +93,8 @@ public class IconCell extends ListCell<IconEntry>
 				labelWarning.setMinWidth(100);
 				labelWarning.setPrefWidth(100);
 
-				rootBox.getChildren().addAll(warningIcon, labelWarning);
+				box.getChildren().addAll(warningIcon, labelWarning);
+				boxAllUsages.getChildren().add(box);
 			}
 
 			setGraphic(rootBox);
