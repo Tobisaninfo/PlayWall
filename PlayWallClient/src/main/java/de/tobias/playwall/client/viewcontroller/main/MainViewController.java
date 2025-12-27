@@ -72,8 +72,8 @@ public class MainViewController extends BaseNVC
 		padGridPane.getStyleClass().add("pad-grid");
 
 		notificationPane = new SnackBar(padGridPane, new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID));
-		final Action closeAction = new Action(event -> notificationPane.hide());
-		closeAction.setGraphic(new FontIcon(FontAwesomeType.CROSS_SOLID));
+		final Action closeAction = new Action(_ -> notificationPane.hide());
+		closeAction.setGraphic(new FontIcon(FontAwesomeType.XMARK_SOLID));
 		notificationPane.getActions().add(closeAction);
 		notificationPane.setCloseButtonVisible(false);
 		gridContainer.getChildren().add(notificationPane);

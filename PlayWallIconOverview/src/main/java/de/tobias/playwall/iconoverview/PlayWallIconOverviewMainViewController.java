@@ -90,15 +90,14 @@ public class PlayWallIconOverviewMainViewController extends NVC
 			else
 			{
 				final String newValueLowerCase = newValue.toLowerCase();
-				filteredData.setPredicate(s -> s.description().toLowerCase().contains(newValueLowerCase) || s.fontIconType().toString().toLowerCase().contains(newValueLowerCase));
+				filteredData.setPredicate(s -> s.description() != null && s.description().toLowerCase().contains(newValueLowerCase) || s.fontIconType().toString().toLowerCase().contains(newValueLowerCase));
 			}
 		});
 	}
 
 	private ObservableList<IconEntry> getData()
 	{
-		final ObservableList<IconEntry> data = FXCollections.observableArrayList();
-		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, "Speichern Button", true));
+		final ObservableList<IconEntry> data = getDeclaredData();
 
 		final Set<String> declaredIconTypes = data.stream()
 				.map(IconEntry::fontIconType)
@@ -121,6 +120,34 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		}
 
 		FXCollections.sort(data, Comparator.comparing((e) -> e.fontIconType().toString()));
+
+		return data;
+	}
+
+	private ObservableList<IconEntry> getDeclaredData()
+	{
+		final ObservableList<IconEntry> data = FXCollections.observableArrayList();
+		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, "Speichern Button", true));
+
+		// pad
+		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, "Kachel wiederholen (Loop)", true));
+		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, "Kachel abspielen (Play)", true));
+		data.add(new IconEntry(FontAwesomeType.PAUSE_SOLID, "Kachel pausieren (Pause)", true));
+		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, "Kachel stoppen (Stop)", true));
+
+		// menu
+		data.add(new IconEntry(FontAwesomeType.ARROWS_ROTATE_SOLID, "Menü - Nach Updates suchen", true));
+		data.add(new IconEntry(FontAwesomeType.CIRCLE_INFO_SOLID, "Menü - Über", true));
+		data.add(new IconEntry(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID, "Menü - Zuletzt verwendete Projekte", true));
+		data.add(new IconEntry(FontAwesomeType.EXPAND_SOLID, "Menü - Vollbild", true));
+		data.add(new IconEntry(FontAwesomeType.FILE_AUDIO_SOLID, "Menü - Medien ersetzen", true));
+		data.add(new IconEntry(FontAwesomeType.FILE_PEN_SOLID, "Menü - Projekteinstellungen", true));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_PLUS_SOLID, "Menü - Neues Projekt", true));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_TREE_SOLID, "Menü - Projekte verwalten", true));
+		data.add(new IconEntry(FontAwesomeType.HAND_POINTER_SOLID, "Menü - Touchmodus aktivieren", true));
+		data.add(new IconEntry(FontAwesomeType.MAGNIFYING_GLASS_SOLID, "Menü - Kacheln suchen", true));
+		data.add(new IconEntry(FontAwesomeType.GEAR_SOLID, "Menü - Einstellungen, Kachel - Einstellungen", true));
+		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SOLID, "Menü - im Vordergrund behalten", true));
 
 		return data;
 	}
