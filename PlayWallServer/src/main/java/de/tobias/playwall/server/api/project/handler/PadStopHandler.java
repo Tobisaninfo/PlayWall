@@ -4,7 +4,6 @@ import de.tobias.playwall.common.api.project.PadStopRequest;
 import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 
 @RequestHandlerTyped(PadStopRequest.class)
