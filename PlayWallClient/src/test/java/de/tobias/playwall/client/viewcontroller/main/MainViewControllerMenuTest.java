@@ -7,7 +7,9 @@ import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
@@ -15,6 +17,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.testfx.assertions.api.Assertions.assertThat;
 
 class MainViewControllerMenuTest extends AbstractViewControllerTest
 {
@@ -58,6 +61,19 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		robot.clickOn(robot.lookup(".menu-item").lookup("Projekt speichern").queryLabeled());
 
 		verify(client).saveProject();
+		assertThat(robot.lookup(".notification-bar").lookup(".label").queryLabeled()).hasText("Projekt gespeichert");
+	}
+
+	@Test
+	@Disabled("Not working in headless mode")
+	void testMenuSaveKeyboardShortcut(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		robot.push(KeyCode.SHORTCUT, KeyCode.S);
+
+		verify(client).saveProject();
+		assertThat(robot.lookup(".notification-bar").lookup(".label").queryLabeled()).hasText("Projekt gespeichert");
 	}
 
 	@Test

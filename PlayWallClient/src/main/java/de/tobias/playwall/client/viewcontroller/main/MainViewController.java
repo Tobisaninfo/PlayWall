@@ -31,6 +31,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.KeyCharacterCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -242,7 +244,7 @@ public class MainViewController extends BaseNVC
 		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID, Optional.empty());
 		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
 		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
-		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave));
+		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave), new KeyCharacterCombination("S", KeyCombination.SHORTCUT_DOWN));
 		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.empty());
 		final MenuItem menuItemSettings = createMenuItem(Strings.UI_MENU_FILE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.empty());
 
@@ -310,7 +312,13 @@ public class MainViewController extends BaseNVC
 
 	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType, Optional<EventHandler<ActionEvent>> eventHandler)
 	{
+		return createMenuItem(localizationKey, fontIconType, eventHandler, KeyCombination.NO_MATCH);
+	}
+
+	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType, Optional<EventHandler<ActionEvent>> eventHandler, KeyCombination shortcut)
+	{
 		final MenuItem menuItem = new MenuItem(Localization.getString(localizationKey), createFontIcon(fontIconType));
+		menuItem.setAccelerator(shortcut);
 		eventHandler.ifPresent(menuItem::setOnAction);
 		menuItem.setDisable(eventHandler.isEmpty());
 		return menuItem;
