@@ -1,16 +1,17 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.PageAddRequest;
 import de.tobias.playwall.common.api.project.PageAddResponse;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PageMapper;
-import de.tobias.playwall.server.api.project.ProjectNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 
@@ -21,6 +22,7 @@ import java.util.Optional;
 @RequestHandlerTyped(PageAddRequest.class)
 public class PageAddHandler implements RequestHandler<PageAddRequest>
 {
+	private final ProjectController projectController;
 	private final ProjectService projectService;
 	private final PageMapper mapper;
 	private final MessageSource messageSource;
@@ -30,12 +32,12 @@ public class PageAddHandler implements RequestHandler<PageAddRequest>
 	{
 		try
 		{
-			final Page page = projectService.addPage(requestMessage.getProjectId(), requestMessage.getName());
+			final Page page = projectService.addPage(projectController.getLoadedProject(), requestMessage.getName());
 			return Optional.of(new PageAddResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
-		catch(ProjectNotExistsException _)
+		catch(ProjectNotLoadedException _)
 		{
-			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
+			final ProjectNotLoadedError error = new ProjectNotLoadedError();
 			throw new PlayWallServerException(messageSource, error);
 		}
 	}

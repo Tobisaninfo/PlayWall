@@ -12,7 +12,6 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class PageRenameRequest extends RequestMessage
 {
-	private UUID projectId;
 	private UUID pageId;
 	private String newName;
 }

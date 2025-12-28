@@ -12,6 +12,5 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class PageDeleteRequest extends RequestMessage
 {
-	private UUID projectId;
 	private UUID pageId;
 }

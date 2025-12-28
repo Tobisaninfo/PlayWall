@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.project.PadController;
@@ -23,7 +24,6 @@ public class ProjectController
 {
 	private final ApplicationContext context;
 	private final PadContentControllerFactory padControllerFactory;
-	@Getter
 	private Project loadedProject;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
@@ -51,6 +51,15 @@ public class ProjectController
 				.forEach(this::createNewPadController);
 
 		padControllers.values().forEach(PadController::load);
+	}
+
+	public Project getLoadedProject() throws ProjectNotLoadedException
+	{
+		if(loadedProject == null)
+		{
+			throw new ProjectNotLoadedException();
+		}
+		return loadedProject;
 	}
 
 	public PadController getPadController(UUID padId)

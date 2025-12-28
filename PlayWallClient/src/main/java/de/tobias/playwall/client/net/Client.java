@@ -32,13 +32,13 @@ public interface Client
 
 	void saveProject() throws PlayWallApiException;
 
-	Page addPage(UUID projectId, String name) throws PlayWallApiException;
+	Page addPage(String name) throws PlayWallApiException;
 
-	Page renamePage(UUID projectId, UUID pageId, String newName) throws PlayWallApiException;
+	Page renamePage(UUID pageId, String newName) throws PlayWallApiException;
 
-	void deletePage(UUID projectId, UUID pageId) throws PlayWallApiException;
+	void deletePage(UUID pageId) throws PlayWallApiException;
 
-	Page duplicatePage(UUID projectId, UUID pageId, String name) throws PlayWallApiException;
+	Page duplicatePage(UUID pageId, String name) throws PlayWallApiException;
 
 	void play(UUID padId) throws PlayWallApiException;
 

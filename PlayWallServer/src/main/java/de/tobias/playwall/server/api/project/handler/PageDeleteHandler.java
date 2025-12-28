@@ -3,13 +3,14 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.project.PageDeleteRequest;
 import de.tobias.playwall.common.api.project.PageDeleteResponse;
 import de.tobias.playwall.common.api.project.PageNotExistsError;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
+import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.ProjectNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 
@@ -20,6 +21,7 @@ import java.util.Optional;
 @RequestHandlerTyped(PageDeleteRequest.class)
 public class PageDeleteHandler implements RequestHandler<PageDeleteRequest>
 {
+	private final ProjectController projectController;
 	private final ProjectService projectService;
 	private final MessageSource messageSource;
 
@@ -28,18 +30,18 @@ public class PageDeleteHandler implements RequestHandler<PageDeleteRequest>
 	{
 		try
 		{
-			final boolean success = projectService.deletePage(requestMessage.getProjectId(), requestMessage.getPageId());
+			final boolean success = projectService.deletePage(projectController.getLoadedProject(), requestMessage.getPageId());
 			if(success)
 			{
 				return Optional.of(new PageDeleteResponse(requestMessage.getMessageId()));
 			}
 
-			final PageNotExistsError error = new PageNotExistsError(requestMessage.getProjectId(), requestMessage.getPageId());
+			final PageNotExistsError error = new PageNotExistsError(requestMessage.getPageId());
 			throw new PlayWallServerException(messageSource, error);
 		}
-		catch(ProjectNotExistsException _)
+		catch(ProjectNotLoadedException _)
 		{
-			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
+			final ProjectNotLoadedError error = new ProjectNotLoadedError();
 			throw new PlayWallServerException(messageSource, error);
 		}
 	}

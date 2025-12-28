@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.NoProjectLoadedError;
+import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.ProjectSaveRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
@@ -55,7 +55,7 @@ class ProjectSaveHandlerTest
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectSaveRequest()))
 				.isInstanceOf(PlayWallServerException.class)
 				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(NoProjectLoadedError.class);
+				.isInstanceOf(ProjectNotLoadedError.class);
 
 		verify(projectRepository, never()).saveProject(any());
 	}

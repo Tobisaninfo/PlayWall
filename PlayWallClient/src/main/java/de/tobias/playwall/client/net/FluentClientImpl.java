@@ -90,64 +90,50 @@ class FluentClientImpl implements FluentClient
 			delegate.deleteProject(projectId);
 		}
 
-		@Override
-		public PagesBuilder pages()
-		{
-			return new PagesBuilderImpl(projectId);
-		}
-
-		@Override
-		public PageBuilder page(UUID pageId)
-		{
-			return new PageBuilderImpl(projectId, pageId);
-		}
 	}
 
 	private class ProjectCurrentBuilderImpl implements ProjectCurrentBuilder
 	{
+		@Override
+		public PageBuilder page(UUID pageId)
+		{
+			return new PageBuilderImpl(pageId);
+		}
 
 		@Override
 		public void save() throws PlayWallApiException
 		{
 			delegate.saveProject();
 		}
-	}
-
-	@AllArgsConstructor
-	private class PagesBuilderImpl implements PagesBuilder
-	{
-
-		private final UUID projectId;
 
 		@Override
 		public Page addPage(String name) throws PlayWallApiException
 		{
-			return delegate.addPage(projectId, name);
+			return delegate.addPage(name);
 		}
 	}
 
 	@AllArgsConstructor
 	private class PageBuilderImpl implements PageBuilder
 	{
-		private final UUID projectId;
 		private final UUID pageId;
 
 		@Override
 		public Page rename(String name) throws PlayWallApiException
 		{
-			return delegate.renamePage(projectId, pageId, name);
+			return delegate.renamePage(pageId, name);
 		}
 
 		@Override
 		public void delete(String name) throws PlayWallApiException
 		{
-			delegate.deletePage(projectId, pageId);
+			delegate.deletePage(pageId);
 		}
 
 		@Override
 		public Page duplicate(String name) throws PlayWallApiException
 		{
-			return delegate.duplicatePage(projectId, pageId, name);
+			return delegate.duplicatePage(pageId, name);
 		}
 	}
 

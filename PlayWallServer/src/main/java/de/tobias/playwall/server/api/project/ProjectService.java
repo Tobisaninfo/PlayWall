@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -41,6 +42,16 @@ public class ProjectService
 		return projectRepository.loadProject(id);
 	}
 
+	/**
+	 * Create and initially save the newly created project. The created project contains one page with empty pads.
+	 *
+	 * @param name                   Name of the project
+	 * @param numberOfHorizontalPads Number of horizontal pads
+	 * @param numberOfVerticalPads   Number of vertical pads
+	 * @return created project
+	 * @throws IOException                       persistence error
+	 * @throws ProjectNameAlreadyExistsException project with the same name already exists
+	 */
 	public ProjectMetadata addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException, ProjectNameAlreadyExistsException
 	{
 		final ProjectMetadata projectMetadata = projectMetadataRepository.addProject(name, numberOfHorizontalPads, numberOfVerticalPads);
@@ -49,47 +60,74 @@ public class ProjectService
 				.metadata(projectMetadata)
 				.pages(new ArrayList<>())
 				.build();
-
-		project.getPages().add(Page.builder().id(UUID.randomUUID()).name("Page 1").position(0).pads(new ArrayList<>()).build()); // TODO: Move
-		fillProjectPagesWithEmptyPads(project);
+		addPage(project, "Page 1");
 
 		projectRepository.saveProject(project);
 
 		return projectMetadata;
 	}
 
-	public Page addPage(UUID id, String name) throws IOException, ProjectNotExistsException
+	public Page addPage(Project project, String name)
 	{
-		return projectRepository.addPage(id, name);
-	}
+		final int nextPagePosition = project.getPages().size();
 
-	public Page renamePage(UUID id, UUID pageId, String newName) throws IOException, PageNotExistsException, ProjectNotExistsException
-	{
-		return projectRepository.renamePage(id, pageId, newName);
-	}
+		final Page page = Page.builder()
+				.id(UUID.randomUUID())
+				.name(name)
+				.position(nextPagePosition)
+				.pads(new ArrayList<>())
+				.build();
 
-	public Page duplicatePage(UUID id, UUID pageId, String name) throws IOException, PageNotExistsException, ProjectNotExistsException
-	{
-		return projectRepository.duplicatePage(id, pageId, name);
-	}
-
-	public boolean deletePage(UUID id, UUID pageId) throws IOException, ProjectNotExistsException
-	{
-		return projectRepository.deletePage(id, pageId);
-	}
-
-	public void fillProjectPagesWithEmptyPads(Project project)
-	{
-		for(Page page : project.getPages())
+		for(int position = 0; position < project.getMetadata().getNumberOfPadsPerPage(); position++)
 		{
-			for(int position = 0; position < project.getMetadata().getNumberOfPadsPerPage(); position++)
-			{
-				if(page.getPad(position) == null)
-				{
-					final Pad pad = Pad.builder().id(UUID.randomUUID()).position(position).build();
-					page.getPads().add(pad);
-				}
-			}
+			final Pad pad = Pad.builder().id(UUID.randomUUID()).position(position).build();
+			page.getPads().add(pad);
 		}
+
+		project.getPages().add(page);
+		return page;
+	}
+
+	public Page renamePage(Project project, UUID pageId, String newName) throws PageNotExistsException
+	{
+		final Optional<Page> pageOptional = project.getPageById(pageId);
+		if(pageOptional.isEmpty())
+		{
+			throw new PageNotExistsException(project.getMetadata().getId(), pageId);
+		}
+		final Page page = pageOptional.get();
+		page.setName(newName);
+
+		return page;
+	}
+
+	public Page duplicatePage(Project project, UUID pageId, String name) throws PageNotExistsException
+	{
+		final Optional<Page> pageOptional = project.getPageById(pageId);
+		if(pageOptional.isEmpty())
+		{
+			throw new PageNotExistsException(project.getMetadata().getId(), pageId);
+		}
+		final Page page = pageOptional.get();
+
+		final List<Pad> newPads = page.getPads().stream()
+				.map(Pad::copy)
+				.toList();
+
+		final int nextPagePosition = project.getPages().size();
+		final Page newPage = Page.builder()
+				.id(UUID.randomUUID())
+				.name(name)
+				.position(nextPagePosition)
+				.pads(newPads)
+				.build();
+
+		project.getPages().add(newPage);
+		return newPage;
+	}
+
+	public boolean deletePage(Project project, UUID pageId)
+	{
+		return project.getPages().removeIf(page -> page.getId().equals(pageId));
 	}
 }
