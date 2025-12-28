@@ -20,6 +20,7 @@ import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.service.ProjectService;
 import de.tobias.playwall.client.utils.Size;
+import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.viewcontroller.BaseNVC;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.event.ActionEvent;
@@ -329,6 +330,7 @@ public class MainViewController extends BaseNVC
 		try
 		{
 			client.currentProject().save();
+			notificationPane.showAndHide(Localization.getString("ui.notification.project.saved"), ViewConstants.DEFAULT_SNACKBAR_SHOW);
 		}
 		catch(PlayWallApiException e)
 		{
