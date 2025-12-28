@@ -1,7 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.PageDeleteRequest;
-import de.tobias.playwall.common.api.project.PageDeleteResponse;
 import de.tobias.playwall.common.api.project.PageNotExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.net.ResponseMessage;
@@ -33,7 +32,7 @@ public class PageDeleteHandler implements RequestHandler<PageDeleteRequest>
 			final boolean success = projectService.deletePage(projectController.getLoadedProject(), requestMessage.getPageId());
 			if(success)
 			{
-				return Optional.of(new PageDeleteResponse(requestMessage.getMessageId()));
+				return Optional.empty();
 			}
 
 			final PageNotExistsError error = new PageNotExistsError(requestMessage.getPageId());

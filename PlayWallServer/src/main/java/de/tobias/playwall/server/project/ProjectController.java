@@ -37,6 +37,12 @@ public class ProjectController
 		return CompletableFuture.completedFuture(null);
 	}
 
+	public void unloadProject()
+	{
+		unloadPads();
+		loadedProject = null;
+	}
+
 	private void unloadPads()
 	{
 		padControllers.values().forEach(PadController::unload);

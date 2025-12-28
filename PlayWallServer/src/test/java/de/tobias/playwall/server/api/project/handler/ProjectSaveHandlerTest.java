@@ -9,10 +9,10 @@ import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.project.ProjectController;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.Optional;
@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class ProjectSaveHandlerTest
 {
 	@Autowired
@@ -36,6 +35,12 @@ class ProjectSaveHandlerTest
 
 	@Autowired
 	private ProjectSaveHandler handler;
+
+	@BeforeEach
+	void init()
+	{
+		projectController.unloadProject();
+	}
 
 	@Test
 	void testProjectSaveRequestSuccessful() throws Exception
