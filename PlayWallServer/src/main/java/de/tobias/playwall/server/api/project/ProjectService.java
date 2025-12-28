@@ -5,6 +5,8 @@ import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,6 +21,7 @@ public class ProjectService
 {
 	private final ProjectMetadataRepository projectMetadataRepository;
 	private final ProjectRepository projectRepository;
+	private final MessageSource messageSource;
 
 	public List<ProjectMetadata> getAllProjectMetadata() throws IOException
 	{
@@ -60,7 +63,7 @@ public class ProjectService
 				.metadata(projectMetadata)
 				.pages(new ArrayList<>())
 				.build();
-		addPage(project, "Page 1");
+		addPage(project, messageSource.getMessage("page.name.default", new Object[]{1}, LocaleContextHolder.getLocale()));
 
 		projectRepository.saveProject(project);
 

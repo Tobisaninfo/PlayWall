@@ -71,6 +71,7 @@ class ProjectServiceTest
 		final Project project = projectCaptor.getValue();
 		assertThat(project.getMetadata().getId()).isEqualTo(createdProject.getId());
 		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getName()).isEqualTo("Seite 1");
 		assertThat(project.getPages().getFirst().getPads()).hasSize(5 * 4);
 	}
 
