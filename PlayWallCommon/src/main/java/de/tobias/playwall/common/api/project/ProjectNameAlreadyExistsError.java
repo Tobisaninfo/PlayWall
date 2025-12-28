@@ -10,4 +10,10 @@ import lombok.*;
 public class ProjectNameAlreadyExistsError extends ServerError
 {
 	private String projectName;
+
+	@Override
+	public Object[] getMessageArguments()
+	{
+		return new Object[]{projectName};
+	}
 }

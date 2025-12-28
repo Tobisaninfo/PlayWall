@@ -13,7 +13,6 @@ import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
 		catch(ProjectNameAlreadyExistsException _)
 		{
 			final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(requestMessage.getName());
-			throw new PlayWallServerException(messageSource.getMessage(error.getLocalizationKey(), new Object[]{requestMessage.getName()}, LocaleContextHolder.getLocale()), error);
+			throw new PlayWallServerException(messageSource, error);
 		}
 	}
 }

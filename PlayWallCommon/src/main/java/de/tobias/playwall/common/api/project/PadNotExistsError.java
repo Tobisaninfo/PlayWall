@@ -13,4 +13,10 @@ public class PadNotExistsError extends ServerError
 {
 	private UUID projectId;
 	private UUID padId;
+
+	@Override
+	public Object[] getMessageArguments()
+	{
+		return new Object[]{padId};
+	}
 }

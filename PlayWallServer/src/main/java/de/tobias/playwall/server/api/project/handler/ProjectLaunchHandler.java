@@ -14,7 +14,6 @@ import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -41,7 +40,7 @@ public class ProjectLaunchHandler implements RequestHandler<ProjectLaunchRequest
 		catch(ProjectNotExistsException _)
 		{
 			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
-			throw new PlayWallServerException(messageSource.getMessage(error.getLocalizationKey(), new Object[]{requestMessage.getProjectId()}, LocaleContextHolder.getLocale()), error);
+			throw new PlayWallServerException(messageSource, error);
 		}
 	}
 }

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 		use = JsonTypeInfo.Id.CLASS,
 		include = JsonTypeInfo.As.PROPERTY,
 		property = "@class")
-public class ServerError implements Serializable
+public abstract class ServerError implements Serializable
 {
 	private static final String PATTERN_CAMEL_CASE = "(?<!^)(?=[A-Z])";
 
@@ -23,4 +23,6 @@ public class ServerError implements Serializable
 				.map(String::toLowerCase)
 				.collect(Collectors.joining("."));
 	}
+
+	public abstract Object[] getMessageArguments();
 }

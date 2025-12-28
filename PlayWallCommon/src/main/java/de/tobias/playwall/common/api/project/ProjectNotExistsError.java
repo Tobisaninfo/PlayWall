@@ -12,4 +12,10 @@ import java.util.UUID;
 public class ProjectNotExistsError extends ServerError
 {
 	private UUID projectId;
+
+	@Override
+	public Object[] getMessageArguments()
+	{
+		return new Object[]{projectId};
+	}
 }
