@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadPauseRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
@@ -74,7 +75,9 @@ class PadPauseHandlerTest
 		projectController.loadProject(project).get();
 
 		assertThatThrownBy(() -> handler.handleRequest(new PadPauseRequest(padId)))
-				.isInstanceOf(PlayWallServerException.class);
+				.isInstanceOf(PlayWallServerException.class)
+				.extracting(e -> ((PlayWallServerException) e).getError())
+				.isInstanceOf(PadNotExistsError.class);
 
 		verify(audioHandler, never()).pause();
 	}

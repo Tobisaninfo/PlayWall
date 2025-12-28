@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.ProjectAddRequest;
 import de.tobias.playwall.common.api.project.ProjectAddResponse;
+import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -90,7 +91,8 @@ class ProjectAddHandlerTest
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectAddRequest("Name1", 5, 4)))
 				.isInstanceOf(PlayWallServerException.class)
-				.hasMessage("Das Projekt mit dem Namen \"Name1\" konnte nicht angelegt werden. Es existiert ein Projekt mit diesem Namen.");
+				.extracting(e -> ((PlayWallServerException) e).getError())
+				.isInstanceOf(ProjectNameAlreadyExistsError.class);
 
 		assertThat(projectMetadataRepository.getAllProjectMetadata()).hasSize(1);
 	}

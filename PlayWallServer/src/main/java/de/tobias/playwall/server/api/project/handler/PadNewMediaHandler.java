@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playwall.common.api.project.PadNewMediaRequest;
+import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.utils.FileFormats;
@@ -17,6 +18,8 @@ import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -33,13 +36,15 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 	private final PadMapper padMapper;
 
 	private final Executor asyncExecutor;
+	private final MessageSource messageSource;
 
-	public PadNewMediaHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, @Qualifier(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME) Executor asyncExecutor)
+	public PadNewMediaHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, @Qualifier(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME) Executor asyncExecutor, MessageSource messageSource)
 	{
 		this.projectController = projectController;
 		this.context = context;
 		this.padMapper = padMapper;
 		this.asyncExecutor = asyncExecutor;
+		this.messageSource = messageSource;
 	}
 
 	@Override
@@ -52,6 +57,11 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 			oldController.unload();
 		}
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
+		if(pad == null)
+		{
+			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
+			throw new PlayWallServerException(messageSource.getMessage(error.getLocalizationKey(), new Object[]{requestMessage.getPadId()}, LocaleContextHolder.getLocale()), error);
+		}
 
 		final Path path = Paths.get(requestMessage.getPath());
 		final PadContent content = switch(FileFormats.getContentTypeForFile(path))

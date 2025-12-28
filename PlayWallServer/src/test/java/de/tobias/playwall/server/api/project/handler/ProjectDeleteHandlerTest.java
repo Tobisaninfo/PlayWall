@@ -1,6 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.ProjectDeleteRequest;
+import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
@@ -68,7 +70,8 @@ class ProjectDeleteHandlerTest
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectDeleteRequest(id)))
 				.isInstanceOf(PlayWallServerException.class)
-				.hasMessage("Es existiert kein Projekt mit der ID \"fc427184-2e55-4734-8148-5fb657963616\".");
+				.extracting(e -> ((PlayWallServerException) e).getError())
+				.isInstanceOf(ProjectNotExistsError.class);
 
 		verify(projectMetadataRepository).deleteProject(id);
 		verify(projectRepository).deleteProject(id);

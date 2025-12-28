@@ -3,8 +3,11 @@ package de.tobias.playwall.server.api.project.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.project.PadLoadedUpdate;
 import de.tobias.playwall.common.api.project.PadNewMediaRequest;
+import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
@@ -22,10 +25,12 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -68,7 +73,9 @@ class PadNewMediaHandlerTest
 
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
-		handler.handleRequest(request);
+		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
+
+		assertThat(responseMessage).isEmpty();
 
 		assertThat(project.getPad(padId).getName()).isEqualTo("example_1");
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class);
@@ -97,7 +104,9 @@ class PadNewMediaHandlerTest
 
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
-		handler.handleRequest(request);
+		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
+
+		assertThat(responseMessage).isEmpty();
 
 		assertThat(project.getPad(padId).getName()).isEqualTo("example_1");
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class);
@@ -111,5 +120,25 @@ class PadNewMediaHandlerTest
 		assertThat(applicationEvents.stream(PadLoadedUpdate.class))
 				.hasSize(2)
 				.allSatisfy(event -> assertThat(event.getPadId()).isEqualTo(padId));
+	}
+
+	@Test
+	void testPadNewMediaHandlerPadNotFound() throws Exception
+	{
+		final UUID padId = UUID.fromString("fc427184-2d55-4734-8148-5fb657963616");
+
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		projectController.loadProject(project).get();
+		applicationEvents.clear();
+
+		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
+		assertThatThrownBy(() -> handler.handleRequest(request))
+				.isInstanceOf(PlayWallServerException.class)
+				.extracting(e -> ((PlayWallServerException) e).getError())
+				.isInstanceOf(PadNotExistsError.class);
+
+		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+		assertThat(applicationEvents.stream(PadLoadedUpdate.class)).isEmpty();
 	}
 }
