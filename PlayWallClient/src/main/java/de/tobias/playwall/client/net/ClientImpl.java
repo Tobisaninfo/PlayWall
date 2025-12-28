@@ -114,6 +114,12 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public void saveProject() throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new ProjectSaveRequest());
+	}
+
+	@Override
 	public Page addPage(UUID projectId, String name) throws PlayWallApiException
 	{
 		final PageAddResponse response = clientWebSocketHandler.send(new PageAddRequest(projectId, name));

@@ -39,6 +39,13 @@ public interface FluentClient
 		PageBuilder page(UUID pageId);
 	}
 
+	ProjectCurrentBuilder currentProject();
+
+	interface ProjectCurrentBuilder
+	{
+		void save() throws PlayWallApiException;
+	}
+
 	interface PagesBuilder
 	{
 		Page addPage(String name) throws PlayWallApiException;
