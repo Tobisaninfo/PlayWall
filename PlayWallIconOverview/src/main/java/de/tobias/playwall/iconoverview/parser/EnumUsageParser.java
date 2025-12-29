@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class EnumUsageParser
 {
@@ -24,9 +25,11 @@ public class EnumUsageParser
 
 		final Pattern pattern = Pattern.compile(enumName + "\\.([A-Z0-9_]+)");
 
-		Files.walk(sourceRoot).filter(p -> p.toString().endsWith(".java")).forEach(p -> {
-			extractEnumValue(p, pattern, usedValues);
-		});
+		try(Stream<Path> paths = Files.walk(sourceRoot))
+		{
+			paths.filter(p -> p.toString().endsWith(".java"))
+					.forEach(p -> extractEnumValue(p, pattern, usedValues));
+		}
 
 		return usedValues;
 	}
@@ -37,9 +40,11 @@ public class EnumUsageParser
 
 		final Pattern pattern = Pattern.compile("icon=\"([A-Z0-9_]+)\"");
 
-		Files.walk(sourceRoot).filter(p -> p.toString().endsWith(".fxml")).forEach(p -> {
-			extractEnumValue(p, pattern, usedValues);
-		});
+		try(Stream<Path> paths = Files.walk(sourceRoot))
+		{
+			paths.filter(p -> p.toString().endsWith(".fxml"))
+					.forEach(p -> extractEnumValue(p, pattern, usedValues));
+		}
 
 		return usedValues;
 	}
