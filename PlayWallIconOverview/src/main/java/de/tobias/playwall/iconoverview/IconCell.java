@@ -41,12 +41,12 @@ public class IconCell extends ListCell<IconEntry>
 
 			rootBox.setAlignment(Pos.CENTER_LEFT);
 
-			final FontIcon fontIcon = new FontIcon(ref.fontIconType());
+			final FontIcon fontIcon = new FontIcon(ref.getFontIconType());
 			fontIcon.setSize(30);
 			fontIcon.setMinWidth(50);
 			fontIcon.setPrefWidth(50);
 
-			labelName.setText(ref.fontIconType().toString());
+			labelName.setText(ref.getFontIconType().toString());
 			labelName.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
 			labelName.setMinWidth(250);
 			labelName.setPrefWidth(250);
@@ -54,7 +54,7 @@ public class IconCell extends ListCell<IconEntry>
 			final VBox boxAllUsages = new VBox(14);
 			boxAllUsages.setAlignment(Pos.CENTER_LEFT);
 
-			for(IconUsage usage : ref.usages())
+			for(IconUsage usage : ref.getUsages())
 			{
 				final HBox boxUsage = new HBox(14);
 				boxUsage.setAlignment(Pos.CENTER_LEFT);
@@ -70,37 +70,48 @@ public class IconCell extends ListCell<IconEntry>
 				labelDescription.setStyle("-fx-font-size: 12px;");
 				boxUsage.getChildren().add(labelDescription);
 
+				if(ref.isUnused())
+				{
+					boxUsage.getChildren().add(createMessageBox("#FCA311", "Ungenutzt"));
+				}
+
 				boxAllUsages.getChildren().add(boxUsage);
 			}
 			HBox.setHgrow(boxAllUsages, Priority.ALWAYS);
 
 			rootBox.getChildren().addAll(fontIcon, labelName, boxAllUsages);
 
-			if(ref.usages().isEmpty())
+			if(ref.getUsages().isEmpty())
 			{
-				final HBox box = new HBox(7);
-				box.setAlignment(Pos.CENTER_LEFT);
-
-				final FontIcon warningIcon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
-				warningIcon.setColor(Color.web("#FF0000"));
-				warningIcon.setSize(15);
-				warningIcon.setMinWidth(15);
-				warningIcon.setPrefWidth(15);
-
-				final Label labelWarning = new Label();
-				labelWarning.setText("Nicht deklariert");
-				labelWarning.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #FF0000;");
-				labelWarning.setMinWidth(100);
-				labelWarning.setPrefWidth(100);
-
-				box.getChildren().addAll(warningIcon, labelWarning);
-				boxAllUsages.getChildren().add(box);
+				boxAllUsages.getChildren().add(createMessageBox("#FF0000", "Nicht deklariert"));
 			}
 
 			setGraphic(rootBox);
 
 			this.ref = ref;
 		}
+	}
+
+	private static HBox createMessageBox(String hexColor, String message)
+	{
+		final HBox box = new HBox(7);
+		box.setAlignment(Pos.CENTER_LEFT);
+
+		final FontIcon warningIcon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
+		warningIcon.setColor(Color.web(hexColor));
+		warningIcon.setSize(15);
+		warningIcon.setMinWidth(15);
+		warningIcon.setPrefWidth(15);
+
+		final Label labelWarning = new Label();
+		labelWarning.setText(message);
+		labelWarning.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: " + hexColor);
+		labelWarning.setMinWidth(100);
+		labelWarning.setPrefWidth(100);
+
+		box.getChildren().addAll(warningIcon, labelWarning);
+
+		return box;
 	}
 
 	public void onDoubleClick()
@@ -112,7 +123,7 @@ public class IconCell extends ListCell<IconEntry>
 
 		final Clipboard clipboard = Clipboard.getSystemClipboard();
 		final ClipboardContent content = new ClipboardContent();
-		content.putString(ref.fontIconType().toString());
+		content.putString(ref.getFontIconType().toString());
 		clipboard.setContent(content);
 
 		final String originalText = labelName.getText();

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum IconUsageCategory
 {
-	UNDEFINED("", "#00000000", "#000000FF"),
+	UNDEFINED("?", "#CCCCCCFF", "#000000FF"),
 	GENERAL("Allgemein", "#CA6702FF", "#000000FF"),
 	PAD("Pad", "#134074FF", "#FFFFFFFF"),
 	MENU("Menü", "#94D2BDFF", "#000000FF");

@@ -91,7 +91,7 @@ public class PlayWallIconOverviewMainViewController extends NVC
 			else
 			{
 				final String newValueLowerCase = newValue.toLowerCase();
-				filteredData.setPredicate(s -> s.getDescription().toLowerCase().contains(newValueLowerCase) || s.fontIconType().toString().toLowerCase().contains(newValueLowerCase));
+				filteredData.setPredicate(s -> s.getDescription().toLowerCase().contains(newValueLowerCase) || s.getFontIconType().toString().toLowerCase().contains(newValueLowerCase));
 			}
 		});
 	}
@@ -101,17 +101,18 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		final ObservableList<IconEntry> data = getDeclaredData();
 
 		final Set<String> declaredIconTypes = data.stream()
-				.map(IconEntry::fontIconType)
+				.map(IconEntry::getFontIconType)
 				.map(Object::toString)
 				.collect(Collectors.toSet());
 		final Set<String> usedIconTypes = getUsedIconTypes();
-		usedIconTypes.removeAll(declaredIconTypes);
+		final Set<String> nonDeclaredIconTypes = new HashSet<>(usedIconTypes);
+		nonDeclaredIconTypes.removeAll(declaredIconTypes);
 
-		for(String usedIconType : usedIconTypes)
+		for(String nonDeclaredIconType : nonDeclaredIconTypes)
 		{
 			try
 			{
-				final FontAwesomeType fontIconType = FontAwesomeType.valueOf(usedIconType);
+				final FontAwesomeType fontIconType = FontAwesomeType.valueOf(nonDeclaredIconType);
 				data.add(new IconEntry(fontIconType, List.of()));
 			}
 			catch(IllegalArgumentException e)
@@ -120,7 +121,16 @@ public class PlayWallIconOverviewMainViewController extends NVC
 			}
 		}
 
-		FXCollections.sort(data, Comparator.comparing((e) -> e.fontIconType().toString()));
+		final Set<String> declaredButUnusedIconTypes = new HashSet<>(declaredIconTypes);
+		declaredButUnusedIconTypes.removeAll(usedIconTypes);
+
+		data.stream()
+				.filter(entry -> declaredButUnusedIconTypes.contains(entry.getFontIconType().toString()))
+				.forEach(entry -> {
+					entry.setUnused(true);
+				});
+
+		FXCollections.sort(data, Comparator.comparing((e) -> e.getFontIconType().toString()));
 
 		return data;
 	}
@@ -151,6 +161,9 @@ public class PlayWallIconOverviewMainViewController extends NVC
 				new IconUsage(IconUsageCategory.MENU, "Einstellungen"),
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen"))));
 		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "im Vordergrund behalten"))));
+
+		// test unused
+		data.add(new IconEntry(FontAwesomeType.CAKE_CANDLES_SOLID, List.of(new IconUsage(IconUsageCategory.UNDEFINED, "Ungenutzt"))));
 
 		return data;
 	}
