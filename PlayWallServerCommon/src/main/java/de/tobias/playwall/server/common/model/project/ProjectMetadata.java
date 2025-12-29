@@ -12,6 +12,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class ProjectMetadata
 {
+	private final int VERSION = 1;
+
 	public interface List
 	{
 	}
