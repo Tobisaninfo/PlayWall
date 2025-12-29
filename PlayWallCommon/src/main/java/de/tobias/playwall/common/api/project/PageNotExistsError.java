@@ -13,4 +13,10 @@ public class PageNotExistsError extends ServerError
 {
 	private UUID projectId;
 	private UUID pageId;
+
+	@Override
+	public Object[] getMessageArguments()
+	{
+		return new Object[]{pageId};
+	}
 }

@@ -30,6 +30,8 @@ public interface Client
 
 	Project launchProject(UUID projectId) throws PlayWallApiException;
 
+	void saveProject() throws PlayWallApiException;
+
 	Page addPage(UUID projectId, String name) throws PlayWallApiException;
 
 	Page renamePage(UUID projectId, UUID pageId, String newName) throws PlayWallApiException;

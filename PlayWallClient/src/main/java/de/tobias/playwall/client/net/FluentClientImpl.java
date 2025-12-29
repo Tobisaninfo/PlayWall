@@ -51,6 +51,12 @@ class FluentClientImpl implements FluentClient
 		return new ProjectBuilderImpl(projectId);
 	}
 
+	@Override
+	public ProjectCurrentBuilder currentProject()
+	{
+		return new ProjectCurrentBuilderImpl();
+	}
+
 	private class ProjectsBuilderImpl implements ProjectsBuilder
 	{
 
@@ -94,6 +100,16 @@ class FluentClientImpl implements FluentClient
 		public PageBuilder page(UUID pageId)
 		{
 			return new PageBuilderImpl(projectId, pageId);
+		}
+	}
+
+	private class ProjectCurrentBuilderImpl implements ProjectCurrentBuilder
+	{
+
+		@Override
+		public void save() throws PlayWallApiException
+		{
+			delegate.saveProject();
 		}
 	}
 

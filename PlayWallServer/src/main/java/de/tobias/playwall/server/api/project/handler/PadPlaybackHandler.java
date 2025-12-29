@@ -9,7 +9,6 @@ import de.tobias.playwall.server.common.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -32,7 +31,7 @@ abstract class PadPlaybackHandler<T extends RequestMessage & PadIdRequest> imple
 		if(controller == null)
 		{
 			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
-			throw new PlayWallServerException(messageSource.getMessage(error.getLocalizationKey(), new Object[]{requestMessage.getPadId()}, LocaleContextHolder.getLocale()), error);
+			throw new PlayWallServerException(messageSource, error);
 		}
 
 		handlePlayback(controller);
