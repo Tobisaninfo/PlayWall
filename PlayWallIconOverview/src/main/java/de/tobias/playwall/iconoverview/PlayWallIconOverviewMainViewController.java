@@ -157,7 +157,7 @@ public class PlayWallIconOverviewMainViewController extends NVC
 
 	private Set<String> getUsedIconTypes()
 	{
-		final Path sourceRoot = Paths.get(System.getProperty("user.dir") + "/PlayWallClient/src/main/java");
+		final Path sourceRoot = Paths.get(System.getProperty("user.dir") + "/PlayWallClient/src/main");
 		try
 		{
 			final Set<String> usedValues = EnumUsageParser.parse(sourceRoot, FontAwesomeType.class.getSimpleName());
