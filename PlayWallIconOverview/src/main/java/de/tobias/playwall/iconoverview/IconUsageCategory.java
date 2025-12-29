@@ -10,7 +10,8 @@ public enum IconUsageCategory
 	UNDEFINED("?", "#CCCCCCFF", "#000000FF"),
 	GENERAL("Allgemein", "#CA6702FF", "#000000FF"),
 	PAD("Pad", "#134074FF", "#FFFFFFFF"),
-	MENU("Menü", "#94D2BDFF", "#000000FF");
+	MENU("Menü", "#94D2BDFF", "#000000FF"),
+	SETTINGS("Einstellungen", "#FFD166FF", "#000000FF");
 
 	private final String name;
 	private final String backgroundColor;

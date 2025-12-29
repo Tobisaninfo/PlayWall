@@ -52,7 +52,6 @@ public class DesktopPadView implements PadView
 	private ProgressBar playBar;
 	private Button playButton;
 	private Button pauseButton;
-	private Button nextButton;
 	private Button stopButton;
 	private Button newButton;
 	private Button settingsButton;
@@ -120,7 +119,6 @@ public class DesktopPadView implements PadView
 		// Buttons
 		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY_SOLID), this::onPlayAction);
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE_SOLID), this::onPauseAction);
-		nextButton = new PadButton(new FontIcon(FontAwesomeType.FORWARD_SOLID), null);
 		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP_SOLID), this::onStopAction);
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN_SOLID), this::onNewAction);
 		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR_SOLID), null);
