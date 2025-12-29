@@ -25,18 +25,7 @@ public class EnumUsageParser
 		final Pattern pattern = Pattern.compile(enumName + "\\.([A-Z0-9_]+)");
 
 		Files.walk(sourceRoot).filter(p -> p.toString().endsWith(".java")).forEach(p -> {
-			try
-			{
-				final String content = Files.readString(p);
-				final Matcher matcher = pattern.matcher(content);
-				while(matcher.find())
-				{
-					usedValues.add(matcher.group(1));
-				}
-			}
-			catch(IOException ignored)
-			{
-			}
+			extractEnumValue(p, pattern, usedValues);
 		});
 
 		return usedValues;
@@ -49,20 +38,25 @@ public class EnumUsageParser
 		final Pattern pattern = Pattern.compile("icon=\"([A-Z0-9_]+)\"");
 
 		Files.walk(sourceRoot).filter(p -> p.toString().endsWith(".fxml")).forEach(p -> {
-			try
-			{
-				final String content = Files.readString(p);
-				final Matcher matcher = pattern.matcher(content);
-				while(matcher.find())
-				{
-					usedValues.add(matcher.group(1));
-				}
-			}
-			catch(IOException ignored)
-			{
-			}
+			extractEnumValue(p, pattern, usedValues);
 		});
 
 		return usedValues;
+	}
+
+	private static void extractEnumValue(Path p, Pattern pattern, Set<String> usedValues)
+	{
+		try
+		{
+			final String content = Files.readString(p);
+			final Matcher matcher = pattern.matcher(content);
+			while(matcher.find())
+			{
+				usedValues.add(matcher.group(1));
+			}
+		}
+		catch(IOException ignored)
+		{
+		}
 	}
 }
