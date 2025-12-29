@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class NoProjectLoadedError extends ServerError
+public class ProjectNotLoadedError extends ServerError
 {
 	@Override
 	public Object[] getMessageArguments()

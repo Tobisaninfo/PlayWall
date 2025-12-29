@@ -11,7 +11,6 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class PageNotExistsError extends ServerError
 {
-	private UUID projectId;
 	private UUID pageId;
 
 	@Override

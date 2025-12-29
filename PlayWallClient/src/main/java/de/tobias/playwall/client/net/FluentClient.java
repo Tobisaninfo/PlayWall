@@ -33,10 +33,6 @@ public interface FluentClient
 		void delete() throws PlayWallApiException;
 
 		Project launch() throws PlayWallApiException;
-
-		PagesBuilder pages();
-
-		PageBuilder page(UUID pageId);
 	}
 
 	ProjectCurrentBuilder currentProject();
@@ -44,11 +40,10 @@ public interface FluentClient
 	interface ProjectCurrentBuilder
 	{
 		void save() throws PlayWallApiException;
-	}
 
-	interface PagesBuilder
-	{
 		Page addPage(String name) throws PlayWallApiException;
+
+		PageBuilder page(UUID pageId);
 	}
 
 	interface PageBuilder

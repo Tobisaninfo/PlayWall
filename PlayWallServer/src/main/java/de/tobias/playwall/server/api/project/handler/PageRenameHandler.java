@@ -1,18 +1,13 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.PageAddResponse;
-import de.tobias.playwall.common.api.project.PageNotExistsError;
-import de.tobias.playwall.common.api.project.PageRenameRequest;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
+import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.PageMapper;
-import de.tobias.playwall.server.api.project.PageNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.api.project.*;
 import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 
@@ -23,6 +18,7 @@ import java.util.Optional;
 @RequestHandlerTyped(PageRenameRequest.class)
 public class PageRenameHandler implements RequestHandler<PageRenameRequest>
 {
+	private final ProjectController projectController;
 	private final ProjectService projectService;
 	private final PageMapper mapper;
 	private final MessageSource messageSource;
@@ -32,17 +28,17 @@ public class PageRenameHandler implements RequestHandler<PageRenameRequest>
 	{
 		try
 		{
-			final Page page = projectService.renamePage(requestMessage.getProjectId(), requestMessage.getPageId(), requestMessage.getNewName());
+			final Page page = projectService.renamePage(projectController.getLoadedProject(), requestMessage.getPageId(), requestMessage.getNewName());
 			return Optional.of(new PageAddResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
-		catch(ProjectNotExistsException _)
+		catch(ProjectNotLoadedException _)
 		{
-			final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
+			final ProjectNotLoadedError error = new ProjectNotLoadedError();
 			throw new PlayWallServerException(messageSource, error);
 		}
 		catch(PageNotExistsException _)
 		{
-			final PageNotExistsError error = new PageNotExistsError(requestMessage.getProjectId(), requestMessage.getPageId());
+			final PageNotExistsError error = new PageNotExistsError(requestMessage.getPageId());
 			throw new PlayWallServerException(messageSource, error);
 		}
 	}

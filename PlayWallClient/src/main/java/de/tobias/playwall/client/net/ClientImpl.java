@@ -120,29 +120,29 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public Page addPage(UUID projectId, String name) throws PlayWallApiException
+	public Page addPage(String name) throws PlayWallApiException
 	{
-		final PageAddResponse response = clientWebSocketHandler.send(new PageAddRequest(projectId, name));
+		final PageAddResponse response = clientWebSocketHandler.send(new PageAddRequest(name));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 
 	@Override
-	public Page renamePage(UUID projectId, UUID pageId, String newName) throws PlayWallApiException
+	public Page renamePage(UUID pageId, String newName) throws PlayWallApiException
 	{
-		final ProjectRenamePageResponse response = clientWebSocketHandler.send(new PageRenameRequest(projectId, pageId, newName));
+		final ProjectRenamePageResponse response = clientWebSocketHandler.send(new PageRenameRequest(pageId, newName));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 
 	@Override
-	public void deletePage(UUID projectId, UUID pageId) throws PlayWallApiException
+	public void deletePage(UUID pageId) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new PageDeleteRequest(projectId, pageId));
+		clientWebSocketHandler.send(new PageDeleteRequest(pageId));
 	}
 
 	@Override
-	public Page duplicatePage(UUID projectId, UUID pageId, String name) throws PlayWallApiException
+	public Page duplicatePage(UUID pageId, String name) throws PlayWallApiException
 	{
-		final ProjectDuplicatePageResponse response = clientWebSocketHandler.send(new PageDuplicateRequest(projectId, pageId, name));
+		final ProjectDuplicatePageResponse response = clientWebSocketHandler.send(new PageDuplicateRequest(pageId, name));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 

@@ -60,7 +60,7 @@ public class PadNewMediaHandler implements RequestHandler<PadNewMediaRequest>
 		if(pad == null)
 		{
 			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
-			throw new PlayWallServerException(messageSource.getMessage(error.getLocalizationKey(), new Object[]{requestMessage.getPadId()}, LocaleContextHolder.getLocale()), error);
+			throw new PlayWallServerException(messageSource, error);
 		}
 
 		final Path path = Paths.get(requestMessage.getPath());
