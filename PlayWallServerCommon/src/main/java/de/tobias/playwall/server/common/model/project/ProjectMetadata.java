@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.model.project;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
 
@@ -20,11 +21,14 @@ public class ProjectMetadata
 
 	@JsonView(List.class)
 	private UUID id;
+
 	@JsonView(List.class)
 	private String name;
+
 	private int numberOfHorizontalPads;
 	private int numberOfVerticalPads;
 
+	@JsonIgnore
 	public int getNumberOfPadsPerPage()
 	{
 		return numberOfHorizontalPads * numberOfVerticalPads;
