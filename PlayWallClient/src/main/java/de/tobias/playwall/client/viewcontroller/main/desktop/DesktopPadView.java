@@ -67,6 +67,7 @@ public class DesktopPadView implements PadView
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
 
+	private PadStatus previousStatus;
 	private PadStatus status;
 
 	@Getter
@@ -174,10 +175,10 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateStatus(PadStatus status)
 	{
-		final PadStatus previousStatus = this.status;
+		this.previousStatus = this.status;
 		this.status = status;
 
-		if(previousStatus != status)
+		if(this.previousStatus != status)
 		{
 			updateButtonStates();
 		}
@@ -192,7 +193,8 @@ public class DesktopPadView implements PadView
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling + set correct status
+			// TODO: error handling
+			updateStatus(this.previousStatus);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -206,7 +208,8 @@ public class DesktopPadView implements PadView
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling + set correct status
+			// TODO: error handling
+			updateStatus(this.previousStatus);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -220,7 +223,8 @@ public class DesktopPadView implements PadView
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling + set correct status
+			// TODO: error handling
+			updateStatus(this.previousStatus);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -245,7 +249,8 @@ public class DesktopPadView implements PadView
 			}
 			catch(PlayWallApiException ex)
 			{
-				// TODO: error handling + set correct status
+				// TODO: error handling
+				updateStatus(this.previousStatus);
 				throw new RuntimeException(ex);
 			}
 		}
