@@ -141,6 +141,8 @@ public class DesktopPadView implements PadView
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
+
+		updateStatus(PadStatus.EMPTY);
 	}
 
 	@Override
@@ -157,6 +159,7 @@ public class DesktopPadView implements PadView
 		{
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
+			updateStatus(pad.getContent() == null ? PadStatus.EMPTY : PadStatus.READY);
 		}
 		busyView.showProgress(false);
 	}
@@ -165,12 +168,14 @@ public class DesktopPadView implements PadView
 	public void showLoading(boolean isLoading)
 	{
 		busyView.showProgress(isLoading);
+		updateStatus(isLoading ? PadStatus.EMPTY : PadStatus.READY);
 	}
 
 	@Override
 	public void updateStatus(PadStatus status)
 	{
 		this.status = status;
+		updateButtonStates();
 	}
 
 	private void onPlayAction(ActionEvent event)
@@ -178,10 +183,11 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.play();
+			updateStatus(PadStatus.PLAY);
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling
+			// TODO: error handling + set correct status
 			throw new RuntimeException(ex);
 		}
 	}
@@ -191,10 +197,11 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.pause();
+			updateStatus(PadStatus.PAUSE);
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling
+			// TODO: error handling + set correct status
 			throw new RuntimeException(ex);
 		}
 	}
@@ -204,10 +211,11 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.stop();
+			updateStatus(PadStatus.READY);
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling
+			// TODO: error handling + set correct status
 			throw new RuntimeException(ex);
 		}
 	}
@@ -228,11 +236,55 @@ public class DesktopPadView implements PadView
 			try
 			{
 				padBuilder.newMedia(path.get());
+				updateStatus(PadStatus.READY);
 			}
 			catch(PlayWallApiException ex)
 			{
-				// TODO: error handling
+				// TODO: error handling + set correct status
 				throw new RuntimeException(ex);
+			}
+		}
+	}
+
+	private void updateButtonStates()
+	{
+		switch(status)
+		{
+			case EMPTY ->
+			{
+				playButton.setVisible(false);
+				pauseButton.setVisible(false);
+				stopButton.setVisible(false);
+				stopButton.setDisable(true);
+				newButton.setVisible(true);
+				settingsButton.setVisible(true);
+			}
+			case READY ->
+			{
+				playButton.setVisible(true);
+				pauseButton.setVisible(false);
+				stopButton.setVisible(true);
+				stopButton.setDisable(true);
+				newButton.setVisible(false);
+				settingsButton.setVisible(true);
+			}
+			case PLAY ->
+			{
+				playButton.setVisible(false);
+				pauseButton.setVisible(true);
+				stopButton.setVisible(true);
+				stopButton.setDisable(false);
+				newButton.setVisible(false);
+				settingsButton.setVisible(true);
+			}
+			case PAUSE ->
+			{
+				playButton.setVisible(true);
+				pauseButton.setVisible(false);
+				stopButton.setVisible(true);
+				stopButton.setDisable(false);
+				newButton.setVisible(false);
+				settingsButton.setVisible(true);
 			}
 		}
 	}
