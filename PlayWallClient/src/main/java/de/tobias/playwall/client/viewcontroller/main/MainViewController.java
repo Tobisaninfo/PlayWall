@@ -27,10 +27,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
@@ -55,6 +52,9 @@ public class MainViewController extends BaseNVC
 
 	@FXML
 	private AnchorPane gridContainer;
+
+	@FXML
+	private FlowPane pageButtonsFlowPane;
 
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
@@ -106,6 +106,8 @@ public class MainViewController extends BaseNVC
 
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
+
+		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
 	}
 
 	private void onWindowClosed()
@@ -165,6 +167,7 @@ public class MainViewController extends BaseNVC
 		initializePadViews(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
 		showPage(0);
+		buildPageButtons();
 	}
 
 	private void initializePadViews(int columns, int rows)
@@ -210,9 +213,26 @@ public class MainViewController extends BaseNVC
 		padViews.clear();
 	}
 
-	public void showPage(int pageNumber)
+	private void buildPageButtons()
 	{
-		final Page page = this.project.getPage(pageNumber);
+		pageButtonsFlowPane.getChildren().clear();
+		for(Page page : project.getPages())
+		{
+			final Button button = new Button(page.getName());
+			button.setOnAction(_ -> showPage(page));
+			button.setFocusTraversable(false);
+			pageButtonsFlowPane.getChildren().add(button);
+		}
+	}
+
+	private void showPage(int position)
+	{
+		final Page page = this.project.getPage(position);
+		showPage(page);
+	}
+
+	private void showPage(Page page)
+	{
 		final int padNumberPerPage = project.getMetadata().getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
