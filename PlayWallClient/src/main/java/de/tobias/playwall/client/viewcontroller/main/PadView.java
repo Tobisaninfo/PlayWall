@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
 import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.client.model.project.PadStatus;
 import javafx.scene.Node;
 
 public interface PadView
@@ -14,5 +14,5 @@ public interface PadView
 
 	void showLoading(boolean isLoading);
 
-	void updateStatus(PadControllerStatus status);
+	void updateStatus(PadStatus status);
 }

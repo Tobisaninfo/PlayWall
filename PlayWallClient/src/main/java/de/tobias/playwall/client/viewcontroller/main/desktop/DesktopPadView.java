@@ -7,11 +7,11 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
+import de.tobias.playwall.client.model.project.PadStatus;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.common.utils.FileFormats;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -67,7 +67,7 @@ public class DesktopPadView implements PadView
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
 
-	private PadControllerStatus	status;
+	private PadStatus status;
 
 	@Getter
 	private Pad pad;
@@ -168,7 +168,7 @@ public class DesktopPadView implements PadView
 	}
 
 	@Override
-	public void updateStatus(PadControllerStatus status)
+	public void updateStatus(PadStatus status)
 	{
 		this.status = status;
 	}
