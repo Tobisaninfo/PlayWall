@@ -174,8 +174,13 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateStatus(PadStatus status)
 	{
+		final PadStatus previousStatus = this.status;
 		this.status = status;
-		updateButtonStates();
+
+		if(previousStatus != status)
+		{
+			updateButtonStates();
+		}
 	}
 
 	private void onPlayAction(ActionEvent event)
