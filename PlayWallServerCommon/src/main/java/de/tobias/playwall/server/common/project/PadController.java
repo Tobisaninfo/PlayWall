@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationContext;
 public abstract class PadController
 {
 	@Getter(AccessLevel.PRIVATE)
-	private final ApplicationContext context;
+	protected final ApplicationContext context;
 	protected final Pad pad;
 	private PadControllerStatus status;
 

@@ -11,6 +11,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.common.utils.FileFormats;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -65,6 +66,8 @@ public class DesktopPadView implements PadView
 
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
+
+	private PadControllerStatus	status;
 
 	@Getter
 	private Pad pad;
@@ -162,6 +165,12 @@ public class DesktopPadView implements PadView
 	public void showLoading(boolean isLoading)
 	{
 		busyView.showProgress(isLoading);
+	}
+
+	@Override
+	public void updateStatus(PadControllerStatus status)
+	{
+		this.status = status;
 	}
 
 	private void onPlayAction(ActionEvent event)
