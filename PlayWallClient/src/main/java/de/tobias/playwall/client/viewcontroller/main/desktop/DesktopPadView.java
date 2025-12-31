@@ -138,7 +138,7 @@ public class DesktopPadView implements PadView
 		// Button HBOX
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
-		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton, newButton);
+		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton, newButton, settingsButton);
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
