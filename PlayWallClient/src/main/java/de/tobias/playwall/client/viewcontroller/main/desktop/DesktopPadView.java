@@ -275,7 +275,7 @@ public class DesktopPadView implements PadView
 				pauseButton.setVisible(false);
 				stopButton.setVisible(true);
 				stopButton.setDisable(true);
-				newButton.setVisible(false);
+				newButton.setVisible(true);  // TODO: hide as soon as pad settings view allows to choose a media file pr drag&drop is implemented
 				settingsButton.setVisible(true);
 			}
 			case PLAY ->
