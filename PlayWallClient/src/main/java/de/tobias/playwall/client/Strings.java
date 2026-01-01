@@ -42,4 +42,7 @@ public class Strings
 	public static final String UI_DIALOG_ABOUT_LIBRARIES = "ui.dialog.about.libraries";
 	public static final String UI_DIALOG_ABOUT_WEBSITE = "ui.dialog.about.website";
 	public static final String UI_DIALOG_ABOUT_CODE = "ui.dialog.about.code";
+
+	// ui - settings - pad
+	public static final String UI_SETTINGS_PAD_TITLE  = "ui.settings.pad.title";
 }
