@@ -5,6 +5,7 @@ import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
+import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -58,11 +59,13 @@ public class LaunchDialog extends BaseNVC
 	private Button deleteButton;
 
 	private final FluentClient client;
+	private final CommandLineOptions commandLineOptions;
 
 	@InjectConstructor
-	LaunchDialog(FluentClient client)
+	LaunchDialog(FluentClient client, CommandLineOptions commandLineOptions)
 	{
 		this.client = client;
+		this.commandLineOptions = commandLineOptions;
 	}
 
 	@Override
@@ -185,6 +188,17 @@ public class LaunchDialog extends BaseNVC
 			try
 			{
 				projectListView.getItems().setAll(client.projects().list());
+
+				if(commandLineOptions.hasOption(CommandLineOptions.PROJECT))
+				{
+					final String projectName = commandLineOptions.getOptionValue(CommandLineOptions.PROJECT)
+							.toLowerCase()
+							.strip();
+					projectListView.getItems().stream()
+							.filter(p -> p.name().toLowerCase().equals(projectName))
+							.findFirst()
+							.ifPresent(p -> openProject(p.id()));
+				}
 			}
 			catch(PlayWallApiException e)
 			{

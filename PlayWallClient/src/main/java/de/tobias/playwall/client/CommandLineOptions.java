@@ -22,6 +22,7 @@ public class CommandLineOptions
 	public static final Option DEBUG = new Option(null, "debug", false, "Debug flag");
 	public static final Option STANDALONE = new Option(null, "standalone", false, "Do not start embedded server");
 	public static final Option SERVER_PATH = new Option(null, "server-path", true, "Specify path to embedded server");
+	public static final Option PROJECT = new Option(null, "project", true, "Skip launch dialog and open the specified project immediately if existing");
 
 	@PostConstruct
 	void initialize() throws IOException
@@ -30,15 +31,16 @@ public class CommandLineOptions
 		options.addOption(DEBUG);
 		options.addOption(STANDALONE);
 		options.addOption(SERVER_PATH);
+		options.addOption(PROJECT);
 
 		try
 		{
-			CommandLineParser parser = new DefaultParser();
+			final CommandLineParser parser = new DefaultParser();
 			cmd = parser.parse(options, app.getProgramArgs());
 		}
 		catch(ParseException _)
 		{
-			HelpFormatter formatter = HelpFormatter.builder().get();
+			final HelpFormatter formatter = HelpFormatter.builder().get();
 			formatter.printHelp(app.getInfo().getName(), null, options, null, true);
 			System.exit(1);
 		}

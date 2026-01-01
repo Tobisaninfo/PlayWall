@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller;
 
+import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -34,6 +35,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 
 	private final MainViewController mainViewController = mock(MainViewController.class);
 	private final ProjectNewDialog projectNewDialog = mock(ProjectNewDialog.class);
+	private final CommandLineOptions commandLineOptions = mock(CommandLineOptions.class);
 
 	private LaunchDialog launchDialog;
 	private Stage stage;
@@ -45,6 +47,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 		context = AppContextHolder.getInstance();
 		context.registerLazySingleton(MainViewController.class, _ -> mainViewController);
 		context.registerLazySingleton(ProjectNewDialog.class, _ -> projectNewDialog);
+		context.registerLazySingleton(CommandLineOptions.class, _ -> commandLineOptions);
 		context.registerLazy(Stage.class, _ -> stage);
 
 		context.registerLazySingleton(Client.class, _ -> client);
