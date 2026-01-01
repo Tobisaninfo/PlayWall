@@ -1,16 +1,20 @@
 package de.tobias.playwall.client.viewcontroller.settings.pad;
 
 import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.components.settings.SettingsPage;
 import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,6 +24,9 @@ public class PadSettingsViewController extends ModalBaseNVC<Void>
 {
 	@FXML
 	private SettingsPage settingsPage;
+
+	@FXML
+	private VBox boxCategories;
 
 	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
@@ -42,14 +49,20 @@ public class PadSettingsViewController extends ModalBaseNVC<Void>
 
 		this.stage = stage;
 
-		stage.setWidth(560);
-		stage.setHeight(380);
+		stage.setResizable(true);
 
-		stage.setMinWidth(560);
-		stage.setMinHeight(380);
+		stage.setWidth(750);
+		stage.setHeight(400);
 
-		stage.setMaxWidth(560);
-		stage.setMaxHeight(380);
+		stage.setMinWidth(750);
+		stage.setMinHeight(400);
+
+		boxCategories.getStyleClass().add("settings-category-box");
+
+		final SettingsCategory categoryGeneral = new SettingsCategory("Allgemein", FontAwesomeType.GEAR_SOLID);
+		boxCategories.getChildren().add(categoryGeneral);
+
+		categoryGeneral.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
 	}
 
 	public void setPad(Pad pad)

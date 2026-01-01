@@ -165,7 +165,8 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		data.add(new IconEntry(FontAwesomeType.MAGNIFYING_GLASS_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Kacheln suchen"))));
 		data.add(new IconEntry(FontAwesomeType.GEAR_SOLID, List.of(
 				new IconUsage(IconUsageCategory.MENU, "Einstellungen"),
-				new IconUsage(IconUsageCategory.PAD, "Einstellungen"))));
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen"),
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein"))));
 		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "im Vordergrund behalten"))));
 
 		// settings

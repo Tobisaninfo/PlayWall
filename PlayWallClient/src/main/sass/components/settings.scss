@@ -1,0 +1,46 @@
+@import "variables";
+
+.settings-category-box {
+  -fx-background-color: #2C5FBB;
+}
+
+.settings-category {
+  -fx-background-color: #2C5FBB;
+  -fx-text-fill: white;
+  -fx-padding: 7px 14px 7px 14px;
+  -fx-alignment: top-left;
+  -fx-background-radius: 7px;
+  -fx-graphic-text-gap: 14px;
+  -fx-font-size: 14px;
+
+  .icon {
+    -fx-fill: #FFFFFF;
+  }
+
+  &:selected, &:focused {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #2C5FBB;
+
+    .icon {
+      -fx-fill: #2C5FBB;
+    }
+
+    &:hover {
+      -fx-background-color: #FFFFFF;
+      -fx-text-fill: #2C5FBB;
+
+      .icon {
+        -fx-fill: #2C5FBB;
+      }
+    }
+  }
+
+  &:hover {
+    -fx-background-color: #224A8E;
+    -fx-text-fill: #FFFFFF;
+
+    .icon {
+      -fx-fill: #FFFFFF;
+    }
+  }
+}

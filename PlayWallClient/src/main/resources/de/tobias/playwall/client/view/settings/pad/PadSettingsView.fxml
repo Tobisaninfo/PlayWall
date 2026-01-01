@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="500.0" spacing="14.0"
-      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <padding>
-        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
-    </padding>
-    <SettingsPage fx:id="settingsPage" onCancel="#cancelButtonHandler" onSave="#finishButtonHandler"
-                  saveText="%ui.settings.button.save"
-                  cancelText="%ui.settings.button.cancel">
-        <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="Name">
-            <TextField fx:id="textFieldName" prefWidth="300"/>
-        </SettingsRow>
+<?import javafx.scene.text.Font?>
+<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox fx:id="boxCategories" minWidth="200.0" prefWidth="200.0" spacing="14.0">
+            <children>
+                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="%ui.settings.pad">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="14.0" left="7.0" right="7.0" top="14.0"/>
+            </padding>
+        </VBox>
+        <VBox fx:id="root" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="500.0"
+              spacing="14.0" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+            </padding>
+            <SettingsPage fx:id="settingsPage" cancelText="%ui.settings.button.cancel" onCancel="#cancelButtonHandler"
+                          onSave="#finishButtonHandler" saveText="%ui.settings.button.save">
+                <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="Name">
+                    <TextField fx:id="textFieldName" prefWidth="300"/>
+                </SettingsRow>
 
-        <Separator/>
-    </SettingsPage>
-</VBox>
+                <Separator/>
+            </SettingsPage>
+        </VBox>
+    </children>
+</HBox>
