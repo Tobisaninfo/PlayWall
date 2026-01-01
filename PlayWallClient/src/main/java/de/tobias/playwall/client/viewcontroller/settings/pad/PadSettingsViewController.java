@@ -71,6 +71,8 @@ public class PadSettingsViewController extends ModalBaseNVC<Void>
 		boxCategories.getChildren().add(categoryGeneral);
 
 		categoryGeneral.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
+
+		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
 	}
 
 	public void setPad(Pad pad)
