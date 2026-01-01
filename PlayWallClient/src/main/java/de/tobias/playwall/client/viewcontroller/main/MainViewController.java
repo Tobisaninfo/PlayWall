@@ -389,6 +389,6 @@ public class MainViewController extends BaseNVC
 	private void onMenuItemAbout(ActionEvent event)
 	{
 		final AboutDialog aboutDialog = AppContextHolder.getInstance().get(AboutDialog.class);
-		aboutDialog.showAndWait(getContainingWindow());
+		aboutDialog.showAndWait(null, getContainingWindow());
 	}
 }

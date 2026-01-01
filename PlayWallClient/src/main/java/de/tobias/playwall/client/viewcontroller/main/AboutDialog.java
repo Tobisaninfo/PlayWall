@@ -33,7 +33,7 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "AboutDialog")
-public class AboutDialog extends ModalBaseNVC<Void>
+public class AboutDialog extends ModalBaseNVC<Void, Void>
 {
 	@FXML
 	private Label libsLabel;
@@ -132,7 +132,7 @@ public class AboutDialog extends ModalBaseNVC<Void>
 	}
 
 	@Override
-	public Optional<Void> showAndWait(Window owner)
+	public Optional<Void> showAndWait(Void param, Window owner)
 	{
 		final Stage stage = getStageContainer().orElseThrow().getStage();
 
@@ -142,6 +142,6 @@ public class AboutDialog extends ModalBaseNVC<Void>
 		stage.setX(centerXPosition - stage.getWidth() / 2d);
 		stage.setY(centerYPosition - stage.getHeight() / 2d);
 
-		return super.showAndWait(owner);
+		return super.showAndWait(null, owner);
 	}
 }

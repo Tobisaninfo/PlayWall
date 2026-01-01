@@ -24,7 +24,7 @@ import lombok.Getter;
 
 @ViewController(path = "de/tobias/playwall/client/view/dialog", view = "ProjectNewDialog")
 @Getter(AccessLevel.PACKAGE)
-public class ProjectNewDialog extends ModalBaseNVC<ProjectMetadata>
+public class ProjectNewDialog extends ModalBaseNVC<Void, ProjectMetadata>
 {
 	@FXML
 	private SettingsPage settingsPage;

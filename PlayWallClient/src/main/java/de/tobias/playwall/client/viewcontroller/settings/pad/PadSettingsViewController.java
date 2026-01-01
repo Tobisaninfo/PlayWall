@@ -22,11 +22,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsView")
-public class PadSettingsViewController extends ModalBaseNVC<Void>
+public class PadSettingsViewController extends ModalBaseNVC<PadSettingsViewController.Param, Void>
 {
+	@AllArgsConstructor
+	public static class Param
+	{
+		private Pad pad;
+	}
+
 	@FXML
 	private VBox boxCategories;
 
@@ -75,9 +82,10 @@ public class PadSettingsViewController extends ModalBaseNVC<Void>
 		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
 	}
 
-	public void setPad(Pad pad)
+	@Override
+	protected void initParams(Param param)
 	{
-		this.pad = pad;
+		this.pad = param.pad;
 
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getPosition(), pad.getName()));
 

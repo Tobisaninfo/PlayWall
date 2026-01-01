@@ -89,7 +89,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	void testNewProjectDialogOkay(FxRobot robot) throws PlayWallApiException
 	{
 		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.id(), "Test 1", 4, 4);
-		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
+		when(projectNewDialog.showAndWait(null, any())).thenReturn(Optional.of(metadata));
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(LaunchDialog.class);
@@ -115,7 +115,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testNewProjectDialogCanceled(FxRobot robot) throws PlayWallApiException
 	{
-		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.empty());
+		when(projectNewDialog.showAndWait(null, any())).thenReturn(Optional.empty());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(LaunchDialog.class);
