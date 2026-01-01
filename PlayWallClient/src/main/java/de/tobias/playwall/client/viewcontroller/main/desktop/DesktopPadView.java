@@ -13,6 +13,7 @@ import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
 import de.tobias.playwall.common.utils.FileFormats;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -180,7 +181,7 @@ public class DesktopPadView implements PadView
 
 		if(this.previousStatus != status)
 		{
-			updateButtonStates();
+			Platform.runLater(this::updateButtonStates);
 		}
 	}
 
@@ -262,39 +263,24 @@ public class DesktopPadView implements PadView
 		{
 			case EMPTY ->
 			{
-				playButton.setVisible(false);
-				pauseButton.setVisible(false);
-				stopButton.setVisible(false);
+				buttonBox.getChildren().setAll(newButton, settingsButton);
 				stopButton.setDisable(true);
-				newButton.setVisible(true);
-				settingsButton.setVisible(true);
 			}
 			case READY ->
 			{
-				playButton.setVisible(true);
-				pauseButton.setVisible(false);
-				stopButton.setVisible(true);
+				// TODO: hide as soon as pad settings view allows to choose a media file or drag&drop is implemented
+				buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
 				stopButton.setDisable(true);
-				newButton.setVisible(true);  // TODO: hide as soon as pad settings view allows to choose a media file pr drag&drop is implemented
-				settingsButton.setVisible(true);
 			}
 			case PLAY ->
 			{
-				playButton.setVisible(false);
-				pauseButton.setVisible(true);
-				stopButton.setVisible(true);
+				buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
 				stopButton.setDisable(false);
-				newButton.setVisible(false);
-				settingsButton.setVisible(true);
 			}
 			case PAUSE ->
 			{
-				playButton.setVisible(true);
-				pauseButton.setVisible(false);
-				stopButton.setVisible(true);
+				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				stopButton.setDisable(false);
-				newButton.setVisible(false);
-				settingsButton.setVisible(true);
 			}
 		}
 	}
