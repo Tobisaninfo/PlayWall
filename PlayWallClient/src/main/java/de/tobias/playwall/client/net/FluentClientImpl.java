@@ -166,6 +166,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.newMedia(padId, file);
 		}
+
+		@Override
+		public void updateSettings(String name) throws PlayWallApiException
+		{
+			delegate.updateSettings(padId, name);
+		}
 	}
 
 	@Override

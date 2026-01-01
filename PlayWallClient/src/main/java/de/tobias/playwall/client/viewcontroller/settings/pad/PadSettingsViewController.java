@@ -1,8 +1,11 @@
 package de.tobias.playwall.client.viewcontroller.settings.pad;
 
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -14,6 +17,8 @@ import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
@@ -23,10 +28,13 @@ import lombok.Getter;
 public class PadSettingsViewController extends ModalBaseNVC<Void>
 {
 	@FXML
+	private VBox boxCategories;
+
+	@FXML
 	private SettingsPage settingsPage;
 
 	@FXML
-	private VBox boxCategories;
+	private TextField textFieldName;
 
 	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
@@ -70,11 +78,25 @@ public class PadSettingsViewController extends ModalBaseNVC<Void>
 		this.pad = pad;
 
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getPosition(), pad.getName()));
+
+		textFieldName.setText(pad.getName());
 	}
 
 	@FXML
 	private void finishButtonHandler(ActionEvent event)
 	{
+		final String name = textFieldName.getText();
+
+		try
+		{
+			client.pad(pad.getId()).updateSettings(name);
+			getStageContainer().ifPresent(NVCStage::close);
+		}
+		catch(PlayWallApiException e)
+		{
+			Logger.error(e.getMessage());
+			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
+		}
 	}
 
 	@FXML

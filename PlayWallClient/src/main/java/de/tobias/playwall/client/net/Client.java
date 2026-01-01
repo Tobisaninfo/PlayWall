@@ -47,4 +47,6 @@ public interface Client
 	void stop(UUID padId) throws PlayWallApiException;
 
 	void newMedia(UUID padId, Path file) throws PlayWallApiException;
+
+	void updateSettings(UUID padId, String name) throws PlayWallApiException;
 }
