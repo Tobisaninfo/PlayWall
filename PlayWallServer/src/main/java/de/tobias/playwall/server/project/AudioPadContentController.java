@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.common.api.project.PadStatusUpdate;
 import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -45,6 +46,7 @@ public class AudioPadContentController extends PadController
 	{
 		audioHandler.play();
 		setStatus(PadControllerStatus.PLAY);
+		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 
 	@Override
@@ -52,6 +54,7 @@ public class AudioPadContentController extends PadController
 	{
 		audioHandler.pause();
 		setStatus(PadControllerStatus.PAUSE);
+		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 
 	@Override
@@ -59,5 +62,6 @@ public class AudioPadContentController extends PadController
 	{
 		audioHandler.stop();
 		setStatus(PadControllerStatus.STOP);
+		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 }

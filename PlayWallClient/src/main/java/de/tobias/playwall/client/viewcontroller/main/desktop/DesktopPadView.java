@@ -7,11 +7,13 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
+import de.tobias.playwall.client.model.project.PadStatus;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
 import de.tobias.playwall.common.utils.FileFormats;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -65,6 +67,9 @@ public class DesktopPadView implements PadView
 
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
+
+	private PadStatus previousStatus;
+	private PadStatus status;
 
 	@Getter
 	private Pad pad;
@@ -134,10 +139,12 @@ public class DesktopPadView implements PadView
 		// Button HBOX
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
-		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton, newButton);
+		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton, newButton, settingsButton);
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
+
+		updateStatus(PadStatus.EMPTY);
 	}
 
 	@Override
@@ -154,6 +161,7 @@ public class DesktopPadView implements PadView
 		{
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
+			updateStatus(pad.getContent() == null ? PadStatus.EMPTY : PadStatus.READY);
 		}
 		busyView.showProgress(false);
 	}
@@ -162,6 +170,19 @@ public class DesktopPadView implements PadView
 	public void showLoading(boolean isLoading)
 	{
 		busyView.showProgress(isLoading);
+		updateStatus(isLoading ? PadStatus.EMPTY : PadStatus.READY);
+	}
+
+	@Override
+	public void updateStatus(PadStatus status)
+	{
+		this.previousStatus = this.status;
+		this.status = status;
+
+		if(this.previousStatus != status)
+		{
+			Platform.runLater(this::updateButtonStates);
+		}
 	}
 
 	private void onPlayAction(ActionEvent event)
@@ -169,10 +190,12 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.play();
+			updateStatus(PadStatus.PLAY);
 		}
 		catch(PlayWallApiException ex)
 		{
 			// TODO: error handling
+			updateStatus(this.previousStatus);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -182,10 +205,12 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.pause();
+			updateStatus(PadStatus.PAUSE);
 		}
 		catch(PlayWallApiException ex)
 		{
 			// TODO: error handling
+			updateStatus(this.previousStatus);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -195,10 +220,12 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.stop();
+			updateStatus(PadStatus.READY);
 		}
 		catch(PlayWallApiException ex)
 		{
 			// TODO: error handling
+			updateStatus(this.previousStatus);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -219,11 +246,41 @@ public class DesktopPadView implements PadView
 			try
 			{
 				padBuilder.newMedia(path.get());
+				updateStatus(PadStatus.READY);
 			}
 			catch(PlayWallApiException ex)
 			{
 				// TODO: error handling
+				updateStatus(this.previousStatus);
 				throw new RuntimeException(ex);
+			}
+		}
+	}
+
+	private void updateButtonStates()
+	{
+		switch(status)
+		{
+			case EMPTY ->
+			{
+				buttonBox.getChildren().setAll(newButton, settingsButton);
+				stopButton.setDisable(true);
+			}
+			case READY ->
+			{
+				// TODO: hide as soon as pad settings view allows to choose a media file or drag&drop is implemented
+				buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+				stopButton.setDisable(true);
+			}
+			case PLAY ->
+			{
+				buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
+				stopButton.setDisable(false);
+			}
+			case PAUSE ->
+			{
+				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
+				stopButton.setDisable(false);
 			}
 		}
 	}

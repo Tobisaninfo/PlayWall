@@ -64,6 +64,7 @@ public class MainViewController extends BaseNVC
 
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
+	private PadStatusListener padStatusListener;
 
 	private SnackBar notificationPane;
 
@@ -91,6 +92,8 @@ public class MainViewController extends BaseNVC
 		eventHandler.registerListener(padUpdateListener);
 		padLoadedListener = new PadLoadedListener(this);
 		eventHandler.registerListener(padLoadedListener);
+		padStatusListener = new PadStatusListener(this);
+		eventHandler.registerListener(padStatusListener);
 	}
 
 	@Override
@@ -109,6 +112,7 @@ public class MainViewController extends BaseNVC
 	{
 		eventHandler.unregisterListener(padUpdateListener);
 		eventHandler.unregisterListener(padLoadedListener);
+		eventHandler.unregisterListener(padStatusListener);
 	}
 
 	private static String getWindowTitle(String projectName)
