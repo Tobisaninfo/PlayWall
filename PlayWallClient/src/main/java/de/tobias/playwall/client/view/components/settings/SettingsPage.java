@@ -49,11 +49,13 @@ public class SettingsPage extends VBox
 		VBox.setVgrow(spacer, Priority.ALWAYS);
 
 		this.saveButton = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
+		this.saveButton.setId("saveButton");
 		this.saveButton.setDefaultButton(true);
 		this.saveButton.textProperty().bind(saveText);
 		this.saveButton.onActionProperty().bind(onSave);
 
 		this.cancelButton = new PlayWallButton("", FontAwesomeType.XMARK_SOLID);
+		this.cancelButton.setId("cancelButton");
 		this.cancelButton.textProperty().bind(cancelText);
 		this.cancelButton.onActionProperty().bind(onCancel);
 
