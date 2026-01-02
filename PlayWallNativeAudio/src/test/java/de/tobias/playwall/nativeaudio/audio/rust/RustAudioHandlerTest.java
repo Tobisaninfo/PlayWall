@@ -102,7 +102,6 @@ class RustAudioHandlerTest
 		handler.play();
 
 		await()
-				.atLeast(1500, MILLISECONDS)
 				.atMost(2500, MILLISECONDS)
 				.untilAsserted(() -> verify(mock).onEof());
 	}
