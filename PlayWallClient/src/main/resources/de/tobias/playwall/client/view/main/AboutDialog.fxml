@@ -80,5 +80,7 @@
                 <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
             </padding>
         </HBox>
+        <HeaderBar fx:id="headerBar" HeaderBar.dragType="DRAGGABLE_SUBTREE" AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" minHeight="50"/>
     </children>
 </AnchorPane>
