@@ -77,16 +77,21 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		boxCategories.getStyleClass().add("settings-category-box");
 
-		final SettingsCategory categoryGeneral = new SettingsCategory("Allgemein", FontAwesomeType.GEAR_SOLID);
-		boxCategories.getChildren().add(categoryGeneral);
 		padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
 		settingsPageContainer.getChildren().add(padSettingsGeneralViewController.getSettingsPage());
 
-		categoryGeneral.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
+		final SettingsCategory categoryGeneral = new SettingsCategory("Allgemein", FontAwesomeType.GEAR_SOLID, padSettingsGeneralViewController);
+		categoryGeneral.setOnAction(this::onSelectCategory);
+		boxCategories.getChildren().add(categoryGeneral);
 
 		initButtons();
 
 		selectCategory(categoryGeneral);
+	}
+
+	private void onSelectCategory(ActionEvent event)
+	{
+		selectCategory((SettingsCategory) event.getSource());
 	}
 
 	private void selectCategory(SettingsCategory category)
@@ -96,6 +101,8 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 				.filter(c -> c.equals(category))
 				.findFirst()
 				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true));
+
+		settingsPageContainer.getChildren().setAll(category.getSettingsPageController().getSettingsPage());
 	}
 
 	@Override
@@ -103,7 +110,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	{
 		this.pad = param.pad;
 
-		padSettingsGeneralViewController.initParameter(new PadSettingsGeneralViewController.Param(pad));
+		padSettingsGeneralViewController.initParameter(new BasePadSettingsViewController.Param(pad));
 
 		if(pad.getName() == null || pad.getName().isEmpty())
 		{

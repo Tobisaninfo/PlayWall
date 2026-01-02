@@ -26,7 +26,7 @@ public abstract class BasePadSettingsViewController extends ParamViewControllerB
 	@Getter(AccessLevel.NONE)
 	protected final FluentClient client;
 
-	@Getter(AccessLevel.PACKAGE)
+	@Getter
 	protected final SimpleBooleanProperty isValidProperty = new SimpleBooleanProperty();
 
 	@InjectConstructor
