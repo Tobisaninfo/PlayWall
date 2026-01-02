@@ -52,4 +52,5 @@ public abstract class PadController
 
 	public abstract void stop();
 
+	public abstract void onEof();
 }

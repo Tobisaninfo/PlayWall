@@ -1,4 +1,4 @@
-use crate::{with_bridge, AudioStreamHandler};
+use crate::{with_audio_handler, AudioStreamHandler};
 use jni::objects::{JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jint, jobjectArray, jsize};
 use jni::JNIEnv;
@@ -57,17 +57,17 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         return;
     }
 
-    with_bridge(&mut env, object, |env, bridge| {
+    with_audio_handler(&mut env, object, |_, audio_handler| {
         let stream_handler = OutputStreamBuilder::from_device(device.unwrap())
             .unwrap()
             .open_stream()
             .unwrap();
         let sink = Sink::connect_new(stream_handler.mixer());
-        bridge.setAudioHandlerStream(AudioStreamHandler {
+        audio_handler.setAudioHandlerStream(AudioStreamHandler {
             stream_handler,
             sink,
         });
-        bridge.device_name = Some(device_name_str.clone());
+        audio_handler.device_name = Some(device_name_str.clone());
         trace!("Init output stream and sink for device {}", device_name_str);
     });
 }

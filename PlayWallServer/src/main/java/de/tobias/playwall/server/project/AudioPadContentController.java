@@ -63,5 +63,16 @@ public class AudioPadContentController extends PadController
 		audioHandler.stop();
 		setStatus(PadControllerStatus.STOP);
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+		setStatus(PadControllerStatus.READY);
+		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+	}
+
+	@Override
+	public void onEof()
+	{
+		setStatus(PadControllerStatus.EOF);
+		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+		setStatus(PadControllerStatus.READY);
+		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 }

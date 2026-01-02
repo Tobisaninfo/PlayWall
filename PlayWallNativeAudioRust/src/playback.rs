@@ -1,29 +1,36 @@
-use crate::{with_bridge, AudioStreamHandler};
+use crate::{with_audio_handler, AudioStreamHandler};
 use jni::objects::JObject;
 use jni::sys::{jboolean, jdouble, jlong};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
-use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink, Source};
+use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink};
 use std::fs::File;
 use std::io::BufReader;
 use tracing::trace;
+use tracing::debug;
+use crate::looping_source::LoopingSource;
+use crate::eof_callback_source::EofCallbackSource;
 
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_playNative(
-    mut env: JNIEnv,
+    mut e: JNIEnv,
     obj: JObject,
     looping: jboolean,
 ) {
-    with_bridge(&mut env, obj, |env, bridge| {
-        if bridge.media_path.is_none() {
+    let obj_for_global = unsafe { JObject::from_raw(obj.as_raw()) };
+    let global_obj = e.new_global_ref(obj_for_global).expect("...");
+    let mut global_obj_opt = Some(global_obj);
+
+    with_audio_handler(&mut e, obj, |env, audio_handler| {
+        if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
             return;
         }
 
-        if bridge.audio_stream_handler.is_none() {
+        if audio_handler.audio_stream_handler.is_none() {
             let host = rodio::cpal::default_host();
-            let device = if let Some(ref name) = bridge.device_name {
+            let device = if let Some(ref name) = audio_handler.device_name {
                 host.output_devices()
                     .unwrap()
                     .find(|d| d.name().unwrap_or_default() == *name)
@@ -39,16 +46,16 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
             let stream_handler = stream_builder.unwrap().open_stream().unwrap();
             let sink = Sink::connect_new(stream_handler.mixer());
-            bridge.setAudioHandlerStream(AudioStreamHandler {
+            audio_handler.setAudioHandlerStream(AudioStreamHandler {
                 stream_handler,
                 sink,
             });
             trace!("Init output stream and sink (recreated)");
         }
 
-        let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
+        let sink = &audio_handler.audio_stream_handler.as_ref().unwrap().sink;
         if sink.empty() {
-            let path = bridge.media_path.as_ref().unwrap();
+            let path = audio_handler.media_path.as_ref().unwrap();
 
             if looping == 1 {
                 let source = LoopingSource::new(path.clone());
@@ -57,7 +64,21 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 let file = File::open(path).expect("Failed to open file");
                 let reader = BufReader::new(file);
                 let source = Decoder::new(reader).expect("Failed to create decoder");
-                sink.append(source);
+
+                let eof_source = EofCallbackSource::new(source, move || {
+                    if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
+                        if let Ok(mut env_local) = vm.attach_current_thread() {
+                            trace!("Invoking Java onEof callback");
+                            if let Some(obj_ref) = global_obj_opt.take() {
+                                if let Err(e) = env_local.call_method(&obj_ref, "onEof", "()V", &[]) {
+                                    debug!("Failed to call Java onEof: {:?}", e);
+                                }
+                            }
+                        }
+                    }
+                });
+                sink.set_volume(audio_handler.volume);
+                sink.append(eof_source);
             }
             sink.play();
             trace!("Play (from existing audio handler)");
@@ -73,9 +94,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        if (bridge.audio_stream_handler.as_ref().is_some()) {
-            bridge.audio_stream_handler.as_ref().unwrap().sink.pause();
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        if audio_handler.audio_stream_handler.as_ref().is_some() {
+            audio_handler.audio_stream_handler.as_ref().unwrap().sink.pause();
             trace!("Pause");
         } else {
             trace!("No audio handler to pause, skipping");
@@ -88,8 +109,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        if let Some(handler) = bridge.audio_stream_handler.take() {
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        if let Some(handler) = audio_handler.audio_stream_handler.take() {
             handler.sink.stop();
             // handler will be dropped from memory to free resources
         }
@@ -102,15 +123,15 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) -> jboolean {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        return if (bridge.audio_stream_handler.as_ref().is_some()) {
-            let paused = bridge
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        return if audio_handler.audio_stream_handler.as_ref().is_some() {
+            let paused = audio_handler
                 .audio_stream_handler
                 .as_ref()
                 .unwrap()
                 .sink
                 .is_paused();
-            let is_empty = bridge.audio_stream_handler.as_ref().unwrap().sink.empty();
+            let is_empty = audio_handler.audio_stream_handler.as_ref().unwrap().sink.empty();
             (!paused && !is_empty) as jboolean
         } else {
             false as jboolean
@@ -124,13 +145,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) -> jlong {
-    with_bridge(&mut env, obj, |env, bridge| {
-        if bridge.media_path.is_none() {
+    with_audio_handler(&mut env, obj, |env, audio_handler| {
+        if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
             return 0;
         }
-        return bridge.duration.unwrap().round() as jlong;
+        return audio_handler.duration.unwrap().round() as jlong;
     })
     .unwrap()
 }
@@ -141,9 +162,10 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
     volume: jdouble,
 ) {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        if (bridge.audio_stream_handler.as_ref().is_some()) {
-            bridge
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        audio_handler.volume = volume as f32;
+        if audio_handler.audio_stream_handler.as_ref().is_some() {
+            audio_handler
                 .audio_stream_handler
                 .as_ref()
                 .unwrap()
@@ -154,57 +176,4 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             trace!("No audio handler to set volume, skipping");
         }
     });
-}
-
-struct LoopingSource {
-    path: String,
-    current_source: Box<dyn Source<Item=f32> + Send>,
-}
-
-impl LoopingSource {
-    fn new(path: String) -> Self {
-        let file = File::open(&path).expect("Failed to open file for looping");
-        let reader = BufReader::new(file);
-        let source = Decoder::new(reader).expect("Failed to create decoder for looping");
-        Self {
-            path,
-            current_source: Box::new(source),
-        }
-    }
-}
-
-impl Iterator for LoopingSource {
-    type Item = f32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if let Some(sample) = self.current_source.next() {
-            return Some(sample);
-        }
-
-        let file = File::open(&self.path).ok()?;
-        let reader = BufReader::new(file);
-        if let Ok(source) = Decoder::new(reader) {
-            self.current_source = Box::new(source);
-            self.current_source.next()
-        } else {
-            None
-        }
-    }
-}
-
-impl Source for LoopingSource {
-    fn current_span_len(&self) -> Option<usize> {
-        self.current_source.current_span_len()
-    }
-
-    fn channels(&self) -> u16 {
-        self.current_source.channels()
-    }
-
-    fn sample_rate(&self) -> u32 {
-        self.current_source.sample_rate()
-    }
-    fn total_duration(&self) -> Option<std::time::Duration> {
-        None
-    }
 }

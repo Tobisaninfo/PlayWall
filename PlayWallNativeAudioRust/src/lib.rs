@@ -2,39 +2,39 @@
 
 mod output_devices;
 mod playback;
+mod looping_source;
+mod eof_callback_source;
 
-use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
+use jni::objects::{JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong};
 use jni::{JNIEnv, JavaVM};
-use rodio::source::Buffered;
-use rodio::{Decoder, OutputStream, Sink, Source};
+use lazy_static::lazy_static;
+use rodio::{OutputStream, Sink};
 use std::fs::File;
-use std::io::BufReader;
 use std::str::FromStr;
+use std::sync::RwLock;
 use symphonia::core::io::MediaSourceStream;
 use symphonia::core::probe::Hint;
 use symphonia::default::get_probe;
 use tracing::{debug, trace};
 use tracing_subscriber;
 
-struct RustBridge {
-    java_obj: GlobalRef,
-    jvm: JavaVM,
+struct AudioHandler {
     media_path: Option<String>,
     duration: Option<f64>,
     audio_stream_handler: Option<AudioStreamHandler>,
     device_name: Option<String>,
+    volume: f32,
 }
 
-impl RustBridge {
-    fn new(java_obj: GlobalRef, jvm: JavaVM) -> Self {
+impl AudioHandler {
+    fn new() -> Self {
         Self {
-            java_obj,
-            jvm,
             media_path: None,
             duration: None,
             audio_stream_handler: None,
             device_name: None,
+            volume: 1.0,
         }
     }
 
@@ -53,9 +53,21 @@ impl RustBridge {
     }
 }
 
+#[allow(dead_code)]
 struct AudioStreamHandler {
     stream_handler: OutputStream,
     sink: Sink,
+}
+
+lazy_static! {
+    static ref JVM: RwLock<Option<JavaVM>> = RwLock::new(None);
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn JNI_OnLoad(vm: JavaVM, _reserved: *mut std::ffi::c_void) -> jni::sys::jint {
+    let mut guard = JVM.write().unwrap();
+    *guard = Some(vm);
+    jni::sys::JNI_VERSION_1_8
 }
 
 #[unsafe(no_mangle)]
@@ -98,11 +110,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         return;
     }
 
-    let global_ref = env.new_global_ref(&this).unwrap();
-    let jvm = env.get_java_vm().unwrap();
-
-    let bridge = Box::new(RustBridge::new(global_ref, jvm));
-    let ptr = Box::into_raw(bridge) as jlong;
+    let audio_handler = Box::new(AudioHandler::new());
+    let ptr = Box::into_raw(audio_handler) as jlong;
 
     env.set_field(
         &this,
@@ -111,7 +120,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         JValue::Long(ptr),
     )
     .unwrap();
-    trace!("Created bridge with ptr: {}", ptr);
+    trace!("Created audio_handler with ptr: {}", ptr);
 }
 
 #[unsafe(no_mangle)]
@@ -127,7 +136,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
     if ptr != 0 {
         unsafe {
-            drop(Box::from_raw(ptr as *mut RustBridge));
+            drop(Box::from_raw(ptr as *mut AudioHandler));
         }
         env.set_field(
             &this,
@@ -136,7 +145,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             JValue::Long(0),
         )
         .unwrap();
-        trace!("Destroyed bridge with ptr: {}", ptr);
+        trace!("Destroyed audio_handler with ptr: {}", ptr);
     }
 }
 
@@ -153,13 +162,10 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     debug!("Load path: {}", &path_str);
 
     if let Ok(file) = File::open(&path_str) {
-        let reader = BufReader::new(file);
-
-        let mss =
-            MediaSourceStream::new(Box::new(File::open(&path_str).unwrap()), Default::default()); // TODO better file handling
+        let media_source_stream = MediaSourceStream::new(Box::new(file), Default::default());
         let hint = Hint::new();
         let probed = get_probe()
-            .format(&hint, mss, &Default::default(), &Default::default())
+            .format(&hint, media_source_stream, &Default::default(), &Default::default())
             .unwrap();
         let format = probed.format;
 
@@ -168,14 +174,12 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
         let duration_seconds;
         if let (Some(sample_rate), Some(n_frames)) = (params.sample_rate, params.n_frames) {
-            duration_seconds = (n_frames as f64 / sample_rate as f64);
+            duration_seconds = n_frames as f64 / sample_rate as f64;
         } else {
             duration_seconds = 0.0;
         }
-
-        let source = Decoder::new(reader).unwrap().buffered();
-        with_bridge(&mut env, obj, |_env, bridge| {
-            bridge.setMedia(path_str, duration_seconds);
+        with_audio_handler(&mut env, obj, |_env, audio_handler| {
+            audio_handler.setMedia(path_str, duration_seconds);
             trace!("Loaded media");
         });
     } else {
@@ -192,8 +196,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        bridge.clearMedia();
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        audio_handler.clearMedia();
         trace!("Unload media");
     });
 }
@@ -203,17 +207,17 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) -> jboolean {
-    with_bridge(&mut env, obj, |_env, bridge| {
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
         trace!("Unload media");
-        return bridge.media_path.is_some() as jboolean;
+        return audio_handler.media_path.is_some() as jboolean;
     })
     .unwrap()
 }
 
-fn with_bridge<T>(
+fn with_audio_handler<T>(
     env: &mut JNIEnv,
     this: JObject,
-    f: impl FnOnce(&mut JNIEnv, &mut RustBridge) -> T,
+    f: impl FnOnce(&mut JNIEnv, &mut AudioHandler) -> T,
 ) -> Option<T> {
     let ptr = env
         .get_field(this, NATIVE_POINTER_FIELD_NAME, NATIVE_POINTER_FIELD_TYPE)
@@ -221,11 +225,11 @@ fn with_bridge<T>(
         .j()
         .unwrap();
     if ptr == 0 {
-        env.throw_new("java/lang/IllegalStateException", "Bridge not initialized")
+        env.throw_new("java/lang/IllegalStateException", "audio_handler not initialized")
             .unwrap();
         None
     } else {
-        let bridge: &mut RustBridge = unsafe { &mut *(ptr as *mut RustBridge) };
-        Some(f(env, bridge))
+        let audio_handler: &mut AudioHandler = unsafe { &mut *(ptr as *mut AudioHandler) };
+        Some(f(env, audio_handler))
     }
 }
