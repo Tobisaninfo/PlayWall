@@ -79,7 +79,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		categoryGeneral.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
 
-		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
+//		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
 	}
 
 	@Override

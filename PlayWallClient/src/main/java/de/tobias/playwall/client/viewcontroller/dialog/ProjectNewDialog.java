@@ -10,7 +10,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
-import de.tobias.playwall.client.view.components.settings.SettingsPage;
+import de.tobias.playwall.client.view.components.settings.SettingsPageWithButtons;
 import de.tobias.playwall.client.viewcontroller.ModalDialogBase;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -27,7 +27,7 @@ import lombok.Getter;
 public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 {
 	@FXML
-	private SettingsPage settingsPage;
+	private SettingsPageWithButtons settingsPage;
 	@FXML
 	private TextField textFieldName;
 	@FXML
