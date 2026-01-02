@@ -126,11 +126,9 @@ public class PlayWallIconOverviewMainViewController extends NVC
 
 		data.stream()
 				.filter(entry -> declaredButUnusedIconTypes.contains(entry.getFontIconType().toString()))
-				.forEach(entry -> {
-					entry.setUnused(true);
-				});
+				.forEach(entry -> entry.setUnused(true));
 
-		FXCollections.sort(data, Comparator.comparing((e) -> e.getFontIconType().toString()));
+		FXCollections.sort(data, Comparator.comparing(e -> e.getFontIconType().toString()));
 
 		return data;
 	}

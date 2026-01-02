@@ -1,5 +1,7 @@
 package de.tobias.playwall.iconoverview.parser;
 
+import lombok.NoArgsConstructor;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,9 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class EnumUsageParser
 {
-
 	public static Set<String> parse(Path sourceRoot, String enumName) throws IOException
 	{
 		final Set<String> usages = parseUsagesFromJavaFiles(sourceRoot, enumName);
@@ -60,8 +62,9 @@ public class EnumUsageParser
 				usedValues.add(matcher.group(1));
 			}
 		}
-		catch(IOException ignored)
+		catch(IOException _)
 		{
+			// ignore
 		}
 	}
 }

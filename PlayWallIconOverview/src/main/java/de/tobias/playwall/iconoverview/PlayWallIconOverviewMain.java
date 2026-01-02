@@ -18,8 +18,7 @@ import java.util.Objects;
 
 public class PlayWallIconOverviewMain extends Application
 {
-	public static Image icon;
-	public static App app;
+	static Image icon;
 
 	public static void main(String[] args)
 	{
@@ -28,7 +27,7 @@ public class PlayWallIconOverviewMain extends Application
 		Localization.load();
 
 		ApplicationUtils.addAppListener(PlayWallIconOverviewMain::applicationWillStart);
-		app = ApplicationUtils.registerMainApplication(PlayWallIconOverviewMain.class);
+		App app = ApplicationUtils.registerMainApplication(PlayWallIconOverviewMain.class);
 
 		app.start(args);
 	}
@@ -45,7 +44,8 @@ public class PlayWallIconOverviewMain extends Application
 	}
 
 	@Override
-	public void init() throws Exception
+	@SuppressWarnings("java:S2696")
+	public void init()
 	{
 		icon = new Image("de/tobias/playwall/iconoverview/icon_small.png");
 
@@ -58,7 +58,7 @@ public class PlayWallIconOverviewMain extends Application
 	{
 		try
 		{
-			final PlayWallIconOverviewMainViewController controller = new PlayWallIconOverviewMainViewController(primaryStage, app);
+			final PlayWallIconOverviewMainViewController controller = new PlayWallIconOverviewMainViewController(primaryStage, ApplicationUtils.getApplication());
 			controller.showStage();
 		}
 		catch(Exception e)
