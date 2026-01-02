@@ -17,4 +17,6 @@ public class Pad
 	private Integer position;
 	private String name;
 	private PadContent content;
+
+	private PadStatus status;
 }

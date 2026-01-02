@@ -27,14 +27,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.controlsfx.control.action.Action;
@@ -46,6 +44,7 @@ import java.util.UUID;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 @RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
+@Getter(AccessLevel.PACKAGE)
 public class MainViewController extends BaseNVC
 {
 	@FXML
@@ -55,6 +54,9 @@ public class MainViewController extends BaseNVC
 
 	@FXML
 	private AnchorPane gridContainer;
+
+	@FXML
+	private FlowPane pageButtonsFlowPane;
 
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
@@ -106,6 +108,8 @@ public class MainViewController extends BaseNVC
 
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
+
+		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
 	}
 
 	private void onWindowClosed()
@@ -164,6 +168,7 @@ public class MainViewController extends BaseNVC
 		updateWindowProperties(project);
 		initializePadViews(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
+		buildPageButtons();
 		showPage(0);
 	}
 
@@ -210,9 +215,27 @@ public class MainViewController extends BaseNVC
 		padViews.clear();
 	}
 
-	public void showPage(int pageNumber)
+	private void buildPageButtons()
 	{
-		final Page page = this.project.getPage(pageNumber);
+		pageButtonsFlowPane.getChildren().clear();
+		for(Page page : project.getPages())
+		{
+			final Button button = new Button(page.getName());
+			button.setOnAction(_ -> showPage(page));
+			button.setFocusTraversable(false);
+			button.setUserData(page);
+			pageButtonsFlowPane.getChildren().add(button);
+		}
+	}
+
+	private void showPage(int position)
+	{
+		final Page page = this.project.getPage(position);
+		showPage(page);
+	}
+
+	private void showPage(Page page)
+	{
 		final int padNumberPerPage = project.getMetadata().getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
@@ -222,6 +245,18 @@ public class MainViewController extends BaseNVC
 
 			view.updateFromPad(pad);
 		}
+
+		// Highlight the current page button
+		pageButtonsFlowPane.getChildren().forEach(node -> node.getStyleClass().remove(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
+		pageButtonsFlowPane.getChildren().stream()
+				.filter(button -> button.getUserData().equals(page))
+				.findFirst()
+				.ifPresent(button -> button.getStyleClass().add(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
+	}
+
+	public PadView getPadViewForPosition(int position)
+	{
+		return padViews.get(position);
 	}
 
 	public PadView getPadViewForPadId(UUID padId)

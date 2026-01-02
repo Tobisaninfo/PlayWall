@@ -23,6 +23,19 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "44c78975-7e53-432e-8526-bdcc5209c54e",
+            "name": "Page 2",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "33ee14cf-56d8-42bf-9aee-f5e3f22d2193",
+                    "name": "",
+                    "position": 0,
+                    "content": null
+                }
+            ]
         }
     ]
 }

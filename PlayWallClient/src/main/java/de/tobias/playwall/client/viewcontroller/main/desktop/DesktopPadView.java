@@ -161,7 +161,19 @@ public class DesktopPadView implements PadView
 		{
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
-			updateStatus(pad.getContent() == null ? PadStatus.EMPTY : PadStatus.READY);
+
+			if(pad.getStatus() != null)
+			{
+				updateStatus(pad.getStatus());
+			}
+			else if(pad.getContent() != null)
+			{
+				updateStatus(PadStatus.READY);
+			}
+			else
+			{
+				updateStatus(PadStatus.EMPTY);
+			}
 		}
 		busyView.showProgress(false);
 	}

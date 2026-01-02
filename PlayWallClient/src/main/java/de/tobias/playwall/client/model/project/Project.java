@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
@@ -29,5 +30,13 @@ public class Project
 			return page.getPad(index.id());
 		}
 		return null;
+	}
+
+	public Pad getPad(UUID padId)
+	{
+		return getPages().stream()
+				.flatMap(page -> page.getPads().stream())
+				.filter(pad -> pad.getId().equals(padId))
+				.findFirst().orElse(null);
 	}
 }
