@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
-<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <HBox maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
@@ -26,17 +22,7 @@
             <padding>
                 <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
             </padding>
-         <VBox fx:id="settingsPageContainer" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-            <children>
-                  <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                      <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="Name">
-                          <TextField fx:id="textFieldName" prefWidth="300" />
-                      </SettingsRow>
-      
-                      <Separator />
-                  </SettingsPage>
-            </children>
-         </VBox>
+         <VBox fx:id="settingsPageContainer" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"></VBox>
          <HBox fx:id="boxButtons" alignment="CENTER_RIGHT" spacing="14.0">
             <VBox.margin>
                <Insets />

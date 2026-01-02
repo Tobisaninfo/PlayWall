@@ -7,20 +7,19 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
-import de.tobias.playwall.client.view.components.settings.SettingsPage;
 import de.tobias.playwall.client.viewcontroller.ParamDialogBase;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -41,16 +40,10 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	private VBox boxCategories;
 
 	@FXML
-	private SettingsPage settingsPage;
-
-	@FXML
-	private TextField textFieldName;
+	private VBox settingsPageContainer;
 
 	@FXML
 	private HBox boxButtons;
-
-	private Button saveButton;
-	private Button cancelButton;
 
 	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
@@ -59,6 +52,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	private Pad pad;
 
 	private Stage stage;
+	private PadSettingsGeneralViewController padSettingsGeneralViewController;
 
 	@InjectConstructor
 	public PadSettingsViewController(FluentClient client)
@@ -85,16 +79,31 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		final SettingsCategory categoryGeneral = new SettingsCategory("Allgemein", FontAwesomeType.GEAR_SOLID);
 		boxCategories.getChildren().add(categoryGeneral);
+		padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
+		settingsPageContainer.getChildren().add(padSettingsGeneralViewController.getSettingsPage());
 
 		categoryGeneral.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
 
 		initButtons();
+
+		selectCategory(categoryGeneral);
+	}
+
+	private void selectCategory(SettingsCategory category)
+	{
+		boxCategories.getChildren().forEach(c -> c.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false));
+		boxCategories.getChildren().stream()
+				.filter(c -> c.equals(category))
+				.findFirst()
+				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true));
 	}
 
 	@Override
 	public void initParameter(Param param)
 	{
 		this.pad = param.pad;
+
+		padSettingsGeneralViewController.initParameter(new PadSettingsGeneralViewController.Param(pad));
 
 		if(pad.getName() == null || pad.getName().isEmpty())
 		{
@@ -104,36 +113,34 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		{
 			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getPosition(), pad.getName()));
 		}
-
-		textFieldName.setText(pad.getName());
 	}
 
 	private void initButtons()
 	{
-		this.saveButton = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
-		this.saveButton.setId("saveButton");
-		this.saveButton.setDefaultButton(true);
-		this.saveButton.setText(Localization.getString("ui.settings.button.save"));
-		this.saveButton.setOnAction(this::saveButtonHandler);
+		final Button saveButton = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
+		saveButton.setId("saveButton");
+		saveButton.setDefaultButton(true);
+		saveButton.setText(Localization.getString("ui.settings.button.save"));
+		saveButton.setOnAction(this::saveButtonHandler);
 
-		this.cancelButton = new PlayWallButton("", FontAwesomeType.XMARK_SOLID);
-		this.cancelButton.setId("cancelButton");
-		this.cancelButton.setText(Localization.getString("ui.settings.button.cancel"));
-		this.cancelButton.setOnAction(this::cancelButtonHandler);
+		final Button cancelButton = new PlayWallButton("", FontAwesomeType.XMARK_SOLID);
+		cancelButton.setId("cancelButton");
+		cancelButton.setText(Localization.getString("ui.settings.button.cancel"));
+		cancelButton.setOnAction(this::cancelButtonHandler);
 
-		boxButtons.getChildren().addAll(this.cancelButton, this.saveButton);
+		boxButtons.getChildren().addAll(cancelButton, saveButton);
 
-//		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
+		saveButton.disableProperty().bind(padSettingsGeneralViewController.getIsValidProperty().not());
 	}
 
 	@FXML
 	private void saveButtonHandler(ActionEvent event)
 	{
-		final String name = textFieldName.getText();
+		padSettingsGeneralViewController.applySettings(pad);
 
 		try
 		{
-			client.pad(pad.getId()).updateSettings(name);
+			client.pad(pad.getId()).updateSettings(pad.getName());
 			getStageContainer().ifPresent(NVCStage::close);
 		}
 		catch(PlayWallApiException e)
