@@ -15,6 +15,9 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.viewcontroller.ParamDialogBase;
+import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +29,9 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsView")
 public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewController.Param>
@@ -48,11 +54,12 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
 
+	private final List<BasePadSettingsViewController> settingViewController = new ArrayList<>();
+
 	@Getter(AccessLevel.NONE)
 	private Pad pad;
 
 	private Stage stage;
-	private PadSettingsGeneralViewController padSettingsGeneralViewController;
 
 	@InjectConstructor
 	public PadSettingsViewController(FluentClient client)
@@ -77,8 +84,8 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		boxCategories.getStyleClass().add("settings-category-box");
 
-		padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
-		settingsPageContainer.getChildren().add(padSettingsGeneralViewController.getSettingsPage());
+		final PadSettingsGeneralViewController padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
+		settingViewController.add(padSettingsGeneralViewController);
 
 		final SettingsCategory categoryGeneral = new SettingsCategory("Allgemein", FontAwesomeType.GEAR_SOLID, padSettingsGeneralViewController);
 		categoryGeneral.setOnAction(this::onSelectCategory);
@@ -110,7 +117,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	{
 		this.pad = param.pad;
 
-		padSettingsGeneralViewController.initParameter(new BasePadSettingsViewController.Param(pad));
+		settingViewController.forEach(controller -> controller.initParameter(new BasePadSettingsViewController.Param(pad)));
 
 		if(pad.getName() == null || pad.getName().isEmpty())
 		{
@@ -137,13 +144,21 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		boxButtons.getChildren().addAll(cancelButton, saveButton);
 
-		saveButton.disableProperty().bind(padSettingsGeneralViewController.getIsValidProperty().not());
+		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
+				() -> settingViewController.stream()
+						.allMatch(vc -> vc.getIsValidProperty().get()),
+				settingViewController.stream()
+						.map(BasePadSettingsViewController::getIsValidProperty)
+						.toArray(Observable[]::new)
+		);
+
+		saveButton.disableProperty().bind(allValidBinding.not());
 	}
 
 	@FXML
 	private void saveButtonHandler(ActionEvent event)
 	{
-		padSettingsGeneralViewController.applySettings(pad);
+		settingViewController.forEach(controller -> controller.applySettings(pad));
 
 		try
 		{
