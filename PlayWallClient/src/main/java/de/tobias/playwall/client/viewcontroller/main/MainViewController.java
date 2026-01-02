@@ -27,11 +27,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -42,13 +44,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
+
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 @RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
 @Getter(AccessLevel.PACKAGE)
 public class MainViewController extends BaseNVC
 {
 	@FXML
-	private VBox headerBox;
+	private HeaderBar headerBar;
 	@FXML
 	private GridPane padGridPane;
 
@@ -88,7 +92,7 @@ public class MainViewController extends BaseNVC
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
 
-		headerBox.getChildren().add(createMenu());
+		headerBar.setLeading(createMenu());
 
 		padUpdateListener = new PadUpdateListener(projectService, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
@@ -102,6 +106,7 @@ public class MainViewController extends BaseNVC
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
+		stageContainer.initStyle(environment == GUI_TESTING ? StageStyle.UNDECORATED : StageStyle.EXTENDED);
 		stageContainer.addCloseHook(this::closeRequest);
 
 		stage.setOnHidden(_ -> onWindowClosed());
@@ -266,7 +271,7 @@ public class MainViewController extends BaseNVC
 				.findFirst().orElse(null);
 	}
 
-	private MenuBar createMenu()
+	private Node createMenu()
 	{
 		final Menu menuFile = createMenuFile();
 		final Menu menuEdit = createMenuEdit();

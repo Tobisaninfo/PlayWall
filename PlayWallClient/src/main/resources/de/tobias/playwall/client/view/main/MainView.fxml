@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HeaderBar?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
             prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
@@ -12,7 +13,7 @@
         <VBox layoutX="-0.7071067690849304" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox fx:id="headerBox"/>
+                <HeaderBar fx:id="headerBar" style="-fx-background-color: #333333"/>
                 <HBox fx:id="toolbar" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0"
                       styleClass="tool-bar">
                     <children>
