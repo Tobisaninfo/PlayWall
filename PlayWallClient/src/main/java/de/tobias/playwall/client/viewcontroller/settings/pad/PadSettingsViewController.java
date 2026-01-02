@@ -11,6 +11,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.components.settings.SettingsPage;
 import de.tobias.playwall.client.viewcontroller.ParamDialogBase;
@@ -18,7 +19,9 @@ import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
@@ -42,6 +45,12 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 	@FXML
 	private TextField textFieldName;
+
+	@FXML
+	private HBox boxButtons;
+
+	private Button saveButton;
+	private Button cancelButton;
 
 	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
@@ -79,7 +88,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		categoryGeneral.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
 
-//		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
+		initButtons();
 	}
 
 	@Override
@@ -99,8 +108,26 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		textFieldName.setText(pad.getName());
 	}
 
+	private void initButtons()
+	{
+		this.saveButton = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
+		this.saveButton.setId("saveButton");
+		this.saveButton.setDefaultButton(true);
+		this.saveButton.setText(Localization.getString("ui.settings.button.save"));
+		this.saveButton.setOnAction(this::saveButtonHandler);
+
+		this.cancelButton = new PlayWallButton("", FontAwesomeType.XMARK_SOLID);
+		this.cancelButton.setId("cancelButton");
+		this.cancelButton.setText(Localization.getString("ui.settings.button.cancel"));
+		this.cancelButton.setOnAction(this::cancelButtonHandler);
+
+		boxButtons.getChildren().addAll(this.cancelButton, this.saveButton);
+
+//		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
+	}
+
 	@FXML
-	private void finishButtonHandler(ActionEvent event)
+	private void saveButtonHandler(ActionEvent event)
 	{
 		final String name = textFieldName.getText();
 
