@@ -149,7 +149,7 @@ public class LaunchDialog extends BaseNVC
 	private void onNewProjectButton()
 	{
 		final ProjectNewDialog dialog = AppContextHolder.getInstance().get(ProjectNewDialog.class);
-		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(null, getContainingWindow());
+		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(getContainingWindow());
 		if(projectOptional.isPresent())
 		{
 			fetchProjects();

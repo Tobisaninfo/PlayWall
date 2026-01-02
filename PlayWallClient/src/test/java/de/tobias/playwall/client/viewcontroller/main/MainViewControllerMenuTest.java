@@ -87,6 +87,6 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		robot.clickOn(robot.lookup(".menu").lookup("Info").queryLabeled());
 		robot.clickOn(robot.lookup(".menu-item").lookup("Über PlayWall").queryLabeled());
 
-		verify(dialog).showAndWait(null, stage);
+		verify(dialog).showAndWait(stage);
 	}
 }
