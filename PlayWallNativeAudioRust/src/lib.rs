@@ -24,6 +24,7 @@ struct AudioHandler {
     duration: Option<f64>,
     audio_stream_handler: Option<AudioStreamHandler>,
     device_name: Option<String>,
+    volume: f32,
 }
 
 impl AudioHandler {
@@ -33,6 +34,7 @@ impl AudioHandler {
             duration: None,
             audio_stream_handler: None,
             device_name: None,
+            volume: 1.0,
         }
     }
 

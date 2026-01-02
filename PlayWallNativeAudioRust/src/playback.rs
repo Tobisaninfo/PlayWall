@@ -77,6 +77,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                         }
                     }
                 });
+                sink.set_volume(audio_handler.volume);
                 sink.append(eof_source);
             }
             sink.play();
@@ -162,6 +163,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     volume: jdouble,
 ) {
     with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        audio_handler.volume = volume as f32;
         if audio_handler.audio_stream_handler.as_ref().is_some() {
             audio_handler
                 .audio_stream_handler
