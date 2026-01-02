@@ -7,8 +7,8 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.model.project.PadStatus;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
@@ -71,6 +71,7 @@ public class DesktopPadView implements PadView
 
 	private PadStatus previousStatus;
 	private PadStatus status;
+	private PadSettingsViewController padSettingsViewController;
 
 	@Getter
 	private Pad pad;
@@ -300,7 +301,11 @@ public class DesktopPadView implements PadView
 
 	private void onSettingsAction(ActionEvent event)
 	{
-		final PadSettingsViewController padSettingsViewController = AppContextHolder.getInstance().get(PadSettingsViewController.class);
+		if(padSettingsViewController == null)
+		{
+			padSettingsViewController = AppContextHolder.getInstance().get(PadSettingsViewController.class);
+		}
+
 		padSettingsViewController.showAndWait(new PadSettingsViewController.Param(pad), superRoot.getScene().getWindow());
 	}
 }
