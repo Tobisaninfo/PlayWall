@@ -87,7 +87,14 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	{
 		this.pad = param.pad;
 
-		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getPosition(), pad.getName()));
+		if(pad.getName() == null || pad.getName().isEmpty())
+		{
+			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE_SHORT, pad.getPosition()));
+		}
+		else
+		{
+			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getPosition(), pad.getName()));
+		}
 
 		textFieldName.setText(pad.getName());
 	}
