@@ -60,7 +60,7 @@ class MainViewControllerPadUpdateListenerTest extends AbstractViewControllerTest
 
 		assertThat(padView.getNamePreviewLabel()).hasText("Test Pad");
 
-		final PadDto newPad = PadDto.builder().id(padId).name("Updated Pad").build();
+		final PadDto newPad = PadDto.builder().id(padId).position(0).name("Updated Pad").build();
 		eventHandler.fireEvent(new PadUpdate(newPad));
 		WaitForAsyncUtils.waitForFxEvents();
 
