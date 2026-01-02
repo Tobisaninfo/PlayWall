@@ -19,6 +19,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 ) {
     let obj_for_global = unsafe { JObject::from_raw(obj.as_raw()) };
     let global_obj = e.new_global_ref(obj_for_global).expect("...");
+    let mut global_obj_opt = Some(global_obj);
 
     with_bridge(&mut e, obj, |env, bridge| {
         if bridge.media_path.is_none() {
@@ -65,13 +66,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 let source = Decoder::new(reader).expect("Failed to create decoder");
 
                 let eof_source = EofCallbackSource::new(source, move || {
-                    // Holen der JVM aus der statischen Variable
                     if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
-                        // Thread an die JVM binden
                         if let Ok(mut env_local) = vm.attach_current_thread() {
                             trace!("Invoking Java onEof callback");
-                            if let Err(e) = env_local.call_method(&global_obj, "onEof", "()V", &[]) {
-                                debug!("Failed to call Java onEof: {:?}", e);
+                            if let Some(obj_ref) = global_obj_opt.take() {
+                                if let Err(e) = env_local.call_method(&obj_ref, "onEof", "()V", &[]) {
+                                    debug!("Failed to call Java onEof: {:?}", e);
+                                }
                             }
                         }
                     }
