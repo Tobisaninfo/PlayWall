@@ -3,6 +3,7 @@
 mod output_devices;
 mod playback;
 mod looping_source;
+mod eof_callback_source;
 
 use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong};

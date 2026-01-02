@@ -7,8 +7,9 @@ use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
 use tracing::trace;
-
+use tracing::debug;
 use crate::looping_source::LoopingSource;
+use crate::eof_callback_source::EofCallbackSource;
 
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_playNative(
@@ -59,7 +60,10 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 let file = File::open(path).expect("Failed to open file");
                 let reader = BufReader::new(file);
                 let source = Decoder::new(reader).expect("Failed to create decoder");
-                sink.append(source);
+                let eof_source = EofCallbackSource::new(source, || {
+                    debug!("Eof");
+                });
+                sink.append(eof_source);
             }
             sink.play();
             trace!("Play (from existing audio handler)");
