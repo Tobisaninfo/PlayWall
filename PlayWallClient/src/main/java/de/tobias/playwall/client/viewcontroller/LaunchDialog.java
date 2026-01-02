@@ -2,7 +2,6 @@ package de.tobias.playwall.client.viewcontroller;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
-import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.tobias.playwall.client.CommandLineOptions;
@@ -58,12 +57,14 @@ public class LaunchDialog extends BaseNVC
 	@FXML
 	private Button deleteButton;
 
+	private final App app;
 	private final FluentClient client;
 	private final CommandLineOptions commandLineOptions;
 
 	@InjectConstructor
-	LaunchDialog(FluentClient client, CommandLineOptions commandLineOptions)
+	LaunchDialog(App app, FluentClient client, CommandLineOptions commandLineOptions)
 	{
+		this.app = app;
 		this.client = client;
 		this.commandLineOptions = commandLineOptions;
 	}
@@ -71,8 +72,6 @@ public class LaunchDialog extends BaseNVC
 	@Override
 	public void init()
 	{
-		final App app = ApplicationUtils.getApplication();
-
 		// Setup launch screen labels and image
 		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		imageView.setImage(new Image(IMAGE));

@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.server;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 public class ServerLauncher
 {
 	private final ServerPathLookup serverPathLookup;
+	private final App app;
 
 	private Process serverProcess;
 
@@ -53,7 +54,7 @@ public class ServerLauncher
 
 			final Path javaExecutable = jdkFolder.resolve("bin").resolve(OS.isWindows() ? "java.exe" : "java");
 
-			final String version = ApplicationUtils.getApplication().getInfo().getVersion();
+			final String version = app.getInfo().getVersion();
 			final Path serverJar = resourceFolder.resolve("PlayWallServer-" + version + ".jar");
 			if(Files.notExists(serverJar))
 			{
@@ -63,7 +64,7 @@ public class ServerLauncher
 			javaExecutable.toFile().setExecutable(true);
 			Logger.debug("Set execute permission for: " + javaExecutable.toAbsolutePath());
 
-			final Path loggingPath = ApplicationUtils.getApplication().getPath(PathType.LOG, "server.log");
+			final Path loggingPath = app.getPath(PathType.LOG, "server.log");
 
 			final List<String> jvmOptions = List.of("--enable-native-access=ALL-UNNAMED");
 			final List<String> programArguments = new ArrayList<>();
@@ -172,7 +173,7 @@ public class ServerLauncher
 	@SneakyThrows
 	private void printServerLog()
 	{
-		try(BufferedWriter writer = Files.newBufferedWriter(ApplicationUtils.getApplication().getPath(PathType.LOG, "client_server.log")))
+		try(BufferedWriter writer = Files.newBufferedWriter(app.getPath(PathType.LOG, "client_server.log")))
 		{
 			try(BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream())))
 			{
