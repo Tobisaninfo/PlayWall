@@ -13,7 +13,7 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.components.settings.SettingsPage;
-import de.tobias.playwall.client.viewcontroller.ParamModalDialogBase;
+import de.tobias.playwall.client.viewcontroller.ParamDialogBase;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsView")
-public class PadSettingsViewController extends ParamModalDialogBase<PadSettingsViewController.Param, Void>
+public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewController.Param>
 {
 	@AllArgsConstructor
 	public static class Param
