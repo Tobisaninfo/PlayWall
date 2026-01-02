@@ -15,6 +15,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.viewcontroller.ParamDialogBase;
+import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -54,7 +55,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
 
-	private final List<BasePadSettingsViewController> settingViewController = new ArrayList<>();
+	private final List<BasePadSettingsGeneralViewController> settingViewController = new ArrayList<>();
 
 	@Getter(AccessLevel.NONE)
 	private Pad pad;
@@ -117,7 +118,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	{
 		this.pad = param.pad;
 
-		settingViewController.forEach(controller -> controller.initParameter(new BasePadSettingsViewController.Param(pad)));
+		settingViewController.forEach(controller -> controller.initParameter(new BasePadSettingsGeneralViewController.Param(pad)));
 
 		if(pad.getName() == null || pad.getName().isEmpty())
 		{
@@ -148,7 +149,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 				() -> settingViewController.stream()
 						.allMatch(vc -> vc.getIsValidProperty().get()),
 				settingViewController.stream()
-						.map(BasePadSettingsViewController::getIsValidProperty)
+						.map(BaseSettingsViewController::getIsValidProperty)
 						.toArray(Observable[]::new)
 		);
 
@@ -158,7 +159,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	@FXML
 	private void saveButtonHandler(ActionEvent event)
 	{
-		settingViewController.forEach(controller -> controller.applySettings(pad));
+		settingViewController.forEach(controller -> controller.applySettings(new BasePadSettingsGeneralViewController.Param(pad)));
 
 		try
 		{

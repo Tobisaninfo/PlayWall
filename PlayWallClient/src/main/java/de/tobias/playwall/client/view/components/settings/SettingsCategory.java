@@ -3,7 +3,7 @@ package de.tobias.playwall.client.view.components.settings;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.icon.FontIconType;
-import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
+import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,9 +15,9 @@ import lombok.Getter;
 public class SettingsCategory extends Button
 {
 	@Getter
-	private final BasePadSettingsViewController settingsPageController;
+	private final BaseSettingsViewController settingsPageController;
 
-	public SettingsCategory(String labelText, FontIconType iconType, BasePadSettingsViewController settingsPageController)
+	public SettingsCategory(String labelText, FontIconType iconType, BaseSettingsViewController settingsPageController)
 	{
 		this.settingsPageController = settingsPageController;
 
