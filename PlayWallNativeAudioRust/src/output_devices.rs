@@ -57,7 +57,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         return;
     }
 
-    with_audio_handler(&mut env, object, |env, audio_handler| {
+    with_audio_handler(&mut env, object, |_, audio_handler| {
         let stream_handler = OutputStreamBuilder::from_device(device.unwrap())
             .unwrap()
             .open_stream()

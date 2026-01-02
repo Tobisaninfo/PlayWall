@@ -5,13 +5,12 @@ mod playback;
 mod looping_source;
 mod eof_callback_source;
 
-use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
+use jni::objects::{JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong};
 use jni::{JNIEnv, JavaVM};
 use lazy_static::lazy_static;
-use rodio::{Decoder, OutputStream, Sink, Source};
+use rodio::{OutputStream, Sink};
 use std::fs::File;
-use std::io::BufReader;
 use std::str::FromStr;
 use std::sync::RwLock;
 use symphonia::core::io::MediaSourceStream;
@@ -52,6 +51,7 @@ impl AudioHandler {
     }
 }
 
+#[allow(dead_code)]
 struct AudioStreamHandler {
     stream_handler: OutputStream,
     sink: Sink,
@@ -160,13 +160,10 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     debug!("Load path: {}", &path_str);
 
     if let Ok(file) = File::open(&path_str) {
-        let reader = BufReader::new(file);
-
-        let mss =
-            MediaSourceStream::new(Box::new(File::open(&path_str).unwrap()), Default::default()); // TODO better file handling
+        let media_source_stream = MediaSourceStream::new(Box::new(file), Default::default());
         let hint = Hint::new();
         let probed = get_probe()
-            .format(&hint, mss, &Default::default(), &Default::default())
+            .format(&hint, media_source_stream, &Default::default(), &Default::default())
             .unwrap();
         let format = probed.format;
 
@@ -175,12 +172,10 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
         let duration_seconds;
         if let (Some(sample_rate), Some(n_frames)) = (params.sample_rate, params.n_frames) {
-            duration_seconds = (n_frames as f64 / sample_rate as f64);
+            duration_seconds = n_frames as f64 / sample_rate as f64;
         } else {
             duration_seconds = 0.0;
         }
-
-        let source = Decoder::new(reader).unwrap().buffered();
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             audio_handler.setMedia(path_str, duration_seconds);
             trace!("Loaded media");

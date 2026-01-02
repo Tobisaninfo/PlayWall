@@ -3,7 +3,7 @@ use jni::objects::JObject;
 use jni::sys::{jboolean, jdouble, jlong};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
-use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink, Source};
+use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink};
 use std::fs::File;
 use std::io::BufReader;
 use tracing::trace;
@@ -94,7 +94,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
 ) {
     with_audio_handler(&mut env, obj, |_env, audio_handler| {
-        if (audio_handler.audio_stream_handler.as_ref().is_some()) {
+        if audio_handler.audio_stream_handler.as_ref().is_some() {
             audio_handler.audio_stream_handler.as_ref().unwrap().sink.pause();
             trace!("Pause");
         } else {
@@ -123,7 +123,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
 ) -> jboolean {
     with_audio_handler(&mut env, obj, |_env, audio_handler| {
-        return if (audio_handler.audio_stream_handler.as_ref().is_some()) {
+        return if audio_handler.audio_stream_handler.as_ref().is_some() {
             let paused = audio_handler
                 .audio_stream_handler
                 .as_ref()
@@ -162,7 +162,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     volume: jdouble,
 ) {
     with_audio_handler(&mut env, obj, |_env, audio_handler| {
-        if (audio_handler.audio_stream_handler.as_ref().is_some()) {
+        if audio_handler.audio_stream_handler.as_ref().is_some() {
             audio_handler
                 .audio_stream_handler
                 .as_ref()
