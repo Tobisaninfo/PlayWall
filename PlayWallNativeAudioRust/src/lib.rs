@@ -2,11 +2,11 @@
 
 mod output_devices;
 mod playback;
+mod looping_source;
 
 use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong};
 use jni::{JNIEnv, JavaVM};
-use rodio::source::Buffered;
 use rodio::{Decoder, OutputStream, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
