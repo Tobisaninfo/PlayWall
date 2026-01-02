@@ -106,4 +106,25 @@ class RustAudioHandlerTest
 				.atMost(2500, MILLISECONDS)
 				.untilAsserted(() -> verify(mock).onEof());
 	}
+
+	@Test
+	void testGetDuration() throws Exception
+	{
+		final RustAudioHandler handler = new RustAudioHandler(mock);
+		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
+		assertThat(handler.isMediaLoaded()).isTrue();
+
+		assertThat(handler.getDuration().toSeconds()).isEqualTo(30);
+	}
+
+	@Test
+	void testUnloadMedia() throws Exception
+	{
+		final RustAudioHandler handler = new RustAudioHandler(mock);
+		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
+		assertThat(handler.isMediaLoaded()).isTrue();
+
+		handler.unloadMedia();
+		assertThat(handler.isMediaLoaded()).isFalse();
+	}
 }
