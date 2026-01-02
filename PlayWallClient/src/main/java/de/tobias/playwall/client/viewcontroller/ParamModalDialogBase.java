@@ -14,7 +14,7 @@ import java.util.Optional;
  *
  * @param <R> Return type of the dialog.
  */
-public abstract class ModalBaseNVC<R> extends BaseNVC
+public abstract class ParamModalDialogBase<P, R> extends ViewControllerBase implements ParamView<P>
 {
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
@@ -32,8 +32,9 @@ public abstract class ModalBaseNVC<R> extends BaseNVC
 		return null;
 	}
 
-	public Optional<R> showAndWait(Window owner)
+	public Optional<R> showAndWait(P param, Window owner)
 	{
+		initParameter(param);
 		getStageContainer().ifPresent(nvcStage -> nvcStage.initOwner(owner).showAndWait());
 		return Optional.ofNullable(getResultValue());
 	}

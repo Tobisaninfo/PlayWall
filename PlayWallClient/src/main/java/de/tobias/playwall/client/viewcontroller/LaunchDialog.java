@@ -36,7 +36,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "LaunchDialog")
-public class LaunchDialog extends BaseNVC
+public class LaunchDialog extends ViewControllerBase
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
 
