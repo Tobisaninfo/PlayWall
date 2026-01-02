@@ -8,12 +8,12 @@ mod eof_callback_source;
 use jni::objects::{GlobalRef, JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong};
 use jni::{JNIEnv, JavaVM};
+use lazy_static::lazy_static;
 use rodio::{Decoder, OutputStream, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
 use std::str::FromStr;
 use std::sync::RwLock;
-use lazy_static::lazy_static;
 use symphonia::core::io::MediaSourceStream;
 use symphonia::core::probe::Hint;
 use symphonia::default::get_probe;
@@ -21,7 +21,6 @@ use tracing::{debug, trace};
 use tracing_subscriber;
 
 struct RustBridge {
-    java_obj: GlobalRef,
     jvm: JavaVM,
     media_path: Option<String>,
     duration: Option<f64>,
@@ -30,9 +29,8 @@ struct RustBridge {
 }
 
 impl RustBridge {
-    fn new(java_obj: GlobalRef, jvm: JavaVM) -> Self {
+    fn new(jvm: JavaVM) -> Self {
         Self {
-            java_obj,
             jvm,
             media_path: None,
             duration: None,
@@ -112,10 +110,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         return;
     }
 
-    let global_ref = env.new_global_ref(&this).unwrap();
     let jvm = env.get_java_vm().unwrap();
 
-    let bridge = Box::new(RustBridge::new(global_ref, jvm));
+    let bridge = Box::new(RustBridge::new(jvm));
     let ptr = Box::into_raw(bridge) as jlong;
 
     env.set_field(
