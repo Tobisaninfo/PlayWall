@@ -64,4 +64,11 @@ public class AudioPadContentController extends PadController
 		setStatus(PadControllerStatus.STOP);
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
+
+	@Override
+	public void onEof()
+	{
+		setStatus(PadControllerStatus.EOF);
+		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+	}
 }

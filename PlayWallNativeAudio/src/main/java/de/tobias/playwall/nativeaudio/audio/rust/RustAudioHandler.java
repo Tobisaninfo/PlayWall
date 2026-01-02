@@ -124,8 +124,10 @@ public class RustAudioHandler extends AudioHandler
 
 	public static native AudioDevice[] getOutputDevices();
 
+	// Callback from rust code
+	@SuppressWarnings("unused")
 	void onEof()
 	{
-		log.warn("EOF reached");
+		getController().onEof();
 	}
 }
