@@ -1,4 +1,4 @@
-use crate::{with_bridge, AudioStreamHandler};
+use crate::{with_audio_handler, AudioStreamHandler};
 use jni::objects::JObject;
 use jni::sys::{jboolean, jdouble, jlong};
 use jni::JNIEnv;
@@ -21,16 +21,16 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     let global_obj = e.new_global_ref(obj_for_global).expect("...");
     let mut global_obj_opt = Some(global_obj);
 
-    with_bridge(&mut e, obj, |env, bridge| {
-        if bridge.media_path.is_none() {
+    with_audio_handler(&mut e, obj, |env, audio_handler| {
+        if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
             return;
         }
 
-        if bridge.audio_stream_handler.is_none() {
+        if audio_handler.audio_stream_handler.is_none() {
             let host = rodio::cpal::default_host();
-            let device = if let Some(ref name) = bridge.device_name {
+            let device = if let Some(ref name) = audio_handler.device_name {
                 host.output_devices()
                     .unwrap()
                     .find(|d| d.name().unwrap_or_default() == *name)
@@ -46,16 +46,16 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
             let stream_handler = stream_builder.unwrap().open_stream().unwrap();
             let sink = Sink::connect_new(stream_handler.mixer());
-            bridge.setAudioHandlerStream(AudioStreamHandler {
+            audio_handler.setAudioHandlerStream(AudioStreamHandler {
                 stream_handler,
                 sink,
             });
             trace!("Init output stream and sink (recreated)");
         }
 
-        let sink = &bridge.audio_stream_handler.as_ref().unwrap().sink;
+        let sink = &audio_handler.audio_stream_handler.as_ref().unwrap().sink;
         if sink.empty() {
-            let path = bridge.media_path.as_ref().unwrap();
+            let path = audio_handler.media_path.as_ref().unwrap();
 
             if looping == 1 {
                 let source = LoopingSource::new(path.clone());
@@ -93,9 +93,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        if (bridge.audio_stream_handler.as_ref().is_some()) {
-            bridge.audio_stream_handler.as_ref().unwrap().sink.pause();
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        if (audio_handler.audio_stream_handler.as_ref().is_some()) {
+            audio_handler.audio_stream_handler.as_ref().unwrap().sink.pause();
             trace!("Pause");
         } else {
             trace!("No audio handler to pause, skipping");
@@ -108,8 +108,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        if let Some(handler) = bridge.audio_stream_handler.take() {
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        if let Some(handler) = audio_handler.audio_stream_handler.take() {
             handler.sink.stop();
             // handler will be dropped from memory to free resources
         }
@@ -122,15 +122,15 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) -> jboolean {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        return if (bridge.audio_stream_handler.as_ref().is_some()) {
-            let paused = bridge
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        return if (audio_handler.audio_stream_handler.as_ref().is_some()) {
+            let paused = audio_handler
                 .audio_stream_handler
                 .as_ref()
                 .unwrap()
                 .sink
                 .is_paused();
-            let is_empty = bridge.audio_stream_handler.as_ref().unwrap().sink.empty();
+            let is_empty = audio_handler.audio_stream_handler.as_ref().unwrap().sink.empty();
             (!paused && !is_empty) as jboolean
         } else {
             false as jboolean
@@ -144,13 +144,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: JNIEnv,
     obj: JObject,
 ) -> jlong {
-    with_bridge(&mut env, obj, |env, bridge| {
-        if bridge.media_path.is_none() {
+    with_audio_handler(&mut env, obj, |env, audio_handler| {
+        if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
             return 0;
         }
-        return bridge.duration.unwrap().round() as jlong;
+        return audio_handler.duration.unwrap().round() as jlong;
     })
     .unwrap()
 }
@@ -161,9 +161,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
     volume: jdouble,
 ) {
-    with_bridge(&mut env, obj, |_env, bridge| {
-        if (bridge.audio_stream_handler.as_ref().is_some()) {
-            bridge
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        if (audio_handler.audio_stream_handler.as_ref().is_some()) {
+            audio_handler
                 .audio_stream_handler
                 .as_ref()
                 .unwrap()
