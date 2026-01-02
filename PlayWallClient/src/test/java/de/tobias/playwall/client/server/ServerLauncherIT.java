@@ -1,5 +1,7 @@
 package de.tobias.playwall.client.server;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
 import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -34,6 +36,7 @@ class ServerLauncherIT
 	{
 		final AppContext context = AppContextHolder.getInstance();
 		context.registerLazySingleton(CommandLineOptions.class, _ -> options);
+		context.registerLazySingleton(App.class, _ -> ApplicationUtils.getApplication());
 
 		when(options.hasOption(CommandLineOptions.SERVER_PATH)).thenReturn(true);
 		when(options.getOptionValue(CommandLineOptions.SERVER_PATH)).thenReturn(Paths.get("target/build/server").toAbsolutePath().toString());

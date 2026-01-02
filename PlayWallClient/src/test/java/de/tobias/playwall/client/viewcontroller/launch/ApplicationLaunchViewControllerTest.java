@@ -1,7 +1,5 @@
 package de.tobias.playwall.client.viewcontroller.launch;
 
-import de.thecodelabs.utils.application.App;
-import de.thecodelabs.utils.application.ApplicationInfo;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.net.Client;
@@ -53,13 +51,6 @@ class ApplicationLaunchViewControllerTest extends AbstractViewControllerTest
 		this.stage = stage;
 		context = AppContextHolder.getInstance();
 		context.registerLazy(Stage.class, _ -> stage);
-
-		final App app = mock(App.class);
-		final ApplicationInfo appInfo = mock(ApplicationInfo.class);
-		when(appInfo.getName()).thenReturn("PlayWall");
-		when(appInfo.getVersion()).thenReturn("0.0.1");
-		when(app.getInfo()).thenReturn(appInfo);
-		context.registerLazySingleton(App.class, _ -> app);
 
 		context.registerLazySingleton(ServerLauncher.class, _ -> serverLauncher);
 		context.registerLazySingleton(Client.class, _ -> client);
