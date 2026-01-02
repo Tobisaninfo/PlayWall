@@ -8,6 +8,7 @@ import de.tobias.playwall.client.appcontext.InjectField;
 import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.model.project.Pad;
+import de.tobias.playwall.client.model.project.PadIndex;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.utils.Minifier;
 import de.tobias.playwall.client.view.components.PseudoClasses;
@@ -52,7 +53,7 @@ public class ModernStyle implements Styleable
 
 		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(renderGlobalTemplate());
-//		page.getPads().forEach(pad -> stringBuilder.append(renderPadTemplate(pad)));
+		page.getPads().forEach(pad -> stringBuilder.append(renderPadTemplate(new PadIndex(pad.getPosition(), page.getPosition()), pad)));
 
 		try
 		{
@@ -94,8 +95,28 @@ public class ModernStyle implements Styleable
 		return CssTemplateProcessor.render(globalTemplateString, values);
 	}
 
-	private String renderPadTemplate(Pad pad)
+	private String renderPadTemplate(PadIndex padIndex, Pad pad)
 	{
-		return CssTemplateProcessor.render(padTemplateString, Map.of());
+		return String.join(
+				renderPadTemplate(padIndex, ModernColor.GRAY1, ""),
+				renderPadTemplate(padIndex, ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())),
+				renderPadTemplate(padIndex, ModernColor.ORANGE1, MessageFormat.format(":{0}", PseudoClasses.WARN_CLASS.getPseudoClassName()))
+		);
+	}
+
+	private String renderPadTemplate(PadIndex padIndex, ModernColor color, String pseudoClass)
+	{
+		final Map<String, String> values = new HashMap<>();
+		values.put("prefix", String.valueOf(padIndex));
+		values.put("class", pseudoClass);
+		values.put("buttonColor", color.getButtonColor());
+		values.put("playbarTrackColor", color.getPlaybarColor());
+		values.put("playbarBarColor", color.getPlaybarTrackColor());
+
+		values.put("padColor", color.paint());
+		values.put("padCueInColor", ModernColor.BLUE1.paint()); // TODO: From configuruation
+
+		values.put("fontColor", color.getFontColor());
+		return CssTemplateProcessor.render(padTemplateString, values);
 	}
 }
