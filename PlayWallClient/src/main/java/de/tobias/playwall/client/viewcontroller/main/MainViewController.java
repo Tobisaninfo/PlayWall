@@ -166,8 +166,8 @@ public class MainViewController extends BaseNVC
 		updateWindowProperties(project);
 		initializePadViews(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
-		showPage(0);
 		buildPageButtons();
+		showPage(0);
 	}
 
 	private void initializePadViews(int columns, int rows)
@@ -242,6 +242,10 @@ public class MainViewController extends BaseNVC
 
 			view.updateFromPad(pad);
 		}
+
+		// Highlight the current page button
+		pageButtonsFlowPane.getChildren().forEach(node -> node.getStyleClass().remove(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
+		pageButtonsFlowPane.getChildren().get(page.getPosition()).getStyleClass().add(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
 	}
 
 	public PadView getPadViewForPadId(UUID padId)
