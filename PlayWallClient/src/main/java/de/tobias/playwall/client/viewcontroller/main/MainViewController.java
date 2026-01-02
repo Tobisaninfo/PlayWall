@@ -26,9 +26,11 @@ import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
@@ -53,14 +55,16 @@ public class MainViewController extends BaseNVC
 {
 	@FXML
 	private HeaderBar headerBar;
+	private Label projectTitleLabel;
+
+	@FXML
+	private FlowPane pageButtonsFlowPane;
+
 	@FXML
 	private GridPane padGridPane;
 
 	@FXML
 	private AnchorPane gridContainer;
-
-	@FXML
-	private FlowPane pageButtonsFlowPane;
 
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
@@ -92,7 +96,19 @@ public class MainViewController extends BaseNVC
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
 
-		headerBar.setLeading(createMenu());
+		projectTitleLabel = new Label();
+		projectTitleLabel.getStyleClass().add("window-title");
+		final ImageView logoImageView = new ImageView(iconProvider.getStageIcon());
+		logoImageView.setFitWidth(20);
+		logoImageView.setFitHeight(20);
+		final HBox headerBox = new HBox(logoImageView, projectTitleLabel, createMenu());
+		headerBox.setPadding(new Insets(0, 0, 0, 14));
+		headerBox.setAlignment(Pos.CENTER_LEFT);
+		headerBox.setSpacing(10);
+		HeaderBar.setDragType(projectTitleLabel, HeaderDragType.DRAGGABLE_SUBTREE);
+		HeaderBar.setDragType(logoImageView, HeaderDragType.DRAGGABLE_SUBTREE);
+
+		headerBar.setLeading(headerBox);
 
 		padUpdateListener = new PadUpdateListener(projectService, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
@@ -114,6 +130,7 @@ public class MainViewController extends BaseNVC
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
 
+		projectTitleLabel.textProperty().bind(stage.titleProperty());
 		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
 	}
 
