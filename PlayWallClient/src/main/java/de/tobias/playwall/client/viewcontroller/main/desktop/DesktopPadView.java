@@ -7,8 +7,11 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Pad;
+import de.tobias.playwall.client.model.project.PadIndex;
 import de.tobias.playwall.client.model.project.PadStatus;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.utils.NodeWalker;
+import de.tobias.playwall.client.view.pad.PadIndexable;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
@@ -18,13 +21,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -140,8 +141,26 @@ public class DesktopPadView implements PadView
 
 		// Button HBOX
 		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
-
 		buttonBox.getChildren().addAll(playButton, pauseButton, stopButton, newButton, settingsButton);
+		// Make all buttons the same width
+		buttonBox.prefWidthProperty().bind(superRoot.widthProperty());
+		for(Node child : buttonBox.getChildren())
+		{
+			if(child instanceof Region region)
+			{
+				HBox.setHgrow(region, Priority.ALWAYS);
+				region.setMaxWidth(Double.MAX_VALUE);
+			}
+		}
+
+		// alle Labels in der InfoBox sollen die gleiche Höhe haben, damit die Icons auf gleicher höhe sind
+		for(Node child : infoBox.getChildren())
+		{
+			if(child instanceof Label)
+			{
+				((Label) child).setMaxHeight(Double.MAX_VALUE);
+			}
+		}
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
@@ -176,6 +195,11 @@ public class DesktopPadView implements PadView
 			{
 				updateStatus(PadStatus.EMPTY);
 			}
+			addStyleClasses(new PadIndex(pad.getPosition(), 0)); // TODO
+		}
+		else
+		{
+			removeStyleClasses();
 		}
 		busyView.showProgress(false);
 	}
@@ -197,6 +221,22 @@ public class DesktopPadView implements PadView
 		{
 			Platform.runLater(this::updateButtonStates);
 		}
+	}
+
+	public void addStyleClasses(PadIndex index)
+	{
+		NodeWalker.getAllNodes((Parent) getRootNode())
+				.stream()
+				.filter(node -> node instanceof PadIndexable)
+				.forEach(node -> ((PadIndexable) node).setIndex(index));
+	}
+
+	public void removeStyleClasses()
+	{
+		NodeWalker.getAllNodes((Parent) getRootNode())
+				.stream()
+				.filter(node -> node instanceof PadIndexable)
+				.forEach(node -> ((PadIndexable) node).setIndex(null));
 	}
 
 	private void onPlayAction(ActionEvent event)

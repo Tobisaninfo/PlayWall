@@ -27,7 +27,7 @@ public class Project
 		final Page page = getPage(index.getPagePosition());
 		if(page != null)
 		{
-			return page.getPad(index.id());
+			return page.getPad(index.padPosition());
 		}
 		return null;
 	}

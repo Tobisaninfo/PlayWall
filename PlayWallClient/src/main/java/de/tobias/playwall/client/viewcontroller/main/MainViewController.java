@@ -282,6 +282,8 @@ public class MainViewController extends ViewControllerBase
 				.filter(button -> button.getUserData().equals(page))
 				.findFirst()
 				.ifPresent(button -> button.getStyleClass().add(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
+
+		styleable.renderStylesheets(getStage(), page);
 	}
 
 	public PadView getPadViewForPosition(int position)

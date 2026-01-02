@@ -1,7 +1,7 @@
 /* @formatter:off */
 
-.pad${#prefix}-icon${#class} {
-	-fx-text-fill: ${#buttonColor};
+.pad${#prefix}-icon${#class} .icon {
+	-fx-fill: ${#buttonColor};
 }
 
 .pad${#prefix}-playbar${#class} .track {

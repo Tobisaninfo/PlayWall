@@ -9,17 +9,17 @@ import java.io.Serializable;
  * @since 6.0.0
  */
 // Serializable is for Pad Drag and Drop necessary
-public record PadIndex(int id, int page) implements Serializable
+public record PadIndex(int padPosition, int pagePosition) implements Serializable
 {
 	public int getPagePosition()
 	{
-		return page;
+		return pagePosition;
 	}
 
 	@Override
 	public String toString()
 	{
-		return String.valueOf(id);
+		return String.valueOf(padPosition);
 	}
 
 }
