@@ -21,7 +21,6 @@ use tracing::{debug, trace};
 use tracing_subscriber;
 
 struct RustBridge {
-    jvm: JavaVM,
     media_path: Option<String>,
     duration: Option<f64>,
     audio_stream_handler: Option<AudioStreamHandler>,
@@ -29,9 +28,8 @@ struct RustBridge {
 }
 
 impl RustBridge {
-    fn new(jvm: JavaVM) -> Self {
+    fn new() -> Self {
         Self {
-            jvm,
             media_path: None,
             duration: None,
             audio_stream_handler: None,
@@ -112,7 +110,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
     let jvm = env.get_java_vm().unwrap();
 
-    let bridge = Box::new(RustBridge::new(jvm));
+    let bridge = Box::new(RustBridge::new());
     let ptr = Box::into_raw(bridge) as jlong;
 
     env.set_field(
