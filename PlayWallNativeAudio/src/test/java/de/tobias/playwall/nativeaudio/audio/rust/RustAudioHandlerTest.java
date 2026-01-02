@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.core.io.ClassPathResource;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.verify;
@@ -102,8 +102,8 @@ class RustAudioHandlerTest
 		handler.play();
 
 		await()
-				.atLeast(2, SECONDS)
-				.atMost(3, SECONDS)
+				.atLeast(1500, MILLISECONDS)
+				.atMost(2500, MILLISECONDS)
 				.untilAsserted(() -> verify(mock).onEof());
 	}
 }
