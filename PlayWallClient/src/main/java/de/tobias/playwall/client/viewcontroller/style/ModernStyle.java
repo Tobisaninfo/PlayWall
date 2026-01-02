@@ -33,8 +33,8 @@ public class ModernStyle implements Styleable
 	@PostConstruct
 	void init()
 	{
-		globalTemplateString = Minifier.minify(app.getClasspathResource("style/template-modern-global.css").getAsString());
-		padTemplateString = Minifier.minify(app.getClasspathResource("style/template-modern-pad.css").getAsString());
+		globalTemplateString = Minifier.minifyCss(app.getClasspathResource("style/template-modern-global.css").getAsString());
+		padTemplateString = Minifier.minifyCss(app.getClasspathResource("style/template-modern-pad.css").getAsString());
 	}
 
 	@Override
