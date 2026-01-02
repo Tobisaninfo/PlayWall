@@ -13,11 +13,14 @@ use crate::eof_callback_source::EofCallbackSource;
 
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_playNative(
-    mut env: JNIEnv,
+    mut e: JNIEnv,
     obj: JObject,
     looping: jboolean,
 ) {
-    with_bridge(&mut env, obj, |env, bridge| {
+    let obj_for_global = unsafe { JObject::from_raw(obj.as_raw()) };
+    let global_obj = e.new_global_ref(obj_for_global).expect("...");
+
+    with_bridge(&mut e, obj, |env, bridge| {
         if bridge.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
@@ -60,8 +63,18 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 let file = File::open(path).expect("Failed to open file");
                 let reader = BufReader::new(file);
                 let source = Decoder::new(reader).expect("Failed to create decoder");
-                let eof_source = EofCallbackSource::new(source, || {
-                    debug!("Eof");
+
+                let eof_source = EofCallbackSource::new(source, move || {
+                    // Holen der JVM aus der statischen Variable
+                    if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
+                        // Thread an die JVM binden
+                        if let Ok(mut env_local) = vm.attach_current_thread() {
+                            trace!("Invoking Java onEof callback");
+                            if let Err(e) = env_local.call_method(&global_obj, "onEof", "()V", &[]) {
+                                debug!("Failed to call Java onEof: {:?}", e);
+                            }
+                        }
+                    }
                 });
                 sink.append(eof_source);
             }

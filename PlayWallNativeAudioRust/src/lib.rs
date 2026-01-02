@@ -12,6 +12,8 @@ use rodio::{Decoder, OutputStream, Sink, Source};
 use std::fs::File;
 use std::io::BufReader;
 use std::str::FromStr;
+use std::sync::RwLock;
+use lazy_static::lazy_static;
 use symphonia::core::io::MediaSourceStream;
 use symphonia::core::probe::Hint;
 use symphonia::default::get_probe;
@@ -57,6 +59,17 @@ impl RustBridge {
 struct AudioStreamHandler {
     stream_handler: OutputStream,
     sink: Sink,
+}
+
+lazy_static! {
+    static ref JVM: RwLock<Option<JavaVM>> = RwLock::new(None);
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn JNI_OnLoad(vm: JavaVM, _reserved: *mut std::ffi::c_void) -> jni::sys::jint {
+    let mut guard = JVM.write().unwrap();
+    *guard = Some(vm);
+    jni::sys::JNI_VERSION_1_8
 }
 
 #[unsafe(no_mangle)]
