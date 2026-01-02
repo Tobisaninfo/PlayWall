@@ -1,0 +1,470 @@
+[
+    {
+        "name": "RED1",
+        "colors": {
+            "hi": "#ef9a9a",
+            "low": "#ef5350",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "RED2",
+        "colors": {
+            "hi": "#ef5350",
+            "low": "#e53935",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "RED3",
+        "colors": {
+            "hi": "#e53935",
+            "low": "#c62828",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "DARK_RED1",
+        "colors": {
+            "hi": "#D92349",
+            "low": "#AD2039",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "DARK_RED2",
+        "colors": {
+            "hi": "#C92349",
+            "low": "#8D2039",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "DARK_RED3",
+        "colors": {
+            "hi": "#A90329",
+            "low": "#6D0019",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "PINK1",
+        "colors": {
+            "hi": "#f48fb1",
+            "low": "#ec407a",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "PINK2",
+        "colors": {
+            "hi": "#ec407a",
+            "low": "#d81b60",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "PINK3",
+        "colors": {
+            "hi": "#d81b60",
+            "low": "#ad1457",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "PURPLE1",
+        "colors": {
+            "hi": "#ce93d8",
+            "low": "#ab47bc",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "PURPLE2",
+        "colors": {
+            "hi": "#ab47bc",
+            "low": "#8e24aa",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "PURPLE3",
+        "colors": {
+            "hi": "#8e24aa",
+            "low": "#6a1b9a",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIGHT_BLUE1",
+        "colors": {
+            "hi": "#80deea",
+            "low": "#26c6da",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIGHT_BLUE2",
+        "colors": {
+            "hi": "#26c6da",
+            "low": "#00acc1",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIGHT_BLUE3",
+        "colors": {
+            "hi": "#00acc1",
+            "low": "#00838f",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "BLUE1",
+        "colors": {
+            "hi": "#90caf9",
+            "low": "#42a5f5",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "BLUE2",
+        "colors": {
+            "hi": "#42a5f5",
+            "low": "#1e88e5",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "BLUE3",
+        "colors": {
+            "hi": "#1e88e5",
+            "low": "#1565c0",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIGHT_GREEN1",
+        "colors": {
+            "hi": "#c5e1a5",
+            "low": "#9ccc65",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIGHT_GREEN2",
+        "colors": {
+            "hi": "#9ccc65",
+            "low": "#7cb342",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIGHT_GREEN3",
+        "colors": {
+            "hi": "#7cb342",
+            "low": "#558b2f",
+            "font": "#ffffff",
+            "button": "#ffffff",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIME1",
+        "colors": {
+            "hi": "#e6ee9c",
+            "low": "#d4e157",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIME2",
+        "colors": {
+            "hi": "#d4e157",
+            "low": "#c0ca33",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "LIME3",
+        "colors": {
+            "hi": "#c0ca33",
+            "low": "#9e9d24",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "YELLOW1",
+        "colors": {
+            "hi": "#fff59d",
+            "low": "#ffee58",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#333333",
+                "track": "#FFFFFF"
+            }
+        }
+    },
+    {
+        "name": "YELLOW2",
+        "colors": {
+            "hi": "#ffee58",
+            "low": "#fdd835",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#333333",
+                "track": "#FFFFFF"
+            }
+        }
+    },
+    {
+        "name": "YELLOW3",
+        "colors": {
+            "hi": "#fdd835",
+            "low": "#f9a825",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "ORANGE1",
+        "colors": {
+            "hi": "#ffcc80",
+            "low": "#ffa726",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "ORANGE2",
+        "colors": {
+            "hi": "#ffa726",
+            "low": "#fb8c00",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "ORANGE3",
+        "colors": {
+            "hi": "#fb8c00",
+            "low": "#ef6c00",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "GRAY1",
+        "colors": {
+            "hi": "#eeeeee",
+            "low": "#cccccc",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#333333",
+                "track": "#FFFFFF"
+            }
+        }
+    },
+    {
+        "name": "GRAY2",
+        "colors": {
+            "hi": "#cccccc",
+            "low": "#aaaaaa",
+            "font": "#000000",
+            "button": "#000000",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "GRAY3",
+        "colors": {
+            "hi": "#aaaaaa",
+            "low": "#888888",
+            "font": "#FFFFFF",
+            "button": "#FFFFFF",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "GRAY4",
+        "colors": {
+            "hi": "#888888",
+            "low": "#666666",
+            "font": "#FFFFFF",
+            "button": "#FFFFFF",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "GRAY5",
+        "colors": {
+            "hi": "#666666",
+            "low": "#444444",
+            "font": "#FFFFFF",
+            "button": "#FFFFFF",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    },
+    {
+        "name": "GRAY6",
+        "colors": {
+            "hi": "#444444",
+            "low": "#222222",
+            "font": "#FFFFFF",
+            "button": "#FFFFFF",
+            "playbar": {
+                "background": "#ffffff",
+                "track": "#333333"
+            }
+        }
+    }
+]
