@@ -66,7 +66,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		final List<Window> windows = new ArrayList<>(robot.listWindows());
 		final Stage stageSettings = (Stage) windows.getLast();
 
-		assertThat(stageSettings.getTitle()).isEqualTo("Kacheleinstellungen - 0 | Test Pad");
+		assertThat(stageSettings.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#saveButton");
@@ -94,7 +94,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		final List<Window> windows = new ArrayList<>(robot.listWindows());
 		final Stage stageSettings = (Stage) windows.getLast();
 
-		assertThat(stageSettings.getTitle()).isEqualTo("Kacheleinstellungen - 0 | Test Pad");
+		assertThat(stageSettings.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#cancelButton");
