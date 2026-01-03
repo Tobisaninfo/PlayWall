@@ -3,10 +3,14 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.model.AudioPadContentDto;
+import de.tobias.playwall.common.api.project.model.PadContentDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PadMapper;
+import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
+import de.tobias.playwall.server.common.model.project.PadContent;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
@@ -45,6 +49,15 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 		}
 
 		pad.setName(requestMessage.getPad().getName());
+		final PadContent padContent = pad.getContent();
+		if(padContent instanceof AudioPadContent audioPadContent)
+		{
+			final PadContentDto requestPadContent = requestMessage.getPad().getContent();
+			if(requestPadContent instanceof AudioPadContentDto requestAudioPadContent)
+			{
+				audioPadContent.setLoop(requestAudioPadContent.isLoop());
+			}
+		}
 
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 

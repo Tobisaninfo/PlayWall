@@ -146,7 +146,10 @@ public class PlayWallIconOverviewMainViewController extends NVC
 
 		// pad
 		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));
-		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"))));
+		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, List.of(
+				new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"),
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Wiedergabe - Loop")
+		)));
 		data.add(new IconEntry(FontAwesomeType.PAUSE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel pausieren (Pause)"))));
 		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel stoppen (Stop)"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_OPEN_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Filechooser öffnen"))));

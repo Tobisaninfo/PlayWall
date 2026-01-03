@@ -46,4 +46,6 @@ public class Strings
 	// ui - settings - pad
 	public static final String UI_SETTINGS_PAD_TITLE  = "ui.settings.pad.title";
 	public static final String UI_SETTINGS_PAD_TITLE_SHORT  = "ui.settings.pad.title.short";
+	public static final String UI_SETTINGS_PAD_PLAYBACK = "ui.settings.pad.general.playback";
+	public static final String UI_SETTINGS_PAD_PLAYBACK_LOOP = "ui.settings.pad.general.playback.loop";
 }
