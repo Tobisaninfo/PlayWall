@@ -22,9 +22,11 @@
                 <Label fx:id="loadingLabel"/>
             </children>
         </HBox>
-        <Label fx:id="titleLabel" layoutX="25.0" layoutY="29.0" styleClass="title" text="PlayWall"
+        <Label fx:id="titleLabel" layoutX="25.0" layoutY="29.0" styleClass="application-loading-view--title"
+               text="PlayWall"
                AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0"/>
-        <Label fx:id="versionLabel" layoutX="25.0" layoutY="93.0" styleClass="subtitle" text="Version 6.2.0"
+        <Label fx:id="versionLabel" layoutX="25.0" layoutY="93.0" styleClass="application-loading-view--subtitle"
+               text="Version 6.2.0"
                AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="90.0"/>
     </children>
 </AnchorPane>

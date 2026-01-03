@@ -19,7 +19,7 @@
                 </ImageView>
                 <VBox alignment="CENTER_LEFT" spacing="7.0">
                     <children>
-                        <Label styleClass="about-headline" text="%about.label.headline">
+                        <Label styleClass="about-view--headline" text="%about.label.headline">
                             <VBox.margin>
                                 <Insets bottom="14.0"/>
                             </VBox.margin>

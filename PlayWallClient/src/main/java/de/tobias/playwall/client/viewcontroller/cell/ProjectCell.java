@@ -29,7 +29,7 @@ public class ProjectCell extends ListCell<ProjectMetadata>
 				// Project Name
 				Label projectNameLabel = new Label();
 				projectNameLabel.textProperty().setValue(ref.name());
-				projectNameLabel.getStyleClass().add("projectname");
+				projectNameLabel.getStyleClass().add("launch-dialog--project-name");
 				nameBox.getChildren().add(projectNameLabel);
 
 				HBox.setHgrow(nameBox, Priority.ALWAYS);

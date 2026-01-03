@@ -3,13 +3,20 @@
 .list-view {
 	-fx-base: rgb(60, 60, 60);
 
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+  -fx-background-insets: 0;
+  -fx-padding: 0;
 
 	.list-cell {
 		-fx-skin: "javafx.scene.control.skin.ListCellSkin";
 		-fx-background-color: -fx-base;
 		-fx-padding: 4px;
-		-fx-text-fill: #FFFFFF;
 		-fx-opacity: 1;
+
+		& .label {
+			-fx-text-fill: #FFFFFF;
+		}
 
 		&:filled {
 			-fx-border-width: 0px 0px 1px 0px;
