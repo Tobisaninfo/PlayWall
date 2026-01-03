@@ -163,7 +163,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		try
 		{
-			client.pad(pad.getId()).updateSettings(pad.getName());
+			client.pad(pad.getId()).updateSettings(pad);
 			getStageContainer().ifPresent(NVCStage::close);
 		}
 		catch(PlayWallApiException e)

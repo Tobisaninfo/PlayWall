@@ -28,4 +28,21 @@ public class PadContentMapper
 					.build();
 		};
 	}
+
+	public PadContentDto padContentToPadContentDto(PadContent padContent)
+	{
+		if(padContent == null)
+		{
+			return null;
+		}
+
+		return switch(padContent)
+		{
+			case AudioPadContent audioPad -> AudioPadContentDto.builder()
+					.mediaPath(audioPad.getMediaPath())
+					.loop(audioPad.isLoop())
+					.volume(audioPad.getVolume())
+					.build();
+		};
+	}
 }

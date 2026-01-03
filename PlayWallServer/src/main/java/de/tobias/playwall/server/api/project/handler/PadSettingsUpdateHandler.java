@@ -44,7 +44,7 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 			throw new PlayWallServerException(messageSource, error);
 		}
 
-		pad.setName(requestMessage.getName());
+		pad.setName(requestMessage.getPad().getName());
 
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 

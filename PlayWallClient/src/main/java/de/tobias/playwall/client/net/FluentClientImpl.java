@@ -3,6 +3,7 @@ package de.tobias.playwall.client.net;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
@@ -168,9 +169,9 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public void updateSettings(String name) throws PlayWallApiException
+		public void updateSettings(Pad pad) throws PlayWallApiException
 		{
-			delegate.updateSettings(padId, name);
+			delegate.updateSettings(padId, pad);
 		}
 	}
 

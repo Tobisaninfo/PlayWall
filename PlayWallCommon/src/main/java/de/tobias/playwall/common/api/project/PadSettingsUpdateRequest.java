@@ -1,5 +1,6 @@
 package de.tobias.playwall.common.api.project;
 
+import de.tobias.playwall.common.api.project.model.PadDto;
 import de.tobias.playwall.common.net.RequestMessage;
 import lombok.*;
 
@@ -13,5 +14,5 @@ import java.util.UUID;
 public class PadSettingsUpdateRequest extends RequestMessage
 {
 	private UUID padId;
-	private String name;
+	private PadDto pad;
 }

@@ -3,6 +3,7 @@ package de.tobias.playwall.client.viewcontroller.main;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
@@ -71,7 +72,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#saveButton");
 
-		verify(client).updateSettings(padId, "Lorem");
+		verify(client).updateSettings(padId, Pad.builder().name("Lorem").build());
 	}
 
 	@Test
@@ -99,6 +100,6 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#cancelButton");
 
-		verify(client, never()).updateSettings(padId, "Lorem");
+		verify(client, never()).updateSettings(padId, Pad.builder().name("Lorem").build());
 	}
 }
