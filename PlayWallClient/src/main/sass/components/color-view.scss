@@ -1,0 +1,15 @@
+.color-view-item {
+  -fx-stroke: black;
+  -fx-stroke-width: 2;
+  -fx-arc-height: 7.5;
+  -fx-arc-width: 7.5;
+
+  &:hover {
+    -fx-stroke: DARKRED;
+  }
+
+  &:pressed {
+    -fx-stroke: RED;
+  }
+}
+

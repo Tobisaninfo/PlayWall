@@ -1,0 +1,10 @@
+.dnd-file-option {
+  -fx-text-fill: white;
+
+  &:drag {
+    -fx-text-fill: white;
+    -fx-border-width: 2px;
+    -fx-border-color: white;
+    -fx-border-radius: 10px;
+  }
+}

@@ -11,4 +11,8 @@
 	-fx-prompt-text-fill: $textfield-prompt-color;
 
 	-fx-font-size: $textfield-font-size;
+
+	&:error {
+		-fx-border-color: red !important;
+	}
 }

@@ -28,6 +28,7 @@
 @import "components/treeview";
 @import "components/tableview";
 @import "components/settings";
+@import "components/color-view";
 
 /**
 Default elements
@@ -170,4 +171,10 @@ PlayPad Elements
 .profilename {
 	-fx-font-size: 10px;
 	-fx-text-fill: #DDDDDD;
+}
+
+.about-headline {
+	-fx-underline: true;
+	-fx-font-size: 30px;
+	-fx-font-weight: bold;
 }
