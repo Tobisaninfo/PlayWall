@@ -122,11 +122,11 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		if(pad.getName() == null || pad.getName().isEmpty())
 		{
-			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE_SHORT, pad.getPosition() + 1));
+			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE_SHORT, pad.getReadablePosition()));
 		}
 		else
 		{
-			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getPosition() + 1, pad.getName()));
+			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getReadablePosition(), pad.getName()));
 		}
 	}
 
