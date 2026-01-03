@@ -54,6 +54,10 @@ Default elements
 	-fx-fill: white;
 }
 
+.window-title {
+  -fx-font-weight: bold;
+}
+
 .toggle-button:selected .icon {
 	-fx-fill: #333333;
 }

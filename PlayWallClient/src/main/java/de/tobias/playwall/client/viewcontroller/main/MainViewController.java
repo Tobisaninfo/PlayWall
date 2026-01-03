@@ -26,12 +26,16 @@ import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -42,21 +46,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
+
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 @RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
 @Getter(AccessLevel.PACKAGE)
 public class MainViewController extends BaseNVC
 {
+	private static final int PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR = 60;
+
 	@FXML
-	private VBox headerBox;
+	private HeaderBar headerBar;
+	private Label projectTitleLabel;
+
+	@FXML
+	private FlowPane pageButtonsFlowPane;
+
 	@FXML
 	private GridPane padGridPane;
 
 	@FXML
 	private AnchorPane gridContainer;
-
-	@FXML
-	private FlowPane pageButtonsFlowPane;
 
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
@@ -88,7 +98,19 @@ public class MainViewController extends BaseNVC
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
 
-		headerBox.getChildren().add(createMenu());
+		projectTitleLabel = new Label();
+		projectTitleLabel.getStyleClass().add("window-title");
+		final ImageView logoImageView = new ImageView(iconProvider.getStageIcon());
+		logoImageView.setFitWidth(20);
+		logoImageView.setFitHeight(20);
+		final HBox headerBox = new HBox(logoImageView, projectTitleLabel, createMenu());
+		headerBox.setPadding(new Insets(0, 0, 0, 14));
+		headerBox.setAlignment(Pos.CENTER_LEFT);
+		headerBox.setSpacing(10);
+		HeaderBar.setDragType(projectTitleLabel, HeaderDragType.DRAGGABLE_SUBTREE);
+		HeaderBar.setDragType(logoImageView, HeaderDragType.DRAGGABLE_SUBTREE);
+
+		headerBar.setLeading(headerBox);
 
 		padUpdateListener = new PadUpdateListener(projectService, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
@@ -102,6 +124,7 @@ public class MainViewController extends BaseNVC
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
+		stageContainer.initStyle(environment == GUI_TESTING ? StageStyle.UNDECORATED : StageStyle.EXTENDED);
 		stageContainer.addCloseHook(this::closeRequest);
 
 		stage.setOnHidden(_ -> onWindowClosed());
@@ -109,6 +132,13 @@ public class MainViewController extends BaseNVC
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
 
+		projectTitleLabel.textProperty().bind(stage.titleProperty().map(t -> {
+			if(t.length() > PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR)
+			{
+				return t.substring(0, PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR) + "…";
+			}
+			return t;
+		}));
 		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
 	}
 
@@ -266,7 +296,7 @@ public class MainViewController extends BaseNVC
 				.findFirst().orElse(null);
 	}
 
-	private MenuBar createMenu()
+	private Node createMenu()
 	{
 		final Menu menuFile = createMenuFile();
 		final Menu menuEdit = createMenuEdit();
