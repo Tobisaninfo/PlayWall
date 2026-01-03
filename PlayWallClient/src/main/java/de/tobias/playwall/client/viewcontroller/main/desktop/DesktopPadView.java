@@ -176,7 +176,7 @@ public class DesktopPadView implements PadView
 	}
 
 	@Override
-	public void updateFromPad(Pad pad)
+	public void updateFromPad(int currentPage, Pad pad)
 	{
 		this.pad = pad;
 		if(pad != null)
@@ -197,7 +197,7 @@ public class DesktopPadView implements PadView
 			{
 				updateStatus(PadStatus.EMPTY);
 			}
-			addStyleClasses(new PadIndex(pad.getPosition(), 0)); // TODO
+			addStyleClasses(new PadIndex(pad.getPosition(), currentPage));
 		}
 		else
 		{
@@ -229,7 +229,7 @@ public class DesktopPadView implements PadView
 	{
 		NodeWalker.getAllNodes((Parent) getRootNode())
 				.stream()
-				.filter(node -> node instanceof PadIndexable)
+				.filter(PadIndexable.class::isInstance)
 				.forEach(node -> ((PadIndexable) node).setIndex(index));
 	}
 
@@ -237,7 +237,7 @@ public class DesktopPadView implements PadView
 	{
 		NodeWalker.getAllNodes((Parent) getRootNode())
 				.stream()
-				.filter(node -> node instanceof PadIndexable)
+				.filter(PadIndexable.class::isInstance)
 				.forEach(node -> ((PadIndexable) node).setIndex(null));
 	}
 

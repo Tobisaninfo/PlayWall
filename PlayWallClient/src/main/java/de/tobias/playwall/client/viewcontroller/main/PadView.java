@@ -10,7 +10,7 @@ public interface PadView
 
 	Pad getPad();
 
-	void updateFromPad(Pad pad);
+	void updateFromPad(int currentPage, Pad pad);
 
 	void showLoading(boolean isLoading);
 

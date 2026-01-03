@@ -80,6 +80,7 @@ public class MainViewController extends ViewControllerBase
 
 	private SnackBar notificationPane;
 
+	private Page currentPage;
 	private final List<PadView> padViews = new ArrayList<>();
 
 	@Getter
@@ -266,6 +267,7 @@ public class MainViewController extends ViewControllerBase
 
 	private void showPage(Page page)
 	{
+		this.currentPage = page;
 		final int padNumberPerPage = project.getMetadata().getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
@@ -273,7 +275,7 @@ public class MainViewController extends ViewControllerBase
 			final PadView view = padViews.get(i);
 			final Pad pad = page.getPad(i);
 
-			view.updateFromPad(pad);
+			view.updateFromPad(page.getPosition(), pad);
 		}
 
 		// Highlight the current page button
