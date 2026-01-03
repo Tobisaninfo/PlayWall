@@ -30,7 +30,7 @@
 		}
 
 		.tree-cell:filled:selected {
-			-fx-background-color: $component-focus-background-color;
+			-fx-background-color: $primary-color;
 			-fx-text-fill: $component-text-color;
 
 			&:hover {
@@ -39,7 +39,7 @@
 		}
 
 		.tree-cell:filled:focused:selected:hover {
-			-fx-background-color: $component-focus-background-color;
+			-fx-background-color: $primary-color;
 			-fx-text-fill: $component-text-color;
 		}
 	}
@@ -54,17 +54,17 @@
 	}
 
 	.tree-cell:filled:hover {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 		-fx-text-fill: $component-text-color;
 	}
 
 	.tree-view:focused .tree-cell:filled:focused:hover {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 		-fx-text-fill: $component-text-color;
 	}
 
 	.tree-view:horizontal .tree-cell:filled:selected, .tree-view:horizontal .tree-cell:filled:selected:hover {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 		-fx-text-fill: $component-text-color;
 	}
 }

@@ -16,7 +16,7 @@
 	}
 
 	.list-cell:selected {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 	}
 
 	&:editable .arrow-button {

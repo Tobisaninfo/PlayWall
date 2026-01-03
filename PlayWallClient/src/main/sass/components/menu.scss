@@ -8,7 +8,7 @@
 	}
 
 	.menu:showing, .menu:hover {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 		-fx-background-radius: 0px;
 	}
 }
@@ -17,6 +17,6 @@
     -fx-font-size: 12px;
 
 	&:selected, &:focused {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 	}
 }

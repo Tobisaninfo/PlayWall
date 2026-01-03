@@ -8,7 +8,7 @@ import de.tobias.playwall.client.appcontext.InjectField;
 import de.tobias.playwall.client.viewcontroller.style.Styleable;
 import javafx.stage.Stage;
 
-public class BaseNVC extends NVC
+public class ViewControllerBase extends NVC
 {
 	@InjectField
 	protected Styleable styleable;

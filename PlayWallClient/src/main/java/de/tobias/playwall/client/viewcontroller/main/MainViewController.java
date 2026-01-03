@@ -21,7 +21,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.service.ProjectService;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.components.ViewConstants;
-import de.tobias.playwall.client.viewcontroller.BaseNVC;
+import de.tobias.playwall.client.viewcontroller.ViewControllerBase;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -51,7 +51,7 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 @RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
 @Getter(AccessLevel.PACKAGE)
-public class MainViewController extends BaseNVC
+public class MainViewController extends ViewControllerBase
 {
 	private static final int PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR = 60;
 

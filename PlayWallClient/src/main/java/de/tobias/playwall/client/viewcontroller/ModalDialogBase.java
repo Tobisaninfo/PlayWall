@@ -12,9 +12,9 @@ import java.util.Optional;
 /**
  * Base class for modal dialogs.
  *
- * @param <T> Return type of the dialog.
+ * @param <R> Return type of the dialog.
  */
-public abstract class ModalBaseNVC<T> extends BaseNVC
+public abstract class ModalDialogBase<R> extends ViewControllerBase
 {
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
@@ -27,12 +27,12 @@ public abstract class ModalBaseNVC<T> extends BaseNVC
 		stageContainer.addCloseKeyShortcut(stageContainer::close);
 	}
 
-	protected T getResultValue()
+	protected R getResultValue()
 	{
 		return null;
 	}
 
-	public Optional<T> showAndWait(Window owner)
+	public Optional<R> showAndWait(Window owner)
 	{
 		getStageContainer().ifPresent(nvcStage -> nvcStage.initOwner(owner).showAndWait());
 		return Optional.ofNullable(getResultValue());

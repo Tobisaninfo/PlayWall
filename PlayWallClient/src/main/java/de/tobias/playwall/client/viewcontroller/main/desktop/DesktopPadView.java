@@ -12,6 +12,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
+import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
 import de.tobias.playwall.common.utils.FileFormats;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -70,6 +71,7 @@ public class DesktopPadView implements PadView
 
 	private PadStatus previousStatus;
 	private PadStatus status;
+	private PadSettingsViewController padSettingsViewController;
 
 	@Getter
 	private Pad pad;
@@ -126,7 +128,7 @@ public class DesktopPadView implements PadView
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE_SOLID), this::onPauseAction);
 		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP_SOLID), this::onStopAction);
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN_SOLID), this::onNewAction);
-		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR_SOLID), null);
+		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR_SOLID), this::onSettingsAction);
 
 		// Not Found Label
 		notFoundLabel = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
@@ -295,5 +297,15 @@ public class DesktopPadView implements PadView
 				stopButton.setDisable(false);
 			}
 		}
+	}
+
+	private void onSettingsAction(ActionEvent event)
+	{
+		if(padSettingsViewController == null)
+		{
+			padSettingsViewController = AppContextHolder.getInstance().get(PadSettingsViewController.class);
+		}
+
+		padSettingsViewController.showAndWait(new PadSettingsViewController.Param(pad), superRoot.getScene().getWindow());
 	}
 }

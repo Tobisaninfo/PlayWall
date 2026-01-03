@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
+<?import de.tobias.playwall.client.view.components.settings.SettingsPageWithButtons?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="500.0" spacing="14.0"
       xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <padding>
         <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
     </padding>
-    <SettingsPage fx:id="settingsPage" onCancel="#cancelButtonHandler" onSave="#finishButtonHandler"
+    <SettingsPageWithButtons fx:id="settingsPage" onCancel="#cancelButtonHandler" onSave="#finishButtonHandler"
                   saveText="%ui.settings.button.save"
                   cancelText="%ui.settings.button.cancel">
         <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="Name">
@@ -36,5 +32,5 @@
                 <Spinner fx:id="spinnerNumberOfVerticalPads" editable="true" initialValue="4" max="10" min="3"/>
             </HBox>
         </SettingsRow>
-    </SettingsPage>
+    </SettingsPageWithButtons>
 </VBox>

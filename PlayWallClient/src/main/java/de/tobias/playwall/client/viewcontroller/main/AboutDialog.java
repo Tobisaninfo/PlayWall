@@ -9,7 +9,7 @@ import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
-import de.tobias.playwall.client.viewcontroller.ModalBaseNVC;
+import de.tobias.playwall.client.viewcontroller.ModalDialogBase;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
@@ -33,7 +33,7 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "AboutDialog")
-public class AboutDialog extends ModalBaseNVC<Void>
+public class AboutDialog extends ModalDialogBase<Void>
 {
 	@FXML
 	private Label libsLabel;

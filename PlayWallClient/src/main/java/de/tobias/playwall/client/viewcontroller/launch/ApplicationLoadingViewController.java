@@ -9,7 +9,7 @@ import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.*;
-import de.tobias.playwall.client.viewcontroller.BaseNVC;
+import de.tobias.playwall.client.viewcontroller.ViewControllerBase;
 import de.tobias.playwall.client.viewcontroller.LaunchDialog;
 import de.tobias.playwall.client.viewcontroller.launch.tasks.ClientConnectLaunchTask;
 import de.tobias.playwall.client.viewcontroller.launch.tasks.LaunchTask;
@@ -32,7 +32,7 @@ import java.util.Optional;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "ApplicationLoadingView", applyToStage = false)
-public class ApplicationLoadingViewController extends BaseNVC
+public class ApplicationLoadingViewController extends ViewControllerBase
 {
 	@FXML
 	private Label titleLabel;

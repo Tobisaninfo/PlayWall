@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<HBox maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox fx:id="boxCategories" minWidth="200.0" prefWidth="200.0" spacing="14.0">
+            <children>
+                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="%ui.settings.pad">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="14.0" left="7.0" right="7.0" top="14.0" />
+            </padding>
+        </VBox>
+        <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="500.0" spacing="14.0" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+            </padding>
+         <VBox fx:id="settingsPageContainer" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"></VBox>
+         <HBox fx:id="boxButtons" alignment="CENTER_RIGHT" spacing="14.0">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+         </HBox>
+        </VBox>
+    </children>
+</HBox>
