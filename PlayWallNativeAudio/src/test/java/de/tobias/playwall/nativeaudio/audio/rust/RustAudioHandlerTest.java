@@ -26,7 +26,7 @@ class RustAudioHandlerTest
 		assertThat(handler.isMediaLoaded()).isTrue();
 
 		handler.setVolume(0);
-		handler.play();
+		handler.play(false);
 
 		assertThat(handler.isPlaying()).isTrue();
 	}
@@ -39,7 +39,7 @@ class RustAudioHandlerTest
 		assertThat(handler.isMediaLoaded()).isTrue();
 
 		handler.setVolume(0);
-		handler.play();
+		handler.play(false);
 		assertThat(handler.isPlaying()).isTrue();
 
 		Thread.sleep(100);
@@ -69,7 +69,7 @@ class RustAudioHandlerTest
 		assertThat(handler.isMediaLoaded()).isTrue();
 
 		handler.setVolume(0);
-		handler.play();
+		handler.play(false);
 		assertThat(handler.isPlaying()).isTrue();
 
 		Thread.sleep(100);
@@ -99,7 +99,7 @@ class RustAudioHandlerTest
 		assertThat(handler.isMediaLoaded()).isTrue();
 
 		handler.setVolume(0);
-		handler.play();
+		handler.play(false);
 
 		await()
 				.atMost(2500, MILLISECONDS)

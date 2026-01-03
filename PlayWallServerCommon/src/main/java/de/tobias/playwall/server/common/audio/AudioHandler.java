@@ -23,7 +23,7 @@ public abstract class AudioHandler
 	/**
 	 * Start the audio stream
 	 */
-	public abstract void play();
+	public abstract void play(boolean loop);
 
 	/**
 	 * Pause the audio stream.

@@ -44,7 +44,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void play(boolean withFadeIn)
 	{
-		audioHandler.play();
+		audioHandler.play(padContent.isLoop());
 		setStatus(PadControllerStatus.PLAY);
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
