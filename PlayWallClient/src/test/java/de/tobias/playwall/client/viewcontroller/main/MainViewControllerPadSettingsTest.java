@@ -3,6 +3,7 @@ package de.tobias.playwall.client.viewcontroller.main;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.model.project.AudioPadContent;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.Client;
@@ -72,7 +73,15 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#saveButton");
 
-		verify(client).updateSettings(padId, Pad.builder().name("Lorem").build());
+		verify(client).updateSettings(padId, Pad.builder()
+				.name("Lorem")
+				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
+				.position(0)
+				.content(AudioPadContent.builder()
+						.isLoop(false)
+						.volume(1.0)
+						.build())
+				.build());
 	}
 
 	@Test
@@ -100,6 +109,14 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#cancelButton");
 
-		verify(client, never()).updateSettings(padId, Pad.builder().name("Lorem").build());
+		verify(client, never()).updateSettings(padId, Pad.builder()
+				.name("Lorem")
+				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
+				.position(0)
+				.content(AudioPadContent.builder()
+						.isLoop(false)
+						.volume(1.0)
+						.build())
+				.build());
 	}
 }

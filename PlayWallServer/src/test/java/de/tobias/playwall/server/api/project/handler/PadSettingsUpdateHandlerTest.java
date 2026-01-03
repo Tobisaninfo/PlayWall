@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.model.PadDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -71,7 +72,7 @@ class PadSettingsUpdateHandlerTest
 		projectController.loadProject(project).get();
 		applicationEvents.clear();
 
-		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, "Lorem");
+		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, PadDto.builder().name("Lorem").build());
 		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
 
 		assertThat(responseMessage).isEmpty();
@@ -94,7 +95,7 @@ class PadSettingsUpdateHandlerTest
 		projectController.loadProject(project).get();
 		applicationEvents.clear();
 
-		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, "Lorem");
+		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, PadDto.builder().name("Lorem").build());
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PlayWallServerException.class)
 				.extracting(e -> ((PlayWallServerException) e).getError())
