@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsGeneralPageView", applyToStage = false)
-public class PadSettingsGeneralViewController extends BasePadSettingsGeneralViewController
+public class PadSettingsGeneralViewController extends BasePadSettingsViewController
 {
 	@FXML
 	private TextField textFieldName;
@@ -19,14 +19,14 @@ public class PadSettingsGeneralViewController extends BasePadSettingsGeneralView
 	}
 
 	@Override
-	public void initParameter(BasePadSettingsGeneralViewController.Param param)
+	public void initParameter(BasePadSettingsViewController.Param param)
 	{
 		textFieldName.setText(param.pad.getName());
-		this.isValidProperty.bind(textFieldName.textProperty().isEmpty().not());
+		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty());
 	}
 
 	@Override
-	public void applySettings(BasePadSettingsGeneralViewController.Param param)
+	public void applySettings(BasePadSettingsViewController.Param param)
 	{
 		param.pad.setName(textFieldName.getText());
 	}

@@ -49,9 +49,6 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 	@Test
 	void testOpenSettingsAndSetName(FxRobot robot) throws PlayWallApiException
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.openProject(project);
@@ -80,9 +77,6 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 	@Test
 	void testOpenSettingsAndSetNameAndCancel(FxRobot robot) throws PlayWallApiException
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.openProject(project);

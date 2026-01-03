@@ -9,11 +9,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -34,6 +32,8 @@ public class SettingsPageWithButtons extends SettingsPage
 
 	public SettingsPageWithButtons()
 	{
+		super();
+
 		final Region spacer = new Region();
 		VBox.setVgrow(spacer, Priority.ALWAYS);
 
@@ -55,11 +55,6 @@ public class SettingsPageWithButtons extends SettingsPage
 		getChildren().addAll(spacer, boxButtons);
 
 		Platform.runLater(this.saveButton::requestFocus);
-	}
-
-	public ObservableList<Node> getItems()
-	{
-		return settingsItemsVbox.getChildren();
 	}
 
 	public EventHandler<ActionEvent> getOnSave()

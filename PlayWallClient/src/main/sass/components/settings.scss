@@ -56,7 +56,7 @@
   }
 
   &:hover {
-    -fx-background-color: #224A8E;
+    -fx-background-color: $settings-background-color;
 
     .icon {
       -fx-fill: $settings-selected-background-color;

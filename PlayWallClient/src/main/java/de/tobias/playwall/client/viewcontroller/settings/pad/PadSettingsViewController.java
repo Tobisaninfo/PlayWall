@@ -55,7 +55,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	@Getter(AccessLevel.NONE)
 	private final FluentClient client;
 
-	private final List<BasePadSettingsGeneralViewController> settingViewController = new ArrayList<>();
+	private final List<BasePadSettingsViewController> settingViewController = new ArrayList<>();
 
 	@Getter(AccessLevel.NONE)
 	private Pad pad;
@@ -118,7 +118,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	{
 		this.pad = param.pad;
 
-		settingViewController.forEach(controller -> controller.initParameter(new BasePadSettingsGeneralViewController.Param(pad)));
+		settingViewController.forEach(controller -> controller.initParameter(new BasePadSettingsViewController.Param(pad)));
 
 		if(pad.getName() == null || pad.getName().isEmpty())
 		{
@@ -159,7 +159,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	@FXML
 	private void saveButtonHandler(ActionEvent event)
 	{
-		settingViewController.forEach(controller -> controller.applySettings(new BasePadSettingsGeneralViewController.Param(pad)));
+		settingViewController.forEach(controller -> controller.applySettings(new BasePadSettingsViewController.Param(pad)));
 
 		try
 		{

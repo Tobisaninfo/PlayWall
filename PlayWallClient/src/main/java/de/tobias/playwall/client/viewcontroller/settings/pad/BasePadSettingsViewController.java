@@ -6,7 +6,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
 import lombok.AllArgsConstructor;
 
-public abstract class BasePadSettingsGeneralViewController extends BaseSettingsViewController<BasePadSettingsGeneralViewController.Param>
+public abstract class BasePadSettingsViewController extends BaseSettingsViewController<BasePadSettingsViewController.Param>
 {
 	@AllArgsConstructor
 	public static class Param
@@ -15,7 +15,7 @@ public abstract class BasePadSettingsGeneralViewController extends BaseSettingsV
 	}
 
 	@InjectConstructor
-	public BasePadSettingsGeneralViewController(FluentClient client)
+	public BasePadSettingsViewController(FluentClient client)
 	{
 		super(client);
 	}
