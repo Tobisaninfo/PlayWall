@@ -6,7 +6,7 @@ import de.tobias.playwall.client.extensions.AppEnvironmentSetup;
 import de.tobias.playwall.client.extensions.LoggerSetup;
 import de.tobias.playwall.client.mapper.ProjectMapper;
 import de.tobias.playwall.client.model.project.Project;
-import de.tobias.playwall.client.utils.ScreenshotOnFailure;
+import de.tobias.playwall.utils.ScreenshotOnFailure;
 import de.tobias.playwall.common.api.project.model.ProjectDto;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;

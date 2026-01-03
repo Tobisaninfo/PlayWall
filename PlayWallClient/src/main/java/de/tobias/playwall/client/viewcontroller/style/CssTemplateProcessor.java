@@ -4,7 +4,6 @@ import java.util.Map;
 
 public class CssTemplateProcessor
 {
-
 	private final String template;
 
 	public CssTemplateProcessor(String template)

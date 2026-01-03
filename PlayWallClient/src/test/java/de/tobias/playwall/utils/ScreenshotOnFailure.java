@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.utils;
+package de.tobias.playwall.utils;
 
 import javafx.stage.Stage;
 import org.junit.jupiter.api.extension.ExtensionContext;

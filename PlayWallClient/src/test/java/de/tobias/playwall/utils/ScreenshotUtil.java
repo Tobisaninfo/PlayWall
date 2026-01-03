@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.utils;
+package de.tobias.playwall.utils;
 
 import de.thecodelabs.logger.Logger;
 import javafx.embed.swing.SwingFXUtils;
@@ -14,12 +14,11 @@ import java.nio.file.Paths;
 
 public class ScreenshotUtil
 {
-
 	public static void takeScreenshot(Node node, String filename)
 	{
 		try
 		{
-			FxRobot robot = new FxRobot();
+			final FxRobot robot = new FxRobot();
 			final Image image = robot.capture(node).getImage();
 
 			final Path path = Paths.get(filename);
