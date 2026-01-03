@@ -6,8 +6,7 @@ import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
-import de.tobias.playwall.common.api.project.PadUpdate;
-import de.tobias.playwall.common.api.project.model.PadDto;
+import de.tobias.playwall.common.api.project.PadLoadedUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -16,10 +15,11 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.UUID;
 
-import static org.mockito.Mockito.mock;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-class MainViewControllerPadUpdateListenerTest extends AbstractViewControllerTest
+class PadLoadedListenerTest extends AbstractViewControllerTest
 {
 	private AppContext context;
 
@@ -45,9 +45,6 @@ class MainViewControllerPadUpdateListenerTest extends AbstractViewControllerTest
 	@Test
 	void testPadUpdateListener()
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.openProject(project);
@@ -58,12 +55,17 @@ class MainViewControllerPadUpdateListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
-		assertThat(padView.getNamePreviewLabel()).hasText("Test Pad");
-
-		final PadDto newPad = PadDto.builder().id(padId).position(0).name("Updated Pad").build();
-		eventHandler.fireEvent(new PadUpdate(newPad));
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, false));
 		WaitForAsyncUtils.waitForFxEvents();
 
-		assertThat(padView.getNamePreviewLabel()).hasText("Updated Pad");
+		assertThat(padView.getBusyView().getIndicator()).isVisible();
+
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Check if busy view is removed from node tree
+		await()
+				.atMost(2, SECONDS)
+				.untilAsserted(() -> assertThat(padView.getBusyView().getIndicator().getParent().getParent()).isNull());
 	}
 }

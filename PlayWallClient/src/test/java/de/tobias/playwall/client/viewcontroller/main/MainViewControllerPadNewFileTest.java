@@ -52,9 +52,6 @@ class MainViewControllerPadNewFileTest extends AbstractViewControllerTest
 	@Test
 	void testSelectNewMediaSuccessful(FxRobot robot) throws URISyntaxException, PlayWallApiException
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.openProject(project);
@@ -75,9 +72,6 @@ class MainViewControllerPadNewFileTest extends AbstractViewControllerTest
 	@Test
 	void testSelectNewMediaCancel(FxRobot robot) throws PlayWallApiException
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.openProject(project);
