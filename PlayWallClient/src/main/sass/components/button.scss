@@ -8,7 +8,7 @@
 	-fx-border-width: 0;
 
 	&:focused {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 		-fx-text-fill: $component-text-color;
 	}
 
@@ -18,7 +18,7 @@
 	}
 
 	&:default {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 		-fx-text-fill: $component-text-color;
 	}
 }

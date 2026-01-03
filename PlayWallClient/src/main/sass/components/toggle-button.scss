@@ -5,7 +5,7 @@
 	-fx-text-fill: $component-text-color;
 
 	&:focused {
-		-fx-background-color: $component-focus-background-color;
+		-fx-background-color: $primary-color;
 		-fx-text-fill: $component-text-color !important;
 	}
 

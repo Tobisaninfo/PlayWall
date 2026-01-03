@@ -1,11 +1,11 @@
 @import "variables";
 
 .settings-category-box {
-  -fx-background-color: $settings-background-color;
+  -fx-background-color: $primary-color;
 }
 
 .settings-category {
-  -fx-background-color: $settings-background-color;
+  -fx-background-color: $primary-color;
   -fx-padding: 7px 14px 7px 14px;
   -fx-alignment: top-left;
   -fx-background-radius: 7px;
@@ -27,7 +27,7 @@
     -fx-background-color: $settings-selected-background-color;
 
     .icon {
-      -fx-fill: $settings-background-color;
+      -fx-fill: $primary-color;
     }
 
     .settings-category-icon-warning .icon {
@@ -35,14 +35,14 @@
     }
 
     .settings-category-label {
-      -fx-text-fill: $settings-background-color;
+      -fx-text-fill: $primary-color;
     }
 
     &:hover {
       -fx-background-color: $settings-selected-background-color;
 
       .icon {
-        -fx-fill: $settings-background-color;
+        -fx-fill: $primary-color;
       }
 
        .settings-category-icon-warning .icon {
@@ -50,13 +50,13 @@
       }
 
       .settings-category-label {
-        -fx-text-fill: $settings-background-color;
+        -fx-text-fill: $primary-color;
       }
     }
   }
 
   &:hover {
-    -fx-background-color: $settings-background-color;
+    -fx-background-color: $primary-color;
 
     .icon {
       -fx-fill: $settings-selected-background-color;
