@@ -13,7 +13,7 @@ public class NodeWalker
 {
 	public static List<Node> getAllNodes(Parent root)
 	{
-		List<Node> nodes = new ArrayList<>();
+		final List<Node> nodes = new ArrayList<>();
 		nodes.add(root);
 		addAllDescendents(root, nodes);
 		return nodes;

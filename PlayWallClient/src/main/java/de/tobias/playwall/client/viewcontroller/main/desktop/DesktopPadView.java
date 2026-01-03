@@ -157,9 +157,9 @@ public class DesktopPadView implements PadView
 		// alle Labels in der InfoBox sollen die gleiche Höhe haben, damit die Icons auf gleicher höhe sind
 		for(Node child : infoBox.getChildren())
 		{
-			if(child instanceof Label)
+			if(child instanceof Label label)
 			{
-				((Label) child).setMaxHeight(Double.MAX_VALUE);
+				label.setMaxHeight(Double.MAX_VALUE);
 			}
 		}
 
