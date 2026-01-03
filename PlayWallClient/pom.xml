@@ -171,11 +171,11 @@
                             <goal>update-stylesheets</goal>
                         </goals>
                         <phase>generate-resources</phase>
-                        <configuration>
-                            <destination>target/classes/style</destination>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <destination>target/classes/style</destination>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
