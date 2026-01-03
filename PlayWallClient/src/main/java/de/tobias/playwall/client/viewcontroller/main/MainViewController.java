@@ -53,6 +53,8 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 @Getter(AccessLevel.PACKAGE)
 public class MainViewController extends BaseNVC
 {
+	private static final int PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR = 60;
+
 	@FXML
 	private HeaderBar headerBar;
 	private Label projectTitleLabel;
@@ -130,7 +132,13 @@ public class MainViewController extends BaseNVC
 		stage.setTitle(getWindowTitle("-"));
 		stage.show();
 
-		projectTitleLabel.textProperty().bind(stage.titleProperty());
+		projectTitleLabel.textProperty().bind(stage.titleProperty().map(t -> {
+			if(t.length() > PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR)
+			{
+				return t.substring(0, PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR) + "…";
+			}
+			return t;
+		}));
 		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
 	}
 
