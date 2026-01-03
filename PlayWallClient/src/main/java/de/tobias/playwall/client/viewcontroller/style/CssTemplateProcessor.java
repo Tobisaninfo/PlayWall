@@ -23,22 +23,16 @@ public class CssTemplateProcessor
 		while(pos < template.length())
 		{
 			int start = template.indexOf("${#", pos);
-			if(start == -1)
+			int end = template.indexOf("}", start);
+			if(start == -1 || end == -1)
 			{
 				result.append(template, pos, template.length());
 				break;
 			}
 			result.append(template, pos, start);
 
-			int end = template.indexOf("}", start);
-			if(end == -1)
-			{
-				result.append(template, start, template.length());
-				break;
-			}
-
-			String varName = template.substring(start + 3, end); // #name
-			String replacement = values.getOrDefault(varName, "");
+			final String variableName = template.substring(start + 3, end);
+			final String replacement = values.getOrDefault(variableName, "");
 
 			result.append(replacement);
 			pos = end + 1;
