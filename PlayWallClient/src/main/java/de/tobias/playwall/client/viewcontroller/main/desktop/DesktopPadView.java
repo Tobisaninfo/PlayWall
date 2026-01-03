@@ -91,7 +91,7 @@ public class DesktopPadView implements PadView
 
 		cueInLayer = PadLabel.empty(STYLE_CLASS_PAD_CUE_IN, STYLE_CLASS_PAD_CUE_IN_INDEX);
 		cueInLayer.prefHeightProperty().bind(root.heightProperty());
-		VBox cueInContainer = new VBox(cueInLayer);
+		final VBox cueInContainer = new VBox(cueInLayer);
 
 		indexLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 		timeLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
@@ -102,6 +102,7 @@ public class DesktopPadView implements PadView
 		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID));
 
 		infoBox = new PadHBox(5);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
 
 		previewBox = PadHBox.deepStyled(STYLE_CLASS_PAD_TITLE, STYLE_CLASS_PAD_TITLE_INDEX);
 		HBox.setHgrow(previewBox, Priority.ALWAYS);
@@ -183,6 +184,7 @@ public class DesktopPadView implements PadView
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
 
+			indexLabel.setText(pad.getReadablePosition());
 			if(pad.getStatus() != null)
 			{
 				updateStatus(pad.getStatus());

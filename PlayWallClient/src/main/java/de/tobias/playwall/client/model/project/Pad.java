@@ -19,4 +19,9 @@ public class Pad
 	private PadContent content;
 
 	private PadStatus status;
+
+	public String getReadablePosition()
+	{
+		return String.valueOf(position + 1);
+	}
 }
