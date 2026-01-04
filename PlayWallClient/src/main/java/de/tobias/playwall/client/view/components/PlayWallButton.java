@@ -6,6 +6,11 @@ import javafx.scene.control.Button;
 
 public class PlayWallButton extends Button
 {
+	public PlayWallButton(FontIconType iconType)
+	{
+		this(null, iconType);
+	}
+
 	public PlayWallButton(String labelText, FontIconType iconType)
 	{
 		this.setText(labelText);

@@ -59,8 +59,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		tooltip.setShowDelay(Duration.millis(300));
 		labelFilePath.setTooltip(tooltip);
 
-		final PlayWallButton buttonChooseFile = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_CHOOSE_PATH), FontAwesomeType.FOLDER_OPEN_SOLID);
-		buttonChooseFile.setMinWidth(120);
+		final PlayWallButton buttonChooseFile = new PlayWallButton(FontAwesomeType.FOLDER_OPEN_SOLID);
 		buttonChooseFile.setOnAction(this::onButtonFileChooser);
 
 		buttonShowInFolder = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_SHOW_IN_FOLDER), FontAwesomeType.FOLDER_SOLID);
