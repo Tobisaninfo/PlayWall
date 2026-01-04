@@ -11,6 +11,7 @@ import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.common.utils.FileFormats;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -23,6 +24,7 @@ import javafx.util.Duration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -109,6 +111,14 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		volumeSlider.setSnapToTicks(true);
 		volumeSlider.setPrefWidth(250);
 
+		volumeSlider.styleProperty().bind(Bindings.createStringBinding(() -> {
+			double min = volumeSlider.getMin();
+			double max = volumeSlider.getMax();
+			double value = volumeSlider.getValue();
+
+			return createSliderStyle(min, max, value);
+		}, volumeSlider.valueProperty()));
+
 		volumeSlider.setValue(padContent.getVolume() * 100);
 		settingsRowVolume.add(volumeSlider, 1, 0);
 
@@ -158,5 +168,20 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	{
 		labelFilePath.setText(text);
 		labelFilePath.getTooltip().setText(text);
+	}
+
+	private String createSliderStyle(double min, double max, double value)
+	{
+		final double percentage = 100.0 * (value - min) / (max - min);
+
+		return String.format(Locale.ENGLISH,
+				"-slider-track-color: linear-gradient(to right, " +
+						"%1$s 0%%, " +
+						"%1$s %3$.1f%%, " +
+						"%2$s %3$.1f%%, " +
+						"%2$s %4$.1f%%, " +
+						"%1$s %4$.1f%%, " +
+						"%1$s 100%%);",
+				ViewConstants.SLIDER_DEFAULT_BACKGROUND_COLOR, ViewConstants.PRIMARY_COLOR, min, percentage);
 	}
 }
