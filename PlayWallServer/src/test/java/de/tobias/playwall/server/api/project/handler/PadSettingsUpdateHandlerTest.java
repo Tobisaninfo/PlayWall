@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.model.AudioPadContentDto;
 import de.tobias.playwall.common.api.project.model.PadDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
@@ -83,7 +84,8 @@ class PadSettingsUpdateHandlerTest
 		assertThat(applicationEvents.stream(PadUpdate.class))
 				.hasSize(1)
 				.first()
-				.satisfies(event -> assertThat(event.getPad().getName()).isEqualTo("Lorem"));
+				.satisfies(event -> assertThat(event.getPad().getName()).isEqualTo("Lorem"))
+				.satisfies(event -> assertThat(((AudioPadContentDto)event.getPad().getContent()).isLoop()).isTrue());
 	}
 
 	@Test
