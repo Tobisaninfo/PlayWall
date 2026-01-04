@@ -91,6 +91,7 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 
 				final AudioPadContentDto requestAudioPadContent = (AudioPadContentDto) requestPadContent;
 				audioPadContent.setLoop(requestAudioPadContent.isLoop());
+				handleVolume(pad, audioPadContent, requestAudioPadContent);
 
 				final String newPath = requestAudioPadContent.getMediaPath();
 
@@ -125,5 +126,16 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 
 		// Load pad async
 		asyncExecutor.execute(newPadController::load);
+	}
+
+	private void handleVolume(Pad pad, AudioPadContent audioPadContent, AudioPadContentDto requestAudioPadContent)
+	{
+		audioPadContent.setVolume(requestAudioPadContent.getVolume());
+
+		final PadController padController = projectController.getPadController(pad.getId());
+		if(padController != null)
+		{
+			padController.setVolume(requestAudioPadContent.getVolume());
+		}
 	}
 }
