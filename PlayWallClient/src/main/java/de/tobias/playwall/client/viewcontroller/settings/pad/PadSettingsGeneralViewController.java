@@ -11,6 +11,9 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+/**
+ * Viewcontroller for the general page in the pad settings dialog.
+ */
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsGeneralPageView", applyToStage = false)
 public class PadSettingsGeneralViewController extends BasePadSettingsViewController
 {
@@ -32,14 +35,15 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 	public void initParameter(Param param)
 	{
 		textFieldName.setText(param.pad.getName());
+		BooleanBinding isValidBinding = textFieldName.textProperty().isNotEmpty();
+
+		// dynamic content based on pad content
 
 		if(padContentSettingsContainer != null)
 		{
 			settingsPage.getItems().remove(padContentSettingsContainer);
 			padContentSettingsContainer = null;
 		}
-
-		BooleanBinding isValidBinding = textFieldName.textProperty().isNotEmpty();
 
 		final PadContent content = param.pad.getContent();
 		if(content != null)

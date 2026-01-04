@@ -8,6 +8,9 @@ import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Separator;
 
+/**
+ * Settings related to {@link AudioPadContent}
+ */
 public class AudioPadContentSettingsContainer extends BasePadContentSettingsContainer<AudioPadContent>
 {
 	private final CheckBox checkboxPlaybackLoop;

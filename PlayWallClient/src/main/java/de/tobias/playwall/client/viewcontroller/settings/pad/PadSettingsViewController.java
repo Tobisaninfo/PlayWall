@@ -34,6 +34,13 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Viewcontroller for the pad settings dialog.
+ * Holds the sidebar consisting of {@link de.tobias.playwall.client.view.components.settings.SettingsCategory} instances
+ * and a container for showing the currently selected {@link de.tobias.playwall.client.view.components.settings.SettingsPage}
+ * as well as the cancel and submit button.
+ * On save all settings from all pages will be applied.
+ */
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsView")
 public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewController.Param>
 {
