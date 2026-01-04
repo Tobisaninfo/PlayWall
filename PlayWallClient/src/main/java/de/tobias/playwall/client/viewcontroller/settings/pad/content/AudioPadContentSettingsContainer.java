@@ -13,12 +13,19 @@ import javafx.scene.control.Separator;
  */
 public class AudioPadContentSettingsContainer extends BasePadContentSettingsContainer<AudioPadContent>
 {
-	private final CheckBox checkboxPlaybackLoop;
+	private CheckBox checkboxPlaybackLoop;
 
 	public AudioPadContentSettingsContainer(AudioPadContent	padContent)
 	{
 		super(padContent);
 
+		getChildren().addAll(createPlaybackSettings(), new Separator());
+
+		isValidProperty.set(true);
+	}
+
+	private SettingsRow createPlaybackSettings()
+	{
 		final SettingsRow settingsRowPlayback = new SettingsRow();
 		settingsRowPlayback.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK));
 		settingsRowPlayback.setIcon(FontAwesomeType.PLAY_SOLID);
@@ -27,9 +34,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		checkboxPlaybackLoop.setSelected(padContent.isLoop());
 		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
 
-		getChildren().addAll(settingsRowPlayback, new Separator());
-
-		isValidProperty.set(true);
+		return settingsRowPlayback;
 	}
 
 	@Override
