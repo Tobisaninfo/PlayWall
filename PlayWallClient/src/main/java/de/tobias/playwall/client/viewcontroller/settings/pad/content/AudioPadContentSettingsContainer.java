@@ -17,10 +17,12 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,6 +51,11 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	private SettingsRow createFileSettings()
 	{
 		labelFilePath = new Label(padContent.getMediaPath());
+		final Tooltip tooltip = new Tooltip();
+		tooltip.setText(padContent.getMediaPath());
+		tooltip.setShowDelay(Duration.millis(300));
+		labelFilePath.setTooltip(tooltip);
+
 		final PlayWallButton buttonChooseFile = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_CHOOSE_PATH), FontAwesomeType.FOLDER_OPEN_SOLID);
 		buttonChooseFile.setMinWidth(120);
 		buttonChooseFile.setOnAction(this::onButtonFileChooser);
@@ -111,7 +118,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 		if(path.isPresent())
 		{
-			labelFilePath.setText(path.get().toString());
+			updateLabelFilePath(path.get().toString());
 			buttonShowInFolder.setDisable(false);
 			buttonDelete.setDisable(false);
 		}
@@ -119,7 +126,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 	private void onButtonDelete(ActionEvent event)
 	{
-		labelFilePath.setText(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_PLACEHOLDER));
+		updateLabelFilePath(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_PLACEHOLDER));
 		buttonShowInFolder.setDisable(true);
 		buttonDelete.setDisable(true);
 	}
@@ -127,5 +134,11 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	private void onButtonShowInFolder(ActionEvent event)
 	{
 		NativeApplication.sharedInstance().showFileInFileViewer(Paths.get(padContent.getMediaPath()));
+	}
+
+	private void updateLabelFilePath(String text)
+	{
+		labelFilePath.setText(text);
+		labelFilePath.getTooltip().setText(text);
 	}
 }
