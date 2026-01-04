@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.viewcontroller.settings.pad;
+package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 
 import de.tobias.playwall.client.model.project.AudioPadContent;
 import de.tobias.playwall.client.model.project.PadContent;

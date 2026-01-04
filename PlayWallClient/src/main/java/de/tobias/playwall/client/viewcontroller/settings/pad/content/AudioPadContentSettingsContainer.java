@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.viewcontroller.settings.pad;
+package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;

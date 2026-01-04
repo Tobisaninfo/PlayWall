@@ -5,6 +5,8 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.settings.SettingsPage;
+import de.tobias.playwall.client.viewcontroller.settings.pad.content.BasePadContentSettingsContainer;
+import de.tobias.playwall.client.viewcontroller.settings.pad.content.PadContentSettingsContainerFactory;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
