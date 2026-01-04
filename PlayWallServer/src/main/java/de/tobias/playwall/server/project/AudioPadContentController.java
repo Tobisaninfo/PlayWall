@@ -30,8 +30,7 @@ public class AudioPadContentController extends PadController
 	{
 		audioHandler = audioHandlerFactory.createAudioHandler(this);
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
-
-		// TODO: set volume
+		audioHandler.setVolume(padContent.getVolume());
 	}
 
 	@Override
@@ -74,5 +73,11 @@ public class AudioPadContentController extends PadController
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 		setStatus(PadControllerStatus.READY);
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+	}
+
+	@Override
+	public void setVolume(double volume)
+	{
+		audioHandler.setVolume(volume);
 	}
 }

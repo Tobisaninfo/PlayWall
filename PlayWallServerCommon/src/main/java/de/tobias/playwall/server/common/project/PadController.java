@@ -53,4 +53,6 @@ public abstract class PadController
 	public abstract void stop();
 
 	public abstract void onEof();
+
+	public abstract void setVolume(double volume);
 }
