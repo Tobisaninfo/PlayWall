@@ -152,8 +152,13 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		)));
 		data.add(new IconEntry(FontAwesomeType.PAUSE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel pausieren (Pause)"))));
 		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel stoppen (Stop)"))));
-		data.add(new IconEntry(FontAwesomeType.FOLDER_OPEN_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Filechooser öffnen"))));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_OPEN_SOLID, List.of(
+				new IconUsage(IconUsageCategory.PAD, "Filechooser öffnen"),
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei")
+		)));
 		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"))));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
+		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Entfernen"))));
 
 		// menu
 		data.add(new IconEntry(FontAwesomeType.ARROWS_ROTATE_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Nach Updates suchen"))));

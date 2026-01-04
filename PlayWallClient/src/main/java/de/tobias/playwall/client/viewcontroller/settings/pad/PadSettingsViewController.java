@@ -84,11 +84,11 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		stage.setResizable(true);
 
-		stage.setWidth(750);
-		stage.setHeight(400);
+		stage.setWidth(800);
+		stage.setHeight(450);
 
-		stage.setMinWidth(750);
-		stage.setMinHeight(400);
+		stage.setMinWidth(800);
+		stage.setMinHeight(450);
 
 		boxCategories.getStyleClass().add("settings-category-box");
 
