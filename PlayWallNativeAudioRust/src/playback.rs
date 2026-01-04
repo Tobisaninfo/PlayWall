@@ -59,6 +59,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
             if looping == 1 {
                 let source = LoopingSource::new(path.clone());
+                sink.set_volume(audio_handler.volume);
                 sink.append(source);
             } else {
                 let file = File::open(path).expect("Failed to open file");
