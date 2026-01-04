@@ -34,8 +34,8 @@ public class SettingsRow extends GridPane
 	public SettingsRow()
 	{
 		labelName = new Label();
-		labelName.setMinWidth(150);
-		labelName.setPrefWidth(150);
+		labelName.setMinWidth(200);
+		labelName.setPrefWidth(200);
 		labelName.getStyleClass().add("settings-entry-label");
 
 		fontIcon = icon.get() != null ? new FontIcon(icon.get()) : new FontIcon();
