@@ -14,10 +14,7 @@ import de.tobias.playwall.common.utils.FileFormats;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -37,6 +34,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	private Label labelFilePath;
 	private PlayWallButton buttonShowInFolder;
 	private PlayWallButton buttonDelete;
+	private Slider volumeSlider;
 
 	public AudioPadContentSettingsContainer(AudioPadContent padContent)
 	{
@@ -44,6 +42,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 		getChildren().addAll(createFileSettings(), new Separator());
 		getChildren().addAll(createPlaybackSettings(), new Separator());
+		getChildren().addAll(createVolumeSettings(), new Separator());
 
 		isValidProperty.set(true);
 	}
@@ -98,11 +97,30 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		return settingsRowPlayback;
 	}
 
+	private SettingsRow createVolumeSettings()
+	{
+		final SettingsRow settingsRowVolume = new SettingsRow();
+		settingsRowVolume.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_VOLUME));
+		settingsRowVolume.setIcon(FontAwesomeType.VOLUME_HIGH_SOLID);
+
+		volumeSlider = new Slider(0, 100, 1);
+		volumeSlider.setShowTickLabels(true);
+		volumeSlider.setShowTickMarks(true);
+		volumeSlider.setSnapToTicks(true);
+		volumeSlider.setPrefWidth(250);
+
+		volumeSlider.setValue(padContent.getVolume() * 100);
+		settingsRowVolume.add(volumeSlider, 1, 0);
+
+		return settingsRowVolume;
+	}
+
 	@Override
 	public void applySettings()
 	{
 		padContent.setLoop(checkboxPlaybackLoop.isSelected());
 		padContent.setMediaPath(labelFilePath.getText().equals(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_PLACEHOLDER)) ? null : labelFilePath.getText());
+		padContent.setVolume(volumeSlider.getValue() / 100.0);
 	}
 
 	private void onButtonFileChooser(ActionEvent event)

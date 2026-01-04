@@ -160,6 +160,7 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
 		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Entfernen"))));
+		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Lautstärke"))));
 
 		// menu
 		data.add(new IconEntry(FontAwesomeType.ARROWS_ROTATE_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Nach Updates suchen"))));

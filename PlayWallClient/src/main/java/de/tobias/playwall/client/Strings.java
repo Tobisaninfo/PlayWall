@@ -53,4 +53,5 @@ public class Strings
 	public static final String UI_SETTINGS_PAD_FILE_SHOW_IN_FOLDER = "ui.settings.pad.general.file.show.in.folder";
 	public static final String UI_SETTINGS_PAD_FILE_DELETE = "ui.settings.pad.general.file.delete";
 	public static final String UI_SETTINGS_PAD_FILE_PLACEHOLDER = "ui.settings.pad.general.file.placeholder";
+	public static final String UI_SETTINGS_PAD_VOLUME = "ui.settings.pad.general.volume";
 }
