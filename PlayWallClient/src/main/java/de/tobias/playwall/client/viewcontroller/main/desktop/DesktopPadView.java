@@ -190,11 +190,20 @@ public class DesktopPadView implements PadView
 			notFoundLabel.setVisible(false);
 			errorLabel.setVisible(false);
 
+			final PadContent padContent = pad.getContent();
+			if(padContent != null)
+			{
+				switch(padContent)
+				{
+					case AudioPadContent audioPadContent -> loopLabel.setVisible(audioPadContent.isLoop());
+				}
+			}
+
 			if(pad.getStatus() != null)
 			{
 				updateStatus(pad.getStatus());
 			}
-			else if(pad.getContent() != null)
+			else if(padContent != null)
 			{
 				updateStatus(PadStatus.READY);
 			}
