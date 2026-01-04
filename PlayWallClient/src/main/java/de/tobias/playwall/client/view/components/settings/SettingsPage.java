@@ -26,9 +26,6 @@ public class SettingsPage extends VBox
 		this.settingsItemsVbox.setSpacing(ViewConstants.DEFAULT_SPACING);
 		this.settingsItemsVbox.setPadding(new Insets(0, ViewConstants.DEFAULT_SPACING, 0, ViewConstants.DEFAULT_SPACING));
 
-		final Region spacer = new Region();
-		VBox.setVgrow(spacer, Priority.ALWAYS);
-
 		getChildren().addAll(settingsItemsVbox);
 
 		VBox.setVgrow(this, Priority.ALWAYS);

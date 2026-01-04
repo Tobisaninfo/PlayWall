@@ -1,8 +1,5 @@
 package de.tobias.playwall.client.viewcontroller.settings.pad;
 
-import de.thecodelabs.utils.ui.icon.FontAwesomeType;
-import de.thecodelabs.utils.util.Localization;
-import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.AudioPadContent;
@@ -12,7 +9,6 @@ import de.tobias.playwall.client.view.components.settings.SettingsPage;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsGeneralPageView", applyToStage = false)
@@ -24,8 +20,7 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 	@FXML
 	private TextField textFieldName;
 
-	private SettingsRow settingsRowPlayback;
-	private CheckBox checkboxPlaybackLoop;
+	private AudioPadContentSettingsContainer audioPadContentSettingsContainer;
 
 	@InjectConstructor
 	public PadSettingsGeneralViewController(FluentClient client)
@@ -34,51 +29,40 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 	}
 
 	@Override
-	public void initParameter(BasePadSettingsViewController.Param param)
+	public void initParameter(Param param)
 	{
 		textFieldName.setText(param.pad.getName());
-		final PadContent content = param.pad.getContent();
-		if(content instanceof AudioPadContent audioPadContent)
-		{
-			if(settingsRowPlayback == null)
-			{
-				createPlaybackSettings();
-			}
 
-			checkboxPlaybackLoop.setSelected(audioPadContent.isLoop());
-		}
-		else
+		settingsPage.getItems().removeIf(n -> n instanceof BasePadContentSettingsContainer);
+
+		final PadContent content = param.pad.getContent();
+		if(content != null)
 		{
-			settingsRowPlayback = null;
-			checkboxPlaybackLoop = null;
+			switch(content)
+			{
+				case AudioPadContent audioPadContent ->
+				{
+					audioPadContentSettingsContainer = new AudioPadContentSettingsContainer();
+					audioPadContentSettingsContainer.init(audioPadContent);
+					settingsPage.getItems().add(audioPadContentSettingsContainer);
+				}
+			}
 		}
 
 		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty());
 	}
 
-	private void createPlaybackSettings()
-	{
-		settingsRowPlayback = new SettingsRow();
-		settingsRowPlayback.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK));
-		settingsRowPlayback.setIcon(FontAwesomeType.PLAY_SOLID);
-
-		checkboxPlaybackLoop = new CheckBox(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_LOOP));
-		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
-
-		settingsPage.getItems().addAll(settingsRowPlayback, new Separator());
-	}
-
 	@Override
-	public void applySettings(BasePadSettingsViewController.Param param)
+	public void applySettings(Param param)
 	{
 		param.pad.setName(textFieldName.getText());
 
 		final PadContent content = param.pad.getContent();
-		if(content instanceof AudioPadContent audioPadContent)
+		if(content != null)
 		{
-			if(checkboxPlaybackLoop != null)
+			switch(content)
 			{
-				audioPadContent.setLoop(checkboxPlaybackLoop.isSelected());
+				case AudioPadContent audioPadContent -> audioPadContentSettingsContainer.applySettings(audioPadContent);
 			}
 		}
 	}
