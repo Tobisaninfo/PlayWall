@@ -76,14 +76,11 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		boxButtons.setAlignment(Pos.CENTER_LEFT);
 		boxButtons.getChildren().addAll(buttonShowInFolder, buttonDelete);
 
-		final VBox boxFileSettings = new VBox(ViewConstants.DEFAULT_SPACING);
-		boxFileSettings.setAlignment(Pos.TOP_LEFT);
-		boxFileSettings.getChildren().addAll(boxFile, boxButtons);
-
 		final SettingsRow settingsRowFile = new SettingsRow();
 		settingsRowFile.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_FILE));
 		settingsRowFile.setIcon(FontAwesomeType.FILE_SOLID);
-		settingsRowFile.add(boxFileSettings, 1, 0);
+		settingsRowFile.add(boxFile, 1, 0);
+		settingsRowFile.add(boxButtons, 1, 1);
 		return settingsRowFile;
 	}
 
