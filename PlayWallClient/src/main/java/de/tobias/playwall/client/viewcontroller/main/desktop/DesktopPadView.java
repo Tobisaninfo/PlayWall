@@ -338,8 +338,7 @@ public class DesktopPadView implements PadView
 			}
 			case READY ->
 			{
-				// TODO: hide as soon as pad settings view allows to choose a media file or drag&drop is implemented
-				buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				stopButton.setDisable(true);
 			}
 			case PLAY ->
