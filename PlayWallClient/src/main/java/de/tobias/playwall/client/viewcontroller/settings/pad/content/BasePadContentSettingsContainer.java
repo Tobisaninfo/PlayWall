@@ -2,6 +2,7 @@ package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 
 import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
@@ -29,5 +30,5 @@ public abstract class BasePadContentSettingsContainer<T extends PadContent> exte
 		VBox.setVgrow(this, Priority.ALWAYS);
 	}
 
-	public abstract void applySettings();
+	public abstract void applySettings(BasePadSettingsViewController.Param param);
 }

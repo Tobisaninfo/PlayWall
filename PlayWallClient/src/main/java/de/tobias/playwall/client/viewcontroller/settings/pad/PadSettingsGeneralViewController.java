@@ -63,7 +63,7 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 
 		if(padContentSettingsContainer != null)
 		{
-			padContentSettingsContainer.applySettings();
+			padContentSettingsContainer.applySettings(param);
 		}
 	}
 }

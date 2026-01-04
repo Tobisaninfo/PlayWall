@@ -5,6 +5,7 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Base class for a page in the pad settings dialog.
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 public abstract class BasePadSettingsViewController extends BaseSettingsViewController<BasePadSettingsViewController.Param>
 {
 	@AllArgsConstructor
+	@Getter
 	public static class Param
 	{
 		protected Pad pad;

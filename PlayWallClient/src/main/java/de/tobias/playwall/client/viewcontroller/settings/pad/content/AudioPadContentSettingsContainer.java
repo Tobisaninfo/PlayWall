@@ -10,6 +10,7 @@ import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
+import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
 import de.tobias.playwall.common.utils.FileFormats;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
@@ -17,7 +18,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -124,11 +124,14 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	}
 
 	@Override
-	public void applySettings()
+	public void applySettings(BasePadSettingsViewController.Param param)
 	{
-		padContent.setLoop(checkboxPlaybackLoop.isSelected());
-		padContent.setMediaPath(labelFilePath.getText().equals(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_PLACEHOLDER)) ? null : labelFilePath.getText());
-		padContent.setVolume(volumeSlider.getValue() / 100.0);
+		if(param.getPad().getContent() instanceof AudioPadContent audioPadContent)
+		{
+			audioPadContent.setLoop(checkboxPlaybackLoop.isSelected());
+			audioPadContent.setMediaPath(labelFilePath.getText().equals(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_PLACEHOLDER)) ? null : labelFilePath.getText());
+			audioPadContent.setVolume(volumeSlider.getValue() / 100.0);
+		}
 	}
 
 	private void onButtonFileChooser(ActionEvent event)
