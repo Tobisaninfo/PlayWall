@@ -55,7 +55,7 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
 		// Initial state = READY
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getNewButton(), padView.getSettingsButton());
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -67,15 +67,15 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOP));
 		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getNewButton(), padView.getSettingsButton());
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EOF));
 		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getNewButton(), padView.getSettingsButton());
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getNewButton(), padView.getSettingsButton());
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EMPTY));
 		WaitForAsyncUtils.waitForFxEvents();

@@ -62,7 +62,7 @@ class MainViewControllerPadNewFileTest extends AbstractViewControllerTest
 		final Path path = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		when(fileChooserWrapper.showOpenFile(any())).thenReturn(Optional.of(path));
 
-		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final UUID padId = UUID.fromString("57accabc-7d19-473c-a0a1-ea5c61b85e18");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 		robot.clickOn(padView.getNewButton());
 
@@ -81,7 +81,7 @@ class MainViewControllerPadNewFileTest extends AbstractViewControllerTest
 
 		when(fileChooserWrapper.showOpenFile(any())).thenReturn(Optional.empty());
 
-		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final UUID padId = UUID.fromString("57accabc-7d19-473c-a0a1-ea5c61b85e18");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 		robot.clickOn(padView.getNewButton());
 
