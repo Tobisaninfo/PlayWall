@@ -25,6 +25,8 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
 
 		getChildren().addAll(settingsRowPlayback, new Separator());
+
+		isValidProperty.set(true);
 	}
 
 	@Override

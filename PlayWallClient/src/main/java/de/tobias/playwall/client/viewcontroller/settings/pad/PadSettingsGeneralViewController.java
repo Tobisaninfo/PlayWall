@@ -5,6 +5,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.settings.SettingsPage;
+import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -36,14 +37,17 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 			padContentSettingsContainer = null;
 		}
 
+		BooleanBinding isValidBinding = textFieldName.textProperty().isNotEmpty();
+
 		final PadContent content = param.pad.getContent();
 		if(content != null)
 		{
 			padContentSettingsContainer = PadContentSettingsContainerFactory.createPadContentSettingsContainer(content);
 			settingsPage.getItems().add(padContentSettingsContainer);
+			isValidBinding = isValidBinding.and(padContentSettingsContainer.getIsValidProperty());
 		}
 
-		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty());
+		this.isValidProperty.bind(isValidBinding);
 	}
 
 	@Override
