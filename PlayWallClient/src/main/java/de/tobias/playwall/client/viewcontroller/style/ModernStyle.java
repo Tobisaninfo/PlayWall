@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
+import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.InjectField;
 import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.appcontext.Service;
@@ -13,14 +14,17 @@ import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.utils.Minifier;
 import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.viewcontroller.style.color.ModernColor;
+import javafx.application.Platform;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Service(superclass = Styleable.class)
 public class ModernStyle implements Styleable
@@ -28,21 +32,67 @@ public class ModernStyle implements Styleable
 	@InjectField
 	private App app;
 
+	@InjectField
+	private CommandLineOptions commandLineOptions;
+
 	private String globalTemplateString;
 	private String padTemplateString;
 
+	private Set<Stage> stages = new LinkedHashSet<>();
+
+	@SneakyThrows
 	@PostConstruct
 	void init()
 	{
 		globalTemplateString = Minifier.minifyCss(app.getClasspathResource("style/template-modern-global.css").getAsString());
 		padTemplateString = Minifier.minifyCss(app.getClasspathResource("style/template-modern-pad.css").getAsString());
+
+		if(commandLineOptions.hasOption(CommandLineOptions.WATCH_STYLESHEETS))
+		{
+			final Path modernStylesheet = Paths.get(getClass().getClassLoader().getResource("style").toURI());
+			final WatchService watchService = FileSystems.getDefault().newWatchService();
+			modernStylesheet.register(
+					watchService,
+					StandardWatchEventKinds.ENTRY_MODIFY
+			);
+
+			final Thread watcher = new Thread(() -> watchForChanges(watchService));
+			watcher.setDaemon(true);
+			watcher.start();
+		}
+	}
+
+	private void watchForChanges(WatchService watchService)
+	{
+		try
+		{
+			while(!Thread.currentThread().isInterrupted())
+			{
+				final WatchKey key = watchService.take();
+				key.pollEvents();
+				Platform.runLater(() -> {
+					this.stages.forEach(this::applyToStage);
+					Logger.debug("Reloaded Stylesheets");
+				});
+				key.reset();
+			}
+		}
+		catch(InterruptedException e)
+		{
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	@Override
 	public void applyToStage(Stage stage)
 	{
-		stage.getScene().getStylesheets().add("style/modern.css");
-		stage.getScene().getStylesheets().add("style/settings.css");
+		stages.add(stage);
+
+		stage.getScene().getStylesheets().remove("style/modern.css");
+		stage.getScene().getStylesheets().remove("style/settings.css");
+
+		stage.getScene().getStylesheets().add(0, "style/modern.css");
+		stage.getScene().getStylesheets().add(1, "style/settings.css");
 	}
 
 	@Override
