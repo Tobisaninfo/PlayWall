@@ -157,6 +157,7 @@ public class PlayWallIconOverviewMainViewController extends NVC
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei")
 		)));
 		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"))));
+		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
 		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Entfernen"))));
 
