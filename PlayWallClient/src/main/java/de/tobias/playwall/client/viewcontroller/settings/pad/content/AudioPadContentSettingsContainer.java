@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 
+import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
@@ -7,12 +8,15 @@ import de.tobias.playwall.client.model.project.AudioPadContent;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.nio.file.Paths;
 
 /**
  * Settings related to {@link AudioPadContent}
@@ -33,14 +37,13 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 	private SettingsRow createFileSettings()
 	{
-		final SettingsRow settingsRowFile = new SettingsRow();
-		settingsRowFile.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_FILE));
-		settingsRowFile.setIcon(FontAwesomeType.FILE_SOLID);
-
 		final Label labelFilePath = new Label(padContent.getMediaPath());
 		final PlayWallButton buttonChooseFile = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_CHOOSE_PATH), FontAwesomeType.FOLDER_OPEN_SOLID);
 		buttonChooseFile.setMinWidth(120);
+
 		final PlayWallButton buttonShowInFolder = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_SHOW_IN_FOLDER), FontAwesomeType.FOLDER_SOLID);
+		buttonShowInFolder.setOnAction(this::onButtonShowInFolder);
+
 		final PlayWallButton buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
 
 		final HBox boxFile = new HBox(ViewConstants.DEFAULT_SPACING);
@@ -55,8 +58,10 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		boxFileSettings.setAlignment(Pos.TOP_LEFT);
 		boxFileSettings.getChildren().addAll(boxFile, boxButtons);
 
+		final SettingsRow settingsRowFile = new SettingsRow();
+		settingsRowFile.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_FILE));
+		settingsRowFile.setIcon(FontAwesomeType.FILE_SOLID);
 		settingsRowFile.add(boxFileSettings, 1, 0);
-
 		return settingsRowFile;
 	}
 
@@ -77,5 +82,10 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	public void applySettings()
 	{
 		padContent.setLoop(checkboxPlaybackLoop.isSelected());
+	}
+
+	private void onButtonShowInFolder(ActionEvent event)
+	{
+		NativeApplication.sharedInstance().showFileInFileViewer(Paths.get(padContent.getMediaPath()));
 	}
 }
