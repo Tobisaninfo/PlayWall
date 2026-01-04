@@ -19,7 +19,7 @@ public abstract class BasePadContentSettingsContainer<T extends PadContent> exte
 
 	protected final T padContent;
 
-	public BasePadContentSettingsContainer(T padContent)
+	protected BasePadContentSettingsContainer(T padContent)
 	{
 		this.padContent = padContent;
 
