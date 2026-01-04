@@ -52,6 +52,8 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	private SettingsRow createFileSettings()
 	{
 		labelFilePath = new Label(padContent.getMediaPath());
+		labelFilePath.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
+		labelFilePath.setEllipsisString(" ... ");
 		final Tooltip tooltip = new Tooltip();
 		tooltip.setText(padContent.getMediaPath());
 		tooltip.setShowDelay(Duration.millis(300));
