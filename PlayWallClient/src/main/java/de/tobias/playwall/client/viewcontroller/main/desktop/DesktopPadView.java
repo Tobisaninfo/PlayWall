@@ -6,9 +6,7 @@ import de.thecodelabs.utils.ui.scene.BusyView;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.client.model.project.PadIndex;
-import de.tobias.playwall.client.model.project.PadStatus;
+import de.tobias.playwall.client.model.project.*;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.view.pad.PadIndexable;
@@ -185,6 +183,13 @@ public class DesktopPadView implements PadView
 			namePreviewLabel.setText(pad.getName());
 
 			indexLabel.setText(pad.getReadablePosition());
+
+			loopLabel.setVisible(false);
+			triggerLabel.setVisible(false);
+			playlistLabel.setVisible(false);
+			notFoundLabel.setVisible(false);
+			errorLabel.setVisible(false);
+
 			if(pad.getStatus() != null)
 			{
 				updateStatus(pad.getStatus());
