@@ -78,6 +78,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
 				.content(AudioPadContent.builder()
+						.mediaPath("abc.mp3")
 						.isLoop(false)
 						.volume(1.0)
 						.build())
