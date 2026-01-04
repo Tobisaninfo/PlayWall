@@ -12,28 +12,23 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 {
 	private final CheckBox checkboxPlaybackLoop;
 
-	public AudioPadContentSettingsContainer()
+	public AudioPadContentSettingsContainer(AudioPadContent	padContent)
 	{
-		super();
+		super(padContent);
 
 		final SettingsRow settingsRowPlayback = new SettingsRow();
 		settingsRowPlayback.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK));
 		settingsRowPlayback.setIcon(FontAwesomeType.PLAY_SOLID);
 
 		checkboxPlaybackLoop = new CheckBox(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_LOOP));
+		checkboxPlaybackLoop.setSelected(padContent.isLoop());
 		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
 
 		getChildren().addAll(settingsRowPlayback, new Separator());
 	}
 
 	@Override
-	protected void init(AudioPadContent padContent)
-	{
-		checkboxPlaybackLoop.setSelected(padContent.isLoop());
-	}
-
-	@Override
-	public void applySettings(AudioPadContent padContent)
+	public void applySettings()
 	{
 		padContent.setLoop(checkboxPlaybackLoop.isSelected());
 	}

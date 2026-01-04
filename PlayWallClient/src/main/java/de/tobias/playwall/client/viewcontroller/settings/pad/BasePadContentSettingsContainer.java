@@ -13,15 +13,17 @@ public abstract class BasePadContentSettingsContainer<T extends PadContent> exte
 	@Getter
 	protected final SimpleBooleanProperty isValidProperty = new SimpleBooleanProperty();
 
-	public BasePadContentSettingsContainer()
+	protected final T padContent;
+
+	public BasePadContentSettingsContainer(T padContent)
 	{
+		this.padContent = padContent;
+
 		setAlignment(Pos.TOP_LEFT);
 		setSpacing(ViewConstants.DEFAULT_SPACING);
 
 		VBox.setVgrow(this, Priority.ALWAYS);
 	}
 
-	protected abstract void init(T padContent);
-
-	public abstract void applySettings(T padContent);
+	public abstract void applySettings();
 }
