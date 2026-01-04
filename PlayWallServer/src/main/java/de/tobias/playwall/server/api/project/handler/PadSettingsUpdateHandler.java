@@ -49,18 +49,35 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 		}
 
 		pad.setName(requestMessage.getPad().getName());
-		final PadContent padContent = pad.getContent();
-		if(padContent instanceof AudioPadContent audioPadContent)
-		{
-			final PadContentDto requestPadContent = requestMessage.getPad().getContent();
-			if(requestPadContent instanceof AudioPadContentDto requestAudioPadContent)
-			{
-				audioPadContent.setLoop(requestAudioPadContent.isLoop());
-			}
-		}
+
+		updatePadContent(requestMessage.getPad().getContent(), pad.getContent());
 
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
 		return Optional.empty();
+	}
+
+	private void updatePadContent(PadContentDto requestPadContent, PadContent padContentToUpdate)
+	{
+		if(requestPadContent == null)
+		{
+			return;
+		}
+
+		if(padContentToUpdate == null)
+		{
+			return;
+		}
+
+		switch(requestPadContent)
+		{
+			case AudioPadContentDto requestAudioPadContent ->
+			{
+				switch(padContentToUpdate)
+				{
+					case AudioPadContent audioPadContent -> audioPadContent.setLoop(requestAudioPadContent.isLoop());
+				}
+			}
+		}
 	}
 }
