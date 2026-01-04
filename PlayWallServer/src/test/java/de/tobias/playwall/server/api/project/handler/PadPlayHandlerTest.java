@@ -57,7 +57,7 @@ class PadPlayHandlerTest
 
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
-		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(true).build());
+		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 		projectController.loadProject(project).get();
 
 		final Optional<ResponseMessage> response = handler.handleRequest(new PadPlayRequest(padId));
