@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
@@ -42,10 +43,14 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 	private final FluentClient fluentClient;
 
+	private final double initialVolume;
+
 	public AudioPadContentSettingsContainer(AudioPadContent padContent, UUID padId, FluentClient fluentClient)
 	{
 		super(padContent, padId);
 		this.fluentClient = fluentClient;
+
+		this.initialVolume = padContent.getVolume();
 
 		getChildren().addAll(createFileSettings(), new Separator());
 		getChildren().addAll(createPlaybackSettings(), new Separator());
@@ -115,6 +120,17 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 			return createSliderStyle(min, max, value);
 		}, volumeSlider.valueProperty()));
 
+		volumeSlider.valueProperty().addListener((_, _, newValue) -> {
+			try
+			{
+				fluentClient.pad(padId).changeVolume(newValue.doubleValue() / 100.0);
+			}
+			catch(PlayWallApiException e)
+			{
+				Logger.error(e.getMessage());
+			}
+		});
+
 		volumeSlider.setValue(padContent.getVolume() * 100);
 		settingsRowVolume.add(volumeSlider, 1, 0);
 
@@ -128,6 +144,19 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		{
 			audioPadContent.setLoop(checkboxPlaybackLoop.isSelected());
 			audioPadContent.setVolume(volumeSlider.getValue() / 100.0);
+		}
+	}
+
+	@Override
+	public void cleanup()
+	{
+		try
+		{
+			fluentClient.pad(padId).changeVolume(initialVolume);
+		}
+		catch(PlayWallApiException e)
+		{
+			Logger.error(e.getMessage());
 		}
 	}
 
@@ -147,7 +176,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 			try
 			{
 				fluentClient.pad(padId).newMedia(path.get());
-				final Stage stage = (Stage)((Node) event.getTarget()).getScene().getWindow();
+				final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
 				stage.close();
 			}
 			catch(PlayWallApiException ex)

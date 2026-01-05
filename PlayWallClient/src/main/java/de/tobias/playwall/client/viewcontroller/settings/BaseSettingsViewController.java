@@ -31,4 +31,6 @@ public abstract class BaseSettingsViewController<P> extends ParamViewControllerB
 	}
 
 	public abstract void applySettings(P param);
+
+	public abstract void cleanup();
 }

@@ -62,4 +62,13 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 			padContentSettingsContainer.applySettings(param);
 		}
 	}
+
+	@Override
+	public void cleanup()
+	{
+		if(padContentSettingsContainer != null)
+		{
+			padContentSettingsContainer.cleanup();
+		}
+	}
 }

@@ -69,6 +69,8 @@ public interface FluentClient
 		void updateSettings(Pad pad) throws PlayWallApiException;
 
 		void delete() throws PlayWallApiException;
+
+		void changeVolume(double volume) throws PlayWallApiException;
 	}
 
 	PadBuilder pad(UUID padId);

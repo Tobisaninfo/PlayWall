@@ -184,4 +184,10 @@ class ClientImpl implements Client
 	{
 		clientWebSocketHandler.send(new PadDeleteContentRequest(padId));
 	}
+
+	@Override
+	public void changeVolume(UUID padId, double volume) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadChangeVolumeRequest(padId, volume));
+	}
 }

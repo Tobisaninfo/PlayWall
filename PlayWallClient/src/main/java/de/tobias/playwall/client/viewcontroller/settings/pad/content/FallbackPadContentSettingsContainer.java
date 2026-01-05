@@ -58,6 +58,11 @@ public class FallbackPadContentSettingsContainer extends BasePadContentSettingsC
 	{
 	}
 
+	@Override
+	public void cleanup()
+	{
+	}
+
 	private void onButtonFileChooser(ActionEvent event)
 	{
 		final Window owner = ((Node) event.getTarget()).getScene().getWindow();

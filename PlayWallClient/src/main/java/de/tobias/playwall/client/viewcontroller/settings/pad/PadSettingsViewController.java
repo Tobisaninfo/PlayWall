@@ -195,6 +195,8 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	@FXML
 	private void cancelButtonHandler(ActionEvent event)
 	{
+		settingViewController.forEach(BaseSettingsViewController::cleanup);
+
 		getStageContainer().ifPresent(NVCStage::close);
 	}
 

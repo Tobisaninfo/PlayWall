@@ -179,6 +179,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.deletePad(padId);
 		}
+
+		@Override
+		public void changeVolume(double volume) throws PlayWallApiException
+		{
+			delegate.changeVolume(padId, volume);
+		}
 	}
 
 	@Override

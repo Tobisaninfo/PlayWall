@@ -52,4 +52,6 @@ public interface Client
 	void updateSettings(UUID padId, Pad pad) throws PlayWallApiException;
 
 	void deletePad(UUID padId) throws PlayWallApiException;
+
+	void changeVolume(UUID padId, double volume) throws PlayWallApiException;
 }
