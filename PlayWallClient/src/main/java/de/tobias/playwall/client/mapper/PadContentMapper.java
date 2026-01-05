@@ -43,6 +43,7 @@ public class PadContentMapper
 					.loop(audioPad.isLoop())
 					.volume(audioPad.getVolume())
 					.build();
+			default -> throw new IllegalStateException("Unexpected value: " + padContent);
 		};
 	}
 }
