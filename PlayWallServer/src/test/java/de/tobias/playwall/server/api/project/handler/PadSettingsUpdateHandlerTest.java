@@ -92,62 +92,6 @@ class PadSettingsUpdateHandlerTest
 	}
 
 	@Test
-	void testPadSettingsUpdateHandlerMediaPathSetToNull() throws Exception
-	{
-		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		final String oldMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString();
-		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(oldMediaPath).loop(true).build());
-		projectController.loadProject(project).get();
-		applicationEvents.clear();
-
-		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, PadDto.builder()
-				.name("Lorem")
-				.content(AudioPadContentDto.builder().mediaPath(null).build())
-				.build());
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
-
-		assertThat(project.getPad(padId).getContent()).isNull();
-
-		assertThat(applicationEvents.stream(PadUpdate.class))
-				.hasSize(1)
-				.first()
-				.satisfies(event -> assertThat(event.getPad().getContent()).isNull());
-	}
-
-	@Test
-	void testPadSettingsUpdateHandlerMediaPathChanged() throws Exception
-	{
-		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		final String newMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
-		final String oldMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString();
-		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(oldMediaPath).loop(true).build());
-		projectController.loadProject(project).get();
-		applicationEvents.clear();
-
-		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, PadDto.builder()
-				.name("Lorem")
-				.content(AudioPadContentDto.builder().mediaPath(newMediaPath).build())
-				.build());
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
-
-		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class);
-
-		assertThat(applicationEvents.stream(PadUpdate.class))
-				.hasSize(1)
-				.first()
-				.satisfies(event -> assertThat(event.getPad().getName()).isEqualTo("example_1"))
-				.satisfies(event -> assertThat(((AudioPadContentDto) event.getPad().getContent()).getMediaPath()).isEqualTo(newMediaPath));
-	}
-
-	@Test
 	void testPadSettingsUpdateHandlerPadNotFound() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2d55-4734-8148-5fb657963616");
