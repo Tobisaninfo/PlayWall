@@ -38,9 +38,6 @@ import java.util.UUID;
 public class AudioPadContentSettingsContainer extends BasePadContentSettingsContainer<AudioPadContent>
 {
 	private CheckBox checkboxPlaybackLoop;
-	private Label labelFilePath;
-	private PlayWallButton buttonShowInFolder;
-	private PlayWallButton buttonDelete;
 	private Slider volumeSlider;
 
 	private final FluentClient fluentClient;
@@ -59,7 +56,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 	private SettingsRow createFileSettings()
 	{
-		labelFilePath = new Label(padContent.getMediaPath());
+		Label labelFilePath = new Label(padContent.getMediaPath());
 		labelFilePath.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
 		labelFilePath.setEllipsisString(" ... ");
 		final Tooltip tooltip = new Tooltip();
@@ -67,27 +64,20 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		tooltip.setShowDelay(Duration.millis(300));
 		labelFilePath.setTooltip(tooltip);
 
-		final PlayWallButton buttonChooseFile = new PlayWallButton(FontAwesomeType.FOLDER_OPEN_SOLID);
+		final PlayWallButton buttonChooseFile = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_CHOOSE_PATH), FontAwesomeType.FOLDER_OPEN_SOLID);
 		buttonChooseFile.setOnAction(this::onButtonFileChooser);
 
-		buttonShowInFolder = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_SHOW_IN_FOLDER), FontAwesomeType.FOLDER_SOLID);
+		final PlayWallButton buttonShowInFolder = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_SHOW_IN_FOLDER), FontAwesomeType.FOLDER_SOLID);
 		buttonShowInFolder.setOnAction(this::onButtonShowInFolder);
-
-		buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
-		buttonDelete.setOnAction(this::onButtonDelete);
-
-		final HBox boxFile = new HBox(ViewConstants.DEFAULT_SPACING);
-		boxFile.setAlignment(Pos.CENTER_LEFT);
-		boxFile.getChildren().addAll(labelFilePath, buttonChooseFile);
 
 		final HBox boxButtons = new HBox(ViewConstants.DEFAULT_SPACING);
 		boxButtons.setAlignment(Pos.CENTER_LEFT);
-		boxButtons.getChildren().addAll(buttonShowInFolder, buttonDelete);
+		boxButtons.getChildren().addAll(buttonChooseFile, buttonShowInFolder);
 
 		final SettingsRow settingsRowFile = new SettingsRow();
 		settingsRowFile.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_FILE));
 		settingsRowFile.setIcon(FontAwesomeType.FILE_SOLID);
-		settingsRowFile.add(boxFile, 1, 0);
+		settingsRowFile.add(labelFilePath, 1, 0);
 		settingsRowFile.add(boxButtons, 1, 1);
 		return settingsRowFile;
 	}
@@ -137,7 +127,6 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		if(param.getPad().getContent() instanceof AudioPadContent audioPadContent)
 		{
 			audioPadContent.setLoop(checkboxPlaybackLoop.isSelected());
-			audioPadContent.setMediaPath(labelFilePath.getText().equals(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_PLACEHOLDER)) ? null : labelFilePath.getText());
 			audioPadContent.setVolume(volumeSlider.getValue() / 100.0);
 		}
 	}
@@ -169,22 +158,9 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		}
 	}
 
-	private void onButtonDelete(ActionEvent event)
-	{
-		updateLabelFilePath(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_PLACEHOLDER));
-		buttonShowInFolder.setDisable(true);
-		buttonDelete.setDisable(true);
-	}
-
 	private void onButtonShowInFolder(ActionEvent event)
 	{
 		NativeApplication.sharedInstance().showFileInFileViewer(Paths.get(padContent.getMediaPath()));
-	}
-
-	private void updateLabelFilePath(String text)
-	{
-		labelFilePath.setText(text);
-		labelFilePath.getTooltip().setText(text);
 	}
 
 	private String createSliderStyle(double min, double max, double value)

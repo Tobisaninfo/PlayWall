@@ -1,24 +1,36 @@
 @import "variables";
 
 .button {
-	-fx-background-color: #5c5c5c;
-	-fx-text-fill: $component-text-color;
-	-fx-background-radius: 3px;
-	-fx-font-size: 1.1em;
-	-fx-border-width: 0;
+    -fx-background-color: #5c5c5c;
+    -fx-text-fill: $component-text-color;
+    -fx-background-radius: 3px;
+    -fx-font-size: 1.1em;
+    -fx-border-width: 0;
 
-	&:focused {
-		-fx-background-color: $primary-color;
-		-fx-text-fill: $component-text-color;
-	}
+    &.danger {
+        -fx-background-color: $danger-color;
+    }
 
-	&:hover {
-		-fx-background-color: $component-hover-background-color;
-		-fx-text-fill: $component-text-color;
-	}
+    &:focused {
+        -fx-background-color: $primary-color;
+        -fx-text-fill: $component-text-color;
 
-	&:default {
-		-fx-background-color: $primary-color;
-		-fx-text-fill: $component-text-color;
-	}
+        &.danger {
+            -fx-background-color: $danger-color;
+        }
+    }
+
+    &:hover {
+        -fx-background-color: $component-hover-background-color;
+        -fx-text-fill: $component-text-color;
+
+        &.danger {
+            -fx-background-color: $danger-color;
+        }
+    }
+
+    &:default {
+        -fx-background-color: $primary-color;
+        -fx-text-fill: $component-text-color;
+    }
 }

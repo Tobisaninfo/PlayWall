@@ -13,6 +13,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
+import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.viewcontroller.ParamDialogBase;
 import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
@@ -25,6 +26,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
@@ -84,11 +87,11 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		stage.setResizable(true);
 
-		stage.setWidth(800);
-		stage.setHeight(450);
+		stage.setWidth(825);
+		stage.setHeight(500);
 
-		stage.setMinWidth(800);
-		stage.setMinHeight(450);
+		stage.setMinWidth(825);
+		stage.setMinHeight(500);
 
 		boxCategories.getStyleClass().add("settings-category-box");
 
@@ -139,18 +142,23 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 	private void initButtons()
 	{
-		final Button saveButton = new PlayWallButton("", FontAwesomeType.FLOPPY_DISK_SOLID);
+		final Button buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
+		buttonDelete.setId("deleteButton");
+		buttonDelete.getStyleClass().add(ViewConstants.DANGER_STYLECLASS);
+//		buttonDelete.setOnAction(this::deleteButtonHandler);
+
+		final Button saveButton = new PlayWallButton(Localization.getString("ui.settings.button.save"), FontAwesomeType.FLOPPY_DISK_SOLID);
 		saveButton.setId("saveButton");
 		saveButton.setDefaultButton(true);
-		saveButton.setText(Localization.getString("ui.settings.button.save"));
 		saveButton.setOnAction(this::saveButtonHandler);
 
-		final Button cancelButton = new PlayWallButton("", FontAwesomeType.XMARK_SOLID);
+		final Button cancelButton = new PlayWallButton(Localization.getString("ui.settings.button.cancel"), FontAwesomeType.XMARK_SOLID);
 		cancelButton.setId("cancelButton");
-		cancelButton.setText(Localization.getString("ui.settings.button.cancel"));
 		cancelButton.setOnAction(this::cancelButtonHandler);
 
-		boxButtons.getChildren().addAll(cancelButton, saveButton);
+		final Region spacer = new Region();
+		boxButtons.getChildren().addAll(buttonDelete, spacer, cancelButton, saveButton);
+		HBox.setHgrow(spacer, Priority.ALWAYS);
 
 		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
 				() -> settingViewController.stream()
