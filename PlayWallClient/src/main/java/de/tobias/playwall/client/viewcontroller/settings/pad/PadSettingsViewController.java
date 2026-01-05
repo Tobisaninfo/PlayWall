@@ -72,6 +72,8 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 	private Stage stage;
 
+	private Button buttonDelete;
+
 	@InjectConstructor
 	public PadSettingsViewController(FluentClient client)
 	{
@@ -138,11 +140,13 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		{
 			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getReadablePosition(), pad.getName()));
 		}
+
+		buttonDelete.setVisible(pad.getContent() != null);
 	}
 
 	private void initButtons()
 	{
-		final Button buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
+		buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
 		buttonDelete.setId("deleteButton");
 		buttonDelete.getStyleClass().add(ViewConstants.DANGER_STYLECLASS);
 		buttonDelete.setOnAction(this::deleteButtonHandler);
