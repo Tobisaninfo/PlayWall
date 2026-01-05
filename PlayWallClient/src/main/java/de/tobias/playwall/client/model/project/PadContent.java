@@ -14,3 +14,4 @@ import lombok.experimental.SuperBuilder;
 public abstract sealed class PadContent permits AudioPadContent
 {
 }
+

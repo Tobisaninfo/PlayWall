@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public final class AudioPadContent extends PadContent
+public final class AudioPadContent extends PadContent implements Loopable
 {
 	private String mediaPath;
 

@@ -191,12 +191,9 @@ public class DesktopPadView implements PadView
 			errorLabel.setVisible(false);
 
 			final PadContent padContent = pad.getContent();
-			if(padContent != null)
+			if(padContent instanceof Loopable loopable)
 			{
-				switch(padContent)
-				{
-					case AudioPadContent audioPadContent -> loopLabel.setVisible(audioPadContent.isLoop());
-				}
+				loopLabel.setVisible(loopable.isLoop());
 			}
 
 			if(pad.getStatus() != null)
