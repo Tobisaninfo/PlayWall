@@ -9,8 +9,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public abstract sealed class PadContent permits AudioPadContent, FallbackPadContent
+public final class FallbackPadContent extends PadContent
 {
 }
