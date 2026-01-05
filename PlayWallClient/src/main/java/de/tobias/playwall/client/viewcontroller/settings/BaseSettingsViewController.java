@@ -12,7 +12,7 @@ import lombok.Getter;
 /**
  * Base class for a page in a settings dialog.
  */
-public abstract class BaseSettingsViewController<P> extends ParamViewControllerBase<P>
+public abstract class BaseSettingsViewController<P> extends ParamViewControllerBase<P> implements Configurable<P>
 {
 	@FXML
 	@Getter
