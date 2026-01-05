@@ -24,6 +24,7 @@ import javafx.util.Duration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -175,14 +176,16 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	{
 		final double percentage = 100.0 * (value - min) / (max - min);
 
-		return String.format(Locale.ENGLISH,
+		final MessageFormat messageFormat = new MessageFormat(
 				"-slider-track-color: linear-gradient(to right, " +
-						"%1$s 0%%, " +
-						"%1$s %3$.1f%%, " +
-						"%2$s %3$.1f%%, " +
-						"%2$s %4$.1f%%, " +
-						"%1$s %4$.1f%%, " +
-						"%1$s 100%%);",
-				ViewConstants.SLIDER_DEFAULT_BACKGROUND_COLOR, ViewConstants.PRIMARY_COLOR, min, percentage);
+						"{0} 0%, " +
+						"{0} {2}%, " +
+						"{1} {2}%, " +
+						"{1} {3}%, " +
+						"{0} {3}%, " +
+						"{0} 100%);", Locale.ENGLISH);
+
+		final Object[] arguments = {ViewConstants.SLIDER_DEFAULT_BACKGROUND_COLOR, ViewConstants.PRIMARY_COLOR, min, percentage};
+		return messageFormat.format(arguments, new StringBuffer(), null).toString();
 	}
 }
