@@ -54,6 +54,7 @@ public class PadDeleteContentHandler implements RequestHandler<PadDeleteContentR
 		}
 
 		pad.setContent(null);
+		pad.setName(null);
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
 		return Optional.empty();
