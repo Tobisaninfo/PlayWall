@@ -178,4 +178,10 @@ class ClientImpl implements Client
 	{
 		clientWebSocketHandler.send(new PadSettingsUpdateRequest(padId, padMapper.padToPadDto(pad)));
 	}
+
+	@Override
+	public void deletePad(UUID padId) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadDeleteContentRequest(padId));
+	}
 }

@@ -173,6 +173,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.updateSettings(padId, pad);
 		}
+
+		@Override
+		public void delete() throws PlayWallApiException
+		{
+			delegate.deletePad(padId);
+		}
 	}
 
 	@Override

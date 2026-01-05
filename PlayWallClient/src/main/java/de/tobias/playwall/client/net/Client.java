@@ -50,4 +50,6 @@ public interface Client
 	void newMedia(UUID padId, Path file) throws PlayWallApiException;
 
 	void updateSettings(UUID padId, Pad pad) throws PlayWallApiException;
+
+	void deletePad(UUID padId) throws PlayWallApiException;
 }

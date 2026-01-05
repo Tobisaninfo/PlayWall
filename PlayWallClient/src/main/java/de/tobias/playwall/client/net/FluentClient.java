@@ -67,6 +67,8 @@ public interface FluentClient
 		void newMedia(Path file) throws PlayWallApiException;
 
 		void updateSettings(Pad pad) throws PlayWallApiException;
+
+		void delete() throws PlayWallApiException;
 	}
 
 	PadBuilder pad(UUID padId);

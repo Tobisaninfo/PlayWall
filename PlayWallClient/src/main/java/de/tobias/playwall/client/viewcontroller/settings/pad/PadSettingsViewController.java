@@ -145,7 +145,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		final Button buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
 		buttonDelete.setId("deleteButton");
 		buttonDelete.getStyleClass().add(ViewConstants.DANGER_STYLECLASS);
-//		buttonDelete.setOnAction(this::deleteButtonHandler);
+		buttonDelete.setOnAction(this::deleteButtonHandler);
 
 		final Button saveButton = new PlayWallButton(Localization.getString("ui.settings.button.save"), FontAwesomeType.FLOPPY_DISK_SOLID);
 		saveButton.setId("saveButton");
@@ -192,5 +192,20 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	private void cancelButtonHandler(ActionEvent event)
 	{
 		getStageContainer().ifPresent(NVCStage::close);
+	}
+
+	@FXML
+	private void deleteButtonHandler(ActionEvent event)
+	{
+		try
+		{
+			client.pad(pad.getId()).delete();
+			getStageContainer().ifPresent(NVCStage::close);
+		}
+		catch(PlayWallApiException e)
+		{
+			Logger.error(e.getMessage());
+			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
+		}
 	}
 }
