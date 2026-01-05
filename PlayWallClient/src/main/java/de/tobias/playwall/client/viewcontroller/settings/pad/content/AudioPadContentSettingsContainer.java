@@ -3,9 +3,11 @@ package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.AudioPadContent;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
@@ -19,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
@@ -27,6 +30,7 @@ import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Settings related to {@link AudioPadContent}
@@ -39,9 +43,12 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	private PlayWallButton buttonDelete;
 	private Slider volumeSlider;
 
-	public AudioPadContentSettingsContainer(AudioPadContent padContent)
+	private final FluentClient fluentClient;
+
+	public AudioPadContentSettingsContainer(AudioPadContent padContent, UUID padId, FluentClient fluentClient)
 	{
-		super(padContent);
+		super(padContent, padId);
+		this.fluentClient = fluentClient;
 
 		getChildren().addAll(createFileSettings(), new Separator());
 		getChildren().addAll(createPlaybackSettings(), new Separator());
@@ -148,9 +155,17 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 		if(path.isPresent())
 		{
-			updateLabelFilePath(path.get().toString());
-			buttonShowInFolder.setDisable(false);
-			buttonDelete.setDisable(false);
+			try
+			{
+				fluentClient.pad(padId).newMedia(path.get());
+				final Stage stage = (Stage)((Node) event.getTarget()).getScene().getWindow();
+				stage.close();
+			}
+			catch(PlayWallApiException ex)
+			{
+				// TODO: error handling
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 

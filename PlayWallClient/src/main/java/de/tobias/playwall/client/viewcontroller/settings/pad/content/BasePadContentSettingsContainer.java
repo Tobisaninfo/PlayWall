@@ -9,6 +9,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 
+import java.util.UUID;
+
 /**
  * Base class for settings related to specific pad content types.
  * Subclasses of this class will be used to dynamically extend the settings in {@link de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsGeneralViewController}.
@@ -19,10 +21,12 @@ public abstract class BasePadContentSettingsContainer<T extends PadContent> exte
 	protected final SimpleBooleanProperty isValidProperty = new SimpleBooleanProperty();
 
 	protected final T padContent;
+	protected final UUID padId;
 
-	protected BasePadContentSettingsContainer(T padContent)
+	protected BasePadContentSettingsContainer(T padContent, UUID padId)
 	{
 		this.padContent = padContent;
+		this.padId = padId;
 
 		setAlignment(Pos.TOP_LEFT);
 		setSpacing(ViewConstants.DEFAULT_SPACING);

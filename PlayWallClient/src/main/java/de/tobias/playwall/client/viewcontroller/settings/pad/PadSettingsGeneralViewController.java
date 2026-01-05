@@ -25,10 +25,13 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 
 	private BasePadContentSettingsContainer<? extends PadContent> padContentSettingsContainer;
 
+	private final PadContentSettingsContainerFactory padContentSettingsContainerFactory;
+
 	@InjectConstructor
-	public PadSettingsGeneralViewController(FluentClient client)
+	public PadSettingsGeneralViewController(FluentClient client, PadContentSettingsContainerFactory padContentSettingsContainerFactory)
 	{
 		super(client);
+		this.padContentSettingsContainerFactory = padContentSettingsContainerFactory;
 	}
 
 	@Override
@@ -48,7 +51,7 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 		final PadContent content = param.pad.getContent();
 		if(content != null)
 		{
-			padContentSettingsContainer = PadContentSettingsContainerFactory.createPadContentSettingsContainer(content);
+			padContentSettingsContainer = padContentSettingsContainerFactory.createPadContentSettingsContainer(param.pad);
 			settingsPage.getItems().add(padContentSettingsContainer);
 			isValidBinding = isValidBinding.and(padContentSettingsContainer.getIsValidProperty());
 		}
