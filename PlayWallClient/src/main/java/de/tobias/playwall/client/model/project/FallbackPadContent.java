@@ -13,4 +13,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public final class FallbackPadContent extends PadContent
 {
+	@Override
+	public FallbackPadContent copy()
+	{
+		return FallbackPadContent.builder().build();
+	}
 }

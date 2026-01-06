@@ -17,4 +17,14 @@ public final class AudioPadContent extends PadContent implements Loopable
 
 	private boolean isLoop;
 	private double volume;
+
+	@Override
+	public AudioPadContent copy()
+	{
+		return AudioPadContent.builder()
+				.mediaPath(mediaPath)
+				.isLoop(isLoop)
+				.volume(volume)
+				.build();
+	}
 }

@@ -13,4 +13,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract sealed class PadContent permits AudioPadContent, FallbackPadContent
 {
+	public abstract PadContent copy();
 }
