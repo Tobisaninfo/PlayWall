@@ -30,61 +30,20 @@
 @import "components/tableview";
 @import "components/settings";
 @import "components/color-view";
+@import "components/tool-bar";
+@import "components/icon";
 
 @import "views/about-view";
 @import "views/application-loading-view";
 @import "views/launch-dialog";
 @import "views/pad-view";
-
-/**
-Default elements
- */
+@import "views/main-view";
 
 .root {
 	-fx-base: rgb(20, 20, 20);
 	-fx-font-family: Lato sans-serif;
 }
 
-.tool-bar {
-	-fx-background-color: #333333;
-	-fx-border-width: 1px 0 1px 0;
-	-fx-border-color: #222222;
-}
-
-.icon {
-	-fx-fill: white;
-}
-
 .window-title {
   -fx-font-weight: bold;
-}
-
-.toggle-button:selected .icon {
-	-fx-fill: #333333;
-}
-
-/**
-PlayPad Elements
- */
-
-.pad:drag {
-	-fx-opacity: 0.8;
-}
-
-.text-field:error {
-	-fx-text-box-border: red;
-	-fx-focus-color: red;
-}
-
-.pad-notfound {
-	-fx-text-fill: red !important;
-}
-
-.icon-notfound:pressed {
-	-fx-fill: lightgray;
-}
-
-.current-page-button {
-	-fx-background-color: #dbdbdb !important;
-	-fx-text-fill: #333333 !important;
 }

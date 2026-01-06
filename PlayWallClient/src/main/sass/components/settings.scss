@@ -1,5 +1,10 @@
 @import "variables";
 
+.settings-entry-label {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+}
+
 .settings-category-box {
   -fx-background-color: $primary-color;
 }
@@ -14,7 +19,7 @@
     -fx-fill: $settings-selected-background-color;
   }
 
-   .settings-category-icon-warning .icon {
+  .settings-category-icon-warning .icon {
     -fx-fill: $settings-warning-color;
   }
 
@@ -45,7 +50,7 @@
         -fx-fill: $primary-color;
       }
 
-       .settings-category-icon-warning .icon {
+      .settings-category-icon-warning .icon {
         -fx-fill: $settings-warning-color;
       }
 
@@ -62,7 +67,7 @@
       -fx-fill: $settings-selected-background-color;
     }
 
-     .settings-category-icon-warning .icon {
+    .settings-category-icon-warning .icon {
       -fx-fill: $settings-warning-color;
     }
 

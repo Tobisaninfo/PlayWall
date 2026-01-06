@@ -42,7 +42,6 @@ public class ModernStyle implements Styleable
 	public void applyToStage(Stage stage)
 	{
 		stage.getScene().getStylesheets().add("style/modern.css");
-		stage.getScene().getStylesheets().add("style/settings.css");
 	}
 
 	@Override

@@ -1,0 +1,7 @@
+.icon {
+  -fx-fill: white;
+}
+
+.toggle-button:selected .icon {
+  -fx-fill: #333333;
+}

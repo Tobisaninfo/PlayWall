@@ -37,3 +37,7 @@
 .pad-button:hover {
   -fx-background-color: #00000030;
 }
+
+.pad:drag {
+  -fx-opacity: 0.8;
+}
