@@ -120,4 +120,37 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 						.build())
 				.build());
 	}
+
+	@Test
+	void testOpenSettingsAndSetNameTryToSelectNewFile(FxRobot robot) throws PlayWallApiException
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.openProject(project);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
+		context.registerLazy(Stage.class, _ -> new Stage());
+		robot.clickOn(padView.getSettingsButton());
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		List<Window> windows = new ArrayList<>(robot.listWindows());
+		Stage stage= (Stage) windows.getLast();
+
+		assertThat(stage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
+
+		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
+		robot.clickOn("#buttonChooseFile");
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		windows = new ArrayList<>(robot.listWindows());
+		stage = (Stage) windows.getLast();
+
+		assertThat(stage.getTitle()).isEqualTo("Es existieren ungespeicherte Änderungen");
+	}
 }
