@@ -2,9 +2,14 @@ package de.tobias.playwall.client.viewcontroller;
 
 import com.google.gson.JsonElement;
 import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.common.utils.FileFormats;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
@@ -12,6 +17,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @ViewController(autoload = false, path = "", view = "")
 public class FileChooserWrapper
@@ -59,5 +65,20 @@ public class FileChooserWrapper
 			app.getUserDefaults().setData(OPEN_FOLDER, selectedFile.getParent());
 		}
 		return Optional.ofNullable(selectedFile).map(File::toPath);
+	}
+
+	public void showByActionEvent(ActionEvent event, Consumer<Path> callback)
+	{
+		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
+		fileChooser.setExtensionFilter(FileFormats.FILE_FORMATS.stream().map(format ->
+				new FileChooser.ExtensionFilter(
+						Localization.getString("FileFormat." + format.contentType().name()),
+						format.extensions().stream().map(ext -> "*." + ext).toList()
+				)).toList());
+
+		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
+		final Optional<Path> path = fileChooser.showOpenFile(owner);
+
+		path.ifPresent(callback);
 	}
 }

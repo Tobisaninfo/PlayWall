@@ -177,20 +177,12 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
 		{
 			final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-			fileChooser.setExtensionFilter(FileFormats.FILE_FORMATS.stream().map(format ->
-					new FileChooser.ExtensionFilter(
-							Localization.getString("FileFormat." + format.contentType().name()),
-							format.extensions().stream().map(ext -> "*." + ext).toList()
-					)).toList());
-			final Optional<Path> path = fileChooser.showOpenFile(owner);
-
-			if(path.isPresent())
-			{
+			fileChooser.showByActionEvent(event, (path) -> {
 				cleanup();
 
 				try
 				{
-					fluentClient.pad(padId).newMedia(path.get());
+					fluentClient.pad(padId).newMedia(path);
 					final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
 					stage.close();
 				}
@@ -199,7 +191,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 					// TODO: error handling
 					throw new RuntimeException(ex);
 				}
-			}
+			});
 		});
 	}
 

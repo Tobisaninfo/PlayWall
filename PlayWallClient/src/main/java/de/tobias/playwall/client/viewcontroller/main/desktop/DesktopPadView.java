@@ -3,7 +3,6 @@ package de.tobias.playwall.client.viewcontroller.main.desktop;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
-import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.*;
@@ -14,7 +13,6 @@ import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
 import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
-import de.tobias.playwall.common.utils.FileFormats;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -25,12 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import lombok.Getter;
-
-import java.nio.file.Path;
-import java.util.Optional;
 
 import static de.tobias.playwall.client.view.pad.control.PadStyleClasses.*;
 
@@ -299,20 +292,11 @@ public class DesktopPadView implements PadView
 
 	private void onNewAction(ActionEvent event)
 	{
-		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
 		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-		fileChooser.setExtensionFilter(FileFormats.FILE_FORMATS.stream().map(format ->
-				new FileChooser.ExtensionFilter(
-						Localization.getString("FileFormat." + format.contentType().name()),
-						format.extensions().stream().map(ext -> "*." + ext).toList()
-				)).toList());
-		final Optional<Path> path = fileChooser.showOpenFile(owner);
-
-		if(path.isPresent())
-		{
+		fileChooser.showByActionEvent(event, (path) -> {
 			try
 			{
-				padBuilder.newMedia(path.get());
+				padBuilder.newMedia(path);
 				updateStatus(PadStatus.READY);
 			}
 			catch(PlayWallApiException ex)
@@ -321,7 +305,7 @@ public class DesktopPadView implements PadView
 				updateStatus(this.previousStatus);
 				throw new RuntimeException(ex);
 			}
-		}
+		});
 	}
 
 	private void updateButtonStates()
