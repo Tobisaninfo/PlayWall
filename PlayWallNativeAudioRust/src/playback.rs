@@ -13,11 +13,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut e: JNIEnv,
     obj: JObject,
 ) {
-    let global_obj = e.new_global_ref(&obj).expect("Failed to create global ref for EOF");
-    let global_obj_progress = e.new_global_ref(&obj).expect("Failed to create global ref for progress");
+    let global_obj = e.new_global_ref(&obj).expect("Failed to create global ref");
     
-    let mut global_obj_opt = Some(global_obj);
-
     with_audio_handler(&mut e, obj, |env, audio_handler| {
         if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
@@ -56,33 +53,19 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
             let looping_ptr = &audio_handler.looping as *const bool;
 
-            let eof_callback = move || {
-                if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
-                    if let Ok(mut env_local) = vm.attach_current_thread() {
-                        trace!("Invoking Java onEof callback");
-                        if let Some(obj_ref) = global_obj_opt.take() {
-                            if let Err(e) = env_local.call_method(&obj_ref, "onEof", "()V", &[]) {
-                                debug!("Failed to call Java onEof: {:?}", e);
-                            }
-                        }
-                    }
-                }
+            let jvm_static: &'static jni::JavaVM = unsafe {
+                let jvm_lock = crate::JVM.read().unwrap();
+                let jvm_ref = jvm_lock.as_ref().expect("JVM not initialized");
+                &*(jvm_ref as *const jni::JavaVM)
             };
 
-            let progress_callback = move |seconds: f32| {
-                if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
-                    if let Ok(mut env_local) = vm.attach_current_thread() {
-                        let _ = env_local.call_method(
-                            &global_obj_progress,
-                            "onProgress",
-                            "(D)V",
-                            &[jni::objects::JValue::Double(seconds as f64)],
-                        );
-                    }
-                }
-            };
+            let source = HybridLoopSource::new(
+                path.clone(),
+                looping_ptr,
+                jvm_static,
+                global_obj,
+            );
 
-            let source = HybridLoopSource::new(path.clone(), looping_ptr, eof_callback, progress_callback);
             sink.set_volume(audio_handler.volume);
             sink.append(source);
             sink.play();

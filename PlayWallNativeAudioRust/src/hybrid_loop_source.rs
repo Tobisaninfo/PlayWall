@@ -2,32 +2,25 @@ use rodio::{Decoder, Source};
 use std::fs::File;
 use std::io::BufReader;
 use std::time::Duration;
+use jni::objects::GlobalRef;
+use jni::JavaVM;
 
-pub struct HybridLoopSource<F, P>
-where
-    F: FnOnce() + Send + 'static,
-    P: FnMut(f32) + Send + 'static,
-{
+pub struct HybridLoopSource {
     path: String,
     current_source: Box<dyn Source<Item=f32> + Send>,
-    eof_callback: Option<F>,
-    progress_callback: P,
+    jvm: &'static JavaVM,
+    java_callback_obj: GlobalRef,
     looping_flag_ptr: *const bool,
     samples_played: u64,
+    has_finished: bool,
+    env_cache: std::cell::RefCell<Option<jni::JNIEnv<'static>>>,
 }
 
-unsafe impl<F, P> Send for HybridLoopSource<F, P>
-where
-    F: FnOnce() + Send + 'static,
-    P: FnMut(f32) + Send + 'static,
-{}
+// GlobalRef ist Send, JavaVM ist Send/Sync, daher ist die Source sicher für Rodio
+unsafe impl Send for HybridLoopSource {}
 
-impl<F, P> HybridLoopSource<F, P>
-where
-    F: FnOnce() + Send + 'static,
-    P: FnMut(f32) + Send + 'static,
-{
-    pub fn new(path: String, looping_flag_ptr: *const bool, callback: F, progress_callback: P) -> Self {
+impl HybridLoopSource {
+    pub fn new(path: String, looping_flag_ptr: *const bool, jvm: &'static JavaVM, java_callback_obj: GlobalRef) -> Self {
         let file = File::open(&path).expect("Failed to open file");
         let reader = BufReader::new(file);
         let source = Decoder::new(reader).expect("Failed to create decoder");
@@ -35,10 +28,12 @@ where
         Self {
             path,
             current_source: Box::new(source),
-            eof_callback: Some(callback),
-            progress_callback,
+            jvm,
+            java_callback_obj,
             looping_flag_ptr,
             samples_played: 0,
+            has_finished: false,
+            env_cache: std::cell::RefCell::new(None),
         }
     }
 
@@ -50,54 +45,72 @@ where
         self.samples_played as f32
             / (self.current_source.sample_rate() as f32 * self.current_source.channels() as f32)
     }
+
+    fn with_env<R>(&self, f: impl FnOnce(&mut jni::JNIEnv) -> R) -> Option<R> {
+        let mut cache = self.env_cache.borrow_mut();
+
+        if cache.is_none() {
+            // Wir nutzen permanent_attach, damit kein Guard beim Drop des Threads panikt
+            if let Ok(env) = self.jvm.attach_current_thread_permanently() {
+                *cache = Some(env);
+            }
+        }
+
+        cache.as_mut().map(|env| f(env))
+    }
+
+    fn report_progress(&self) {
+        self.with_env(|env| {
+            let _ = env.call_method(
+                &self.java_callback_obj,
+                "onProgress",
+                "(D)V",
+                &[jni::objects::JValue::Double(self.elapsed_seconds() as f64)],
+            );
+        });
+    }
+
+    fn report_eof(&self) {
+        self.with_env(|env| {
+            let _ = env.call_method(&self.java_callback_obj, "onEof", "()V", &[]);
+        });
+    }
 }
 
-impl<F, P> Iterator for HybridLoopSource<F, P>
-where
-    F: FnOnce() + Send + 'static,
-    P: FnMut(f32) + Send + 'static,
-{
+impl Iterator for HybridLoopSource {
     type Item = f32;
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(sample) = self.current_source.next() {
             self.samples_played += 1;
 
-            // Report progress every 10.000 samples (~200ms at 48kHz Stereo)
             if self.samples_played % 10000 == 0 {
-                let elapsed = self.elapsed_seconds();
-                (self.progress_callback)(elapsed);
+                self.report_progress();
             }
 
             return Some(sample);
         }
-        self.samples_played = 0;
 
-        // End of current decoder reached. Check looping flag.
         if self.is_looping_enabled() {
             let file = File::open(&self.path).ok()?;
             let reader = BufReader::new(file);
             if let Ok(source) = Decoder::new(reader) {
                 self.current_source = Box::new(source);
-                self.samples_played += 1;
-                return self.current_source.next();
+                self.samples_played = 0;
+                return self.next();
             }
         }
 
-        // Run callback
-        if let Some(cb) = self.eof_callback.take() {
-            cb();
+        if !self.has_finished {
+            self.report_eof();
+            self.has_finished = true;
         }
 
         None
     }
 }
 
-impl<F, P> Source for HybridLoopSource<F, P>
-where
-    F: FnOnce() + Send + 'static,
-    P: FnMut(f32) + Send + 'static,
-{
+impl Source for HybridLoopSource {
     fn current_span_len(&self) -> Option<usize> {
         self.current_source.current_span_len()
     }
