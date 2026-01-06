@@ -15,6 +15,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
+import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.ParamDialogBase;
 import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
 import javafx.beans.Observable;
@@ -23,19 +24,25 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static de.thecodelabs.utils.util.Localization.getString;
 
 /**
  * Viewcontroller for the pad settings dialog.
@@ -213,5 +220,57 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 			Logger.error(e.getMessage());
 			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
 		}
+	}
+
+	@FXML
+	public void onButtonFileChooser(ActionEvent event)
+	{
+		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
+
+		if(!hasChanges())
+		{
+			showFileChooser(event);
+			return;
+		}
+
+		final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle(getString(Strings.UI_DIALOG_SETTINGS_PAD_OVERRIDE_TITLE));
+		alert.setContentText(getString(Strings.UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT));
+		alert.initOwner(owner);
+		alert.initModality(Modality.WINDOW_MODAL);
+		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
+		{
+			showFileChooser(event);
+		});
+	}
+
+	private boolean hasChanges()
+	{
+		final Pad padCopy = pad.copy();
+
+		settingViewController.forEach(controller -> controller.applySettings(new BasePadSettingsViewController.Param(padCopy, this)));
+
+		return !padCopy.equals(pad);
+	}
+
+	private void showFileChooser(ActionEvent event)
+	{
+		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
+		fileChooser.showByActionEvent(event, (path) -> {
+			settingViewController.forEach(BaseSettingsViewController::cleanup);
+
+			try
+			{
+				client.pad(pad.getId()).newMedia(path);
+				final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+				stage.close();
+			}
+			catch(PlayWallApiException ex)
+			{
+				// TODO: error handling
+				throw new RuntimeException(ex);
+			}
+		});
 	}
 }

@@ -29,8 +29,7 @@ public class PadContentSettingsContainerFactory
 		{
 			case AudioPadContent audioPadContent ->
 					new AudioPadContentSettingsContainer(audioPadContent, pad.getId(), fluentClient, parentDialog);
-			case FallbackPadContent _ ->
-					new FallbackPadContentSettingsContainer(pad.getId(), fluentClient, parentDialog);
+			case FallbackPadContent _ -> new FallbackPadContentSettingsContainer(pad.getId(), parentDialog);
 		};
 	}
 }

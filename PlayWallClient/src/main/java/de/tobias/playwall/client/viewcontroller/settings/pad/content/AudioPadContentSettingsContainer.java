@@ -6,32 +6,24 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.AudioPadContent;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
-import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
+import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.UUID;
-
-import static de.thecodelabs.utils.util.Localization.getString;
 
 /**
  * Settings related to {@link AudioPadContent}
@@ -70,7 +62,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		labelFilePath.setTooltip(tooltip);
 
 		final PlayWallButton buttonChooseFile = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_CHOOSE_PATH), FontAwesomeType.FOLDER_OPEN_SOLID);
-		buttonChooseFile.setOnAction(this::onButtonFileChooser);
+		buttonChooseFile.setOnAction(parentDialog::onButtonFileChooser);
 
 		final PlayWallButton buttonShowInFolder = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_SHOW_IN_FOLDER), FontAwesomeType.FOLDER_SOLID);
 		buttonShowInFolder.setOnAction(this::onButtonShowInFolder);
@@ -160,41 +152,6 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		}
 	}
 
-	private void onButtonFileChooser(ActionEvent event)
-	{
-		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
-
-		final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle(getString(Strings.UI_DIALOG_SETTINGS_PAD_OVERRIDE_TITLE));
-		alert.setContentText(getString(Strings.UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT));
-		alert.initOwner(owner);
-		alert.initModality(Modality.WINDOW_MODAL);
-		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
-		{
-			showFileChooser(event);
-		});
-	}
-
-	private void showFileChooser(ActionEvent event)
-	{
-		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-		fileChooser.showByActionEvent(event, (path) -> {
-			cleanup();
-
-			try
-			{
-				fluentClient.pad(padId).newMedia(path);
-				final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
-				stage.close();
-			}
-			catch(PlayWallApiException ex)
-			{
-				// TODO: error handling
-				throw new RuntimeException(ex);
-			}
-		});
-	}
 
 	private void onButtonShowInFolder(ActionEvent event)
 	{
