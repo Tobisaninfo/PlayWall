@@ -21,7 +21,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -32,6 +34,8 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+
+import static de.thecodelabs.utils.util.Localization.getString;
 
 /**
  * Settings related to {@link AudioPadContent}
@@ -163,28 +167,40 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 	private void onButtonFileChooser(ActionEvent event)
 	{
 		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
-		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-		fileChooser.setExtensionFilter(FileFormats.FILE_FORMATS.stream().map(format ->
-				new FileChooser.ExtensionFilter(
-						Localization.getString("FileFormat." + format.contentType().name()),
-						format.extensions().stream().map(ext -> "*." + ext).toList()
-				)).toList());
-		final Optional<Path> path = fileChooser.showOpenFile(owner);
 
-		if(path.isPresent())
+		final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle(getString(Strings.UI_DIALOG_SETTINGS_PAD_OVERRIDE_TITLE));
+		alert.setContentText(getString(Strings.UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT));
+		alert.initOwner(owner);
+		alert.initModality(Modality.WINDOW_MODAL);
+		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
 		{
-			try
+			final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
+			fileChooser.setExtensionFilter(FileFormats.FILE_FORMATS.stream().map(format ->
+					new FileChooser.ExtensionFilter(
+							Localization.getString("FileFormat." + format.contentType().name()),
+							format.extensions().stream().map(ext -> "*." + ext).toList()
+					)).toList());
+			final Optional<Path> path = fileChooser.showOpenFile(owner);
+
+			if(path.isPresent())
 			{
-				fluentClient.pad(padId).newMedia(path.get());
-				final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
-				stage.close();
+				cleanup();
+
+				try
+				{
+					fluentClient.pad(padId).newMedia(path.get());
+					final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+					stage.close();
+				}
+				catch(PlayWallApiException ex)
+				{
+					// TODO: error handling
+					throw new RuntimeException(ex);
+				}
 			}
-			catch(PlayWallApiException ex)
-			{
-				// TODO: error handling
-				throw new RuntimeException(ex);
-			}
-		}
+		});
 	}
 
 	private void onButtonShowInFolder(ActionEvent event)
