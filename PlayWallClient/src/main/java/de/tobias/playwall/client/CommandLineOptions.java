@@ -21,6 +21,7 @@ public class CommandLineOptions
 
 	public static final Option DEBUG = new Option(null, "debug", false, "Debug flag");
 	public static final Option STANDALONE = new Option(null, "standalone", false, "Do not start embedded server");
+	public static final Option WATCH_STYLESHEETS = new Option(null, "watch-stylesheets", false, "Install a file watch for stylesheets");
 	public static final Option SERVER_PATH = new Option(null, "server-path", true, "Specify path to embedded server");
 	public static final Option PROJECT = new Option(null, "project", true, "Skip launch dialog and open the specified project immediately if existing");
 
@@ -30,6 +31,7 @@ public class CommandLineOptions
 		final Options options = new Options();
 		options.addOption(DEBUG);
 		options.addOption(STANDALONE);
+		options.addOption(WATCH_STYLESHEETS);
 		options.addOption(SERVER_PATH);
 		options.addOption(PROJECT);
 

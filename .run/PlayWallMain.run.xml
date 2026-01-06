@@ -2,7 +2,7 @@
   <configuration default="false" name="PlayWallMain" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="de.tobias.playwall.client.PlayWallMain" />
     <module name="PlayWallClient" />
-    <option name="PROGRAM_PARAMETERS" value="--debug --standalone" />
+    <option name="PROGRAM_PARAMETERS" value="--debug --standalone --watch-stylesheets"/>
     <option name="VM_PARAMETERS" value="--enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx -Djavafx.enablePreview=true -Djavafx.suppressPreviewWarning=true" />
     <extension name="coverage">
       <pattern>
