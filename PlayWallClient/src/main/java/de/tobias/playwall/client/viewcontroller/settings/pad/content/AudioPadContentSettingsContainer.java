@@ -14,7 +14,6 @@ import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
-import de.tobias.playwall.common.utils.FileFormats;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -22,17 +21,14 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.UUID;
 
 import static de.thecodelabs.utils.util.Localization.getString;
@@ -176,22 +172,27 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
 		{
-			final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-			fileChooser.showByActionEvent(event, (path) -> {
-				cleanup();
+			showFileChooser(event);
+		});
+	}
 
-				try
-				{
-					fluentClient.pad(padId).newMedia(path);
-					final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
-					stage.close();
-				}
-				catch(PlayWallApiException ex)
-				{
-					// TODO: error handling
-					throw new RuntimeException(ex);
-				}
-			});
+	private void showFileChooser(ActionEvent event)
+	{
+		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
+		fileChooser.showByActionEvent(event, (path) -> {
+			cleanup();
+
+			try
+			{
+				fluentClient.pad(padId).newMedia(path);
+				final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
+				stage.close();
+			}
+			catch(PlayWallApiException ex)
+			{
+				// TODO: error handling
+				throw new RuntimeException(ex);
+			}
 		});
 	}
 
