@@ -9,6 +9,7 @@ import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxRobot;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
 import static org.mockito.Mockito.*;
@@ -61,6 +63,11 @@ class MainViewControllerPadNewFileTest extends AbstractViewControllerTest
 
 		final Path path = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		when(fileChooserWrapper.showOpenFile(any())).thenReturn(Optional.of(path));
+		doAnswer(invocation -> {
+			final Consumer<Path> callback = invocation.getArgument(1);
+			callback.accept(path);
+			return null;
+		}).when(fileChooserWrapper).showByActionEvent(any(ActionEvent.class), any());
 
 		final UUID padId = UUID.fromString("57accabc-7d19-473c-a0a1-ea5c61b85e18");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
