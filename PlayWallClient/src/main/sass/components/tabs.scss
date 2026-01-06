@@ -1,17 +1,17 @@
 @import "variables";
 
 .tab-pane {
-	&:top *.tab-header-background {
-		-fx-background-color: #333333;
-	}
+    &:top *.tab-header-background {
+        -fx-background-color: #333333;
+    }
 
-	&:top *.tab {
-		-fx-background-color: $component-background-color;
+    &:top *.tab {
+        -fx-background-color: $component-background-color;
 
-		&:selected {
-			-fx-background-color: $primary-color;
-			-fx-focus-color: transparent;
-			-fx-faint-focus-color: transparent;
-		}
-	}
+        &:selected {
+            -fx-background-color: $primary-color;
+            -fx-focus-color: transparent;
+            -fx-faint-focus-color: transparent;
+        }
+    }
 }

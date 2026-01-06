@@ -1,22 +1,22 @@
 @import "variables";
 
 .menu-bar {
-	-fx-background-color: #333333;
+    -fx-background-color: #333333;
 
-	.menu-button {
-		-fx-background-color: #333333;
-	}
+    .menu-button {
+        -fx-background-color: #333333;
+    }
 
-	.menu:showing, .menu:hover {
-		-fx-background-color: $primary-color;
-		-fx-background-radius: 0px;
-	}
+    .menu:showing, .menu:hover {
+        -fx-background-color: $primary-color;
+        -fx-background-radius: 0px;
+    }
 }
 
 .menu-item {
     -fx-font-size: 12px;
 
-	&:selected, &:focused {
-		-fx-background-color: $primary-color;
-	}
+    &:selected, &:focused {
+        -fx-background-color: $primary-color;
+    }
 }

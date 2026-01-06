@@ -1,23 +1,23 @@
 @import "variables";
 
 .dark-list {
-	-fx-base: rgb(60, 60, 60);
+    -fx-base: rgb(60, 60, 60);
 
 
-	.list-cell {
-		-fx-skin: "javafx.scene.control.skin.ListCellSkin";
-		-fx-background-color: -fx-base;
-		-fx-padding: 10px;
-		-fx-text-fill: #FFFFFF;
-		-fx-opacity: 1;
+    .list-cell {
+        -fx-skin: "javafx.scene.control.skin.ListCellSkin";
+        -fx-background-color: -fx-base;
+        -fx-padding: 10px;
+        -fx-text-fill: #FFFFFF;
+        -fx-opacity: 1;
 
-		&:filled {
-			-fx-border-width: 0px 0px 1px 0px;
-			-fx-border-color: #00000044;
-		}
+        &:filled {
+            -fx-border-width: 0px 0px 1px 0px;
+            -fx-border-color: #00000044;
+        }
 
-		&:odd {
-			-fx-background-color: -fx-base;
-		}
-	}
+        &:odd {
+            -fx-background-color: -fx-base;
+        }
+    }
 }

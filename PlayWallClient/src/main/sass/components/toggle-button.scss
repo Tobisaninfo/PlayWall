@@ -1,21 +1,21 @@
 @import "variables";
 
 .toggle-button {
-	-fx-background-color: $component-background-color;
-	-fx-text-fill: $component-text-color;
+    -fx-background-color: $component-background-color;
+    -fx-text-fill: $component-text-color;
 
-	&:focused {
-		-fx-background-color: $primary-color;
-		-fx-text-fill: $component-text-color !important;
-	}
+    &:focused {
+        -fx-background-color: $primary-color;
+        -fx-text-fill: $component-text-color !important;
+    }
 
-	&:hover {
-		-fx-background-color: $component-hover-background-color;
-		-fx-text-fill: $component-text-color !important;
-	}
+    &:hover {
+        -fx-background-color: $component-hover-background-color;
+        -fx-text-fill: $component-text-color !important;
+    }
 
-	&:selected {
-		-fx-background-color: #dbdbdb;
-		-fx-text-fill: #333333 !important;
-	}
+    &:selected {
+        -fx-background-color: #dbdbdb;
+        -fx-text-fill: #333333 !important;
+    }
 }

@@ -3,75 +3,76 @@
 
 .tree-view {
 
-	-fx-base: rgb(60, 60, 60);
+    -fx-base: rgb(60, 60, 60);
 
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 
-	.tree-cell {
-		-fx-skin: "javafx.scene.control.skin.TreeCellSkin";
-		-fx-background-color: -fx-base;
-		-fx-padding: 5px;
-		-fx-text-fill: #FFFFFF;
-		-fx-opacity: 1;
-	}
+    .tree-cell {
+        -fx-skin: "javafx.scene.control.skin.TreeCellSkin";
+        -fx-background-color: -fx-base;
+        -fx-padding: 5px;
+        -fx-text-fill: #FFFFFF;
+        -fx-opacity: 1;
+    }
 
-	.tree-view:focused {
-		.tree-cell:focused {
-			-fx-background-color: derive(-fx-hover-base, -50%);
-			-fx-background-insets: 0, 1, 2;
-		}
+    .tree-view:focused {
+        .tree-cell:focused {
+            -fx-background-color: derive(-fx-hover-base, -50%);
+            -fx-background-insets: 0, 1, 2;
+        }
 
-		.tree-cell:filled:focused:selected {
-			-fx-background-color: derive(-fx-hover-base, -50%);
-			-fx-background-insets: 0, 1, 2;
-			-fx-background: derive(-fx-base, -50%);
-			-fx-text-fill: $component-text-color;
-		}
+        .tree-cell:filled:focused:selected {
+            -fx-background-color: derive(-fx-hover-base, -50%);
+            -fx-background-insets: 0, 1, 2;
+            -fx-background: derive(-fx-base, -50%);
+            -fx-text-fill: $component-text-color;
+        }
 
-		.tree-cell:filled:selected {
-			-fx-background-color: $primary-color;
-			-fx-text-fill: $component-text-color;
+        .tree-cell:filled:selected {
+            -fx-background-color: $primary-color;
+            -fx-text-fill: $component-text-color;
 
-			&:hover {
-				@extend .tree-cell, :filled, :selected;
-			}
-		}
+            &:hover {
+                @extend .tree-cell, :filled, :selected;
+            }
+        }
 
-		.tree-cell:filled:focused:selected:hover {
-			-fx-background-color: $primary-color;
-			-fx-text-fill: $component-text-color;
-		}
-	}
+        .tree-cell:filled:focused:selected:hover {
+            -fx-background-color: $primary-color;
+            -fx-text-fill: $component-text-color;
+        }
+    }
 
-	.tree-cell:filled:selected:focused, .tree-cell:filled:selected, .tree-view:horizontal .tree-cell:filled:selected {
-		-fx-background-color: derive(-fx-base, +50%);
-		-fx-text-fill: $component-text-color;
-	}
+    .tree-cell:filled:selected:focused, .tree-cell:filled:selected, .tree-view:horizontal .tree-cell:filled:selected {
+        -fx-background-color: derive(-fx-base, +50%);
+        -fx-text-fill: $component-text-color;
+    }
 
-	.tree-cell:filled:selected:focused:disabled, .tree-cell:filled:selected:disabled {
-		-fx-opacity: derive(-fx-hover-base, -50%);
-	}
+    .tree-cell:filled:selected:focused:disabled, .tree-cell:filled:selected:disabled {
+        -fx-opacity: derive(-fx-hover-base, -50%);
+    }
 
-	.tree-cell:filled:hover {
-		-fx-background-color: $primary-color;
-		-fx-text-fill: $component-text-color;
-	}
+    .tree-cell:filled:hover {
+        -fx-background-color: $primary-color;
+        -fx-text-fill: $component-text-color;
+    }
 
-	.tree-view:focused .tree-cell:filled:focused:hover {
-		-fx-background-color: $primary-color;
-		-fx-text-fill: $component-text-color;
-	}
+    .tree-view:focused .tree-cell:filled:focused:hover {
+        -fx-background-color: $primary-color;
+        -fx-text-fill: $component-text-color;
+    }
 
-	.tree-view:horizontal .tree-cell:filled:selected, .tree-view:horizontal .tree-cell:filled:selected:hover {
-		-fx-background-color: $primary-color;
-		-fx-text-fill: $component-text-color;
-	}
+    .tree-view:horizontal .tree-cell:filled:selected, .tree-view:horizontal .tree-cell:filled:selected:hover {
+        -fx-background-color: $primary-color;
+        -fx-text-fill: $component-text-color;
+    }
 }
 
 .tree-cell .tree-disclosure-node .arrow {
-	-fx-background-color: $component-text-color;
+    -fx-background-color: $component-text-color;
 }
+
 .tree-cell:expanded .tree-disclosure-node .arrow {
-	-fx-background-color: $component-text-color;
+    -fx-background-color: $component-text-color;
 }

@@ -1,78 +1,78 @@
 @import "variables";
 
 .settings-entry-label {
-  -fx-font-size: 14px;
-  -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
 }
 
 .settings-category-box {
-  -fx-background-color: $primary-color;
+    -fx-background-color: $primary-color;
 }
 
 .settings-category {
-  -fx-background-color: $primary-color;
-  -fx-padding: 7px 14px 7px 14px;
-  -fx-alignment: top-left;
-  -fx-background-radius: 7px;
-
-  .icon {
-    -fx-fill: $settings-selected-background-color;
-  }
-
-  .settings-category-icon-warning .icon {
-    -fx-fill: $settings-warning-color;
-  }
-
-  .settings-category-label {
-    -fx-text-fill: $settings-selected-background-color;
-    -fx-font-size: 14px;
-  }
-
-  &:selected, &:focused {
-    -fx-background-color: $settings-selected-background-color;
+    -fx-background-color: $primary-color;
+    -fx-padding: 7px 14px 7px 14px;
+    -fx-alignment: top-left;
+    -fx-background-radius: 7px;
 
     .icon {
-      -fx-fill: $primary-color;
+        -fx-fill: $settings-selected-background-color;
     }
 
     .settings-category-icon-warning .icon {
-      -fx-fill: $settings-warning-color;
+        -fx-fill: $settings-warning-color;
     }
 
     .settings-category-label {
-      -fx-text-fill: $primary-color;
+        -fx-text-fill: $settings-selected-background-color;
+        -fx-font-size: 14px;
+    }
+
+    &:selected, &:focused {
+        -fx-background-color: $settings-selected-background-color;
+
+        .icon {
+            -fx-fill: $primary-color;
+        }
+
+        .settings-category-icon-warning .icon {
+            -fx-fill: $settings-warning-color;
+        }
+
+        .settings-category-label {
+            -fx-text-fill: $primary-color;
+        }
+
+        &:hover {
+            -fx-background-color: $settings-selected-background-color;
+
+            .icon {
+                -fx-fill: $primary-color;
+            }
+
+            .settings-category-icon-warning .icon {
+                -fx-fill: $settings-warning-color;
+            }
+
+            .settings-category-label {
+                -fx-text-fill: $primary-color;
+            }
+        }
     }
 
     &:hover {
-      -fx-background-color: $settings-selected-background-color;
+        -fx-background-color: $primary-color;
 
-      .icon {
-        -fx-fill: $primary-color;
-      }
+        .icon {
+            -fx-fill: $settings-selected-background-color;
+        }
 
-      .settings-category-icon-warning .icon {
-        -fx-fill: $settings-warning-color;
-      }
+        .settings-category-icon-warning .icon {
+            -fx-fill: $settings-warning-color;
+        }
 
-      .settings-category-label {
-        -fx-text-fill: $primary-color;
-      }
+        .settings-category-label {
+            -fx-text-fill: $settings-selected-background-color;
+        }
     }
-  }
-
-  &:hover {
-    -fx-background-color: $primary-color;
-
-    .icon {
-      -fx-fill: $settings-selected-background-color;
-    }
-
-    .settings-category-icon-warning .icon {
-      -fx-fill: $settings-warning-color;
-    }
-
-    .settings-category-label {
-      -fx-text-fill: $settings-selected-background-color;
-    }
-  }
 }

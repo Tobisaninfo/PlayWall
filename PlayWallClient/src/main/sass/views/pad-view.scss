@@ -1,43 +1,43 @@
 .pad-grid {
-  -fx-background-color: rgb(60, 60, 60);
+    -fx-background-color: rgb(60, 60, 60);
 
-  -fx-hgap: 7px;
-  -fx-vgap: 7px;
+    -fx-hgap: 7px;
+    -fx-vgap: 7px;
 
-  -fx-padding: 6px;
+    -fx-padding: 6px;
 }
 
 .pad {
-  -fx-background-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
 .pad-cue-in {
-  -fx-background-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
 .pad-root {
-  -fx-spacing: 4px;
-  -fx-padding: 5 5 5 5;
+    -fx-spacing: 4px;
+    -fx-padding: 5 5 5 5;
 }
 
 .pad-button-box {
-  -fx-spacing: 0px;
+    -fx-spacing: 0px;
 }
 
 .pad-info {
-  -fx-text-fill: white;
-  -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
 }
 
 .pad-button {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }
 
 .pad-button:hover {
-  -fx-background-color: #00000030;
+    -fx-background-color: #00000030;
 }
 
 .pad:drag {
-  -fx-opacity: 0.8;
+    -fx-opacity: 0.8;
 }

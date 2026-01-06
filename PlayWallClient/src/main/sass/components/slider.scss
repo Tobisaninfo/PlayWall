@@ -2,22 +2,21 @@
 
 .slider {
 
-	-slider-track-color: $component-background-color;
+    -slider-track-color: $component-background-color;
 
-	.track {
-		-fx-background-radius: 3px;
-		-fx-background-insets: 1px;
+    .track {
+        -fx-background-radius: 3px;
+        -fx-background-insets: 1px;
 
-		-fx-background-color:
-				-fx-shadow-highlight-color,
-				linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
-				-slider-track-color ;
-	}
+        -fx-background-color: -fx-shadow-highlight-color,
+        linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
+        -slider-track-color;
+    }
 
-	.thumb {
-		-fx-background-color: #CCCCCC;
-		-fx-padding: 0.333333em;
-		-fx-scale-x: 2;
-		-fx-scale-y: 2;
-	}
+    .thumb {
+        -fx-background-color: #CCCCCC;
+        -fx-padding: 0.333333em;
+        -fx-scale-x: 2;
+        -fx-scale-y: 2;
+    }
 }

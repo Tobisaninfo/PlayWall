@@ -1,12 +1,12 @@
 @font-face {
-  font-family: "Lato";
-  src: url("Lato/Lato-Regular.ttf");
+    font-family: "Lato";
+    src: url("Lato/Lato-Regular.ttf");
 }
 
 @font-face {
-  font-family: "Lato";
-  font-weight: bold;
-  src: url("Lato/Lato-Bold.ttf");
+    font-family: "Lato";
+    font-weight: bold;
+    src: url("Lato/Lato-Bold.ttf");
 }
 
 @import "components/button";
@@ -40,10 +40,10 @@
 @import "views/main-view";
 
 .root {
-	-fx-base: rgb(20, 20, 20);
-	-fx-font-family: Lato sans-serif;
+    -fx-base: rgb(20, 20, 20);
+    -fx-font-family: Lato sans-serif;
 }
 
 .window-title {
-  -fx-font-weight: bold;
+    -fx-font-weight: bold;
 }
