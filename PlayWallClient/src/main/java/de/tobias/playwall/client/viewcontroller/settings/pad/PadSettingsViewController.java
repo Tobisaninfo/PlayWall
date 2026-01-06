@@ -130,7 +130,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	{
 		this.pad = param.pad;
 
-		settingViewController.forEach(controller -> controller.initParameter(new BasePadSettingsViewController.Param(pad)));
+		settingViewController.forEach(controller -> controller.initParameter(new BasePadSettingsViewController.Param(pad, this)));
 
 		if(pad.getName() == null || pad.getName().isEmpty())
 		{
@@ -178,7 +178,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	@FXML
 	private void saveButtonHandler(ActionEvent event)
 	{
-		settingViewController.forEach(controller -> controller.applySettings(new BasePadSettingsViewController.Param(pad)));
+		settingViewController.forEach(controller -> controller.applySettings(new BasePadSettingsViewController.Param(pad, this)));
 
 		try
 		{

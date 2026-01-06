@@ -17,6 +17,7 @@ public abstract class BasePadSettingsViewController extends BaseSettingsViewCont
 	public static class Param
 	{
 		protected Pad pad;
+		protected PadSettingsViewController parentDialog;
 	}
 
 	@InjectConstructor

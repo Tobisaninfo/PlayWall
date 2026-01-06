@@ -45,9 +45,9 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 	private final double initialVolume;
 
-	public AudioPadContentSettingsContainer(AudioPadContent padContent, UUID padId, FluentClient fluentClient)
+	public AudioPadContentSettingsContainer(AudioPadContent padContent, UUID padId, FluentClient fluentClient, PadSettingsViewController parentDialog)
 	{
-		super(padContent, padId);
+		super(padContent, padId, parentDialog);
 		this.fluentClient = fluentClient;
 
 		this.initialVolume = padContent.getVolume();

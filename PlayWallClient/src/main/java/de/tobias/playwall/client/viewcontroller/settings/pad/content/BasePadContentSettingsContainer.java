@@ -4,6 +4,7 @@ import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.viewcontroller.settings.Configurable;
 import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
+import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;
@@ -23,11 +24,13 @@ public abstract class BasePadContentSettingsContainer<T extends PadContent> exte
 
 	protected final T padContent;
 	protected final UUID padId;
+	protected final PadSettingsViewController parentDialog;
 
-	protected BasePadContentSettingsContainer(T padContent, UUID padId)
+	protected BasePadContentSettingsContainer(T padContent, UUID padId, PadSettingsViewController parentDialog)
 	{
 		this.padContent = padContent;
 		this.padId = padId;
+		this.parentDialog = parentDialog;
 
 		setAlignment(Pos.TOP_LEFT);
 		setSpacing(ViewConstants.DEFAULT_SPACING);

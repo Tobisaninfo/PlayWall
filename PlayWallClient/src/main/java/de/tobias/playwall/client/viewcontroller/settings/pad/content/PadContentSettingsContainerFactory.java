@@ -7,6 +7,7 @@ import de.tobias.playwall.client.model.project.FallbackPadContent;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +17,7 @@ public class PadContentSettingsContainerFactory
 {
 	private final FluentClient fluentClient;
 
-	public BasePadContentSettingsContainer<? extends PadContent> createPadContentSettingsContainer(Pad pad)
+	public BasePadContentSettingsContainer<? extends PadContent> createPadContentSettingsContainer(Pad pad, PadSettingsViewController parentDialog)
 	{
 		PadContent padContent = pad.getContent();
 		if(padContent == null)
@@ -27,9 +28,9 @@ public class PadContentSettingsContainerFactory
 		return switch(padContent)
 		{
 			case AudioPadContent audioPadContent ->
-					new AudioPadContentSettingsContainer(audioPadContent, pad.getId(), fluentClient);
+					new AudioPadContentSettingsContainer(audioPadContent, pad.getId(), fluentClient, parentDialog);
 			case FallbackPadContent _ ->
-					new FallbackPadContentSettingsContainer(pad.getId(), fluentClient);
+					new FallbackPadContentSettingsContainer(pad.getId(), fluentClient, parentDialog);
 		};
 	}
 }

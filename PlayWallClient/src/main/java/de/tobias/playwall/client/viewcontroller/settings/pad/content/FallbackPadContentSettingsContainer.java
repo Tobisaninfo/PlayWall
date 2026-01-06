@@ -11,6 +11,7 @@ import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
+import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Separator;
@@ -25,9 +26,9 @@ public class FallbackPadContentSettingsContainer extends BasePadContentSettingsC
 {
 	private final FluentClient fluentClient;
 
-	public FallbackPadContentSettingsContainer(UUID padId, FluentClient fluentClient)
+	public FallbackPadContentSettingsContainer(UUID padId, FluentClient fluentClient, PadSettingsViewController parentDialog)
 	{
-		super(null, padId);
+		super(null, padId, parentDialog);
 		this.fluentClient = fluentClient;
 
 		getChildren().addAll(createFileSettings(), new Separator());

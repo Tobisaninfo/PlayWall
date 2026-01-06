@@ -46,7 +46,7 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 			padContentSettingsContainer = null;
 		}
 
-		padContentSettingsContainer = padContentSettingsContainerFactory.createPadContentSettingsContainer(param.pad);
+		padContentSettingsContainer = padContentSettingsContainerFactory.createPadContentSettingsContainer(param.pad, param.parentDialog);
 		settingsPage.getItems().add(padContentSettingsContainer);
 
 		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty().and(padContentSettingsContainer.getIsValidProperty()));
