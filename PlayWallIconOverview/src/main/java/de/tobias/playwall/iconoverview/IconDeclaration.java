@@ -1,19 +1,38 @@
 package de.tobias.playwall.iconoverview;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.tobias.playwall.iconoverview.parser.EnumUsageParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IconDeclaration
 {
-	public static ObservableList<IconEntry> getDeclaredData()
+	private static final String SRC_PATH = "/PlayWallClient/src/main";
+
+	@Getter
+	private final ObservableList<IconEntry> data;
+
+	private final Path sourceRootPath;
+
+	public IconDeclaration(Path sourceRootPath)
+	{
+		this.sourceRootPath = sourceRootPath;
+		this.data = initData();
+	}
+
+	private ObservableList<IconEntry> initData()
 	{
 		final ObservableList<IconEntry> data = FXCollections.observableArrayList();
+
 		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Speichern Button"))));
 		data.add(new IconEntry(FontAwesomeType.XMARK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Abbrechen Button"))));
 		data.add(new IconEntry(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID, List.of(
@@ -55,5 +74,45 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.CAKE_CANDLES_SOLID, List.of(new IconUsage(IconUsageCategory.UNDEFINED, "Ungenutzt"))));
 
 		return data;
+	}
+
+	private Set<String> getDeclaredIconTypes()
+	{
+		return data.stream()
+				.map(IconEntry::getFontIconType)
+				.map(Object::toString)
+				.collect(Collectors.toSet());
+	}
+
+	public Set<String> getUsedIconTypes()
+	{
+		try
+		{
+			final Set<String> usedValues = EnumUsageParser.parse(sourceRootPath, FontAwesomeType.class.getSimpleName());
+			for(String value : usedValues)
+			{
+				Logger.info(value);
+			}
+			return usedValues;
+		}
+		catch(IOException e)
+		{
+			Logger.error("Error parsing used icon types", e);
+			return new HashSet<>();
+		}
+	}
+
+	public Set<String> getNonDeclaredIconTypes()
+	{
+		final Set<String> nonDeclaredIconTypes = new HashSet<>(getUsedIconTypes());
+		nonDeclaredIconTypes.removeAll(getDeclaredIconTypes());
+		return nonDeclaredIconTypes;
+	}
+
+	public Set<String> getDeclaredButUnusedIconTypes()
+	{
+		final Set<String> declaredButUnusedIconTypes = new HashSet<>(getDeclaredIconTypes());
+		declaredButUnusedIconTypes.removeAll(getUsedIconTypes());
+		return declaredButUnusedIconTypes;
 	}
 }

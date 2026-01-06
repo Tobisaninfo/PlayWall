@@ -6,7 +6,6 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playwall.iconoverview.parser.EnumUsageParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -18,14 +17,10 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 
@@ -98,17 +93,11 @@ public class PlayWallIconOverviewMainViewController extends NVC
 
 	private ObservableList<IconEntry> getData()
 	{
-		final ObservableList<IconEntry> data = IconDeclaration.getDeclaredData();
+		final IconDeclaration iconDeclaration = new IconDeclaration(Paths.get(System.getProperty("user.dir")).resolve("PlayWallClient/src/main"));
 
-		final Set<String> declaredIconTypes = data.stream()
-				.map(IconEntry::getFontIconType)
-				.map(Object::toString)
-				.collect(Collectors.toSet());
-		final Set<String> usedIconTypes = getUsedIconTypes();
-		final Set<String> nonDeclaredIconTypes = new HashSet<>(usedIconTypes);
-		nonDeclaredIconTypes.removeAll(declaredIconTypes);
+		final ObservableList<IconEntry> data = iconDeclaration.getData();
 
-		for(String nonDeclaredIconType : nonDeclaredIconTypes)
+		for(String nonDeclaredIconType : iconDeclaration.getNonDeclaredIconTypes())
 		{
 			try
 			{
@@ -121,8 +110,7 @@ public class PlayWallIconOverviewMainViewController extends NVC
 			}
 		}
 
-		final Set<String> declaredButUnusedIconTypes = new HashSet<>(declaredIconTypes);
-		declaredButUnusedIconTypes.removeAll(usedIconTypes);
+		final Set<String> declaredButUnusedIconTypes = iconDeclaration.getDeclaredButUnusedIconTypes();
 
 		data.stream()
 				.filter(entry -> declaredButUnusedIconTypes.contains(entry.getFontIconType().toString()))
@@ -131,24 +119,5 @@ public class PlayWallIconOverviewMainViewController extends NVC
 		FXCollections.sort(data, Comparator.comparing(e -> e.getFontIconType().toString()));
 
 		return data;
-	}
-
-	private Set<String> getUsedIconTypes()
-	{
-		final Path sourceRoot = Paths.get(System.getProperty("user.dir") + "/PlayWallClient/src/main");
-		try
-		{
-			final Set<String> usedValues = EnumUsageParser.parse(sourceRoot, FontAwesomeType.class.getSimpleName());
-			for(String value : usedValues)
-			{
-				Logger.info(value);
-			}
-			return usedValues;
-		}
-		catch(IOException e)
-		{
-			Logger.error("Error parsing used icon types", e);
-			return new HashSet<>();
-		}
 	}
 }
