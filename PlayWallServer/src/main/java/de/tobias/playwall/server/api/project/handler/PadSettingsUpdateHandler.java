@@ -72,31 +72,17 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 			case AudioPadContent audioPadContent ->
 			{
 				final AudioPadContentDto requestAudioPadContent = (AudioPadContentDto) requestPadContent;
-				handleLooping(pad, audioPadContent, requestAudioPadContent);
-				handleVolume(pad, audioPadContent, requestAudioPadContent);
+
+				audioPadContent.setLoop(requestAudioPadContent.isLoop());
+				audioPadContent.setVolume(requestAudioPadContent.getVolume());
+
+				final PadController padController = projectController.getPadController(pad.getId());
+				if(padController != null)
+				{
+					padController.setLooping(requestAudioPadContent.isLoop());
+					padController.setVolume(requestAudioPadContent.getVolume());
+				}
 			}
-		}
-	}
-
-	private void handleLooping(Pad pad, AudioPadContent audioPadContent, AudioPadContentDto requestAudioPadContent)
-	{
-		audioPadContent.setLoop(requestAudioPadContent.isLoop());
-
-		final PadController padController = projectController.getPadController(pad.getId());
-		if(padController != null)
-		{
-			padController.setLooping(requestAudioPadContent.isLoop());
-		}
-	}
-
-	private void handleVolume(Pad pad, AudioPadContent audioPadContent, AudioPadContentDto requestAudioPadContent)
-	{
-		audioPadContent.setVolume(requestAudioPadContent.getVolume());
-
-		final PadController padController = projectController.getPadController(pad.getId());
-		if(padController != null)
-		{
-			padController.setVolume(requestAudioPadContent.getVolume());
 		}
 	}
 }
