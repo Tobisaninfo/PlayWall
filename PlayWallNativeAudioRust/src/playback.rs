@@ -13,8 +13,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut e: JNIEnv,
     obj: JObject,
 ) {
-    let obj_for_global = unsafe { JObject::from_raw(obj.as_raw()) };
-    let global_obj = e.new_global_ref(obj_for_global).expect("...");
+    let global_obj = e.new_global_ref(&obj).expect("Failed to create global ref for EOF");
+    let global_obj_progress = e.new_global_ref(&obj).expect("Failed to create global ref for progress");
+    
     let mut global_obj_opt = Some(global_obj);
 
     with_audio_handler(&mut e, obj, |env, audio_handler| {
@@ -54,7 +55,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             let path = audio_handler.media_path.as_ref().unwrap();
 
             let looping_ptr = &audio_handler.looping as *const bool;
-            let source = HybridLoopSource::new(path.clone(), looping_ptr, move || {
+
+            let eof_callback = move || {
                 if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
                     if let Ok(mut env_local) = vm.attach_current_thread() {
                         trace!("Invoking Java onEof callback");
@@ -65,7 +67,22 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                         }
                     }
                 }
-            });
+            };
+
+            let progress_callback = move |seconds: f32| {
+                if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
+                    if let Ok(mut env_local) = vm.attach_current_thread() {
+                        let _ = env_local.call_method(
+                            &global_obj_progress,
+                            "onProgress",
+                            "(D)V",
+                            &[jni::objects::JValue::Double(seconds as f64)],
+                        );
+                    }
+                }
+            };
+
+            let source = HybridLoopSource::new(path.clone(), looping_ptr, eof_callback, progress_callback);
             sink.set_volume(audio_handler.volume);
             sink.append(source);
             sink.play();

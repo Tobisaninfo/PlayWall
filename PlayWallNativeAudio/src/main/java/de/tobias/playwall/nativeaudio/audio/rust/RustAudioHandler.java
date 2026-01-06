@@ -138,4 +138,11 @@ public class RustAudioHandler extends AudioHandler
 	{
 		getController().onEof();
 	}
+
+	@SuppressWarnings("unused")
+	void onProgress(double seconds)
+	{
+		log.debug("Progress: {} seconds", seconds);
+		// Hier kann der Fortschritt verarbeitet werden, z.B. an das UI weitergeben
+	}
 }
