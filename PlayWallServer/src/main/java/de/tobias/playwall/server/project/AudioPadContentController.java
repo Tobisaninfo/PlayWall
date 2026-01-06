@@ -16,7 +16,7 @@ public class AudioPadContentController extends PadController
 	private final AudioHandlerFactory audioHandlerFactory;
 	private AudioHandler audioHandler;
 
-	private AudioPadContent padContent;
+	private final AudioPadContent padContent;
 
 	protected AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory)
 	{
@@ -43,7 +43,8 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void play(boolean withFadeIn)
 	{
-		audioHandler.play(padContent.isLoop());
+		audioHandler.setLooping(padContent.isLoop());
+		audioHandler.play();
 		setStatus(PadControllerStatus.PLAY);
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
@@ -79,5 +80,11 @@ public class AudioPadContentController extends PadController
 	public void setVolume(double volume)
 	{
 		audioHandler.setVolume(volume);
+	}
+
+	@Override
+	public void setLooping(boolean looping)
+	{
+		audioHandler.setLooping(looping);
 	}
 }

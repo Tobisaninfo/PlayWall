@@ -63,7 +63,7 @@ class PadPlayHandlerTest
 		final Optional<ResponseMessage> response = handler.handleRequest(new PadPlayRequest(padId));
 
 		assertThat(response).isEmpty();
-		verify(audioHandler).play(false);
+		verify(audioHandler).play();
 	}
 
 	@Test
@@ -79,6 +79,6 @@ class PadPlayHandlerTest
 				.extracting(e -> ((PlayWallServerException) e).getError())
 				.isInstanceOf(PadNotExistsError.class);
 
-		verify(audioHandler, never()).play(false);
+		verify(audioHandler, never()).play();
 	}
 }

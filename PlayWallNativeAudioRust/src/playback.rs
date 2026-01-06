@@ -1,21 +1,17 @@
+use crate::hybrid_loop_source::HybridLoopSource;
 use crate::{with_audio_handler, AudioStreamHandler};
 use jni::objects::JObject;
 use jni::sys::{jboolean, jdouble, jlong};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
-use rodio::{Decoder, DeviceTrait, OutputStreamBuilder, Sink};
-use std::fs::File;
-use std::io::BufReader;
-use tracing::trace;
+use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
 use tracing::debug;
-use crate::looping_source::LoopingSource;
-use crate::eof_callback_source::EofCallbackSource;
+use tracing::trace;
 
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_playNative(
     mut e: JNIEnv,
     obj: JObject,
-    looping: jboolean,
 ) {
     let obj_for_global = unsafe { JObject::from_raw(obj.as_raw()) };
     let global_obj = e.new_global_ref(obj_for_global).expect("...");
@@ -57,30 +53,21 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         if sink.empty() {
             let path = audio_handler.media_path.as_ref().unwrap();
 
-            if looping == 1 {
-                let source = LoopingSource::new(path.clone());
-                sink.set_volume(audio_handler.volume);
-                sink.append(source);
-            } else {
-                let file = File::open(path).expect("Failed to open file");
-                let reader = BufReader::new(file);
-                let source = Decoder::new(reader).expect("Failed to create decoder");
-
-                let eof_source = EofCallbackSource::new(source, move || {
-                    if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
-                        if let Ok(mut env_local) = vm.attach_current_thread() {
-                            trace!("Invoking Java onEof callback");
-                            if let Some(obj_ref) = global_obj_opt.take() {
-                                if let Err(e) = env_local.call_method(&obj_ref, "onEof", "()V", &[]) {
-                                    debug!("Failed to call Java onEof: {:?}", e);
-                                }
+            let looping_ptr = &audio_handler.looping as *const bool;
+            let source = HybridLoopSource::new(path.clone(), looping_ptr, move || {
+                if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
+                    if let Ok(mut env_local) = vm.attach_current_thread() {
+                        trace!("Invoking Java onEof callback");
+                        if let Some(obj_ref) = global_obj_opt.take() {
+                            if let Err(e) = env_local.call_method(&obj_ref, "onEof", "()V", &[]) {
+                                debug!("Failed to call Java onEof: {:?}", e);
                             }
                         }
                     }
-                });
-                sink.set_volume(audio_handler.volume);
-                sink.append(eof_source);
-            }
+                }
+            });
+            sink.set_volume(audio_handler.volume);
+            sink.append(source);
             sink.play();
             trace!("Play (from existing audio handler)");
         } else {
@@ -139,6 +126,17 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         };
     })
         .unwrap()
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_setLoopingNative(
+    mut env: JNIEnv,
+    obj: JObject,
+    looping: jboolean,
+) {
+    with_audio_handler(&mut env, obj, |_env, audio_handler| {
+        audio_handler.looping = looping != 0;
+    });
 }
 
 #[unsafe(no_mangle)]

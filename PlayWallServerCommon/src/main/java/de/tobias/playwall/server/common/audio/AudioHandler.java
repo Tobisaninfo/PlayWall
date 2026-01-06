@@ -23,7 +23,7 @@ public abstract class AudioHandler
 	/**
 	 * Start the audio stream
 	 */
-	public abstract void play(boolean loop);
+	public abstract void play();
 
 	/**
 	 * Pause the audio stream.
@@ -41,6 +41,13 @@ public abstract class AudioHandler
 	 * @return true if playing
 	 */
 	public abstract boolean isPlaying();
+
+	/**
+	 * Set looping on or off.
+	 *
+	 * @param looping true to enable looping
+	 */
+	public abstract void setLooping(boolean looping);
 
 	/**
 	 * Get the current play position of the current player.
@@ -84,6 +91,7 @@ public abstract class AudioHandler
 
 	/**
 	 * Sets the audio device.
+	 *
 	 * @param name audio device name
 	 */
 	public abstract void setOutputDevice(String name);
