@@ -19,6 +19,9 @@ use symphonia::core::probe::Hint;
 use symphonia::default::get_probe;
 use tracing::{debug, trace};
 use tracing_subscriber;
+use tracing_subscriber::{fmt, EnvFilter};
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
 
 struct AudioHandler {
     media_path: Option<String>,
@@ -84,8 +87,12 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         .expect("Couldn't get java string")
         .into();
 
-    tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::from_str(&log_level_str).unwrap())
+    let filter = EnvFilter::new(&log_level_str)
+        .add_directive("jni=warn".parse().unwrap());
+
+    tracing_subscriber::registry()
+        .with(fmt::layer())
+        .with(filter)
         .init();
     debug!("Initialized rust audio component");
 }
