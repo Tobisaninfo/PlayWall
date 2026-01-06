@@ -40,9 +40,6 @@ public class ProjectCell extends ListCell<ProjectMetadata>
 //				Path path = ref.getProjectPath();
 //				if((Files.notExists(path) || !ref.getMissedModules().isEmpty()))
 //				{
-//					FontIcon graphics = new FontIcon(FontAwesomeType.WARNING);
-//					graphics.setColor(Color.RED);
-//					rootBox.getChildren().add(graphics);
 //				}
 
 				setGraphic(rootBox);
