@@ -9,6 +9,7 @@ import de.tobias.playwall.server.common.model.project.Pad;
 import org.springframework.context.ApplicationContext;
 
 import java.nio.file.Paths;
+import java.time.Duration;
 
 public class AudioPadContentController extends PadController
 {
@@ -73,6 +74,12 @@ public class AudioPadContentController extends PadController
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 		setStatus(PadControllerStatus.READY);
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+	}
+
+	@Override
+	public Duration getPlayPosition()
+	{
+		return audioHandler.getPosition();
 	}
 
 	@Override

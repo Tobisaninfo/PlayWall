@@ -12,6 +12,7 @@ public class RustAudioHandler extends AudioHandler
 	@SuppressWarnings("unused")
 	private long nativePointer;
 	private Runnable eofCallback;
+	private Duration position = Duration.ZERO;
 
 	public RustAudioHandler(Runnable eofCallback)
 	{
@@ -72,7 +73,7 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public Duration getPosition()
 	{
-		return null;
+		return position;
 	}
 
 	@Override
@@ -142,7 +143,6 @@ public class RustAudioHandler extends AudioHandler
 	@SuppressWarnings("unused")
 	void onProgress(double seconds)
 	{
-		log.debug("Progress: {} seconds", seconds);
-		// Hier kann der Fortschritt verarbeitet werden, z.B. an das UI weitergeben
+		position = Duration.ofMillis((long) (seconds * 1000));
 	}
 }

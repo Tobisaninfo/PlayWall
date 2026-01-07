@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -74,6 +76,13 @@ public class ProjectController
 	public Pad getPad(UUID padId)
 	{
 		return loadedProject.getPad(padId);
+	}
+
+	public List<PadController> getPlayingPadControllers()
+	{
+		return this.padControllers.values().stream()
+				.filter(controller -> controller.getStatus() == PadControllerStatus.PLAY)
+				.toList();
 	}
 
 	public PadController createNewPadController(Pad pad)

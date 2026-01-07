@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
+import java.time.Duration;
+
 @Slf4j
 @Getter
 @Setter
@@ -53,6 +55,8 @@ public abstract class PadController
 	public abstract void stop();
 
 	public abstract void onEof();
+
+	public abstract Duration getPlayPosition();
 
 	// TODO: Cannot be in generic PadController
 	public abstract void setVolume(double volume);
