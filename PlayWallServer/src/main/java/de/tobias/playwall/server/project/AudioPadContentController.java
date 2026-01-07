@@ -6,7 +6,6 @@ import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
-import de.tobias.playwall.server.common.project.PadController;
 import org.springframework.context.ApplicationContext;
 
 import java.nio.file.Paths;
@@ -28,7 +27,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	protected void loadInternal()
 	{
-		audioHandler = audioHandlerFactory.createAudioHandler(this);
+		audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
 		audioHandler.setVolume(padContent.getVolume());
 	}

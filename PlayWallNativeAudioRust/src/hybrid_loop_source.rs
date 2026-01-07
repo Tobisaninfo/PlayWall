@@ -84,7 +84,8 @@ impl Iterator for HybridLoopSource {
         if let Some(sample) = self.current_source.next() {
             self.samples_played += 1;
 
-            if self.samples_played % 10000 == 0 {
+            // Report progress every 1.000 samples (~20ms at 48kHz Stereo)
+            if self.samples_played % 1000 == 0 {
                 self.report_progress();
             }
 

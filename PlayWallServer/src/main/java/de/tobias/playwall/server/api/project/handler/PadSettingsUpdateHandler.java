@@ -11,7 +11,7 @@ import de.tobias.playwall.server.api.project.PadMapper;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
-import de.tobias.playwall.server.common.project.PadController;
+import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;

@@ -1,7 +1,6 @@
 package de.tobias.playwall.nativeaudio.audio.rust;
 
 import de.tobias.playwall.server.common.audio.AudioHandler;
-import de.tobias.playwall.server.common.project.PadController;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
@@ -12,10 +11,11 @@ public class RustAudioHandler extends AudioHandler
 {
 	@SuppressWarnings("unused")
 	private long nativePointer;
+	private Runnable eofCallback;
 
-	public RustAudioHandler(PadController padController)
+	public RustAudioHandler(Runnable eofCallback)
 	{
-		super(padController);
+		this.eofCallback = eofCallback;
 		createNativeInstance();
 		log.trace("Created new NativeAudioRustHandler with handle {}", nativePointer);
 	}
@@ -136,7 +136,7 @@ public class RustAudioHandler extends AudioHandler
 	@SuppressWarnings("unused")
 	void onEof()
 	{
-		getController().onEof();
+		eofCallback.run();
 	}
 
 	@SuppressWarnings("unused")

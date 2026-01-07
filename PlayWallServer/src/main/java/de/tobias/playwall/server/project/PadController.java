@@ -1,4 +1,4 @@
-package de.tobias.playwall.server.common.project;
+package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.project.PadLoadedUpdate;
 import de.tobias.playwall.common.api.project.model.PadControllerStatus;
