@@ -78,7 +78,7 @@ class PadChangeVolumeHandlerTest
 
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class)
 				.satisfies(padContent -> assertThat(((AudioPadContent) padContent).getVolume()).isEqualTo(0.25));
-
+		// Assert PadController / AudioHandler methode called?
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 	}
 

@@ -95,7 +95,7 @@ class PadDeleteContentHandlerTest
 
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
 		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
+		// Assert stop is called?
 		assertThat(responseMessage).isEmpty();
 
 		assertThat(project.getPad(padId).getContent()).isNull();

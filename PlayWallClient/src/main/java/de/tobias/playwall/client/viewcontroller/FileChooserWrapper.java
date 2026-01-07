@@ -79,6 +79,6 @@ public class FileChooserWrapper
 		final Window owner = ((Node) event.getTarget()).getScene().getWindow();
 		final Optional<Path> path = fileChooser.showOpenFile(owner);
 
-		path.ifPresent(callback);
+		path.ifPresent(callback); // wollen wir ein callback hier?
 	}
 }
