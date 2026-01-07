@@ -77,6 +77,7 @@ public class MainViewController extends ViewControllerBase
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
+	private PadPlayPositionListener padPlayPositionListener;
 
 	private SnackBar notificationPane;
 
@@ -119,6 +120,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padLoadedListener);
 		padStatusListener = new PadStatusListener(this);
 		eventHandler.registerListener(padStatusListener);
+		padPlayPositionListener = new PadPlayPositionListener(this);
+		eventHandler.registerListener(padPlayPositionListener);
 	}
 
 	@Override

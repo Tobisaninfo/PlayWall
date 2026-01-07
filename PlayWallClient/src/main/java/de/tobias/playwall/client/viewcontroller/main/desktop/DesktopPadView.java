@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.main.desktop;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
@@ -23,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import lombok.Getter;
 
 import static de.tobias.playwall.client.view.pad.control.PadStyleClasses.*;
@@ -227,6 +229,13 @@ public class DesktopPadView implements PadView
 		{
 			Platform.runLater(this::updateButtonStates);
 		}
+	}
+
+	@Override
+	public void updatePlayPosition(Duration position)
+	{
+		playBar.setProgress(position.toMillis() / Duration.millis(3800).toMillis());
+		Logger.debug("Update PlayPosition: " + position);
 	}
 
 	public void addStyleClasses(PadIndex index)
