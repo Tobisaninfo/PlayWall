@@ -67,6 +67,8 @@ public class DesktopPadView implements PadView
 	private PadStatus status;
 	private PadSettingsViewController padSettingsViewController;
 
+	private Duration padDuration;
+
 	@Getter
 	private Pad pad;
 
@@ -234,8 +236,17 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updatePlayPosition(Duration position)
 	{
-		playBar.setProgress(position.toMillis() / Duration.millis(3800).toMillis());
-		Logger.debug("Update PlayPosition: " + position);
+		if(padDuration != null)
+		{
+			playBar.setProgress(position.toMillis() / padDuration.toMillis());
+			Logger.debug("Update PlayPosition: " + position);
+		}
+	}
+
+	@Override
+	public void setPadDuration(Duration padDuration)
+	{
+		this.padDuration = padDuration;
 	}
 
 	public void addStyleClasses(PadIndex index)

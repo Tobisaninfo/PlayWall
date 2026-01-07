@@ -34,7 +34,7 @@ public abstract class PadController
 		log.debug("Loading Pad {}", pad.getId());
 		loadInternal();
 		status = PadControllerStatus.READY;
-		context.publishEvent(new PadLoadedUpdate(pad.getId(), true));
+		context.publishEvent(new PadLoadedUpdate(pad.getId(), true, getDuration().toMillis()));
 	}
 
 	protected abstract void loadInternal();
@@ -55,6 +55,8 @@ public abstract class PadController
 	public abstract void stop();
 
 	public abstract void onEof();
+
+	public abstract Duration getDuration();
 
 	public abstract Duration getPlayPosition();
 

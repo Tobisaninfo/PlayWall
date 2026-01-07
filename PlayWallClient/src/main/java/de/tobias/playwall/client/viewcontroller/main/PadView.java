@@ -18,4 +18,6 @@ public interface PadView
 	void updateStatus(PadStatus status);
 
 	void updatePlayPosition(Duration position);
+
+	void setPadDuration(Duration padDuration);
 }

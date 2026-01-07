@@ -77,6 +77,12 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
+	public Duration getDuration()
+	{
+		return audioHandler.getDuration();
+	}
+
+	@Override
 	public Duration getPlayPosition()
 	{
 		return audioHandler.getPosition();
