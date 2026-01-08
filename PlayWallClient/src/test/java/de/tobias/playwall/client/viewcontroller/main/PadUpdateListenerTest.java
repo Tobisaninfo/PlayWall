@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
 import de.tobias.playwall.common.api.project.PadStatusUpdate;
@@ -39,6 +40,8 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 
 		project = loadProject("projects/project_1.json");
+		ClientProjectController projectController = context.get(ClientProjectController.class);
+		projectController.loadProject(project);
 	}
 
 	@Test
