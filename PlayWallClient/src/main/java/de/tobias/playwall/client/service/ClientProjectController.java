@@ -5,7 +5,6 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 @Service
 @Getter
-@Setter
 public class ClientProjectController
 {
 	private final Map<UUID, ClientPadController> padControllers = new HashMap<>();
