@@ -26,7 +26,7 @@ class PadLoadedListener implements UpdateMessageEventListener<PadLoadedUpdate>
 
 			if(padView != null)
 			{
-				Platform.runLater(() -> padView.setPadDuration(duration));
+				Platform.runLater(padView::updateTimeNodes);
 			}
 		}
 

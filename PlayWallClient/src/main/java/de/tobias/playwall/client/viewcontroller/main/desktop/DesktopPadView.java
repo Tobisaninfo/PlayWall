@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.viewcontroller.main.desktop;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
@@ -211,7 +210,7 @@ public class DesktopPadView implements PadView
 			}
 			addStyleClasses(new PadIndex(pad.getPosition(), currentPage));
 
-			setPadDuration(controller.getDuration());
+			updateTimeNodes();
 		}
 		else
 		{
@@ -237,35 +236,33 @@ public class DesktopPadView implements PadView
 		{
 			Platform.runLater(() -> {
 				this.updateButtonStates();
-
-				if(status != PadStatus.PLAY && status != PadStatus.PAUSE)
-				{
-					playBar.setProgress(0);
-				}
+				this.updateTimeNodes();
 			});
 		}
 	}
 
 	@Override
-	public void updatePlayPosition(Duration position)
+	public void updateTimeNodes()
 	{
-		if(padController.getDuration() != null)
-		{
-			playBar.setProgress(position.toMillis() / padController.getDuration().toMillis());
-			Logger.debug("Update PlayPosition: " + position);
-		}
-	}
+		final Duration position = padController.getPosition();
+		final Duration duration = padController.getDuration();
 
-	@Override
-	public void setPadDuration(Duration padDuration)
-	{
-		if(padDuration != null)
+		if(duration != null)
 		{
-			this.timeLabel.setText(padTimeUtils.getTimeString(padDuration));
+			if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
+			{
+				this.timeLabel.setText(padTimeUtils.getTimeString(position));
+				this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
+			}
+			else
+			{
+				this.timeLabel.setText(padTimeUtils.getTimeString(duration));
+				this.playBar.setProgress(0.0);
+			}
 		}
 		else
 		{
-			this.timeLabel.setText(null);
+			timeLabel.setText(null);
 		}
 	}
 

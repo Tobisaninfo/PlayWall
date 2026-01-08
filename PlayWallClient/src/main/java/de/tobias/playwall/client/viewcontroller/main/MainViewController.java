@@ -120,7 +120,7 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padLoadedListener);
 		padStatusListener = new PadStatusListener(projectController, this);
 		eventHandler.registerListener(padStatusListener);
-		padPlayPositionListener = new PadPlayPositionListener(this);
+		padPlayPositionListener = new PadPlayPositionListener(projectController, this);
 		eventHandler.registerListener(padPlayPositionListener);
 	}
 
