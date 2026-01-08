@@ -68,10 +68,8 @@ public class DesktopPadView implements PadView
 	private PadStatus status;
 	private PadSettingsViewController padSettingsViewController;
 
-	private Duration padDuration;
-
 	@Getter
-	private Pad pad;
+	private ClientPadController padController;
 
 	public DesktopPadView()
 	{
@@ -174,9 +172,10 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateFromPad(int currentPage, ClientPadController controller)
 	{
-		this.pad = controller.getPad();
-		if(pad != null)
+		this.padController = controller;
+		if(padController != null)
 		{
+			final Pad pad = padController.getPad();
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
 
@@ -239,9 +238,9 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updatePlayPosition(Duration position)
 	{
-		if(padDuration != null)
+		if(padController.getDuration() != null)
 		{
-			playBar.setProgress(position.toMillis() / padDuration.toMillis());
+			playBar.setProgress(position.toMillis() / padController.getDuration().toMillis());
 			Logger.debug("Update PlayPosition: " + position);
 		}
 	}
@@ -251,7 +250,6 @@ public class DesktopPadView implements PadView
 	{
 		if(padDuration != null)
 		{
-			this.padDuration = padDuration;
 			this.timeLabel.setText(padDuration.toString());
 		}
 		else
@@ -373,6 +371,6 @@ public class DesktopPadView implements PadView
 			padSettingsViewController = AppContextHolder.getInstance().get(PadSettingsViewController.class);
 		}
 
-		padSettingsViewController.showAndWait(new PadSettingsViewController.Param(pad), superRoot.getScene().getWindow());
+		padSettingsViewController.showAndWait(new PadSettingsViewController.Param(padController.getPad()), superRoot.getScene().getWindow());
 	}
 }

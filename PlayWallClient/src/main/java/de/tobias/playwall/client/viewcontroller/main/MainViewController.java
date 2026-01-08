@@ -298,7 +298,7 @@ public class MainViewController extends ViewControllerBase
 	public PadView getPadViewForPadId(UUID padId)
 	{
 		return padViews.stream()
-				.filter(view -> view.getPad().getId().equals(padId))
+				.filter(view -> view.getPadController().getPad().getId().equals(padId))
 				.findFirst().orElse(null);
 	}
 
