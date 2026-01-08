@@ -108,7 +108,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 		// open project
 		verify(client).launchProject(PROJECT_METADATA_1.id());
 		verify(mainViewController).showStage();
-		verify(mainViewController).openProject(any());
+		verify(mainViewController).showProject(any());
 		assertThat(stage.isShowing()).isFalse();
 	}
 
@@ -153,7 +153,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 
 		verify(client).launchProject(PROJECT_ID);
 		verify(mainViewController).showStage();
-		verify(mainViewController).openProject(any());
+		verify(mainViewController).showProject(any());
 		assertThat(stage.isShowing()).isFalse();
 	}
 
@@ -176,7 +176,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 
 		verify(client).launchProject(PROJECT_ID);
 		verify(mainViewController).showStage();
-		verify(mainViewController).openProject(any());
+		verify(mainViewController).showProject(any());
 		assertThat(stage.isShowing()).isFalse();
 	}
 

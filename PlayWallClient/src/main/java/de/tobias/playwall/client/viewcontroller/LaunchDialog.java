@@ -13,6 +13,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
@@ -59,13 +60,15 @@ public class LaunchDialog extends ViewControllerBase
 
 	private final App app;
 	private final FluentClient client;
+	private final ClientProjectController projectController;
 	private final CommandLineOptions commandLineOptions;
 
 	@InjectConstructor
-	LaunchDialog(App app, FluentClient client, CommandLineOptions commandLineOptions)
+	LaunchDialog(App app, FluentClient client, ClientProjectController projectController, CommandLineOptions commandLineOptions)
 	{
 		this.app = app;
 		this.client = client;
+		this.projectController = projectController;
 		this.commandLineOptions = commandLineOptions;
 	}
 
@@ -167,11 +170,12 @@ public class LaunchDialog extends ViewControllerBase
 		try
 		{
 			final Project project = client.project(id).launch();
+			this.projectController.loadProject(project);
 			Logger.info("Launched project " + project.getMetadata().name());
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
 			controller.showStage();
-			controller.openProject(project);
+			controller.showProject(project);
 			closeStage();
 		}
 		catch(PlayWallApiException e)

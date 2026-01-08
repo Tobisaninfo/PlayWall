@@ -8,6 +8,7 @@ import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.*;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.service.ClientPadController;
 import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.view.pad.PadIndexable;
 import de.tobias.playwall.client.view.pad.control.*;
@@ -171,9 +172,9 @@ public class DesktopPadView implements PadView
 	}
 
 	@Override
-	public void updateFromPad(int currentPage, Pad pad)
+	public void updateFromPad(int currentPage, ClientPadController controller)
 	{
-		this.pad = pad;
+		this.pad = controller.getPad();
 		if(pad != null)
 		{
 			padBuilder = fluentClient.pad(pad.getId());
@@ -193,9 +194,9 @@ public class DesktopPadView implements PadView
 				loopLabel.setVisible(loopable.isLoop());
 			}
 
-			if(pad.getStatus() != null)
+			if(controller.getStatus() != null)
 			{
-				updateStatus(pad.getStatus());
+				updateStatus(controller.getStatus());
 			}
 			else if(padContent != null)
 			{
@@ -206,6 +207,8 @@ public class DesktopPadView implements PadView
 				updateStatus(PadStatus.EMPTY);
 			}
 			addStyleClasses(new PadIndex(pad.getPosition(), currentPage));
+
+			setPadDuration(controller.getDuration());
 		}
 		else
 		{

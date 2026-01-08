@@ -53,7 +53,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 	{
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
-			mainViewController.openProject(project);
+			mainViewController.showProject(project);
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();
@@ -90,7 +90,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 	{
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
-			mainViewController.openProject(project);
+			mainViewController.showProject(project);
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();
@@ -126,7 +126,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 	{
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
-			mainViewController.openProject(project);
+			mainViewController.showProject(project);
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();
