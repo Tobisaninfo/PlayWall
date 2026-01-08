@@ -1,15 +1,17 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.tobias.playwall.common.api.project.ProjectGetRequest;
+import de.tobias.playwall.common.api.project.ProjectGetResponse;
 import de.tobias.playwall.common.api.project.ProjectLoadRequest;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.ProjectMapper;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
-import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 
@@ -17,21 +19,20 @@ import java.io.IOException;
 import java.util.Optional;
 
 @AllArgsConstructor
-@RequestHandlerTyped(ProjectLoadRequest.class)
-public class ProjectLaunchHandler implements RequestHandler<ProjectLoadRequest>
+@RequestHandlerTyped(ProjectGetRequest.class)
+public class ProjectGetHandler implements RequestHandler<ProjectGetRequest>
 {
 	private final ProjectService projectService;
-	private final ProjectController projectController;
+	private final ProjectMapper projectMapper;
 	private final MessageSource messageSource;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectLoadRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<ResponseMessage> handleRequest(ProjectGetRequest requestMessage) throws IOException, PlayWallServerException
 	{
 		try
 		{
 			final Project project = projectService.getProjectById(requestMessage.getProjectId());
-			projectController.loadProject(project);
-			return Optional.empty();
+			return Optional.of(new ProjectGetResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project)));
 		}
 		catch(ProjectNotExistsException _)
 		{

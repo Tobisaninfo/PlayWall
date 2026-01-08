@@ -80,9 +80,15 @@ class FluentClientImpl implements FluentClient
 		private final UUID projectId;
 
 		@Override
-		public Project launch() throws PlayWallApiException
+		public Project get() throws PlayWallApiException
 		{
-			return delegate.launchProject(projectId);
+			return delegate.getProject(projectId);
+		}
+
+		@Override
+		public void load() throws PlayWallApiException
+		{
+			delegate.loadProject(projectId);
 		}
 
 		@Override

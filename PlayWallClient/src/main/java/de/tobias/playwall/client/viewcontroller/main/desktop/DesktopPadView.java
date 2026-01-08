@@ -249,7 +249,15 @@ public class DesktopPadView implements PadView
 	@Override
 	public void setPadDuration(Duration padDuration)
 	{
-		this.padDuration = padDuration;
+		if(padDuration != null)
+		{
+			this.padDuration = padDuration;
+			this.timeLabel.setText(padDuration.toString());
+		}
+		else
+		{
+			this.timeLabel.setText(null);
+		}
 	}
 
 	public void addStyleClasses(PadIndex index)

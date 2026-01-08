@@ -29,7 +29,9 @@ public interface Client
 
 	void deleteProject(UUID projectId) throws PlayWallApiException;
 
-	Project launchProject(UUID projectId) throws PlayWallApiException;
+	Project getProject(UUID projectId) throws PlayWallApiException;
+
+	void loadProject(UUID projectId) throws PlayWallApiException;
 
 	void saveProject() throws PlayWallApiException;
 

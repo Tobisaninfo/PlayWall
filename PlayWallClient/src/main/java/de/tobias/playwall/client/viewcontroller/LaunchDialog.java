@@ -186,8 +186,9 @@ public class LaunchDialog extends ViewControllerBase
 	{
 		try
 		{
-			final Project project = client.project(id).launch();
+			final Project project = client.project(id).get();
 			this.projectController.loadProject(project);
+			client.project(id).load();
 			Logger.info("Launched project " + project.getMetadata().name());
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);

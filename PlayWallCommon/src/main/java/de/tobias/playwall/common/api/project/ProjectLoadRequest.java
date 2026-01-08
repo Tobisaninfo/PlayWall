@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class ProjectLaunchRequest extends RequestMessage
+public class ProjectLoadRequest extends RequestMessage
 {
 	private UUID projectId;
 }
