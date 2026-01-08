@@ -2,8 +2,6 @@
 
 mod output_devices;
 mod playback;
-mod looping_source;
-mod eof_callback_source;
 mod hybrid_loop_source;
 
 use jni::objects::{JClass, JObject, JString, JValue};
@@ -12,7 +10,6 @@ use jni::{JNIEnv, JavaVM};
 use lazy_static::lazy_static;
 use rodio::{OutputStream, Sink};
 use std::fs::File;
-use std::str::FromStr;
 use std::sync::RwLock;
 use symphonia::core::io::MediaSourceStream;
 use symphonia::core::probe::Hint;

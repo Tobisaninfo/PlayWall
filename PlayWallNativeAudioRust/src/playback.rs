@@ -1,11 +1,10 @@
 use crate::hybrid_loop_source::HybridLoopSource;
 use crate::{with_audio_handler, AudioStreamHandler};
 use jni::objects::JObject;
-use jni::sys::{jboolean, jdouble, jlong};
+use jni::sys::{jboolean, jdouble};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
-use tracing::debug;
 use tracing::trace;
 
 #[unsafe(no_mangle)]
