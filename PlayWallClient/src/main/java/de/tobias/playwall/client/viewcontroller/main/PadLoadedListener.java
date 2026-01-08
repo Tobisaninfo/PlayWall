@@ -3,6 +3,7 @@ package de.tobias.playwall.client.viewcontroller.main;
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.common.api.project.PadLoadedUpdate;
+import javafx.application.Platform;
 import javafx.util.Duration;
 import lombok.AllArgsConstructor;
 
@@ -25,7 +26,7 @@ class PadLoadedListener implements UpdateMessageEventListener<PadLoadedUpdate>
 
 			if(padView != null)
 			{
-				padView.setPadDuration(duration);
+				Platform.runLater(() -> padView.setPadDuration(duration));
 			}
 		}
 
