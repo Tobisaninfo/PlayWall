@@ -56,6 +56,7 @@ public class MainViewController extends ViewControllerBase
 	private static final int PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR = 60;
 
 	@FXML
+	@SuppressWarnings({"java:S1874", "deprecation"})
 	private HeaderBar headerBar;
 	private Label projectTitleLabel;
 
@@ -86,6 +87,7 @@ public class MainViewController extends ViewControllerBase
 	private final ClientProjectController projectController;
 
 	@Override
+	@SuppressWarnings({"java:S1874", "deprecation"})
 	protected void init()
 	{
 		padGridPane.getStyleClass().add("pad-grid");
@@ -123,6 +125,7 @@ public class MainViewController extends ViewControllerBase
 	}
 
 	@Override
+	@SuppressWarnings({"java:S1874", "deprecation"})
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
