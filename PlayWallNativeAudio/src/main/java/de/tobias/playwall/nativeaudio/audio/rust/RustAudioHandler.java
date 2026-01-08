@@ -79,10 +79,10 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public Duration getDuration()
 	{
-		return Duration.ofSeconds(getDurationNative());
+		return Duration.ofMillis((long) (getDurationNative() * 1000));
 	}
 
-	private native long getDurationNative();
+	private native double getDurationNative();
 
 	@Override
 	public void setVolume(double volume)

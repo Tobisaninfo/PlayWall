@@ -143,14 +143,14 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getDurationNative(
     mut env: JNIEnv,
     obj: JObject,
-) -> jlong {
+) -> jdouble {
     with_audio_handler(&mut env, obj, |env, audio_handler| {
         if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
-            return 0;
+            return 0.0;
         }
-        return audio_handler.duration.unwrap().round() as jlong;
+        return audio_handler.duration.unwrap() as jdouble;
     })
     .unwrap()
 }
