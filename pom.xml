@@ -64,7 +64,7 @@
         <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
         <sass-maven-plugin.version>3.7.2</sass-maven-plugin.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
-        <jpackage-maven-plugin.version>1.7.2</jpackage-maven-plugin.version>
+        <jpackage-maven-plugin.version>1.7.3</jpackage-maven-plugin.version>
         <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
         <cwd>.</cwd>
