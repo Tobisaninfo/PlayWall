@@ -10,6 +10,7 @@ import de.tobias.playwall.client.model.project.*;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.service.ClientPadController;
 import de.tobias.playwall.client.utils.NodeWalker;
+import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.pad.PadIndexable;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
@@ -64,6 +65,8 @@ public class DesktopPadView implements PadView
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
 
+	private final PadTimeUtils padTimeUtils;
+
 	private PadStatus previousStatus;
 	private PadStatus status;
 	private PadSettingsViewController padSettingsViewController;
@@ -74,6 +77,7 @@ public class DesktopPadView implements PadView
 	public DesktopPadView()
 	{
 		fluentClient = AppContextHolder.getInstance().get(FluentClient.class);
+		padTimeUtils = AppContextHolder.getInstance().get(PadTimeUtils.class);
 		setupView();
 	}
 
@@ -250,7 +254,7 @@ public class DesktopPadView implements PadView
 	{
 		if(padDuration != null)
 		{
-			this.timeLabel.setText(padDuration.toString());
+			this.timeLabel.setText(padTimeUtils.getTimeString(padDuration));
 		}
 		else
 		{
