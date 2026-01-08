@@ -235,7 +235,14 @@ public class DesktopPadView implements PadView
 
 		if(this.previousStatus != status)
 		{
-			Platform.runLater(this::updateButtonStates);
+			Platform.runLater(() -> {
+				this.updateButtonStates();
+
+				if(status != PadStatus.PLAY && status != PadStatus.PAUSE)
+				{
+					playBar.setProgress(0);
+				}
+			});
 		}
 	}
 
