@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @EqualsAndHashCode
 @SuperBuilder
-public abstract sealed class PadContent permits AudioPadContent, FallbackPadContent
+public abstract sealed class PadContent permits AudioPadContent
 {
 	public abstract PadContent copy();
 }

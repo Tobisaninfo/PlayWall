@@ -3,7 +3,6 @@ package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.model.project.AudioPadContent;
-import de.tobias.playwall.client.model.project.FallbackPadContent;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.net.FluentClient;
@@ -22,14 +21,13 @@ public class PadContentSettingsContainerFactory
 		PadContent padContent = pad.getContent();
 		if(padContent == null)
 		{
-			padContent = FallbackPadContent.builder().build();
+			return new FallbackPadContentSettingsContainer(pad.getId(), parentDialog);
 		}
 
 		return switch(padContent)
 		{
 			case AudioPadContent audioPadContent ->
 					new AudioPadContentSettingsContainer(audioPadContent, pad.getId(), fluentClient, parentDialog);
-			case FallbackPadContent _ -> new FallbackPadContentSettingsContainer(pad.getId(), parentDialog);
 		};
 	}
 }

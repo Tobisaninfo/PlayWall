@@ -3,7 +3,7 @@ package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.model.project.FallbackPadContent;
+import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * Fallback settings to allow to choose a media file if the pad is empty.
  */
-public class FallbackPadContentSettingsContainer extends BasePadContentSettingsContainer<FallbackPadContent>
+public class FallbackPadContentSettingsContainer extends BasePadContentSettingsContainer<PadContent>
 {
 	public FallbackPadContentSettingsContainer(UUID padId, PadSettingsViewController parentDialog)
 	{
