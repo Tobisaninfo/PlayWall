@@ -53,4 +53,10 @@ public abstract class PadController
 	public abstract void stop();
 
 	public abstract void onEof();
+
+	// TODO: Cannot be in generic PadController
+	public abstract void setVolume(double volume);
+
+	// TODO: Cannot be in generic PadController
+	public abstract void setLooping(boolean looping);
 }

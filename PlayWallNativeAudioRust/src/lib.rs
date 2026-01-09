@@ -4,6 +4,7 @@ mod output_devices;
 mod playback;
 mod looping_source;
 mod eof_callback_source;
+mod hybrid_loop_source;
 
 use jni::objects::{JClass, JObject, JString, JValue};
 use jni::sys::{jboolean, jlong};
@@ -25,6 +26,7 @@ struct AudioHandler {
     audio_stream_handler: Option<AudioStreamHandler>,
     device_name: Option<String>,
     volume: f32,
+    looping: bool,
 }
 
 impl AudioHandler {
@@ -35,6 +37,7 @@ impl AudioHandler {
             audio_stream_handler: None,
             device_name: None,
             volume: 1.0,
+            looping: false,
         }
     }
 

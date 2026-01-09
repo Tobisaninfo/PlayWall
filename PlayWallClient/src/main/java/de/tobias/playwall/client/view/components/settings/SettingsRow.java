@@ -96,5 +96,4 @@ public class SettingsRow extends GridPane
 	{
 		return icon;
 	}
-
 }

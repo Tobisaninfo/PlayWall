@@ -24,4 +24,15 @@ public class Pad
 	{
 		return String.valueOf(position + 1);
 	}
+
+	public Pad copy()
+	{
+		return Pad.builder()
+				.id(id)
+				.position(position)
+				.name(name)
+				.status(status)
+				.content(content == null ? null : content.copy())
+				.build();
+	}
 }

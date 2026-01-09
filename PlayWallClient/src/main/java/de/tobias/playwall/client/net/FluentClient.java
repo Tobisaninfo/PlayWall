@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.net;
 
 import de.tobias.playwall.client.PlayWallApiException;
+import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
@@ -65,7 +66,11 @@ public interface FluentClient
 
 		void newMedia(Path file) throws PlayWallApiException;
 
-		void updateSettings(String name) throws PlayWallApiException;
+		void updateSettings(Pad pad) throws PlayWallApiException;
+
+		void delete() throws PlayWallApiException;
+
+		void changeVolume(double volume) throws PlayWallApiException;
 	}
 
 	PadBuilder pad(UUID padId);

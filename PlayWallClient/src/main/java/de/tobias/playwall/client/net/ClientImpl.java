@@ -4,9 +4,11 @@ import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.mapper.PadMapper;
 import de.tobias.playwall.client.mapper.PageMapper;
 import de.tobias.playwall.client.mapper.ProjectMapper;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
+import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
@@ -29,6 +31,7 @@ class ClientImpl implements Client
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
 	private final PageMapper pageMapper;
+	private final PadMapper padMapper;
 
 	private final ClientWebSocketHandler clientWebSocketHandler;
 
@@ -171,8 +174,20 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public void updateSettings(UUID padId, String name) throws PlayWallApiException
+	public void updateSettings(UUID padId, Pad pad) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new PadSettingsUpdateRequest(padId, name));
+		clientWebSocketHandler.send(new PadSettingsUpdateRequest(padId, padMapper.padToPadDto(pad)));
+	}
+
+	@Override
+	public void deletePad(UUID padId) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadDeleteContentRequest(padId));
+	}
+
+	@Override
+	public void changeVolume(UUID padId, double volume) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadChangeVolumeRequest(padId, volume));
 	}
 }

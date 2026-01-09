@@ -14,7 +14,9 @@ public final class AudioPadContent extends PadContent
 	private String mediaPath;
 
 	private boolean loop;
-	private double volume;
+
+	@Builder.Default
+	private double volume = 1.0;
 
 	@Override
 	public PadContent copy()

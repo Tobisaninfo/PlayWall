@@ -22,4 +22,14 @@ public class PadMapper
 				.content(padContentMapper.padContentDtoToPadContent(pad.getContent()))
 				.build();
 	}
+
+	public PadDto padToPadDto(Pad pad)
+	{
+		return PadDto.builder()
+				.id(pad.getId())
+				.name(pad.getName())
+				.position(pad.getPosition())
+				.content(padContentMapper.padContentToPadContentDto(pad.getContent()))
+				.build();
+	}
 }

@@ -11,10 +11,20 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public final class AudioPadContent extends PadContent
+public final class AudioPadContent extends PadContent implements Loopable
 {
 	private String mediaPath;
 
 	private boolean isLoop;
 	private double volume;
+
+	@Override
+	public AudioPadContent copy()
+	{
+		return AudioPadContent.builder()
+				.mediaPath(mediaPath)
+				.isLoop(isLoop)
+				.volume(volume)
+				.build();
+	}
 }

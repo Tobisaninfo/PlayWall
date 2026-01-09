@@ -32,10 +32,10 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public void play()
 	{
-		playNative(false); // TODO Use pad settings
+		playNative();
 	}
 
-	private native void playNative(boolean loop);
+	private native void playNative();
 
 	@Override
 	public void pause()
@@ -60,6 +60,14 @@ public class RustAudioHandler extends AudioHandler
 	}
 
 	private native boolean isPlayingNative();
+
+	@Override
+	public void setLooping(boolean looping)
+	{
+		setLoopingNative(looping);
+	}
+
+	private native void setLoopingNative(boolean looping);
 
 	@Override
 	public Duration getPosition()

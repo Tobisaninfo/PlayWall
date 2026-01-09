@@ -9,7 +9,10 @@ import javafx.fxml.FXML;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-public abstract class BaseSettingsViewController<P> extends ParamViewControllerBase<P>
+/**
+ * Base class for a page in a settings dialog.
+ */
+public abstract class BaseSettingsViewController<P> extends ParamViewControllerBase<P> implements Configurable<P>
 {
 	@FXML
 	@Getter
@@ -28,4 +31,6 @@ public abstract class BaseSettingsViewController<P> extends ParamViewControllerB
 	}
 
 	public abstract void applySettings(P param);
+
+	public abstract void cleanup();
 }

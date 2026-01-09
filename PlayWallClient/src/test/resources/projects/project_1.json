@@ -17,7 +17,7 @@
                     "position": 0,
                     "content": {
                         "@class": "de.tobias.playwall.common.api.project.model.AudioPadContentDto",
-                        "mediaPath": null,
+                        "mediaPath": "abc.mp3",
                         "loop": false,
                         "volume": 1.0
                     }

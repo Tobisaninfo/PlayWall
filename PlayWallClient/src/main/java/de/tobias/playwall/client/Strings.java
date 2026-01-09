@@ -46,4 +46,13 @@ public class Strings
 	// ui - settings - pad
 	public static final String UI_SETTINGS_PAD_TITLE  = "ui.settings.pad.title";
 	public static final String UI_SETTINGS_PAD_TITLE_SHORT  = "ui.settings.pad.title.short";
+	public static final String UI_SETTINGS_PAD_PLAYBACK = "ui.settings.pad.general.playback";
+	public static final String UI_SETTINGS_PAD_PLAYBACK_LOOP = "ui.settings.pad.general.playback.loop";
+	public static final String UI_SETTINGS_PAD_FILE = "ui.settings.pad.general.file";
+	public static final String UI_SETTINGS_PAD_FILE_CHOOSE_PATH = "ui.settings.pad.general.file.choose.path";
+	public static final String UI_SETTINGS_PAD_FILE_SHOW_IN_FOLDER = "ui.settings.pad.general.file.show.in.folder";
+	public static final String UI_SETTINGS_PAD_FILE_DELETE = "ui.settings.pad.general.file.delete";
+	public static final String UI_SETTINGS_PAD_VOLUME = "ui.settings.pad.general.volume";
+	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_TITLE = "ui.dialog.settings.pad.override.title";
+	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT = "ui.dialog.settings.pad.override.content";
 }

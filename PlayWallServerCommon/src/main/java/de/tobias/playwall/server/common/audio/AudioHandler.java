@@ -43,6 +43,13 @@ public abstract class AudioHandler
 	public abstract boolean isPlaying();
 
 	/**
+	 * Set looping on or off.
+	 *
+	 * @param looping true to enable looping
+	 */
+	public abstract void setLooping(boolean looping);
+
+	/**
 	 * Get the current play position of the current player.
 	 *
 	 * @return current position
@@ -84,6 +91,7 @@ public abstract class AudioHandler
 
 	/**
 	 * Sets the audio device.
+	 *
 	 * @param name audio device name
 	 */
 	public abstract void setOutputDevice(String name);

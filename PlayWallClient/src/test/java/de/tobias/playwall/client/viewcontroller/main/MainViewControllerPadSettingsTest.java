@@ -3,6 +3,8 @@ package de.tobias.playwall.client.viewcontroller.main;
 import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.model.project.AudioPadContent;
+import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
@@ -71,7 +73,16 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#saveButton");
 
-		verify(client).updateSettings(padId, "Lorem");
+		verify(client).updateSettings(padId, Pad.builder()
+				.name("Lorem")
+				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
+				.position(0)
+				.content(AudioPadContent.builder()
+						.mediaPath("abc.mp3")
+						.isLoop(false)
+						.volume(1.0)
+						.build())
+				.build());
 	}
 
 	@Test
@@ -99,6 +110,47 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#cancelButton");
 
-		verify(client, never()).updateSettings(padId, "Lorem");
+		verify(client, never()).updateSettings(padId, Pad.builder()
+				.name("Lorem")
+				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
+				.position(0)
+				.content(AudioPadContent.builder()
+						.isLoop(false)
+						.volume(1.0)
+						.build())
+				.build());
+	}
+
+	@Test
+	void testOpenSettingsAndSetNameTryToSelectNewFile(FxRobot robot) throws PlayWallApiException
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.openProject(project);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
+		context.registerLazy(Stage.class, _ -> new Stage());
+		robot.clickOn(padView.getSettingsButton());
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		List<Window> windows = new ArrayList<>(robot.listWindows());
+		Stage stage= (Stage) windows.getLast();
+
+		assertThat(stage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
+
+		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
+		robot.clickOn("#buttonChooseFile");
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		windows = new ArrayList<>(robot.listWindows());
+		stage = (Stage) windows.getLast();
+
+		assertThat(stage.getTitle()).isEqualTo("Es existieren ungespeicherte Änderungen");
 	}
 }
