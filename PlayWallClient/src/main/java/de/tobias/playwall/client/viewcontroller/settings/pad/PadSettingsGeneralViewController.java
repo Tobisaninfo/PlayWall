@@ -4,7 +4,6 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.client.net.FluentClient;
-import de.tobias.playwall.client.view.components.settings.SettingsPage;
 import de.tobias.playwall.client.viewcontroller.settings.pad.content.BasePadContentSettingsContainer;
 import de.tobias.playwall.client.viewcontroller.settings.pad.content.PadContentSettingsContainerFactory;
 import javafx.fxml.FXML;
@@ -49,7 +48,15 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 		padContentSettingsContainer = padContentSettingsContainerFactory.createPadContentSettingsContainer(param.pad, param.parentDialog);
 		settingsPage.getItems().add(padContentSettingsContainer);
 
-		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty().and(padContentSettingsContainer.getIsValidProperty()));
+		if(param.getPad().getContent() != null)
+		{
+			this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty().and(padContentSettingsContainer.getIsValidProperty()));
+		}
+		else
+		{
+			this.isValidProperty.unbind();
+			this.isValidProperty.set(true);
+		}
 	}
 
 	@Override
