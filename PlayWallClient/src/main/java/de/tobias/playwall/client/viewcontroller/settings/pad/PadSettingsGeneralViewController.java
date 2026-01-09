@@ -12,12 +12,10 @@ import javafx.scene.control.TextField;
 /**
  * Viewcontroller for the general page in the pad settings dialog.
  */
+@SuppressWarnings("java:S110")
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsGeneralPageView", applyToStage = false)
 public class PadSettingsGeneralViewController extends BasePadSettingsViewController
 {
-	@FXML
-	private SettingsPage settingsPage;
-
 	@FXML
 	private TextField textFieldName;
 
