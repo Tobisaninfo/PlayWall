@@ -15,6 +15,7 @@ import de.tobias.playwall.server.config.SyncAsyncConfig;
 import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -30,8 +31,7 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
@@ -43,6 +43,9 @@ class PadDeleteContentHandlerTest
 
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
+
+	@Mock
+	private AudioHandler audioHandler;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -56,7 +59,6 @@ class PadDeleteContentHandlerTest
 	@BeforeEach
 	void init()
 	{
-		final AudioHandler audioHandler = mock(AudioHandler.class);
 		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
 	}
 
@@ -95,11 +97,12 @@ class PadDeleteContentHandlerTest
 
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
 		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-		// Assert stop is called?
 		assertThat(responseMessage).isEmpty();
 
 		assertThat(project.getPad(padId).getContent()).isNull();
 
+		verify(audioHandler).stop();
+		verify(audioHandler).unloadMedia();
 		assertThat(applicationEvents.stream(PadUpdate.class))
 				.hasSize(1)
 				.first()
