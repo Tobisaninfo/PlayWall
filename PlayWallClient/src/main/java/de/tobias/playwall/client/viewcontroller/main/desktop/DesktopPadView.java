@@ -254,12 +254,12 @@ public class DesktopPadView implements PadView
 			{
 				if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
 				{
-					this.timeLabel.setText(padTimeUtils.getTimeString(position));
+					this.timeLabel.setText(padTimeUtils.formatDurationToString(position));
 					this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
 				}
 				else
 				{
-					this.timeLabel.setText(padTimeUtils.getTimeString(duration));
+					this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
 					this.playBar.setProgress(0.0);
 				}
 			}

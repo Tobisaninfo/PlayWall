@@ -8,15 +8,10 @@ public class PadTimeUtils
 {
 	private static final String DURATION_FORMAT = "%d:%02d";
 
-	public String getTimeString(Duration duration)
+	public String formatDurationToString(Duration duration)
 	{
-		return durationToString(duration);
-	}
-
-	private String durationToString(Duration value)
-	{
-		int seconds = (int) ((value.toMillis() / 1000) % 60);
-		int minutes = (int) ((value.toMillis() / (1000 * 60)) % 60);
+		int seconds = (int) ((duration.toMillis() / 1000) % 60);
+		int minutes = (int) (duration.toMillis() / (1000 * 60));
 		return String.format(DURATION_FORMAT, minutes, seconds);
 	}
 }
