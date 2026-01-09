@@ -257,7 +257,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	private void showFileChooser(ActionEvent event)
 	{
 		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-		fileChooser.showByActionEvent(event, (path) -> {
+		fileChooser.showByActionEvent(event).ifPresent(path -> {
 			settingViewController.forEach(BaseSettingsViewController::cleanup);
 
 			try

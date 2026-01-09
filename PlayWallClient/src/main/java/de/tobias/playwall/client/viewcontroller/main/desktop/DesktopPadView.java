@@ -293,7 +293,7 @@ public class DesktopPadView implements PadView
 	private void onNewAction(ActionEvent event)
 	{
 		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-		fileChooser.showByActionEvent(event, (path) -> {
+		fileChooser.showByActionEvent(event).ifPresent(path -> {
 			try
 			{
 				padBuilder.newMedia(path);
