@@ -244,28 +244,30 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateTimeNodes()
 	{
-		if(padController != null)
+		if(padController == null)
 		{
-			final Duration position = padController.getPosition();
-			final Duration duration = padController.getDuration();
+			this.timeLabel.setText(null);
+			this.playBar.setProgress(0.0);
 
-			if(duration != null)
-			{
-				if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
-				{
-					this.timeLabel.setText(padTimeUtils.formatDurationToString(position));
-					this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
-				}
-				else
-				{
-					this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
-					this.playBar.setProgress(0.0);
-				}
-			}
+			return;
+		}
+
+		final Duration position = padController.getPosition();
+		final Duration duration = padController.getDuration();
+
+		if(duration == null)
+		{
+			return;
+		}
+
+		if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
+		{
+			this.timeLabel.setText(padTimeUtils.formatDurationToString(position));
+			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
 		}
 		else
 		{
-			this.timeLabel.setText(null);
+			this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
 			this.playBar.setProgress(0.0);
 		}
 	}
