@@ -244,7 +244,6 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateTimeNodes()
 	{
-
 		if(padController != null)
 		{
 			final Duration position = padController.getPosition();
@@ -264,9 +263,11 @@ public class DesktopPadView implements PadView
 				}
 			}
 		}
-
-		this.playBar.setProgress(0.0);
-		this.timeLabel.setText(null);
+		else
+		{
+			this.timeLabel.setText(null);
+			this.playBar.setProgress(0.0);
+		}
 	}
 
 	public void addStyleClasses(PadIndex index)
