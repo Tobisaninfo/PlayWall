@@ -96,7 +96,7 @@ public class LaunchDialog extends ViewControllerBase
 			   mouseEvent.getClickCount() == 2 &&
 			   !projectListView.getSelectionModel().isEmpty())
 			{
-				openProject(getSelectedProject().id());
+				openProject(getSelectedProject().getId());
 			}
 		});
 
@@ -144,8 +144,8 @@ public class LaunchDialog extends ViewControllerBase
 		}
 
 		final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle(getString(Strings.UI_DIALOG_PROJECT_DELETE_TITLE, selectedProject.name()));
-		alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_DELETE_CONTENT, selectedProject.name()));
+		alert.setTitle(getString(Strings.UI_DIALOG_PROJECT_DELETE_TITLE, selectedProject.getName()));
+		alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_DELETE_CONTENT, selectedProject.getName()));
 		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
@@ -153,7 +153,7 @@ public class LaunchDialog extends ViewControllerBase
 		{
 			try
 			{
-				client.project(selectedProject.id()).delete();
+				client.project(selectedProject.getId()).delete();
 				fetchProjects();
 			}
 			catch(PlayWallApiException e)
@@ -172,14 +172,14 @@ public class LaunchDialog extends ViewControllerBase
 		if(projectOptional.isPresent())
 		{
 			fetchProjects();
-			openProject(projectOptional.get().id());
+			openProject(projectOptional.get().getId());
 		}
 	}
 
 	@FXML
 	private void onOpenButton()
 	{
-		openProject(getSelectedProject().id());
+		openProject(getSelectedProject().getId());
 	}
 
 	private void openProject(UUID id)
@@ -189,7 +189,7 @@ public class LaunchDialog extends ViewControllerBase
 			final Project project = client.project(id).get();
 			this.projectController.loadProject(project);
 			client.project(id).load();
-			Logger.info("Launched project " + project.getMetadata().name());
+			Logger.info("Launched project " + project.getMetadata().getName());
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
 			controller.showStage();
@@ -216,9 +216,9 @@ public class LaunchDialog extends ViewControllerBase
 							.toLowerCase()
 							.strip();
 					projectListView.getItems().stream()
-							.filter(p -> p.name().toLowerCase().equals(projectName))
+							.filter(p -> p.getName().toLowerCase().equals(projectName))
 							.findFirst()
-							.ifPresent(p -> openProject(p.id()));
+							.ifPresent(p -> openProject(p.getId()));
 				}
 			}
 			catch(PlayWallApiException e)

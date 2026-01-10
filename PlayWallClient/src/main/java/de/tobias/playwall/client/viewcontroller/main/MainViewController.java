@@ -181,12 +181,12 @@ public class MainViewController extends ViewControllerBase
 	private void updateWindowProperties(Project project)
 	{
 		final Stage stage = getStage();
-		final Size minSize = computeMinStageSize(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
+		final Size minSize = computeMinStageSize(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
 
 		stage.setMinWidth(minSize.width());
 		stage.setMinHeight(minSize.height());
 
-		stage.setTitle(getWindowTitle(project.getMetadata().name()));
+		stage.setTitle(getWindowTitle(project.getMetadata().getName()));
 	}
 
 	private Stage getStage()
@@ -199,7 +199,7 @@ public class MainViewController extends ViewControllerBase
 	public void showProject(Project project)
 	{
 		updateWindowProperties(project);
-		initializePadViews(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
+		initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
 
 		buildPageButtons();
 		showPage(0);

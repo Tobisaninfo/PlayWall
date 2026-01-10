@@ -88,7 +88,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testNewProjectDialogOkay(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.id(), "Test 1", 4, 4);
+		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4);
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 
 		Platform.runLater(() -> {
@@ -98,7 +98,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 		reset(client);
 
-		when(client.getProject(PROJECT_METADATA_1.id())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 		doNothing().when(client).loadProject(PROJECT_METADATA_1.id());
 
 		robot.clickOn(launchDialog.getNewProjectButton());
@@ -107,7 +107,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 		verify(client).getProjects();
 
 		// open project
-		verify(client).loadProject(PROJECT_METADATA_1.id());
+		verify(client).loadProject(PROJECT_METADATA_1.getId());
 		verify(mainViewController).showStage();
 		verify(mainViewController).showProject(any());
 		assertThat(stage.isShowing()).isFalse();
@@ -140,7 +140,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	void testOpenProjectDoubleClick(FxRobot robot) throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
-		when(client.getProject(PROJECT_METADATA_1.id())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 		doNothing().when(client).loadProject(PROJECT_METADATA_1.id());
 
 		Platform.runLater(() -> {
@@ -163,7 +163,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	void testOpenProjectButtonClick(FxRobot robot) throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
-		when(client.getProject(PROJECT_METADATA_1.id())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 		doNothing().when(client).loadProject(PROJECT_METADATA_1.id());
 
 		Platform.runLater(() -> {
@@ -187,7 +187,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	void testOpenProjectError(FxRobot robot) throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
-		when(client.getProject(PROJECT_METADATA_1.id())).thenThrow(new PlayWallApiException("Fehler beim öffnen des Projekts", null));
+		when(client.getProject(PROJECT_METADATA_1.getId())).thenThrow(new PlayWallApiException("Fehler beim öffnen des Projekts", null));
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(LaunchDialog.class);

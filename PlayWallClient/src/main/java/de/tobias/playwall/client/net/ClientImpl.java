@@ -92,7 +92,7 @@ class ClientImpl implements Client
 		final ProjectListResponse response = clientWebSocketHandler.send(new ProjectListRequest());
 		return response.getProjects().stream()
 				.map(projectMetadataMapper::projectMetadataDtoToProjectMetadata)
-				.sorted(Comparator.comparing(ProjectMetadata::name))
+				.sorted(Comparator.comparing(ProjectMetadata::getName))
 				.toList();
 	}
 
