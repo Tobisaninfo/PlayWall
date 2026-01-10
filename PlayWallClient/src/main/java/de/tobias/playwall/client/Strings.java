@@ -56,4 +56,8 @@ public class Strings
 	public static final String UI_SETTINGS_PAD_VOLUME = "ui.settings.pad.general.volume";
 	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_TITLE = "ui.dialog.settings.pad.override.title";
 	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT = "ui.dialog.settings.pad.override.content";
+
+	// ui - settings - project
+	public static final String UI_SETTINGS_PROJECT_TITLE  = "ui.settings.project.title";
+	public static final String UI_SETTINGS_PROJECT_GENERAL_TITLE  = "ui.settings.pad.general.title";
 }

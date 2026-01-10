@@ -22,6 +22,7 @@ import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.viewcontroller.ViewControllerBase;
+import de.tobias.playwall.client.viewcontroller.settings.project.ProjectSettingsViewController;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -85,6 +86,8 @@ public class MainViewController extends ViewControllerBase
 	private final List<PadView> padViews = new ArrayList<>();
 
 	private final ClientProjectController projectController;
+
+	private ProjectSettingsViewController projectSettingsViewController;
 
 	@Override
 	@SuppressWarnings({"java:S1874", "deprecation"})
@@ -320,7 +323,7 @@ public class MainViewController extends ViewControllerBase
 		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
 		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
 		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave), new KeyCharacterCombination("S", KeyCombination.SHORTCUT_DOWN));
-		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.empty());
+		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.of(this::onMenuItemProjectSettings));
 		final MenuItem menuItemSettings = createMenuItem(Strings.UI_MENU_FILE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
@@ -426,5 +429,15 @@ public class MainViewController extends ViewControllerBase
 	{
 		final AboutDialog aboutDialog = AppContextHolder.getInstance().get(AboutDialog.class);
 		aboutDialog.showAndWait(getContainingWindow());
+	}
+
+	private void onMenuItemProjectSettings(ActionEvent event)
+	{
+		if(projectSettingsViewController == null)
+		{
+			projectSettingsViewController = AppContextHolder.getInstance().get(ProjectSettingsViewController.class);
+		}
+
+		projectSettingsViewController.showAndWait(new ProjectSettingsViewController.Param(projectController.getProject().getMetadata()), getContainingWindow());
 	}
 }
