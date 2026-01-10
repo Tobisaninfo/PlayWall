@@ -13,6 +13,7 @@ import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.*;
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.utils.MapUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -195,5 +196,11 @@ class ClientImpl implements Client
 	public void changeVolume(UUID padId, double volume) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new PadChangeVolumeRequest(padId, volume));
+	}
+
+	@Override
+	public void updateProjectSettings(ProjectMetadata projectMetadata) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new ProjectSettingsUpdateRequest(projectMetadataMapper.projectMetadataToProjectMetadataDto(projectMetadata)));
 	}
 }

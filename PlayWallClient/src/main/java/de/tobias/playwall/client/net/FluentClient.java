@@ -5,6 +5,7 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -47,6 +48,8 @@ public interface FluentClient
 		Page addPage(String name) throws PlayWallApiException;
 
 		PageBuilder page(UUID pageId);
+
+		void updateSettings(ProjectMetadata projectMetadata) throws PlayWallApiException;
 	}
 
 	interface PageBuilder

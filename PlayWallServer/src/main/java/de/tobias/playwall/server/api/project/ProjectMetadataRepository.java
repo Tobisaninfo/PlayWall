@@ -42,7 +42,7 @@ public class ProjectMetadataRepository
 		});
 	}
 
-	private void saveProjects() throws IOException
+	public void saveProjects() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
@@ -88,6 +88,20 @@ public class ProjectMetadataRepository
 		saveProjects();
 
 		return newProjectMetadata;
+	}
+
+	public void renameProject(UUID id, String name) throws IOException, ProjectNameAlreadyExistsException, ProjectNotExistsException
+	{
+		final Optional<ProjectMetadata> existingProjectOptional = getProjectMetadataByName(name);
+		if(existingProjectOptional.isPresent())
+		{
+			if(!existingProjectOptional.get().getId().equals(id))
+			{
+				throw new ProjectNameAlreadyExistsException(name);
+			}
+		}
+
+		getProjectMetadataById(id).setName(name);
 	}
 
 	ProjectMetadata getProjectMetadataById(UUID id) throws ProjectNotExistsException

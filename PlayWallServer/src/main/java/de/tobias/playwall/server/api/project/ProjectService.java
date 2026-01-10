@@ -70,6 +70,12 @@ public class ProjectService
 		return projectMetadata;
 	}
 
+	public void rename(UUID projectId, String name) throws IOException, ProjectNameAlreadyExistsException, ProjectNotExistsException
+	{
+		projectMetadataRepository.renameProject(projectId, name);
+		getProjectById(projectId).getMetadata().setName(name);
+	}
+
 	public Page addPage(Project project, String name)
 	{
 		final int nextPagePosition = project.getPages().size();

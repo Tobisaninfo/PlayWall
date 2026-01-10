@@ -5,6 +5,7 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -56,4 +57,6 @@ public interface Client
 	void deletePad(UUID padId) throws PlayWallApiException;
 
 	void changeVolume(UUID padId, double volume) throws PlayWallApiException;
+
+	void updateProjectSettings(ProjectMetadata projectMetadata) throws PlayWallApiException;
 }

@@ -15,4 +15,9 @@ public class ProjectMetadataMapper
 	{
 		return new ProjectMetadata(project.id(), project.name(), project.numberOfHorizontalPads(), project.numberOfVerticalPads());
 	}
+
+	public ProjectMetadataDto projectMetadataToProjectMetadataDto(ProjectMetadata project)
+	{
+		return new ProjectMetadataDto(project.getId(), project.getName(), project.getNumberOfHorizontalPads(), project.getNumberOfVerticalPads());
+	}
 }

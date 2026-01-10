@@ -7,6 +7,7 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -117,6 +118,12 @@ class FluentClientImpl implements FluentClient
 		public Page addPage(String name) throws PlayWallApiException
 		{
 			return delegate.addPage(name);
+		}
+
+		@Override
+		public void updateSettings(ProjectMetadata projectMetadata) throws PlayWallApiException
+		{
+			delegate.updateProjectSettings(projectMetadata);
 		}
 	}
 

@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.ProjectSaveRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -22,6 +23,7 @@ public class ProjectSaveHandler implements RequestHandler<ProjectSaveRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectRepository projectRepository;
+	private final ProjectMetadataRepository projectMetadataRepository;
 	private final MessageSource messageSource;
 
 	@Override
@@ -31,6 +33,7 @@ public class ProjectSaveHandler implements RequestHandler<ProjectSaveRequest>
 		{
 			final Project loadedProject = projectController.getLoadedProject();
 			projectRepository.saveProject(loadedProject);
+			projectMetadataRepository.saveProjects();
 			return Optional.empty();
 		}
 		catch(ProjectNotLoadedException _)
