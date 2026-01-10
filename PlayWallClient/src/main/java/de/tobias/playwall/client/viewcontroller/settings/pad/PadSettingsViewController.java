@@ -108,7 +108,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		final PadSettingsGeneralViewController padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
 		settingViewController.add(padSettingsGeneralViewController);
 
-		final SettingsCategory categoryGeneral = new SettingsCategory("Allgemein", FontAwesomeType.GEAR_SOLID, padSettingsGeneralViewController);
+		final SettingsCategory categoryGeneral = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PAD_GENERAL_TITLE), FontAwesomeType.GEAR_SOLID, padSettingsGeneralViewController);
 		categoryGeneral.setOnAction(this::onSelectCategory);
 		boxCategories.getChildren().add(categoryGeneral);
 
