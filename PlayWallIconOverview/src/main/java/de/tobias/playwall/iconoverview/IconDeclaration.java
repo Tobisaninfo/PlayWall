@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 
 public class IconDeclaration
 {
-	private static final String SRC_PATH = "/PlayWallClient/src/main";
-
 	@Getter
 	private final ObservableList<IconEntry> data;
 
@@ -29,6 +27,7 @@ public class IconDeclaration
 		this.data = initData();
 	}
 
+	@SuppressWarnings("java:S1117")
 	private ObservableList<IconEntry> initData()
 	{
 		final ObservableList<IconEntry> data = FXCollections.observableArrayList();
@@ -43,11 +42,21 @@ public class IconDeclaration
 
 		// pad
 		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));
-		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"))));
+		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, List.of(
+				new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"),
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Wiedergabe - Loop")
+		)));
 		data.add(new IconEntry(FontAwesomeType.PAUSE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel pausieren (Pause)"))));
 		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel stoppen (Stop)"))));
-		data.add(new IconEntry(FontAwesomeType.FOLDER_OPEN_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Filechooser öffnen"))));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_OPEN_SOLID, List.of(
+				new IconUsage(IconUsageCategory.PAD, "Filechooser öffnen"),
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei")
+		)));
 		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"))));
+		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei"))));
+		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
+		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Entfernen"))));
+		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Lautstärke"))));
 
 		// menu
 		data.add(new IconEntry(FontAwesomeType.ARROWS_ROTATE_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Nach Updates suchen"))));
