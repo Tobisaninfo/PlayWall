@@ -382,11 +382,13 @@ public class MainViewController extends ViewControllerBase
 
 	private Menu createMenuEdit()
 	{
+		final MenuItem menuItemUndo = createMenuItem(Strings.UI_MENU_EDIT_UNDO, FontAwesomeType.ARROW_DOWN_1_9_SOLID, Optional.of(this::onMenuItemUndo));
 		final MenuItem menuItemSearch = createMenuItem(Strings.UI_MENU_EDIT_SEARCH, FontAwesomeType.MAGNIFYING_GLASS_SOLID, Optional.empty());
 		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
+				menuItemUndo,
 				menuItemSearch,
 				new SeparatorMenuItem(),
 				menuItemReplaceMedia
@@ -456,6 +458,19 @@ public class MainViewController extends ViewControllerBase
 		{
 			client.currentProject().save();
 			notificationPane.showAndHide(Localization.getString("ui.notification.project.saved"), ViewConstants.DEFAULT_SNACKBAR_SHOW);
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO: error handling
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void onMenuItemUndo(ActionEvent event)
+	{
+		try
+		{
+			client.currentProject().undo();
 		}
 		catch(PlayWallApiException e)
 		{

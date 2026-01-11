@@ -36,6 +36,8 @@ public interface Client
 
 	void saveProject() throws PlayWallApiException;
 
+	void undo() throws PlayWallApiException;
+
 	Page addPage(String name) throws PlayWallApiException;
 
 	Page renamePage(UUID pageId, String newName) throws PlayWallApiException;

@@ -12,6 +12,7 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.utils.MapUtils;
@@ -127,6 +128,12 @@ class ClientImpl implements Client
 	public void saveProject() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new ProjectSaveRequest());
+	}
+
+	@Override
+	public void undo() throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new UndoRequest());
 	}
 
 	@Override
