@@ -8,10 +8,10 @@ import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.UpdateMessage;
 import de.tobias.playwall.server.SystemTrayHandler;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.RequestExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
@@ -23,19 +23,17 @@ import java.net.InetSocketAddress;
 import java.text.MessageFormat;
 import java.util.*;
 
-import static java.util.Objects.requireNonNull;
-
 @Slf4j
 @Service
 @AllArgsConstructor
-@SuppressWarnings({"java:S3740", "rawtypes", "unchecked"})
+@SuppressWarnings({"java:S3740"})
 public class ServerWebSocketHandler extends TextWebSocketHandler
 {
 	private static final Set<WebSocketSession> SESSIONS = new HashSet<>();
 
 	private final ObjectMapper objectMapper;
-	private final List<RequestHandler> requestHandlers;
 	private final SystemTrayHandler systemTrayHandler;
+	private final RequestExecutor requestExecutor;
 
 	@EventListener(UpdateMessage.class)
 	void handleUpdateMessageEvents(UpdateMessage message) throws JsonProcessingException
@@ -68,15 +66,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 
 		try
 		{
-			final Optional<RequestHandler> requestHandlerOptional = getRequestHandler(parsedMessage.getClass());
-			if(requestHandlerOptional.isEmpty())
-			{
-				throw new IllegalArgumentException("Cannot handle request message type " + parsedMessage.getClass().getSimpleName());
-			}
-
-			final RequestHandler requestHandler = requestHandlerOptional.get();
-			final Optional<ResponseMessage> responseMessageOptional = requestHandler.handleRequest(parsedMessage);
-
+			final Optional<ResponseMessage> responseMessageOptional = requestExecutor.execute(parsedMessage);
 			final TextMessage textResponse;
 			if(responseMessageOptional.isPresent())
 			{
@@ -121,14 +111,6 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 				}
 			}
 		}
-	}
-
-	private Optional<RequestHandler> getRequestHandler(Class<? extends RequestMessage> requestClass)
-	{
-		return requestHandlers.stream().filter(handler -> {
-			final RequestHandlerTyped annotation = AnnotationUtils.findAnnotation(handler.getClass(), RequestHandlerTyped.class);
-			return Objects.equals(requireNonNull(annotation).value(), requestClass);
-		}).findAny();
 	}
 
 	private void updateSystemTray()
