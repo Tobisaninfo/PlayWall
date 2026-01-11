@@ -90,15 +90,12 @@ public class ProjectMetadataRepository
 		return newProjectMetadata;
 	}
 
-	public void renameProject(UUID id, String name) throws IOException, ProjectNameAlreadyExistsException, ProjectNotExistsException
+	public void renameProject(UUID id, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException
 	{
 		final Optional<ProjectMetadata> existingProjectOptional = getProjectMetadataByName(name);
-		if(existingProjectOptional.isPresent())
+		if(existingProjectOptional.isPresent() && !existingProjectOptional.get().getId().equals(id))
 		{
-			if(!existingProjectOptional.get().getId().equals(id))
-			{
-				throw new ProjectNameAlreadyExistsException(name);
-			}
+			throw new ProjectNameAlreadyExistsException(name);
 		}
 
 		getProjectMetadataById(id).setName(name);

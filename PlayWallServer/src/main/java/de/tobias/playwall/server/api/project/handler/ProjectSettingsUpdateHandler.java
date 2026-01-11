@@ -15,7 +15,6 @@ import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @RequestHandlerTyped(ProjectSettingsUpdateRequest.class)
@@ -35,7 +34,7 @@ public class ProjectSettingsUpdateHandler implements RequestHandler<ProjectSetti
 	}
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectSettingsUpdateRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<ResponseMessage> handleRequest(ProjectSettingsUpdateRequest requestMessage) throws PlayWallServerException
 	{
 		final Project project = projectController.getLoadedProject();
 		if(project == null)
