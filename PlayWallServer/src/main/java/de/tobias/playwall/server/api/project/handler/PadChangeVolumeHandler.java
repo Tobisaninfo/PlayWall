@@ -8,7 +8,6 @@ import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
-import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;
@@ -16,7 +15,6 @@ import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Optional;
 
 @RequestHandlerTyped(PadChangeVolumeRequest.class)
@@ -44,17 +42,10 @@ public class PadChangeVolumeHandler implements RequestHandler<PadChangeVolumeReq
 
 		VolumeHelper.validateVolume(requestMessage.getVolume());
 
-		final PadContent padContent = pad.getContent();
-
-		if(padContent instanceof AudioPadContent audioPadContent)
+		final PadController padController = projectController.getPadController(pad.getId());
+		if(padController != null)
 		{
-			audioPadContent.setVolume(requestMessage.getVolume());
-
-			final PadController padController = projectController.getPadController(pad.getId());
-			if(padController != null)
-			{
-				padController.setVolume(projectController.getLoadedProject().getMetadata().getVolume() * requestMessage.getVolume());
-			}
+			padController.setVolume(projectController.getLoadedProject().getMetadata().getVolume() * requestMessage.getVolume());
 		}
 
 		return Optional.empty();

@@ -79,7 +79,7 @@ class PadChangeVolumeHandlerTest
 		assertThat(responseMessage).isEmpty();
 
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class)
-				.satisfies(padContent -> assertThat(((AudioPadContent) padContent).getVolume()).isEqualTo(0.25));
+				.satisfies(padContent -> assertThat(((AudioPadContent) padContent).getVolume()).isEqualTo(1.0)); // Not persisted
 		verify(audioHandler).setVolume(0.25);
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 	}
@@ -101,8 +101,6 @@ class PadChangeVolumeHandlerTest
 
 		assertThat(responseMessage).isEmpty();
 
-		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class)
-				.satisfies(padContent -> assertThat(((AudioPadContent) padContent).getVolume()).isEqualTo(0.25));
 		verify(audioHandler).setVolume(0.125);
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 	}
