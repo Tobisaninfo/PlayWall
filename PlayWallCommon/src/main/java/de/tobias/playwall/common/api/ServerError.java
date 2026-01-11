@@ -24,5 +24,6 @@ public abstract class ServerError implements Serializable
 				.collect(Collectors.joining("."));
 	}
 
+	@JsonIgnore
 	public abstract Object[] getMessageArguments();
 }
