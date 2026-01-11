@@ -12,6 +12,8 @@ import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
 import de.tobias.playwall.server.project.PadController;
+import de.tobias.playwall.server.history.UndoItem;
+import de.tobias.playwall.server.history.Undoable;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
@@ -22,7 +24,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @RequestHandlerTyped(PadSettingsUpdateRequest.class)
-public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdateRequest>
+public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdateRequest>, Undoable<PadSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 
@@ -84,5 +86,12 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 				}
 			}
 		}
+	}
+
+	@Override
+	public UndoItem getInverseOperation(PadSettingsUpdateRequest requestMessage)
+	{
+		final Pad pad = projectController.getPad(requestMessage.getPadId());
+		return new UndoItem("Kacheleinstellungen", requestMessage, new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)));
 	}
 }
