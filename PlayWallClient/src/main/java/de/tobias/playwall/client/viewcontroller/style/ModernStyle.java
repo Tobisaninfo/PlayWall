@@ -119,8 +119,7 @@ public class ModernStyle implements Styleable
 	{
 		return String.join(
 				renderGlobalTemplate(ModernColor.GRAY1, ""),
-				renderGlobalTemplate(ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())),
-				renderGlobalTemplate(ModernColor.ORANGE1, MessageFormat.format(":{0}", PseudoClasses.WARN_CLASS.getPseudoClassName()))
+				renderGlobalTemplate(ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName()))
 		);
 	}
 
@@ -146,8 +145,7 @@ public class ModernStyle implements Styleable
 	{
 		return String.join(
 				renderPadTemplate(padIndex, ModernColor.GRAY1, ""),
-				renderPadTemplate(padIndex, ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())),
-				renderPadTemplate(padIndex, ModernColor.ORANGE1, MessageFormat.format(":{0}", PseudoClasses.WARN_CLASS.getPseudoClassName()))
+				renderPadTemplate(padIndex, ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName()))
 		);
 	}
 
