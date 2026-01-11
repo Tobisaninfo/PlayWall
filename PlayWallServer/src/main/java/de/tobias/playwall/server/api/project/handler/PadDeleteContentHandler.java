@@ -4,21 +4,25 @@ import de.tobias.playwall.common.api.project.PadDeleteContentRequest;
 import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.common.api.CompoundRequest;
+import de.tobias.playwall.common.api.project.*;
+import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PadMapper;
+import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.project.PadController;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.history.UndoItem;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 
-import java.io.IOException;
-import java.util.Optional;
+import java.util.List;
 
 @RequestHandlerTyped(PadDeleteContentRequest.class)
-public class PadDeleteContentHandler implements RequestHandler<PadDeleteContentRequest>
+public class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentRequest>
 {
 	private final ProjectController projectController;
 
@@ -36,7 +40,7 @@ public class PadDeleteContentHandler implements RequestHandler<PadDeleteContentR
 	}
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(PadDeleteContentRequest requestMessage) throws IOException, PlayWallServerException
+	public void handleUndoableRequest(PadDeleteContentRequest requestMessage) throws PlayWallServerException
 	{
 		final PadController oldController = projectController.getPadController(requestMessage.getPadId());
 		if(oldController != null)
@@ -55,7 +59,27 @@ public class PadDeleteContentHandler implements RequestHandler<PadDeleteContentR
 		pad.setContent(null);
 		pad.setName(null);
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
+	}
 
-		return Optional.empty();
+	@Override
+	public UndoItem getInverseOperation(PadDeleteContentRequest request)
+	{
+		final Pad pad = projectController.getPad(request.getPadId());
+		if(pad.getContent() == null)
+		{
+			return null;
+		}
+
+		final RequestMessage newMediaRequest = switch(pad.getContent())
+		{
+			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
+		};
+
+		return new UndoItem("Kachel löschen", request, new CompoundRequest(
+				List.of(
+						newMediaRequest,
+						new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad))
+				)
+		));
 	}
 }

@@ -13,8 +13,7 @@ import java.time.Duration;
 
 public class AudioPadContentController extends PadController
 {
-	private final AudioHandlerFactory audioHandlerFactory;
-	private AudioHandler audioHandler;
+	private final AudioHandler audioHandler;
 
 	private final AudioPadContent padContent;
 
@@ -22,13 +21,12 @@ public class AudioPadContentController extends PadController
 	{
 		super(context, pad);
 		this.padContent = padContent;
-		this.audioHandlerFactory = audioHandlerFactory;
+		this.audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
 	}
 
 	@Override
 	protected void loadInternal()
 	{
-		audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
 		audioHandler.setVolume(padContent.getVolume());
 	}
