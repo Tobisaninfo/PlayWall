@@ -16,6 +16,12 @@ public class UndoManager
 
 	public void addUndoOperation(UndoItem undoItem)
 	{
+		// Delete all items after the current cursor position (possible redo items get lost on new undo item)
+		if(cursor + 1 < history.size())
+		{
+			history.subList(cursor + 1, history.size()).clear();
+		}
+
 		history.add(undoItem);
 		cursor = history.size() - 1;
 	}
