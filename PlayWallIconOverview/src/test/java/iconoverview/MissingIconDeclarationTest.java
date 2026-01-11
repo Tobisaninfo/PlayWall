@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MissingIconDeclarationTest
 {
 	@BeforeAll
-	public static void beforeAll()
+	static void beforeAll()
 	{
 		Logger.init(Paths.get("."));
 		Logger.setLevelFilter(LogLevelFilter.DEBUG);

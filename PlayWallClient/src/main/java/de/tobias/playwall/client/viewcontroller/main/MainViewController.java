@@ -382,7 +382,7 @@ public class MainViewController extends ViewControllerBase
 
 	private Menu createMenuEdit()
 	{
-		final MenuItem menuItemUndo = createMenuItem(Strings.UI_MENU_EDIT_UNDO, FontAwesomeType.ARROW_DOWN_1_9_SOLID, Optional.of(this::onMenuItemUndo));
+		final MenuItem menuItemUndo = createMenuItem(Strings.UI_MENU_EDIT_UNDO, FontAwesomeType.ROTATE_LEFT_SOLID, Optional.of(this::onMenuItemUndo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN));
 		final MenuItem menuItemSearch = createMenuItem(Strings.UI_MENU_EDIT_SEARCH, FontAwesomeType.MAGNIFYING_GLASS_SOLID, Optional.empty());
 		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID, Optional.empty());
 
