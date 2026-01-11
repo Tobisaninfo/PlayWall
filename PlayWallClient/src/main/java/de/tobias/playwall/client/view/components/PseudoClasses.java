@@ -11,4 +11,6 @@ public class PseudoClasses
 	public static final PseudoClass FADE_CLASS = PseudoClass.getPseudoClass("fade");
 	public static final PseudoClass HOVER_CLASS = PseudoClass.getPseudoClass("drag");
 	public static final PseudoClass DRAG_CLASS = PseudoClass.getPseudoClass("drag");
+
+	public static final PseudoClass SELECTED = PseudoClass.getPseudoClass("selected");
 }

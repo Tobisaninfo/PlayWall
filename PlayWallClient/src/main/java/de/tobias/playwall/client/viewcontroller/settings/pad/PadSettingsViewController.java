@@ -13,6 +13,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
+import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
@@ -123,11 +124,11 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 	private void selectCategory(SettingsCategory category)
 	{
-		boxCategories.getChildren().forEach(c -> c.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false));
+		boxCategories.getChildren().forEach(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, false));
 		boxCategories.getChildren().stream()
 				.filter(c -> c.equals(category))
 				.findFirst()
-				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true));
+				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, true));
 
 		settingsPageContainer.getChildren().setAll(category.getSettingsPageController().getSettingsPage());
 	}
