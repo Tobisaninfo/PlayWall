@@ -99,8 +99,8 @@ public class ModernStyle implements Styleable
 		final Path renderedCss = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "generated_project.css");
 
 		final StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(renderGlobalTemplate());
-		page.getPads().forEach(pad -> stringBuilder.append(renderPadTemplate(new PadIndex(pad.getPosition(), page.getPosition()), pad)));
+		renderGlobalTemplate(stringBuilder);
+		page.getPads().forEach(pad -> renderPadTemplate(stringBuilder, new PadIndex(pad.getPosition(), page.getPosition()), pad));
 
 		try
 		{
@@ -115,12 +115,10 @@ public class ModernStyle implements Styleable
 		stage.getScene().getStylesheets().add(renderedCss.toUri().toString());
 	}
 
-	private String renderGlobalTemplate()
+	private void renderGlobalTemplate(StringBuilder builder)
 	{
-		return String.join(
-				renderGlobalTemplate(ModernColor.GRAY1, ""),
-				renderGlobalTemplate(ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName()))
-		);
+		builder.append(renderGlobalTemplate(ModernColor.GRAY1, ""))
+				.append(renderGlobalTemplate(ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
 	}
 
 	private String renderGlobalTemplate(ModernColor color, String pseudoClass)
@@ -141,12 +139,10 @@ public class ModernStyle implements Styleable
 		return CssTemplateProcessor.render(globalTemplateString, values);
 	}
 
-	private String renderPadTemplate(PadIndex padIndex, Pad pad)
+	private void renderPadTemplate(StringBuilder builder, PadIndex padIndex, Pad pad)
 	{
-		return String.join(
-				renderPadTemplate(padIndex, ModernColor.GRAY1, ""),
-				renderPadTemplate(padIndex, ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName()))
-		);
+		builder.append(renderPadTemplate(padIndex, ModernColor.GRAY1, ""))
+				.append(renderPadTemplate(padIndex, ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
 	}
 
 	private String renderPadTemplate(PadIndex padIndex, ModernColor color, String pseudoClass)
