@@ -50,6 +50,7 @@ public class RustAudioHandler extends AudioHandler
 	public void stop()
 	{
 		stopNative();
+		position = Duration.ZERO;
 	}
 
 	private native void stopNative();
@@ -138,6 +139,7 @@ public class RustAudioHandler extends AudioHandler
 	void onEof()
 	{
 		eofCallback.run();
+		position = Duration.ZERO;
 	}
 
 	@SuppressWarnings("unused")

@@ -5,6 +5,7 @@ import de.tobias.playwall.client.model.project.PadStatus;
 import de.tobias.playwall.client.service.ClientPadController;
 import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.common.api.project.PadStatusUpdate;
+import javafx.util.Duration;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -19,6 +20,11 @@ class PadStatusListener implements UpdateMessageEventListener<PadStatusUpdate>
 		final PadStatus clientStatus = PadStatus.fromPadControllerStatus(message.getStatus());
 		final ClientPadController padController = projectController.getPadController(message.getPadId());
 		padController.setStatus(clientStatus);
+
+		if(clientStatus == PadStatus.READY)
+		{
+			padController.setPosition(Duration.ZERO);
+		}
 
 		final PadView padView = mainViewController.getPadViewForPadId(message.getPadId());
 		if(padView != null)
