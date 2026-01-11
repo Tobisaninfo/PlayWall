@@ -5,7 +5,6 @@ import de.tobias.playwall.common.api.project.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.PadUpdate;
 import de.tobias.playwall.common.api.project.model.AudioPadContentDto;
 import de.tobias.playwall.common.api.project.model.PadContentDto;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PadMapper;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
@@ -13,18 +12,14 @@ import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
 import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.history.UndoItem;
-import de.tobias.playwall.server.history.Undoable;
-import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 
-import java.io.IOException;
-import java.util.Optional;
-
 @RequestHandlerTyped(PadSettingsUpdateRequest.class)
-public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdateRequest>, Undoable<PadSettingsUpdateRequest>
+public class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 
@@ -42,7 +37,7 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 	}
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(PadSettingsUpdateRequest requestMessage) throws IOException, PlayWallServerException
+	public void handleUndoableRequest(PadSettingsUpdateRequest requestMessage) throws PlayWallServerException
 	{
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
 		if(pad == null)
@@ -56,8 +51,6 @@ public class PadSettingsUpdateHandler implements RequestHandler<PadSettingsUpdat
 		updatePadContent(requestMessage.getPad().getContent(), pad);
 
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
-
-		return Optional.empty();
 	}
 
 	private void updatePadContent(PadContentDto requestPadContent, Pad pad)
