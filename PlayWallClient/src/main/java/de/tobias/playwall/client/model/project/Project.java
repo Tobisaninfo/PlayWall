@@ -2,6 +2,7 @@ package de.tobias.playwall.client.model.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.UUID;
 @ToString
 public class Project
 {
-	private final ProjectMetadata metadata;
+	@Setter
+	private ProjectMetadata metadata;
 	private final List<Page> pages;
 
 	public Page getPage(int position)

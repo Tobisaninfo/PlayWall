@@ -14,6 +14,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.mapper.PadMapper;
+import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
@@ -73,12 +74,14 @@ public class MainViewController extends ViewControllerBase
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
 	private final PadMapper padMapper;
+	private final ProjectMetadataMapper projectMetadataMapper;
 	private final UpdateMessageEventHandler eventHandler;
 
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
 	private PadPlayPositionListener padPlayPositionListener;
+	private ProjectSettingsUpdateListener projectSettingsUpdateListener;
 
 	private SnackBar notificationPane;
 
@@ -125,6 +128,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padStatusListener);
 		padPlayPositionListener = new PadPlayPositionListener(projectController, this);
 		eventHandler.registerListener(padPlayPositionListener);
+		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper);
+		eventHandler.registerListener(projectSettingsUpdateListener);
 	}
 
 	@Override
@@ -150,11 +155,17 @@ public class MainViewController extends ViewControllerBase
 		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
 	}
 
+	public void updateTitle()
+	{
+		getStage().setTitle(getWindowTitle(projectController.getProject().getMetadata().getName()));
+	}
+
 	private void onWindowClosed()
 	{
 		eventHandler.unregisterListener(padUpdateListener);
 		eventHandler.unregisterListener(padLoadedListener);
 		eventHandler.unregisterListener(padStatusListener);
+		eventHandler.unregisterListener(projectSettingsUpdateListener);
 	}
 
 	private static String getWindowTitle(String projectName)
