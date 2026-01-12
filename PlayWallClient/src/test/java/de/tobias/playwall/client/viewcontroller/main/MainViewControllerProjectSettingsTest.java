@@ -61,6 +61,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 	void testProjectSettingsChangeName(FxRobot robot) throws PlayWallApiException
 	{
 		showMainView();
+		context.registerLazy(Stage.class, _ -> new Stage());
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
 		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
