@@ -1,39 +1,70 @@
 package de.tobias.playwall.client.view.components;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.HBox;
 
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class VolumeSlider extends Slider
+public class VolumeSlider extends HBox
 {
 	private static final int MIN_VALUE = 0;
 	private static final int MAX_VALUE = 115;
 	private static final int DEFAULT_VALUE = 100;
 	private static final int SNAP_DELTA = 3;
 
+	private final Slider slider;
+
 	public VolumeSlider()
 	{
-		setMin(MIN_VALUE);
-		setMax(MAX_VALUE);
-		setValue(DEFAULT_VALUE);
-		setMajorTickUnit(DEFAULT_VALUE);
-		setMinorTickCount(0);
-		setBlockIncrement(1);
-		setShowTickLabels(true);
-		setShowTickMarks(true);
-		setSnapToTicks(false);
-		setPrefWidth(250);
+		final Label label = new Label();
+		label.setStyle("-fx-font-weight: bold");
 
-		valueProperty().addListener((_, _, newVal) -> {
+		slider = new Slider(MIN_VALUE, MAX_VALUE, DEFAULT_VALUE);
+		slider.setMajorTickUnit(DEFAULT_VALUE);
+		slider.setMinorTickCount(0);
+		slider.setBlockIncrement(1);
+		slider.setShowTickLabels(false);
+		slider.setShowTickMarks(false);
+		slider.setSnapToTicks(false);
+		slider.setPrefWidth(250);
+
+		slider.valueProperty().addListener((_, _, newVal) -> {
 			if(Math.abs(newVal.doubleValue() - DEFAULT_VALUE) < SNAP_DELTA)
 			{
-				setValue(DEFAULT_VALUE);
+				slider.setValue(DEFAULT_VALUE);
+				label.setText(String.valueOf(DEFAULT_VALUE));
+			}
+			else
+			{
+				label.setText(String.valueOf(newVal.intValue()));
 			}
 		});
 
-		styleProperty().bind(Bindings.createStringBinding(() -> createSliderStyle(getMin(), getMax(), getValue()), valueProperty()));
+		slider.styleProperty().bind(Bindings.createStringBinding(() -> createSliderStyle(slider.getMin(), slider.getMax(), slider.getValue()), slider.valueProperty()));
+
+		getChildren().addAll(slider, label);
+		setSpacing(ViewConstants.DEFAULT_SPACING);
+		setAlignment(Pos.CENTER_LEFT);
+	}
+
+	public double getValue()
+	{
+		return slider.getValue();
+	}
+
+	public void setValue(double value)
+	{
+		slider.setValue(value);
+	}
+
+	public DoubleProperty valueProperty()
+	{
+		return slider.valueProperty();
 	}
 
 	private String createSliderStyle(double min, double max, double value)
