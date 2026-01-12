@@ -8,15 +8,30 @@ import java.util.Locale;
 
 public class VolumeSlider extends Slider
 {
+	private static final int MIN_VALUE = 0;
+	private static final int MAX_VALUE = 115;
+	private static final int DEFAULT_VALUE = 100;
+	private static final int SNAP_DELTA = 3;
+
 	public VolumeSlider()
 	{
-		setMin(0);
-		setMax(115);
-		setValue(100);
+		setMin(MIN_VALUE);
+		setMax(MAX_VALUE);
+		setValue(DEFAULT_VALUE);
+		setMajorTickUnit(DEFAULT_VALUE);
+		setMinorTickCount(0);
+		setBlockIncrement(1);
 		setShowTickLabels(true);
 		setShowTickMarks(true);
-		setSnapToTicks(true);
+		setSnapToTicks(false);
 		setPrefWidth(250);
+
+		valueProperty().addListener((_, _, newVal) -> {
+			if(Math.abs(newVal.doubleValue() - DEFAULT_VALUE) < SNAP_DELTA)
+			{
+				setValue(DEFAULT_VALUE);
+			}
+		});
 
 		styleProperty().bind(Bindings.createStringBinding(() -> createSliderStyle(getMin(), getMax(), getValue()), valueProperty()));
 	}
