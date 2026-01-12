@@ -49,7 +49,9 @@ public class VolumeSlider extends Slider
 						"{0} {3}%, " +
 						"{0} 100%);", Locale.ENGLISH);
 
-		final Object[] arguments = {ViewConstants.SLIDER_DEFAULT_BACKGROUND_COLOR, ViewConstants.PRIMARY_COLOR, min, percentage};
+		final String color = value <= DEFAULT_VALUE ? ViewConstants.PRIMARY_COLOR : ViewConstants.DANGER_COLOR;
+
+		final Object[] arguments = {ViewConstants.SLIDER_DEFAULT_BACKGROUND_COLOR, color, min, percentage};
 		return messageFormat.format(arguments, new StringBuffer(), null).toString();
 	}
 }
