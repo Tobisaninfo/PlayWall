@@ -9,6 +9,7 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@Builder
 public final class ProjectMetadata
 {
 	private final UUID id;
