@@ -261,13 +261,13 @@ public class MainViewController extends ViewControllerBase
 		}
 	}
 
-	private void showPage(int position)
+	public void showPage(int position)
 	{
 		final Page page = projectController.getProject().getPage(position);
 		showPage(page);
 	}
 
-	private void showPage(Page page)
+	public void showPage(Page page)
 	{
 		this.currentPage = page;
 		final int padNumberPerPage = projectController.getProject().getMetadata().getNumberOfPadsPerPage();
