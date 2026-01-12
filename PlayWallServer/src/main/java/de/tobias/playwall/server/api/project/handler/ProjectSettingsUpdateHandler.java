@@ -1,11 +1,9 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
-import de.tobias.playwall.common.api.project.ProjectSettingsUpdateRequest;
+import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
@@ -13,25 +11,21 @@ import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 
 import java.util.Optional;
 
 @RequestHandlerTyped(ProjectSettingsUpdateRequest.class)
+@RequiredArgsConstructor
 public class ProjectSettingsUpdateHandler implements RequestHandler<ProjectSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
-
 	private final ProjectService projectService;
-
 	private final MessageSource messageSource;
-
-	public ProjectSettingsUpdateHandler(ProjectController projectController, ProjectService projectService, MessageSource messageSource)
-	{
-		this.projectController = projectController;
-		this.projectService = projectService;
-		this.messageSource = messageSource;
-	}
+	private final ApplicationContext context;
+	private final ProjectMetadataMapper projectMetadataMapper;
 
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectSettingsUpdateRequest requestMessage) throws PlayWallServerException
@@ -47,6 +41,8 @@ public class ProjectSettingsUpdateHandler implements RequestHandler<ProjectSetti
 		{
 			project.getMetadata().setName(requestMessage.getProjectMetadata().name());
 			projectService.rename(project.getMetadata().getId(), requestMessage.getProjectMetadata().name());
+
+			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(project.getMetadata())));
 		}
 		catch(ProjectNameAlreadyExistsException e)
 		{
