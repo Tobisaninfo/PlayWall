@@ -10,10 +10,10 @@ import de.tobias.playwall.client.model.project.AudioPadContent;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;
 import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
-import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -21,8 +21,6 @@ import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 import java.nio.file.Paths;
-import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -31,7 +29,7 @@ import java.util.UUID;
 public class AudioPadContentSettingsContainer extends BasePadContentSettingsContainer<AudioPadContent>
 {
 	private CheckBox checkboxPlaybackLoop;
-	private Slider volumeSlider;
+	private VolumeSlider volumeSlider;
 
 	private final FluentClient fluentClient;
 
@@ -99,20 +97,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		settingsRowVolume.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_VOLUME));
 		settingsRowVolume.setIcon(FontAwesomeType.VOLUME_HIGH_SOLID);
 
-		volumeSlider = new Slider(0, 100, 1);
-		volumeSlider.setShowTickLabels(true);
-		volumeSlider.setShowTickMarks(true);
-		volumeSlider.setSnapToTicks(true);
-		volumeSlider.setPrefWidth(250);
-
-		volumeSlider.styleProperty().bind(Bindings.createStringBinding(() -> {
-			double min = volumeSlider.getMin();
-			double max = volumeSlider.getMax();
-			double value = volumeSlider.getValue();
-
-			return createSliderStyle(min, max, value);
-		}, volumeSlider.valueProperty()));
-
+		volumeSlider = new VolumeSlider();
 		volumeSlider.valueProperty().addListener((_, _, newValue) -> {
 			try
 			{
@@ -153,26 +138,8 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		}
 	}
 
-
 	private void onButtonShowInFolder(ActionEvent event)
 	{
 		NativeApplication.sharedInstance().showFileInFileViewer(Paths.get(padContent.getMediaPath()));
-	}
-
-	private String createSliderStyle(double min, double max, double value)
-	{
-		final double percentage = 100.0 * (value - min) / (max - min);
-
-		final MessageFormat messageFormat = new MessageFormat(
-				"-slider-track-color: linear-gradient(to right, " +
-						"{0} 0%, " +
-						"{0} {2}%, " +
-						"{1} {2}%, " +
-						"{1} {3}%, " +
-						"{0} {3}%, " +
-						"{0} 100%);", Locale.ENGLISH);
-
-		final Object[] arguments = {ViewConstants.SLIDER_DEFAULT_BACKGROUND_COLOR, ViewConstants.PRIMARY_COLOR, min, percentage};
-		return messageFormat.format(arguments, new StringBuffer(), null).toString();
 	}
 }
