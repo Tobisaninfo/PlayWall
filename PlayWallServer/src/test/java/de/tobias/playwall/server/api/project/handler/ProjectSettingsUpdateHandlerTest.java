@@ -1,13 +1,14 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.*;
+import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
+import de.tobias.playwall.common.api.project.ProjectSettingsUpdate;
+import de.tobias.playwall.common.api.project.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
-import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -56,9 +57,6 @@ class ProjectSettingsUpdateHandlerTest
 
 	@MockitoBean
 	private PathProvider pathProvider;
-
-	@Autowired
-	private ProjectMetadataRepository projectMetadataRepository;
 
 	@BeforeEach
 	void beforeEach() throws IOException
