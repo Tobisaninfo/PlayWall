@@ -13,6 +13,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class ProjectMetadata
 {
+	public static final double MIN_VOLUME = 0.0;
+	public static final double MAX_VOLUME = 1.15;
 	private static final double DEFAULT_VOLUME = 1.0;
 
 	private final int VERSION = 1;
