@@ -83,6 +83,7 @@ public class ProjectMetadataRepository
 				.name(name)
 				.numberOfHorizontalPads(numberOfHorizontalPads)
 				.numberOfVerticalPads(numberOfVerticalPads)
+				.volume(1.0)
 				.build();
 		allProjectsMetadata.add(newProjectMetadata);
 		saveProjects();

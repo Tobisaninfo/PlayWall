@@ -7,9 +7,9 @@ import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
-import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
 
@@ -48,7 +48,7 @@ public class PadChangeVolumeHandler implements RequestHandler<PadChangeVolumeReq
 			final PadController padController = projectController.getPadController(pad.getId());
 			if(padController != null)
 			{
-				padController.setVolume(requestMessage.getVolume());
+				padController.setVolume(projectController.getLoadedProject().getMetadata().getVolume() * requestMessage.getVolume());
 			}
 		}
 

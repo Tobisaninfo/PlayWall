@@ -13,6 +13,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class ProjectMetadata
 {
+	private static final double DEFAULT_VOLUME = 1.0;
+
 	private final int VERSION = 1;
 
 	public interface List
@@ -27,6 +29,9 @@ public class ProjectMetadata
 
 	private int numberOfHorizontalPads;
 	private int numberOfVerticalPads;
+
+	@Builder.Default
+	private double volume = DEFAULT_VOLUME;
 
 	@JsonIgnore
 	public int getNumberOfPadsPerPage()

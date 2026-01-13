@@ -13,11 +13,11 @@ public class ProjectMetadataMapper
 {
 	public ProjectMetadata projectMetadataDtoToProjectMetadata(ProjectMetadataDto project)
 	{
-		return new ProjectMetadata(project.id(), project.name(), project.numberOfHorizontalPads(), project.numberOfVerticalPads());
+		return new ProjectMetadata(project.id(), project.name(), project.numberOfHorizontalPads(), project.numberOfVerticalPads(), project.volume());
 	}
 
 	public ProjectMetadataDto projectMetadataToProjectMetadataDto(ProjectMetadata project)
 	{
-		return new ProjectMetadataDto(project.getId(), project.getName(), project.getNumberOfHorizontalPads(), project.getNumberOfVerticalPads());
+		return new ProjectMetadataDto(project.getId(), project.getName(), project.getNumberOfHorizontalPads(), project.getNumberOfVerticalPads(), project.getVolume());
 	}
 }
