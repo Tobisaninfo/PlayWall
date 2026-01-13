@@ -99,7 +99,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 		reset(client);
 
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
-		doNothing().when(client).loadProject(PROJECT_METADATA_1.id());
+		doNothing().when(client).loadProject(PROJECT_METADATA_1.getId());
 
 		robot.clickOn(launchDialog.getNewProjectButton());
 		WaitForAsyncUtils.waitForFxEvents();
@@ -141,7 +141,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
-		doNothing().when(client).loadProject(PROJECT_METADATA_1.id());
+		doNothing().when(client).loadProject(PROJECT_METADATA_1.getId());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(LaunchDialog.class);
@@ -164,7 +164,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
-		doNothing().when(client).loadProject(PROJECT_METADATA_1.id());
+		doNothing().when(client).loadProject(PROJECT_METADATA_1.getId());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(LaunchDialog.class);
