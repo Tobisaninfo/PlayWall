@@ -11,6 +11,7 @@ import de.tobias.playwall.server.project.ProjectController;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Optional;
 
 @RequestHandlerTyped(GlobaleChangeVolumeRequest.class)
@@ -23,6 +24,12 @@ public class GlobalChangeVolumeHandler implements RequestHandler<GlobaleChangeVo
 	public Optional<ResponseMessage> handleRequest(GlobaleChangeVolumeRequest requestMessage) throws IOException, PlayWallServerException
 	{
 		final Project loadedProject = projectController.getLoadedProject();
+
+		if(requestMessage.getVolume() < ProjectMetadata.MIN_VOLUME || requestMessage.getVolume() > ProjectMetadata.MAX_VOLUME)
+		{
+			throw new IllegalArgumentException(MessageFormat.format("Volume must be between {0} and {1}", ProjectMetadata.MIN_VOLUME, ProjectMetadata.MAX_VOLUME));
+		}
+
 		loadedProject.getMetadata().setVolume(requestMessage.getVolume());
 
 		for(Page page : loadedProject.getPages())

@@ -7,6 +7,7 @@ import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;
@@ -14,6 +15,7 @@ import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Optional;
 
 @RequestHandlerTyped(PadChangeVolumeRequest.class)
@@ -37,6 +39,11 @@ public class PadChangeVolumeHandler implements RequestHandler<PadChangeVolumeReq
 		{
 			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
 			throw new PlayWallServerException(messageSource, error);
+		}
+
+		if(requestMessage.getVolume() < ProjectMetadata.MIN_VOLUME || requestMessage.getVolume() > ProjectMetadata.MAX_VOLUME)
+		{
+			throw new IllegalArgumentException(MessageFormat.format("Volume must be between {0} and {1}", ProjectMetadata.MIN_VOLUME, ProjectMetadata.MAX_VOLUME));
 		}
 
 		final PadContent padContent = pad.getContent();
