@@ -18,11 +18,12 @@ public class VolumeSlider extends HBox
 	private static final int DEFAULT_VALUE = 100;
 	private static final int SNAP_DELTA = 3;
 
+	private final Label label;
 	private final Slider slider;
 
 	public VolumeSlider()
 	{
-		final Label label = new Label();
+		label = new Label();
 		label.setStyle("-fx-font-weight: bold");
 		label.setMinWidth(35);
 
@@ -63,6 +64,7 @@ public class VolumeSlider extends HBox
 	public void setValue(double value)
 	{
 		slider.setValue(value);
+		label.setText((int) value + "%");
 	}
 
 	public DoubleProperty valueProperty()
