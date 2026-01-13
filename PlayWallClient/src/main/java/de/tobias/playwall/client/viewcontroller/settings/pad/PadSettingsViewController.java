@@ -22,7 +22,6 @@ import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewControl
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -89,6 +88,23 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	}
 
 	@Override
+	protected void init()
+	{
+		boxCategories.getStyleClass().add("settings-category-box");
+
+		final PadSettingsGeneralViewController padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
+		settingViewController.add(padSettingsGeneralViewController);
+
+		final SettingsCategory categoryGeneral = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PAD_GENERAL_TITLE), FontAwesomeType.GEAR_SOLID, padSettingsGeneralViewController);
+		categoryGeneral.setOnAction(this::onSelectCategory);
+		boxCategories.getChildren().add(categoryGeneral);
+
+		initButtons();
+
+		selectCategory(categoryGeneral);
+	}
+
+	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
@@ -102,19 +118,6 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		stage.setMinWidth(825);
 		stage.setMinHeight(500);
-
-		boxCategories.getStyleClass().add("settings-category-box");
-
-		final PadSettingsGeneralViewController padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
-		settingViewController.add(padSettingsGeneralViewController);
-
-		final SettingsCategory categoryGeneral = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PAD_GENERAL_TITLE), FontAwesomeType.GEAR_SOLID, padSettingsGeneralViewController);
-		categoryGeneral.setOnAction(this::onSelectCategory);
-		boxCategories.getChildren().add(categoryGeneral);
-
-		initButtons();
-
-		selectCategory(categoryGeneral);
 	}
 
 	private void onSelectCategory(ActionEvent event)

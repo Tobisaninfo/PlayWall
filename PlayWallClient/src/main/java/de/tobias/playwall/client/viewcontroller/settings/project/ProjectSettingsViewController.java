@@ -76,6 +76,23 @@ public class ProjectSettingsViewController extends ParamDialogBase<ProjectSettin
 	}
 
 	@Override
+	protected void init()
+	{
+		boxCategories.getStyleClass().add("settings-category-box");
+
+		final ProjectSettingsGeneralViewController projectSettingsGeneralViewController = AppContextHolder.getInstance().get(ProjectSettingsGeneralViewController.class);
+		settingViewController.add(projectSettingsGeneralViewController);
+
+		final SettingsCategory categoryGeneral = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PROJECT_GENERAL_TITLE), FontAwesomeType.GEAR_SOLID, projectSettingsGeneralViewController);
+		categoryGeneral.setOnAction(this::onSelectCategory);
+		boxCategories.getChildren().add(categoryGeneral);
+
+		initButtons();
+
+		selectCategory(categoryGeneral);
+	}
+
+	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
@@ -89,19 +106,6 @@ public class ProjectSettingsViewController extends ParamDialogBase<ProjectSettin
 
 		stage.setMinWidth(825);
 		stage.setMinHeight(500);
-
-		boxCategories.getStyleClass().add("settings-category-box");
-
-		final ProjectSettingsGeneralViewController projectSettingsGeneralViewController = AppContextHolder.getInstance().get(ProjectSettingsGeneralViewController.class);
-		settingViewController.add(projectSettingsGeneralViewController);
-
-		final SettingsCategory categoryGeneral = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PROJECT_GENERAL_TITLE), FontAwesomeType.GEAR_SOLID, projectSettingsGeneralViewController);
-		categoryGeneral.setOnAction(this::onSelectCategory);
-		boxCategories.getChildren().add(categoryGeneral);
-
-		initButtons();
-
-		selectCategory(categoryGeneral);
 	}
 
 	private void onSelectCategory(ActionEvent event)
