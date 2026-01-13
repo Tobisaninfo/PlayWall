@@ -24,7 +24,7 @@ public class VolumeSlider extends HBox
 	{
 		final Label label = new Label();
 		label.setStyle("-fx-font-weight: bold");
-		label.setMinWidth(25);
+		label.setMinWidth(35);
 
 		slider = new Slider(MIN_VALUE, MAX_VALUE, DEFAULT_VALUE);
 		slider.setMajorTickUnit(DEFAULT_VALUE);
@@ -39,11 +39,11 @@ public class VolumeSlider extends HBox
 			if(Math.abs(newVal.doubleValue() - DEFAULT_VALUE) < SNAP_DELTA)
 			{
 				slider.setValue(DEFAULT_VALUE);
-				label.setText(String.valueOf(DEFAULT_VALUE));
+				label.setText(DEFAULT_VALUE + "%");
 			}
 			else
 			{
-				label.setText(String.valueOf(newVal.intValue()));
+				label.setText(newVal.intValue() + "%");
 			}
 		});
 
