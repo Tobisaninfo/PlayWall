@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import javafx.application.Platform;
@@ -46,6 +47,8 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		context.registerLazySingleton(Client.class, _ -> client);
 
 		project = loadProject("projects/project_1.json");
+		ClientProjectController projectController = context.get(ClientProjectController.class);
+		projectController.loadProject(project);
 	}
 
 	private void showMainView()
