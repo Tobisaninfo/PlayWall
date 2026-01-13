@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -22,6 +23,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.viewcontroller.ViewControllerBase;
 import de.tobias.playwall.client.viewcontroller.settings.project.ProjectSettingsViewController;
 import de.tobias.playwall.client.viewcontroller.style.ModernStyleSizeHelper;
@@ -71,6 +73,9 @@ public class MainViewController extends ViewControllerBase
 	@FXML
 	private AnchorPane gridContainer;
 
+	@FXML
+	private HBox toolbar;
+
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
 	private final PadMapper padMapper;
@@ -91,6 +96,8 @@ public class MainViewController extends ViewControllerBase
 	private final ClientProjectController projectController;
 
 	private ProjectSettingsViewController projectSettingsViewController;
+
+	private VolumeSlider volumeSlider;
 
 	@Override
 	@SuppressWarnings({"java:S1874", "deprecation"})
@@ -130,6 +137,20 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padPlayPositionListener);
 		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper);
 		eventHandler.registerListener(projectSettingsUpdateListener);
+
+		volumeSlider = new VolumeSlider();
+		volumeSlider.setPrefWidth(350);
+		volumeSlider.valueProperty().addListener((_, _, newValue) -> {
+			try
+			{
+				client.currentProject().changeGlobalVolume(newValue.doubleValue() / 100.0);
+			}
+			catch(PlayWallApiException e)
+			{
+				Logger.error(e.getMessage());
+			}
+		});
+		toolbar.getChildren().add(volumeSlider);
 	}
 
 	@Override
@@ -153,6 +174,8 @@ public class MainViewController extends ViewControllerBase
 			return t;
 		}));
 		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
+
+		volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
 	}
 
 	public void updateTitle()

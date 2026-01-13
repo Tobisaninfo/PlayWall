@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -23,6 +24,7 @@ public class VolumeSlider extends HBox
 	{
 		final Label label = new Label();
 		label.setStyle("-fx-font-weight: bold");
+		label.setMinWidth(25);
 
 		slider = new Slider(MIN_VALUE, MAX_VALUE, DEFAULT_VALUE);
 		slider.setMajorTickUnit(DEFAULT_VALUE);
@@ -50,6 +52,7 @@ public class VolumeSlider extends HBox
 		getChildren().addAll(slider, label);
 		setSpacing(ViewConstants.DEFAULT_SPACING);
 		setAlignment(Pos.CENTER_LEFT);
+		HBox.setHgrow(slider, Priority.ALWAYS);
 	}
 
 	public double getValue()
