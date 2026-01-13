@@ -1,0 +1,60 @@
+package de.tobias.playwall.client.viewcontroller.main;
+
+import de.tobias.playwall.client.appcontext.AppContext;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
+import de.tobias.playwall.common.api.project.ProjectSettingsUpdate;
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import org.junit.jupiter.api.Test;
+import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
+
+import static org.testfx.assertions.api.Assertions.assertThat;
+
+class ProjectSettingsUpdateListenerTest extends AbstractViewControllerTest
+{
+	private AppContext context;
+
+	private MainViewController mainViewController;
+	private Stage stage;
+
+	private UpdateMessageEventHandler eventHandler;
+
+	private Project project;
+
+	@Start
+	private void start(Stage stage)
+	{
+		this.stage = stage;
+		context = AppContextHolder.getInstance();
+		context.registerLazy(Stage.class, _ -> stage);
+
+		eventHandler = context.get(UpdateMessageEventHandler.class);
+
+		project = loadProject("projects/project_1.json");
+	}
+
+	@Test
+	void testProjectSettingsUpdateListener()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.openProject(project);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		assertThat(mainViewController.getProjectTitleLabel().getText()).isEqualTo("PlayWall - Project 1");
+
+		eventHandler.fireEvent(new ProjectSettingsUpdate(ProjectMetadataDto.builder()
+				.name("Fancy project name")
+				.build()));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		assertThat(mainViewController.getProjectTitleLabel().getText()).isEqualTo("PlayWall - Fancy project name");
+	}
+}
