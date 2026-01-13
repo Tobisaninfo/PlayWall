@@ -18,8 +18,6 @@ public class Pad
 	private String name;
 	private PadContent content;
 
-	private PadStatus status;
-
 	public String getReadablePosition()
 	{
 		return String.valueOf(position + 1);
@@ -31,7 +29,6 @@ public class Pad
 				.id(id)
 				.position(position)
 				.name(name)
-				.status(status)
 				.content(content == null ? null : content.copy())
 				.build();
 	}

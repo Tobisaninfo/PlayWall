@@ -6,10 +6,10 @@ import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
-import de.tobias.playwall.server.common.project.PadController;
 import org.springframework.context.ApplicationContext;
 
 import java.nio.file.Paths;
+import java.time.Duration;
 
 public class AudioPadContentController extends PadController
 {
@@ -28,7 +28,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	protected void loadInternal()
 	{
-		audioHandler = audioHandlerFactory.createAudioHandler(this);
+		audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
 		audioHandler.setVolume(padContent.getVolume());
 	}
@@ -74,6 +74,18 @@ public class AudioPadContentController extends PadController
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 		setStatus(PadControllerStatus.READY);
 		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+	}
+
+	@Override
+	public Duration getDuration()
+	{
+		return audioHandler.getDuration();
+	}
+
+	@Override
+	public Duration getPlayPosition()
+	{
+		return audioHandler.getPosition();
 	}
 
 	@Override

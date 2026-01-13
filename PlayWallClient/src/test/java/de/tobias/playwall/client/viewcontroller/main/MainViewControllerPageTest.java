@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
@@ -39,13 +40,15 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		context.registerLazySingleton(Client.class, _ -> client);
 
 		project = loadProject("projects/project_1.json");
+		ClientProjectController projectController = context.get(ClientProjectController.class);
+		projectController.loadProject(project);
 	}
 
 	private void showMainView()
 	{
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
-			mainViewController.openProject(project);
+			mainViewController.showProject(project);
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();

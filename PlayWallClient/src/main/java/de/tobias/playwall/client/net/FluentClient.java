@@ -33,7 +33,9 @@ public interface FluentClient
 	{
 		void delete() throws PlayWallApiException;
 
-		Project launch() throws PlayWallApiException;
+		Project get() throws PlayWallApiException;
+
+		void load() throws PlayWallApiException;
 	}
 
 	ProjectCurrentBuilder currentProject();

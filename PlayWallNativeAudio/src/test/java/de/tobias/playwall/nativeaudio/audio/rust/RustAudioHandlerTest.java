@@ -1,7 +1,6 @@
 package de.tobias.playwall.nativeaudio.audio.rust;
 
 import de.tobias.playwall.nativeaudio.extensions.RustAudioLoaderExtension;
-import de.tobias.playwall.server.common.project.PadController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -16,12 +15,12 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(RustAudioLoaderExtension.class)
 class RustAudioHandlerTest
 {
-	final PadController mock = Mockito.mock(PadController.class);
+	final Runnable eofCallback = Mockito.mock(Runnable.class);
 
 	@Test
 	void testPlay() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 
@@ -34,7 +33,7 @@ class RustAudioHandlerTest
 	@Test
 	void testPauseOnPlayingAudio() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 
@@ -51,7 +50,7 @@ class RustAudioHandlerTest
 	@Test
 	void testPauseOnStoppedAudio() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 
@@ -64,7 +63,7 @@ class RustAudioHandlerTest
 	@Test
 	void testStopOnPlayingAudio() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 
@@ -81,7 +80,7 @@ class RustAudioHandlerTest
 	@Test
 	void testStopOnStoppedAudio() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 
@@ -94,7 +93,7 @@ class RustAudioHandlerTest
 	@Test
 	void testEof() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_2.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 
@@ -103,13 +102,13 @@ class RustAudioHandlerTest
 
 		await()
 				.atMost(2500, MILLISECONDS)
-				.untilAsserted(() -> verify(mock).onEof());
+				.untilAsserted(() -> verify(eofCallback).run());
 	}
 
 	@Test
 	void testGetDuration() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 
@@ -119,7 +118,7 @@ class RustAudioHandlerTest
 	@Test
 	void testUnloadMedia() throws Exception
 	{
-		final RustAudioHandler handler = new RustAudioHandler(mock);
+		final RustAudioHandler handler = new RustAudioHandler(eofCallback);
 		handler.loadMedia(new ClassPathResource("audio/example_1.mp3").getFile().toPath());
 		assertThat(handler.isMediaLoaded()).isTrue();
 

@@ -1,7 +1,6 @@
 package de.tobias.playwall.nativeaudio.audio.rust;
 
 import de.tobias.playwall.server.common.audio.AudioHandler;
-import de.tobias.playwall.server.common.project.PadController;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
@@ -12,10 +11,12 @@ public class RustAudioHandler extends AudioHandler
 {
 	@SuppressWarnings("unused")
 	private long nativePointer;
+	private Runnable eofCallback;
+	private Duration position = Duration.ZERO;
 
-	public RustAudioHandler(PadController padController)
+	public RustAudioHandler(Runnable eofCallback)
 	{
-		super(padController);
+		this.eofCallback = eofCallback;
 		createNativeInstance();
 		log.trace("Created new NativeAudioRustHandler with handle {}", nativePointer);
 	}
@@ -49,6 +50,7 @@ public class RustAudioHandler extends AudioHandler
 	public void stop()
 	{
 		stopNative();
+		position = Duration.ZERO;
 	}
 
 	private native void stopNative();
@@ -72,16 +74,16 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public Duration getPosition()
 	{
-		return null;
+		return position;
 	}
 
 	@Override
 	public Duration getDuration()
 	{
-		return Duration.ofSeconds(getDurationNative());
+		return Duration.ofMillis((long) (getDurationNative() * 1000));
 	}
 
-	private native long getDurationNative();
+	private native double getDurationNative();
 
 	@Override
 	public void setVolume(double volume)
@@ -136,6 +138,13 @@ public class RustAudioHandler extends AudioHandler
 	@SuppressWarnings("unused")
 	void onEof()
 	{
-		getController().onEof();
+		eofCallback.run();
+		position = Duration.ZERO;
+	}
+
+	@SuppressWarnings("unused")
+	void onProgress(double seconds)
+	{
+		position = Duration.ofMillis((long) (seconds * 1000));
 	}
 }

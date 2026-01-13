@@ -1,4 +1,4 @@
-package de.tobias.playwall.server.common.project;
+package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.project.PadLoadedUpdate;
 import de.tobias.playwall.common.api.project.model.PadControllerStatus;
@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
+
+import java.time.Duration;
 
 @Slf4j
 @Getter
@@ -32,7 +34,7 @@ public abstract class PadController
 		log.debug("Loading Pad {}", pad.getId());
 		loadInternal();
 		status = PadControllerStatus.READY;
-		context.publishEvent(new PadLoadedUpdate(pad.getId(), true));
+		context.publishEvent(new PadLoadedUpdate(pad.getId(), true, getDuration().toMillis()));
 	}
 
 	protected abstract void loadInternal();
@@ -53,6 +55,10 @@ public abstract class PadController
 	public abstract void stop();
 
 	public abstract void onEof();
+
+	public abstract Duration getDuration();
+
+	public abstract Duration getPlayPosition();
 
 	// TODO: Cannot be in generic PadController
 	public abstract void setVolume(double volume);

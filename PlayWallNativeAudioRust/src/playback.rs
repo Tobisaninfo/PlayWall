@@ -1,11 +1,10 @@
 use crate::hybrid_loop_source::HybridLoopSource;
 use crate::{with_audio_handler, AudioStreamHandler};
 use jni::objects::JObject;
-use jni::sys::{jboolean, jdouble, jlong};
+use jni::sys::{jboolean, jdouble};
 use jni::JNIEnv;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
-use tracing::debug;
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -13,10 +12,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut e: JNIEnv,
     obj: JObject,
 ) {
-    let obj_for_global = unsafe { JObject::from_raw(obj.as_raw()) };
-    let global_obj = e.new_global_ref(obj_for_global).expect("...");
-    let mut global_obj_opt = Some(global_obj);
-
+    let global_obj = e.new_global_ref(&obj).expect("Failed to create global ref");
+    
     with_audio_handler(&mut e, obj, |env, audio_handler| {
         if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
@@ -54,18 +51,20 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             let path = audio_handler.media_path.as_ref().unwrap();
 
             let looping_ptr = &audio_handler.looping as *const bool;
-            let source = HybridLoopSource::new(path.clone(), looping_ptr, move || {
-                if let Some(vm) = crate::JVM.read().unwrap().as_ref() {
-                    if let Ok(mut env_local) = vm.attach_current_thread() {
-                        trace!("Invoking Java onEof callback");
-                        if let Some(obj_ref) = global_obj_opt.take() {
-                            if let Err(e) = env_local.call_method(&obj_ref, "onEof", "()V", &[]) {
-                                debug!("Failed to call Java onEof: {:?}", e);
-                            }
-                        }
-                    }
-                }
-            });
+
+            let jvm_static: &'static jni::JavaVM = unsafe {
+                let jvm_lock = crate::JVM.read().unwrap();
+                let jvm_ref = jvm_lock.as_ref().expect("JVM not initialized");
+                &*(jvm_ref as *const jni::JavaVM)
+            };
+
+            let source = HybridLoopSource::new(
+                path.clone(),
+                looping_ptr,
+                jvm_static,
+                global_obj,
+            );
+
             sink.set_volume(audio_handler.volume);
             sink.append(source);
             sink.play();
@@ -143,14 +142,14 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getDurationNative(
     mut env: JNIEnv,
     obj: JObject,
-) -> jlong {
+) -> jdouble {
     with_audio_handler(&mut env, obj, |env, audio_handler| {
         if audio_handler.media_path.is_none() {
             env.throw_new("java/lang/IllegalStateException", "No media loaded")
                 .unwrap();
-            return 0;
+            return 0.0;
         }
-        return audio_handler.duration.unwrap().round() as jlong;
+        return audio_handler.duration.unwrap() as jdouble;
     })
     .unwrap()
 }

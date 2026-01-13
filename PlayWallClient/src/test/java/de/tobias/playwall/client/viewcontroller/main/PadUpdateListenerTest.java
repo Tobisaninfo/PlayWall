@@ -4,10 +4,11 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
-import de.tobias.playwall.common.api.project.PadStatusUpdate;
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.model.PadDto;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.UUID;
 
+import static org.mockito.Mockito.mock;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 class PadUpdateListenerTest extends AbstractViewControllerTest
@@ -39,14 +41,19 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 
 		project = loadProject("projects/project_1.json");
+		ClientProjectController projectController = context.get(ClientProjectController.class);
+		projectController.loadProject(project);
 	}
 
 	@Test
 	void testPadUpdateListener()
 	{
+		final AboutDialog dialog = mock(AboutDialog.class);
+		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
+
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
-			mainViewController.openProject(project);
+			mainViewController.showProject(project);
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();
@@ -54,31 +61,12 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
-		// Initial state = READY
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getNamePreviewLabel()).hasText("Test Pad");
 
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		final PadDto newPad = PadDto.builder().id(padId).position(0).name("Updated Pad").build();
+		eventHandler.fireEvent(new PadUpdate(newPad));
 		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPauseButton(), padView.getStopButton(), padView.getSettingsButton());
 
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PAUSE));
-		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
-
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOP));
-		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
-
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EOF));
-		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
-
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
-		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
-
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EMPTY));
-		WaitForAsyncUtils.waitForFxEvents();
-		assertThat(padView.getButtonBox().getChildren()).contains(padView.getNewButton(), padView.getSettingsButton());
+		assertThat(padView.getNamePreviewLabel()).hasText("Updated Pad");
 	}
 }

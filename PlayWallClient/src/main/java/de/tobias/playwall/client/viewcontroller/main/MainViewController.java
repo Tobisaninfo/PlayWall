@@ -18,7 +18,7 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.FluentClient;
-import de.tobias.playwall.client.service.ProjectService;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.viewcontroller.ViewControllerBase;
@@ -56,6 +56,7 @@ public class MainViewController extends ViewControllerBase
 	private static final int PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR = 60;
 
 	@FXML
+	@SuppressWarnings({"java:S1874", "deprecation"})
 	private HeaderBar headerBar;
 	private Label projectTitleLabel;
 
@@ -70,23 +71,23 @@ public class MainViewController extends ViewControllerBase
 
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
-	private final ProjectService projectService;
 	private final PadMapper padMapper;
 	private final UpdateMessageEventHandler eventHandler;
 
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
+	private PadPlayPositionListener padPlayPositionListener;
 
 	private SnackBar notificationPane;
 
 	private Page currentPage;
 	private final List<PadView> padViews = new ArrayList<>();
 
-	@Getter
-	private Project project;
+	private final ClientProjectController projectController;
 
 	@Override
+	@SuppressWarnings({"java:S1874", "deprecation"})
 	protected void init()
 	{
 		padGridPane.getStyleClass().add("pad-grid");
@@ -113,15 +114,18 @@ public class MainViewController extends ViewControllerBase
 
 		headerBar.setLeading(headerBox);
 
-		padUpdateListener = new PadUpdateListener(projectService, this, padMapper);
+		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
-		padLoadedListener = new PadLoadedListener(this);
+		padLoadedListener = new PadLoadedListener(projectController, this);
 		eventHandler.registerListener(padLoadedListener);
-		padStatusListener = new PadStatusListener(this);
+		padStatusListener = new PadStatusListener(projectController, this);
 		eventHandler.registerListener(padStatusListener);
+		padPlayPositionListener = new PadPlayPositionListener(projectController, this);
+		eventHandler.registerListener(padPlayPositionListener);
 	}
 
 	@Override
+	@SuppressWarnings({"java:S1874", "deprecation"})
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
@@ -192,10 +196,8 @@ public class MainViewController extends ViewControllerBase
 
 	// Project handling
 
-	public void openProject(Project project)
+	public void showProject(Project project)
 	{
-		this.project = project;
-
 		updateWindowProperties(project);
 		initializePadViews(project.getMetadata().numberOfHorizontalPads(), project.getMetadata().numberOfVerticalPads());
 
@@ -249,7 +251,7 @@ public class MainViewController extends ViewControllerBase
 	private void buildPageButtons()
 	{
 		pageButtonsFlowPane.getChildren().clear();
-		for(Page page : project.getPages())
+		for(Page page : projectController.getProject().getPages())
 		{
 			final Button button = new Button(page.getName());
 			button.setOnAction(_ -> showPage(page));
@@ -259,23 +261,23 @@ public class MainViewController extends ViewControllerBase
 		}
 	}
 
-	private void showPage(int position)
+	public void showPage(int position)
 	{
-		final Page page = this.project.getPage(position);
+		final Page page = projectController.getProject().getPage(position);
 		showPage(page);
 	}
 
-	private void showPage(Page page)
+	public void showPage(Page page)
 	{
 		this.currentPage = page;
-		final int padNumberPerPage = project.getMetadata().getNumberOfPadsPerPage();
+		final int padNumberPerPage = projectController.getProject().getMetadata().getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
 		{
 			final PadView view = padViews.get(i);
 			final Pad pad = page.getPad(i);
 
-			view.updateFromPad(page.getPosition(), pad);
+			view.updateFromPad(page.getPosition(), projectController.getPadController(pad.getId()));
 		}
 
 		// Highlight the current page button
@@ -296,7 +298,7 @@ public class MainViewController extends ViewControllerBase
 	public PadView getPadViewForPadId(UUID padId)
 	{
 		return padViews.stream()
-				.filter(view -> view.getPad().getId().equals(padId))
+				.filter(view -> view.getPadController().getPad().getId().equals(padId))
 				.findFirst().orElse(null);
 	}
 

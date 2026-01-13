@@ -17,8 +17,9 @@ public class Project
 
 	public Page getPage(int position)
 	{
-		return pages.stream().findFirst()
+		return pages.stream()
 				.filter(page -> page.getPosition() == position)
+				.findFirst()
 				.orElse(null);
 	}
 

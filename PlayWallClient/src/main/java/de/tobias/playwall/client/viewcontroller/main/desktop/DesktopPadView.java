@@ -7,7 +7,9 @@ import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.model.project.*;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.service.ClientPadController;
 import de.tobias.playwall.client.utils.NodeWalker;
+import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.pad.PadIndexable;
 import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
@@ -23,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import lombok.Getter;
 
 import static de.tobias.playwall.client.view.pad.control.PadStyleClasses.*;
@@ -61,16 +64,19 @@ public class DesktopPadView implements PadView
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
 
+	private final PadTimeUtils padTimeUtils;
+
 	private PadStatus previousStatus;
 	private PadStatus status;
 	private PadSettingsViewController padSettingsViewController;
 
 	@Getter
-	private Pad pad;
+	private ClientPadController padController;
 
 	public DesktopPadView()
 	{
 		fluentClient = AppContextHolder.getInstance().get(FluentClient.class);
+		padTimeUtils = AppContextHolder.getInstance().get(PadTimeUtils.class);
 		setupView();
 	}
 
@@ -167,11 +173,12 @@ public class DesktopPadView implements PadView
 	}
 
 	@Override
-	public void updateFromPad(int currentPage, Pad pad)
+	public void updateFromPad(int currentPage, ClientPadController controller)
 	{
-		this.pad = pad;
-		if(pad != null)
+		this.padController = controller;
+		if(padController != null)
 		{
+			final Pad pad = padController.getPad();
 			padBuilder = fluentClient.pad(pad.getId());
 			namePreviewLabel.setText(pad.getName());
 
@@ -189,9 +196,9 @@ public class DesktopPadView implements PadView
 				loopLabel.setVisible(loopable.isLoop());
 			}
 
-			if(pad.getStatus() != null)
+			if(controller.getStatus() != null)
 			{
-				updateStatus(pad.getStatus());
+				updateStatus(controller.getStatus());
 			}
 			else if(padContent != null)
 			{
@@ -202,6 +209,8 @@ public class DesktopPadView implements PadView
 				updateStatus(PadStatus.EMPTY);
 			}
 			addStyleClasses(new PadIndex(pad.getPosition(), currentPage));
+
+			updateTimeNodes();
 		}
 		else
 		{
@@ -225,7 +234,41 @@ public class DesktopPadView implements PadView
 
 		if(this.previousStatus != status)
 		{
-			Platform.runLater(this::updateButtonStates);
+			Platform.runLater(() -> {
+				this.updateButtonStates();
+				this.updateTimeNodes();
+			});
+		}
+	}
+
+	@Override
+	public void updateTimeNodes()
+	{
+		if(padController == null)
+		{
+			this.timeLabel.setText(null);
+			this.playBar.setProgress(0.0);
+
+			return;
+		}
+
+		final Duration position = padController.getPosition();
+		final Duration duration = padController.getDuration();
+
+		if(duration == null)
+		{
+			return;
+		}
+
+		if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
+		{
+			this.timeLabel.setText(padTimeUtils.formatDurationToString(position));
+			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
+		}
+		else
+		{
+			this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
+			this.playBar.setProgress(0.0);
 		}
 	}
 
@@ -342,6 +385,6 @@ public class DesktopPadView implements PadView
 			padSettingsViewController = AppContextHolder.getInstance().get(PadSettingsViewController.class);
 		}
 
-		padSettingsViewController.showAndWait(new PadSettingsViewController.Param(pad), superRoot.getScene().getWindow());
+		padSettingsViewController.showAndWait(new PadSettingsViewController.Param(padController.getPad()), superRoot.getScene().getWindow());
 	}
 }

@@ -10,11 +10,11 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @ToString(callSuper = true)
-public class ProjectLaunchResponse extends ResponseMessage
+public class ProjectGetResponse extends ResponseMessage
 {
 	private ProjectDto project;
 
-	public ProjectLaunchResponse(UUID messageId, ProjectDto project)
+	public ProjectGetResponse(UUID messageId, ProjectDto project)
 	{
 		super(messageId);
 		this.project = project;

@@ -14,4 +14,12 @@ public class PadLoadedUpdate extends UpdateMessage
 {
 	private UUID padId;
 	private boolean isLoaded;
+
+	private Long durationMillis;
+
+	public PadLoadedUpdate(UUID padId, boolean isLoaded)
+	{
+		this.padId = padId;
+		this.isLoaded = isLoaded;
+	}
 }

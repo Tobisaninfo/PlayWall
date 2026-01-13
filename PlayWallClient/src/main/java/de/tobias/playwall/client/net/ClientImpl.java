@@ -110,10 +110,16 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public Project launchProject(UUID projectId) throws PlayWallApiException
+	public Project getProject(UUID projectId) throws PlayWallApiException
 	{
-		final ProjectLaunchResponse response = clientWebSocketHandler.send(new ProjectLaunchRequest(projectId));
+		final ProjectGetResponse response = clientWebSocketHandler.send(new ProjectGetRequest(projectId));
 		return projectMapper.projectDtoToProject(response.getProject());
+	}
+
+	@Override
+	public void loadProject(UUID projectId) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new ProjectLoadRequest(projectId));
 	}
 
 	@Override

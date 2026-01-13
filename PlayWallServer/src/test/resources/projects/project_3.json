@@ -1,0 +1,29 @@
+{
+    "metadata": {
+        "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
+        "name": "Project 1",
+        "numberOfHorizontalPads": 6,
+        "numberOfVerticalPads": 4
+    },
+    "pages": [
+        {
+            "id": "1e76b8b3-2d58-4533-aa57-e2b66360e9ea",
+            "name": "Page 1",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "fc427184-2e55-4734-8148-5fb657963616",
+                    "name": "Test Pad 1",
+                    "position": 0,
+                    "content": null
+                },
+                {
+                    "id": "efb30a6f-593b-4a15-94db-faa2d4117e4f",
+                    "name": "Test Pad 2",
+                    "position": 1,
+                    "content": null
+                }
+            ]
+        }
+    ]
+}

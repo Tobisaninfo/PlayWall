@@ -10,12 +10,16 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
+import de.tobias.playwall.common.api.project.PadLoadedUpdate;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -25,8 +29,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +41,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "LaunchDialog")
+@RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
 public class LaunchDialog extends ViewControllerBase
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
@@ -59,15 +66,9 @@ public class LaunchDialog extends ViewControllerBase
 
 	private final App app;
 	private final FluentClient client;
+	private final ClientProjectController projectController;
 	private final CommandLineOptions commandLineOptions;
-
-	@InjectConstructor
-	LaunchDialog(App app, FluentClient client, CommandLineOptions commandLineOptions)
-	{
-		this.app = app;
-		this.client = client;
-		this.commandLineOptions = commandLineOptions;
-	}
+	private final UpdateMessageEventHandler updateMessageEventHandler;
 
 	@Override
 	public void init()
@@ -92,10 +93,29 @@ public class LaunchDialog extends ViewControllerBase
 		// Mouse Double Click on the list
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
-					mouseEvent.getClickCount() == 2 &&
-					!projectListView.getSelectionModel().isEmpty())
+			   mouseEvent.getClickCount() == 2 &&
+			   !projectListView.getSelectionModel().isEmpty())
 			{
 				openProject(getSelectedProject().id());
+			}
+		});
+
+		updateMessageEventHandler.registerListener(new UpdateMessageEventListener<PadLoadedUpdate>()
+		{
+			@Override
+			public void onUpdateMessage(PadLoadedUpdate message)
+			{
+				if(message.getDurationMillis() != null)
+				{
+					final Duration duration = Duration.millis(message.getDurationMillis());
+					projectController.getPadController(message.getPadId()).setDuration(duration);
+				}
+			}
+
+			@Override
+			public Class<PadLoadedUpdate> getMessageClass()
+			{
+				return PadLoadedUpdate.class;
 			}
 		});
 
@@ -166,12 +186,14 @@ public class LaunchDialog extends ViewControllerBase
 	{
 		try
 		{
-			final Project project = client.project(id).launch();
+			final Project project = client.project(id).get();
+			this.projectController.loadProject(project);
+			client.project(id).load();
 			Logger.info("Launched project " + project.getMetadata().name());
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
 			controller.showStage();
-			controller.openProject(project);
+			controller.showProject(project);
 			closeStage();
 		}
 		catch(PlayWallApiException e)

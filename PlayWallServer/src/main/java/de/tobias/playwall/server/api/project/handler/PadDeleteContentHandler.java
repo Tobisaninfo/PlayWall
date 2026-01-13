@@ -1,14 +1,13 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.PadDeleteContentRequest;
-import de.tobias.playwall.common.api.project.PadNewMediaRequest;
 import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.api.project.PadUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.PadMapper;
 import de.tobias.playwall.server.common.model.project.Pad;
-import de.tobias.playwall.server.common.project.PadController;
+import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;

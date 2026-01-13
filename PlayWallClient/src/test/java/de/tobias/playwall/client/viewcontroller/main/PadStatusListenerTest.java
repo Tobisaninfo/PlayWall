@@ -3,20 +3,23 @@ package de.tobias.playwall.client.viewcontroller.main;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.model.project.PadStatus;
 import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.service.ClientPadController;
+import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
-import de.tobias.playwall.common.api.project.PadUpdate;
-import de.tobias.playwall.common.api.project.model.PadDto;
+import de.tobias.playwall.common.api.project.PadStatusUpdate;
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.UUID;
 
-import static org.mockito.Mockito.mock;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 class PadStatusListenerTest extends AbstractViewControllerTest
@@ -40,17 +43,16 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 
 		project = loadProject("projects/project_1.json");
+		ClientProjectController projectController = context.get(ClientProjectController.class);
+		projectController.loadProject(project);
 	}
 
 	@Test
 	void testPadUpdateListener()
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
-			mainViewController.openProject(project);
+			mainViewController.showProject(project);
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();
@@ -58,12 +60,45 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
-		assertThat(padView.getNamePreviewLabel()).hasText("Test Pad");
+		final ClientPadController padController = context.get(ClientProjectController.class).getPadController(padId);
 
-		final PadDto newPad = PadDto.builder().id(padId).position(0).name("Updated Pad").build();
-		eventHandler.fireEvent(new PadUpdate(newPad));
+		// Initial state = READY
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPauseButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.PLAY);
 
-		assertThat(padView.getNamePreviewLabel()).hasText("Updated Pad");
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PAUSE));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.PAUSE);
+
+		padController.setPosition(Duration.millis(5000L));
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOP));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.READY);
+		assertThat(padController.getPosition()).isEqualTo(Duration.ZERO); // Check that the play position is set to zero
+
+		padController.setPosition(Duration.millis(5000L));
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EOF));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.READY);
+		assertThat(padController.getPosition()).isEqualTo(Duration.ZERO); // Check that the play position is set to zero
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.READY);
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EMPTY));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getNewButton(), padView.getSettingsButton());
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.EMPTY);
 	}
 }
