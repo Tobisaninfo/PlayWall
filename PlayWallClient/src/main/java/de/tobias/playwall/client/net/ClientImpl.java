@@ -199,6 +199,12 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public void changeGlobalVolume(double volume) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new GlobaleChangeVolumeRequest(volume));
+	}
+
+	@Override
 	public void updateProjectSettings(ProjectMetadata projectMetadata) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new ProjectSettingsUpdateRequest(projectMetadataMapper.projectMetadataToProjectMetadataDto(projectMetadata)));

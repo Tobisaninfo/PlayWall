@@ -50,6 +50,8 @@ public interface FluentClient
 		PageBuilder page(UUID pageId);
 
 		void updateSettings(ProjectMetadata projectMetadata) throws PlayWallApiException;
+
+		void changeGlobalVolume(double volume) throws PlayWallApiException;
 	}
 
 	interface PageBuilder
