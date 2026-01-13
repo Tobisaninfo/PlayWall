@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.project.GlobaleChangeVolumeRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.project.*;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -25,10 +26,7 @@ public class GlobalChangeVolumeHandler implements RequestHandler<GlobaleChangeVo
 	{
 		final Project loadedProject = projectController.getLoadedProject();
 
-		if(requestMessage.getVolume() < ProjectMetadata.MIN_VOLUME || requestMessage.getVolume() > ProjectMetadata.MAX_VOLUME)
-		{
-			throw new IllegalArgumentException(MessageFormat.format("Volume must be between {0} and {1}", ProjectMetadata.MIN_VOLUME, ProjectMetadata.MAX_VOLUME));
-		}
+		VolumeHelper.validateVolume(requestMessage.getVolume());
 
 		loadedProject.getMetadata().setVolume(requestMessage.getVolume());
 
