@@ -9,9 +9,7 @@ import java.text.MessageFormat;
 public class VolumeHelper
 {
 	public static final double MIN_VOLUME = 0.0;
-	public static final double MAX_VOLUME = 1.15;
-	private static final double MAX_VOLUME_BOOST_IN_DECIBEL = 3.0;
-	private static final double SILENCE_IN_DECIBEL = -60.0;
+	public static final double MAX_VOLUME = 1.25;
 
 	public static void validateVolume(double volume)
 	{
@@ -21,6 +19,13 @@ public class VolumeHelper
 		}
 	}
 
+	/**
+	 * Converts the linear volume input value to a perceived loudness.
+	 * 0.0 --> 0.0
+	 * 0.5 --> 0.25
+	 * 1.0 --> 1.0
+	 * 1.25 --> 1.56
+	 */
 	public static double convertVolumeToLogarithmic(double volume)
 	{
 		if(volume <= 0)
@@ -28,9 +33,6 @@ public class VolumeHelper
 			return 0;
 		}
 
-		double normalizedVolume = volume / MAX_VOLUME;
-		double db = SILENCE_IN_DECIBEL + (MAX_VOLUME_BOOST_IN_DECIBEL - SILENCE_IN_DECIBEL) * normalizedVolume;
-
-		return Math.pow(10.0, db / 20.0);
+		return Math.pow(volume, 2);
 	}
 }

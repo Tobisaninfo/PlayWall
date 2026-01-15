@@ -15,7 +15,7 @@ import java.util.Locale;
 public class VolumeSlider extends HBox
 {
 	public static final int DEFAULT_VALUE = 100;
-	public static final int BOOSTED_VALUE = 115;
+	public static final int BOOSTED_VALUE = 125;
 	private static final int MIN_VALUE = 0;
 	private static final int SNAP_DELTA = 3;
 

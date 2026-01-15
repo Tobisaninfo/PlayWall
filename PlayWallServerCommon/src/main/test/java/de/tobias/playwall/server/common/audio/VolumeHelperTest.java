@@ -18,7 +18,7 @@ class VolumeHelperTest
 	@Test
 	void testValidateVolumeGreaterThanMax()
 	{
-		assertThatThrownBy(() -> VolumeHelper.validateVolume(1.20)).isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> VolumeHelper.validateVolume(1.40)).isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -30,7 +30,7 @@ class VolumeHelperTest
 	@Test
 	void testValidateVolumeExactlyMax()
 	{
-		assertDoesNotThrow(() -> VolumeHelper.validateVolume(1.15));
+		assertDoesNotThrow(() -> VolumeHelper.validateVolume(1.25));
 	}
 
 	@Test
@@ -48,18 +48,24 @@ class VolumeHelperTest
 	@Test
 	void testConvertVolumeToLogarithmicMaxValue()
 	{
-		assertThat(VolumeHelper.convertVolumeToLogarithmic(1.15)).isCloseTo(1.41,  Offset.offset(0.01));
+		assertThat(VolumeHelper.convertVolumeToLogarithmic(1.25)).isCloseTo(1.56,  Offset.offset(0.01));
 	}
 
 	@Test
 	void testConvertVolumeToLogarithmicDefault()
 	{
-		assertThat(VolumeHelper.convertVolumeToLogarithmic(1.0)).isCloseTo(0.54,  Offset.offset(0.01));
+		assertThat(VolumeHelper.convertVolumeToLogarithmic(1.0)).isCloseTo(1.0,  Offset.offset(0.01));
 	}
 
 	@Test
 	void testConvertVolumeToLogarithmic50percent()
 	{
-		assertThat(VolumeHelper.convertVolumeToLogarithmic(0.5)).isCloseTo(0.025,  Offset.offset(0.01));
+		assertThat(VolumeHelper.convertVolumeToLogarithmic(0.5)).isCloseTo(0.25,  Offset.offset(0.01));
+	}
+
+	@Test
+	void testConvertVolumeToLogarithmic20percent()
+	{
+		assertThat(VolumeHelper.convertVolumeToLogarithmic(0.2)).isCloseTo(0.04,  Offset.offset(0.01));
 	}
 }
