@@ -97,7 +97,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		settingsRowVolume.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_VOLUME));
 		settingsRowVolume.setIcon(FontAwesomeType.VOLUME_HIGH_SOLID);
 
-		volumeSlider = new VolumeSlider();
+		volumeSlider = new VolumeSlider(VolumeSlider.BOOSTED_VALUE);
 		volumeSlider.valueProperty().addListener((_, _, newValue) -> {
 			try
 			{

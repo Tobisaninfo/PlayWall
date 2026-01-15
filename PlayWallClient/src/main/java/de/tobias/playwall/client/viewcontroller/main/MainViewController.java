@@ -138,7 +138,7 @@ public class MainViewController extends ViewControllerBase
 		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper);
 		eventHandler.registerListener(projectSettingsUpdateListener);
 
-		volumeSlider = new VolumeSlider();
+		volumeSlider = new VolumeSlider(VolumeSlider.DEFAULT_VALUE);
 		volumeSlider.setPrefWidth(350);
 		volumeSlider.valueProperty().addListener((_, _, newValue) -> {
 			try

@@ -13,21 +13,21 @@ import java.util.Locale;
 
 public class VolumeSlider extends HBox
 {
+	public static final int DEFAULT_VALUE = 100;
+	public static final int BOOSTED_VALUE = 115;
 	private static final int MIN_VALUE = 0;
-	private static final int MAX_VALUE = 115;
-	private static final int DEFAULT_VALUE = 100;
 	private static final int SNAP_DELTA = 3;
 
 	private final Label label;
 	private final Slider slider;
 
-	public VolumeSlider()
+	public VolumeSlider(int maxValue)
 	{
 		label = new Label();
 		label.setStyle("-fx-font-weight: bold");
 		label.setMinWidth(35);
 
-		slider = new Slider(MIN_VALUE, MAX_VALUE, DEFAULT_VALUE);
+		slider = new Slider(MIN_VALUE, Math.min(maxValue, BOOSTED_VALUE), DEFAULT_VALUE);
 		slider.setMajorTickUnit(DEFAULT_VALUE);
 		slider.setMinorTickCount(0);
 		slider.setBlockIncrement(1);
