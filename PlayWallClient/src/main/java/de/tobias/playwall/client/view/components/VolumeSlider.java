@@ -5,6 +5,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -49,6 +50,13 @@ public class VolumeSlider extends HBox
 		});
 
 		slider.styleProperty().bind(Bindings.createStringBinding(() -> createSliderStyle(slider.getMin(), slider.getMax(), slider.getValue()), slider.valueProperty()));
+
+		slider.setOnMouseClicked(event -> {
+			if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
+			{
+				slider.setValue(DEFAULT_VALUE);
+			}
+		});
 
 		getChildren().addAll(slider, label);
 		setSpacing(ViewConstants.DEFAULT_SPACING);
