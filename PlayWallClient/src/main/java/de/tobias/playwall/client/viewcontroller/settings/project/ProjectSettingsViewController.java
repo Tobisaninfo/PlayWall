@@ -87,6 +87,13 @@ public class ProjectSettingsViewController extends ParamDialogBase<ProjectSettin
 		categoryGeneral.setOnAction(this::onSelectCategory);
 		boxCategories.getChildren().add(categoryGeneral);
 
+		final ProjectSettingsDisplayViewController projectSettingsDisplayViewController = AppContextHolder.getInstance().get(ProjectSettingsDisplayViewController.class);
+		settingViewController.add(projectSettingsDisplayViewController);
+
+		final SettingsCategory categoryView = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PROJECT_VIEW_TITLE), FontAwesomeType.IMAGE_SOLID, projectSettingsDisplayViewController);
+		categoryView.setOnAction(this::onSelectCategory);
+		boxCategories.getChildren().add(categoryView);
+
 		initButtons();
 
 		selectCategory(categoryGeneral);

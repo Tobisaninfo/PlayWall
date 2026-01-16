@@ -64,4 +64,7 @@ public class Strings
 	// ui - settings - project
 	public static final String UI_SETTINGS_PROJECT_TITLE  = "ui.settings.project.title";
 	public static final String UI_SETTINGS_PROJECT_GENERAL_TITLE  = "ui.settings.pad.general.title";
+	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE  = "ui.settings.pad.view.title";
+	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
+
 }
