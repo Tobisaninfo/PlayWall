@@ -42,6 +42,7 @@ public class ProjectSettingsUpdateHandler extends UndoableRequestHandler<Project
 		try
 		{
 			project.getMetadata().setName(requestMessage.getProjectMetadata().name());
+			project.getMetadata().setTimeMode(requestMessage.getProjectMetadata().timeMode());
 			projectService.rename(project.getMetadata().getId(), requestMessage.getProjectMetadata().name());
 
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(project.getMetadata())));

@@ -31,7 +31,7 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 		comboBoxTime.getItems().addAll(ProjectTimeMode.values());
 		comboBoxTime.setButtonCell(new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
 		comboBoxTime.setCellFactory(list -> new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
-		comboBoxTime.getSelectionModel().select(0);
+		comboBoxTime.getSelectionModel().select(param.projectMetadata.getTimeMode());
 
 		this.isValidProperty.set(true);
 	}
@@ -39,6 +39,7 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	@Override
 	public void applySettings(Param param)
 	{
+		param.getProjectMetadata().setTimeMode(comboBoxTime.getSelectionModel().getSelectedItem());
 	}
 
 	@Override
