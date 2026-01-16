@@ -1,11 +1,13 @@
 package de.tobias.playwall.client.view.components;
 
+import de.thecodelabs.logger.Logger;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -18,6 +20,7 @@ public class VolumeSlider extends HBox
 	public static final int BOOSTED_VALUE = 125;
 	private static final int MIN_VALUE = 0;
 	private static final int SNAP_DELTA = 3;
+	private static final int SCROLL_STEP_SIZE = 5;
 
 	private final Label label;
 	private final Slider slider;
@@ -56,6 +59,22 @@ public class VolumeSlider extends HBox
 			{
 				slider.setValue(DEFAULT_VALUE);
 			}
+		});
+
+		slider.addEventFilter(ScrollEvent.SCROLL, event -> {
+			double delta = event.getDeltaY();
+
+			Logger.debug(delta);
+			if(delta > 0)
+			{
+				slider.setValue(slider.getValue() + SCROLL_STEP_SIZE);
+			}
+			else if(delta < 0)
+			{
+				slider.setValue(slider.getValue() - SCROLL_STEP_SIZE);
+			}
+
+			event.consume();
 		});
 
 		getChildren().addAll(slider, label);
