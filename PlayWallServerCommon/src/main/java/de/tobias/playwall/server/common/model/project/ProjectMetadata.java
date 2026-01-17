@@ -22,6 +22,7 @@ public class ProjectMetadata
 	}
 
 	@JsonView(List.class)
+	@EqualsAndHashCode.Exclude
 	private UUID id;
 
 	@JsonView(List.class)
@@ -37,5 +38,16 @@ public class ProjectMetadata
 	public int getNumberOfPadsPerPage()
 	{
 		return numberOfHorizontalPads * numberOfVerticalPads;
+	}
+
+	public ProjectMetadata copy()
+	{
+		return ProjectMetadata.builder()
+				.id(UUID.randomUUID())
+				.name(name)
+				.numberOfHorizontalPads(numberOfHorizontalPads)
+				.numberOfVerticalPads(numberOfVerticalPads)
+				.volume(volume)
+				.build();
 	}
 }

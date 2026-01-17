@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Pad
 {
+	@EqualsAndHashCode.Exclude
 	private UUID id;
 	private Integer position;
 	private String name;
@@ -22,8 +23,9 @@ public class Pad
 	{
 		return Pad.builder()
 				.id(UUID.randomUUID())
-				.position(this.getPosition())
-				.name(this.getName())
+				.position(position)
+				.name(name)
+				.content(content == null ? null : content.copy())
 				.build();
 	}
 }

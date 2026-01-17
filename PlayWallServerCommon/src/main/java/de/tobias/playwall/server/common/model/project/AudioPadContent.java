@@ -22,6 +22,7 @@ public final class AudioPadContent extends PadContent
 	public PadContent copy()
 	{
 		return AudioPadContent.builder()
+				.mediaPath(this.getMediaPath())
 				.loop(this.isLoop())
 				.volume(this.getVolume())
 				.build();

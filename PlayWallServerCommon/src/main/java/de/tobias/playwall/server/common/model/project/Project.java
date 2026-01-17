@@ -2,9 +2,11 @@ package de.tobias.playwall.server.common.model.project;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,5 +31,14 @@ public class Project
 				.flatMap(page -> page.getPads().stream())
 				.filter(pad -> pad.getId().equals(padId))
 				.findFirst().orElse(null);
+	}
+
+	@SuppressWarnings("java:S6204")
+	public Project copy()
+	{
+		return Project.builder()
+				.metadata(metadata.copy())
+				.pages(pages == null ? null : pages.stream().map(Page::copy).collect(Collectors.toList()))
+				.build();
 	}
 }
