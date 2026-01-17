@@ -40,10 +40,10 @@ public class ProjectMetadata
 		return numberOfHorizontalPads * numberOfVerticalPads;
 	}
 
-	public ProjectMetadata copy()
+	public ProjectMetadata copy(boolean generateNewId)
 	{
 		return ProjectMetadata.builder()
-				.id(UUID.randomUUID())
+				.id(generateNewId ? UUID.randomUUID() : id)
 				.name(name)
 				.numberOfHorizontalPads(numberOfHorizontalPads)
 				.numberOfVerticalPads(numberOfVerticalPads)

@@ -37,7 +37,7 @@ public class Project
 	public Project copy()
 	{
 		return Project.builder()
-				.metadata(metadata.copy())
+				.metadata(metadata.copy(true))
 				.pages(pages == null ? null : pages.stream().map(Page::copy).collect(Collectors.toList()))
 				.build();
 	}

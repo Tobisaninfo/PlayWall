@@ -169,6 +169,7 @@ class ProjectSettingsUpdateHandlerTest
 				.isInstanceOf(ProjectNameAlreadyExistsError.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+		assertThat(project.getMetadata().getName()).isEqualTo("Project 1");
 	}
 
 	@Test

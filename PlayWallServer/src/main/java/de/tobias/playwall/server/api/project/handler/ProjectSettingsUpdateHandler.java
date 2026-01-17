@@ -8,6 +8,7 @@ import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.history.UndoItem;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
@@ -36,6 +37,8 @@ public class ProjectSettingsUpdateHandler extends UndoableRequestHandler<Project
 			throw new PlayWallServerException(messageSource, error);
 		}
 
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
 		try
 		{
 			project.getMetadata().setName(requestMessage.getProjectMetadata().name());
@@ -45,6 +48,8 @@ public class ProjectSettingsUpdateHandler extends UndoableRequestHandler<Project
 		}
 		catch(ProjectNameAlreadyExistsException _)
 		{
+			project.setMetadata(oldMetadata);
+
 			final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(requestMessage.getProjectMetadata().name());
 			throw new PlayWallServerException(messageSource, error);
 		}
