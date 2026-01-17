@@ -52,6 +52,7 @@ public class ProjectMetadata
 				.numberOfHorizontalPads(numberOfHorizontalPads)
 				.numberOfVerticalPads(numberOfVerticalPads)
 				.volume(volume)
+				.timeMode(timeMode)
 				.build();
 	}
 }
