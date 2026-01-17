@@ -85,7 +85,7 @@ class PadChangeVolumeHandlerTest
 	}
 
 	@Test
-	void testPadChangeVolumeHandlerGLobalVolumeShouldHaveAnEffect() throws Exception
+	void testPadChangeVolumeHandlerGlobalVolumeShouldHaveAnEffect() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
