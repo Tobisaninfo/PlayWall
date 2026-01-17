@@ -5,8 +5,8 @@ import de.tobias.playwall.common.api.project.PadNotExistsError;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
 

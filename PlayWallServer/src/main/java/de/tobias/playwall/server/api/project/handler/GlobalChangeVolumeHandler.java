@@ -12,7 +12,6 @@ import de.tobias.playwall.server.project.ProjectController;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Optional;
 
 @RequestHandlerTyped(GlobaleChangeVolumeRequest.class)
