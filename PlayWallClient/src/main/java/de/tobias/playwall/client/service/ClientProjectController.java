@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.model.project.ProjectMetadata;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ClientProjectController
 	{
 		this.project = project;
 		this.padControllers.clear();
+
 		for(Page page : project.getPages())
 		{
 			for(Pad pad : page.getPads())
@@ -37,7 +39,7 @@ public class ClientProjectController
 
 	private void createPadController(Pad pad)
 	{
-		final ClientPadController controller = new ClientPadController(pad);
+		final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
 		padControllers.put(pad.getId(), controller);
 	}
 
@@ -58,5 +60,15 @@ public class ClientProjectController
 			}
 		}
 		return null;
+	}
+
+	public void updateMetadata(ProjectMetadata projectMetadata)
+	{
+		getProject().setMetadata(projectMetadata);
+
+		for(ClientPadController padController : padControllers.values())
+		{
+			padController.setProjectMetadata(projectMetadata);
+		}
 	}
 }

@@ -19,7 +19,12 @@ class ProjectSettingsUpdateListener implements UpdateMessageEventListener<Projec
 	public void onUpdateMessage(ProjectSettingsUpdate message)
 	{
 		final ProjectMetadata projectMetadata = projectMetadataMapper.projectMetadataDtoToProjectMetadata(message.getProjectMetadata());
-		projectController.getProject().setMetadata(projectMetadata);
+		projectController.updateMetadata(projectMetadata);
+
+		for(PadView padView : mainViewController.getPadViews())
+		{
+			padView.updateTimeNodes();
+		}
 
 		Platform.runLater(mainViewController::updateTitle);
 	}
