@@ -15,8 +15,6 @@ import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.config.SyncAsyncConfig;
-import de.tobias.playwall.server.history.UndoItem;
-import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +30,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
+import static de.tobias.playwall.server.api.project.handler.UndoTestHelper.testInverseOperation;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -141,28 +140,11 @@ class PadDeleteContentHandlerTest
 	}
 
 	@Test
-	void testRedoOperation() throws Exception
+	void testUndoOperation() throws Exception
 	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
-		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
-		projectController.loadProject(project).get();
-		applicationEvents.clear();
-
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
 
-		final UndoItem undoItem = handler.getInverseOperation(request);
-
-		handler.handleRequest(request);
-
-		final RequestHandler inverseHandler = requestHandlerFactory.getRequestHandler(undoItem.inverseRequest().getClass()).orElseThrow();
-		inverseHandler.handleRequest(undoItem.inverseRequest());
-
-		final Project expected = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		expected.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
-
-		assertThat(project).isEqualTo(expected);
+		testInverseOperation(objectMapper, projectController, applicationEvents, handler, request, requestHandlerFactory);
 	}
 }

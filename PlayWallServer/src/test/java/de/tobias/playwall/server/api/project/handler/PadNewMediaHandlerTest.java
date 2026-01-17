@@ -1,13 +1,11 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.PadLoadedUpdate;
-import de.tobias.playwall.common.api.project.PadNewMediaRequest;
-import de.tobias.playwall.common.api.project.PadNotExistsError;
-import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.RequestHandlerFactory;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
@@ -28,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
+import static de.tobias.playwall.server.api.project.handler.UndoTestHelper.testInverseOperation;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -51,6 +50,9 @@ class PadNewMediaHandlerTest
 
 	@Autowired
 	private ProjectController projectController;
+
+	@Autowired
+	private RequestHandlerFactory requestHandlerFactory;
 
 	@Autowired
 	private PadNewMediaHandler handler;
@@ -140,5 +142,15 @@ class PadNewMediaHandlerTest
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 		assertThat(applicationEvents.stream(PadLoadedUpdate.class)).isEmpty();
+	}
+
+	@Test
+	void testUndoOperation() throws Exception
+	{
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
+
+		testInverseOperation(objectMapper, projectController, applicationEvents, handler, request, requestHandlerFactory);
 	}
 }

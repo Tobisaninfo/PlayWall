@@ -9,6 +9,7 @@ import de.tobias.playwall.common.api.project.model.PadDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.RequestHandlerFactory;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
@@ -28,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
+import static de.tobias.playwall.server.api.project.handler.UndoTestHelper.testInverseOperation;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -51,6 +53,9 @@ class PadSettingsUpdateHandlerTest
 
 	@Autowired
 	private ProjectController projectController;
+
+	@Autowired
+	private RequestHandlerFactory requestHandlerFactory;
 
 	@Autowired
 	private PadSettingsUpdateHandler handler;
@@ -107,5 +112,17 @@ class PadSettingsUpdateHandlerTest
 				.isInstanceOf(PadNotExistsError.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+	}
+
+	@Test
+	void testUndoOperation() throws Exception
+	{
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, PadDto.builder()
+				.name("Lorem")
+				.content(AudioPadContentDto.builder().mediaPath("abc.mp3").loop(true).build())
+				.build());
+
+		testInverseOperation(objectMapper, projectController, applicationEvents, handler, request, requestHandlerFactory);
 	}
 }
