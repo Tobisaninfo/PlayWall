@@ -140,7 +140,12 @@ public class MainViewController extends ViewControllerBase
 
 		volumeSlider = new VolumeSlider(VolumeSlider.DEFAULT_VALUE);
 		volumeSlider.setPrefWidth(350);
-		volumeSlider.valueProperty().addListener((_, _, newValue) -> {
+		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
+			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
+			{
+				return;
+			}
+
 			try
 			{
 				client.currentProject().changeGlobalVolume(newValue.doubleValue() / 100.0);

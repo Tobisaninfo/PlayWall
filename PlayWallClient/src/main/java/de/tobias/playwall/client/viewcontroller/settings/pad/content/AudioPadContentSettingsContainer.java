@@ -98,7 +98,12 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		settingsRowVolume.setIcon(FontAwesomeType.VOLUME_HIGH_SOLID);
 
 		volumeSlider = new VolumeSlider(VolumeSlider.BOOSTED_VALUE);
-		volumeSlider.valueProperty().addListener((_, _, newValue) -> {
+		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
+			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
+			{
+				return;
+			}
+
 			try
 			{
 				fluentClient.pad(padId).changeVolume(newValue.doubleValue() / 100.0);
