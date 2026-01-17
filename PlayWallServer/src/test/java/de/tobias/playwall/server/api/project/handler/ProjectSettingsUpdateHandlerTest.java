@@ -9,8 +9,11 @@ import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.RequestHandlerFactory;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.common.audio.AudioHandler;
+import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import de.tobias.playwall.server.project.ProjectController;
@@ -28,9 +31,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import static de.tobias.playwall.server.api.project.handler.UndoTestHelper.testInverseOperation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -39,6 +44,9 @@ class ProjectSettingsUpdateHandlerTest
 {
 	@TempDir
 	private Path tempDir;
+
+	@MockitoBean
+	private AudioHandlerFactory audioHandlerFactory;
 
 	@Autowired
 	private ApplicationEvents applicationEvents;
@@ -53,6 +61,9 @@ class ProjectSettingsUpdateHandlerTest
 	private ProjectService projectService;
 
 	@Autowired
+	private RequestHandlerFactory requestHandlerFactory;
+
+	@Autowired
 	private ProjectSettingsUpdateHandler handler;
 
 	@MockitoBean
@@ -61,6 +72,9 @@ class ProjectSettingsUpdateHandlerTest
 	@BeforeEach
 	void beforeEach() throws IOException
 	{
+		final AudioHandler audioHandler = mock(AudioHandler.class);
+		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
+
 		final Path projectsFile = tempDir.resolve("projects.json");
 
 		Files.writeString(projectsFile, """
@@ -155,5 +169,15 @@ class ProjectSettingsUpdateHandlerTest
 				.isInstanceOf(ProjectNameAlreadyExistsError.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+	}
+
+	@Test
+	void testUndoOperation() throws Exception
+	{
+		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
+				.name("Fancy project name")
+				.build());
+
+		testInverseOperation(objectMapper, projectController, applicationEvents, handler, request, requestHandlerFactory);
 	}
 }
