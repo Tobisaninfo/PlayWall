@@ -26,6 +26,12 @@ class PadStatusListener implements UpdateMessageEventListener<PadStatusUpdate>
 			padController.setPosition(Duration.ZERO);
 		}
 
+		if(clientStatus == PadStatus.EMPTY)
+		{
+			padController.setDuration(null);
+			padController.setPosition(null);
+		}
+
 		final PadView padView = mainViewController.getPadViewForPadId(message.getPadId());
 		if(padView != null)
 		{

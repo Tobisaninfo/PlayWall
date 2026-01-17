@@ -61,6 +61,7 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
 		final ClientPadController padController = context.get(ClientProjectController.class).getPadController(padId);
+		padController.setDuration(Duration.millis(10000L));
 
 		// Initial state = READY
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
@@ -100,5 +101,7 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getNewButton(), padView.getSettingsButton());
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.EMPTY);
+		assertThat(padController.getPosition()).isNull();
+		assertThat(padController.getDuration()).isNull();
 	}
 }
