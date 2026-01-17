@@ -5,6 +5,7 @@ import de.thecodelabs.utils.util.OS;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,7 @@ public class SystemTrayHandler
 
 	private Menu clientMenu;
 
-	private final AppInfo appInfo;
+	private final BuildProperties buildProperties;
 
 	@EventListener(ApplicationStartedEvent.class)
 	public void onApplicationStarted(ApplicationStartedEvent event)
@@ -38,7 +39,7 @@ public class SystemTrayHandler
 
 		final PopupMenu popup = new PopupMenu();
 
-		final MenuItem aboutItem = new MenuItem(MessageFormat.format("PlayWall Server v{0}", appInfo.getVersion()));
+		final MenuItem aboutItem = new MenuItem(MessageFormat.format("PlayWall Server v{0}", buildProperties.getVersion()));
 		popup.add(aboutItem);
 
 		popup.addSeparator();
