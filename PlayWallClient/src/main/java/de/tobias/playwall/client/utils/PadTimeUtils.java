@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.utils;
 
 import de.tobias.playwall.client.appcontext.Service;
-import de.tobias.playwall.common.api.project.model.TimeMode;
+import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.util.Duration;
 
 import java.text.MessageFormat;

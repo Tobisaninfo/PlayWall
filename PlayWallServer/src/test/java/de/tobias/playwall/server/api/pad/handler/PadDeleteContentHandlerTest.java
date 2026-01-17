@@ -5,7 +5,7 @@ import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;

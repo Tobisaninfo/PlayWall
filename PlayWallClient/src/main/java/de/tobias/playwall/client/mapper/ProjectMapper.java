@@ -4,7 +4,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
-import de.tobias.playwall.common.api.project.model.PageDto;
+import de.tobias.playwall.common.api.page.PageDto;
 import de.tobias.playwall.common.api.project.model.ProjectDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

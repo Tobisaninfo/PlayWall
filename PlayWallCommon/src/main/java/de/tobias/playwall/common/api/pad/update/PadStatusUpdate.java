@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.api.pad.update;
 
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.net.UpdateMessage;
 import lombok.*;
 

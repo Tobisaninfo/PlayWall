@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.api.page.request;
 
-import de.tobias.playwall.common.api.project.model.PageDto;
+import de.tobias.playwall.common.api.page.PageDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import lombok.*;
 

@@ -11,7 +11,7 @@ import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.util.Duration;

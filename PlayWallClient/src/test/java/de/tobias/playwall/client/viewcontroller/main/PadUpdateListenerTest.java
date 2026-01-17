@@ -9,7 +9,7 @@ import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.api.project.model.PadDto;
+import de.tobias.playwall.common.api.pad.PadDto;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;

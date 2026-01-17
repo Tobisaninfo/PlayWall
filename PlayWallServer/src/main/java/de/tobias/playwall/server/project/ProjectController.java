@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.project;
 
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.Project;

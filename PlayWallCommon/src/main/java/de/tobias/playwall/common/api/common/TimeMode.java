@@ -1,4 +1,4 @@
-package de.tobias.playwall.common.api.project.model;
+package de.tobias.playwall.common.api.common;
 
 public enum TimeMode
 {

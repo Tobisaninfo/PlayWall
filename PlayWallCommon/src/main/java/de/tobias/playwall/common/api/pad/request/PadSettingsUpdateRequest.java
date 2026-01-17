@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.api.pad.request;
 
-import de.tobias.playwall.common.api.project.model.PadDto;
+import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.net.RequestMessage;
 import lombok.*;
 

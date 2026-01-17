@@ -9,7 +9,7 @@ import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
-import de.tobias.playwall.common.api.project.model.TimeMode;
+import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;

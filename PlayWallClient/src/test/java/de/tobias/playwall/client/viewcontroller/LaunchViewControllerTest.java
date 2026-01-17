@@ -9,7 +9,7 @@ import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
-import de.tobias.playwall.common.api.project.model.TimeMode;
+import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.stage.Stage;

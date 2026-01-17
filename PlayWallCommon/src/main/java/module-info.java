@@ -10,6 +10,9 @@ open module de.tobias.playwall.common {
 	exports de.tobias.playwall.common.api.page.request;
 	exports de.tobias.playwall.common.api.project.request;
 	exports de.tobias.playwall.common.api.project.update;
+	exports de.tobias.playwall.common.api.pad;
+	exports de.tobias.playwall.common.api.page;
+	exports de.tobias.playwall.common.api.common;
 
 	requires com.fasterxml.jackson.annotation;
 	requires de.thecodelabs.libUtils;

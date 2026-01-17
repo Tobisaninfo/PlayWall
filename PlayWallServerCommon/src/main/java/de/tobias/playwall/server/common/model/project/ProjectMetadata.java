@@ -2,7 +2,7 @@ package de.tobias.playwall.server.common.model.project;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
-import de.tobias.playwall.common.api.project.model.TimeMode;
+import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 
 import java.util.UUID;

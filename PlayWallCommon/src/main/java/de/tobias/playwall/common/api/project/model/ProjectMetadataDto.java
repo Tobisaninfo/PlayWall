@@ -1,5 +1,6 @@
 package de.tobias.playwall.common.api.project.model;
 
+import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.Builder;
 
 import java.util.UUID;

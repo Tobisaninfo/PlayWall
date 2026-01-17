@@ -15,7 +15,7 @@ import de.tobias.playwall.client.view.pad.control.*;
 import de.tobias.playwall.client.viewcontroller.FileChooserWrapper;
 import de.tobias.playwall.client.viewcontroller.main.PadView;
 import de.tobias.playwall.client.viewcontroller.settings.pad.PadSettingsViewController;
-import de.tobias.playwall.common.api.project.model.TimeMode;
+import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;

@@ -5,7 +5,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.EnumCell;
-import de.tobias.playwall.common.api.project.model.TimeMode;
+import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 

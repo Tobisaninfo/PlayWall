@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.pad;
 
-import de.tobias.playwall.common.api.project.model.AudioPadContentDto;
-import de.tobias.playwall.common.api.project.model.PadContentDto;
+import de.tobias.playwall.common.api.pad.AudioPadContentDto;
+import de.tobias.playwall.common.api.pad.PadContentDto;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.PadContent;
 import org.mapstruct.Mapper;

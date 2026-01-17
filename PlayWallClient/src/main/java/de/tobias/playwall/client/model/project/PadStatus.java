@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.model.project;
 
-import de.tobias.playwall.common.api.project.model.PadControllerStatus;
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 
 public enum PadStatus
 {
