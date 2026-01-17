@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.common.model.project.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;

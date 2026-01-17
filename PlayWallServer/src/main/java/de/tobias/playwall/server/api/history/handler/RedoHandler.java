@@ -5,7 +5,7 @@ import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.RequestHandlerFactory;
-import de.tobias.playwall.server.history.UndoManager;
+import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;

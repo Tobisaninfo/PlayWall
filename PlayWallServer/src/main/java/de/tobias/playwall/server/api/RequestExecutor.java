@@ -2,9 +2,9 @@ package de.tobias.playwall.server.api;
 
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.server.history.UndoItem;
-import de.tobias.playwall.server.history.UndoManager;
-import de.tobias.playwall.server.history.Undoable;
+import de.tobias.playwall.server.api.history.UndoItem;
+import de.tobias.playwall.server.api.history.UndoManager;
+import de.tobias.playwall.server.api.history.Undoable;
 import de.tobias.playwall.server.net.RequestHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

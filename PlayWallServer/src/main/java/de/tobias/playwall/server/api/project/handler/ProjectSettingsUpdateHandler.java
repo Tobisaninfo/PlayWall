@@ -9,7 +9,7 @@ import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
-import de.tobias.playwall.server.history.UndoItem;
+import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
