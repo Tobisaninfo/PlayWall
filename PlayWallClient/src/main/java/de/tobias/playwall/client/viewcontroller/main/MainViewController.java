@@ -480,6 +480,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		try
 		{
+			undoMenuItem.setDisable(true);
 			client.currentProject().undo();
 		}
 		catch(PlayWallApiException e)
@@ -493,6 +494,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		try
 		{
+			redoMenuItem.setDisable(true);
 			client.currentProject().redo();
 		}
 		catch(PlayWallApiException e)
