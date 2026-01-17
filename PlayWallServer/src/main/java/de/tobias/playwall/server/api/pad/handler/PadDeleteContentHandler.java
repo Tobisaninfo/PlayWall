@@ -1,7 +1,11 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import de.tobias.playwall.common.api.CompoundRequest;
-import de.tobias.playwall.common.api.project.*;
+import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
+import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
+import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
+import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
+import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;

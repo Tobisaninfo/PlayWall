@@ -5,7 +5,7 @@ import de.tobias.playwall.client.mapper.PadMapper;
 import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.service.ClientPadController;
 import de.tobias.playwall.client.service.ClientProjectController;
-import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 

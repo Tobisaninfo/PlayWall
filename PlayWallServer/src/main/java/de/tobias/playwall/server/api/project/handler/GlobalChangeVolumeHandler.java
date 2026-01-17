@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.GlobaleChangeVolumeRequest;
+import de.tobias.playwall.common.api.project.request.GlobaleChangeVolumeRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.VolumeHelper;

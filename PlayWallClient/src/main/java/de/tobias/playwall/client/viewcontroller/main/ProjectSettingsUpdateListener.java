@@ -4,7 +4,7 @@ import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.service.ClientProjectController;
-import de.tobias.playwall.common.api.project.ProjectSettingsUpdate;
+import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 

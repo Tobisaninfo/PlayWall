@@ -1,9 +1,9 @@
 package de.tobias.playwall.server.api.page.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.PageAddResponse;
-import de.tobias.playwall.common.api.project.PageNotExistsError;
-import de.tobias.playwall.common.api.project.PageRenameRequest;
+import de.tobias.playwall.common.api.page.request.PageAddResponse;
+import de.tobias.playwall.common.api.page.request.PageNotExistsError;
+import de.tobias.playwall.common.api.page.request.PageRenameRequest;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.model.PageDto;
 import de.tobias.playwall.common.net.ResponseMessage;

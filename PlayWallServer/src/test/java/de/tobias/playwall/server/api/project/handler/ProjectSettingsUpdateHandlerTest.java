@@ -1,10 +1,10 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
-import de.tobias.playwall.common.api.project.ProjectSettingsUpdate;
-import de.tobias.playwall.common.api.project.ProjectSettingsUpdateRequest;
+import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
+import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;

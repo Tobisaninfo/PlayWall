@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import de.tobias.playwall.common.api.project.PadIdRequest;
-import de.tobias.playwall.common.api.project.PadNotExistsError;
+import de.tobias.playwall.common.api.pad.request.PadIdRequest;
+import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;

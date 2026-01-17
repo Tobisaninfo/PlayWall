@@ -1,7 +1,10 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.*;
+import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
+import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
+import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
+import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;

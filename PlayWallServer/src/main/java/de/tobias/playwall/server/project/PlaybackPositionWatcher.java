@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.project;
 
-import de.tobias.playwall.common.api.project.PadPlayPositionUpdate;
+import de.tobias.playwall.common.api.pad.update.PadPlayPositionUpdate;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;

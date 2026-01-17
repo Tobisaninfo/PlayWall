@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.page.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.PageDeleteRequest;
-import de.tobias.playwall.common.api.project.PageNotExistsError;
+import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
+import de.tobias.playwall.common.api.page.request.PageNotExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;

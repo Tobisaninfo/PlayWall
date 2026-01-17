@@ -14,7 +14,9 @@ import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.api.history.UndoRequest;
-import de.tobias.playwall.common.api.project.*;
+import de.tobias.playwall.common.api.pad.request.*;
+import de.tobias.playwall.common.api.page.request.*;
+import de.tobias.playwall.common.api.project.request.*;
 import de.tobias.playwall.common.utils.MapUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -152,7 +154,7 @@ class ClientImpl implements Client
 	@Override
 	public Page renamePage(UUID pageId, String newName) throws PlayWallApiException
 	{
-		final ProjectRenamePageResponse response = clientWebSocketHandler.send(new PageRenameRequest(pageId, newName));
+		final PageRenameResponse response = clientWebSocketHandler.send(new PageRenameRequest(pageId, newName));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 
@@ -165,7 +167,7 @@ class ClientImpl implements Client
 	@Override
 	public Page duplicatePage(UUID pageId, String name) throws PlayWallApiException
 	{
-		final ProjectDuplicatePageResponse response = clientWebSocketHandler.send(new PageDuplicateRequest(pageId, name));
+		final PageDuplicateResponse response = clientWebSocketHandler.send(new PageDuplicateRequest(pageId, name));
 		return pageMapper.pageDtoToPage(response.getPage());
 	}
 

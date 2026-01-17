@@ -1,10 +1,10 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.PadDeleteContentRequest;
-import de.tobias.playwall.common.api.project.PadNotExistsError;
-import de.tobias.playwall.common.api.project.PadStatusUpdate;
-import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
+import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
+import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
+import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;

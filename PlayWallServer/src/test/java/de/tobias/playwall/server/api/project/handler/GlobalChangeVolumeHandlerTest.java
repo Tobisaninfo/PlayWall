@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.GlobaleChangeVolumeRequest;
-import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.request.GlobaleChangeVolumeRequest;
+import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.common.audio.AudioHandler;

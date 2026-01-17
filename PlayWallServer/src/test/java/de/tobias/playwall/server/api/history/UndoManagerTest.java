@@ -1,12 +1,10 @@
 package de.tobias.playwall.server.api.history;
 
 import de.tobias.playwall.common.api.history.UndoHistoryUpdate;
-import de.tobias.playwall.common.api.project.PadDeleteContentRequest;
-import de.tobias.playwall.common.api.project.PadNewMediaRequest;
-import de.tobias.playwall.common.api.project.PadSettingsUpdateRequest;
+import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
+import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
+import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.api.history.UndoItem;
-import de.tobias.playwall.server.api.history.UndoManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

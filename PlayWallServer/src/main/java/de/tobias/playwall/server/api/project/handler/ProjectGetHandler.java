@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.ProjectGetRequest;
-import de.tobias.playwall.common.api.project.ProjectGetResponse;
+import de.tobias.playwall.common.api.project.request.ProjectGetRequest;
+import de.tobias.playwall.common.api.project.request.ProjectGetResponse;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;

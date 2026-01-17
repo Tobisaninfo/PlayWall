@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import de.tobias.playwall.common.api.project.PadChangeVolumeRequest;
-import de.tobias.playwall.common.api.project.PadNotExistsError;
+import de.tobias.playwall.common.api.pad.request.PadChangeVolumeRequest;
+import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.VolumeHelper;

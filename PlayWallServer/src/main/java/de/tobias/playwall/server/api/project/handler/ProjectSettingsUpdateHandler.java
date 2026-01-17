@@ -2,6 +2,8 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
+import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.project.ProjectMetadataMapper;

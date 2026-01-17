@@ -2,7 +2,7 @@ package de.tobias.playwall.client.viewcontroller.main;
 
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.client.service.ClientProjectController;
-import de.tobias.playwall.common.api.project.PadPlayPositionUpdate;
+import de.tobias.playwall.common.api.pad.update.PadPlayPositionUpdate;
 import javafx.application.Platform;
 import javafx.util.Duration;
 import lombok.AllArgsConstructor;

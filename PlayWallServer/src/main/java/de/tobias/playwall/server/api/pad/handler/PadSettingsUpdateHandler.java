@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import de.tobias.playwall.common.api.project.PadNotExistsError;
-import de.tobias.playwall.common.api.project.PadSettingsUpdateRequest;
-import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
+import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
+import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.model.AudioPadContentDto;
 import de.tobias.playwall.common.api.project.model.PadContentDto;
 import de.tobias.playwall.server.api.PlayWallServerException;

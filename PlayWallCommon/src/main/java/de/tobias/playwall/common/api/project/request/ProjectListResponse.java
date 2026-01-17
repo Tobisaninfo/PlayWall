@@ -1,0 +1,23 @@
+package de.tobias.playwall.common.api.project.request;
+
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import de.tobias.playwall.common.net.ResponseMessage;
+import lombok.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@ToString(callSuper = true)
+public class ProjectListResponse extends ResponseMessage
+{
+	private List<ProjectMetadataDto> projects;
+
+	public ProjectListResponse(UUID messageId, List<ProjectMetadataDto> projects)
+	{
+		super(messageId);
+		this.projects = projects;
+	}
+}

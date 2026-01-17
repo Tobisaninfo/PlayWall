@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.project.PadNotExistsError;
-import de.tobias.playwall.common.api.project.PadPauseRequest;
+import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
+import de.tobias.playwall.common.api.pad.request.PadPauseRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;

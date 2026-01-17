@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import de.tobias.playwall.common.api.project.PadPauseRequest;
+import de.tobias.playwall.common.api.pad.request.PadPauseRequest;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;

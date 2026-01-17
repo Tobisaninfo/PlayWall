@@ -19,7 +19,7 @@ import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.cell.ProjectCell;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
-import de.tobias.playwall.common.api.project.PadLoadedUpdate;
+import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

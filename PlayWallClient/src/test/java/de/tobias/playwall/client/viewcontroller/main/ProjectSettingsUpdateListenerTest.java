@@ -7,7 +7,7 @@ import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
-import de.tobias.playwall.common.api.project.ProjectSettingsUpdate;
+import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import javafx.application.Platform;
 import javafx.stage.Stage;
