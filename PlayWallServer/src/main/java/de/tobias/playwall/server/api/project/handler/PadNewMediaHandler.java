@@ -1,10 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.thecodelabs.utils.io.PathUtils;
-import de.tobias.playwall.common.api.project.PadDeleteContentRequest;
-import de.tobias.playwall.common.api.project.PadNewMediaRequest;
-import de.tobias.playwall.common.api.project.PadNotExistsError;
-import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.CompoundRequest;
+import de.tobias.playwall.common.api.project.*;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.utils.FileFormats;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -12,10 +10,10 @@ import de.tobias.playwall.server.api.project.PadMapper;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Pad;
 import de.tobias.playwall.server.common.model.project.PadContent;
-import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.history.UndoItem;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
+import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
@@ -24,6 +22,7 @@ import org.springframework.context.MessageSource;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 @RequestHandlerTyped(PadNewMediaRequest.class)
@@ -98,10 +97,14 @@ public class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaReques
 			return new UndoItem("Neues Medienobjekt", request, new PadDeleteContentRequest(pad.getId()));
 		}
 
-		final RequestMessage inverseOperation = switch(pad.getContent())
+
+		final RequestMessage reloadOldMediaRequest = switch(pad.getContent())
 		{
 			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
 		};
-		return new UndoItem("Neues Medienobjekt", request, inverseOperation);
+		return new UndoItem("Neues Medienobjekt", request, new CompoundRequest(List.of(
+				reloadOldMediaRequest,
+				new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)) // Set old pad settings (name, loop, volume, ...)
+		)));
 	}
 }
