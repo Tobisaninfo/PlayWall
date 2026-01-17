@@ -34,7 +34,7 @@ public class UndoManager
 
 	public RequestMessage getUndoOperation()
 	{
-		if(cursor < 0)
+		if(cursor < 0 || history.isEmpty())
 		{
 			return null;
 		}
@@ -49,7 +49,7 @@ public class UndoManager
 
 	public RequestMessage getRedoOperation()
 	{
-		if(cursor >= history.size())
+		if(cursor >= history.size() - 1)
 		{
 			return null;
 		}
@@ -69,4 +69,9 @@ public class UndoManager
 		context.publishEvent(new UndoHistoryUpdate(nextUndoOperation, nextRedoOperation));
 	}
 
+	void clear()
+	{
+		history.clear();
+		cursor = 0;
+	}
 }
