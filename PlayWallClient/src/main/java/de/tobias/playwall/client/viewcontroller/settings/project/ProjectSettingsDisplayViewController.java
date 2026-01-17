@@ -26,11 +26,16 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	}
 
 	@Override
-	public void initParameter(Param param)
+	protected void init()
 	{
 		comboBoxTime.getItems().addAll(TimeMode.values());
 		comboBoxTime.setButtonCell(new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
-		comboBoxTime.setCellFactory(list -> new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
+		comboBoxTime.setCellFactory(_ -> new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
+	}
+
+	@Override
+	public void initParameter(Param param)
+	{
 		comboBoxTime.getSelectionModel().select(param.projectMetadata.getTimeMode());
 
 		this.isValidProperty.set(true);
