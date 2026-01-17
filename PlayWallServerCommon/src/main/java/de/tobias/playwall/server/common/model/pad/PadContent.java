@@ -1,4 +1,4 @@
-package de.tobias.playwall.server.common.model.project;
+package de.tobias.playwall.server.common.model.pad;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

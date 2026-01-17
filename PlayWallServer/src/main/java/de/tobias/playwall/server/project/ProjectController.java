@@ -2,7 +2,7 @@ package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
-import de.tobias.playwall.server.common.model.project.Pad;
+import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.project.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

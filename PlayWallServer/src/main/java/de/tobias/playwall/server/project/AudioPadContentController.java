@@ -3,8 +3,8 @@ package de.tobias.playwall.server.project;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
-import de.tobias.playwall.server.common.model.project.AudioPadContent;
-import de.tobias.playwall.server.common.model.project.Pad;
+import de.tobias.playwall.server.common.model.pad.AudioPadContent;
+import de.tobias.playwall.server.common.model.pad.Pad;
 import org.springframework.context.ApplicationContext;
 
 import java.nio.file.Paths;

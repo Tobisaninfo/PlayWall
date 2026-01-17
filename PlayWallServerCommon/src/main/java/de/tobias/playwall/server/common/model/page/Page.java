@@ -1,8 +1,8 @@
-package de.tobias.playwall.server.common.model.project;
+package de.tobias.playwall.server.common.model.page;
 
+import de.tobias.playwall.server.common.model.pad.Pad;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

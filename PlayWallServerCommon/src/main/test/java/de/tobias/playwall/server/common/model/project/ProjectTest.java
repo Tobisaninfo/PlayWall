@@ -1,5 +1,8 @@
 package de.tobias.playwall.server.common.model.project;
 
+import de.tobias.playwall.server.common.model.pad.AudioPadContent;
+import de.tobias.playwall.server.common.model.pad.Pad;
+import de.tobias.playwall.server.common.model.page.Page;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

@@ -6,7 +6,7 @@ import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
-import de.tobias.playwall.server.common.model.project.AudioPadContent;
+import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

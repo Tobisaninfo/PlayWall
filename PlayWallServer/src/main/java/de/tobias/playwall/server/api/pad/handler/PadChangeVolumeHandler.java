@@ -5,7 +5,7 @@ import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.VolumeHelper;
-import de.tobias.playwall.server.common.model.project.Pad;
+import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;

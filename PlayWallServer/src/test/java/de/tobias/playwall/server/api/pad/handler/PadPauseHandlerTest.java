@@ -8,7 +8,7 @@ import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
-import de.tobias.playwall.server.common.model.project.AudioPadContent;
+import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
