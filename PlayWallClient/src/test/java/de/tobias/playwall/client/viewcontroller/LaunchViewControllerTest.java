@@ -9,6 +9,7 @@ import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.dialog.ProjectNewDialog;
 import de.tobias.playwall.client.viewcontroller.main.MainViewController;
+import de.tobias.playwall.common.api.project.model.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.stage.Stage;
@@ -28,7 +29,7 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 class LaunchViewControllerTest extends AbstractViewControllerTest
 {
 	private static final UUID PROJECT_ID = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0);
+	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED);
 
 	private AppContext context;
 	private final Client client = mock(Client.class);
@@ -58,7 +59,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testProjectListDisplayAllProjects() throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0)));
+		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED)));
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(LaunchDialog.class);
@@ -88,7 +89,7 @@ class LaunchViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testNewProjectDialogOkay(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4, 1.0);
+		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED);
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 
 		Platform.runLater(() -> {

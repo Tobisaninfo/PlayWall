@@ -7,6 +7,7 @@ import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
+import de.tobias.playwall.common.api.project.model.TimeMode;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class ProjectNewDialogTest extends AbstractViewControllerTest
 	@Test
 	void testCreateProjectOkay(FxRobot robot) throws PlayWallApiException
 	{
-		final ProjectMetadata metadata = new ProjectMetadata(UUID.randomUUID(), "Test", 5, 3, 1.0);
+		final ProjectMetadata metadata = new ProjectMetadata(UUID.randomUUID(), "Test", 5, 3, 1.0, TimeMode.ELAPSED);
 		when(client.addProject(any(), anyInt(), anyInt())).thenReturn(metadata);
 
 		Platform.runLater(() -> {
