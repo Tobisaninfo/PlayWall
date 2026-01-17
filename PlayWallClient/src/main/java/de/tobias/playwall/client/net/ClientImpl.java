@@ -1,7 +1,6 @@
 package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
-import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.PadMapper;

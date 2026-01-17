@@ -3,7 +3,6 @@ package de.tobias.playwall.client.net;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.logger.Logger;
-import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;

@@ -3,7 +3,7 @@ package de.tobias.playwall.client.view.components.settings;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.icon.FontIconType;
-import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
+import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

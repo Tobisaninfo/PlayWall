@@ -14,7 +14,8 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.viewcontroller.launch.ApplicationLoadingViewController;
+import de.tobias.playwall.client.view.launch.ApplicationLoadingViewController;
+import de.tobias.playwall.client.view.style.AppIconProvider;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

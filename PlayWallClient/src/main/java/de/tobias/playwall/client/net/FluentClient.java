@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.net;
 
-import de.tobias.playwall.client.PlayWallApiException;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.project.Project;
