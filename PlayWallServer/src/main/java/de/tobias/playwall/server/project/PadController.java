@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.project.PadLoadedUpdate;
+import de.tobias.playwall.common.api.project.PadStatusUpdate;
 import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.server.common.model.project.Pad;
 import lombok.AccessLevel;
@@ -28,12 +29,18 @@ public abstract class PadController
 		this.status = PadControllerStatus.EMPTY;
 	}
 
+	public void setStatus(PadControllerStatus status)
+	{
+		this.status = status;
+		this.context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
+	}
+
 	public void load()
 	{
 		context.publishEvent(new PadLoadedUpdate(pad.getId(), false));
 		log.debug("Loading Pad {}", pad.getId());
 		loadInternal();
-		status = PadControllerStatus.READY;
+		setStatus(PadControllerStatus.READY);
 		context.publishEvent(new PadLoadedUpdate(pad.getId(), true, getDuration().toMillis()));
 	}
 
@@ -43,7 +50,7 @@ public abstract class PadController
 	{
 		log.debug("Unload Pad {}", pad.getId());
 		unloadInternal();
-		status = PadControllerStatus.EMPTY;
+		setStatus(PadControllerStatus.EMPTY);
 	}
 
 	protected abstract void unloadInternal();

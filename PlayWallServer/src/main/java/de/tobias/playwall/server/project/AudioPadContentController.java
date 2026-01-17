@@ -46,7 +46,6 @@ public class AudioPadContentController extends PadController
 		audioHandler.setLooping(padContent.isLoop());
 		audioHandler.play();
 		setStatus(PadControllerStatus.PLAY);
-		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 
 	@Override
@@ -54,7 +53,6 @@ public class AudioPadContentController extends PadController
 	{
 		audioHandler.pause();
 		setStatus(PadControllerStatus.PAUSE);
-		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 
 	@Override
@@ -62,18 +60,14 @@ public class AudioPadContentController extends PadController
 	{
 		audioHandler.stop();
 		setStatus(PadControllerStatus.STOP);
-		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 		setStatus(PadControllerStatus.READY);
-		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 
 	@Override
 	public void onEof()
 	{
 		setStatus(PadControllerStatus.EOF);
-		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 		setStatus(PadControllerStatus.READY);
-		context.publishEvent(new PadStatusUpdate(pad.getId(), getStatus()));
 	}
 
 	@Override

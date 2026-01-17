@@ -3,7 +3,9 @@ package de.tobias.playwall.server.api.project.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.project.PadDeleteContentRequest;
 import de.tobias.playwall.common.api.project.PadNotExistsError;
+import de.tobias.playwall.common.api.project.PadStatusUpdate;
 import de.tobias.playwall.common.api.project.PadUpdate;
+import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -31,7 +33,8 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
@@ -107,6 +110,9 @@ class PadDeleteContentHandlerTest
 				.hasSize(1)
 				.first()
 				.satisfies(event -> assertThat(event.getPad().getContent()).isNull());
+		assertThat(applicationEvents.stream(PadStatusUpdate.class))
+				.last()
+				.satisfies(event -> assertThat(event.getStatus()).isEqualTo(PadControllerStatus.EMPTY));
 	}
 
 	@Test
