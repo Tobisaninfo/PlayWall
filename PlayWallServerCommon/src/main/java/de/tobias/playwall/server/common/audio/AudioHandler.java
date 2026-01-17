@@ -54,7 +54,7 @@ public abstract class AudioHandler
 	public abstract Duration getDuration();
 
 	/**
-	 * Set the current volume between 0 and 1.
+	 * Set the current volume between 0 and 1.25.
 	 *
 	 * @param volume new volume
 	 */

@@ -1,9 +1,12 @@
 package de.tobias.playwall.nativeaudio.audio.rust;
 
 import de.tobias.playwall.server.common.audio.AudioHandler;
+import de.tobias.playwall.server.common.audio.VolumeHelper;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.time.Duration;
 
 @Slf4j
@@ -88,11 +91,12 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public void setVolume(double volume)
 	{
-		if(volume < 0 || volume > 1)
+		if(volume < VolumeHelper.MIN_VOLUME || volume > VolumeHelper.MAX_VOLUME)
 		{
-			throw new IllegalArgumentException("Volume must be between 0 and 1");
+			throw new IllegalArgumentException(MessageFormat.format("Volume must be between {0} and {1}", VolumeHelper.MIN_VOLUME, VolumeHelper.MAX_VOLUME));
 		}
-		setVolumeNative(volume);
+
+		setVolumeNative(VolumeHelper.convertVolumeToLogarithmic(volume));
 	}
 
 	private native void setVolumeNative(double volume);

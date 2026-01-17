@@ -16,6 +16,7 @@ public final class ProjectMetadata
 	private String name;
 	private final int numberOfHorizontalPads;
 	private final int numberOfVerticalPads;
+	private double volume;
 
 	public int getNumberOfPadsPerPage()
 	{

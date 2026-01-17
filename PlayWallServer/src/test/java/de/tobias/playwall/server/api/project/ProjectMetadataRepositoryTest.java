@@ -53,14 +53,15 @@ class ProjectMetadataRepositoryTest
 		final ProjectMetadata projectMetadata = projectMetadataRepository.addProject("New ProjectMetadata", 6, 5);
 
 		assertThat(projectMetadata)
-				.extracting(ProjectMetadata::getName, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads)
-				.containsExactly("New ProjectMetadata", 6, 5);
+				.extracting(ProjectMetadata::getName, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads, ProjectMetadata::getVolume)
+				.containsExactly("New ProjectMetadata", 6, 5, 1.0);
 
 		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectMetadata.getId())
 				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
+				.volume(1.0)
 				.build();
 
 		assertThat(projectMetadataRepository.getAllProjectMetadata()).containsExactly(expected);
@@ -83,6 +84,7 @@ class ProjectMetadataRepositoryTest
 				.name("New ProjectMetadata")
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(5)
+				.volume(1.0)
 				.build();
 
 		assertThat(projectMetadataRepository.getProjectMetadataById(projectMetadata.getId())).isEqualTo(expected);

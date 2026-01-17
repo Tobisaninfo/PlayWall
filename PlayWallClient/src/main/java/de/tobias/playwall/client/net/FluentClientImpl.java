@@ -7,7 +7,6 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
-import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -124,6 +123,12 @@ class FluentClientImpl implements FluentClient
 		public void updateSettings(ProjectMetadata projectMetadata) throws PlayWallApiException
 		{
 			delegate.updateProjectSettings(projectMetadata);
+		}
+
+		@Override
+		public void changeGlobalVolume(double volume) throws PlayWallApiException
+		{
+			delegate.changeGlobalVolume(volume);
 		}
 	}
 

@@ -58,5 +58,7 @@ public interface Client
 
 	void changeVolume(UUID padId, double volume) throws PlayWallApiException;
 
+	void changeGlobalVolume(double volume) throws PlayWallApiException;
+
 	void updateProjectSettings(ProjectMetadata projectMetadata) throws PlayWallApiException;
 }

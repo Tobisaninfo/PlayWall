@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.service.ClientPadController;
 import de.tobias.playwall.client.service.ClientProjectController;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -40,6 +42,10 @@ class PadLoadedListenerTest extends AbstractViewControllerTest
 		this.stage = stage;
 		context = AppContextHolder.getInstance();
 		context.registerLazy(Stage.class, _ -> stage);
+
+		final FluentClient client = Mockito.mock(FluentClient.class);
+		Mockito.when(client.currentProject()).thenReturn(Mockito.mock(FluentClient.ProjectCurrentBuilder.class));
+		context.registerLazy(FluentClient.class, _ -> client);
 
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 

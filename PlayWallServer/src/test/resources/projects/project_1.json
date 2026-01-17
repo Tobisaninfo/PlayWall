@@ -3,7 +3,8 @@
         "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
         "name": "Project 1",
         "numberOfHorizontalPads": 6,
-        "numberOfVerticalPads": 4
+        "numberOfVerticalPads": 4,
+        "volume": 1.0
     },
     "pages": [
         {
