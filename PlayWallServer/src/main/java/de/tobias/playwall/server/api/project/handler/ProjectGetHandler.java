@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(ProjectGetRequest.class)
-public class ProjectGetHandler implements RequestHandler<ProjectGetRequest>
+class ProjectGetHandler implements RequestHandler<ProjectGetRequest>
 {
 	private final ProjectService projectService;
 	private final ProjectMapper projectMapper;

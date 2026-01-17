@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequestHandlerTyped(ProjectListRequest.class)
 @AllArgsConstructor
-public class ProjectListHandler implements RequestHandler<ProjectListRequest>
+class ProjectListHandler implements RequestHandler<ProjectListRequest>
 {
 	private final ProjectService projectService;
 	private final ProjectMetadataMapper mapper;

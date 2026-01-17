@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageDuplicateRequest.class)
-public class PageDuplicateHandler implements RequestHandler<PageDuplicateRequest>
+class PageDuplicateHandler implements RequestHandler<PageDuplicateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

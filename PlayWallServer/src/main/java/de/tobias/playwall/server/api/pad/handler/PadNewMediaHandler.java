@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 @RequestHandlerTyped(PadNewMediaRequest.class)
-public class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
+class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 {
 	private final ProjectController projectController;
 

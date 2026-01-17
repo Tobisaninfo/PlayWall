@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(ProjectDeleteRequest.class)
-public class ProjectDeleteHandler implements RequestHandler<ProjectDeleteRequest>
+class ProjectDeleteHandler implements RequestHandler<ProjectDeleteRequest>
 {
 	private final ProjectService projectService;
 	private final MessageSource messageSource;

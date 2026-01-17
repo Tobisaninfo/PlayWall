@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RequestHandlerTyped(ProjectSaveRequest.class)
 @AllArgsConstructor
-public class ProjectSaveHandler implements RequestHandler<ProjectSaveRequest>
+class ProjectSaveHandler implements RequestHandler<ProjectSaveRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectRepository projectRepository;

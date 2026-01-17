@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageRenameRequest.class)
-public class PageRenameHandler implements RequestHandler<PageRenameRequest>
+class PageRenameHandler implements RequestHandler<PageRenameRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

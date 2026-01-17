@@ -19,7 +19,7 @@ import org.springframework.context.MessageSource;
 
 @RequestHandlerTyped(ProjectSettingsUpdateRequest.class)
 @RequiredArgsConstructor
-public class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSettingsUpdateRequest>
+class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

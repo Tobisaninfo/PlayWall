@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageDeleteRequest.class)
-public class PageDeleteHandler implements RequestHandler<PageDeleteRequest>
+class PageDeleteHandler implements RequestHandler<PageDeleteRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

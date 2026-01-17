@@ -17,7 +17,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestHandlerTyped(RedoRequest.class)
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class RedoHandler implements RequestHandler<RedoRequest>
+class RedoHandler implements RequestHandler<RedoRequest>
 {
 	private final UndoManager undoManager;
 	private final ApplicationContext context;

@@ -7,7 +7,7 @@ import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
 
 @RequestHandlerTyped(PadPauseRequest.class)
-public class PadPauseHandler extends PadPlaybackHandler<PadPauseRequest>
+class PadPauseHandler extends PadPlaybackHandler<PadPauseRequest>
 {
 	public PadPauseHandler(ProjectController projectController, MessageSource messageSource)
 	{

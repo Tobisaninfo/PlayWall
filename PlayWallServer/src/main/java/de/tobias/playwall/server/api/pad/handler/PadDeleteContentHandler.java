@@ -18,7 +18,7 @@ import org.springframework.context.MessageSource;
 import java.util.List;
 
 @RequestHandlerTyped(PadDeleteContentRequest.class)
-public class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentRequest>
+class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentRequest>
 {
 	private final ProjectController projectController;
 

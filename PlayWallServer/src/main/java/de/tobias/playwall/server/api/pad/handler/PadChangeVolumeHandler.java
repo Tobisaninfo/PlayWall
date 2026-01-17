@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @RequestHandlerTyped(PadChangeVolumeRequest.class)
-public class PadChangeVolumeHandler implements RequestHandler<PadChangeVolumeRequest>
+class PadChangeVolumeHandler implements RequestHandler<PadChangeVolumeRequest>
 {
 	private final ProjectController projectController;
 

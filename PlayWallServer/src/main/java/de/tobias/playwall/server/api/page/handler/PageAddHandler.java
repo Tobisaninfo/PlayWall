@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageAddRequest.class)
-public class PageAddHandler implements RequestHandler<PageAddRequest>
+class PageAddHandler implements RequestHandler<PageAddRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

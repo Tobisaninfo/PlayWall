@@ -19,7 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 
 @RequestHandlerTyped(PadSettingsUpdateRequest.class)
-public class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateRequest>
+class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 

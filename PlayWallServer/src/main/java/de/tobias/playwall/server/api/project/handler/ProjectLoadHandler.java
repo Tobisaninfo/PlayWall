@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(ProjectLoadRequest.class)
-public class ProjectLoadHandler implements RequestHandler<ProjectLoadRequest>
+class ProjectLoadHandler implements RequestHandler<ProjectLoadRequest>
 {
 	private final ProjectService projectService;
 	private final ProjectController projectController;

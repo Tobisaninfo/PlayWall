@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RequestHandlerTyped(GlobaleChangeVolumeRequest.class)
 @RequiredArgsConstructor
-public class GlobalChangeVolumeHandler implements RequestHandler<GlobaleChangeVolumeRequest>
+class GlobalChangeVolumeHandler implements RequestHandler<GlobaleChangeVolumeRequest>
 {
 	private final ProjectController projectController;
 

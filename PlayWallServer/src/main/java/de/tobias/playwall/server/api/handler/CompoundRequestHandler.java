@@ -16,7 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestHandlerTyped(CompoundRequest.class)
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class CompoundRequestHandler implements RequestHandler<CompoundRequest>
+class CompoundRequestHandler implements RequestHandler<CompoundRequest>
 {
 	private final ApplicationContext context;
 
