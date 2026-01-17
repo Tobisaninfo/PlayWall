@@ -2,6 +2,7 @@ package de.tobias.playwall.server.common.model.project;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.EqualsAndHashCode;
 
 @JsonTypeInfo(
 		use = JsonTypeInfo.Id.NAME,
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = AudioPadContent.class, name = "AudioPadContent")
 })
+@EqualsAndHashCode
 public abstract sealed class PadContent permits AudioPadContent
 {
 	public abstract PadContent copy();

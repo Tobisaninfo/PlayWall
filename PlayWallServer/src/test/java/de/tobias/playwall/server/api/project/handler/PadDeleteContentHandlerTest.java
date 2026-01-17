@@ -9,11 +9,14 @@ import de.tobias.playwall.common.api.project.model.PadControllerStatus;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.RequestHandlerFactory;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.config.SyncAsyncConfig;
+import de.tobias.playwall.server.history.UndoItem;
+import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,6 +58,9 @@ class PadDeleteContentHandlerTest
 
 	@Autowired
 	private ProjectController projectController;
+
+	@Autowired
+	private RequestHandlerFactory requestHandlerFactory;
 
 	@Autowired
 	private PadDeleteContentHandler handler;
@@ -132,5 +138,31 @@ class PadDeleteContentHandlerTest
 				.isInstanceOf(PadNotExistsError.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+	}
+
+	@Test
+	void testRedoOperation() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
+		projectController.loadProject(project).get();
+		applicationEvents.clear();
+
+		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
+
+		final UndoItem undoItem = handler.getInverseOperation(request);
+
+		handler.handleRequest(request);
+
+		final RequestHandler inverseHandler = requestHandlerFactory.getRequestHandler(undoItem.inverseRequest().getClass()).orElseThrow();
+		inverseHandler.handleRequest(undoItem.inverseRequest());
+
+		final Project expected = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		expected.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
+
+		assertThat(project).isEqualTo(expected);
 	}
 }
