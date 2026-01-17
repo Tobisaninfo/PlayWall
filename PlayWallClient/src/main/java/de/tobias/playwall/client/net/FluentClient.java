@@ -47,6 +47,8 @@ public interface FluentClient
 
 		void undo() throws PlayWallApiException;
 
+		void redo() throws PlayWallApiException;
+
 		Page addPage(String name) throws PlayWallApiException;
 
 		PageBuilder page(UUID pageId);

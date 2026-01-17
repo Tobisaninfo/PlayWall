@@ -38,6 +38,8 @@ public interface Client
 
 	void undo() throws PlayWallApiException;
 
+	void redo() throws PlayWallApiException;
+
 	Page addPage(String name) throws PlayWallApiException;
 
 	Page renamePage(UUID pageId, String newName) throws PlayWallApiException;

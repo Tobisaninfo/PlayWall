@@ -383,12 +383,14 @@ public class MainViewController extends ViewControllerBase
 	private Menu createMenuEdit()
 	{
 		final MenuItem menuItemUndo = createMenuItem(Strings.UI_MENU_EDIT_UNDO, FontAwesomeType.ROTATE_LEFT_SOLID, Optional.of(this::onMenuItemUndo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN));
+		final MenuItem menuItemRedo = createMenuItem(Strings.UI_MENU_EDIT_REDO, FontAwesomeType.ROTATE_RIGHT_SOLID, Optional.of(this::onMenuItemRedo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
 		final MenuItem menuItemSearch = createMenuItem(Strings.UI_MENU_EDIT_SEARCH, FontAwesomeType.MAGNIFYING_GLASS_SOLID, Optional.empty());
 		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
 				menuItemUndo,
+				menuItemRedo,
 				menuItemSearch,
 				new SeparatorMenuItem(),
 				menuItemReplaceMedia
@@ -471,6 +473,19 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			client.currentProject().undo();
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO: error handling
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void onMenuItemRedo(ActionEvent event)
+	{
+		try
+		{
+			client.currentProject().redo();
 		}
 		catch(PlayWallApiException e)
 		{

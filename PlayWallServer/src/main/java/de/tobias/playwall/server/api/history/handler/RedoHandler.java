@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.api.history.handler;
 
-import de.tobias.playwall.common.api.history.UndoRequest;
+import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -15,25 +15,25 @@ import java.io.IOException;
 import java.util.Optional;
 
 @AllArgsConstructor
-@RequestHandlerTyped(UndoRequest.class)
+@RequestHandlerTyped(RedoRequest.class)
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class UndoHandler implements RequestHandler<UndoRequest>
+public class RedoHandler implements RequestHandler<RedoRequest>
 {
 	private final UndoManager undoManager;
 	private final ApplicationContext context;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(UndoRequest ignored) throws IOException, PlayWallServerException
+	public Optional<ResponseMessage> handleRequest(RedoRequest ignored) throws IOException, PlayWallServerException
 	{
-		final RequestMessage undoOperation = undoManager.getUndoOperation();
+		final RequestMessage redoOperation = undoManager.getRedoOperation();
 
 		final RequestHandlerFactory requestHandlerFactory = context.getBean(RequestHandlerFactory.class);
-		final Optional<RequestHandler> requestHandlerOptional = requestHandlerFactory.getRequestHandler(undoOperation.getClass());
+		final Optional<RequestHandler> requestHandlerOptional = requestHandlerFactory.getRequestHandler(redoOperation.getClass());
 		if(requestHandlerOptional.isEmpty())
 		{
-			throw new IllegalArgumentException("Cannot handle request message type " + undoOperation.getClass().getSimpleName());
+			throw new IllegalArgumentException("Cannot handle request message type " + redoOperation.getClass().getSimpleName());
 		}
 
-		return requestHandlerOptional.get().handleRequest(undoOperation); // TODO: Should this really get returned
+		return requestHandlerOptional.get().handleRequest(redoOperation); // TODO: Should this really get returned
 	}
 }

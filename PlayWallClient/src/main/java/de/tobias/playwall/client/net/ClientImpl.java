@@ -12,9 +12,9 @@ import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.client.model.project.Page;
 import de.tobias.playwall.client.model.project.Project;
 import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.api.project.*;
-import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.utils.MapUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -134,6 +134,12 @@ class ClientImpl implements Client
 	public void undo() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new UndoRequest());
+	}
+
+	@Override
+	public void redo() throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new RedoRequest());
 	}
 
 	@Override

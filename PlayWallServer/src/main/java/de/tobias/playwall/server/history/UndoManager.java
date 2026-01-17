@@ -16,7 +16,7 @@ public class UndoManager
 
 	public void addUndoOperation(UndoItem undoItem)
 	{
-		// Delete all items after the current cursor position (possible redo items get lost on new undo item)
+		// Delete all items after the current cursor position (possible redo items get lost on a new undo item)
 		if(cursor + 1 < history.size())
 		{
 			history.subList(cursor + 1, history.size()).clear();
@@ -37,5 +37,18 @@ public class UndoManager
 		cursor--;
 
 		return inverseRequest;
+	}
+
+	public RequestMessage getRedoOperation()
+	{
+		if(cursor >= history.size())
+		{
+			return null;
+		}
+
+		final RequestMessage request = history.get(cursor + 1).request();
+		cursor++;
+
+		return request;
 	}
 }

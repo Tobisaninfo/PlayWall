@@ -69,6 +69,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.FOLDER_TREE_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Projekte verwalten"))));
 		data.add(new IconEntry(FontAwesomeType.HAND_POINTER_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Touchmodus aktivieren"))));
 		data.add(new IconEntry(FontAwesomeType.ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Rückgängig"))));
+		data.add(new IconEntry(FontAwesomeType.ROTATE_RIGHT_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Wiederholen"))));
 		data.add(new IconEntry(FontAwesomeType.MAGNIFYING_GLASS_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Kacheln suchen"))));
 		data.add(new IconEntry(FontAwesomeType.GEAR_SOLID, List.of(
 				new IconUsage(IconUsageCategory.MENU, "Einstellungen"),

@@ -120,6 +120,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public void redo() throws PlayWallApiException
+		{
+			delegate.redo();
+		}
+
+		@Override
 		public Page addPage(String name) throws PlayWallApiException
 		{
 			return delegate.addPage(name);
