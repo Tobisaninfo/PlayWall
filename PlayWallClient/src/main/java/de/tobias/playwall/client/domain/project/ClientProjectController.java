@@ -1,10 +1,9 @@
-package de.tobias.playwall.client.service;
+package de.tobias.playwall.client.domain.project;
 
 import de.tobias.playwall.client.appcontext.Service;
-import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.client.model.project.Page;
-import de.tobias.playwall.client.model.project.Project;
-import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.pad.ClientPadController;
+import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.page.Page;
 import lombok.Getter;
 
 import java.util.HashMap;

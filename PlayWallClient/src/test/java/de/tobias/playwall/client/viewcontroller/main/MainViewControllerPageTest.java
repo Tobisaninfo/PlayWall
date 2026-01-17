@@ -2,9 +2,9 @@ package de.tobias.playwall.client.viewcontroller.main;
 
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.service.ClientProjectController;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.viewcontroller.AbstractViewControllerTest;
 import de.tobias.playwall.client.viewcontroller.main.desktop.DesktopPadView;

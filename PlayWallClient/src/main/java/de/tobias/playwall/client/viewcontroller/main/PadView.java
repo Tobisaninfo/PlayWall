@@ -1,9 +1,8 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
-import de.tobias.playwall.client.model.project.PadStatus;
-import de.tobias.playwall.client.service.ClientPadController;
+import de.tobias.playwall.client.domain.pad.PadStatus;
+import de.tobias.playwall.client.domain.pad.ClientPadController;
 import javafx.scene.Node;
-import javafx.util.Duration;
 
 public interface PadView
 {

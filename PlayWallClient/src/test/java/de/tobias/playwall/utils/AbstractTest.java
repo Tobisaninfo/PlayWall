@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.extensions.AppEnvironmentSetup;
 import de.tobias.playwall.client.extensions.LoggerSetup;
-import de.tobias.playwall.client.mapper.ProjectMapper;
-import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.domain.project.ProjectMapper;
+import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.common.api.project.model.ProjectDto;
 import org.junit.jupiter.api.extension.ExtendWith;
 

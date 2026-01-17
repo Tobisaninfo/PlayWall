@@ -2,7 +2,7 @@ package de.tobias.playwall.client.viewcontroller.settings.pad;
 
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
-import de.tobias.playwall.client.model.project.PadContent;
+import de.tobias.playwall.client.domain.pad.PadContent;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.settings.pad.content.BasePadContentSettingsContainer;
 import de.tobias.playwall.client.viewcontroller.settings.pad.content.PadContentSettingsContainerFactory;

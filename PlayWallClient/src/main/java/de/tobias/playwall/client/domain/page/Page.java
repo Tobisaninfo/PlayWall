@@ -1,5 +1,6 @@
-package de.tobias.playwall.client.model.project;
+package de.tobias.playwall.client.domain.page;
 
+import de.tobias.playwall.client.domain.pad.Pad;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

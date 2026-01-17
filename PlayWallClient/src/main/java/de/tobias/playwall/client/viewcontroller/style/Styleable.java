@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.style;
 
-import de.tobias.playwall.client.model.project.Page;
+import de.tobias.playwall.client.domain.page.Page;
 import javafx.stage.Stage;
 
 public interface Styleable

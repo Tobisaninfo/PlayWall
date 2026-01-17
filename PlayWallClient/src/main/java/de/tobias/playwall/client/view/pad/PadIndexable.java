@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.view.pad;
 
 
-import de.tobias.playwall.client.model.project.PadIndex;
+import de.tobias.playwall.client.domain.pad.PadIndex;
 
 public interface PadIndexable
 {

@@ -1,8 +1,6 @@
-package de.tobias.playwall.client.service;
+package de.tobias.playwall.client.domain.pad;
 
-import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.client.model.project.PadStatus;
-import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import javafx.util.Duration;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class ClientPadController
 {
-	@Setter(AccessLevel.PACKAGE)
+	@Setter
 	private Pad pad;
 
 	private PadStatus status;

@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.viewcontroller.settings.project;
 
 import de.tobias.playwall.client.appcontext.InjectConstructor;
-import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.viewcontroller.settings.BaseSettingsViewController;
 import lombok.AllArgsConstructor;

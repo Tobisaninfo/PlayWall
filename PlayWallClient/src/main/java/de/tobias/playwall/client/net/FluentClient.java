@@ -1,11 +1,10 @@
 package de.tobias.playwall.client.net;
 
 import de.tobias.playwall.client.PlayWallApiException;
-import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.client.model.project.Page;
-import de.tobias.playwall.client.model.project.Project;
-import de.tobias.playwall.client.model.project.ProjectMetadata;
-import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 
 import java.nio.file.Path;
 import java.util.List;

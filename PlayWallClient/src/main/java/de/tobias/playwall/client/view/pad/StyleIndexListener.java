@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.view.pad;
 
-import de.tobias.playwall.client.model.project.PadIndex;
+import de.tobias.playwall.client.domain.pad.PadIndex;
 import de.tobias.playwall.client.view.pad.control.PadStyleClasses;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

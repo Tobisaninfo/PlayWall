@@ -1,8 +1,7 @@
-package de.tobias.playwall.client.mapper;
+package de.tobias.playwall.client.domain.project;
 
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
-import de.tobias.playwall.client.model.project.ProjectMetadata;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.cell;
 
-import de.tobias.playwall.client.model.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;

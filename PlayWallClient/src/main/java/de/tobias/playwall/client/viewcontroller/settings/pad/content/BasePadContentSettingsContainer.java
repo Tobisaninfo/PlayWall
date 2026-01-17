@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.viewcontroller.settings.pad.content;
 
-import de.tobias.playwall.client.model.project.PadContent;
+import de.tobias.playwall.client.domain.pad.PadContent;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.viewcontroller.settings.Configurable;
 import de.tobias.playwall.client.viewcontroller.settings.pad.BasePadSettingsViewController;

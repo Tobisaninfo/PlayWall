@@ -1,9 +1,10 @@
 package de.tobias.playwall.client.service;
 
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.model.project.AudioPadContent;
-import de.tobias.playwall.client.model.project.Pad;
-import de.tobias.playwall.client.model.project.Project;
+import de.tobias.playwall.client.domain.pad.AudioPadContent;
+import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.utils.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

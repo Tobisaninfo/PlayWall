@@ -1,8 +1,7 @@
-package de.tobias.playwall.client.mapper;
+package de.tobias.playwall.client.domain.pad;
 
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
-import de.tobias.playwall.client.model.project.Pad;
 import de.tobias.playwall.common.api.pad.PadDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
-import de.tobias.playwall.client.model.project.PadStatus;
-import de.tobias.playwall.client.service.ClientPadController;
-import de.tobias.playwall.client.service.ClientProjectController;
+import de.tobias.playwall.client.domain.pad.PadStatus;
+import de.tobias.playwall.client.domain.pad.ClientPadController;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import javafx.util.Duration;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,6 @@
-package de.tobias.playwall.client.mapper;
+package de.tobias.playwall.client.domain.pad;
 
 import de.tobias.playwall.client.appcontext.Service;
-import de.tobias.playwall.client.model.project.AudioPadContent;
-import de.tobias.playwall.client.model.project.PadContent;
 import de.tobias.playwall.common.api.pad.AudioPadContentDto;
 import de.tobias.playwall.common.api.pad.PadContentDto;
 import lombok.AccessLevel;

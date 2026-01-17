@@ -1,9 +1,9 @@
 package de.tobias.playwall.client.viewcontroller.main;
 
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
-import de.tobias.playwall.client.mapper.ProjectMetadataMapper;
-import de.tobias.playwall.client.model.project.ProjectMetadata;
-import de.tobias.playwall.client.service.ClientProjectController;
+import de.tobias.playwall.client.domain.project.ProjectMetadataMapper;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;

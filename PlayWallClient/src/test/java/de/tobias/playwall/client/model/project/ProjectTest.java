@@ -1,5 +1,7 @@
 package de.tobias.playwall.client.model.project;
 
+import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.utils.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

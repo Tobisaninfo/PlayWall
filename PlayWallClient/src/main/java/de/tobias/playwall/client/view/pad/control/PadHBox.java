@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.view.pad.control;
 
-import de.tobias.playwall.client.model.project.PadIndex;
+import de.tobias.playwall.client.domain.pad.PadIndex;
 import de.tobias.playwall.client.view.pad.PadIndexable;
 import de.tobias.playwall.client.view.pad.StyleIndexListener;
 import javafx.beans.InvalidationListener;
