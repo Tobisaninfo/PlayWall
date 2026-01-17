@@ -69,11 +69,13 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPauseButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:10");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.PLAY);
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PAUSE));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:10");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.PAUSE);
 
 		padController.setPosition(Duration.millis(5000L));
@@ -81,6 +83,7 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOP));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:10");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.READY);
 		assertThat(padController.getPosition()).isEqualTo(Duration.ZERO); // Check that the play position is set to zero
 
@@ -89,17 +92,20 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EOF));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:10");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.READY);
 		assertThat(padController.getPosition()).isEqualTo(Duration.ZERO); // Check that the play position is set to zero
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:10");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.READY);
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.EMPTY));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getNewButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel().getText()).isNull();
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.EMPTY);
 		assertThat(padController.getPosition()).isNull();
 		assertThat(padController.getDuration()).isNull();

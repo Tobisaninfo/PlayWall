@@ -257,6 +257,9 @@ public class DesktopPadView implements PadView
 
 		if(duration == null)
 		{
+			this.timeLabel.setText(null);
+			this.playBar.setProgress(0.0);
+
 			return;
 		}
 
