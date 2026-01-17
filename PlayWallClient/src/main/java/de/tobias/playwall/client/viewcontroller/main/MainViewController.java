@@ -76,6 +76,9 @@ public class MainViewController extends ViewControllerBase
 	@FXML
 	private HBox toolbar;
 
+	private MenuItem undoMenuItem;
+	private MenuItem redoMenuItem;
+
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
 	private final PadMapper padMapper;
@@ -87,6 +90,7 @@ public class MainViewController extends ViewControllerBase
 	private PadStatusListener padStatusListener;
 	private PadPlayPositionListener padPlayPositionListener;
 	private ProjectSettingsUpdateListener projectSettingsUpdateListener;
+	private UndoHistoryUpdateListener undoHistoryUpdateListener;
 
 	private SnackBar notificationPane;
 
@@ -137,6 +141,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padPlayPositionListener);
 		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper);
 		eventHandler.registerListener(projectSettingsUpdateListener);
+		undoHistoryUpdateListener = new UndoHistoryUpdateListener(this);
+		eventHandler.registerListener(undoHistoryUpdateListener);
 
 		volumeSlider = new VolumeSlider(VolumeSlider.DEFAULT_VALUE);
 		volumeSlider.setPrefWidth(350);
@@ -382,15 +388,17 @@ public class MainViewController extends ViewControllerBase
 
 	private Menu createMenuEdit()
 	{
-		final MenuItem menuItemUndo = createMenuItem(Strings.UI_MENU_EDIT_UNDO, FontAwesomeType.ROTATE_LEFT_SOLID, Optional.of(this::onMenuItemUndo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN));
-		final MenuItem menuItemRedo = createMenuItem(Strings.UI_MENU_EDIT_REDO, FontAwesomeType.ROTATE_RIGHT_SOLID, Optional.of(this::onMenuItemRedo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
+		undoMenuItem = createMenuItem(Strings.UI_MENU_EDIT_UNDO, FontAwesomeType.ROTATE_LEFT_SOLID, Optional.of(this::onMenuItemUndo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN));
+		undoMenuItem.setDisable(true);
+		redoMenuItem = createMenuItem(Strings.UI_MENU_EDIT_REDO, FontAwesomeType.ROTATE_RIGHT_SOLID, Optional.of(this::onMenuItemRedo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
+		redoMenuItem.setDisable(true);
 		final MenuItem menuItemSearch = createMenuItem(Strings.UI_MENU_EDIT_SEARCH, FontAwesomeType.MAGNIFYING_GLASS_SOLID, Optional.empty());
 		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
-				menuItemUndo,
-				menuItemRedo,
+				undoMenuItem,
+				redoMenuItem,
 				menuItemSearch,
 				new SeparatorMenuItem(),
 				menuItemReplaceMedia

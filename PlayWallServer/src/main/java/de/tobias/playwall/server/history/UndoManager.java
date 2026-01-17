@@ -1,7 +1,9 @@
 package de.tobias.playwall.server.history;
 
+import de.tobias.playwall.common.api.history.UndoHistoryUpdate;
 import de.tobias.playwall.common.net.RequestMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UndoManager
 {
+	private final ApplicationContext context;
+
 	private final List<UndoItem> history = new ArrayList<>();
 	private int cursor = -1;
 
@@ -24,6 +28,8 @@ public class UndoManager
 
 		history.add(undoItem);
 		cursor = history.size() - 1;
+
+		publishHistoryStateUpdate();
 	}
 
 	public RequestMessage getUndoOperation()
@@ -35,6 +41,8 @@ public class UndoManager
 
 		final RequestMessage inverseRequest = history.get(cursor).inverseRequest();
 		cursor--;
+
+		publishHistoryStateUpdate();
 
 		return inverseRequest;
 	}
@@ -49,6 +57,16 @@ public class UndoManager
 		final RequestMessage request = history.get(cursor + 1).request();
 		cursor++;
 
+		publishHistoryStateUpdate();
+
 		return request;
 	}
+
+	private void publishHistoryStateUpdate()
+	{
+		final String nextUndoOperation = cursor < 0 ? null : history.get(cursor).description();
+		final String nextRedoOperation = cursor >= history.size() - 1 ? null : history.get(cursor + 1).description();
+		context.publishEvent(new UndoHistoryUpdate(nextUndoOperation, nextRedoOperation));
+	}
+
 }

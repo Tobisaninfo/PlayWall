@@ -25,7 +25,9 @@ public class Strings
 
 	public static final String UI_MENU_EDIT = "ui.menu.edit";
 	public static final String UI_MENU_EDIT_UNDO = "ui.menu.edit.undo";
+	public static final String UI_MENU_EDIT_UNDO_DESCRIPTION = "ui.menu.edit.undo.description";
 	public static final String UI_MENU_EDIT_REDO = "ui.menu.edit.redo";
+	public static final String UI_MENU_EDIT_REDO_DESCRIPTION = "ui.menu.edit.redo.description";
 	public static final String UI_MENU_EDIT_SEARCH = "ui.menu.edit.search";
 	public static final String UI_MENU_EDIT_REPLACE_MEDIA = "ui.menu.edit.replace.media";
 
