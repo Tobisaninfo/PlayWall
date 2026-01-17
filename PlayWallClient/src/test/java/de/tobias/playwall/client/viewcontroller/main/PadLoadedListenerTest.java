@@ -88,7 +88,7 @@ class PadLoadedListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
-		assertThat(padView.getTimeLabel().getText()).isEmpty();
+		assertThat(padView.getTimeLabel().getText()).isNull();
 
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		WaitForAsyncUtils.waitForFxEvents();
