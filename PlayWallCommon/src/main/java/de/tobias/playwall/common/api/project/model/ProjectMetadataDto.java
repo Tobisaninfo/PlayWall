@@ -5,6 +5,6 @@ import lombok.Builder;
 import java.util.UUID;
 
 @Builder
-public record ProjectMetadataDto(UUID id, String name, int numberOfHorizontalPads, int numberOfVerticalPads, double volume, ProjectTimeMode timeMode)
+public record ProjectMetadataDto(UUID id, String name, int numberOfHorizontalPads, int numberOfVerticalPads, double volume, TimeMode timeMode)
 {
 }

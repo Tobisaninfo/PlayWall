@@ -5,7 +5,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.EnumCell;
-import de.tobias.playwall.common.api.project.model.ProjectTimeMode;
+import de.tobias.playwall.common.api.project.model.TimeMode;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
@@ -17,7 +17,7 @@ import javafx.scene.control.ComboBox;
 public class ProjectSettingsDisplayViewController extends BaseProjectSettingsViewController
 {
 	@FXML
-	private ComboBox<ProjectTimeMode> comboBoxTime;
+	private ComboBox<TimeMode> comboBoxTime;
 
 	@InjectConstructor
 	public ProjectSettingsDisplayViewController(FluentClient client)
@@ -28,7 +28,7 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	@Override
 	public void initParameter(Param param)
 	{
-		comboBoxTime.getItems().addAll(ProjectTimeMode.values());
+		comboBoxTime.getItems().addAll(TimeMode.values());
 		comboBoxTime.setButtonCell(new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
 		comboBoxTime.setCellFactory(list -> new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
 		comboBoxTime.getSelectionModel().select(param.projectMetadata.getTimeMode());

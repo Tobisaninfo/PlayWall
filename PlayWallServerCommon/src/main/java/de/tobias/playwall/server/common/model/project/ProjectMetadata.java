@@ -2,7 +2,7 @@ package de.tobias.playwall.server.common.model.project;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
-import de.tobias.playwall.common.api.project.model.ProjectTimeMode;
+import de.tobias.playwall.common.api.project.model.TimeMode;
 import lombok.*;
 
 import java.util.UUID;
@@ -36,7 +36,7 @@ public class ProjectMetadata
 	private double volume = DEFAULT_VOLUME;
 
 	@Builder.Default
-	private ProjectTimeMode timeMode = ProjectTimeMode.ELAPSED;
+	private TimeMode timeMode = TimeMode.ELAPSED;
 
 	@JsonIgnore
 	public int getNumberOfPadsPerPage()

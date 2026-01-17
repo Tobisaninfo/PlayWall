@@ -19,7 +19,14 @@ public class EnumCell<T extends Enum<?>> extends ListCell<T>
 		}
 		else
 		{
-			setText(Localization.getString(baseName + item.name()));
+			if(item == null)
+			{
+				setText(Localization.getString(baseName + "null"));
+			}
+			else
+			{
+				setText(Localization.getString(baseName + item.name()));
+			}
 		}
 	}
 }
