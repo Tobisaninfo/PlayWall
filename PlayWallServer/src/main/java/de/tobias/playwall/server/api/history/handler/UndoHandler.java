@@ -34,6 +34,8 @@ public class UndoHandler implements RequestHandler<UndoRequest>
 			throw new IllegalArgumentException("Cannot handle request message type " + undoOperation.getClass().getSimpleName());
 		}
 
-		return requestHandlerOptional.get().handleRequest(undoOperation); // TODO: Should this really get returned
+		requestHandlerOptional.get().handleRequest(undoOperation);
+
+		return Optional.empty();
 	}
 }

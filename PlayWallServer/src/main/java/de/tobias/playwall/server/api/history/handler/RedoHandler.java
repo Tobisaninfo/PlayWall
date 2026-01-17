@@ -34,6 +34,8 @@ public class RedoHandler implements RequestHandler<RedoRequest>
 			throw new IllegalArgumentException("Cannot handle request message type " + redoOperation.getClass().getSimpleName());
 		}
 
-		return requestHandlerOptional.get().handleRequest(redoOperation); // TODO: Should this really get returned
+		requestHandlerOptional.get().handleRequest(redoOperation);
+
+		return Optional.empty();
 	}
 }
