@@ -47,6 +47,7 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 		}
 
 		pad.setName(requestMessage.getPad().getName());
+		pad.setTimeMode(requestMessage.getPad().getTimeMode());
 
 		updatePadContent(requestMessage.getPad().getContent(), pad);
 

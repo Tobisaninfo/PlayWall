@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.model.pad;
 
+import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -18,6 +19,7 @@ public class Pad
 	private Integer position;
 	private String name;
 	private PadContent content;
+	private TimeMode timeMode;
 
 	public Pad copy()
 	{
@@ -25,6 +27,7 @@ public class Pad
 				.id(UUID.randomUUID())
 				.position(position)
 				.name(name)
+				.timeMode(timeMode)
 				.content(content == null ? null : content.copy())
 				.build();
 	}
