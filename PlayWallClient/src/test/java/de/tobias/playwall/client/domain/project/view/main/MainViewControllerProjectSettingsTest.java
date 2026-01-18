@@ -11,6 +11,8 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -20,6 +22,7 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -177,5 +180,43 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		Assertions.assertThat(robot.lookup(".label.content").queryLabeled()).hasText("Das Projekt mit dem Namen \"Project 2\" konnte nicht angelegt werden. Es existiert ein Projekt mit diesem Namen.");
+	}
+
+	@Test
+	void testProjectSettingsChangeTimeMode(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+		context.registerLazy(Stage.class, _ -> new Stage());
+
+		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final List<Window> windows = new ArrayList<>(robot.listWindows());
+		final Stage stageSettings = (Stage) windows.getLast();
+
+		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
+
+		final Button settingsCategoryView = robot.lookup(".settings-category").nth(1).queryAs(Button.class);
+		robot.clickOn(settingsCategoryView);
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final ComboBox<?> comboBoxTime = robot.lookup("#comboBoxTime").queryAs(ComboBox.class);
+		assertThat(comboBoxTime.getSelectionModel().getSelectedItem()).isEqualTo(TimeMode.ELAPSED);
+
+		robot.interact(() -> comboBoxTime.getSelectionModel().select(1));
+		robot.clickOn("#saveButton");
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).updateProjectSettings(ProjectMetadata.builder()
+				.name("Project 1")
+				.id(UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c"))
+				.numberOfHorizontalPads(6)
+				.numberOfVerticalPads(4)
+				.timeMode(TimeMode.REMAINING)
+				.build());
 	}
 }

@@ -12,6 +12,8 @@ import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -81,7 +83,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.name("Lorem")
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
-				.timeMode(TimeMode.ELAPSED)
+				.timeMode(null)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
@@ -158,5 +160,99 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		settingsStage = (Stage) windows.getLast();
 
 		assertThat(settingsStage.getTitle()).isEqualTo("Es existieren ungespeicherte Änderungen");
+	}
+
+	@Test
+	void testProjectSettingsChangeTimeMode(FxRobot robot) throws PlayWallApiException
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
+		context.registerLazy(Stage.class, _ -> new Stage());
+		robot.clickOn(padView.getSettingsButton());
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		List<Window> windows = new ArrayList<>(robot.listWindows());
+		Stage stage= (Stage) windows.getLast();
+
+		assertThat(stage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
+
+		final Button settingsCategoryView = robot.lookup(".settings-category").nth(1).queryAs(Button.class);
+		robot.clickOn(settingsCategoryView);
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final ComboBox<?> comboBoxTime = robot.lookup("#comboBoxTime").queryAs(ComboBox.class);
+		assertThat(comboBoxTime.getSelectionModel().getSelectedItem()).isEqualTo(null);
+
+		robot.interact(() -> comboBoxTime.getSelectionModel().select(1));
+		robot.clickOn("#saveButton");
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client, never()).updateSettings(padId, Pad.builder()
+				.name("Test Pad")
+				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
+				.position(0)
+				.timeMode(TimeMode.REMAINING)
+				.content(AudioPadContent.builder()
+						.isLoop(false)
+						.volume(1.0)
+						.build())
+				.build());
+	}
+
+	@Test
+	void testProjectSettingsChangeTimeModeToNull(FxRobot robot) throws PlayWallApiException
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
+		context.registerLazy(Stage.class, _ -> new Stage());
+		robot.clickOn(padView.getSettingsButton());
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		List<Window> windows = new ArrayList<>(robot.listWindows());
+		Stage stage= (Stage) windows.getLast();
+
+		assertThat(stage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
+
+		final Button settingsCategoryView = robot.lookup(".settings-category").nth(1).queryAs(Button.class);
+		robot.clickOn(settingsCategoryView);
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final ComboBox<?> comboBoxTime = robot.lookup("#comboBoxTime").queryAs(ComboBox.class);
+		assertThat(comboBoxTime.getSelectionModel().getSelectedItem()).isEqualTo(null);
+
+		robot.interact(() -> comboBoxTime.getSelectionModel().select(1));
+		robot.clickOn("#saveButton");
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client, never()).updateSettings(padId, Pad.builder()
+				.name("Test Pad")
+				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
+				.position(0)
+				.timeMode(null)
+				.content(AudioPadContent.builder()
+						.isLoop(false)
+						.volume(1.0)
+						.build())
+				.build());
 	}
 }
