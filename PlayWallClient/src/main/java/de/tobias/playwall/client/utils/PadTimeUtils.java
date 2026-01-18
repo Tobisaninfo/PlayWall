@@ -21,7 +21,7 @@ public class PadTimeUtils
 			}
 			case REMAINING ->
 			{
-				return formatDurationToString(duration.subtract(position));
+				return MessageFormat.format("-{0}", formatDurationToString(duration.subtract(position)));
 			}
 			case ELAPSED_AND_TOTAL ->
 			{
