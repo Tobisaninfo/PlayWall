@@ -265,8 +265,7 @@ public class DesktopPadView implements PadView
 
 		if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
 		{
-			// TODO: use real pad time mode from PW-14
-			final TimeMode padTimeMode = null;
+			final TimeMode padTimeMode = padController.getPad().getTimeMode();
 
 			if(padTimeMode == null)
 			{
