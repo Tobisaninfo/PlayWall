@@ -1,5 +1,6 @@
 package de.tobias.playwall.common.api.pad;
 
+import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,5 +18,6 @@ public class PadDto
 	private Integer position;
 	private String name;
 	private PadContentDto content;
+	private TimeMode timeMode;
 }
 

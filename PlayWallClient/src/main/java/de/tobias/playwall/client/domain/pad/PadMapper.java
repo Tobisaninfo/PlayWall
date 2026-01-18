@@ -18,6 +18,7 @@ public class PadMapper
 				.id(pad.getId())
 				.name(pad.getName())
 				.position(pad.getPosition())
+				.timeMode(pad.getTimeMode())
 				.content(padContentMapper.padContentDtoToPadContent(pad.getContent()))
 				.build();
 	}
@@ -28,6 +29,7 @@ public class PadMapper
 				.id(pad.getId())
 				.name(pad.getName())
 				.position(pad.getPosition())
+				.timeMode(pad.getTimeMode())
 				.content(padContentMapper.padContentToPadContentDto(pad.getContent()))
 				.build();
 	}

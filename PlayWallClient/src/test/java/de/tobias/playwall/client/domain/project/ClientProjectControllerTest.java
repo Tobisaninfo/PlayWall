@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.AudioPadContent;
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.utils.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ class ClientProjectControllerTest extends AbstractTest
 				.name("Lorem")
 				.id(padId)
 				.position(0)
+				.timeMode(TimeMode.ELAPSED)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
@@ -55,6 +57,7 @@ class ClientProjectControllerTest extends AbstractTest
 				.name("Lorem")
 				.id(padId)
 				.position(0)
+				.timeMode(TimeMode.ELAPSED)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)

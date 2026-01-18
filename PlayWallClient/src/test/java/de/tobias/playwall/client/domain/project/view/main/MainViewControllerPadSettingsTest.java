@@ -10,6 +10,7 @@ import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -80,6 +81,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.name("Lorem")
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
+				.timeMode(TimeMode.ELAPSED)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
@@ -117,6 +119,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.name("Lorem")
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
+				.timeMode(TimeMode.ELAPSED)
 				.content(AudioPadContent.builder()
 						.isLoop(false)
 						.volume(1.0)

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+<SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <SettingsRow icon="CLOCK_SOLID" title="%ui.settings.pad.view.time">
+        <ComboBox fx:id="comboBoxTime" prefWidth="300"/>
+    </SettingsRow>
+    <Separator/>
+</SettingsPage>
+
