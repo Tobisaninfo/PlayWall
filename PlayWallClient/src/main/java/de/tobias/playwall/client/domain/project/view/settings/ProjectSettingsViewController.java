@@ -80,23 +80,23 @@ public class ProjectSettingsViewController extends ParamDialogBase<ProjectSettin
 	{
 		boxCategories.getStyleClass().add("settings-category-box");
 
-		final ProjectSettingsGeneralViewController projectSettingsGeneralViewController = AppContextHolder.getInstance().get(ProjectSettingsGeneralViewController.class);
-		settingViewController.add(projectSettingsGeneralViewController);
-
-		final SettingsCategory categoryGeneral = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PROJECT_GENERAL_TITLE), FontAwesomeType.GEAR_SOLID, projectSettingsGeneralViewController);
-		categoryGeneral.setOnAction(this::onSelectCategory);
-		boxCategories.getChildren().add(categoryGeneral);
-
-		final ProjectSettingsDisplayViewController projectSettingsDisplayViewController = AppContextHolder.getInstance().get(ProjectSettingsDisplayViewController.class);
-		settingViewController.add(projectSettingsDisplayViewController);
-
-		final SettingsCategory categoryView = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PROJECT_VIEW_TITLE), FontAwesomeType.IMAGE_SOLID, projectSettingsDisplayViewController);
-		categoryView.setOnAction(this::onSelectCategory);
-		boxCategories.getChildren().add(categoryView);
+		final SettingsCategory categoryGeneral = createSettingsCategory(ProjectSettingsGeneralViewController.class, Strings.UI_SETTINGS_PROJECT_GENERAL_TITLE, FontAwesomeType.GEAR_SOLID);
+		createSettingsCategory(ProjectSettingsDisplayViewController.class, Strings.UI_SETTINGS_PROJECT_VIEW_TITLE, FontAwesomeType.IMAGE_SOLID);
 
 		initButtons();
 
 		selectCategory(categoryGeneral);
+	}
+
+	private SettingsCategory createSettingsCategory(Class<? extends BaseProjectSettingsViewController> controllerClass, String localizationKey, FontAwesomeType icon)
+	{
+		final BaseProjectSettingsViewController viewController = AppContextHolder.getInstance().get(controllerClass);
+		settingViewController.add(viewController);
+
+		final SettingsCategory category = new SettingsCategory(Localization.getString(localizationKey), icon, viewController);
+		category.setOnAction(this::onSelectCategory);
+		boxCategories.getChildren().add(category);
+		return category;
 	}
 
 	@Override

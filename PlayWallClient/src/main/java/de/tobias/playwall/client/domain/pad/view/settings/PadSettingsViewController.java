@@ -92,23 +92,23 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	{
 		boxCategories.getStyleClass().add("settings-category-box");
 
-		final PadSettingsGeneralViewController padSettingsGeneralViewController = AppContextHolder.getInstance().get(PadSettingsGeneralViewController.class);
-		settingViewController.add(padSettingsGeneralViewController);
-
-		final SettingsCategory categoryGeneral = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PAD_GENERAL_TITLE), FontAwesomeType.GEAR_SOLID, padSettingsGeneralViewController);
-		categoryGeneral.setOnAction(this::onSelectCategory);
-		boxCategories.getChildren().add(categoryGeneral);
-
-		final PadSettingsDisplayViewController padSettingsDisplayViewController = AppContextHolder.getInstance().get(PadSettingsDisplayViewController.class);
-		settingViewController.add(padSettingsDisplayViewController);
-
-		final SettingsCategory categoryView = new SettingsCategory(Localization.getString(Strings.UI_SETTINGS_PROJECT_VIEW_TITLE), FontAwesomeType.IMAGE_SOLID, padSettingsDisplayViewController);
-		categoryView.setOnAction(this::onSelectCategory);
-		boxCategories.getChildren().add(categoryView);
+		final SettingsCategory categoryGeneral = createSettingsCategory(PadSettingsGeneralViewController.class, Strings.UI_SETTINGS_PAD_GENERAL_TITLE, FontAwesomeType.GEAR_SOLID);
+		createSettingsCategory(PadSettingsDisplayViewController.class, Strings.UI_SETTINGS_PROJECT_VIEW_TITLE, FontAwesomeType.IMAGE_SOLID);
 
 		initButtons();
 
 		selectCategory(categoryGeneral);
+	}
+
+	private SettingsCategory createSettingsCategory(Class<? extends BasePadSettingsViewController> controllerClass, String localizationKey, FontAwesomeType icon)
+	{
+		final BasePadSettingsViewController viewController = AppContextHolder.getInstance().get(controllerClass);
+		settingViewController.add(viewController);
+
+		final SettingsCategory category = new SettingsCategory(Localization.getString(localizationKey), icon, viewController);
+		category.setOnAction(this::onSelectCategory);
+		boxCategories.getChildren().add(category);
+		return category;
 	}
 
 	@Override
