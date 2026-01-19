@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
@@ -8,15 +7,14 @@ import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateReques
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.RequestHandlerFactory;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
-import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -31,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static de.tobias.playwall.server.api.project.handler.UndoTestHelper.testInverseOperation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +37,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
-class ProjectSettingsUpdateHandlerTest
+class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<ProjectSettingsUpdateRequest>
 {
 	@TempDir
 	private Path tempDir;
@@ -52,16 +49,7 @@ class ProjectSettingsUpdateHandlerTest
 	private ApplicationEvents applicationEvents;
 
 	@Autowired
-	private ObjectMapper objectMapper;
-
-	@Autowired
-	private ProjectController projectController;
-
-	@Autowired
 	private ProjectService projectService;
-
-	@Autowired
-	private RequestHandlerFactory requestHandlerFactory;
 
 	@Autowired
 	private ProjectSettingsUpdateHandler handler;
@@ -179,6 +167,6 @@ class ProjectSettingsUpdateHandlerTest
 				.name("Fancy project name")
 				.build());
 
-		testInverseOperation(objectMapper, projectController, applicationEvents, handler, request, requestHandlerFactory);
+		testInverseOperation(handler, request);
 	}
 }

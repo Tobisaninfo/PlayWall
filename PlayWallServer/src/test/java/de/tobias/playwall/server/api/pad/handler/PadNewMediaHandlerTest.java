@@ -1,20 +1,18 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.RequestHandlerFactory;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.config.SyncAsyncConfig;
-import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,6 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
-import static de.tobias.playwall.server.api.project.handler.UndoTestHelper.testInverseOperation;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,22 +37,13 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
 @Import(SyncAsyncConfig.class)
-class PadNewMediaHandlerTest
+class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMediaRequest>
 {
 	@Autowired
 	private ApplicationEvents applicationEvents;
 
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
-
-	@Autowired
-	private ObjectMapper objectMapper;
-
-	@Autowired
-	private ProjectController projectController;
-
-	@Autowired
-	private RequestHandlerFactory requestHandlerFactory;
 
 	@Autowired
 	private PadNewMediaHandler handler;
@@ -154,6 +142,6 @@ class PadNewMediaHandlerTest
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
 
-		testInverseOperation(objectMapper, projectController, applicationEvents, handler, request, requestHandlerFactory);
+		testInverseOperation(handler, request);
 	}
 }
