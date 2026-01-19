@@ -41,10 +41,12 @@ public class FallbackPadContentSettingsContainer extends BasePadContentSettingsC
 	@Override
 	public void applySettings(BasePadSettingsViewController.Param param)
 	{
+		// Nothing to do
 	}
 
 	@Override
 	public void cleanup()
 	{
+		// Nothing to do
 	}
 }

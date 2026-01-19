@@ -50,5 +50,6 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	@Override
 	public void cleanup()
 	{
+		// Nothing to do
 	}
 }

@@ -38,5 +38,6 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 	@Override
 	public void cleanup()
 	{
+		// Nothing to do
 	}
 }
