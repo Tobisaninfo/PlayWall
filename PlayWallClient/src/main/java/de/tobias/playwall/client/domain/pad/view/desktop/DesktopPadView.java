@@ -265,16 +265,7 @@ public class DesktopPadView implements PadView
 
 		if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
 		{
-			final TimeMode padTimeMode = padController.getPad().getTimeMode();
-
-			if(padTimeMode == null)
-			{
-				this.timeLabel.setText(padTimeUtils.formatTimeMode(padController.getProjectMetadata().getTimeMode(), duration, position));
-			}
-			else
-			{
-				this.timeLabel.setText(padTimeUtils.formatTimeMode(padTimeMode, duration, position));
-			}
+			updateTimeLabelByTimeMode(duration, position);
 
 			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
 		}
@@ -282,6 +273,20 @@ public class DesktopPadView implements PadView
 		{
 			this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
 			this.playBar.setProgress(0.0);
+		}
+	}
+
+	private void updateTimeLabelByTimeMode(Duration duration, Duration position)
+	{
+		final TimeMode padTimeMode = padController.getPad().getTimeMode();
+
+		if(padTimeMode == null)
+		{
+			this.timeLabel.setText(padTimeUtils.formatTimeMode(padController.getProjectMetadata().getTimeMode(), duration, position));
+		}
+		else
+		{
+			this.timeLabel.setText(padTimeUtils.formatTimeMode(padTimeMode, duration, position));
 		}
 	}
 
