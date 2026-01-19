@@ -12,7 +12,7 @@ public class ProjectLoadedListener implements UpdateMessageEventListener<Project
 	@Override
 	public void onUpdateMessage(ProjectLoadedUpdate message)
 	{
-		mainViewController.showLoadingOverlay(false);
+		mainViewController.getLoadingOverlay().hide();
 	}
 
 	@Override

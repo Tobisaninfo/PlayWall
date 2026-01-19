@@ -1,5 +1,7 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.thecodelabs.utils.util.Localization;
+import javafx.animation.FadeTransition;
 import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -9,9 +11,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import lombok.Getter;
 
-public class ProjectLoadingView extends StackPane
+public class LoadingView extends StackPane
 {
 	@Getter
 	private final ProgressBar progressBar;
@@ -21,7 +24,10 @@ public class ProjectLoadingView extends StackPane
 	private int loadedPads;
 	private int padCount;
 
-	public ProjectLoadingView()
+	private FadeTransition fadeIn;
+	private FadeTransition fadeOut;
+
+	public LoadingView()
 	{
 		// dunkler Hintergrund
 		final Region background = new Region();
@@ -38,7 +44,7 @@ public class ProjectLoadingView extends StackPane
 		progressBar.setStyle("-fx-progress-color: #316DCE");
 		progressBar.setPrefWidth(300);
 		progressBar.getStyleClass().add("project-loading--progres-bar");
-		label = new Label("Projekt laden... ");
+		label = new Label(Localization.getString("ui.project.loading"));
 		label.getStyleClass().add("project-loading--label");
 
 		loadingBox.getChildren().addAll(progressBar, label);
@@ -47,6 +53,16 @@ public class ProjectLoadingView extends StackPane
 
 		addEventFilter(MouseEvent.ANY, Event::consume);
 		addEventFilter(KeyEvent.ANY, Event::consume);
+
+		fadeIn = new FadeTransition(Duration.millis(200), this);
+		fadeIn.setFromValue(0.0);
+		fadeIn.setToValue(0.5);
+
+		fadeOut = new FadeTransition(Duration.millis(200), this);
+		fadeOut.setFromValue(0.5);
+		fadeOut.setToValue(0.0);
+
+		fadeOut.setOnFinished(e -> setVisible(false));
 	}
 
 	public void incrementProgress()
@@ -61,5 +77,17 @@ public class ProjectLoadingView extends StackPane
 		progressBar.setProgress(0);
 
 		this.padCount = padCount;
+	}
+
+	public void show()
+	{
+		setOpacity(0);
+		setVisible(true);
+		fadeIn.playFromStart();
+	}
+
+	public void hide()
+	{
+		fadeOut.playFromStart();
 	}
 }
