@@ -51,8 +51,6 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 
 		project = loadProject("projects/project_1.json");
-		ClientProjectController projectController = context.get(ClientProjectController.class);
-		projectController.loadProject(project);
 	}
 
 	@Test
