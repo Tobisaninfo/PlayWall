@@ -1,8 +1,8 @@
 package de.tobias.playwall.client.view.about;
 
+import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.AbstractViewControllerTest;
 import javafx.application.Platform;
 import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;

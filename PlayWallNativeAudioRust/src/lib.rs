@@ -16,9 +16,9 @@ use symphonia::core::probe::Hint;
 use symphonia::default::get_probe;
 use tracing::{debug, trace};
 use tracing_subscriber;
-use tracing_subscriber::{fmt, EnvFilter};
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
+use tracing_subscriber::{fmt, EnvFilter};
 
 struct AudioHandler {
     media_path: Option<String>,

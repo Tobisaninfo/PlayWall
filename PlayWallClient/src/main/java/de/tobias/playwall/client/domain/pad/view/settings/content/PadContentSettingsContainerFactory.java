@@ -5,8 +5,8 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.AudioPadContent;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadContent;
-import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
+import de.tobias.playwall.client.net.FluentClient;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

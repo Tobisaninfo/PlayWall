@@ -4,10 +4,10 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.pad.PadContent;
-import de.tobias.playwall.client.view.components.PlayWallButton;
-import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
+import de.tobias.playwall.client.view.components.PlayWallButton;
+import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import javafx.scene.control.Separator;
 
 import java.util.UUID;

@@ -1,15 +1,15 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
-import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.AbstractViewControllerTest;
-import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
+import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.common.api.common.TimeMode;
+import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;

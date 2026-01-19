@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.domain.pad.view;
 
-import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.pad.ClientPadController;
+import de.tobias.playwall.client.domain.pad.PadStatus;
 import javafx.scene.Node;
 
 public interface PadView

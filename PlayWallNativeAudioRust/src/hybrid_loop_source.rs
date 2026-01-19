@@ -1,9 +1,9 @@
+use jni::objects::GlobalRef;
+use jni::JavaVM;
 use rodio::{Decoder, Source};
 use std::fs::File;
 use std::io::BufReader;
 use std::time::Duration;
-use jni::objects::GlobalRef;
-use jni::JavaVM;
 
 pub struct HybridLoopSource {
     path: String,

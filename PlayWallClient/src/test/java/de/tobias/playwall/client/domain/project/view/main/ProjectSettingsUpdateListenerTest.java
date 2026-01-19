@@ -1,14 +1,14 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.event.UpdateMessageEventHandler;
-import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.AbstractViewControllerTest;
-import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
+import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;

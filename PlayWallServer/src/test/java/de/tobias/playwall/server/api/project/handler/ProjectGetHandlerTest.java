@@ -1,9 +1,9 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectGetRequest;
 import de.tobias.playwall.common.api.project.request.ProjectGetResponse;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;

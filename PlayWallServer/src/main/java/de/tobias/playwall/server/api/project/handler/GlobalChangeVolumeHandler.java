@@ -8,7 +8,7 @@ import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.pad.PadContent;
 import de.tobias.playwall.server.common.model.page.Page;
-import de.tobias.playwall.server.common.model.project.*;
+import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;

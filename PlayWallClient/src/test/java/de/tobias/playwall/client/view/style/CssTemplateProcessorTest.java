@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.view.style;
 
-import de.tobias.playwall.client.view.style.CssTemplateProcessor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

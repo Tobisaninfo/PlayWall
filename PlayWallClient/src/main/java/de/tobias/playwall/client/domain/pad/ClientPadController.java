@@ -2,7 +2,6 @@ package de.tobias.playwall.client.domain.pad;
 
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import javafx.util.Duration;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 

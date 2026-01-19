@@ -1,11 +1,11 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tobias.playwall.common.api.pad.AudioPadContentDto;
+import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.api.pad.AudioPadContentDto;
-import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;

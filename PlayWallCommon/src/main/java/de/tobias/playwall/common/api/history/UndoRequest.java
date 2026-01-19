@@ -1,7 +1,10 @@
 package de.tobias.playwall.common.api.history;
 
 import de.tobias.playwall.common.net.RequestMessage;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter

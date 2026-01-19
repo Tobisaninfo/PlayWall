@@ -3,9 +3,9 @@ package de.tobias.playwall.client.domain.pad.view.settings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.pad.PadContent;
-import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.domain.pad.view.settings.content.BasePadContentSettingsContainer;
 import de.tobias.playwall.client.domain.pad.view.settings.content.PadContentSettingsContainerFactory;
+import de.tobias.playwall.client.net.FluentClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 

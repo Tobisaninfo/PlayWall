@@ -1,17 +1,17 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.event.UpdateMessageEventHandler;
-import de.tobias.playwall.client.domain.pad.PadStatus;
-import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.domain.pad.ClientPadController;
-import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.AbstractViewControllerTest;
+import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
-import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
+import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.util.Duration;

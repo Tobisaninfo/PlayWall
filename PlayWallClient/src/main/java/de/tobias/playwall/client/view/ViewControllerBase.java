@@ -2,9 +2,9 @@ package de.tobias.playwall.client.view;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
-import de.tobias.playwall.client.view.style.AppIconProvider;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.InjectField;
+import de.tobias.playwall.client.view.style.AppIconProvider;
 import de.tobias.playwall.client.view.style.Styleable;
 import javafx.stage.Stage;
 

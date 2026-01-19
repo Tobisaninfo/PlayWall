@@ -1,11 +1,11 @@
 package de.tobias.playwall.client.view.launch;
 
+import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.domain.project.view.list.ProjectListViewController;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.server.ServerLauncher;
-import de.tobias.playwall.client.AbstractViewControllerTest;
-import de.tobias.playwall.client.domain.project.view.list.ProjectListViewController;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;

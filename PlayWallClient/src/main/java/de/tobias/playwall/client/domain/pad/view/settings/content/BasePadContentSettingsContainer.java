@@ -1,11 +1,11 @@
 package de.tobias.playwall.client.domain.pad.view.settings.content;
 
 import de.tobias.playwall.client.domain.pad.PadContent;
+import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsGeneralViewController;
+import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.settings.Configurable;
-import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
-import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Priority;

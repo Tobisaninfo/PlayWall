@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
-import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import lombok.AccessLevel;
 import lombok.Getter;

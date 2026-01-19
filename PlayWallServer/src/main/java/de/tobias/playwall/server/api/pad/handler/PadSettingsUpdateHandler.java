@@ -1,10 +1,10 @@
 package de.tobias.playwall.server.api.pad.handler;
 
+import de.tobias.playwall.common.api.pad.AudioPadContentDto;
+import de.tobias.playwall.common.api.pad.PadContentDto;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.api.pad.AudioPadContentDto;
-import de.tobias.playwall.common.api.pad.PadContentDto;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
