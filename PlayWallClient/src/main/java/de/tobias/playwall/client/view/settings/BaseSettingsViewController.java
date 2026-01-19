@@ -29,8 +29,4 @@ public abstract class BaseSettingsViewController<P> extends ParamViewControllerB
 	{
 		this.client = client;
 	}
-
-	public abstract void applySettings(P param);
-
-	public abstract void cleanup();
 }

@@ -38,8 +38,4 @@ public abstract class BasePadContentSettingsContainer<T extends PadContent> exte
 
 		VBox.setVgrow(this, Priority.ALWAYS);
 	}
-
-	public abstract void applySettings(BasePadSettingsViewController.Param param);
-
-	public abstract void cleanup();
 }
