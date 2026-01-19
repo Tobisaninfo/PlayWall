@@ -20,7 +20,7 @@ public abstract class BaseProjectSettingsViewController extends BaseSettingsView
 	}
 
 	@InjectConstructor
-	public BaseProjectSettingsViewController(FluentClient client)
+	protected BaseProjectSettingsViewController(FluentClient client)
 	{
 		super(client);
 	}

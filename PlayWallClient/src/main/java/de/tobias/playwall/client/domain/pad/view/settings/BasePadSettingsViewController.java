@@ -21,7 +21,7 @@ public abstract class BasePadSettingsViewController extends BaseSettingsViewCont
 	}
 
 	@InjectConstructor
-	public BasePadSettingsViewController(FluentClient client)
+	protected BasePadSettingsViewController(FluentClient client)
 	{
 		super(client);
 	}

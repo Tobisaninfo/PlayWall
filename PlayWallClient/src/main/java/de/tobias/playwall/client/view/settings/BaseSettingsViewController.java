@@ -25,7 +25,7 @@ public abstract class BaseSettingsViewController<P> extends ParamViewControllerB
 	protected final SimpleBooleanProperty isValidProperty = new SimpleBooleanProperty();
 
 	@InjectConstructor
-	public BaseSettingsViewController(FluentClient client)
+	protected BaseSettingsViewController(FluentClient client)
 	{
 		this.client = client;
 	}
