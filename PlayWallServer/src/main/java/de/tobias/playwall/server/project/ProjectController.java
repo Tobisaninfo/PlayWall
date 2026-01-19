@@ -1,11 +1,13 @@
 package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
+import de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -50,6 +52,7 @@ public class ProjectController
 		padControllers.clear();
 	}
 
+	@SneakyThrows
 	private void loadPads()
 	{
 		loadedProject.getPages().stream()
@@ -58,6 +61,7 @@ public class ProjectController
 				.forEach(this::createNewPadController);
 
 		padControllers.values().forEach(PadController::load);
+		context.publishEvent(new ProjectLoadedUpdate());
 	}
 
 	public Project getLoadedProject() throws ProjectNotLoadedException

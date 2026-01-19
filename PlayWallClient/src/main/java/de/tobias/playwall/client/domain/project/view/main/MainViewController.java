@@ -93,6 +93,7 @@ public class MainViewController extends ViewControllerBase
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final UpdateMessageEventHandler eventHandler;
 
+	private ProjectLoadedListener projectLoadedListener;
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
@@ -143,6 +144,8 @@ public class MainViewController extends ViewControllerBase
 		loadingOverlay.setVisible(true);
 		rootStackPane.getChildren().add(loadingOverlay);
 
+		projectLoadedListener = new ProjectLoadedListener(this);
+		eventHandler.registerListener(projectLoadedListener);
 		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
 		padLoadedListener = new PadLoadedListener(projectController, this);
