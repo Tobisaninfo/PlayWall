@@ -61,6 +61,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
 			stage.show();
 			mainViewController.showPage(0);
 		});
@@ -91,6 +92,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
 			stage.show();
 			mainViewController.showPage(1);
 		});
@@ -119,6 +121,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
 			stage.show();
 			mainViewController.showPage(0);
 		});

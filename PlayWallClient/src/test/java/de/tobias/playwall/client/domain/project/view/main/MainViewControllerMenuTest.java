@@ -51,6 +51,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();

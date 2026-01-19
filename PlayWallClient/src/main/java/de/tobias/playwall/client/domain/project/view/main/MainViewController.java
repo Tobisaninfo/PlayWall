@@ -82,6 +82,8 @@ public class MainViewController extends ViewControllerBase
 	@FXML
 	private HBox toolbar;
 
+	private ProjectLoadingView loadingOverlay;
+
 	private MenuItem undoMenuItem;
 	private MenuItem redoMenuItem;
 
@@ -137,6 +139,10 @@ public class MainViewController extends ViewControllerBase
 
 		headerBar.setLeading(headerBox);
 
+		loadingOverlay = new ProjectLoadingView();
+		loadingOverlay.setVisible(true);
+		rootStackPane.getChildren().add(loadingOverlay);
+
 		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
 		padLoadedListener = new PadLoadedListener(projectController, this);
@@ -168,6 +174,8 @@ public class MainViewController extends ViewControllerBase
 			}
 		});
 		toolbar.getChildren().add(volumeSlider);
+
+
 	}
 
 	@Override
@@ -252,6 +260,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		try
 		{
+			loadingOverlay.setVisible(true);
 			this.projectController.loadProject(project);
 
 			updateWindowProperties(project);
@@ -267,6 +276,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
+			loadingOverlay.setVisible(false);
 			// TODO:
 			Logger.error(e);
 		}
@@ -326,6 +336,11 @@ public class MainViewController extends ViewControllerBase
 			button.setUserData(page);
 			pageButtonsFlowPane.getChildren().add(button);
 		}
+	}
+
+	public void showLoadingOverlay(boolean visible)
+	{
+		loadingOverlay.setVisible(visible);
 	}
 
 	public void showPage(int position)
