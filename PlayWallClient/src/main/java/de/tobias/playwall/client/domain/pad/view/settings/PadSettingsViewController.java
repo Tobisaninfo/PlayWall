@@ -267,7 +267,6 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 			try
 			{
 				client.pad(pad.getId()).newMedia(path);
-				final Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
 				stage.close();
 			}
 			catch(PlayWallApiException ex)

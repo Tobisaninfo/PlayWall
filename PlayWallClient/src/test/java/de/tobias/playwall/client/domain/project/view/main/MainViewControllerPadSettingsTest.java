@@ -142,9 +142,9 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		List<Window> windows = new ArrayList<>(robot.listWindows());
-		Stage stage= (Stage) windows.getLast();
+		Stage settingsStage = (Stage) windows.getLast();
 
-		assertThat(stage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
+		assertThat(settingsStage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
 		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
 		robot.clickOn("#buttonChooseFile");
@@ -152,8 +152,8 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		windows = new ArrayList<>(robot.listWindows());
-		stage = (Stage) windows.getLast();
+		settingsStage = (Stage) windows.getLast();
 
-		assertThat(stage.getTitle()).isEqualTo("Es existieren ungespeicherte Änderungen");
+		assertThat(settingsStage.getTitle()).isEqualTo("Es existieren ungespeicherte Änderungen");
 	}
 }
