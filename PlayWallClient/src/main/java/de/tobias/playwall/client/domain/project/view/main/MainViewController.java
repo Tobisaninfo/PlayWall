@@ -263,6 +263,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		try
 		{
+			loadingOverlay.resetAndSetPadCount((int) project.getPadCountWithContent());
 			loadingOverlay.setVisible(true);
 			this.projectController.loadProject(project);
 

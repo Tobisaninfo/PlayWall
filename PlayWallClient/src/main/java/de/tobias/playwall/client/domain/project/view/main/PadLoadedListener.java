@@ -36,6 +36,11 @@ class PadLoadedListener implements UpdateMessageEventListener<PadLoadedUpdate>
 		{
 			padView.showLoading(!message.isLoaded());
 		}
+
+		if(message.isLoaded())
+		{
+			Platform.runLater(() -> mainViewController.getLoadingOverlay().incrementProgress());
+		}
 	}
 
 	@Override

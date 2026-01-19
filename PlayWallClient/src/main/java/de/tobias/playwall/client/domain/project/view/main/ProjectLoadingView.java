@@ -18,6 +18,9 @@ public class ProjectLoadingView extends StackPane
 	@Getter
 	private final Label label;
 
+	private int loadedPads;
+	private int padCount;
+
 	public ProjectLoadingView()
 	{
 		// dunkler Hintergrund
@@ -44,5 +47,19 @@ public class ProjectLoadingView extends StackPane
 
 		addEventFilter(MouseEvent.ANY, Event::consume);
 		addEventFilter(KeyEvent.ANY, Event::consume);
+	}
+
+	public void incrementProgress()
+	{
+		loadedPads++;
+		progressBar.setProgress(loadedPads / (double) padCount);
+	}
+
+	public void resetAndSetPadCount(int padCount)
+	{
+		loadedPads = 0;
+		progressBar.setProgress(0);
+
+		this.padCount = padCount;
 	}
 }

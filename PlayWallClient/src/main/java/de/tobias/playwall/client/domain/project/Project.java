@@ -20,6 +20,11 @@ public class Project
 	private ProjectMetadata metadata;
 	private final List<Page> pages;
 
+	public long getPadCountWithContent()
+	{
+		return pages.stream().flatMap(page -> page.getPads().stream()).filter(pad -> pad.getContent() != null).count();
+	}
+
 	public Page getPage(int position)
 	{
 		return pages.stream()
