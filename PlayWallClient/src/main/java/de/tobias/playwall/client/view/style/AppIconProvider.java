@@ -18,7 +18,7 @@ public class AppIconProvider
 	private final Image stageIcon;
 	private final byte[] stageIconData;
 
-	public AppIconProvider()
+	AppIconProvider()
 	{
 		this.stageIcon = new Image(ICON_PATH);
 		try

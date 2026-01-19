@@ -125,7 +125,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testOpenSettingsAndSetNameTryToSelectNewFile(FxRobot robot) throws PlayWallApiException
+	void testOpenSettingsAndSetNameTryToSelectNewFile(FxRobot robot)
 	{
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
