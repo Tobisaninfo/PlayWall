@@ -100,8 +100,8 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 		reset(client);
 
-		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
-		doNothing().when(client).loadProject(PROJECT_METADATA_1.getId());
+		final Project project = new Project(PROJECT_METADATA_1, List.of());
+		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(project);
 
 		robot.clickOn(launchDialog.getNewProjectButton());
 		WaitForAsyncUtils.waitForFxEvents();
@@ -109,9 +109,8 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		verify(client).getProjects();
 
 		// open project
-		verify(client).loadProject(PROJECT_METADATA_1.getId());
 		verify(mainViewController).showStage();
-		verify(mainViewController).showProject(any());
+		verify(mainViewController).showProject(project);
 		assertThat(stage.isShowing()).isFalse();
 	}
 
@@ -131,9 +130,6 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		verify(client, never()).getProjects();
-
-		// not open anything
-		verify(client, never()).loadProject(any());
 	}
 
 	// Open
@@ -143,7 +139,6 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
-		doNothing().when(client).loadProject(PROJECT_METADATA_1.getId());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -155,7 +150,6 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		robot.doubleClickOn(cell, Motion.DEFAULT);
 		WaitForAsyncUtils.waitForFxEvents();
 
-		verify(client).loadProject(PROJECT_ID);
 		verify(mainViewController).showStage();
 		verify(mainViewController).showProject(any());
 		assertThat(stage.isShowing()).isFalse();
@@ -166,7 +160,6 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	{
 		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
-		doNothing().when(client).loadProject(PROJECT_METADATA_1.getId());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -179,7 +172,6 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		robot.clickOn(launchDialog.getOpenButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
-		verify(client).loadProject(PROJECT_ID);
 		verify(mainViewController).showStage();
 		verify(mainViewController).showProject(any());
 		assertThat(stage.isShowing()).isFalse();

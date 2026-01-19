@@ -71,6 +71,9 @@ public class MainViewController extends ViewControllerBase
 	private FlowPane pageButtonsFlowPane;
 
 	@FXML
+	private StackPane rootStackPane;
+
+	@FXML
 	private GridPane padGridPane;
 
 	@FXML
@@ -188,8 +191,6 @@ public class MainViewController extends ViewControllerBase
 			return t;
 		}));
 		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
-
-		volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
 	}
 
 	public void updateTitle()
@@ -249,11 +250,26 @@ public class MainViewController extends ViewControllerBase
 
 	public void showProject(Project project)
 	{
-		updateWindowProperties(project);
-		initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
+		try
+		{
+			this.projectController.loadProject(project);
 
-		buildPageButtons();
-		showPage(0);
+			updateWindowProperties(project);
+			initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
+
+			volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
+
+			buildPageButtons();
+			showPage(0);
+
+			client.project(project.getMetadata().getId()).load();
+			Logger.info("Loading project " + project.getMetadata().getName());
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO:
+			Logger.error(e);
+		}
 	}
 
 	private void initializePadViews(int columns, int rows)

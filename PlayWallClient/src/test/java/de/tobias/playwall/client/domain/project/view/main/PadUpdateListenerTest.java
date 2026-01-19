@@ -7,14 +7,13 @@ import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
-import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.view.about.AboutDialog;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -34,6 +33,8 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 
 	private Project project;
 
+	private final Client client = mock(Client.class);
+
 	@Start
 	private void start(Stage stage)
 	{
@@ -41,9 +42,7 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 		context = AppContextHolder.getInstance();
 		context.registerLazy(Stage.class, _ -> stage);
 
-		final FluentClient client = Mockito.mock(FluentClient.class);
-		Mockito.when(client.currentProject()).thenReturn(Mockito.mock(FluentClient.ProjectCurrentBuilder.class));
-		context.registerLazy(FluentClient.class, _ -> client);
+		context.registerLazySingleton(Client.class, _ -> client);
 
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 

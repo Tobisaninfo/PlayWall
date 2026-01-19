@@ -100,25 +100,6 @@ public class ProjectListViewController extends ViewControllerBase
 			}
 		});
 
-		updateMessageEventHandler.registerListener(new UpdateMessageEventListener<PadLoadedUpdate>()
-		{
-			@Override
-			public void onUpdateMessage(PadLoadedUpdate message)
-			{
-				if(message.getDurationMillis() != null)
-				{
-					final Duration duration = Duration.millis(message.getDurationMillis());
-					projectController.getPadController(message.getPadId()).setDuration(duration);
-				}
-			}
-
-			@Override
-			public Class<PadLoadedUpdate> getMessageClass()
-			{
-				return PadLoadedUpdate.class;
-			}
-		});
-
 		Worker.runLater(this::fetchProjects);
 	}
 
@@ -187,9 +168,6 @@ public class ProjectListViewController extends ViewControllerBase
 		try
 		{
 			final Project project = client.project(id).get();
-			this.projectController.loadProject(project);
-			client.project(id).load();
-			Logger.info("Launched project " + project.getMetadata().getName());
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
 			controller.showStage();

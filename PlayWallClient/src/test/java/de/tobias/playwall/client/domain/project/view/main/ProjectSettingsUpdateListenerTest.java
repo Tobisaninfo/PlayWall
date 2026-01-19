@@ -6,16 +6,16 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
-import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
+import static org.mockito.Mockito.mock;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 class ProjectSettingsUpdateListenerTest extends AbstractViewControllerTest
@@ -29,6 +29,8 @@ class ProjectSettingsUpdateListenerTest extends AbstractViewControllerTest
 
 	private Project project;
 
+	private final Client client = mock(Client.class);
+
 	@Start
 	private void start(Stage stage)
 	{
@@ -36,9 +38,7 @@ class ProjectSettingsUpdateListenerTest extends AbstractViewControllerTest
 		context = AppContextHolder.getInstance();
 		context.registerLazy(Stage.class, _ -> stage);
 
-		final FluentClient client = Mockito.mock(FluentClient.class);
-		Mockito.when(client.currentProject()).thenReturn(Mockito.mock(FluentClient.ProjectCurrentBuilder.class));
-		context.registerLazy(FluentClient.class, _ -> client);
+		context.registerLazySingleton(Client.class, _ -> client);
 
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 
