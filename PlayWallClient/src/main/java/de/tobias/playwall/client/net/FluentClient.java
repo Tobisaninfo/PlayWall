@@ -54,6 +54,8 @@ public interface FluentClient
 		void updateSettings(ProjectMetadata projectMetadata) throws PlayWallApiException;
 
 		void changeGlobalVolume(double volume) throws PlayWallApiException;
+
+		void stopAllPads() throws PlayWallApiException;
 	}
 
 	interface PageBuilder

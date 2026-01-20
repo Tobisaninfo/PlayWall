@@ -141,6 +141,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.changeGlobalVolume(volume);
 		}
+
+		@Override
+		public void stopAllPads() throws PlayWallApiException
+		{
+			delegate.stopAllPads();
+		}
 	}
 
 	@AllArgsConstructor

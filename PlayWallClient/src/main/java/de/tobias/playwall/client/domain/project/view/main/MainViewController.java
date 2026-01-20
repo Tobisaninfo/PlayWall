@@ -213,6 +213,16 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.unregisterListener(padLoadedListener);
 		eventHandler.unregisterListener(padStatusListener);
 		eventHandler.unregisterListener(projectSettingsUpdateListener);
+
+		try
+		{
+			client.currentProject().stopAllPads();
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO: error handling
+			throw new RuntimeException(e);
+		}
 	}
 
 	private static String getWindowTitle(String projectName)

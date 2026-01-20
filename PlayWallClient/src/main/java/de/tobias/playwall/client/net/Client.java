@@ -63,4 +63,6 @@ public interface Client
 	void changeGlobalVolume(double volume) throws PlayWallApiException;
 
 	void updateProjectSettings(ProjectMetadata projectMetadata) throws PlayWallApiException;
+
+	void stopAllPads() throws PlayWallApiException;
 }

@@ -223,4 +223,11 @@ class ClientImpl implements Client
 	{
 		clientWebSocketHandler.send(new ProjectSettingsUpdateRequest(projectMetadataMapper.projectMetadataToProjectMetadataDto(projectMetadata)));
 	}
+
+	@Override
+	public void stopAllPads() throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new AllPadsStopRequest());
+
+	}
 }
