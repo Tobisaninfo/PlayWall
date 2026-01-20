@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 class TimeModeTest extends AbstractViewControllerTest
 {
@@ -36,6 +39,8 @@ class TimeModeTest extends AbstractViewControllerTest
 
 	private Project project;
 
+	private final Client client = mock(Client.class);
+
 	@Start
 	private void start(Stage stage)
 	{
@@ -43,15 +48,11 @@ class TimeModeTest extends AbstractViewControllerTest
 		context = AppContextHolder.getInstance();
 		context.registerLazy(Stage.class, _ -> stage);
 
-		final FluentClient client = Mockito.mock(FluentClient.class);
-		Mockito.when(client.currentProject()).thenReturn(Mockito.mock(FluentClient.ProjectCurrentBuilder.class));
-		context.registerLazy(FluentClient.class, _ -> client);
+		context.registerLazy(Client.class, _ -> client);
 
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 
 		project = loadProject("projects/project_1.json");
-		ClientProjectController projectController = context.get(ClientProjectController.class);
-		projectController.loadProject(project);
 	}
 
 	@Test
