@@ -21,7 +21,7 @@ public class LoadingView extends StackPane
 	@Getter
 	private final Label label;
 
-	private int loadedPads;
+	private int numberOfLoadedPads;
 	private int padCount;
 
 	private FadeTransition fadeIn;
@@ -67,13 +67,13 @@ public class LoadingView extends StackPane
 
 	public void incrementProgress()
 	{
-		loadedPads++;
-		progressBar.setProgress(loadedPads / (double) padCount);
+		numberOfLoadedPads++;
+		progressBar.setProgress(numberOfLoadedPads / (double) padCount);
 	}
 
 	public void resetAndSetPadCount(int padCount)
 	{
-		loadedPads = 0;
+		numberOfLoadedPads = 0;
 		progressBar.setProgress(0);
 
 		this.padCount = padCount;
