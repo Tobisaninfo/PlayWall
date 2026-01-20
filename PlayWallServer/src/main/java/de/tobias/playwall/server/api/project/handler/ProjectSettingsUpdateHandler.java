@@ -20,6 +20,7 @@ import de.tobias.playwall.server.project.ProjectController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 @RequestHandlerTyped(ProjectSettingsUpdateRequest.class)
 @RequiredArgsConstructor
@@ -69,6 +70,7 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 	public UndoItem getInverseOperation(ProjectSettingsUpdateRequest request)
 	{
 		final ProjectMetadataDto oldMetadata = projectMetadataMapper.projectMetadataToProjectMetadataDto(projectController.getLoadedProject().getMetadata());
-		return new UndoItem("Projekteinstellungen", request, new ProjectSettingsUpdateRequest(oldMetadata));
+		final String shortDescription = messageSource.getMessage("undo.description.short.project.settings", new Object[]{}, LocaleContextHolder.getLocale());
+		return new UndoItem(shortDescription, request, new ProjectSettingsUpdateRequest(oldMetadata));
 	}
 }

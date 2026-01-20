@@ -17,6 +17,7 @@ import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 @RequestHandlerTyped(PadSettingsUpdateRequest.class)
 class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateRequest>
@@ -86,6 +87,7 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 	public UndoItem getInverseOperation(PadSettingsUpdateRequest requestMessage)
 	{
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
-		return new UndoItem("Kacheleinstellungen", requestMessage, new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)));
+		final String shortDescription = messageSource.getMessage("undo.description.short.pad.settings", new Object[]{}, LocaleContextHolder.getLocale());
+		return new UndoItem(shortDescription, requestMessage, new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)));
 	}
 }

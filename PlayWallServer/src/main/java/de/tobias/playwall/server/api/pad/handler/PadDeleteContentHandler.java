@@ -18,6 +18,7 @@ import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.List;
 
@@ -75,7 +76,8 @@ class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentReq
 			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
 		};
 
-		return new UndoItem("Kachel löschen", request, new CompoundRequest(
+		final String shortDescription = messageSource.getMessage("undo.description.short.pad.delete", new Object[]{}, LocaleContextHolder.getLocale());
+		return new UndoItem(shortDescription, request, new CompoundRequest(
 				List.of(
 						newMediaRequest,
 						new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad))

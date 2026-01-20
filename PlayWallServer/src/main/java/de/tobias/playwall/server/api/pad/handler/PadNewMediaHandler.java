@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -95,10 +96,12 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 	@Override
 	public UndoItem getInverseOperation(PadNewMediaRequest request)
 	{
+		final String shortDescription = messageSource.getMessage("undo.description.short.pad.new.media", new Object[]{}, LocaleContextHolder.getLocale());
+
 		final Pad pad = projectController.getPad(request.getPadId());
 		if(pad.getContent() == null)
 		{
-			return new UndoItem("Neues Medienobjekt", request, new PadDeleteContentRequest(pad.getId()));
+			return new UndoItem(shortDescription, request, new PadDeleteContentRequest(pad.getId()));
 		}
 
 
@@ -106,7 +109,7 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 		{
 			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
 		};
-		return new UndoItem("Neues Medienobjekt", request, new CompoundRequest(List.of(
+		return new UndoItem(shortDescription, request, new CompoundRequest(List.of(
 				reloadOldMediaRequest,
 				new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)) // Set old pad settings (name, loop, volume, ...)
 		)));
