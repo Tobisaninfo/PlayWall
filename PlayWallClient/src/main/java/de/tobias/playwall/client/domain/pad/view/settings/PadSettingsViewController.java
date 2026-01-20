@@ -250,10 +250,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		alert.initOwner(owner);
 		alert.initModality(Modality.WINDOW_MODAL);
 		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
-		{
-			showFileChooser(event);
-		});
+		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ -> showFileChooser(event));
 	}
 
 	private boolean hasChanges()

@@ -77,7 +77,7 @@ public class ModernStyle implements Styleable
 				key.reset();
 			}
 		}
-		catch(InterruptedException e)
+		catch(InterruptedException _)
 		{
 			Thread.currentThread().interrupt();
 		}

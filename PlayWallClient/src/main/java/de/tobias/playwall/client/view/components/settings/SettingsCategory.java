@@ -15,9 +15,9 @@ import lombok.Getter;
 public class SettingsCategory extends Button
 {
 	@Getter
-	private final BaseSettingsViewController settingsPageController;
+	private final BaseSettingsViewController<?> settingsPageController;
 
-	public SettingsCategory(String labelText, FontIconType iconType, BaseSettingsViewController settingsPageController)
+	public SettingsCategory(String labelText, FontIconType iconType, BaseSettingsViewController<?> settingsPageController)
 	{
 		this.settingsPageController = settingsPageController;
 

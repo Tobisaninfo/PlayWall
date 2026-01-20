@@ -180,9 +180,9 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		List<Window> windows = new ArrayList<>(robot.listWindows());
-		Stage stage= (Stage) windows.getLast();
+		Stage currentStage = (Stage) windows.getLast();
 
-		assertThat(stage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
+		assertThat(currentStage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
 		final Button settingsCategoryView = robot.lookup(".settings-category").nth(1).queryAs(Button.class);
 		robot.clickOn(settingsCategoryView);
@@ -190,7 +190,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final ComboBox<?> comboBoxTime = robot.lookup("#comboBoxTime").queryAs(ComboBox.class);
-		assertThat(comboBoxTime.getSelectionModel().getSelectedItem()).isEqualTo(null);
+		assertThat(comboBoxTime.getSelectionModel().getSelectedItem()).isNull();
 
 		robot.interact(() -> comboBoxTime.getSelectionModel().select(1));
 		robot.clickOn("#saveButton");
@@ -227,9 +227,9 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		List<Window> windows = new ArrayList<>(robot.listWindows());
-		Stage stage= (Stage) windows.getLast();
+		Stage currentStage = (Stage) windows.getLast();
 
-		assertThat(stage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
+		assertThat(currentStage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
 		final Button settingsCategoryView = robot.lookup(".settings-category").nth(1).queryAs(Button.class);
 		robot.clickOn(settingsCategoryView);
@@ -237,7 +237,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final ComboBox<?> comboBoxTime = robot.lookup("#comboBoxTime").queryAs(ComboBox.class);
-		assertThat(comboBoxTime.getSelectionModel().getSelectedItem()).isEqualTo(null);
+		assertThat(comboBoxTime.getSelectionModel().getSelectedItem()).isNull();
 
 		robot.interact(() -> comboBoxTime.getSelectionModel().select(1));
 		robot.clickOn("#saveButton");

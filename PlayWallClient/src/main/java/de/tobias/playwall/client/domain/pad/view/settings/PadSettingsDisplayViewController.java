@@ -52,5 +52,6 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	@Override
 	public void cleanup()
 	{
+		// Nothing to do
 	}
 }
