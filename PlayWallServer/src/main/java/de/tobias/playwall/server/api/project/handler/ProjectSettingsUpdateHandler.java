@@ -71,6 +71,7 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 	{
 		final ProjectMetadataDto oldMetadata = projectMetadataMapper.projectMetadataToProjectMetadataDto(projectController.getLoadedProject().getMetadata());
 		final String shortDescription = messageSource.getMessage("undo.description.short.project.settings", new Object[]{}, LocaleContextHolder.getLocale());
-		return new UndoItem(shortDescription, request, new ProjectSettingsUpdateRequest(oldMetadata));
+		final String longDescription = messageSource.getMessage("undo.description.long.project.settings", new Object[]{}, LocaleContextHolder.getLocale());
+		return new UndoItem(shortDescription, longDescription, request, new ProjectSettingsUpdateRequest(oldMetadata));
 	}
 }

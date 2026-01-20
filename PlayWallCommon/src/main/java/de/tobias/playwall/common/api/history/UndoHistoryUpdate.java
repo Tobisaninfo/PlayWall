@@ -12,4 +12,5 @@ public class UndoHistoryUpdate extends UpdateMessage
 {
 	private String nextUndoOperation;
 	private String nextRedoOperation;
+	private String message;
 }

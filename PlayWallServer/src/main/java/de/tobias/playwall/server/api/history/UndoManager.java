@@ -4,6 +4,8 @@ import de.tobias.playwall.common.api.history.UndoHistoryUpdate;
 import de.tobias.playwall.common.net.RequestMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 public class UndoManager
 {
 	private final ApplicationContext context;
+	private final MessageSource messageSource;
 
 	private final List<UndoItem> history = new ArrayList<>();
 	private int cursor = -1;
@@ -29,7 +32,7 @@ public class UndoManager
 		history.add(undoItem);
 		cursor = history.size() - 1;
 
-		publishHistoryStateUpdate();
+		publishHistoryStateUpdate(null);
 	}
 
 	public RequestMessage getUndoOperation()
@@ -39,10 +42,11 @@ public class UndoManager
 			return null;
 		}
 
-		final RequestMessage inverseRequest = history.get(cursor).inverseRequest();
+		final UndoItem undoItem = history.get(cursor);
+		final RequestMessage inverseRequest = undoItem.inverseRequest();
 		cursor--;
 
-		publishHistoryStateUpdate();
+		publishHistoryStateUpdate(messageSource.getMessage("undo.description.long.postfix.undo", new Object[]{undoItem.longDescription()}, LocaleContextHolder.getLocale()));
 
 		return inverseRequest;
 	}
@@ -54,19 +58,20 @@ public class UndoManager
 			return null;
 		}
 
-		final RequestMessage request = history.get(cursor + 1).request();
+		final UndoItem undoItem = history.get(cursor + 1);
+		final RequestMessage request = undoItem.request();
 		cursor++;
 
-		publishHistoryStateUpdate();
+		publishHistoryStateUpdate(messageSource.getMessage("undo.description.long.postfix.redo", new Object[]{undoItem.longDescription()}, LocaleContextHolder.getLocale()));
 
 		return request;
 	}
 
-	private void publishHistoryStateUpdate()
+	private void publishHistoryStateUpdate(String message)
 	{
-		final String nextUndoOperation = cursor < 0 ? null : history.get(cursor).description();
-		final String nextRedoOperation = cursor >= history.size() - 1 ? null : history.get(cursor + 1).description();
-		context.publishEvent(new UndoHistoryUpdate(nextUndoOperation, nextRedoOperation));
+		final String nextUndoOperation = cursor < 0 ? null : history.get(cursor).shortDescription();
+		final String nextRedoOperation = cursor >= history.size() - 1 ? null : history.get(cursor + 1).shortDescription();
+		context.publishEvent(new UndoHistoryUpdate(nextUndoOperation, nextRedoOperation, message));
 	}
 
 	void clear()

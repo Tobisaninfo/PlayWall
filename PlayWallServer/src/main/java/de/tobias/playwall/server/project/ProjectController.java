@@ -3,6 +3,7 @@ package de.tobias.playwall.server.project;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.pad.Pad;
+import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -76,6 +77,11 @@ public class ProjectController
 	public Pad getPad(UUID padId)
 	{
 		return loadedProject.getPad(padId);
+	}
+
+	public Page getPageByPad(UUID padId)
+	{
+		return loadedProject.getPageByPad(padId);
 	}
 
 	public List<PadController> getPlayingPadControllers()

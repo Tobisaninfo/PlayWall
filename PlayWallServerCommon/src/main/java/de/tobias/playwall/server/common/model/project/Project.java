@@ -26,6 +26,17 @@ public class Project
 				.findFirst();
 	}
 
+	public Page getPageByPad(UUID padId)
+	{
+		return getPages().stream()
+				.filter(page ->
+						page.getPads().stream()
+								.anyMatch(pad -> pad.getId().equals(padId))
+				)
+				.findFirst()
+				.orElse(null);
+	}
+
 	public Pad getPad(UUID padId)
 	{
 		return getPages().stream()

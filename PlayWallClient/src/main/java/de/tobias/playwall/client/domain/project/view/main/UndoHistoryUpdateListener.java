@@ -33,6 +33,11 @@ class UndoHistoryUpdateListener implements UpdateMessageEventListener<UndoHistor
 		{
 			controller.getRedoMenuItem().setText(Localization.getString(Strings.UI_MENU_EDIT_REDO));
 		}
+
+		if(message.getMessage() != null)
+		{
+			controller.showNotification(message.getMessage());
+		}
 	}
 
 	@Override

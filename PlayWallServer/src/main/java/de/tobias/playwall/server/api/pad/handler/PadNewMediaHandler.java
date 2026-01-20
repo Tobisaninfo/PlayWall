@@ -96,20 +96,22 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 	@Override
 	public UndoItem getInverseOperation(PadNewMediaRequest request)
 	{
-		final String shortDescription = messageSource.getMessage("undo.description.short.pad.new.media", new Object[]{}, LocaleContextHolder.getLocale());
-
 		final Pad pad = projectController.getPad(request.getPadId());
+
+		final String shortDescription = messageSource.getMessage("undo.description.short.pad.new.media", new Object[]{}, LocaleContextHolder.getLocale());
+		final String pageName = projectController.getPageByPad(pad.getId()).getName();
+		final String longDescription = messageSource.getMessage("undo.description.long.pad.new.media", new Object[]{pad.getPosition() + 1, pageName}, LocaleContextHolder.getLocale());
+
 		if(pad.getContent() == null)
 		{
-			return new UndoItem(shortDescription, request, new PadDeleteContentRequest(pad.getId()));
+			return new UndoItem(shortDescription, longDescription, request, new PadDeleteContentRequest(pad.getId()));
 		}
-
 
 		final RequestMessage reloadOldMediaRequest = switch(pad.getContent())
 		{
 			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
 		};
-		return new UndoItem(shortDescription, request, new CompoundRequest(List.of(
+		return new UndoItem(shortDescription, longDescription, request, new CompoundRequest(List.of(
 				reloadOldMediaRequest,
 				new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)) // Set old pad settings (name, loop, volume, ...)
 		)));

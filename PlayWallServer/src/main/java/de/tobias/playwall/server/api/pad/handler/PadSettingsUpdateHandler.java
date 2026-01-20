@@ -88,6 +88,8 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 	{
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.settings", new Object[]{}, LocaleContextHolder.getLocale());
-		return new UndoItem(shortDescription, requestMessage, new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)));
+		final String pageName = projectController.getPageByPad(pad.getId()).getName();
+		final String longDescription = messageSource.getMessage("undo.description.long.pad.settings", new Object[]{pad.getPosition() + 1, pageName}, LocaleContextHolder.getLocale());
+		return new UndoItem(shortDescription, longDescription, requestMessage, new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)));
 	}
 }

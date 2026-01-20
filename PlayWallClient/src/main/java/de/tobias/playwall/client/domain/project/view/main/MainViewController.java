@@ -353,6 +353,11 @@ public class MainViewController extends ViewControllerBase
 				.findFirst().orElse(null);
 	}
 
+	public void showNotification(String message)
+	{
+		notificationPane.showAndHide(message, ViewConstants.DEFAULT_SNACKBAR_SHOW);
+	}
+
 	private Node createMenu()
 	{
 		final Menu menuFile = createMenuFile();
