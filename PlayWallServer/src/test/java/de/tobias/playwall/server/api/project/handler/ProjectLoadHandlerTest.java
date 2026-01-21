@@ -1,10 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectLoadRequest;
 import de.tobias.playwall.server.TestUtils;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -80,9 +78,8 @@ class ProjectLoadHandlerTest
 		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
 		when(projectRepository.loadProject(projectId)).thenThrow(new ProjectNotExistsException(projectId));
 
-		assertThatThrownBy(() -> handler.handleRequest(new ProjectLoadRequest(projectId)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNotExistsError.class);
+		final ProjectLoadRequest request = new ProjectLoadRequest(projectId);
+		assertThatThrownBy(() -> handler.handleRequest(request))
+				.isInstanceOf(ProjectNotExistsException.class);
 	}
 }

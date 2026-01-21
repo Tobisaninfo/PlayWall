@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
-public class ProjectNotExistsException extends Exception
+public class ProjectNotExistsException extends RuntimeException
 {
 	private final UUID projectId;
 }

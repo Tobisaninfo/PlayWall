@@ -2,7 +2,6 @@ package de.tobias.playwall.common.net;
 
 import de.tobias.playwall.common.api.ServerError;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,6 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class ErrorMessage extends ResponseMessage
 {
 	private String message;

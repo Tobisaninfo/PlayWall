@@ -1,12 +1,11 @@
 package de.tobias.playwall.server.net;
 
 import de.tobias.playwall.common.api.StackTraceError;
-import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.UpdateMessage;
 import de.tobias.playwall.server.SystemTrayHandler;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.net.exception.AnnotatedExceptionTextWebSocketHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +21,16 @@ import tools.jackson.databind.json.JsonMapper;
 
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 @SuppressWarnings({"java:S3740"})
-public class ServerWebSocketHandler extends TextWebSocketHandler
+public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandler
 {
 	private static final Set<WebSocketSession> SESSIONS = new HashSet<>();
 
@@ -67,59 +69,19 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	}
 
 	@Override
-	protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message)
+	protected void doHandleTextMessage(WebSocketSession session, RequestMessage requestMessage) throws Exception
 	{
-		final RequestMessage parsedMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
-		log.debug("Received: {}", message.getPayload());
-
-		try
+		final Optional<ResponseMessage> responseMessageOptional = requestExecutor.execute(requestMessage);
+		final TextMessage textResponse;
+		if(responseMessageOptional.isPresent())
 		{
-			final Optional<ResponseMessage> responseMessageOptional = requestExecutor.execute(parsedMessage);
-			final TextMessage textResponse;
-			if(responseMessageOptional.isPresent())
-			{
-				textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessageOptional.get()));
-			}
-			else
-			{
-				textResponse = new TextMessage(objectMapper.writeValueAsString(new ResponseMessage(parsedMessage.getMessageId())));
-			}
-			sendToClients(textResponse, List.of(session)); // TODO: Do not send to all clients, only updates should be sent to all clients
+			textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessageOptional.get()));
 		}
-		catch(PlayWallServerException e)
+		else
 		{
-			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), e.getError());
-			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
-			sendToClients(textResponse, List.of(session)); // TODO: Do not send to all clients
+			textResponse = new TextMessage(objectMapper.writeValueAsString(new ResponseMessage(requestMessage.getMessageId())));
 		}
-		catch(Exception e)
-		{
-			final String stackTrace = ExceptionUtils.getStackTrace(e);
-			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), new StackTraceError(stackTrace));
-			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
-			sendToClients(textResponse, List.of(session));  // TODO: Do not send to all clients
-			log.error("Error processing request", e);
-		}
-	}
-
-	private static synchronized void sendToClients(TextMessage textResponse, Collection<WebSocketSession> sessions)
-	{
-		log.debug("Sending: {}", textResponse.getPayload());
-
-		for(WebSocketSession webSocketSession : sessions)
-		{
-			if(webSocketSession.isOpen())
-			{
-				try
-				{
-					webSocketSession.sendMessage(textResponse);
-				}
-				catch(Exception e)
-				{
-					log.error("Error on sending message: {}", textResponse.getPayload(), e);
-				}
-			}
-		}
+		sendToClients(textResponse, List.of(session));
 	}
 
 	private void updateSystemTray()
