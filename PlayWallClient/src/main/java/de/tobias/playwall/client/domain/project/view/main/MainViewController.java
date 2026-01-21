@@ -492,7 +492,13 @@ public class MainViewController extends ViewControllerBase
 	{
 		final MenuItem menuItem = new MenuItem(Localization.getString(localizationKey), createFontIcon(fontIconType));
 		menuItem.setAccelerator(shortcut);
-		eventHandler.ifPresent(menuItem::setOnAction);
+		eventHandler.ifPresent(handler -> menuItem.setOnAction(event -> {
+			if(loadingOverlay.isVisible())
+			{
+				return;
+			}
+			handler.handle(event);
+		}));
 		menuItem.setDisable(eventHandler.isEmpty());
 		return menuItem;
 	}
