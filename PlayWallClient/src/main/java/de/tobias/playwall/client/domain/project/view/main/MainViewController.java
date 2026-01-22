@@ -110,6 +110,7 @@ public class MainViewController extends ViewControllerBase
 
 	private ProjectSettingsViewController projectSettingsViewController;
 
+	@FXML
 	private VolumeSlider volumeSlider;
 
 	@Override
@@ -159,8 +160,6 @@ public class MainViewController extends ViewControllerBase
 		undoHistoryUpdateListener = new UndoHistoryUpdateListener(this);
 		eventHandler.registerListener(undoHistoryUpdateListener);
 
-		volumeSlider = new VolumeSlider(VolumeSlider.DEFAULT_VALUE);
-		volumeSlider.setPrefWidth(350);
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
 			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
 			{
@@ -176,7 +175,6 @@ public class MainViewController extends ViewControllerBase
 				Logger.error(e.getMessage());
 			}
 		});
-		toolbar.getChildren().add(volumeSlider);
 	}
 
 	@Override

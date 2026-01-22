@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HeaderBar?>
+<?import de.tobias.playwall.client.view.components.VolumeSlider?>
 
 <?import javafx.scene.layout.StackPane?>
 <StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -20,6 +21,7 @@
                     <children>
                         <FlowPane fx:id="pageButtonsFlowPane" alignment="CENTER_LEFT" hgap="14.0"
                                   maxWidth="1.7976931348623157E308" vgap="14.0"/>
+                        <VolumeSlider fx:id="volumeSlider" maxValue="100" prefWidth="350"/>
                     </children>
                 </HBox>
                 <AnchorPane fx:id="gridContainer" VBox.vgrow="ALWAYS">

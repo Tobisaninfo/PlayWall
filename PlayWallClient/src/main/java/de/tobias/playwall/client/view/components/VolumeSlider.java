@@ -25,6 +25,11 @@ public class VolumeSlider extends HBox
 	private final Label label;
 	private final Slider slider;
 
+	public VolumeSlider()
+	{
+		this(DEFAULT_VALUE);
+	}
+
 	public VolumeSlider(int maxValue)
 	{
 		label = new Label();
@@ -93,6 +98,16 @@ public class VolumeSlider extends HBox
 		label.setText((int) value + "%");
 	}
 
+	public double getMaxValue()
+	{
+		return slider.getMax();
+	}
+
+	public void setMaxValue(double maxValue)
+	{
+		slider.setMax(Math.min(maxValue, BOOSTED_VALUE));
+	}
+
 	public DoubleProperty valueProperty()
 	{
 		return slider.valueProperty();
@@ -104,12 +119,12 @@ public class VolumeSlider extends HBox
 
 		final MessageFormat messageFormat = new MessageFormat(
 				"-slider-track-color: linear-gradient(to right, " +
-						"{0} 0%, " +
-						"{0} {2}%, " +
-						"{1} {2}%, " +
-						"{1} {3}%, " +
-						"{0} {3}%, " +
-						"{0} 100%);", Locale.ENGLISH);
+				"{0} 0%, " +
+				"{0} {2}%, " +
+				"{1} {2}%, " +
+				"{1} {3}%, " +
+				"{0} {3}%, " +
+				"{0} 100%);", Locale.ENGLISH);
 
 		final String color = value <= DEFAULT_VALUE ? ViewConstants.PRIMARY_COLOR : ViewConstants.DANGER_COLOR;
 
