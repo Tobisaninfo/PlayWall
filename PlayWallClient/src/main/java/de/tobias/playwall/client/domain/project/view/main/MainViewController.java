@@ -17,6 +17,7 @@ import de.tobias.playwall.client.domain.pad.PadMapper;
 import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadataMapper;
@@ -93,11 +94,13 @@ public class MainViewController extends ViewControllerBase
 
 	private final FluentClient client;
 	private final PadViewProvider padViewProvider;
+	private final PageMapper pageMapper;
 	private final PadMapper padMapper;
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final UpdateMessageEventHandler eventHandler;
 
 	private ProjectLoadedListener projectLoadedListener;
+	private PageAddListener pageAddListener;
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
@@ -148,6 +151,8 @@ public class MainViewController extends ViewControllerBase
 
 		projectLoadedListener = new ProjectLoadedListener(this);
 		eventHandler.registerListener(projectLoadedListener);
+		pageAddListener = new PageAddListener(projectController, this, pageMapper);
+		eventHandler.registerListener(pageAddListener);
 		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
 		padLoadedListener = new PadLoadedListener(projectController, this);
@@ -340,7 +345,7 @@ public class MainViewController extends ViewControllerBase
 		padViews.clear();
 	}
 
-	private void buildPageButtons()
+	void buildPageButtons()
 	{
 		pageButtonsFlowPane.getChildren().clear();
 		for(Page page : projectController.getProject().getPages())
@@ -351,6 +356,7 @@ public class MainViewController extends ViewControllerBase
 			button.setUserData(page);
 			pageButtonsFlowPane.getChildren().add(button);
 		}
+		highlightPageButton(currentPage);
 	}
 
 	public void showLoadingOverlay(boolean visible)
@@ -378,13 +384,18 @@ public class MainViewController extends ViewControllerBase
 		}
 
 		// Highlight the current page button
+		highlightPageButton(page);
+
+		styleable.renderStylesheets(getStage(), page);
+	}
+
+	private void highlightPageButton(Page page)
+	{
 		pageButtonsFlowPane.getChildren().forEach(node -> node.getStyleClass().remove(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
 		pageButtonsFlowPane.getChildren().stream()
 				.filter(button -> button.getUserData().equals(page))
 				.findFirst()
 				.ifPresent(button -> button.getStyleClass().add(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
-
-		styleable.renderStylesheets(getStage(), page);
 	}
 
 	public PadView getPadViewForPosition(int position)

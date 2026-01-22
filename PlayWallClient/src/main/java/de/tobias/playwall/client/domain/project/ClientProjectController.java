@@ -24,10 +24,7 @@ public class ClientProjectController
 
 		for(Page page : project.getPages())
 		{
-			for(Pad pad : page.getPads())
-			{
-				createPadController(pad);
-			}
+			createPadControllerForPage(page);
 		}
 	}
 
@@ -68,6 +65,20 @@ public class ClientProjectController
 		for(ClientPadController padController : padControllers.values())
 		{
 			padController.setProjectMetadata(projectMetadata);
+		}
+	}
+
+	public void addPage(Page page)
+	{
+		project.getPages().add(page);
+		createPadControllerForPage(page);
+	}
+
+	private void createPadControllerForPage(Page page)
+	{
+		for(Pad pad : page.getPads())
+		{
+			createPadController(pad);
 		}
 	}
 }
