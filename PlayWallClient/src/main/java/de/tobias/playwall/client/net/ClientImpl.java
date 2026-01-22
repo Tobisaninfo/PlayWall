@@ -144,10 +144,9 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public Page addPage(String name) throws PlayWallApiException
+	public void addPage() throws PlayWallApiException
 	{
-		final PageAddResponse response = clientWebSocketHandler.send(new PageAddRequest(name));
-		return pageMapper.pageDtoToPage(response.getPage());
+		clientWebSocketHandler.send(new PageAddRequest());
 	}
 
 	@Override

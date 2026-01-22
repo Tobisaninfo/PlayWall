@@ -39,6 +39,7 @@ public class IconDeclaration
 				new IconUsage(IconUsageCategory.PAD, "Medienfehler"),
 				new IconUsage(IconUsageCategory.PAD, "Medium nicht gefunden")
 		)));
+		data.add(new IconEntry(FontAwesomeType.PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite hinzufügen"))));
 
 		// pad
 		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));

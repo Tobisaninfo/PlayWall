@@ -5,10 +5,8 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class PageAddRequest extends RequestMessage
 {
-	private String name;
 }

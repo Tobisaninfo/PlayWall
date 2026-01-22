@@ -38,7 +38,7 @@ public interface Client
 
 	void redo() throws PlayWallApiException;
 
-	Page addPage(String name) throws PlayWallApiException;
+	void addPage() throws PlayWallApiException;
 
 	Page renamePage(UUID pageId, String newName) throws PlayWallApiException;
 

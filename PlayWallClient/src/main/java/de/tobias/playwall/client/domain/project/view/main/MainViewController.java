@@ -81,6 +81,10 @@ public class MainViewController extends ViewControllerBase
 
 	@FXML
 	private HBox toolbar;
+	@FXML
+	private Button pageAddButton;
+	@FXML
+	private VolumeSlider volumeSlider;
 
 	private LoadingView loadingOverlay;
 
@@ -109,9 +113,6 @@ public class MainViewController extends ViewControllerBase
 	private final ClientProjectController projectController;
 
 	private ProjectSettingsViewController projectSettingsViewController;
-
-	@FXML
-	private VolumeSlider volumeSlider;
 
 	@Override
 	@SuppressWarnings({"java:S1874", "deprecation"})
@@ -175,6 +176,7 @@ public class MainViewController extends ViewControllerBase
 				Logger.error(e.getMessage());
 			}
 		});
+		pageAddButton.setGraphic(new FontIcon(FontAwesomeType.PLUS_SOLID));
 	}
 
 	@Override
@@ -401,6 +403,24 @@ public class MainViewController extends ViewControllerBase
 	{
 		notificationPane.showAndHide(message, ViewConstants.DEFAULT_SNACKBAR_SHOW);
 	}
+
+	// Action Handlers
+
+	@FXML
+	private void onPageAdd(ActionEvent event)
+	{
+		try
+		{
+			client.currentProject().addPage();
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO: Error Handling
+			throw new RuntimeException(e);
+		}
+	}
+
+	// Menu
 
 	private Node createMenu()
 	{
