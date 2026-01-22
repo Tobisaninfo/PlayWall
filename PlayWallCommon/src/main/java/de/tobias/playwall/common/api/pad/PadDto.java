@@ -12,6 +12,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class PadDto
 {
 	private UUID id;

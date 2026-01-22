@@ -3,11 +3,13 @@ package de.tobias.playwall.client.domain.project;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.AudioPadContent;
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.utils.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,4 +70,19 @@ class ClientProjectControllerTest extends AbstractTest
 		assertThat(project.getPad(padId)).isNull();
 	}
 
+	@Test
+	void testAddPage()
+	{
+		final Pad pad1 = new Pad(UUID.randomUUID(), 0, null, null, null);
+		final Pad pad2 = new Pad(UUID.randomUUID(), 0, null, null, null);
+		final Page newPage = new Page(UUID.randomUUID(), "Seite 3", 2, List.of(pad1, pad2));
+
+		controller.addPage(newPage);
+
+		assertThat(project.getPage(newPage.getPosition())).isEqualTo(newPage);
+		assertThat(controller.getPadController(pad1.getId())).isNotNull()
+				.satisfies(padController -> assertThat(padController.getPad()).isEqualTo(pad1));
+		assertThat(controller.getPadController(pad2.getId())).isNotNull()
+				.satisfies(padController -> assertThat(padController.getPad()).isEqualTo(pad2));
+	}
 }
