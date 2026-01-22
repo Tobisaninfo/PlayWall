@@ -214,10 +214,14 @@ public class MainViewController extends ViewControllerBase
 
 	private void onWindowClosed()
 	{
+		eventHandler.unregisterListener(projectLoadedListener);
+		eventHandler.unregisterListener(pageAddListener);
 		eventHandler.unregisterListener(padUpdateListener);
 		eventHandler.unregisterListener(padLoadedListener);
 		eventHandler.unregisterListener(padStatusListener);
+		eventHandler.unregisterListener(padPlayPositionListener);
 		eventHandler.unregisterListener(projectSettingsUpdateListener);
+		eventHandler.unregisterListener(undoHistoryUpdateListener);
 
 		try
 		{
