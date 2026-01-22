@@ -9,7 +9,6 @@
 <?import de.tobias.playwall.client.view.components.VolumeSlider?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.Button?>
-<?import de.thecodelabs.utils.ui.icon.FontIcon?>
 
 <StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
            prefHeight="400.0"
@@ -24,7 +23,7 @@
                         <FlowPane fx:id="pageButtonsFlowPane" alignment="CENTER_LEFT" hgap="14.0"
                                   maxWidth="1.7976931348623157E308" vgap="14.0"/>
                         <Button fx:id="pageAddButton" onAction="#onPageAdd" focusTraversable="false"/>
-                        <VolumeSlider fx:id="volumeSlider" maxValue="100" prefWidth="350"/>
+                        <VolumeSlider fx:id="volumeSlider" maxValue="100" minWidth="200"/>
                     </children>
                 </HBox>
                 <AnchorPane fx:id="gridContainer" VBox.vgrow="ALWAYS">
