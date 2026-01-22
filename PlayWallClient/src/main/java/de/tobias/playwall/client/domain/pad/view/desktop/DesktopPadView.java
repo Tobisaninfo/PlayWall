@@ -214,6 +214,15 @@ public class DesktopPadView implements PadView
 		}
 		else
 		{
+			namePreviewLabel.setText(null);
+			timeLabel.setText(null);
+
+			loopLabel.setVisible(false);
+			triggerLabel.setVisible(false);
+			playlistLabel.setVisible(false);
+			notFoundLabel.setVisible(false);
+			errorLabel.setVisible(false);
+
 			removeStyleClasses();
 		}
 		busyView.showProgress(false);
