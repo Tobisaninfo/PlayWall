@@ -80,11 +80,11 @@ class ProjectServiceTest
 	void testAddPage()
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_2.json");
-		final Page page = projectService.addPage(project, "New Page");
+		final Page page = projectService.addPage(project);
 
 		assertThat(page)
 				.extracting(Page::getPosition, Page::getName)
-				.containsExactly(0, "New Page");
+				.containsExactly(0, "Seite 1");
 
 		assertThat(project.getPages().getFirst().getPads()).hasSize(6 * 4);
 	}

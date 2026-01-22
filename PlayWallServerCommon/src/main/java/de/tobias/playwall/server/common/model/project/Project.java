@@ -45,6 +45,11 @@ public class Project
 				.findFirst().orElse(null);
 	}
 
+	public boolean containsPageName(String name)
+	{
+		return pages.stream().map(Page::getName).anyMatch(name::equals);
+	}
+
 	@SuppressWarnings("java:S6204")
 	public Project copy()
 	{

@@ -64,7 +64,7 @@ public class ProjectService
 				.metadata(projectMetadata)
 				.pages(new ArrayList<>())
 				.build();
-		addPage(project, messageSource.getMessage("page.name.default", new Object[]{1}, LocaleContextHolder.getLocale()));
+		addPage(project);
 
 		projectRepository.saveProject(project);
 
@@ -76,9 +76,18 @@ public class ProjectService
 		projectMetadataRepository.renameProject(projectId, name);
 	}
 
-	public Page addPage(Project project, String name)
+	public Page addPage(Project project)
 	{
 		final int nextPagePosition = project.getPages().size();
+
+		String name;
+		int pageNameIndex = nextPagePosition + 1;
+		do
+		{
+			name = messageSource.getMessage("page.name.default", new Object[]{pageNameIndex}, LocaleContextHolder.getLocale());
+			pageNameIndex++;
+		}
+		while(project.containsPageName(name));
 
 		final Page page = Page.builder()
 				.id(UUID.randomUUID())

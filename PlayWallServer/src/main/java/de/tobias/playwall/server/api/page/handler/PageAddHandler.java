@@ -32,8 +32,8 @@ class PageAddHandler implements GetRequestHandler<PageAddRequest>
 	{
 		try
 		{
-			final Page page = projectService.addPage(projectController.getLoadedProject(), "");
-			return Optional.of(new PageAddResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
+			final Page page = projectService.addPage(projectController.getLoadedProject());
+			return Optional.empty();
 		}
 		catch(ProjectNotLoadedException _)
 		{
