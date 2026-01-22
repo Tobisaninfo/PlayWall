@@ -8,6 +8,7 @@ open module de.tobias.playwall.common {
 	exports de.tobias.playwall.common.api.pad.update;
 	exports de.tobias.playwall.common.api.pad.request;
 	exports de.tobias.playwall.common.api.page.request;
+	exports de.tobias.playwall.common.api.page.update;
 	exports de.tobias.playwall.common.api.project.request;
 	exports de.tobias.playwall.common.api.project.update;
 	exports de.tobias.playwall.common.api.pad;
