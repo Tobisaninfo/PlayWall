@@ -52,6 +52,26 @@ public class ProjectController
 		padControllers.clear();
 	}
 
+	public void loadPage(Page page)
+	{
+		page.getPads().stream()
+				.filter(pad -> pad.getContent() != null)
+				.forEach(pad -> {
+					final PadController controller = createNewPadController(pad);
+					controller.load();
+				});
+	}
+
+	public void unloadPage(Page page)
+	{
+		page.getPads()
+				.stream().filter(pad -> padControllers.containsKey(pad.getId()))
+				.forEach(pad -> {
+					padControllers.get(pad.getId()).unload();
+					padControllers.remove(pad.getId());
+				});
+	}
+
 	@SneakyThrows
 	private void loadPads()
 	{

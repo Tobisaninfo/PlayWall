@@ -10,4 +10,6 @@ import org.mapstruct.MappingConstants;
 public interface PageMapper
 {
 	PageDto pageToPageDto(Page page);
+
+	Page pageDtoToPage(PageDto page);
 }

@@ -9,4 +9,6 @@ import org.mapstruct.MappingConstants;
 public interface PadMapper
 {
 	PadDto padToPadDto(Pad pad);
+
+	Pad padDtoToPad(PadDto pad);
 }

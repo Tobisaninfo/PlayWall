@@ -6,6 +6,8 @@ import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.event.EventListener;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
+import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
+import de.tobias.playwall.common.api.page.update.PageReplaceUpdate;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 
@@ -21,6 +23,30 @@ class PageListener
 	{
 		final Page page = pageMapper.pageDtoToPage(message.getPage());
 		projectController.addPage(page);
+		Platform.runLater(() -> {
+			mainViewController.buildPageButtons();
+			mainViewController.showPage(page);
+		});
+	}
+
+	@EventListener(PageInsertUpdate.class)
+	void onPageInsertUpdate(PageInsertUpdate message)
+	{
+		final Page page = pageMapper.pageDtoToPage(message.getPage());
+		projectController.insertPage(page, message.getIndex(), message.getPositions());
+
+		Platform.runLater(() -> {
+			mainViewController.buildPageButtons();
+			mainViewController.showPage(page);
+		});
+	}
+
+	@EventListener(PageReplaceUpdate.class)
+	void onPageInsertUpdate(PageReplaceUpdate message)
+	{
+		final Page page = pageMapper.pageDtoToPage(message.getPage());
+		projectController.replacePage(page, message.getIndex());
+
 		Platform.runLater(() -> {
 			mainViewController.buildPageButtons();
 			mainViewController.showPage(page);

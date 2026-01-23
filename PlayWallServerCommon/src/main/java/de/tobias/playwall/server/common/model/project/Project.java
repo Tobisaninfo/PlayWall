@@ -5,6 +5,7 @@ import de.tobias.playwall.server.common.model.page.Page;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -43,6 +44,14 @@ public class Project
 				.flatMap(page -> page.getPads().stream())
 				.filter(pad -> pad.getId().equals(padId))
 				.findFirst().orElse(null);
+	}
+
+	public Map<UUID, Integer> getPagePositions()
+	{
+		return getPages().stream().collect(Collectors.toMap(
+				Page::getId,
+				Page::getPosition
+		));
 	}
 
 	public boolean containsPageName(String name)

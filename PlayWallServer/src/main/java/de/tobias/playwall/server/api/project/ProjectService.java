@@ -106,6 +106,21 @@ public class ProjectService
 		return page;
 	}
 
+	public void insertPage(Project project, Page page, int index)
+	{
+		project.getPages().add(index, page);
+		for(int i = index + 1; i < project.getPages().size(); i++)
+		{
+			project.getPages().get(i).setPosition(i);
+		}
+	}
+
+	public void replacePage(Project project, Page page, int index)
+	{
+		page.setPosition(index);
+		project.getPages().set(index, page);
+	}
+
 	public Page renamePage(Project project, UUID pageId, String newName) throws PageNotExistsException
 	{
 		final Optional<Page> pageOptional = project.getPageById(pageId);

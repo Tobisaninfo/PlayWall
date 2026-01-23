@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectService;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,8 +51,7 @@ class PageDeleteHandlerTest
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		final Optional<ResponseMessage> response = handler.handleRequest(new PageDeleteRequest(pageId));
-		assertThat(response).isEmpty();
+		handler.handleRequest(new PageDeleteRequest(pageId));
 
 		assertThat(project.getPageById(pageId)).isEmpty();
 	}

@@ -13,4 +13,7 @@ public interface PadContentMapper
 {
 	@SubclassMapping(target = AudioPadContentDto.class, source = AudioPadContent.class)
 	PadContentDto padContentToPadContentDto(PadContent pad);
+
+	@SubclassMapping(target = AudioPadContent.class, source = AudioPadContentDto.class)
+	PadContent padContentDtoToPadContent(PadContentDto pad);
 }
