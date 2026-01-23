@@ -51,9 +51,6 @@ class PadUpdateListenerTest extends AbstractViewControllerTest
 	@Test
 	void testPadUpdateListener()
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.showProject(project);

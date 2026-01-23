@@ -6,7 +6,6 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.view.about.AboutDialog;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.page.PageDto;
@@ -25,7 +24,7 @@ import java.util.stream.IntStream;
 import static org.mockito.Mockito.mock;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
-class PageAddListenerTest extends AbstractViewControllerTest
+class PageListenerTest extends AbstractViewControllerTest
 {
 	private AppContext context;
 
@@ -55,9 +54,6 @@ class PageAddListenerTest extends AbstractViewControllerTest
 	@Test
 	void testPadUpdateListener(FxRobot robot)
 	{
-		final AboutDialog dialog = mock(AboutDialog.class);
-		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
-
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
 			mainViewController.showProject(project);
