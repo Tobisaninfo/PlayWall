@@ -97,7 +97,7 @@ public class MainViewController extends ViewControllerBase
 	private final UpdateMessageEventHandler eventHandler;
 
 	private ProjectLoadedListener projectLoadedListener;
-	private PageAddListener pageAddListener;
+	private PageListener pageAddListener;
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
@@ -148,7 +148,7 @@ public class MainViewController extends ViewControllerBase
 
 		projectLoadedListener = new ProjectLoadedListener(this);
 		eventHandler.registerListener(projectLoadedListener);
-		pageAddListener = new PageAddListener(projectController, this, pageMapper);
+		pageAddListener = new PageListener(projectController, this, pageMapper);
 		eventHandler.registerListener(pageAddListener);
 		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
