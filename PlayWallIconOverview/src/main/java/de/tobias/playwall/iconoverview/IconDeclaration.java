@@ -40,6 +40,7 @@ public class IconDeclaration
 				new IconUsage(IconUsageCategory.PAD, "Medium nicht gefunden")
 		)));
 		data.add(new IconEntry(FontAwesomeType.PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite hinzufügen"))));
+		data.add(new IconEntry(FontAwesomeType.TRASH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"))));
 
 		// pad
 		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));

@@ -356,9 +356,25 @@ public class MainViewController extends ViewControllerBase
 			button.setOnAction(_ -> showPage(page));
 			button.setFocusTraversable(false);
 			button.setUserData(page);
+			button.setContextMenu(new ContextMenu(
+					createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)))
+			));
 			pageButtonsFlowPane.getChildren().add(pageButtonsFlowPane.getChildren().size() - 1, button);
 		}
 		highlightPageButton(currentPage);
+	}
+
+	private void onPageDeleteMenuItem(Page page)
+	{
+		try
+		{
+			client.currentProject().page(page.getId()).delete();
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO: Error Handling
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void showLoadingOverlay(boolean visible)

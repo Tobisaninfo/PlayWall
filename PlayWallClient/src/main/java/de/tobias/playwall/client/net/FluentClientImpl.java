@@ -161,7 +161,7 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public void delete(String name) throws PlayWallApiException
+		public void delete() throws PlayWallApiException
 		{
 			delegate.deletePage(pageId);
 		}

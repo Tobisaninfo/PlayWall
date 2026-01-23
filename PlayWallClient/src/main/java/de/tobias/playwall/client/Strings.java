@@ -15,6 +15,8 @@ public class Strings
 	public static final String UI_DIALOG_PROJECT_DELETE_CONTENT = "ui.dialog.project.delete.content";
 	public static final String UI_PLACEHOLDER_PROJECT = "ui.placeholder.project";
 
+	public static final String UI_PAGE_DELETE = "ui.page.delete";
+
 	public static final String UI_MENU_FILE = "ui.menu.file";
 	public static final String UI_MENU_FILE_NEW_PROJECT = "ui.menu.file.new.project";
 	public static final String UI_MENU_FILE_RECENT_PROJECT = "ui.menu.file.recent.projects";

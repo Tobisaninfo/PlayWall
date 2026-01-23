@@ -62,7 +62,7 @@ public interface FluentClient
 	{
 		Page rename(String name) throws PlayWallApiException;
 
-		void delete(String name) throws PlayWallApiException;
+		void delete() throws PlayWallApiException;
 
 		Page duplicate(String name) throws PlayWallApiException;
 	}
