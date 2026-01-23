@@ -146,6 +146,14 @@ public class ProjectService
 
 	public boolean deletePage(Project project, UUID pageId)
 	{
-		return project.getPages().removeIf(page -> page.getId().equals(pageId));
+		final boolean removed = project.getPages().removeIf(page -> page.getId().equals(pageId));
+
+		// Update remaining positions
+		for(int i = 0; i < project.getPages().size(); i++)
+		{
+			project.getPages().get(i).setPosition(i);
+		}
+
+		return removed;
 	}
 }

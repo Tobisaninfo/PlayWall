@@ -74,6 +74,19 @@ public class ClientProjectController
 		createPadControllerForPage(page);
 	}
 
+	public void deletePage(UUID pageId, Map<UUID, Integer> positions)
+	{
+		// Remove the old pad controllers
+		final Page page = project.getPage(pageId);
+		page.getPads().forEach(pad -> padControllers.remove(pad.getId()));
+
+		// Remove page
+		project.getPages().remove(page);
+
+		// Update remaining page positions
+		positions.forEach((id, position) -> project.getPage(id).setPosition(position));
+	}
+
 	private void createPadControllerForPage(Page page)
 	{
 		for(Pad pad : page.getPads())

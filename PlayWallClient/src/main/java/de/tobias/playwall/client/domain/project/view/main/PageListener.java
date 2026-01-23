@@ -5,6 +5,7 @@ import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.event.EventListener;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
+import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 
@@ -23,6 +24,20 @@ class PageListener
 		Platform.runLater(() -> {
 			mainViewController.buildPageButtons();
 			mainViewController.showPage(page);
+		});
+	}
+
+	@EventListener(PageDeleteUpdate.class)
+	void onPageDeleteUpdate(PageDeleteUpdate message)
+	{
+		projectController.deletePage(message.getPageId(), message.getPositions());
+		Platform.runLater(() -> {
+			mainViewController.buildPageButtons();
+
+			if(mainViewController.getCurrentPage().getId().equals(message.getPageId()))
+			{
+				mainViewController.showPage(0);
+			}
 		});
 	}
 }

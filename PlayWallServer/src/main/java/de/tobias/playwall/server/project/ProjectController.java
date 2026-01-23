@@ -106,4 +106,9 @@ public class ProjectController
 		padControllers.put(pad.getId(), controller);
 		return controller;
 	}
+
+	public void deletePadControllersForPage(Page page)
+	{
+		page.getPads().forEach(pad -> padControllers.remove(pad.getId()));
+	}
 }

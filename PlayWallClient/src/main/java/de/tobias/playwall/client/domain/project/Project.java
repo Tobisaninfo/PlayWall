@@ -25,6 +25,14 @@ public class Project
 		return pages.stream().flatMap(page -> page.getPads().stream()).filter(pad -> pad.getContent() != null).count();
 	}
 
+	public Page getPage(UUID pageId)
+	{
+		return pages.stream()
+				.filter(page -> page.getId().equals(pageId))
+				.findFirst()
+				.orElse(null);
+	}
+
 	public Page getPage(int position)
 	{
 		return pages.stream()
