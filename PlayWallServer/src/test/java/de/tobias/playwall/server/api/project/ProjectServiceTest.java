@@ -82,11 +82,26 @@ class ProjectServiceTest
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_2.json");
 		final Page page = projectService.addPage(project);
 
+		assertThat(page.getId()).isNotNull();
 		assertThat(page)
 				.extracting(Page::getPosition, Page::getName)
 				.containsExactly(0, "Seite 1");
 
-		assertThat(project.getPages().getFirst().getPads()).hasSize(6 * 4);
+		assertThat(project.getPages().getLast().getPads()).hasSize(6 * 4);
+	}
+
+	@Test
+	void testAddPageNameAlreadyExists()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
+		final Page page = projectService.addPage(project);
+
+		assertThat(page.getId()).isNotNull();
+		assertThat(page)
+				.extracting(Page::getPosition, Page::getName)
+				.containsExactly(2, "Seite 4");
+
+		assertThat(project.getPages().getLast().getPads()).hasSize(6 * 4);
 	}
 
 	@Test
@@ -104,9 +119,7 @@ class ProjectServiceTest
 	void test_renamePage_unknownPage()
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		assertThatThrownBy(() -> {
-			projectService.renamePage(project, UUID.randomUUID(), "Updated Page Name");
-		}).isInstanceOf(PageNotExistsException.class);
+		assertThatThrownBy(() -> projectService.renamePage(project, UUID.randomUUID(), "Updated Page Name")).isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
@@ -147,8 +160,6 @@ class ProjectServiceTest
 	void test_duplicatePage_unknownPage()
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		assertThatThrownBy(() -> {
-			projectService.duplicatePage(project, UUID.randomUUID(), "Duplicated Page");
-		}).isInstanceOf(PageNotExistsException.class);
+		assertThatThrownBy(() -> projectService.duplicatePage(project, UUID.randomUUID(), "Duplicated Page")).isInstanceOf(PageNotExistsException.class);
 	}
 }
