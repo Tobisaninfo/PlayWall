@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.pad.view.desktop;
 
+import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
@@ -23,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
@@ -33,6 +35,8 @@ import static de.tobias.playwall.client.domain.pad.view.control.PadStyleClasses.
 @Getter
 public class DesktopPadView implements PadView
 {
+	private Tooltip tooltip;
+
 	private Label indexLabel;
 	private Label loopLabel;
 	private Label triggerLabel;
@@ -176,6 +180,8 @@ public class DesktopPadView implements PadView
 	public void updateFromPad(int currentPage, ClientPadController controller)
 	{
 		this.padController = controller;
+		updateTooltip();
+
 		if(padController == null)
 		{
 			reset();
@@ -231,6 +237,20 @@ public class DesktopPadView implements PadView
 		removeStyleClasses();
 
 		busyView.showProgress(false);
+	}
+
+	private void updateTooltip()
+	{
+		if(tooltip != null)
+		{
+			Tooltip.uninstall(superRoot, tooltip);
+			tooltip = null;
+		}
+		if(padController != null && AppContextHolder.getInstance().get(App.class).isDebug())
+		{
+			tooltip = new Tooltip(padController.getPad().getId().toString());
+			Tooltip.install(superRoot, tooltip);
+		}
 	}
 
 	@Override
