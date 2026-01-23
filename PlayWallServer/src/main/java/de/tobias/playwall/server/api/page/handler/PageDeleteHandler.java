@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.page.handler;
 
 import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
+import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.net.ResponseMessage;
@@ -68,6 +69,13 @@ class PageDeleteHandler implements GetRequestHandler<PageDeleteRequest>
 						Page::getId,
 						Page::getPosition
 				))));
+
+				// Create new page if last page is deleted
+				if(project.getPages().isEmpty())
+				{
+					final Page newPage = projectService.addPage(project);
+					context.publishEvent(new PageAddUpdate(pageMapper.pageToPageDto(newPage)));
+				}
 
 				return Optional.empty();
 			}
