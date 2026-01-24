@@ -95,6 +95,11 @@ public class ProjectController
 				.toList();
 	}
 
+	public void stopAll()
+	{
+		getPlayingPadControllers().forEach(PadController::stop);
+	}
+
 	public PadController createNewPadController(Pad pad)
 	{
 		final PadController controller = padControllerFactory.createPadContentController(context, pad);

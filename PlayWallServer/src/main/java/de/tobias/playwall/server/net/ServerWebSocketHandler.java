@@ -9,6 +9,7 @@ import de.tobias.playwall.common.net.UpdateMessage;
 import de.tobias.playwall.server.SystemTrayHandler;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.RequestExecutor;
+import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -35,6 +36,8 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	private final SystemTrayHandler systemTrayHandler;
 	private final RequestExecutor requestExecutor;
 
+	private final ProjectController controller;
+
 	@EventListener(UpdateMessage.class)
 	void handleUpdateMessageEvents(UpdateMessage message) throws JsonProcessingException
 	{
@@ -56,6 +59,11 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
 		SESSIONS.remove(session);
 		updateSystemTray();
+
+		if(SESSIONS.isEmpty())
+		{
+			controller.stopAll();
+		}
 	}
 
 	@Override

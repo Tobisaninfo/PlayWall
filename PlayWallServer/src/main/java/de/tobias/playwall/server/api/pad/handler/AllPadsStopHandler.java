@@ -7,7 +7,6 @@ import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
-import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -32,7 +31,7 @@ class AllPadsStopHandler implements RequestHandler<AllPadsStopRequest>
 			throw new PlayWallServerException(messageSource, error);
 		}
 
-		projectController.getPlayingPadControllers().forEach(PadController::stop);
+		projectController.stopAll();
 
 		return Optional.empty();
 	}
