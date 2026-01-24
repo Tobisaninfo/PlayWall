@@ -228,6 +228,5 @@ class ClientImpl implements Client
 	public void stopAllPads() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new AllPadsStopRequest());
-
 	}
 }
