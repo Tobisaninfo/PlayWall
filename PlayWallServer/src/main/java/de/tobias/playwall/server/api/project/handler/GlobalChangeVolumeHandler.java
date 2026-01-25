@@ -1,7 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.request.GlobaleChangeVolumeRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -9,23 +8,22 @@ import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.pad.PadContent;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.OneTimeActionRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @RequestHandlerTyped(GlobaleChangeVolumeRequest.class)
 @RequiredArgsConstructor
-class GlobalChangeVolumeHandler implements RequestHandler<GlobaleChangeVolumeRequest>
+class GlobalChangeVolumeHandler implements OneTimeActionRequestHandler<GlobaleChangeVolumeRequest>
 {
 	private final ProjectController projectController;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(GlobaleChangeVolumeRequest requestMessage) throws IOException, PlayWallServerException
+	public void handleRequest(GlobaleChangeVolumeRequest requestMessage) throws IOException, PlayWallServerException
 	{
 		final Project loadedProject = projectController.getLoadedProject();
 
@@ -49,7 +47,5 @@ class GlobalChangeVolumeHandler implements RequestHandler<GlobaleChangeVolumeReq
 				}
 			}
 		}
-
-		return Optional.empty();
 	}
 }

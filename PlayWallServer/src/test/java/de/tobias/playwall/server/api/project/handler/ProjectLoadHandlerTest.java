@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectLoadRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
@@ -14,7 +13,6 @@ import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.config.SyncAsyncConfig;
-import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -50,9 +47,6 @@ class ProjectLoadHandlerTest
 	private ProjectRepository projectRepository;
 
 	@Autowired
-	private ProjectController projectController;
-
-	@Autowired
 	private ProjectLoadHandler handler;
 
 	@MockitoBean
@@ -75,9 +69,7 @@ class ProjectLoadHandlerTest
 		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
 		when(projectRepository.loadProject(projectId)).thenReturn(project);
 
-		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectLoadRequest(projectId));
-
-		assertThat(response).isEmpty();
+		handler.handleRequest(new ProjectLoadRequest(projectId));
 
 		assertThat(applicationEvents.stream(PadLoadedUpdate.class)).hasSize(2);
 	}

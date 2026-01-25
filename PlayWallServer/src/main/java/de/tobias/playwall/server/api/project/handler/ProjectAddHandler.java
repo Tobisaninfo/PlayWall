@@ -9,7 +9,7 @@ import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(ProjectAddRequest.class)
-class ProjectAddHandler implements RequestHandler<ProjectAddRequest>
+class ProjectAddHandler implements GetRequestHandler<ProjectAddRequest> // TODO: OneTimeAction with update listener?
 {
 	private final ProjectService projectService;
 	private final ProjectMetadataMapper mapper;

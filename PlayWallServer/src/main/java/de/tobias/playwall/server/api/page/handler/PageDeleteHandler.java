@@ -7,7 +7,7 @@ import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageDeleteRequest.class)
-class PageDeleteHandler implements RequestHandler<PageDeleteRequest>
+class PageDeleteHandler implements GetRequestHandler<PageDeleteRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

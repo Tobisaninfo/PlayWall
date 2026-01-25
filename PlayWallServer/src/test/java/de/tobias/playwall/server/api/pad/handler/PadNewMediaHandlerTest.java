@@ -4,7 +4,6 @@ import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -24,7 +23,6 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -66,9 +64,7 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getName()).isEqualTo("example_1");
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class);
@@ -97,9 +93,7 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getName()).isEqualTo("example_1");
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class);

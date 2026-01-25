@@ -5,7 +5,6 @@ import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -27,7 +26,6 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -93,9 +91,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
 				.name("Fancy project name")
 				.build());
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getMetadata().getName()).isEqualTo("Fancy project name");
 
@@ -128,9 +124,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
 				.name("Project 1")
 				.build());
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getMetadata().getName()).isEqualTo("Project 1");
 

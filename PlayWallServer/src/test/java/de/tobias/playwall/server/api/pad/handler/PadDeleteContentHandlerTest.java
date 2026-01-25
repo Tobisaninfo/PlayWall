@@ -5,7 +5,6 @@ import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -25,7 +24,6 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -68,9 +66,7 @@ class PadDeleteContentHandlerTest extends AbstractUndoableRequestHandlerTest<Pad
 		applicationEvents.clear();
 
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getContent()).isNull();
 
@@ -92,8 +88,7 @@ class PadDeleteContentHandlerTest extends AbstractUndoableRequestHandlerTest<Pad
 		applicationEvents.clear();
 
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getContent()).isNull();
 

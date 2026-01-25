@@ -2,12 +2,9 @@ package de.tobias.playwall.server.api.history.handler;
 
 import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.net.RequestHandlerFactory;
 import de.tobias.playwall.server.api.history.UndoManager;
-import de.tobias.playwall.server.net.RequestHandler;
-import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.net.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 
@@ -17,13 +14,13 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestHandlerTyped(UndoRequest.class)
 @SuppressWarnings({"rawtypes", "unchecked"})
-class UndoHandler implements RequestHandler<UndoRequest>
+class UndoHandler implements OneTimeActionRequestHandler<UndoRequest>
 {
 	private final UndoManager undoManager;
 	private final ApplicationContext context;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(UndoRequest ignored) throws IOException, PlayWallServerException
+	public void handleRequest(UndoRequest ignored) throws IOException, PlayWallServerException
 	{
 		final RequestMessage undoOperation = undoManager.getUndoOperation();
 
@@ -34,8 +31,13 @@ class UndoHandler implements RequestHandler<UndoRequest>
 			throw new IllegalArgumentException("Cannot handle request message type " + undoOperation.getClass().getSimpleName());
 		}
 
-		requestHandlerOptional.get().handleRequest(undoOperation);
+		final RequestHandler requestHandler = requestHandlerOptional.get();
 
-		return Optional.empty();
+		switch(requestHandler)
+		{
+			case UndoableRequestHandler handler -> handler.handleRequest(undoOperation);
+			case OneTimeActionRequestHandler handler -> handler.handleRequest(undoOperation);
+			case GetRequestHandler handler -> handler.handleRequest(undoOperation);
+		}
 	}
 }

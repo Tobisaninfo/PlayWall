@@ -4,7 +4,6 @@ import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.history.UndoManager;
-import de.tobias.playwall.server.api.history.Undoable;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,20 +29,21 @@ public class RequestExecutor
 
 		final RequestHandler requestHandler = requestHandlerOptional.get();
 
-		UndoItem undoItem = null;
-		if(requestHandler instanceof Undoable undoable)
+		return switch(requestHandler)
 		{
-			undoItem = undoable.getInverseOperation(requestMessage);
-		}
-
-		final Optional response = requestHandler.handleRequest(requestMessage);
-
-		// Add to undo manager if previous code does not throw any exception. This means the handler execution was successful.
-		if(undoItem != null)
-		{
-			undoManager.addUndoOperation(undoItem);
-		}
-
-		return response;
+			case UndoableRequestHandler handler ->
+			{
+				final Optional<UndoItem> undoItem = handler.handleRequest(requestMessage);
+				// Add to undo manager if previous code does not throw any exception. This means the handler execution was successful.
+				undoItem.ifPresent(undoManager::addUndoOperation);
+				yield Optional.empty();
+			}
+			case OneTimeActionRequestHandler handler ->
+			{
+				handler.handleRequest(requestMessage);
+				yield Optional.empty();
+			}
+			case GetRequestHandler handler -> handler.handleRequest(requestMessage);
+		};
 	}
 }

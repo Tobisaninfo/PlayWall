@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.request.PadChangeVolumeRequest;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -24,7 +23,6 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -74,9 +72,7 @@ class PadChangeVolumeHandlerTest
 		applicationEvents.clear();
 
 		final PadChangeVolumeRequest request = new PadChangeVolumeRequest(padId, 0.25);
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class)
 				.satisfies(padContent -> assertThat(((AudioPadContent) padContent).getVolume()).isEqualTo(1.0)); // Not persisted
@@ -97,9 +93,7 @@ class PadChangeVolumeHandlerTest
 		applicationEvents.clear();
 
 		final PadChangeVolumeRequest request = new PadChangeVolumeRequest(padId, 0.25);
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		verify(audioHandler).setVolume(0.125);
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();

@@ -2,11 +2,8 @@ package de.tobias.playwall.server.api.handler;
 
 import de.tobias.playwall.common.api.CompoundRequest;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.net.RequestHandlerFactory;
-import de.tobias.playwall.server.net.RequestHandler;
-import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.net.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 
@@ -16,12 +13,12 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestHandlerTyped(CompoundRequest.class)
 @SuppressWarnings({"rawtypes", "unchecked"})
-class CompoundRequestHandler implements RequestHandler<CompoundRequest>
+class CompoundRequestHandler implements OneTimeActionRequestHandler<CompoundRequest>
 {
 	private final ApplicationContext context;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(CompoundRequest compoundRequest) throws IOException, PlayWallServerException
+	public void handleRequest(CompoundRequest compoundRequest) throws IOException, PlayWallServerException
 	{
 		final RequestHandlerFactory requestHandlerFactory = context.getBean(RequestHandlerFactory.class);
 		for(RequestMessage requestMessage : compoundRequest.getRequests())
@@ -31,9 +28,14 @@ class CompoundRequestHandler implements RequestHandler<CompoundRequest>
 			{
 				throw new IllegalArgumentException("Cannot handle request message type " + requestMessage.getClass().getSimpleName());
 			}
+			final RequestHandler requestHandler = requestHandlerOptional.get();
 
-			requestHandlerOptional.get().handleRequest(requestMessage);
+			switch(requestHandler)
+			{
+				case UndoableRequestHandler handler -> handler.handleRequest(requestMessage);
+				case OneTimeActionRequestHandler handler -> handler.handleRequest(requestMessage);
+				case GetRequestHandler handler -> handler.handleRequest(requestMessage);
+			}
 		}
-		return Optional.empty();
 	}
 }

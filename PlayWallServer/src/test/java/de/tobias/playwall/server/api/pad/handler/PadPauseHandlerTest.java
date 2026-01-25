@@ -3,7 +3,6 @@ package de.tobias.playwall.server.api.pad.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadPauseRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -18,11 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -60,9 +57,8 @@ class PadPauseHandlerTest
 		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(true).build());
 		projectController.loadProject(project).get();
 
-		final Optional<ResponseMessage> response = handler.handleRequest(new PadPauseRequest(padId));
+		handler.handleRequest(new PadPauseRequest(padId));
 
-		assertThat(response).isEmpty();
 		verify(audioHandler).pause();
 	}
 

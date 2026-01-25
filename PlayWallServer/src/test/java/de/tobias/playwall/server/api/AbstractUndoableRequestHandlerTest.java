@@ -6,18 +6,18 @@ import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.net.RequestHandler;
-import de.tobias.playwall.server.net.RequestHandlerFactory;
-import de.tobias.playwall.server.net.UndoableRequestHandler;
+import de.tobias.playwall.server.net.*;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessage>
@@ -42,13 +42,25 @@ public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessag
 		projectController.loadProject(project).get();
 		final Project expected = project.copy();
 
-		final UndoItem undoItem = handler.getInverseOperation(requestMessage);
 
-		handler.handleRequest(requestMessage);
+		final Optional<UndoItem> undoItemOptional = handler.handleRequest(requestMessage);
 		assertThat(project).isNotEqualTo(expected);
 
+
+		if(undoItemOptional.isEmpty())
+		{
+			fail("No undo item was created.");
+		}
+
+		final UndoItem undoItem = undoItemOptional.get();
 		final RequestHandler inverseHandler = requestHandlerFactory.getRequestHandler(undoItem.inverseRequest().getClass()).orElseThrow();
-		inverseHandler.handleRequest(undoItem.inverseRequest());
+
+		switch(inverseHandler)
+		{
+			case UndoableRequestHandler handler2 -> handler2.handleRequest(undoItem.inverseRequest());
+			case OneTimeActionRequestHandler handler2 -> handler2.handleRequest(undoItem.inverseRequest());
+			case GetRequestHandler handler2 -> handler2.handleRequest(undoItem.inverseRequest());
+		}
 
 		assertThat(project).isEqualTo(expected);
 	}

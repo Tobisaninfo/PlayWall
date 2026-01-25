@@ -9,7 +9,7 @@ import de.tobias.playwall.server.api.page.PageMapper;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageAddRequest.class)
-class PageAddHandler implements RequestHandler<PageAddRequest>
+class PageAddHandler implements GetRequestHandler<PageAddRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

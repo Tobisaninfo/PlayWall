@@ -19,8 +19,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.util.Optional;
+
 @RequestHandlerTyped(PadSettingsUpdateRequest.class)
-class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateRequest>
+class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 
@@ -38,8 +40,10 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 	}
 
 	@Override
-	public void handleUndoableRequest(PadSettingsUpdateRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(PadSettingsUpdateRequest requestMessage) throws PlayWallServerException
 	{
+		final UndoItem inverseOperation = getInverseOperation(requestMessage);
+
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
 		if(pad == null)
 		{
@@ -53,6 +57,8 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 		updatePadContent(requestMessage.getPad().getContent(), pad);
 
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
+
+		return Optional.of(inverseOperation);
 	}
 
 	private void updatePadContent(PadContentDto requestPadContent, Pad pad)
@@ -83,8 +89,7 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 		}
 	}
 
-	@Override
-	public UndoItem getInverseOperation(PadSettingsUpdateRequest requestMessage)
+	private UndoItem getInverseOperation(PadSettingsUpdateRequest requestMessage)
 	{
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.settings", new Object[]{}, LocaleContextHolder.getLocale());

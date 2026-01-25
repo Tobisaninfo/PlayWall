@@ -3,7 +3,6 @@ package de.tobias.playwall.server.api.pad.handler;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.request.AllPadsStopRequest;
 import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -21,7 +20,6 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -65,8 +63,7 @@ class AllPadsStopHandlerTest extends AbstractUndoableRequestHandlerTest<PadSetti
 		projectController.getPadController(padId).play(false);
 		assertThat(projectController.getPadController(padId).getStatus()).isNotEqualTo(PadControllerStatus.READY);
 
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(new AllPadsStopRequest());
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(new AllPadsStopRequest());
 
 		assertThat(projectController.getPadController(padId).getStatus()).isEqualTo(PadControllerStatus.READY);
 	}

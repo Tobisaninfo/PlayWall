@@ -21,9 +21,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestHandlerTyped(PadDeleteContentRequest.class)
-class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentRequest>
+class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContentRequest>
 {
 	private final ProjectController projectController;
 
@@ -41,8 +42,10 @@ class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentReq
 	}
 
 	@Override
-	public void handleUndoableRequest(PadDeleteContentRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(PadDeleteContentRequest requestMessage) throws PlayWallServerException
 	{
+		final UndoItem inverseOperation = getInverseOperation(requestMessage);
+
 		final PadController oldController = projectController.getPadController(requestMessage.getPadId());
 		if(oldController != null)
 		{
@@ -60,10 +63,11 @@ class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentReq
 		pad.setContent(null);
 		pad.setName(null);
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
+
+		return Optional.of(inverseOperation);
 	}
 
-	@Override
-	public UndoItem getInverseOperation(PadDeleteContentRequest request)
+	private UndoItem getInverseOperation(PadDeleteContentRequest request)
 	{
 		final Pad pad = projectController.getPad(request.getPadId());
 		if(pad.getContent() == null)

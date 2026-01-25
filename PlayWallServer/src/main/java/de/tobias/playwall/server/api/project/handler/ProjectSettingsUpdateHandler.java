@@ -22,9 +22,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.util.Optional;
+
 @RequestHandlerTyped(ProjectSettingsUpdateRequest.class)
 @RequiredArgsConstructor
-class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSettingsUpdateRequest>
+class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
@@ -33,8 +35,10 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 	private final ProjectMetadataMapper projectMetadataMapper;
 
 	@Override
-	public void handleUndoableRequest(ProjectSettingsUpdateRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(ProjectSettingsUpdateRequest requestMessage) throws PlayWallServerException
 	{
+		final UndoItem inverseOperation = getInverseOperation(requestMessage);
+
 		final Project project = projectController.getLoadedProject();
 		if(project == null)
 		{
@@ -51,6 +55,8 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 			projectService.rename(project.getMetadata().getId(), requestMessage.getProjectMetadata().name());
 
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(project.getMetadata())));
+
+			return Optional.of(inverseOperation);
 		}
 		catch(ProjectNameAlreadyExistsException _)
 		{
@@ -66,8 +72,7 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 		}
 	}
 
-	@Override
-	public UndoItem getInverseOperation(ProjectSettingsUpdateRequest request)
+	private UndoItem getInverseOperation(ProjectSettingsUpdateRequest request)
 	{
 		final ProjectMetadataDto oldMetadata = projectMetadataMapper.projectMetadataToProjectMetadataDto(projectController.getLoadedProject().getMetadata());
 		final String shortDescription = messageSource.getMessage("undo.description.short.project.settings", new Object[]{}, LocaleContextHolder.getLocale());

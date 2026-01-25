@@ -5,7 +5,7 @@ import de.tobias.playwall.common.api.project.request.ProjectListResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectService;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequestHandlerTyped(ProjectListRequest.class)
 @AllArgsConstructor
-class ProjectListHandler implements RequestHandler<ProjectListRequest>
+class ProjectListHandler implements GetRequestHandler<ProjectListRequest>
 {
 	private final ProjectService projectService;
 	private final ProjectMetadataMapper mapper;

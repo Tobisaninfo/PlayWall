@@ -12,7 +12,7 @@ import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageDuplicateRequest.class)
-class PageDuplicateHandler implements RequestHandler<PageDuplicateRequest>
+class PageDuplicateHandler implements GetRequestHandler<PageDuplicateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;

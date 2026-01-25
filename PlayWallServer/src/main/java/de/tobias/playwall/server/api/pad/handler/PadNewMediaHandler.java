@@ -28,10 +28,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executor;
 
 @RequestHandlerTyped(PadNewMediaRequest.class)
-class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
+class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 {
 	private final ProjectController projectController;
 
@@ -51,8 +52,10 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 	}
 
 	@Override
-	public void handleUndoableRequest(PadNewMediaRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(PadNewMediaRequest requestMessage) throws PlayWallServerException
 	{
+		final UndoItem undoItem = getInverseOperation(requestMessage);
+
 		final PadController oldController = projectController.getPadController(requestMessage.getPadId());
 		if(oldController != null)
 		{
@@ -91,10 +94,11 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 
 		// Load pad async
 		asyncExecutor.execute(newPadController::load);
+
+		return Optional.of(undoItem);
 	}
 
-	@Override
-	public UndoItem getInverseOperation(PadNewMediaRequest request)
+	private UndoItem getInverseOperation(PadNewMediaRequest request)
 	{
 		final Pad pad = projectController.getPad(request.getPadId());
 

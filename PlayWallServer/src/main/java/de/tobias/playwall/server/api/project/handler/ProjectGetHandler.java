@@ -9,7 +9,7 @@ import de.tobias.playwall.server.api.project.ProjectMapper;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(ProjectGetRequest.class)
-class ProjectGetHandler implements RequestHandler<ProjectGetRequest>
+class ProjectGetHandler implements GetRequestHandler<ProjectGetRequest>
 {
 	private final ProjectService projectService;
 	private final ProjectMapper projectMapper;

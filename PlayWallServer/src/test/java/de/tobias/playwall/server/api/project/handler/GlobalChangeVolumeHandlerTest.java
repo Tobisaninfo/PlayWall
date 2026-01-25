@@ -3,7 +3,6 @@ package de.tobias.playwall.server.api.project.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.request.GlobaleChangeVolumeRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -22,7 +21,6 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -72,9 +70,7 @@ class GlobalChangeVolumeHandlerTest
 		applicationEvents.clear();
 
 		final GlobaleChangeVolumeRequest request = new GlobaleChangeVolumeRequest(0.5);
-		final Optional<ResponseMessage> responseMessage = handler.handleRequest(request);
-
-		assertThat(responseMessage).isEmpty();
+		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class)
 				.satisfies(padContent -> assertThat(((AudioPadContent) padContent).getVolume()).isEqualTo(0.25));

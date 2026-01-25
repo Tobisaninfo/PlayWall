@@ -3,7 +3,6 @@ package de.tobias.playwall.server.api.project.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.request.ProjectSaveRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
@@ -20,9 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -64,9 +61,8 @@ class ProjectSaveHandlerTest
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		projectController.loadProject(project).get();
 
-		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectSaveRequest());
+		handler.handleRequest(new ProjectSaveRequest());
 
-		assertThat(response).isEmpty();
 		verify(projectRepository).saveProject(project);
 	}
 

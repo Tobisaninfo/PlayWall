@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectDeleteRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectRepository;
@@ -11,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -37,12 +34,10 @@ class ProjectDeleteHandlerTest
 		when(projectMetadataRepository.deleteProject(id)).thenReturn(true);
 		when(projectRepository.deleteProject(id)).thenReturn(true);
 
-		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectDeleteRequest(id));
+		handler.handleRequest(new ProjectDeleteRequest(id));
 
 		verify(projectMetadataRepository).deleteProject(id);
 		verify(projectRepository).deleteProject(id);
-
-		assertThat(response).isEmpty();
 	}
 
 	@Test
