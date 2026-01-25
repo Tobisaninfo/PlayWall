@@ -1,0 +1,23 @@
+{
+    "metadata": {
+        "id": "097ff337-af29-4fa9-8ca1-0ba6cb6fb843",
+        "name": "Project 1",
+        "numberOfHorizontalPads": 6,
+        "numberOfVerticalPads": 4,
+        "volume": 1.0
+    },
+    "pages": [
+        {
+            "id": "5eee891b-7e4e-451a-b4be-116770f73677",
+            "name": "Seite 1",
+            "position": 0,
+            "pads": []
+        },
+        {
+            "id": "209e515b-4237-4fc3-968b-79da4356836d",
+            "name": "Seite 3",
+            "position": 1,
+            "pads": []
+        }
+    ]
+}
