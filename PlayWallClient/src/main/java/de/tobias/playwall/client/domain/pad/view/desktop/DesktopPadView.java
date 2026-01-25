@@ -176,55 +176,60 @@ public class DesktopPadView implements PadView
 	public void updateFromPad(int currentPage, ClientPadController controller)
 	{
 		this.padController = controller;
-		if(padController != null)
+		if(padController == null)
 		{
-			final Pad pad = padController.getPad();
-			padBuilder = fluentClient.pad(pad.getId());
-			namePreviewLabel.setText(pad.getName());
+			reset();
+			return;
+		}
+		final Pad pad = padController.getPad();
+		padBuilder = fluentClient.pad(pad.getId());
+		namePreviewLabel.setText(pad.getName());
 
-			indexLabel.setText(pad.getReadablePosition());
+		indexLabel.setText(pad.getReadablePosition());
 
-			loopLabel.setVisible(false);
-			triggerLabel.setVisible(false);
-			playlistLabel.setVisible(false);
-			notFoundLabel.setVisible(false);
-			errorLabel.setVisible(false);
+		loopLabel.setVisible(false);
+		triggerLabel.setVisible(false);
+		playlistLabel.setVisible(false);
+		notFoundLabel.setVisible(false);
+		errorLabel.setVisible(false);
 
-			final PadContent padContent = pad.getContent();
-			if(padContent instanceof Loopable loopable)
-			{
-				loopLabel.setVisible(loopable.isLoop());
-			}
+		final PadContent padContent = pad.getContent();
+		if(padContent instanceof Loopable loopable)
+		{
+			loopLabel.setVisible(loopable.isLoop());
+		}
 
-			if(controller.getStatus() != null)
-			{
-				updateStatus(controller.getStatus());
-			}
-			else if(padContent != null)
-			{
-				updateStatus(PadStatus.READY);
-			}
-			else
-			{
-				updateStatus(PadStatus.EMPTY);
-			}
-			addStyleClasses(new PadIndex(pad.getPosition(), currentPage));
-
-			updateTimeNodes();
+		if(controller.getStatus() != null)
+		{
+			updateStatus(controller.getStatus());
+		}
+		else if(padContent != null)
+		{
+			updateStatus(PadStatus.READY);
 		}
 		else
 		{
-			namePreviewLabel.setText(null);
-			timeLabel.setText(null);
-
-			loopLabel.setVisible(false);
-			triggerLabel.setVisible(false);
-			playlistLabel.setVisible(false);
-			notFoundLabel.setVisible(false);
-			errorLabel.setVisible(false);
-
-			removeStyleClasses();
+			updateStatus(PadStatus.EMPTY);
 		}
+		addStyleClasses(new PadIndex(pad.getPosition(), currentPage));
+
+		updateTimeNodes();
+		busyView.showProgress(false);
+	}
+
+	private void reset()
+	{
+		namePreviewLabel.setText(null);
+		timeLabel.setText(null);
+
+		loopLabel.setVisible(false);
+		triggerLabel.setVisible(false);
+		playlistLabel.setVisible(false);
+		notFoundLabel.setVisible(false);
+		errorLabel.setVisible(false);
+
+		removeStyleClasses();
+
 		busyView.showProgress(false);
 	}
 
