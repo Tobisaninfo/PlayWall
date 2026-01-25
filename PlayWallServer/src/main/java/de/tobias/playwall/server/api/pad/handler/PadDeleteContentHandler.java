@@ -64,13 +64,13 @@ class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContent
 		pad.setName(null);
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
-		return Optional.of(inverseOperation);
+		return Optional.ofNullable(inverseOperation);
 	}
 
 	private UndoItem getInverseOperation(PadDeleteContentRequest request)
 	{
 		final Pad pad = projectController.getPad(request.getPadId());
-		if(pad.getContent() == null)
+		if(pad == null || pad.getContent() == null)
 		{
 			return null;
 		}

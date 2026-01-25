@@ -58,7 +58,7 @@ class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpda
 
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
-		return Optional.of(inverseOperation);
+		return Optional.ofNullable(inverseOperation);
 	}
 
 	private void updatePadContent(PadContentDto requestPadContent, Pad pad)
@@ -92,6 +92,11 @@ class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpda
 	private UndoItem getInverseOperation(PadSettingsUpdateRequest requestMessage)
 	{
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
+		if(pad == null)
+		{
+			return null;
+		}
+
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.settings", new Object[]{}, LocaleContextHolder.getLocale());
 		final String pageName = projectController.getPageByPad(pad.getId()).getName();
 		final String longDescription = messageSource.getMessage("undo.description.long.pad.settings", new Object[]{pad.getPosition() + 1, pageName}, LocaleContextHolder.getLocale());

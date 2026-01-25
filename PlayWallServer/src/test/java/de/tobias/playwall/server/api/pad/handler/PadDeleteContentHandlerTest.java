@@ -77,7 +77,7 @@ class PadDeleteContentHandlerTest extends AbstractUndoableRequestHandlerTest<Pad
 	}
 
 	@Test
-	void testPadNewMediaHandlerOnAudioPad() throws Exception
+	void testPadDeleteMediaHandlerOnAudioPad() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
@@ -104,7 +104,7 @@ class PadDeleteContentHandlerTest extends AbstractUndoableRequestHandlerTest<Pad
 	}
 
 	@Test
-	void testPadNewMediaHandlerPadNotFound() throws Exception
+	void testPadDeleteMediaHandlerPadNotFound() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2d55-4734-8148-5fb657963616");
 

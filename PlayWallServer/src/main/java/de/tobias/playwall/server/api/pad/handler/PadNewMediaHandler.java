@@ -95,12 +95,16 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 		// Load pad async
 		asyncExecutor.execute(newPadController::load);
 
-		return Optional.of(undoItem);
+		return Optional.ofNullable(undoItem);
 	}
 
 	private UndoItem getInverseOperation(PadNewMediaRequest request)
 	{
 		final Pad pad = projectController.getPad(request.getPadId());
+		if(pad == null)
+		{
+			return null;
+		}
 
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.new.media", new Object[]{}, LocaleContextHolder.getLocale());
 		final String pageName = projectController.getPageByPad(pad.getId()).getName();
