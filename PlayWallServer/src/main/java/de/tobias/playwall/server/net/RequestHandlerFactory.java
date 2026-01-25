@@ -1,8 +1,6 @@
-package de.tobias.playwall.server.api;
+package de.tobias.playwall.server.net;
 
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.net.RequestHandler;
-import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;

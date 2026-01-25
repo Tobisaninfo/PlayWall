@@ -8,7 +8,6 @@ import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.UpdateMessage;
 import de.tobias.playwall.server.SystemTrayHandler;
 import de.tobias.playwall.server.api.PlayWallServerException;
-import de.tobias.playwall.server.api.RequestExecutor;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

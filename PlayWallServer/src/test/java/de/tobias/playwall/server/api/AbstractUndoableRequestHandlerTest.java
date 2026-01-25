@@ -7,6 +7,7 @@ import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandler;
+import de.tobias.playwall.server.net.RequestHandlerFactory;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Autowired;
