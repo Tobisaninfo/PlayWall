@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -52,7 +53,7 @@ class PageAddListenerTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testPadUpdateListener()
+	void testPadUpdateListener(FxRobot robot)
 	{
 		final AboutDialog dialog = mock(AboutDialog.class);
 		AppContextHolder.getInstance().registerLazySingleton(AboutDialog.class, _ -> dialog);
@@ -65,17 +66,17 @@ class PageAddListenerTest extends AbstractViewControllerTest
 		});
 		WaitForAsyncUtils.waitForFxEvents();
 
-		assertThat(mainViewController.getPageButtonsFlowPane()).hasExactlyChildren(2, ".button");
+		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
 
 		eventHandler.fireEvent(new PageAddUpdate(new PageDto(UUID.randomUUID(), "Page 3", 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null)).toList())));
 		WaitForAsyncUtils.waitForFxEvents();
 
-		assertThat(mainViewController.getPageButtonsFlowPane()).hasExactlyChildren(3, ".button");
-		assertThat(mainViewController.getPageButtonsFlowPane().getChildren())
+		assertThat(robot.lookup(".page-button").queryAll()).hasSize(3);
+		assertThat(robot.lookup(".page-button").queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactlyInAnyOrder("Page 1", "Page 2", "Page 3");
-		assertThat(mainViewController.getPageButtonsFlowPane().getChildren().getLast().getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
+		assertThat(robot.lookup(".page-button").queryAll()).last().satisfies(button -> assertThat(((Button) button).getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
 	}
 }

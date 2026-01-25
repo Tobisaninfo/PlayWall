@@ -58,8 +58,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Assert buttons
-		assertThat(mainViewController.getPageButtonsFlowPane()).hasExactlyChildren(2, ".button");
-		assertThat(mainViewController.getPageButtonsFlowPane().getChildren())
+		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
+		assertThat(robot.lookup(".page-button").queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactlyInAnyOrder("Page 1", "Page 2");
 

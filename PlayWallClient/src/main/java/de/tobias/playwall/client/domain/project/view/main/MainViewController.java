@@ -49,10 +49,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.controlsfx.control.action.Action;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
 
@@ -351,14 +348,15 @@ public class MainViewController extends ViewControllerBase
 
 	void buildPageButtons()
 	{
-		pageButtonsFlowPane.getChildren().clear();
+		pageButtonsFlowPane.getChildren().removeIf(node -> node.getUserData() != null);
 		for(Page page : projectController.getProject().getPages())
 		{
 			final Button button = new Button(page.getName());
+			button.getStyleClass().add("page-button");
 			button.setOnAction(_ -> showPage(page));
 			button.setFocusTraversable(false);
 			button.setUserData(page);
-			pageButtonsFlowPane.getChildren().add(button);
+			pageButtonsFlowPane.getChildren().add(pageButtonsFlowPane.getChildren().size() - 1, button);
 		}
 		highlightPageButton(currentPage);
 	}
@@ -397,7 +395,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		pageButtonsFlowPane.getChildren().forEach(node -> node.getStyleClass().remove(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
 		pageButtonsFlowPane.getChildren().stream()
-				.filter(button -> button.getUserData().equals(page))
+				.filter(button -> Objects.equals(button.getUserData(), page))
 				.findFirst()
 				.ifPresent(button -> button.getStyleClass().add(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
 	}
