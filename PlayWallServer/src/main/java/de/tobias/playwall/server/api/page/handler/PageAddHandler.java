@@ -51,7 +51,7 @@ class PageAddHandler implements UndoableRequestHandler<PageAddRequest>
 	private UndoItem getInverseOperation(PageAddRequest request, Page newPage)
 	{
 		final String shortDescription = messageSource.getMessage("undo.description.short.page.add", new Object[]{}, LocaleContextHolder.getLocale());
-		final String longDescription = messageSource.getMessage("undo.description.long.page.add", new Object[]{}, LocaleContextHolder.getLocale()); //N TODO: Page Name not available
+		final String longDescription = messageSource.getMessage("undo.description.long.page.add", new Object[]{newPage.getName()}, LocaleContextHolder.getLocale());
 
 		return new UndoItem(shortDescription, longDescription, request, new PageDeleteRequest(newPage.getId()));
 	}
