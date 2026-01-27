@@ -23,6 +23,7 @@ class PageListener
 	{
 		final Page page = pageMapper.pageDtoToPage(message.getPage());
 		projectController.addPage(page);
+
 		Platform.runLater(() -> {
 			mainViewController.buildPageButtons();
 			mainViewController.showPage(page);
@@ -42,7 +43,7 @@ class PageListener
 	}
 
 	@EventListener(PageReplaceUpdate.class)
-	void onPageInsertUpdate(PageReplaceUpdate message)
+	void onPageReplaceUpdate(PageReplaceUpdate message)
 	{
 		final Page page = pageMapper.pageDtoToPage(message.getPage());
 		projectController.replacePage(page, message.getIndex());
@@ -57,6 +58,7 @@ class PageListener
 	void onPageDeleteUpdate(PageDeleteUpdate message)
 	{
 		projectController.deletePage(message.getPageId(), message.getPositions());
+
 		Platform.runLater(() -> {
 			mainViewController.buildPageButtons();
 
