@@ -7,6 +7,9 @@ import de.tobias.playwall.server.api.PlayWallServerException;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * A RequestHandler to provide data as a return value to the client.
+ */
 public non-sealed interface GetRequestHandler<T extends RequestMessage> extends RequestHandler
 {
 	Optional<ResponseMessage> handleRequest(T requestMessage) throws IOException, PlayWallServerException;
