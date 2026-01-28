@@ -31,7 +31,7 @@ public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessag
 	@Autowired
 	protected RequestHandlerFactory requestHandlerFactory;
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({"unchecked", "rawtypes", "java:S1871"})
 	protected void testInverseOperation(UndoableRequestHandler<T> handler, T requestMessage) throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");

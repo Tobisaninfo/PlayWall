@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(CompoundRequest.class)
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "java:S1871"})
 class CompoundRequestHandler implements OneTimeActionRequestHandler<CompoundRequest>
 {
 	private final ApplicationContext context;

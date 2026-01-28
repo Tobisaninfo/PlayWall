@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(UndoRequest.class)
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked", "java:S1871"})
 class UndoHandler implements OneTimeActionRequestHandler<UndoRequest>
 {
 	private final UndoManager undoManager;
