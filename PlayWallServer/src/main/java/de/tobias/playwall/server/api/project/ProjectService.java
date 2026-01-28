@@ -108,8 +108,13 @@ public class ProjectService
 
 	public void insertPage(Project project, Page page, int index)
 	{
+		if(project.getPageById(page.getId()).isPresent())
+		{
+			throw new DuplicatedIdException(page.getId());
+		}
+
 		project.getPages().add(index, page);
-		for(int i = index + 1; i < project.getPages().size(); i++)
+		for(int i = index; i < project.getPages().size(); i++)
 		{
 			project.getPages().get(i).setPosition(i);
 		}
