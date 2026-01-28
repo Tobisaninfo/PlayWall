@@ -5,8 +5,11 @@ import de.tobias.playwall.common.api.page.request.PageAddRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.common.audio.AudioHandler;
+import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.project.ProjectController;
@@ -14,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
@@ -24,12 +28,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
-class PageAddHandlerTest
+class PageAddHandlerTest extends AbstractUndoableRequestHandlerTest<PageAddRequest>
 {
 	@Autowired
 	private ProjectController projectController;
@@ -46,9 +49,15 @@ class PageAddHandlerTest
 	@Autowired
 	private ApplicationEvents applicationEvents;
 
+	@MockitoBean
+	private AudioHandlerFactory audioHandlerFactory;
+
 	@BeforeEach
 	void init()
 	{
+		final AudioHandler audioHandler = mock(AudioHandler.class);
+		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
+
 		projectController.unloadProject();
 	}
 
@@ -103,5 +112,12 @@ class PageAddHandlerTest
 		verify(projectService, never()).addProject(any(), anyInt(), anyInt());
 	}
 
-	// TODO: Undo test after implementing PW-56
+	@Test
+	void testUndoOperation() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+
+		final PageAddRequest request = new PageAddRequest();
+		testInverseOperation(project, handler, request);
+	}
 }
