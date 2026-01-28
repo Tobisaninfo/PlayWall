@@ -59,7 +59,6 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 		final PadController oldController = projectController.getPadController(requestMessage.getPadId());
 		if(oldController != null)
 		{
-			oldController.stop();
 			oldController.unload();
 		}
 		final Pad pad = projectController.getPad(requestMessage.getPadId());

@@ -49,7 +49,6 @@ class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContent
 		final PadController oldController = projectController.getPadController(requestMessage.getPadId());
 		if(oldController != null)
 		{
-			oldController.stop();
 			oldController.unload();
 		}
 

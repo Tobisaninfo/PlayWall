@@ -48,6 +48,7 @@ public abstract class PadController
 
 	public void unload()
 	{
+		stop();
 		log.debug("Unload Pad {}", pad.getId());
 		unloadInternal();
 		setStatus(PadControllerStatus.EMPTY);

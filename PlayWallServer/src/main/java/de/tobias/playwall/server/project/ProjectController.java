@@ -67,7 +67,8 @@ public class ProjectController
 		page.getPads()
 				.stream().filter(pad -> padControllers.containsKey(pad.getId()))
 				.forEach(pad -> {
-					padControllers.get(pad.getId()).unload();
+					final PadController controller = padControllers.get(pad.getId());
+					controller.unload();
 					padControllers.remove(pad.getId());
 				});
 	}
