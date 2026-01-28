@@ -16,6 +16,7 @@ public class PadContentSettingsContainerFactory
 {
 	private final FluentClient fluentClient;
 
+	@SuppressWarnings("java:S1452")
 	public BasePadContentSettingsContainer<? extends PadContent> createPadContentSettingsContainer(Pad pad, PadSettingsViewController parentDialog)
 	{
 		PadContent padContent = pad.getContent();
