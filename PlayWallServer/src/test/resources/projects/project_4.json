@@ -11,13 +11,27 @@
             "id": "5eee891b-7e4e-451a-b4be-116770f73677",
             "name": "Seite 1",
             "position": 0,
-            "pads": []
+            "pads": [
+                {
+                    "id": "fc427184-2e55-4734-8148-5fb657963616",
+                    "name": "Test Pad",
+                    "position": 0,
+                    "content": null
+                }
+            ]
         },
         {
             "id": "209e515b-4237-4fc3-968b-79da4356836d",
             "name": "Seite 3",
             "position": 1,
-            "pads": []
+            "pads": [
+                {
+                    "id": "535e5130-2e46-4865-bb24-e2a55ac793f7",
+                    "name": "Test Pad",
+                    "position": 0,
+                    "content": null
+                }
+            ]
         }
     ]
 }
