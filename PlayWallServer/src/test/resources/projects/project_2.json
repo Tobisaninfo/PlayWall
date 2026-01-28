@@ -4,7 +4,10 @@
         "name": "Project 1",
         "numberOfHorizontalPads": 6,
         "numberOfVerticalPads": 4,
-        "volume": 1.0
+        "volume": 1.0,
+        "timeMode": "ELAPSED",
+        "defaultColor": "GRAY1",
+        "playColor": "RED3"
     },
     "pages": [
     ]
