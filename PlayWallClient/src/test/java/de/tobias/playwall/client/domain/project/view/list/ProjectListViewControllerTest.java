@@ -10,6 +10,7 @@ import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -30,7 +31,7 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 class ProjectListViewControllerTest extends AbstractViewControllerTest
 {
 	private static final UUID PROJECT_ID = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED);
+	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3);
 
 	private AppContext context;
 	private final Client client = mock(Client.class);
@@ -60,7 +61,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testProjectListDisplayAllProjects() throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED)));
+		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3)));
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -90,7 +91,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testNewProjectDialogOkay(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED);
+		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3);
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 
 		Platform.runLater(() -> {

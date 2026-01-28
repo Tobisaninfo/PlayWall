@@ -1,0 +1,51 @@
+package de.tobias.playwall.common.api.common;
+
+public enum Color
+{
+	RED1,
+	RED2,
+	RED3,
+
+	DARK_RED1,
+	DARK_RED2,
+	DARK_RED3,
+
+	PINK1,
+	PINK2,
+	PINK3,
+
+	PURPLE1,
+	PURPLE2,
+	PURPLE3,
+
+	LIGHT_BLUE1,
+	LIGHT_BLUE2,
+	LIGHT_BLUE3,
+
+	BLUE1,
+	BLUE2,
+	BLUE3,
+
+	LIGHT_GREEN1,
+	LIGHT_GREEN2,
+	LIGHT_GREEN3,
+
+	LIME1,
+	LIME2,
+	LIME3,
+
+	YELLOW1,
+	YELLOW2,
+	YELLOW3,
+
+	ORANGE1,
+	ORANGE2,
+	ORANGE3,
+
+	GRAY1,
+	GRAY2,
+	GRAY3,
+	GRAY4,
+	GRAY5,
+	GRAY6;
+}

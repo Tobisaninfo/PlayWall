@@ -2,6 +2,7 @@ package de.tobias.playwall.server.common.model.project;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 
@@ -38,6 +39,12 @@ public class ProjectMetadata
 	@Builder.Default
 	private TimeMode timeMode = TimeMode.ELAPSED;
 
+	@Builder.Default
+	private Color defaultColor = Color.GRAY1;
+
+	@Builder.Default
+	private Color playColor = Color.RED3;
+
 	@JsonIgnore
 	public int getNumberOfPadsPerPage()
 	{
@@ -53,6 +60,8 @@ public class ProjectMetadata
 				.numberOfVerticalPads(numberOfVerticalPads)
 				.volume(volume)
 				.timeMode(timeMode)
+				.defaultColor(defaultColor)
+				.playColor(playColor)
 				.build();
 	}
 }

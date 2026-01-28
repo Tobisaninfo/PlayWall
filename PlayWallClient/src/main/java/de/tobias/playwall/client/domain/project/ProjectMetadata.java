@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.project;
 
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 
@@ -19,6 +20,8 @@ public final class ProjectMetadata
 	private final int numberOfVerticalPads;
 	private double volume;
 	private TimeMode timeMode;
+	private ModernColor defaultColor;
+	private ModernColor playColor;
 
 	public int getNumberOfPadsPerPage()
 	{
