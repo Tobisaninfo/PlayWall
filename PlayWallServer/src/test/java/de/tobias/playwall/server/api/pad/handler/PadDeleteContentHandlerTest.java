@@ -126,8 +126,12 @@ class PadDeleteContentHandlerTest extends AbstractUndoableRequestHandlerTest<Pad
 	void testUndoOperation() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
+
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
 
-		testInverseOperation(handler, request);
+		testInverseOperation(project, handler, request);
 	}
 }

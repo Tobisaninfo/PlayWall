@@ -130,12 +130,16 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 	}
 
 	@Test
-	void testUndoOperation() throws Exception
+	void testUndoOperationForExistingMedia() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
-		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 
-		testInverseOperation(handler, request);
+		final String newMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString();
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, newMediaPath);
+
+		testInverseOperation(project, handler, request);
 	}
 }

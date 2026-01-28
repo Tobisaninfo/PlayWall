@@ -157,10 +157,12 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 	@Test
 	void testUndoOperation() throws Exception
 	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+
 		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
 				.name("Fancy project name")
 				.build());
 
-		testInverseOperation(handler, request);
+		testInverseOperation(project, handler, request);
 	}
 }
