@@ -1,5 +1,7 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.tobias.playwall.common.api.common.Color;
+import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
@@ -13,6 +15,7 @@ import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,15 +93,21 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 
 		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
 				.name("Fancy project name")
+				.timeMode(TimeMode.ELAPSED_AND_TOTAL)
+				.defaultColor(Color.DARK_RED1)
+				.playColor(Color.BLUE1)
 				.build());
 		handler.handleRequest(request);
 
-		assertThat(project.getMetadata().getName()).isEqualTo("Fancy project name");
+		assertThat(project.getMetadata()).extracting(ProjectMetadata::getName, ProjectMetadata::getTimeMode, ProjectMetadata::getDefaultColor, ProjectMetadata::getPlayColor)
+				.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1);
 
 		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class))
 				.hasSize(1)
 				.first()
-				.satisfies(event -> assertThat(event.getProjectMetadata().name()).isEqualTo("Fancy project name"));
+				.satisfies(event -> assertThat(event.getProjectMetadata())
+						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor)
+						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1));
 	}
 
 	@Test
