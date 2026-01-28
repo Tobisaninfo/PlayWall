@@ -2,6 +2,7 @@ package de.tobias.playwall.client.view.style.color;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.utils.application.ApplicationUtils;
+import javafx.scene.paint.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,6 +88,11 @@ public enum ModernColor
 	public String getColorLow()
 	{
 		return getCurrentModernColor().getColors().getLow();
+	}
+
+	public Paint getColor()
+	{
+		return Color.web(paint());
 	}
 
 	public String getFontColor()
