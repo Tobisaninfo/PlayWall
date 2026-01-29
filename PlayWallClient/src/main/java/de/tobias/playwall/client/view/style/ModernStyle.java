@@ -11,6 +11,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadIndex;
 import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.utils.Minifier;
 import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -94,13 +95,13 @@ public class ModernStyle implements Styleable
 	}
 
 	@Override
-	public void renderStylesheets(Stage stage, Page page, ModernColor defaultColor, ModernColor playColor)
+	public void renderStylesheets(Stage stage, Page page, ProjectMetadata projectMetadata)
 	{
 		final Path renderedCss = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "generated_project.css");
 
 		final StringBuilder stringBuilder = new StringBuilder();
-		renderGlobalTemplate(stringBuilder, defaultColor, playColor);
-		page.getPads().forEach(pad -> renderPadTemplate(stringBuilder, new PadIndex(pad.getPosition(), page.getPosition()), pad));
+		renderGlobalTemplate(stringBuilder, projectMetadata);
+		page.getPads().forEach(pad -> renderPadTemplate(stringBuilder, new PadIndex(pad.getPosition(), page.getPosition()), projectMetadata, pad));
 
 		try
 		{
@@ -115,10 +116,10 @@ public class ModernStyle implements Styleable
 		stage.getScene().getStylesheets().add(renderedCss.toUri().toString());
 	}
 
-	private void renderGlobalTemplate(StringBuilder builder, ModernColor defaultColor, ModernColor playColor)
+	private void renderGlobalTemplate(StringBuilder builder, ProjectMetadata projectMetadata)
 	{
-		builder.append(renderGlobalTemplate(defaultColor, ""))
-				.append(renderGlobalTemplate(playColor, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
+		builder.append(renderGlobalTemplate(projectMetadata.getDefaultColor(), ""))
+				.append(renderGlobalTemplate(projectMetadata.getPlayColor(), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
 	}
 
 	private String renderGlobalTemplate(ModernColor color, String pseudoClass)
@@ -139,10 +140,10 @@ public class ModernStyle implements Styleable
 		return CssTemplateProcessor.render(globalTemplateString, values);
 	}
 
-	private void renderPadTemplate(StringBuilder builder, PadIndex padIndex, Pad pad)
+	private void renderPadTemplate(StringBuilder builder, PadIndex padIndex, ProjectMetadata projectMetadata, Pad pad)
 	{
-		builder.append(renderPadTemplate(padIndex, ModernColor.GRAY1, ""))
-				.append(renderPadTemplate(padIndex, ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
+		builder.append(renderPadTemplate(padIndex, projectMetadata.getDefaultColor(), ""))
+				.append(renderPadTemplate(padIndex, projectMetadata.getPlayColor(), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
 	}
 
 	private String renderPadTemplate(PadIndex padIndex, ModernColor color, String pseudoClass)

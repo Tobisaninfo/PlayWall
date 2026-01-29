@@ -20,6 +20,7 @@ import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.ProjectMetadataMapper;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
@@ -397,7 +398,8 @@ public class MainViewController extends ViewControllerBase
 	public void showPage(Page page)
 	{
 		this.currentPage = page;
-		final int padNumberPerPage = projectController.getProject().getMetadata().getNumberOfPadsPerPage();
+		final ProjectMetadata projectMetadata = projectController.getProject().getMetadata();
+		final int padNumberPerPage = projectMetadata.getNumberOfPadsPerPage();
 
 		for(int i = 0; i < padNumberPerPage; i++)
 		{
@@ -410,7 +412,12 @@ public class MainViewController extends ViewControllerBase
 		// Highlight the current page button
 		highlightPageButton(page);
 
-		styleable.renderStylesheets(getStage(), page);
+		styleable.renderStylesheets(getStage(), page, projectMetadata);
+	}
+
+	public void updateStyle()
+	{
+		styleable.renderStylesheets(getStage(), getCurrentPage(),  projectController.getProject().getMetadata());
 	}
 
 	private void highlightPageButton(Page page)

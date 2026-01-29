@@ -27,7 +27,10 @@ class ProjectSettingsUpdateListener implements UpdateMessageEventListener<Projec
 			padView.updateTimeNodes();
 		}
 
-		Platform.runLater(mainViewController::updateTitle);
+		Platform.runLater(() -> {
+			mainViewController.updateTitle();
+			mainViewController.updateStyle();
+		});
 	}
 
 	@Override
