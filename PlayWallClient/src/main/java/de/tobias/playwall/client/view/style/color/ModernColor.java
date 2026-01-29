@@ -90,7 +90,7 @@ public enum ModernColor
 		return getCurrentModernColor().getColors().getLow();
 	}
 
-	public Paint getColor()
+	public Color getColor()
 	{
 		return Color.web(paint());
 	}

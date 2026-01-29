@@ -94,12 +94,12 @@ public class ModernStyle implements Styleable
 	}
 
 	@Override
-	public void renderStylesheets(Stage stage, Page page)
+	public void renderStylesheets(Stage stage, Page page, ModernColor defaultColor, ModernColor playColor)
 	{
 		final Path renderedCss = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "generated_project.css");
 
 		final StringBuilder stringBuilder = new StringBuilder();
-		renderGlobalTemplate(stringBuilder);
+		renderGlobalTemplate(stringBuilder, defaultColor, playColor);
 		page.getPads().forEach(pad -> renderPadTemplate(stringBuilder, new PadIndex(pad.getPosition(), page.getPosition()), pad));
 
 		try
@@ -115,10 +115,10 @@ public class ModernStyle implements Styleable
 		stage.getScene().getStylesheets().add(renderedCss.toUri().toString());
 	}
 
-	private void renderGlobalTemplate(StringBuilder builder)
+	private void renderGlobalTemplate(StringBuilder builder, ModernColor defaultColor, ModernColor playColor)
 	{
-		builder.append(renderGlobalTemplate(ModernColor.GRAY1, ""))
-				.append(renderGlobalTemplate(ModernColor.RED1, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
+		builder.append(renderGlobalTemplate(defaultColor, ""))
+				.append(renderGlobalTemplate(playColor, MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
 	}
 
 	private String renderGlobalTemplate(ModernColor color, String pseudoClass)
