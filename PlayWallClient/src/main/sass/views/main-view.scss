@@ -2,3 +2,21 @@
     -fx-background-color: #dbdbdb !important;
     -fx-text-fill: #333333 !important;
 }
+
+.page-button-dragging {
+    -fx-opacity: 0.55;
+}
+
+.page-button-drop-placeholder {
+    /* Größe wie ein Tab – passt sich an, wenn Buttons unterschiedlich breit sind */
+    -fx-min-width: 40px;
+    -fx-pref-width: 80px;
+    -fx-min-height: 24px;
+    -fx-pref-height: 24px;
+
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(255, 255, 255, 0.35);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
