@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import javafx.application.Platform;
@@ -21,7 +22,6 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -90,6 +90,8 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(4)
 				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.build());
 	}
 
@@ -120,6 +122,8 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(4)
 				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.build());
 	}
 
@@ -150,6 +154,8 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(4)
 				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.build());
 	}
 
@@ -215,6 +221,8 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.numberOfHorizontalPads(6)
 				.numberOfVerticalPads(4)
 				.timeMode(TimeMode.REMAINING)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.build());
 	}
 }
