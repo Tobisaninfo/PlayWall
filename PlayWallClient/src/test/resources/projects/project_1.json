@@ -5,7 +5,7 @@
         "numberOfHorizontalPads": 6,
         "numberOfVerticalPads": 4,
         "timeMode": "ELAPSED",
-        "defaultColor": null,
+        "defaultColor": "GRAY1",
         "playColor": "RED3"
     },
     "pages": [
