@@ -29,6 +29,11 @@ public class ColorButton extends Button
 
 	public void updateColors(ModernColor color)
 	{
+		if(color == null)
+		{
+			return;
+		}
+
 		this.setStyle(MessageFormat.format(STYLE_TEMPLATE, color.paint()));
 	}
 }

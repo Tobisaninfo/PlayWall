@@ -12,6 +12,7 @@ import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 
 /**
@@ -22,7 +23,13 @@ import javafx.scene.control.ComboBox;
 public class PadSettingsDisplayViewController extends BasePadSettingsViewController
 {
 	@FXML
+	private CheckBox checkboxColorDefault;
+
+	@FXML
 	private ColorButton buttonColorDefault;
+
+	@FXML
+	private CheckBox checkboxColorPlay;
 
 	@FXML
 	private ColorButton buttonColorPlay;
@@ -51,26 +58,51 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	@Override
 	public void initParameter(Param param)
 	{
-		final ModernColor defaultColor = param.getPad().getDefaultColor();
-		;
-		colorPickerDefault = new ColorPicker(defaultColor, ModernColor.values(), (newColor) -> buttonColorDefault.updateColors(newColor));
-		buttonColorDefault.updateColors(defaultColor);
-
-		final ModernColor playColor = param.getPad().getPlayColor();
-		colorPickerPlay = new ColorPicker(playColor, ModernColor.values(), (newColor) -> buttonColorPlay.updateColors(newColor));
-		buttonColorPlay.updateColors(playColor);
+		colorPickerDefault = initColorPicker(param.getPad().getDefaultColor(), buttonColorDefault, checkboxColorDefault);
+		colorPickerPlay = initColorPicker(param.getPad().getPlayColor(), buttonColorPlay, checkboxColorPlay);
 
 		comboBoxTime.getSelectionModel().select(param.pad.getTimeMode());
 
 		this.isValidProperty.set(true);
 	}
 
+	private ColorPicker initColorPicker(ModernColor color, ColorButton buttonColor, CheckBox checkboxColor)
+	{
+		ModernColor actualColor = color;
+		if(actualColor == null)
+		{
+			actualColor = ModernColor.GRAY1;
+		}
+
+		final boolean isOverrideActive = color != null;
+
+		final ColorPicker colorPicker = new ColorPicker(actualColor, ModernColor.values(), buttonColor::updateColors);
+		buttonColor.updateColors(actualColor);
+		buttonColor.setDisable(!isOverrideActive);
+		checkboxColor.setSelected(isOverrideActive);
+		checkboxColor.selectedProperty().addListener((_, _, newValue) -> buttonColor.setDisable(!newValue));
+
+		return colorPicker;
+	}
+
 	@Override
 	public void applySettings(Param param)
 	{
 		param.pad.setTimeMode(comboBoxTime.getSelectionModel().getSelectedItem());
-		param.pad.setDefaultColor(colorPickerDefault.getSelectedColor());
-		param.pad.setPlayColor(colorPickerPlay.getSelectedColor());
+
+		ModernColor defaultColor = null;
+		if(checkboxColorDefault.isSelected())
+		{
+			defaultColor = colorPickerDefault.getSelectedColor();
+		}
+		param.pad.setDefaultColor(defaultColor);
+
+		ModernColor playColor = null;
+		if(checkboxColorPlay.isSelected())
+		{
+			playColor = colorPickerPlay.getSelectedColor();
+		}
+		param.pad.setPlayColor(playColor);
 	}
 
 	@Override
