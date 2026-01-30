@@ -33,6 +33,7 @@ public class Pad
 				.timeMode(timeMode)
 				.defaultColor(defaultColor)
 				.playColor(playColor)
+				.content(content == null ? null : content.copy())
 				.build();
 	}
 }
