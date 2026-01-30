@@ -76,8 +76,8 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 
 		final boolean isOverrideActive = color != null;
 
-		final ColorPicker colorPicker = new ColorPicker(actualColor, ModernColor.values(), buttonColor::updateColors);
-		buttonColor.updateColors(actualColor);
+		final ColorPicker colorPicker = new ColorPicker(actualColor, ModernColor.values(), buttonColor::updateColor);
+		buttonColor.updateColor(actualColor);
 		buttonColor.setDisable(!isOverrideActive);
 		checkboxColor.setSelected(isOverrideActive);
 		checkboxColor.selectedProperty().addListener((_, _, newValue) -> buttonColor.setDisable(!newValue));

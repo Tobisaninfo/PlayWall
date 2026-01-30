@@ -27,7 +27,7 @@ public class ColorButton extends Button
 		this.setAlignment(Pos.CENTER_RIGHT);
 	}
 
-	public void updateColors(ModernColor color)
+	public void updateColor(ModernColor color)
 	{
 		if(color == null)
 		{

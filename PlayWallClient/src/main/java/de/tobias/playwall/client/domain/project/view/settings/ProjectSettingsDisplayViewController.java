@@ -50,12 +50,12 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	public void initParameter(Param param)
 	{
 		final ModernColor defaultColor = param.getProjectMetadata().getDefaultColor();
-		colorPickerDefault = new ColorPicker(defaultColor, ModernColor.values(), (newColor) -> buttonColorDefault.updateColors(newColor));
-		buttonColorDefault.updateColors(defaultColor);
+		colorPickerDefault = new ColorPicker(defaultColor, ModernColor.values(), (newColor) -> buttonColorDefault.updateColor(newColor));
+		buttonColorDefault.updateColor(defaultColor);
 
 		final ModernColor playColor = param.getProjectMetadata().getPlayColor();
-		colorPickerPlay = new ColorPicker(playColor, ModernColor.values(), (newColor) -> buttonColorPlay.updateColors(newColor));
-		buttonColorPlay.updateColors(playColor);
+		colorPickerPlay = new ColorPicker(playColor, ModernColor.values(), (newColor) -> buttonColorPlay.updateColor(newColor));
+		buttonColorPlay.updateColor(playColor);
 
 		comboBoxTime.getSelectionModel().select(param.projectMetadata.getTimeMode());
 
