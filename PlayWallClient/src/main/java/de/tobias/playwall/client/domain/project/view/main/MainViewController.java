@@ -179,6 +179,12 @@ public class MainViewController extends ViewControllerBase
 			}
 		});
 		pageAddButton.setGraphic(new FontIcon(FontAwesomeType.PLUS_SOLID));
+		pageAddButton.setPrefHeight(25);
+		pageAddButton.setPrefWidth(25);
+		pageAddButton.setMinHeight(25);
+		pageAddButton.setMinWidth(25);
+		pageAddButton.setMaxHeight(25);
+		pageAddButton.setMaxWidth(25);
 	}
 
 	@Override

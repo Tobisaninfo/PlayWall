@@ -23,8 +23,7 @@
                         <FlowPane fx:id="pageButtonsFlowPane" alignment="CENTER_LEFT" hgap="14.0"
                                   maxWidth="1.7976931348623157E308" vgap="14.0">
                             <children>
-                                <Button fx:id="pageAddButton" styleClass="circle" maxWidth="50" maxHeight="50"
-                                        onAction="#onPageAdd" focusTraversable="false"/>
+                                <Button fx:id="pageAddButton" styleClass="circle" onAction="#onPageAdd" focusTraversable="false"/>
                             </children>
                         </FlowPane>
                         <VolumeSlider fx:id="volumeSlider" maxValue="100" minWidth="200"/>
