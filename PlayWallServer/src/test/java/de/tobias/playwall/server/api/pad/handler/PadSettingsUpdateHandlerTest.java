@@ -1,5 +1,7 @@
 package de.tobias.playwall.server.api.pad.handler;
 
+import de.tobias.playwall.common.api.common.Color;
+import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.pad.AudioPadContentDto;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
@@ -66,6 +68,9 @@ class PadSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Pa
 
 		final PadSettingsUpdateRequest request = new PadSettingsUpdateRequest(padId, PadDto.builder()
 				.name("Lorem")
+				.timeMode(TimeMode.ELAPSED_AND_TOTAL)
+				.defaultColor(Color.BLUE1)
+				.playColor(Color.LIGHT_BLUE2)
 				.content(AudioPadContentDto.builder().mediaPath(oldMediaPath).loop(false).build())
 				.build());
 		handler.handleRequest(request);
@@ -77,6 +82,9 @@ class PadSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Pa
 				.hasSize(1)
 				.first()
 				.satisfies(event -> assertThat(event.getPad().getName()).isEqualTo("Lorem"))
+				.satisfies(event -> assertThat(event.getPad().getTimeMode()).isEqualTo(TimeMode.ELAPSED_AND_TOTAL))
+				.satisfies(event -> assertThat(event.getPad().getDefaultColor()).isEqualTo(Color.BLUE1))
+				.satisfies(event -> assertThat(event.getPad().getPlayColor()).isEqualTo(Color.LIGHT_BLUE2))
 				.satisfies(event -> assertThat(((AudioPadContentDto) event.getPad().getContent()).isLoop()).isFalse());
 	}
 
