@@ -5,8 +5,12 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.content.PadContentSettingsContainerFactory;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.ColorButton;
+import de.tobias.playwall.client.view.components.ColorPicker;
 import de.tobias.playwall.client.view.components.EnumCell;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 
@@ -18,7 +22,16 @@ import javafx.scene.control.ComboBox;
 public class PadSettingsDisplayViewController extends BasePadSettingsViewController
 {
 	@FXML
+	private ColorButton buttonColorDefault;
+
+	@FXML
+	private ColorButton buttonColorPlay;
+
+	@FXML
 	private ComboBox<TimeMode> comboBoxTime;
+
+	private ColorPicker colorPickerDefault;
+	private ColorPicker colorPickerPlay;
 
 	@InjectConstructor
 	public PadSettingsDisplayViewController(FluentClient client, PadContentSettingsContainerFactory padContentSettingsContainerFactory)
@@ -38,6 +51,15 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	@Override
 	public void initParameter(Param param)
 	{
+		final ModernColor defaultColor = param.getPad().getDefaultColor();
+		;
+		colorPickerDefault = new ColorPicker(defaultColor, ModernColor.values(), (newColor) -> buttonColorDefault.updateColors(newColor));
+		buttonColorDefault.updateColors(defaultColor);
+
+		final ModernColor playColor = param.getPad().getPlayColor();
+		colorPickerPlay = new ColorPicker(playColor, ModernColor.values(), (newColor) -> buttonColorPlay.updateColors(newColor));
+		buttonColorPlay.updateColors(playColor);
+
 		comboBoxTime.getSelectionModel().select(param.pad.getTimeMode());
 
 		this.isValidProperty.set(true);
@@ -47,11 +69,27 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	public void applySettings(Param param)
 	{
 		param.pad.setTimeMode(comboBoxTime.getSelectionModel().getSelectedItem());
+		param.pad.setDefaultColor(colorPickerDefault.getSelectedColor());
+		param.pad.setPlayColor(colorPickerPlay.getSelectedColor());
 	}
 
 	@Override
 	public void cleanup()
 	{
 		// Nothing to do
+	}
+
+	@FXML
+	public void onButtonColorDefault(ActionEvent event)
+	{
+		colorPickerDefault.hide();
+		colorPickerDefault.show(buttonColorDefault);
+	}
+
+	@FXML
+	public void onButtonColorPlay(ActionEvent event)
+	{
+		colorPickerPlay.hide();
+		colorPickerPlay.show(buttonColorPlay);
 	}
 }
