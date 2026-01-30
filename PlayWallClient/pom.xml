@@ -166,20 +166,23 @@
             </plugin>
 
             <plugin>
-                <groupId>nl.geodienstencentrum.maven</groupId>
-                <artifactId>sass-maven-plugin</artifactId>
-                <version>${sass-maven-plugin.version}</version>
+                <groupId>io.github.cleydyr</groupId>
+                <artifactId>dart-sass-maven-plugin</artifactId>
+                <version>${dart-sass-maven-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>translate-css</id>
+                        <id>generate-css-using-sass</id>
                         <goals>
-                            <goal>update-stylesheets</goal>
+                            <goal>compile-sass</goal>
                         </goals>
                         <phase>generate-resources</phase>
                     </execution>
                 </executions>
                 <configuration>
-                    <destination>target/classes/style</destination>
+                    <!-- use a fixed version of dart-saas to ensure reproducible builds -->
+                    <version>1.83.0</version>
+                    <inputFolder>src/main/sass</inputFolder>
+                    <outputFolder>target/classes/style</outputFolder>
                 </configuration>
             </plugin>
             <plugin>
