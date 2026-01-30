@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.pad;
 
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 
@@ -19,6 +20,8 @@ public class Pad
 	private String name;
 	private PadContent content;
 	private TimeMode timeMode;
+	private ModernColor defaultColor;
+	private ModernColor playColor;
 
 	public String getReadablePosition()
 	{
@@ -32,6 +35,8 @@ public class Pad
 				.position(position)
 				.name(name)
 				.timeMode(timeMode)
+				.defaultColor(defaultColor)
+				.playColor(playColor)
 				.content(content == null ? null : content.copy())
 				.build();
 	}

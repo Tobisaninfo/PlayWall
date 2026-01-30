@@ -19,6 +19,9 @@
                     "id": "fc427184-2e55-4734-8148-5fb657963616",
                     "name": "Test Pad",
                     "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
                     "content": null
                 }
             ]

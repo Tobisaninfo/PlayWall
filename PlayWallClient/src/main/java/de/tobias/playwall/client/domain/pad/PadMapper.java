@@ -2,6 +2,7 @@ package de.tobias.playwall.client.domain.pad;
 
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.domain.project.ColorMapper;
 import de.tobias.playwall.common.api.pad.PadDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class PadMapper
 {
 	private final PadContentMapper padContentMapper;
+	private final ColorMapper colorMapper;
 
 	public Pad padDtoToPad(PadDto pad)
 	{
@@ -19,6 +21,8 @@ public class PadMapper
 				.name(pad.getName())
 				.position(pad.getPosition())
 				.timeMode(pad.getTimeMode())
+				.defaultColor(colorMapper.colorToModernColor(pad.getDefaultColor()))
+				.playColor(colorMapper.colorToModernColor(pad.getPlayColor()))
 				.content(padContentMapper.padContentDtoToPadContent(pad.getContent()))
 				.build();
 	}
@@ -30,6 +34,8 @@ public class PadMapper
 				.name(pad.getName())
 				.position(pad.getPosition())
 				.timeMode(pad.getTimeMode())
+				.defaultColor(colorMapper.modernColorToColor(pad.getDefaultColor()))
+				.playColor(colorMapper.modernColorToColor(pad.getPlayColor()))
 				.content(padContentMapper.padContentToPadContentDto(pad.getContent()))
 				.build();
 	}

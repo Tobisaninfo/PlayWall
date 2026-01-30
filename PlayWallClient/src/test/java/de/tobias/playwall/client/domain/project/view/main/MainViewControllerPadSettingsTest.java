@@ -9,6 +9,7 @@ import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -82,6 +83,8 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
 				.timeMode(null)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
@@ -121,6 +124,8 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
 				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.content(AudioPadContent.builder()
 						.isLoop(false)
 						.volume(1.0)
@@ -203,6 +208,8 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
 				.timeMode(TimeMode.REMAINING)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.content(AudioPadContent.builder()
 						.isLoop(false)
 						.volume(1.0)
@@ -251,6 +258,8 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.id(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"))
 				.position(0)
 				.timeMode(null)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.content(AudioPadContent.builder()
 						.isLoop(false)
 						.volume(1.0)

@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.page.PageDto;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
@@ -66,7 +67,7 @@ class PageListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PageAddUpdate(new PageDto(UUID.randomUUID(), "Page 3", 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
-						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null)).toList())));
+						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3)).toList())));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		assertThat(robot.lookup(".page-button").queryAll()).hasSize(3);

@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.model.pad;
 
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -20,6 +21,8 @@ public class Pad
 	private String name;
 	private PadContent content;
 	private TimeMode timeMode;
+	private Color defaultColor;
+	private Color playColor;
 
 	public Pad copy()
 	{
@@ -28,7 +31,8 @@ public class Pad
 				.position(position)
 				.name(name)
 				.timeMode(timeMode)
-				.content(content == null ? null : content.copy())
+				.defaultColor(defaultColor)
+				.playColor(playColor)
 				.build();
 	}
 }

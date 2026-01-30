@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.AudioPadContent;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.utils.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,8 @@ class ClientProjectControllerTest extends AbstractTest
 				.id(padId)
 				.position(0)
 				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
@@ -60,6 +63,8 @@ class ClientProjectControllerTest extends AbstractTest
 				.id(padId)
 				.position(0)
 				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
@@ -73,8 +78,8 @@ class ClientProjectControllerTest extends AbstractTest
 	@Test
 	void testAddPage()
 	{
-		final Pad pad1 = new Pad(UUID.randomUUID(), 0, null, null, null);
-		final Pad pad2 = new Pad(UUID.randomUUID(), 0, null, null, null);
+		final Pad pad1 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3);
+		final Pad pad2 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3);
 		final Page newPage = new Page(UUID.randomUUID(), "Seite 3", 2, List.of(pad1, pad2));
 
 		controller.addPage(newPage);

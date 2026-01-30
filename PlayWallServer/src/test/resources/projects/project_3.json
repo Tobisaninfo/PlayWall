@@ -19,12 +19,18 @@
                     "id": "fc427184-2e55-4734-8148-5fb657963616",
                     "name": "Test Pad 1",
                     "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
                     "content": null
                 },
                 {
                     "id": "efb30a6f-593b-4a15-94db-faa2d4117e4f",
                     "name": "Test Pad 2",
                     "position": 1,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
                     "content": null
                 }
             ]
