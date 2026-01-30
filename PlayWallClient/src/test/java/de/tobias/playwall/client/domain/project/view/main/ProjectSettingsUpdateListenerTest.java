@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import javafx.application.Platform;
@@ -59,6 +60,8 @@ class ProjectSettingsUpdateListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new ProjectSettingsUpdate(ProjectMetadataDto.builder()
 				.name("Fancy project name")
+				.defaultColor(Color.GRAY4)
+				.playColor(Color.RED3)
 				.build()));
 		WaitForAsyncUtils.waitForFxEvents();
 
