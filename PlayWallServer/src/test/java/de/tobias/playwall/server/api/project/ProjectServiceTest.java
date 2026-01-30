@@ -162,4 +162,43 @@ class ProjectServiceTest
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		assertThatThrownBy(() -> projectService.duplicatePage(project, UUID.randomUUID(), "Duplicated Page")).isInstanceOf(PageNotExistsException.class);
 	}
+
+	@Test
+	void test_replacePage()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+
+		projectService.replacePage(project,
+				Page.builder()
+						.id(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"))
+						.name("Seite X")
+						.build(),
+				0);
+
+		assertThat(project.getPages()).containsExactly(Page.builder()
+				.id(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"))
+				.name("Seite X")
+				.position(0)
+				.build());
+	}
+
+	@Test
+	void test_insertPage()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+
+		final Page addedPage = projectService.addPage(project);
+
+		projectService.insertPage(project,
+				Page.builder()
+						.id(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"))
+						.name("Seite X").build(),
+				1);
+
+
+		assertThat(project.getPages()).hasSize(3);
+		assertThat(project.getPages().get(0)).extracting(Page::getId, Page::getPosition).containsExactly(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), 0);
+		assertThat(project.getPages().get(1)).extracting(Page::getId, Page::getPosition).containsExactly(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"), 1);
+		assertThat(project.getPages().get(2)).extracting(Page::getId, Page::getPosition).containsExactly(addedPage.getId(), 2);
+	}
 }
