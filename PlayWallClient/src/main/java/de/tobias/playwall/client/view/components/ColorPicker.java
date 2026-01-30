@@ -3,12 +3,10 @@ package de.tobias.playwall.client.view.components;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import org.controlsfx.control.PopOver;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 public class ColorPicker extends PopOver
@@ -22,7 +20,7 @@ public class ColorPicker extends PopOver
 	{
 		final GridPane gridPane = initContent(startColor, colors, onSelectedCallback);
 
-		setContentNode(new VBox(gridPane));
+		setContentNode(gridPane);
 		setDetachable(false);
 		setCornerRadius(5);
 		setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
