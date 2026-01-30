@@ -28,6 +28,8 @@ class PadUpdateListener implements UpdateMessageEventListener<PadUpdate>
 		{
 			Platform.runLater(() -> padView.updateFromPad(mainViewController.getCurrentPage().getPosition(), updatedPadController));
 		}
+
+		Platform.runLater(mainViewController::updateStyle);
 	}
 
 	@Override

@@ -142,8 +142,18 @@ public class ModernStyle implements Styleable
 
 	private void renderPadTemplate(StringBuilder builder, PadIndex padIndex, ProjectMetadata projectMetadata, Pad pad)
 	{
-		builder.append(renderPadTemplate(padIndex, projectMetadata.getDefaultColor(), ""))
-				.append(renderPadTemplate(padIndex, projectMetadata.getPlayColor(), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
+		builder.append(renderPadTemplate(padIndex, determineEffectiveColor(projectMetadata.getDefaultColor(), pad.getDefaultColor()), ""))
+				.append(renderPadTemplate(padIndex, determineEffectiveColor(projectMetadata.getPlayColor(), pad.getPlayColor()), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
+	}
+
+	private ModernColor determineEffectiveColor(ModernColor projectColor, ModernColor padColor)
+	{
+		if(padColor == null)
+		{
+			return projectColor;
+		}
+
+		return padColor;
 	}
 
 	private String renderPadTemplate(PadIndex padIndex, ModernColor color, String pseudoClass)
