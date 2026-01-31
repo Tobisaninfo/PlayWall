@@ -101,7 +101,7 @@ public class ModernStyle implements Styleable
 
 		final StringBuilder stringBuilder = new StringBuilder();
 		renderGlobalTemplate(stringBuilder, projectMetadata);
-		page.getPads().forEach(pad -> renderPadTemplate(stringBuilder, new PadIndex(pad.getPosition(), page.getPosition()), projectMetadata, pad));
+		page.getPads().forEach(pad -> renderPadTemplate(stringBuilder, new PadIndex(pad.getPosition(), page.getPosition()), pad));
 
 		try
 		{
@@ -140,20 +140,17 @@ public class ModernStyle implements Styleable
 		return CssTemplateProcessor.render(globalTemplateString, values);
 	}
 
-	private void renderPadTemplate(StringBuilder builder, PadIndex padIndex, ProjectMetadata projectMetadata, Pad pad)
+	private void renderPadTemplate(StringBuilder builder, PadIndex padIndex, Pad pad)
 	{
-		builder.append(renderPadTemplate(padIndex, determineEffectiveColor(projectMetadata.getDefaultColor(), pad.getDefaultColor()), ""))
-				.append(renderPadTemplate(padIndex, determineEffectiveColor(projectMetadata.getPlayColor(), pad.getPlayColor()), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
-	}
-
-	private ModernColor determineEffectiveColor(ModernColor projectColor, ModernColor padColor)
-	{
-		if(padColor == null)
+		if(pad.getDefaultColor() != null)
 		{
-			return projectColor;
+			builder.append(renderPadTemplate(padIndex, pad.getDefaultColor(), ""));
 		}
 
-		return padColor;
+		if(pad.getPlayColor() != null)
+		{
+			builder.append(renderPadTemplate(padIndex, pad.getPlayColor(), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
+		}
 	}
 
 	private String renderPadTemplate(PadIndex padIndex, ModernColor color, String pseudoClass)
