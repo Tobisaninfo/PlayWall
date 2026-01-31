@@ -32,6 +32,7 @@ import javafx.util.Duration;
 import lombok.Getter;
 
 import static de.tobias.playwall.client.domain.pad.view.control.PadStyleClasses.*;
+import static de.tobias.playwall.client.view.components.PseudoClasses.PLAY_CLASS;
 
 @Getter
 public class DesktopPadView implements PadView
@@ -272,10 +273,11 @@ public class DesktopPadView implements PadView
 			Platform.runLater(() -> {
 				this.updateButtonStates();
 				this.updateTimeNodes();
+
+				NodeWalker.getAllNodes(superRoot)
+						.forEach(node -> node.pseudoClassStateChanged(PLAY_CLASS, status == PadStatus.PLAY));
 			});
 		}
-
-		this.superRoot.pseudoClassStateChanged(PseudoClasses.PLAY_CLASS, status == PadStatus.PLAY);
 	}
 
 	@Override
