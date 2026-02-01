@@ -41,6 +41,7 @@ public class IconDeclaration
 		)));
 		data.add(new IconEntry(FontAwesomeType.PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite hinzufügen"))));
 		data.add(new IconEntry(FontAwesomeType.TRASH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"))));
+		data.add(new IconEntry(FontAwesomeType.PAINTBRUSH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Farbmodus (globaler Colorpicker"))));
 
 		// pad
 		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));
