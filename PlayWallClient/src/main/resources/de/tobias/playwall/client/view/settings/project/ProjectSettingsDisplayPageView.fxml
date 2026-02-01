@@ -11,11 +11,11 @@
         <HBox prefWidth="300" spacing="14.0">
             <VBox spacing="14.0">
                 <Label alignment="CENTER" prefWidth="150.0" text="%ui.settings.pad.view.color.default" wrapText="true" VBox.vgrow="ALWAYS" />
-                <ColorButton fx:id="buttonColorDefault" focusTraversable="false" mnemonicParsing="false" onAction="#onButtonColorDefault" prefWidth="150.0" />
+                <ColorButton fx:id="buttonColorDefault" focusTraversable="false" mnemonicParsing="false" onAction="#onButtonColorDefault" minWidth="150.0" prefWidth="150.0" />
             </VBox>
             <VBox spacing="14.0">
                 <Label alignment="CENTER" prefWidth="150.0" text="%ui.settings.pad.view.color.play" wrapText="true" VBox.vgrow="ALWAYS" />
-                <ColorButton fx:id="buttonColorPlay" focusTraversable="false" mnemonicParsing="false" onAction="#onButtonColorPlay" prefWidth="150.0" />
+                <ColorButton fx:id="buttonColorPlay" focusTraversable="false" mnemonicParsing="false" onAction="#onButtonColorPlay" minWidth="150.0" prefWidth="150.0" />
             </VBox>
         </HBox>
     </SettingsRow>

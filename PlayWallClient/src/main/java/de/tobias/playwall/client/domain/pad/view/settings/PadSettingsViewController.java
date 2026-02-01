@@ -120,10 +120,10 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 
 		stage.setResizable(true);
 
-		stage.setWidth(825);
+		stage.setWidth(850);
 		stage.setHeight(500);
 
-		stage.setMinWidth(825);
+		stage.setMinWidth(850);
 		stage.setMinHeight(500);
 	}
 
