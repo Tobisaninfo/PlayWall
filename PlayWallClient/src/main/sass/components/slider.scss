@@ -1,8 +1,8 @@
-@import "variables";
+@use "variables";
 
 .slider {
 
-    -slider-track-color: $component-background-color;
+  -slider-track-color: variables.$component-background-color;
 
     .track {
         -fx-background-radius: 3px;

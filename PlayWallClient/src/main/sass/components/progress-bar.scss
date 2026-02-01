@@ -1,10 +1,10 @@
-@import "variables";
+@use "variables";
 
 .progress-bar {
     .track {
         -fx-background-radius: 2px;
-        -fx-base: $component-background-color;
-        -fx-background-color: $component-background-color;
+      -fx-base: variables.$component-background-color;
+      -fx-background-color: variables.$component-background-color;
     }
 
     .bar {

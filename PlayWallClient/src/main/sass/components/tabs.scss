@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .tab-pane {
     &:top *.tab-header-background {
@@ -6,10 +6,10 @@
     }
 
     &:top *.tab {
-        -fx-background-color: $component-background-color;
+      -fx-background-color: variables.$component-background-color;
 
         &:selected {
-            -fx-background-color: $primary-color;
+          -fx-background-color: variables.$primary-color;
             -fx-focus-color: transparent;
             -fx-faint-focus-color: transparent;
         }

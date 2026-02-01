@@ -1,16 +1,16 @@
-@import "variables";
+@use "variables";
 
 .text-field {
-    -fx-border-color: $component-border-color;
-    -fx-border-width: $component-border-width;
-    -fx-border-radius: $component-border-radius;
+  -fx-border-color: variables.$component-border-color;
+  -fx-border-width: variables.$component-border-width;
+  -fx-border-radius: variables.$component-border-radius;
 
-    -fx-background-color: $textfield-background;
+  -fx-background-color: variables.$textfield-background;
 
-    -fx-text-fill: $component-text-color;
-    -fx-prompt-text-fill: $textfield-prompt-color;
+  -fx-text-fill: variables.$component-text-color;
+  -fx-prompt-text-fill: variables.$textfield-prompt-color;
 
-    -fx-font-size: $textfield-font-size;
+  -fx-font-size: variables.$textfield-font-size;
 
     &:error {
         -fx-border-color: red !important;

@@ -1,4 +1,4 @@
-@import "../components/variables";
+@use "../components/variables";
 
 .project-loading--overlay {
   -fx-background-color: rgba(0, 0, 0, 0.4);

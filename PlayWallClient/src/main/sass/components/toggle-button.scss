@@ -1,17 +1,17 @@
-@import "variables";
+@use "variables";
 
 .toggle-button {
-    -fx-background-color: $component-background-color;
-    -fx-text-fill: $component-text-color;
+  -fx-background-color: variables.$component-background-color;
+  -fx-text-fill: variables.$component-text-color;
 
     &:focused {
-        -fx-background-color: $primary-color;
-        -fx-text-fill: $component-text-color !important;
+      -fx-background-color: variables.$primary-color;
+      -fx-text-fill: variables.$component-text-color !important;
     }
 
     &:hover {
-        -fx-background-color: $component-hover-background-color;
-        -fx-text-fill: $component-text-color !important;
+      -fx-background-color: variables.$component-hover-background-color;
+      -fx-text-fill: variables.$component-text-color !important;
     }
 
     &:selected {
