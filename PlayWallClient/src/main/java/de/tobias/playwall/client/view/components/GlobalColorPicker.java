@@ -14,7 +14,6 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.util.List;
@@ -65,7 +64,28 @@ public class GlobalColorPicker extends ToggleButton
 
 				for(PadView padView : padViews)
 				{
-					padView.getRootNode().setOnMouseClicked(event -> onPadClicked(padView, event));
+					padView.getRootNode().setOnMouseClicked(event -> {
+						if(event.getButton() == MouseButton.PRIMARY)
+						{
+							updatePadColor(padView);
+						}
+					});
+
+					padView.getRootNode().setOnDragDetected(event -> {
+						if(event.isPrimaryButtonDown())
+						{
+							padView.getRootNode().startFullDrag();
+							updatePadColor(padView);
+							event.consume();
+						}
+					});
+
+					padView.getRootNode().setOnMouseDragEntered(event -> {
+						if(event.isPrimaryButtonDown())
+						{
+							updatePadColor(padView);
+						}
+					});
 					padView.disableSettings(true);
 				}
 			}
@@ -76,19 +96,16 @@ public class GlobalColorPicker extends ToggleButton
 				for(PadView padView : padViews)
 				{
 					padView.getRootNode().setOnMouseClicked(null);
+					padView.getRootNode().setOnDragDetected(null);
+					padView.getRootNode().setOnMouseDragEntered(null);
 					padView.disableSettings(false);
 				}
 			}
 		});
 	}
 
-	private void onPadClicked(PadView padView, MouseEvent event)
+	private void updatePadColor(PadView padView)
 	{
-		if(event.getButton() != MouseButton.PRIMARY)
-		{
-			return;
-		}
-
 		final Pad pad = padView.getPadController().getPad();
 		pad.setDefaultColor(colorPicker.getSelectedColor());
 
