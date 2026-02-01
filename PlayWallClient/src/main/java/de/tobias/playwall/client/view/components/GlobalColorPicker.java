@@ -11,8 +11,10 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 
@@ -31,7 +33,7 @@ public class GlobalColorPicker extends ToggleButton
 
 	public GlobalColorPicker()
 	{
-		final FontIcon icon = new FontIcon(FontAwesomeType.PALETTE_SOLID);
+		final FontIcon icon = new FontIcon(FontAwesomeType.PAINTBRUSH_SOLID);
 		icon.setSize(14);
 		icon.setMouseTransparent(true);
 
@@ -57,10 +59,13 @@ public class GlobalColorPicker extends ToggleButton
 
 		this.setSelected(false);
 
+		final Image cursorImage = new Image("de/tobias/playwall/client/icon/paintbrush-solid-full.png");
+		final ImageCursor imageCursor = new ImageCursor(cursorImage, cursorImage.getWidth() / 2, cursorImage.getHeight() / 2);
+
 		this.selectedProperty().addListener((_, _, newValue) -> {
 			if(newValue)
 			{
-				getScene().setCursor(Cursor.HAND);
+				getScene().setCursor(imageCursor);
 
 				for(PadView padView : padViews)
 				{
