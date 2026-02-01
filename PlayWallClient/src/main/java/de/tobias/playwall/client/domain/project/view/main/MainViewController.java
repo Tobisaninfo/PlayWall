@@ -29,6 +29,7 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.about.AboutDialog;
+import de.tobias.playwall.client.view.components.GlobalColorPicker;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.style.ModernStyleSizeHelper;
@@ -82,6 +83,8 @@ public class MainViewController extends ViewControllerBase
 	private HBox toolbar;
 	@FXML
 	private Button pageAddButton;
+	@FXML
+	private GlobalColorPicker globalColorPicker;
 	@FXML
 	private VolumeSlider volumeSlider;
 
