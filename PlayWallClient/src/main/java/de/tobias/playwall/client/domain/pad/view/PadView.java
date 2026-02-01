@@ -17,4 +17,6 @@ public interface PadView
 	void updateStatus(PadStatus status);
 
 	void updateTimeNodes();
+
+	void disableSettings(boolean disabled);
 }

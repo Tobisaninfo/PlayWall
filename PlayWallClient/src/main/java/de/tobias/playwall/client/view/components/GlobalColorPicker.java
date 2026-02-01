@@ -59,8 +59,6 @@ public class GlobalColorPicker extends ToggleButton
 		this.setSelected(false);
 
 		this.selectedProperty().addListener((_, _, newValue) -> {
-			// TODO: disable pad and page buttons
-
 			if(newValue)
 			{
 				getScene().setCursor(Cursor.HAND);
@@ -68,6 +66,7 @@ public class GlobalColorPicker extends ToggleButton
 				for(PadView padView : padViews)
 				{
 					padView.getRootNode().setOnMouseClicked(event -> onPadClicked(padView, event));
+					padView.disableSettings(true);
 				}
 			}
 			else
@@ -77,6 +76,7 @@ public class GlobalColorPicker extends ToggleButton
 				for(PadView padView : padViews)
 				{
 					padView.getRootNode().setOnMouseClicked(null);
+					padView.disableSettings(false);
 				}
 			}
 		});

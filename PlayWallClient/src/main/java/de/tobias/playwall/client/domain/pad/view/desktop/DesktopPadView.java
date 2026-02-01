@@ -315,6 +315,12 @@ public class DesktopPadView implements PadView
 		}
 	}
 
+	@Override
+	public void disableSettings(boolean disabled)
+	{
+		settingsButton.setDisable(disabled);
+	}
+
 	private void updateTimeLabelByTimeMode(Duration duration, Duration position)
 	{
 		final TimeMode padTimeMode = padController.getPad().getTimeMode();
