@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.geometry.Bounds;
@@ -14,7 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -164,7 +164,7 @@ public class PageButtons extends FlowPane
 
 	private int computeInsertIndexForPointer(double sceneX, double sceneY)
 	{
-		// Do not allow dragging page button after "page-add-button"
+		// Do not allow dragging the page button after "page-add-button"
 		int maxIndex = Math.max(0, getChildren().size() - 1);
 
 		// Collect all page buttons (except placeholder)
@@ -188,31 +188,9 @@ public class PageButtons extends FlowPane
 			return 0;
 		}
 
-		// Stabiler "vor den ersten Tab" Bereich:
-		// - links vom linken Rand des linken Tabs
-		// - oder im oberen Tab-Strip (erste Zeile) links vom ersten Tab-Mittelpunkt
 		final double leftMostX = pageBounds.stream().mapToDouble(Bounds::getMinX).min().orElse(Double.NaN);
-
-		// Ermittele erste Zeile (FlowPane kann umbrechen)
-		final double topRowMinY = pageBounds.stream().mapToDouble(Bounds::getMinY).min().orElse(Double.NaN);
-		final double topRowMaxY = pageBounds.stream()
-				.filter(b -> Math.abs(b.getMinY() - topRowMinY) < 2.0)
-				.mapToDouble(Bounds::getMaxY)
-				.max()
-				.orElse(topRowMinY);
-
-		final Bounds firstInTopRow = pageBounds.stream()
-				.filter(b -> Math.abs(b.getMinY() - topRowMinY) < 2.0)
-				.min(Comparator.comparingDouble(Bounds::getMinX))
-				.orElse(pageBounds.getFirst());
-
-		double firstTopRowMidX = (firstInTopRow.getMinX() + firstInTopRow.getMaxX()) / 2.0;
-
-		boolean inTopStrip = sceneY <= (topRowMaxY + 8.0); // kleiner Puffer nach unten
 		boolean leftOfAll = sceneX < (leftMostX - 8.0);    // kleiner Puffer nach links
-		boolean leftOfFirst = sceneX < firstTopRowMidX;
-
-		if(leftOfAll || (inTopStrip && leftOfFirst))
+		if(leftOfAll)
 		{
 			return 0;
 		}
