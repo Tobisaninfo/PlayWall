@@ -167,6 +167,8 @@ public class MainViewController extends ViewControllerBase
 		undoHistoryUpdateListener = new UndoHistoryUpdateListener(this);
 		eventHandler.registerListener(undoHistoryUpdateListener);
 
+		globalColorPicker.init(padViews, client);
+
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
 			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
 			{
