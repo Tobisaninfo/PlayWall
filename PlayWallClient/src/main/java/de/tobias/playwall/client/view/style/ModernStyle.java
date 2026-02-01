@@ -91,7 +91,7 @@ public class ModernStyle implements Styleable
 
 		stage.getScene().getStylesheets().remove("style/modern.css");
 
-		stage.getScene().getStylesheets().add("style/modern.css");
+		stage.getScene().getStylesheets().addFirst("style/modern.css");
 	}
 
 	@Override
