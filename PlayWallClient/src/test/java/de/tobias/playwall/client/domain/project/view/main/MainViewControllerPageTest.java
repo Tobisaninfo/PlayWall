@@ -64,20 +64,20 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 				.containsExactlyInAnyOrder("Page 1", "Page 2");
 
 		// Assert highlighting
-		assertThat(mainViewController.getPageButtonsFlowPane().getChildren().getFirst().getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
-		assertThat(mainViewController.getPageButtonsFlowPane().getChildren().get(1).getStyleClass()).doesNotContain(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
+		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
+		assertThat(mainViewController.getPageButtons().getChildren().get(1).getStyleClass()).doesNotContain(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
 
 		// Assert current page
 		final DesktopPadView padView1 = (DesktopPadView) mainViewController.getPadViewForPosition(0);
 		assertThat(padView1.getNamePreviewLabel()).hasText("Test Pad");
 
 		// Switch page
-		robot.clickOn(mainViewController.getPageButtonsFlowPane().getChildren().get(1));
+		robot.clickOn(mainViewController.getPageButtons().getChildren().get(1));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Assert highlighting
-		assertThat(mainViewController.getPageButtonsFlowPane().getChildren().getFirst().getStyleClass()).doesNotContain(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
-		assertThat(mainViewController.getPageButtonsFlowPane().getChildren().get(1).getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
+		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getStyleClass()).doesNotContain(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
+		assertThat(mainViewController.getPageButtons().getChildren().get(1).getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
 
 		// Assert current page
 		final DesktopPadView padView2 = (DesktopPadView) mainViewController.getPadViewForPosition(0);
