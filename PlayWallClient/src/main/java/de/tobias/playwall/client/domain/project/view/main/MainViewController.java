@@ -392,6 +392,11 @@ public class MainViewController extends ViewControllerBase
 		}
 	}
 
+	@FXML
+	private void onPageReorder(PageButtons.PageReorderEvent event)
+	{
+		Logger.debug(event.getPages().stream().map(Page::getName).toList());
+	}
 
 	public void showLoadingOverlay(boolean visible)
 	{

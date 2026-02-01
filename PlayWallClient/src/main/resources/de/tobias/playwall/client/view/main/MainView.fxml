@@ -16,7 +16,8 @@
                 <HBox fx:id="toolbar" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0"
                       styleClass="tool-bar">
                     <children>
-                        <PageButtons fx:id="pageButtons" alignment="CENTER_LEFT" hgap="14.0"
+                        <PageButtons fx:id="pageButtons" onPageReorder="#onPageReorder" alignment="CENTER_LEFT"
+                                     hgap="14.0"
                                   maxWidth="1.7976931348623157E308" vgap="14.0">
                             <children>
                                 <Button fx:id="pageAddButton" styleClass="circle" onAction="#onPageAdd" focusTraversable="false"/>

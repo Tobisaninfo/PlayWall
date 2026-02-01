@@ -2,6 +2,12 @@ package de.tobias.playwall.client.domain.project.view.main;
 
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -20,6 +26,21 @@ import java.util.function.BiConsumer;
 
 public class PageButtons extends FlowPane
 {
+	public static class PageReorderEvent extends Event
+	{
+		public static final EventType<ActionEvent> REORDER =
+				new EventType<>(Event.ANY, "REORDER");
+
+		@Getter
+		private final transient List<Page> pages;
+
+		public PageReorderEvent(List<Page> pages)
+		{
+			super(REORDER);
+			this.pages = pages;
+		}
+	}
+
 	private static final DataFormat PAGE_BUTTON_DND = new DataFormat("application/x-playwall-page-button");
 	public static final String PAGE_BUTTON_DRAGGING_STYLECLASS = "page-button-dragging";
 
@@ -27,6 +48,8 @@ public class PageButtons extends FlowPane
 	private int originalDraggedIndex = -1;
 
 	private final Region dropPlaceholder = new Region();
+
+	private final ObjectProperty<EventHandler<PageReorderEvent>> onPageReorder = new SimpleObjectProperty<>();
 
 	@Getter
 	@Setter
@@ -38,6 +61,21 @@ public class PageButtons extends FlowPane
 		dropPlaceholder.setManaged(true);
 
 		installPageButtonsFlowPaneDropBehavior();
+	}
+
+	public EventHandler<PageReorderEvent> getOnPageReorder()
+	{
+		return onPageReorder.get();
+	}
+
+	public void setOnPageReorder(EventHandler<PageReorderEvent> onPageReorder)
+	{
+		this.onPageReorder.set(onPageReorder);
+	}
+
+	public ObjectProperty<EventHandler<PageReorderEvent>> onPageReorderProperty()
+	{
+		return onPageReorder;
 	}
 
 	private void installPageButtonsFlowPaneDropBehavior()
@@ -76,13 +114,22 @@ public class PageButtons extends FlowPane
 
 			getChildren().add(insertIndex, draggedPageButton);
 			draggedPageButton.getStyleClass().remove(PAGE_BUTTON_DRAGGING_STYLECLASS);
-
 			draggedPageButton = null;
 			originalDraggedIndex = -1;
+
+			if(onPageReorder.get() != null)
+			{
+				onPageReorder.get().handle(new PageReorderEvent(getPageButtonOrder()));
+			}
 
 			e.setDropCompleted(true);
 			e.consume();
 		});
+	}
+
+	private List<Page> getPageButtonOrder()
+	{
+		return getChildren().stream().filter(this::isPageButton).map(node -> (Page) node.getUserData()).toList();
 	}
 
 	void buildPageButtons(List<Page> pages, BiConsumer<Button, Page> onButtonCreate)
