@@ -11,7 +11,7 @@
                     </option>
                     <option name="goals">
                         <list>
-                            <option value="sass:update-stylesheets"/>
+                            <option value="dart-sass:compile-sass"/>
                         </list>
                     </option>
                     <option name="multimoduleDir"/>

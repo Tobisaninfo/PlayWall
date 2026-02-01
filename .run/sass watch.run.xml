@@ -11,7 +11,7 @@
                     </option>
                     <option name="goals">
                         <list>
-                            <option value="sass:watch"/>
+                            <option value="dart-sass:watch-sass"/>
                         </list>
                     </option>
                     <option name="multimoduleDir"/>
