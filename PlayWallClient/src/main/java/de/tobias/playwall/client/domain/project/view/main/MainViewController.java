@@ -214,6 +214,8 @@ public class MainViewController extends ViewControllerBase
 			return t;
 		}));
 		pageButtonsFlowPane.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
+
+		stageContainer.addCloseKeyShortcut(() -> globalColorPicker.setSelected(false));
 	}
 
 	public void updateTitle()
