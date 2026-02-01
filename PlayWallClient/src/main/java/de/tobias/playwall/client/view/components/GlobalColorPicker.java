@@ -107,6 +107,11 @@ public class GlobalColorPicker extends ToggleButton
 	private void updatePadColor(PadView padView)
 	{
 		final Pad pad = padView.getPadController().getPad();
+		if(pad.getDefaultColor() == colorPicker.getSelectedColor())
+		{
+			return;
+		}
+
 		pad.setDefaultColor(colorPicker.getSelectedColor());
 
 		try
