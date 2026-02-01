@@ -37,14 +37,9 @@ public class GlobalColorPicker extends ToggleButton
 		icon.setSize(14);
 		icon.setMouseTransparent(true);
 
-		colorButton = new ColorButton();
-		colorButton.setMinWidth(PREVIEW_BOX_SIZE);
-		colorButton.setMinHeight(PREVIEW_BOX_SIZE);
-		colorButton.setMaxWidth(PREVIEW_BOX_SIZE);
-		colorButton.setMaxHeight(PREVIEW_BOX_SIZE);
-		colorButton.updateColor(START_COLOR);
-		colorButton.setGraphic(null);
+		colorButton = initColorButton();
 		colorPicker = new ColorPicker(START_COLOR, ModernColor.values(), colorButton::updateColor);
+
 		colorButton.setOnAction((_) -> {
 			colorPicker.hide();
 			colorPicker.show(colorButton);
@@ -63,50 +58,75 @@ public class GlobalColorPicker extends ToggleButton
 		final ImageCursor imageCursor = new ImageCursor(cursorImage, cursorImage.getWidth() / 2, cursorImage.getHeight() / 2);
 
 		this.selectedProperty().addListener((_, _, newValue) -> {
-			if(newValue)
+			onSelected(newValue, imageCursor);
+		});
+	}
+
+	private ColorButton initColorButton()
+	{
+		final ColorButton colorButton = new ColorButton();
+
+		colorButton.setMinWidth(PREVIEW_BOX_SIZE);
+		colorButton.setMinHeight(PREVIEW_BOX_SIZE);
+		colorButton.setMaxWidth(PREVIEW_BOX_SIZE);
+		colorButton.setMaxHeight(PREVIEW_BOX_SIZE);
+		colorButton.updateColor(START_COLOR);
+		colorButton.setGraphic(null);
+
+		return colorButton;
+	}
+
+	private void onSelected(Boolean newValue, ImageCursor imageCursor)
+	{
+		if(newValue)
+		{
+			getScene().setCursor(imageCursor);
+
+			for(PadView padView : padViews)
 			{
-				getScene().setCursor(imageCursor);
-
-				for(PadView padView : padViews)
-				{
-					padView.getRootNode().setOnMouseClicked(event -> {
-						if(event.getButton() == MouseButton.PRIMARY)
-						{
-							updatePadColor(padView);
-						}
-					});
-
-					padView.getRootNode().setOnDragDetected(event -> {
-						if(event.isPrimaryButtonDown())
-						{
-							padView.getRootNode().startFullDrag();
-							updatePadColor(padView);
-							event.consume();
-						}
-					});
-
-					padView.getRootNode().setOnMouseDragEntered(event -> {
-						if(event.isPrimaryButtonDown())
-						{
-							updatePadColor(padView);
-						}
-					});
-					padView.disableSettings(true);
-				}
+				addPadViewListeners(padView);
 			}
-			else
-			{
-				getScene().setCursor(Cursor.DEFAULT);
+		}
+		else
+		{
+			getScene().setCursor(Cursor.DEFAULT);
 
-				for(PadView padView : padViews)
-				{
-					padView.getRootNode().setOnMouseClicked(null);
-					padView.getRootNode().setOnDragDetected(null);
-					padView.getRootNode().setOnMouseDragEntered(null);
-					padView.disableSettings(false);
-				}
+			for(PadView padView : padViews)
+			{
+				padView.getRootNode().setOnMouseClicked(null);
+				padView.getRootNode().setOnDragDetected(null);
+				padView.getRootNode().setOnMouseDragEntered(null);
+				padView.disableSettings(false);
+			}
+		}
+	}
+
+	private void addPadViewListeners(PadView padView)
+	{
+		padView.getRootNode().setOnMouseClicked(event -> {
+			if(event.getButton() == MouseButton.PRIMARY)
+			{
+				updatePadColor(padView);
 			}
 		});
+
+		padView.getRootNode().setOnDragDetected(event -> {
+			if(event.isPrimaryButtonDown())
+			{
+				padView.getRootNode().startFullDrag();
+				updatePadColor(padView);
+				event.consume();
+			}
+		});
+
+		padView.getRootNode().setOnMouseDragEntered(event -> {
+			if(event.isPrimaryButtonDown())
+			{
+				updatePadColor(padView);
+			}
+		});
+
+		padView.disableSettings(true);
 	}
 
 	private void updatePadColor(PadView padView)
