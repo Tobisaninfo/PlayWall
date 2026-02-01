@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
-import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.geometry.Bounds;
@@ -162,6 +161,7 @@ public class PageButtons extends FlowPane
 		dragDoneEvent.consume();
 	}
 
+	@SuppressWarnings("java:S3776")
 	private int computeInsertIndexForPointer(double sceneX, double sceneY)
 	{
 		// Do not allow dragging the page button after "page-add-button"
@@ -260,6 +260,7 @@ public class PageButtons extends FlowPane
 				.ifPresent(button -> button.getStyleClass().add(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	private boolean isPageButton(Object node)
 	{
 		return (node instanceof Node n) && (n.getUserData() instanceof Page);
