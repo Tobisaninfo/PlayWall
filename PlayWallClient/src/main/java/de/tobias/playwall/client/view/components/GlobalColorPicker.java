@@ -23,6 +23,8 @@ import java.util.List;
 public class GlobalColorPicker extends ToggleButton
 {
 	private static final int PREVIEW_BOX_SIZE = 15;
+	private static final double CURSOR_SIZE_PX = 24.0;
+
 	private static final ModernColor START_COLOR = ModernColor.BLUE1;
 
 	private final ColorButton colorButton;
@@ -54,10 +56,20 @@ public class GlobalColorPicker extends ToggleButton
 
 		this.setSelected(false);
 
-		final Image cursorImage = new Image("de/tobias/playwall/client/icon/paintbrush-solid-full.png");
-		final ImageCursor imageCursor = new ImageCursor(cursorImage, cursorImage.getWidth() / 2, cursorImage.getHeight() / 2);
-
 		this.selectedProperty().addListener((_, _, newValue) -> {
+			final Image cursorImage = new Image(
+					"de/tobias/playwall/client/icon/paintbrush-solid-full.png",
+					CURSOR_SIZE_PX,
+					CURSOR_SIZE_PX,
+					true,
+					true
+			);
+			final ImageCursor imageCursor = new ImageCursor(
+					cursorImage,
+					cursorImage.getWidth() / 2.0,
+					cursorImage.getHeight() / 2.0
+			);
+
 			onSelected(newValue, imageCursor);
 		});
 	}
