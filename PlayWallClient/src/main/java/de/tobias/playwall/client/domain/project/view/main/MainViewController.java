@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
 
@@ -395,7 +396,15 @@ public class MainViewController extends ViewControllerBase
 	@FXML
 	private void onPageReorder(PageButtons.PageReorderEvent event)
 	{
-		Logger.debug(event.getPages().stream().map(Page::getName).toList());
+		try
+		{
+			client.currentProject().reorderPages(event.getPages().stream().collect(Collectors.toMap(Page::getId, page -> event.getPages().indexOf(page))));
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO: Error Handling
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void showLoadingOverlay(boolean visible)

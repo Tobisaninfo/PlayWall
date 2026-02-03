@@ -4,10 +4,7 @@ import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.event.EventListener;
-import de.tobias.playwall.common.api.page.update.PageAddUpdate;
-import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
-import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
-import de.tobias.playwall.common.api.page.update.PageReplaceUpdate;
+import de.tobias.playwall.common.api.page.update.*;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 
@@ -52,6 +49,14 @@ class PageListener
 			mainViewController.buildPageButtons();
 			mainViewController.showPage(page);
 		});
+	}
+
+	@EventListener(PageReorderUpdate.class)
+	void onPageReorderUpdate(PageReorderUpdate update)
+	{
+		projectController.updatePagePositions(update.getPositions());
+
+		Platform.runLater(mainViewController::buildPageButtons);
 	}
 
 	@EventListener(PageDeleteUpdate.class)

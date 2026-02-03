@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static de.tobias.playwall.common.utils.MapUtils.entry;
@@ -167,6 +168,12 @@ class ClientImpl implements Client
 	{
 		final PageDuplicateResponse response = clientWebSocketHandler.send(new PageDuplicateRequest(pageId, name));
 		return pageMapper.pageDtoToPage(response.getPage());
+	}
+
+	@Override
+	public void reorderPage(Map<UUID, Integer> positions) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PageReorderRequest(positions));
 	}
 
 	@Override

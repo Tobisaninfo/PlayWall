@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("ClassCanBeRecord")
@@ -128,6 +129,12 @@ class FluentClientImpl implements FluentClient
 		public void addPage() throws PlayWallApiException
 		{
 			delegate.addPage();
+		}
+
+		@Override
+		public void reorderPages(Map<UUID, Integer> positions) throws PlayWallApiException
+		{
+			delegate.reorderPage(positions);
 		}
 
 		@Override

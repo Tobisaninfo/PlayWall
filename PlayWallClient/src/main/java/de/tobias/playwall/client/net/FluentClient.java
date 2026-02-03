@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.project.ProjectMetadata;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface FluentClient
@@ -48,6 +49,8 @@ public interface FluentClient
 		void redo() throws PlayWallApiException;
 
 		void addPage() throws PlayWallApiException;
+
+		void reorderPages(Map<UUID, Integer> positions) throws PlayWallApiException;
 
 		PageBuilder page(UUID pageId);
 

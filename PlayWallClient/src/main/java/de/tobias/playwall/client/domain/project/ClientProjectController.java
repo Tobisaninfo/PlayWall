@@ -6,6 +6,7 @@ import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.page.Page;
 import lombok.Getter;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -103,6 +104,7 @@ public class ClientProjectController
 	public void updatePagePositions(Map<UUID, Integer> positions)
 	{
 		positions.forEach((id, position) -> project.getPage(id).setPosition(position));
+		project.getPages().sort(Comparator.comparing(Page::getPosition));
 	}
 
 	private void createPadControllerForPage(Page page)

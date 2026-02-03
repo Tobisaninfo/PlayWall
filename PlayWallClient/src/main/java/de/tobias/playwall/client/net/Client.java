@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.project.ProjectMetadata;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface Client
@@ -45,6 +46,8 @@ public interface Client
 	void deletePage(UUID pageId) throws PlayWallApiException;
 
 	Page duplicatePage(UUID pageId, String name) throws PlayWallApiException;
+
+	void reorderPage(Map<UUID, Integer> positions) throws PlayWallApiException;
 
 	void play(UUID padId) throws PlayWallApiException;
 
