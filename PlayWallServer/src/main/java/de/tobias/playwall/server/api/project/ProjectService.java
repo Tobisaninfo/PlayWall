@@ -11,10 +11,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -124,6 +121,22 @@ public class ProjectService
 	{
 		page.setPosition(index);
 		project.getPages().set(index, page);
+	}
+
+	public Map<UUID, Integer> getPageOrder(Project project)
+	{
+		final Map<UUID, Integer> pageOrder = new HashMap<>();
+		for(Page page : project.getPages())
+		{
+			pageOrder.put(page.getId(), page.getPosition());
+		}
+		return pageOrder;
+	}
+
+	public void reorderPages(Project project, Map<UUID, Integer> pages)
+	{
+		project.getPages().forEach(page -> page.setPosition(pages.get(page.getId())));
+		project.getPages().sort(Comparator.comparing(Page::getPosition));
 	}
 
 	public Page renamePage(Project project, UUID pageId, String newName) throws PageNotExistsException
