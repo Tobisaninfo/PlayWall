@@ -53,7 +53,7 @@ class PageListenerTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testPadUpdateListener(FxRobot robot)
+	void testPageAddListener(FxRobot robot)
 	{
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);

@@ -6,16 +6,24 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.util.Map;
+import java.util.UUID;
+
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 class MainViewControllerPageTest extends AbstractViewControllerTest
@@ -82,5 +90,41 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		// Assert current page
 		final DesktopPadView padView2 = (DesktopPadView) mainViewController.getPadViewForPosition(0);
 		assertThat(padView2.getNamePreviewLabel().getText()).isEmpty();
+	}
+
+	@Test
+	void testPageReorder(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		// Assert buttons
+		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 1", "Page 2");
+
+		final Node button1 = robot.lookup(".page-button").nth(0).queryAs(Node.class);
+		final Node button2 = robot.lookup(".page-button").nth(1).queryAs(Node.class);
+
+
+		Point2D destination = button2.localToScreen(
+				button2.getBoundsInLocal().getCenterX(),
+				button2.getBoundsInLocal().getCenterY()
+		);
+
+		robot.drag(button1).moveTo(destination).drop();
+		WaitForAsyncUtils.waitForFxEvents();
+
+		//noinspection unchecked
+		final ArgumentCaptor<Map<UUID, Integer>> argumentCaptor = ArgumentCaptor.forClass(Map.class);
+		verify(client).reorderPage(argumentCaptor.capture());
+		assertThat(argumentCaptor.getValue()).containsExactlyInAnyOrderEntriesOf(Map.of(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), 1,
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 0
+		));
+
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 2", "Page 1");
 	}
 }
