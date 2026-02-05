@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import javafx.fxml.FXML;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
 /**
@@ -16,6 +17,12 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 	@FXML
 	private TextField textFieldName;
 
+	@FXML
+	private Spinner<Integer> spinnerNumberOfHorizontalPads;
+
+	@FXML
+	private Spinner<Integer> spinnerNumberOfVerticalPads;
+
 	@InjectConstructor
 	public ProjectSettingsGeneralViewController(FluentClient client)
 	{
@@ -26,13 +33,20 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 	public void initParameter(Param param)
 	{
 		textFieldName.setText(param.getProjectMetadata().getName());
-		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty());
+		spinnerNumberOfHorizontalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfHorizontalPads());
+		spinnerNumberOfVerticalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfVerticalPads());
+
+		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty()
+				.and(spinnerNumberOfHorizontalPads.valueProperty().isNotNull()
+				.and(spinnerNumberOfVerticalPads.valueProperty().isNotNull())));
 	}
 
 	@Override
 	public void applySettings(Param param)
 	{
 		param.getProjectMetadata().setName(textFieldName.getText());
+		param.getProjectMetadata().setNumberOfHorizontalPads(spinnerNumberOfHorizontalPads.getValue());
+		param.getProjectMetadata().setNumberOfVerticalPads(spinnerNumberOfVerticalPads.getValue());
 	}
 
 	@Override
