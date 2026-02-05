@@ -11,8 +11,7 @@ import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.page.PageDto;
-import de.tobias.playwall.common.api.page.update.PageAddUpdate;
-import de.tobias.playwall.common.api.page.update.PageReorderUpdate;
+import de.tobias.playwall.common.api.page.update.*;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -55,8 +54,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		project = loadProject("projects/project_1.json");
 	}
 
-	@Test
-	void testPageAddListener(FxRobot robot)
+	private void showMainView()
 	{
 		Platform.runLater(() -> {
 			mainViewController = context.get(MainViewController.class);
@@ -65,6 +63,12 @@ class PageListenerTest extends AbstractViewControllerTest
 			stage.show();
 		});
 		WaitForAsyncUtils.waitForFxEvents();
+	}
+
+	@Test
+	void testPageAddListener(FxRobot robot)
+	{
+		showMainView();
 
 		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
 
@@ -81,16 +85,11 @@ class PageListenerTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testPageReorderListener(FxRobot robot)
+	void testPageDeleteListener(FxRobot robot)
 	{
-		Platform.runLater(() -> {
-			mainViewController = context.get(MainViewController.class);
-			mainViewController.showProject(project);
-			mainViewController.showLoadingOverlay(false);
-			stage.show();
-		});
-		WaitForAsyncUtils.waitForFxEvents();
+		showMainView();
 
+		// Check precondition
 		assertThat(robot.lookup(".page-button").queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
@@ -99,12 +98,110 @@ class PageListenerTest extends AbstractViewControllerTest
 				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e")
 		);
 
+		// Perform action
+		eventHandler.fireEvent(new PageDeleteUpdate(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), Map.of(
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 0
+		)));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Verify
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 2");
+		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e")
+		);
+	}
+
+	@Test
+	void testPageInsertListener(FxRobot robot)
+	{
+		showMainView();
+
+		// Check precondition
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 1", "Page 2");
+		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"),
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e")
+		);
+
+		// Perform action
+		final UUID newPageId = UUID.randomUUID();
+		eventHandler.fireEvent(new PageInsertUpdate(new PageDto(newPageId, "Page 3", 1,
+				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
+						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3)).toList()),
+				1, Map.of(
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 2
+		)));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Verify
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 1", "Page 3", "Page 2");
+		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"),
+				newPageId,
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e")
+		);
+	}
+
+	@Test
+	void testPageReplaceListener(FxRobot robot)
+	{
+		showMainView();
+
+		// Check precondition
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 1", "Page 2");
+		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"),
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e")
+		);
+
+		// Perform action
+		final UUID newPageId = UUID.randomUUID();
+		eventHandler.fireEvent(new PageReplaceUpdate(new PageDto(newPageId, "Page 3", 1,
+				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
+						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3)).toList()),
+				1));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Verify
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 1", "Page 3");
+		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"),
+				newPageId
+		);
+	}
+
+	@Test
+	void testPageReorderListener(FxRobot robot)
+	{
+		showMainView();
+
+		// Check precondition
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 1", "Page 2");
+		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"),
+				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e")
+		);
+
+		// Perform action
 		eventHandler.fireEvent(new PageReorderUpdate(Map.of(
 				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), 1,
 				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 0
 		)));
 		WaitForAsyncUtils.waitForFxEvents();
 
+		// Verify
 		assertThat(robot.lookup(".page-button").queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2", "Page 1");

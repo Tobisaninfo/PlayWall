@@ -93,6 +93,20 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	}
 
 	@Test
+	void testPageDelete(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		robot.rightClickOn(mainViewController.getPageButtons().getChildren().getFirst());
+		robot.clickOn((Node) robot.lookup(".menu-item").nth(0).query());
+
+		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
+		verify(client).deletePage(argumentCaptor.capture());
+
+		assertThat(argumentCaptor.getValue()).isEqualTo(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"));
+	}
+
+	@Test
 	void testPageReorder(FxRobot robot) throws PlayWallApiException
 	{
 		showMainView();
