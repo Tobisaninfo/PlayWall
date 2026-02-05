@@ -12,6 +12,8 @@ import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -97,8 +99,9 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	{
 		showMainView();
 
-		robot.rightClickOn(mainViewController.getPageButtons().getChildren().getFirst());
-		robot.clickOn((Node) robot.lookup(".menu-item").nth(0).query());
+		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
+		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
+		robot.interact(deleteMenuItem::fire);
 
 		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
 		verify(client).deletePage(argumentCaptor.capture());
