@@ -207,4 +207,69 @@ public class ProjectService
 
 		return removed;
 	}
+
+	public void updateNumberOfPadsPerRowAndColumn(Project project, ProjectMetadata oldMetadata)
+	{
+		final int numberOfHorizontalPads = project.getMetadata().getNumberOfHorizontalPads();
+		final int oldNumberOfHorizontalPads = oldMetadata.getNumberOfHorizontalPads();
+
+		final int numberOfVerticalPads = project.getMetadata().getNumberOfVerticalPads();
+		final int oldNumberOfVerticalPads = oldMetadata.getNumberOfVerticalPads();
+
+		final int columnDifference = oldNumberOfHorizontalPads - numberOfHorizontalPads;
+		final int rowDifference = oldNumberOfVerticalPads - numberOfVerticalPads;
+
+		if(columnDifference == 0 && rowDifference == 0)
+		{
+			return;
+		}
+
+		for(Page page : project.getPages())
+		{
+			final List<Pad> pads = page.getPads();
+			final List<Pad> resizedPads = new ArrayList<>();
+
+			cleanPads(pads, oldNumberOfHorizontalPads, numberOfVerticalPads, numberOfHorizontalPads, resizedPads);
+			addMissingPads(numberOfVerticalPads, numberOfHorizontalPads, resizedPads);
+
+			page.setPads(resizedPads.stream().sorted(Comparator.comparing(Pad::getPosition)).toList());
+		}
+	}
+
+	private static void cleanPads(List<Pad> pads, int oldNumberOfHorizontalPads, int numberOfVerticalPads, int numberOfHorizontalPads, List<Pad> resizedPads)
+	{
+		for(Pad pad : pads)
+		{
+			int oldPosition = pad.getPosition();
+			int row = oldPosition / oldNumberOfHorizontalPads;
+			int col = oldPosition % oldNumberOfHorizontalPads;
+
+			if(row < numberOfVerticalPads && col < numberOfHorizontalPads)
+			{
+				int newPosition = row * numberOfHorizontalPads + col;
+				pad.setPosition(newPosition);
+				resizedPads.add(pad);
+			}
+		}
+	}
+
+	private static void addMissingPads(int numberOfVerticalPads, int numberOfHorizontalPads, List<Pad> resizedPads)
+	{
+		for(int row = 0; row < numberOfVerticalPads; row++)
+		{
+			for(int col = 0; col < numberOfHorizontalPads; col++)
+			{
+				int position = row * numberOfHorizontalPads + col;
+
+				boolean exists = resizedPads.stream().anyMatch(p -> p.getPosition() == position);
+				if(!exists)
+				{
+					resizedPads.add(Pad.builder()
+							.id(UUID.randomUUID())
+							.position(position)
+							.build());
+				}
+			}
+		}
+	}
 }

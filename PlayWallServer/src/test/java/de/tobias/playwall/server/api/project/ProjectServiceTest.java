@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.project;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.groups.Tuple.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -243,5 +245,145 @@ class ProjectServiceTest
 		assertThat(project.getPages().get(0)).extracting(Page::getId, Page::getPosition).containsExactly(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), 0);
 		assertThat(project.getPages().get(1)).extracting(Page::getId, Page::getPosition).containsExactly(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"), 1);
 		assertThat(project.getPages().get(2)).extracting(Page::getId, Page::getPosition).containsExactly(addedPage.getId(), 2);
+	}
+
+	@Test
+	void test_updateNumberOfPadsPerRowAndColumn_equalSize()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
+		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getPads())
+				.extracting(Pad::getName, Pad::getPosition)
+				.containsExactly(tuple("Test Pad 1", 0),
+						tuple("Test Pad 2", 1),
+						tuple("Test Pad 3", 2),
+						tuple("Test Pad 4", 3));
+	}
+
+	@Test
+	void test_updateNumberOfPadsPerRowAndColumn_newRows()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
+		project.getMetadata().setNumberOfVerticalPads(4);
+		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getPads())
+				.extracting(Pad::getName, Pad::getPosition)
+				.containsExactly(tuple("Test Pad 1", 0),
+						tuple("Test Pad 2", 1),
+						tuple("Test Pad 3", 2),
+						tuple("Test Pad 4", 3),
+						tuple(null, 4),
+						tuple(null, 5),
+						tuple(null, 6),
+						tuple(null, 7));
+	}
+
+	@Test
+	void test_updateNumberOfPadsPerRowAndColumn_newColumns()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
+		project.getMetadata().setNumberOfHorizontalPads(4);
+		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getPads())
+				.extracting(Pad::getName, Pad::getPosition)
+				.containsExactly(tuple("Test Pad 1", 0),
+						tuple("Test Pad 2", 1),
+						tuple(null, 2),
+						tuple(null, 3),
+						tuple("Test Pad 3", 4),
+						tuple("Test Pad 4", 5),
+						tuple(null, 6),
+						tuple(null, 7));
+	}
+
+	@Test
+	void test_updateNumberOfPadsPerRowAndColumn_newRowsAndColumns()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
+		project.getMetadata().setNumberOfHorizontalPads(4);
+		project.getMetadata().setNumberOfVerticalPads(4);
+		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getPads())
+				.extracting(Pad::getName, Pad::getPosition)
+				.containsExactly(tuple("Test Pad 1", 0),
+						tuple("Test Pad 2", 1),
+						tuple(null, 2),
+						tuple(null, 3),
+						tuple("Test Pad 3", 4),
+						tuple("Test Pad 4", 5),
+						tuple(null, 6),
+						tuple(null, 7),
+						tuple(null, 8),
+						tuple(null, 9),
+						tuple(null, 10),
+						tuple(null, 11),
+						tuple(null, 12),
+						tuple(null, 13),
+						tuple(null, 14),
+						tuple(null, 15));
+	}
+
+	@Test
+	void test_updateNumberOfPadsPerRowAndColumn_removeRow()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
+		project.getMetadata().setNumberOfVerticalPads(1);
+		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getPads())
+				.extracting(Pad::getName, Pad::getPosition)
+				.containsExactly(tuple("Test Pad 1", 0),
+						tuple("Test Pad 2", 1));
+	}
+
+	@Test
+	void test_updateNumberOfPadsPerRowAndColumn_removeColumn()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
+		project.getMetadata().setNumberOfHorizontalPads(1);
+		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getPads())
+				.extracting(Pad::getName, Pad::getPosition)
+				.containsExactly(tuple("Test Pad 1", 0),
+						tuple("Test Pad 3", 1));
+	}
+
+	@Test
+	void test_updateNumberOfPadsPerRowAndColumn_removeRowAndColumn()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
+		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+
+		project.getMetadata().setNumberOfHorizontalPads(1);
+		project.getMetadata().setNumberOfVerticalPads(1);
+		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+		assertThat(project.getPages()).hasSize(1);
+		assertThat(project.getPages().getFirst().getPads())
+				.extracting(Pad::getName, Pad::getPosition)
+				.containsExactly(tuple("Test Pad 1", 0));
 	}
 }

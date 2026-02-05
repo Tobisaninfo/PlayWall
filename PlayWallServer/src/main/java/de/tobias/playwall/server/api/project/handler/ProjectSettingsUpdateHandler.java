@@ -54,7 +54,10 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 			project.getMetadata().setTimeMode(requestMessage.getProjectMetadata().timeMode());
 			project.getMetadata().setDefaultColor(requestMessage.getProjectMetadata().defaultColor());
 			project.getMetadata().setPlayColor(requestMessage.getProjectMetadata().playColor());
+			project.getMetadata().setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
+			project.getMetadata().setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
 			projectService.rename(project.getMetadata().getId(), requestMessage.getProjectMetadata().name());
+			projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
 
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(project.getMetadata())));
 

@@ -1,0 +1,57 @@
+{
+    "metadata": {
+        "id": "fee42392-44d2-478d-93f3-49bf6cee98b3",
+        "name": "Project 5",
+        "numberOfHorizontalPads": 2,
+        "numberOfVerticalPads": 2,
+        "volume": 1.0,
+        "timeMode": "ELAPSED",
+        "defaultColor": "GRAY1",
+        "playColor": "RED3"
+    },
+    "pages": [
+        {
+            "id": "af2b42e3-a87f-4d56-9995-417dc7c4e41c",
+            "name": "Page 1",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "3a9edcfd-c4a0-48c5-a34b-d2b9cdc12225",
+                    "name": "Test Pad 1",
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "895082d5-3655-4aca-96db-818fef99e9ef",
+                    "name": "Test Pad 2",
+                    "position": 1,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "f55f7691-2842-4d3f-9b64-08ddb0161398",
+                    "name": "Test Pad 3",
+                    "position": 2,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "c37d6bb6-49a7-4b72-964d-dc9a8571507a",
+                    "name": "Test Pad 4",
+                    "position": 3,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                }
+            ]
+        }
+    ]
+}
