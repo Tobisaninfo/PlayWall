@@ -18,5 +18,5 @@ public interface PadView
 
 	void updateTimeNodes();
 
-	void disableSettings(boolean disabled);
+	void disableSettingsButton(boolean disabled);
 }

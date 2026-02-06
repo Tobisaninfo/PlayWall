@@ -108,7 +108,7 @@ public class GlobalColorPicker extends ToggleButton
 				padView.getRootNode().setOnMouseClicked(null);
 				padView.getRootNode().setOnDragDetected(null);
 				padView.getRootNode().setOnMouseDragEntered(null);
-				padView.disableSettings(false);
+				padView.disableSettingsButton(false);
 			}
 		}
 	}
@@ -138,7 +138,7 @@ public class GlobalColorPicker extends ToggleButton
 			}
 		});
 
-		padView.disableSettings(true);
+		padView.disableSettingsButton(true);
 	}
 
 	private void updatePadColor(PadView padView)

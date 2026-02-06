@@ -316,7 +316,7 @@ public class DesktopPadView implements PadView
 	}
 
 	@Override
-	public void disableSettings(boolean disabled)
+	public void disableSettingsButton(boolean disabled)
 	{
 		settingsButton.setDisable(disabled);
 	}
