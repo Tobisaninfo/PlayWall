@@ -210,14 +210,14 @@ public class ProjectService
 
 	public void updateNumberOfPadsPerRowAndColumn(Project project, ProjectMetadata oldMetadata)
 	{
-		final int numberOfHorizontalPads = project.getMetadata().getNumberOfHorizontalPads();
+		final int newNumberOfHorizontalPads = project.getMetadata().getNumberOfHorizontalPads();
 		final int oldNumberOfHorizontalPads = oldMetadata.getNumberOfHorizontalPads();
 
-		final int numberOfVerticalPads = project.getMetadata().getNumberOfVerticalPads();
+		final int newNumberOfVerticalPads = project.getMetadata().getNumberOfVerticalPads();
 		final int oldNumberOfVerticalPads = oldMetadata.getNumberOfVerticalPads();
 
-		final int columnDifference = oldNumberOfHorizontalPads - numberOfHorizontalPads;
-		final int rowDifference = oldNumberOfVerticalPads - numberOfVerticalPads;
+		final int columnDifference = oldNumberOfHorizontalPads - newNumberOfHorizontalPads;
+		final int rowDifference = oldNumberOfVerticalPads - newNumberOfVerticalPads;
 
 		if(columnDifference == 0 && rowDifference == 0)
 		{
@@ -227,44 +227,49 @@ public class ProjectService
 		for(Page page : project.getPages())
 		{
 			final List<Pad> pads = page.getPads();
-			final List<Pad> resizedPads = new ArrayList<>();
 
-			cleanPads(pads, oldNumberOfHorizontalPads, numberOfVerticalPads, numberOfHorizontalPads, resizedPads);
-			addMissingPads(numberOfVerticalPads, numberOfHorizontalPads, resizedPads);
+			cleanPads(pads, oldNumberOfHorizontalPads, newNumberOfVerticalPads, newNumberOfHorizontalPads);
+			addMissingPads(pads, newNumberOfVerticalPads, newNumberOfHorizontalPads);
 
-			page.setPads(resizedPads.stream().sorted(Comparator.comparing(Pad::getPosition)).toList());
+			pads.sort(Comparator.comparing(Pad::getPosition));
 		}
 	}
 
-	private static void cleanPads(List<Pad> pads, int oldNumberOfHorizontalPads, int numberOfVerticalPads, int numberOfHorizontalPads, List<Pad> resizedPads)
+	private static void cleanPads(List<Pad> pads, int oldNumberOfHorizontalPads, int newNumberOfVerticalPads, int newNumberOfHorizontalPads)
 	{
-		for(Pad pad : pads)
+		final Iterator<Pad> iterator = pads.iterator();
+		while(iterator.hasNext())
 		{
+			final Pad pad = iterator.next();
+
 			int oldPosition = pad.getPosition();
 			int row = oldPosition / oldNumberOfHorizontalPads;
 			int col = oldPosition % oldNumberOfHorizontalPads;
 
-			if(row < numberOfVerticalPads && col < numberOfHorizontalPads)
+			if(row < newNumberOfVerticalPads && col < newNumberOfHorizontalPads)
 			{
-				int newPosition = row * numberOfHorizontalPads + col;
+				int newPosition = row * newNumberOfHorizontalPads + col;
 				pad.setPosition(newPosition);
-				resizedPads.add(pad);
+			}
+			else
+			{
+				iterator.remove();
 			}
 		}
 	}
 
-	private static void addMissingPads(int numberOfVerticalPads, int numberOfHorizontalPads, List<Pad> resizedPads)
+	private static void addMissingPads(List<Pad> pads, int newNumberOfVerticalPads, int newNumberOfHorizontalPads)
 	{
-		for(int row = 0; row < numberOfVerticalPads; row++)
+		for(int row = 0; row < newNumberOfVerticalPads; row++)
 		{
-			for(int col = 0; col < numberOfHorizontalPads; col++)
+			for(int col = 0; col < newNumberOfHorizontalPads; col++)
 			{
-				int position = row * numberOfHorizontalPads + col;
+				int position = row * newNumberOfHorizontalPads + col;
 
-				boolean exists = resizedPads.stream().anyMatch(p -> p.getPosition() == position);
+				boolean exists = pads.stream().anyMatch(p -> p.getPosition() == position);
 				if(!exists)
 				{
-					resizedPads.add(Pad.builder()
+					pads.add(Pad.builder()
 							.id(UUID.randomUUID())
 							.position(position)
 							.build());
