@@ -102,15 +102,13 @@ public class PageButtons extends FlowPane
 				return;
 			}
 
-			// Defensive: falls der Button aus irgendeinem Grund noch im FlowPane ist
 			getChildren().remove(draggedPageButton);
 
 			int insertIndex = getChildren().indexOf(dropPlaceholder);
 			removePlaceholder();
 
 			// Do never move the page button behind "page-add-button"
-			int maxIndex = Math.max(0, getChildren().size() - 1);
-			insertIndex = Math.clamp(insertIndex, 0, maxIndex);
+			insertIndex = Math.clamp(insertIndex, 0, getChildren().size() - 1);
 
 			getChildren().add(insertIndex, draggedPageButton);
 			draggedPageButton.getStyleClass().remove(PAGE_BUTTON_DRAGGING_STYLECLASS);
@@ -158,13 +156,12 @@ public class PageButtons extends FlowPane
 			return;
 		}
 
-		// DnD muss gestartet werden, solange der Node noch in der Scene ist
 		final Dragboard db = button.startDragAndDrop(TransferMode.MOVE);
 		final ClipboardContent content = new ClipboardContent();
 		content.put(PAGE_BUTTON_DND, "page-button");
 		db.setContent(content);
 
-		WritableImage img = button.snapshot(new SnapshotParameters(), null);
+		final WritableImage img = button.snapshot(new SnapshotParameters(), null);
 		db.setDragView(img, img.getWidth() / 2.0, img.getHeight() / 2.0);
 
 		draggedPageButton = button;
@@ -172,20 +169,15 @@ public class PageButtons extends FlowPane
 
 		button.getStyleClass().add(PAGE_BUTTON_DRAGGING_STYLECLASS);
 
-		// Placeholder-Größe an den echten Button anlehnen
 		double placeholderWidth = Math.max(button.getWidth(), button.prefWidth(-1));
 		double placeholderHeight = Math.max(button.getHeight(), button.prefHeight(-1));
 		dropPlaceholder.setPrefSize(placeholderWidth, placeholderHeight);
 		dropPlaceholder.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-		// WICHTIG: Jetzt (nach startDragAndDrop) sofort aus dem Layout nehmen
-		if(getChildren().contains(button))
+		getChildren().remove(button);
+		if(!getChildren().contains(dropPlaceholder))
 		{
-			getChildren().remove(button);
-			if(!getChildren().contains(dropPlaceholder))
-			{
-				getChildren().add(originalDraggedIndex, dropPlaceholder);
-			}
+			getChildren().add(originalDraggedIndex, dropPlaceholder);
 		}
 
 		e.consume();
@@ -212,21 +204,19 @@ public class PageButtons extends FlowPane
 	private int computeInsertIndexForPointer(double sceneX, double sceneY)
 	{
 		// Do not allow dragging the page button after "page-add-button"
-		int maxIndex = Math.max(0, getChildren().size() - 1);
+		int maxIndex = getChildren().size() - 1;
 
-		// Collect all page buttons (except placeholder)
 		final List<Bounds> pageBounds = new ArrayList<>();
-
 		for(int i = 0; i < maxIndex; i++)
 		{
 			final Node n = getChildren().get(i);
-			if(n == dropPlaceholder || !isPageButton(n))
+			if(!isPageButton(n))
 			{
 				continue;
 			}
 
-			final Bounds b = n.localToScene(n.getBoundsInLocal());
-			pageBounds.add(b);
+			final Bounds bounds = n.localToScene(n.getBoundsInLocal());
+			pageBounds.add(bounds);
 		}
 
 		// If no buttons are present, index 0 is correct
@@ -249,19 +239,19 @@ public class PageButtons extends FlowPane
 		for(int i = 0; i < maxIndex; i++)
 		{
 			final Node node = getChildren().get(i);
-			if(node == dropPlaceholder || !isPageButton(node))
+			if(!isPageButton(node))
 			{
 				continue;
 			}
 
-			final Bounds b = node.localToScene(node.getBoundsInLocal());
-			double midX = (b.getMinX() + b.getMaxX()) / 2.0;
+			final Bounds bounds = node.localToScene(node.getBoundsInLocal());
+			double midX = (bounds.getMinX() + bounds.getMaxX()) / 2.0;
 
-			boolean sameRow = sceneY >= b.getMinY() && sceneY <= b.getMaxY();
+			boolean sameRow = sceneY >= bounds.getMinY() && sceneY <= bounds.getMaxY();
 			double rowPenalty = sameRow ? 0.0 : 10_000.0;
 
 			double dx = Math.abs(sceneX - midX);
-			double dy = Math.abs(sceneY - (b.getMinY() + b.getMaxY()) / 2.0);
+			double dy = Math.abs(sceneY - (bounds.getMinY() + bounds.getMaxY()) / 2.0);
 
 			double score = rowPenalty + dx + dy * 0.5;
 			if(score < bestScore)
@@ -276,20 +266,18 @@ public class PageButtons extends FlowPane
 
 	private void movePlaceholderToIndex(int targetIndex)
 	{
-		int current = getChildren().indexOf(dropPlaceholder);
-		if(current == targetIndex)
+		int currentIndex = getChildren().indexOf(dropPlaceholder);
+		if(currentIndex == targetIndex)
 		{
 			return;
 		}
 
-		if(current >= 0)
+		if(currentIndex >= 0)
 		{
-			getChildren().remove(current);
+			getChildren().remove(currentIndex);
 		}
 
-		int addIndex = Math.max(0, getChildren().size() - 1);
-
-		targetIndex = Math.clamp(targetIndex, 0, addIndex);
+		targetIndex = Math.clamp(targetIndex, 0, getChildren().size() - 1);
 		getChildren().add(targetIndex, dropPlaceholder);
 	}
 
