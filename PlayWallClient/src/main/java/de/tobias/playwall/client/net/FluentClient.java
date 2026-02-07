@@ -63,7 +63,7 @@ public interface FluentClient
 
 	interface PageBuilder
 	{
-		Page rename(String name) throws PlayWallApiException;
+		void rename(String name) throws PlayWallApiException;
 
 		void delete() throws PlayWallApiException;
 

@@ -139,7 +139,7 @@ public class ProjectService
 		project.getPages().sort(Comparator.comparing(Page::getPosition));
 	}
 
-	public Page renamePage(Project project, UUID pageId, String newName) throws PageNotExistsException
+	public void renamePage(Project project, UUID pageId, String newName) throws PageNotExistsException
 	{
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
@@ -148,8 +148,6 @@ public class ProjectService
 		}
 		final Page page = pageOptional.get();
 		page.setName(newName);
-
-		return page;
 	}
 
 	public Page duplicatePage(Project project, UUID pageId) throws PageNotExistsException

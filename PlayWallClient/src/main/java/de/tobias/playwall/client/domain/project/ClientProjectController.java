@@ -107,6 +107,12 @@ public class ClientProjectController
 		project.getPages().sort(Comparator.comparing(Page::getPosition));
 	}
 
+
+	public void renamePage(UUID pageId, String newName)
+	{
+		project.getPage(pageId).setName(newName);
+	}
+
 	private void createPadControllerForPage(Page page)
 	{
 		for(Pad pad : page.getPads())

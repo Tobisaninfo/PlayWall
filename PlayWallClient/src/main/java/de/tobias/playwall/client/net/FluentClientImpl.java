@@ -162,9 +162,9 @@ class FluentClientImpl implements FluentClient
 		private final UUID pageId;
 
 		@Override
-		public Page rename(String name) throws PlayWallApiException
+		public void rename(String name) throws PlayWallApiException
 		{
-			return delegate.renamePage(pageId, name);
+			delegate.renamePage(pageId, name);
 		}
 
 		@Override

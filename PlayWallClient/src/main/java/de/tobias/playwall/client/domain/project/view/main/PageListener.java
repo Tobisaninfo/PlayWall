@@ -55,7 +55,13 @@ class PageListener
 	void onPageReorderUpdate(PageReorderUpdate update)
 	{
 		projectController.updatePagePositions(update.getPositions());
+		Platform.runLater(mainViewController::buildPageButtons);
+	}
 
+	@EventListener(PageRenameUpdate.class)
+	void onPageRenameUpdate(PageRenameUpdate update)
+	{
+		projectController.renamePage(update.getPageId(), update.getNewName());
 		Platform.runLater(mainViewController::buildPageButtons);
 	}
 

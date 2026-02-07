@@ -151,10 +151,9 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public Page renamePage(UUID pageId, String newName) throws PlayWallApiException
+	public void renamePage(UUID pageId, String newName) throws PlayWallApiException
 	{
-		final PageRenameResponse response = clientWebSocketHandler.send(new PageRenameRequest(pageId, newName));
-		return pageMapper.pageDtoToPage(response.getPage());
+		clientWebSocketHandler.send(new PageRenameRequest(pageId, newName));
 	}
 
 	@Override

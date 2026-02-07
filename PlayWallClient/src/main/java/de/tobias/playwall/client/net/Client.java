@@ -41,7 +41,7 @@ public interface Client
 
 	void addPage() throws PlayWallApiException;
 
-	Page renamePage(UUID pageId, String newName) throws PlayWallApiException;
+	void renamePage(UUID pageId, String newName) throws PlayWallApiException;
 
 	void deletePage(UUID pageId) throws PlayWallApiException;
 
