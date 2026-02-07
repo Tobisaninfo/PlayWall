@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputControl;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,6 +25,7 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.testfx.assertions.api.Assertions.assertThat;
@@ -143,5 +145,25 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		assertThat(robot.lookup(".page-button").queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2", "Page 1");
+	}
+
+	@Test
+	void testPageRename(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
+		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
+		Platform.runLater(() -> robot.interact(deleteMenuItem::fire));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
+		textInputControl.setText("New Page Name");
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+		verify(client).renamePage(eq(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")), argumentCaptor.capture());
+		assertThat(argumentCaptor.getValue()).isEqualTo("New Page Name");
 	}
 }

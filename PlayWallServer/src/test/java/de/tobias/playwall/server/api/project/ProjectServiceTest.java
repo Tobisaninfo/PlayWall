@@ -112,9 +112,10 @@ class ProjectServiceTest
 	void testRenamePage() throws PageNotExistsException
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		final Page newPage = projectService.renamePage(project, UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), "Updated Page Name");
+		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
+		projectService.renamePage(project, pageId, "Updated Page Name");
 
-		assertThat(newPage)
+		assertThat(project.getPageById(pageId).orElseThrow())
 				.extracting(Page::getPosition, Page::getName)
 				.containsExactly(0, "Updated Page Name");
 	}

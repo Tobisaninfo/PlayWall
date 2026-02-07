@@ -210,4 +210,27 @@ class PageListenerTest extends AbstractViewControllerTest
 				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")
 		);
 	}
+
+
+	@Test
+	void testPageRenameListener(FxRobot robot)
+	{
+		showMainView();
+
+		// Check precondition
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Page 1", "Page 2");
+
+		// Perform action
+		eventHandler.fireEvent(new PageRenameUpdate(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), "Renamed Page"
+		));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Verify
+		assertThat(robot.lookup(".page-button").queryAll())
+				.extracting(node -> ((Button) node).getText())
+				.containsExactly("Renamed Page", "Page 2");
+	}
 }

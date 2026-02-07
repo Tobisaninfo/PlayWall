@@ -1,12 +1,14 @@
 package de.tobias.playwall.server.api.page.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.page.PageDto;
 import de.tobias.playwall.common.api.page.request.PageAddResponse;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageRenameRequest;
+import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -16,9 +18,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import tools.jackson.databind.json.JsonMapper;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +31,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class PageRenameHandlerTest
+@RecordApplicationEvents
+class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenameRequest>
 {
 	@Autowired
 	private ProjectController projectController;
@@ -41,6 +45,9 @@ class PageRenameHandlerTest
 
 	@Autowired
 	private PageRenameHandler handler;
+
+	@Autowired
+	private ApplicationEvents applicationEvents;
 
 	@BeforeEach
 	void init()
@@ -55,15 +62,17 @@ class PageRenameHandlerTest
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		final Optional<ResponseMessage> response = handler.handleRequest(new PageRenameRequest(pageId, "Renamed Page"));
-		assertThat(response).isNotEmpty();
+		handler.handleRequest(new PageRenameRequest(pageId, "Renamed Page"));
 
-		final PageDto createdPage = ((PageAddResponse) response.get()).getPage();
+		assertThat(applicationEvents.stream(PageRenameUpdate.class))
+				.hasSize(1)
+				.first()
+				.satisfies(update -> {
+					assertThat(update.getPageId()).isEqualTo(pageId);
+					assertThat(update.getNewName()).isEqualTo("Renamed Page");
+				});
 
-		assertThat(createdPage.id()).isEqualTo(pageId);
-		assertThat(createdPage.name()).isEqualTo("Renamed Page");
-		assertThat(createdPage.position()).isZero();
-		assertThat(createdPage.pads()).hasSize(project.getPageById(pageId).orElseThrow().getPads().size());
+		assertThat(project.getPageById(pageId).orElseThrow().getName()).isEqualTo("Renamed Page");
 	}
 
 	@Test
@@ -89,5 +98,16 @@ class PageRenameHandlerTest
 				.isInstanceOf(ProjectNotLoadedError.class);
 
 		verify(projectService, never()).renamePage(any(), any(), any());
+	}
+
+	@Test
+	void testUndoOperation() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+
+		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
+		final PageRenameRequest request = new PageRenameRequest(pageId, "Renamed Page");
+
+		testInverseOperation(project, handler, request);
 	}
 }

@@ -22,6 +22,7 @@ public class Project
 	private ProjectMetadata metadata;
 	private List<Page> pages;
 
+	// TODO: Should it realy be an optional?
 	public Optional<Page> getPageById(UUID pageId)
 	{
 		return getPages().stream()
