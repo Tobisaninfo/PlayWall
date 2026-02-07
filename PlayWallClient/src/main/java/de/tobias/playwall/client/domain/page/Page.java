@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Page
 {
 	private final UUID id;
-	private final String name;
+	private String name;
 	private Integer position;
 	private final List<Pad> pads;
 

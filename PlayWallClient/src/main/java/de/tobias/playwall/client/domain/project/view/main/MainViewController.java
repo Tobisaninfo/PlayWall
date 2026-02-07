@@ -371,12 +371,38 @@ public class MainViewController extends ViewControllerBase
 		pageButtons.buildPageButtons(projectController.getProject().getPages(), (button, page) -> {
 			button.setOnAction(_ -> showPage(page));
 			button.setContextMenu(new ContextMenu(
+					createMenuItem(Strings.UI_PAGE_RENAME, FontAwesomeType.PENCIL_SOLID, Optional.of(_ -> onPageRenameMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)))
 			));
 		});
 
 		pageButtons.highlightPageButton(currentPage);
+	}
+
+	private void onPageRenameMenuItem(Page page)
+	{
+		final TextInputDialog dialog = new TextInputDialog(page.getName());
+		dialog.setTitle(Localization.getString(Strings.UI_PAGE_RENAME));
+		dialog.setHeaderText(Localization.getString(Strings.UI_PAGE_RENAME));
+		dialog.setContentText(Localization.getString(Strings.UI_PAGE_RENAME_INPUT));
+		dialog.initOwner(getStage());
+
+		Optional<String> result = dialog.showAndWait();
+		result.ifPresent(newPageName -> {
+			if(!newPageName.trim().isEmpty())
+			{
+				try
+				{
+					client.currentProject().page(page.getId()).rename(newPageName.trim());
+				}
+				catch(PlayWallApiException e)
+				{
+					// TODO: Error Handling
+					throw new RuntimeException(e);
+				}
+			}
+		});
 	}
 
 	private void onPageDuplicateMenuItem(Page page)

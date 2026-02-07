@@ -15,6 +15,8 @@ public class Strings
 	public static final String UI_DIALOG_PROJECT_DELETE_CONTENT = "ui.dialog.project.delete.content";
 	public static final String UI_PLACEHOLDER_PROJECT = "ui.placeholder.project";
 
+	public static final String UI_PAGE_RENAME = "ui.page.rename";
+	public static final String UI_PAGE_RENAME_INPUT = "ui.page.rename.input";
 	public static final String UI_PAGE_DUPLICATE = "ui.page.duplicate";
 	public static final String UI_PAGE_DELETE = "ui.page.delete";
 
