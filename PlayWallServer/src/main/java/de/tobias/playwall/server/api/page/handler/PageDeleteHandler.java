@@ -16,7 +16,6 @@ import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
-import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;

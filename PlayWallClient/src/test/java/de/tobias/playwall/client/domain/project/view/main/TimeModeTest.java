@@ -4,11 +4,9 @@ import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
-import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
@@ -17,7 +15,6 @@ import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -25,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 class TimeModeTest extends AbstractViewControllerTest

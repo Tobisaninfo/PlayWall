@@ -2,7 +2,7 @@ package de.tobias.playwall.client.view.style.color;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.utils.application.ApplicationUtils;
-import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.io.InputStream;

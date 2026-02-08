@@ -2,20 +2,15 @@ package de.tobias.playwall.server.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.history.UndoItem;
-import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.*;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.UUID;
 
-import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.tobias.playwall.client.view.components.ColorButton?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import de.tobias.playwall.client.view.components.ColorButton?>
+<?import javafx.scene.layout.*?>
 <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <SettingsRow icon="PALETTE_SOLID" title="%ui.settings.pad.view.color">
         <HBox prefWidth="300" spacing="14.0">

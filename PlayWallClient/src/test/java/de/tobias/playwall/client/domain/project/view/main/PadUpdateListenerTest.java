@@ -7,7 +7,6 @@ import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
-import de.tobias.playwall.client.view.about.AboutDialog;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import javafx.application.Platform;

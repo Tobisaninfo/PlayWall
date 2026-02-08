@@ -15,7 +15,6 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.FileChooserWrapper;
-import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
