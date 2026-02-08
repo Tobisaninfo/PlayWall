@@ -152,7 +152,7 @@ public class ProjectService
 		return page;
 	}
 
-	public Page duplicatePage(Project project, UUID pageId, String name) throws PageNotExistsException
+	public Page duplicatePage(Project project, UUID pageId) throws PageNotExistsException
 	{
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
@@ -161,11 +161,20 @@ public class ProjectService
 		}
 		final Page page = pageOptional.get();
 
+		String name;
+		int copyIndex = 1;
+		do
+		{
+			name = messageSource.getMessage("page.name.duplicate", new Object[]{page.getName(), copyIndex}, LocaleContextHolder.getLocale());
+			copyIndex++;
+		}
+		while(project.containsPageName(name));
+
 		final List<Pad> newPads = page.getPads().stream()
 				.map(Pad::copy)
 				.toList();
 
-		final int nextPagePosition = project.getPages().size();
+		final int nextPagePosition = page.getPosition() + 1;
 		final Page newPage = Page.builder()
 				.id(UUID.randomUUID())
 				.name(name)
@@ -173,7 +182,11 @@ public class ProjectService
 				.pads(newPads)
 				.build();
 
-		project.getPages().add(newPage);
+		project.getPages().add(nextPagePosition, newPage);
+		for(int i = nextPagePosition + 1; i < project.getPages().size(); i++)
+		{
+			project.getPages().get(i).setPosition(i);
+		}
 		return newPage;
 	}
 

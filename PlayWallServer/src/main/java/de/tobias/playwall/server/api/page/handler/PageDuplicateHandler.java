@@ -1,43 +1,54 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.request.PageAddResponse;
+import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.request.PageDuplicateRequest;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
+import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.page.PageMapper;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
+import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @AllArgsConstructor
 @RequestHandlerTyped(PageDuplicateRequest.class)
-class PageDuplicateHandler implements GetRequestHandler<PageDuplicateRequest>
+class PageDuplicateHandler implements UndoableRequestHandler<PageDuplicateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
 	private final PageMapper mapper;
 	private final MessageSource messageSource;
+	private final ApplicationContext context;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(PageDuplicateRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<UndoItem> handleRequest(PageDuplicateRequest requestMessage) throws IOException, PlayWallServerException
 	{
+		final String shortDescription = messageSource.getMessage("undo.description.short.page.duplicate", new Object[]{}, LocaleContextHolder.getLocale());
+		final String longDescription = messageSource.getMessage("undo.description.long.page.duplicate", new Object[]{}, LocaleContextHolder.getLocale());
+
 		try
 		{
 			final Project project = projectController.getLoadedProject();
-			final Page page = projectService.duplicatePage(project, requestMessage.getPageId(), "");
-			return Optional.of(new PageAddResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
+			final Page page = projectService.duplicatePage(project, requestMessage.getPageId());
+
+			context.publishEvent(new PageInsertUpdate(mapper.pageToPageDto(page), page.getPosition(), project.getPagePositions()));
+			projectController.loadPage(page);
+
+			return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new PageDeleteRequest(page.getId())));
 		}
 		catch(ProjectNotLoadedException _)
 		{
