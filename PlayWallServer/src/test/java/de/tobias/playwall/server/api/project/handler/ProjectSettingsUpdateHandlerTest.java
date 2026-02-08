@@ -172,6 +172,6 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.name("Fancy project name")
 				.build());
 
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 	}
 }

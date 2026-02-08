@@ -140,6 +140,6 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 		final String newMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString();
 		final PadNewMediaRequest request = new PadNewMediaRequest(padId, newMediaPath);
 
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 	}
 }

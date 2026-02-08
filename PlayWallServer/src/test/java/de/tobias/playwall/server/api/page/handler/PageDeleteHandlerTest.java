@@ -164,7 +164,7 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 
 		final PageDeleteRequest request = new PageDeleteRequest(UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677"));
 
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 
 		// Check if the pad is loaded again
 		assertThat(projectController.getPadController(padId)).isNotNull()
@@ -181,7 +181,7 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 
 		final PageDeleteRequest request = new PageDeleteRequest(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"));
 
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 
 		// Check if the pad is loaded again
 		assertThat(projectController.getPadController(padId)).isNotNull()

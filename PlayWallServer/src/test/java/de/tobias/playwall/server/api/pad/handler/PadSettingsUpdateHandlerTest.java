@@ -119,6 +119,6 @@ class PadSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Pa
 				.content(AudioPadContentDto.builder().mediaPath("abc.mp3").loop(true).build())
 				.build());
 
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 	}
 }

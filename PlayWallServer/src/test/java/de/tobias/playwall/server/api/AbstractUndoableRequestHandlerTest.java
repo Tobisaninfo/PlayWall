@@ -1,18 +1,18 @@
 package de.tobias.playwall.server.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tobias.playwall.common.api.history.RedoRequest;
+import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.net.*;
+import de.tobias.playwall.server.net.OneTimeActionRequestHandler;
+import de.tobias.playwall.server.net.RequestExecutor;
+import de.tobias.playwall.server.net.RequestHandlerFactory;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessage>
@@ -21,37 +21,38 @@ public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessag
 	protected ObjectMapper objectMapper;
 
 	@Autowired
+	private RequestExecutor requestExecutor;
+
+	@Autowired
 	protected ProjectController projectController;
 
 	@Autowired
 	protected RequestHandlerFactory requestHandlerFactory;
 
 	@SuppressWarnings({"unchecked", "rawtypes", "java:S1871"})
-	protected void testInverseOperation(Project project, UndoableRequestHandler<T> handler, T requestMessage) throws Exception
+	protected void testInverseOperation(Project project, T requestMessage) throws Exception
 	{
 		projectController.loadProject(project).get();
 		final Project expected = project.copy();
 
-
-		final Optional<UndoItem> undoItemOptional = handler.handleRequest(requestMessage);
+		// Execute request
+		requestExecutor.execute(requestMessage);
 		assertThat(project).isNotEqualTo(expected);
 
+		// Undo Request
+		final OneTimeActionRequestHandler undoHandler = (OneTimeActionRequestHandler) requestHandlerFactory.getRequestHandler(UndoRequest.class).orElseThrow();
+		undoHandler.handleRequest(new UndoRequest());
 
-		if(undoItemOptional.isEmpty())
-		{
-			fail("No undo item was created.");
-		}
+		assertThat(project).isEqualTo(expected);
 
-		final UndoItem undoItem = undoItemOptional.get();
-		final RequestHandler inverseHandler = requestHandlerFactory.getRequestHandler(undoItem.inverseRequest().getClass()).orElseThrow();
+		// Redo Request
+		final OneTimeActionRequestHandler redoHandler = (OneTimeActionRequestHandler) requestHandlerFactory.getRequestHandler(RedoRequest.class).orElseThrow();
+		redoHandler.handleRequest(new RedoRequest());
 
-		switch(inverseHandler)
-		{
-			case UndoableRequestHandler handler2 -> handler2.handleRequest(undoItem.inverseRequest());
-			case OneTimeActionRequestHandler handler2 -> handler2.handleRequest(undoItem.inverseRequest());
-			case GetRequestHandler handler2 -> handler2.handleRequest(undoItem.inverseRequest());
-		}
+		assertThat(project).isNotEqualTo(expected);
 
+		// Undo Again
+		undoHandler.handleRequest(new UndoRequest());
 		assertThat(project).isEqualTo(expected);
 	}
 }

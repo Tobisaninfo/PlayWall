@@ -118,6 +118,6 @@ class PageDuplicateHandlerTest extends AbstractUndoableRequestHandlerTest<PageDu
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 
 		final PageDuplicateRequest request = new PageDuplicateRequest(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"));
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 	}
 }

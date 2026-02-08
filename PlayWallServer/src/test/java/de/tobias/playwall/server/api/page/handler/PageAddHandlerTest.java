@@ -118,6 +118,6 @@ class PageAddHandlerTest extends AbstractUndoableRequestHandlerTest<PageAddReque
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 
 		final PageAddRequest request = new PageAddRequest();
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 	}
 }

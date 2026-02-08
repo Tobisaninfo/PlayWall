@@ -25,6 +25,11 @@ class RedoHandler implements OneTimeActionRequestHandler<RedoRequest>
 	{
 		final RequestMessage redoOperation = undoManager.getRedoOperation();
 
+		if(redoOperation == null)
+		{
+			throw new IllegalStateException("No redo operation available");
+		}
+
 		final RequestHandlerFactory requestHandlerFactory = context.getBean(RequestHandlerFactory.class);
 		final Optional<RequestHandler> requestHandlerOptional = requestHandlerFactory.getRequestHandler(redoOperation.getClass());
 		if(requestHandlerOptional.isEmpty())

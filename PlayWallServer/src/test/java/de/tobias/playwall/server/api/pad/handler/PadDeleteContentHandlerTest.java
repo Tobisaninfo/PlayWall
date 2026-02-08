@@ -132,6 +132,6 @@ class PadDeleteContentHandlerTest extends AbstractUndoableRequestHandlerTest<Pad
 
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
 
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 	}
 }

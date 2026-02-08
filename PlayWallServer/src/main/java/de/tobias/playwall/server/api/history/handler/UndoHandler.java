@@ -24,6 +24,11 @@ class UndoHandler implements OneTimeActionRequestHandler<UndoRequest>
 	{
 		final RequestMessage undoOperation = undoManager.getUndoOperation();
 
+		if(undoOperation == null)
+		{
+			throw new IllegalStateException("No undo operation available");
+		}
+
 		final RequestHandlerFactory requestHandlerFactory = context.getBean(RequestHandlerFactory.class);
 		final Optional<RequestHandler> requestHandlerOptional = requestHandlerFactory.getRequestHandler(undoOperation.getClass());
 		if(requestHandlerOptional.isEmpty())
