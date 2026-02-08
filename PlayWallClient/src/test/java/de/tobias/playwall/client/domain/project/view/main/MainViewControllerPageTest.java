@@ -100,7 +100,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
+		final MenuItem deleteMenuItem = contextMenu.getItems().get(1);
 		robot.interact(deleteMenuItem::fire);
 
 		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);

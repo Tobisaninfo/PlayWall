@@ -7,6 +7,7 @@ import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -147,20 +148,44 @@ class ProjectServiceTest
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final Page page = project.getPageById(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")).orElseThrow();
-		final Page newPage = projectService.duplicatePage(project, page.getId(), "Duplicated Page");
+		final Page newPage = projectService.duplicatePage(project, page.getId());
 
 		assertThat(newPage)
 				.extracting(Page::getPosition, Page::getName, i -> i.getPads().size())
-				.containsExactly(1, "Duplicated Page", page.getPads().size());
+				.containsExactly(1, "Page 1 - 1", page.getPads().size());
 		assertThat(newPage.getId()).isNotEqualTo(page.getId());
 		assertThat(newPage.getPads().getFirst().getId()).isNotEqualTo(page.getPads().getFirst().getId());
+	}
+
+	@Test
+	void testDuplicatePage_nameConflict() throws PageNotExistsException
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		final UUID page2Id = UUID.randomUUID();
+		project.getPages().add(Page.builder().id(page2Id).name("Page 1 - 1").position(1).build());
+		final Page page = project.getPageById(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")).orElseThrow();
+		final Page newPage = projectService.duplicatePage(project, page.getId());
+
+		assertThat(newPage)
+				.extracting(Page::getPosition, Page::getName, i -> i.getPads().size())
+				.containsExactly(1, "Page 1 - 2", page.getPads().size());
+		assertThat(newPage.getId()).isNotEqualTo(page.getId());
+		assertThat(newPage.getPads().getFirst().getId()).isNotEqualTo(page.getPads().getFirst().getId());
+
+		assertThat(project.getPages()).hasSize(3)
+				.extracting(Page::getId, Page::getPosition)
+				.containsExactlyInAnyOrder(
+						Tuple.tuple(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), 0),
+						Tuple.tuple(newPage.getId(), 1),
+						Tuple.tuple(page2Id, 2)
+				);
 	}
 
 	@Test
 	void test_duplicatePage_unknownPage()
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		assertThatThrownBy(() -> projectService.duplicatePage(project, UUID.randomUUID(), "Duplicated Page")).isInstanceOf(PageNotExistsException.class);
+		assertThatThrownBy(() -> projectService.duplicatePage(project, UUID.randomUUID())).isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
