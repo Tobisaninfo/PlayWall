@@ -307,7 +307,7 @@
                                     <goal>jlink</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>de.tobias.playwall.client.PlayWallIconOverviewMain</mainClass>
+                                    <mainClass>de.tobias.playwall.client.PlayWallMain</mainClass>
                                     <stripDebug>true</stripDebug>
                                     <compress>2</compress>
                                     <noHeaderFiles>true</noHeaderFiles>
@@ -354,7 +354,7 @@
                                     <input>${project.build.directory}/build</input>
                                     <destination>${project.build.directory}/installer</destination>
                                     <mainJar>${project.artifactId}-${project.version}.jar</mainJar>
-                                    <mainClass>de.tobias.playwall.client.PlayWallIconOverviewMain</mainClass>
+                                    <mainClass>de.tobias.playwall.client.PlayWallMain</mainClass>
                                     <name>PlayWall</name>
                                     <appVersion>${revision-version}</appVersion>
                                     <runtimeImage>${project.build.directory}/PlayWallClient</runtimeImage>
