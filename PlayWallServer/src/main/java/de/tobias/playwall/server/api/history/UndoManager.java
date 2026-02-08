@@ -51,6 +51,16 @@ public class UndoManager
 		return inverseRequest;
 	}
 
+	public void replaceCurrentUndoOperation(UndoItem undoItem)
+	{
+		if(cursor >= history.size())
+		{
+			return;
+		}
+
+		history.set(cursor, undoItem);
+	}
+
 	public RequestMessage getRedoOperation()
 	{
 		if(cursor >= history.size() - 1)

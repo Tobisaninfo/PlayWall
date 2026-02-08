@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.history.handler;
 import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.net.*;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,11 @@ class RedoHandler implements OneTimeActionRequestHandler<RedoRequest>
 
 		switch(requestHandler)
 		{
-			case UndoableRequestHandler handler -> handler.handleRequest(redoOperation);
+			case UndoableRequestHandler handler ->
+			{
+				final Optional<UndoItem> undoItemOptional = handler.handleRequest(redoOperation);
+				undoItemOptional.ifPresent(undoManager::replaceCurrentUndoOperation);
+			}
 			case OneTimeActionRequestHandler handler -> handler.handleRequest(redoOperation);
 			case GetRequestHandler handler -> handler.handleRequest(redoOperation);
 		}
