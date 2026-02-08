@@ -67,7 +67,7 @@ public interface FluentClient
 
 		void delete() throws PlayWallApiException;
 
-		Page duplicate(String name) throws PlayWallApiException;
+		void duplicate() throws PlayWallApiException;
 	}
 
 	interface PadBuilder

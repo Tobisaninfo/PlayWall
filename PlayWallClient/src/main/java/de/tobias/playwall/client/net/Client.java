@@ -45,7 +45,7 @@ public interface Client
 
 	void deletePage(UUID pageId) throws PlayWallApiException;
 
-	Page duplicatePage(UUID pageId, String name) throws PlayWallApiException;
+	void duplicatePage(UUID pageId) throws PlayWallApiException;
 
 	void reorderPage(Map<UUID, Integer> positions) throws PlayWallApiException;
 

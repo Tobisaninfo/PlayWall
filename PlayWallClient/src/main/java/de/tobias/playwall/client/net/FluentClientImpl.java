@@ -174,9 +174,9 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public Page duplicate(String name) throws PlayWallApiException
+		public void duplicate() throws PlayWallApiException
 		{
-			return delegate.duplicatePage(pageId, name);
+			delegate.duplicatePage(pageId);
 		}
 	}
 

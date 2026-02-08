@@ -13,5 +13,4 @@ import java.util.UUID;
 public class PageDuplicateRequest extends RequestMessage
 {
 	private UUID pageId;
-	private String name;
 }

@@ -164,10 +164,9 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public Page duplicatePage(UUID pageId, String name) throws PlayWallApiException
+	public void duplicatePage(UUID pageId) throws PlayWallApiException
 	{
-		final PageDuplicateResponse response = clientWebSocketHandler.send(new PageDuplicateRequest(pageId, name));
-		return pageMapper.pageDtoToPage(response.getPage());
+		clientWebSocketHandler.send(new PageDuplicateRequest(pageId));
 	}
 
 	@Override

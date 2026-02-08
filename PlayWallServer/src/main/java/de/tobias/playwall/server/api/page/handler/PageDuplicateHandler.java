@@ -36,7 +36,7 @@ class PageDuplicateHandler implements GetRequestHandler<PageDuplicateRequest>
 		try
 		{
 			final Project project = projectController.getLoadedProject();
-			final Page page = projectService.duplicatePage(project, requestMessage.getPageId(), requestMessage.getName());
+			final Page page = projectService.duplicatePage(project, requestMessage.getPageId(), "");
 			return Optional.of(new PageAddResponse(requestMessage.getMessageId(), mapper.pageToPageDto(page)));
 		}
 		catch(ProjectNotLoadedException _)

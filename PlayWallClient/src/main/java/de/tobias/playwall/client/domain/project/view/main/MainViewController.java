@@ -373,11 +373,25 @@ public class MainViewController extends ViewControllerBase
 		pageButtons.buildPageButtons(projectController.getProject().getPages(), (button, page) -> {
 			button.setOnAction(_ -> showPage(page));
 			button.setContextMenu(new ContextMenu(
+					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)))
 			));
 		});
 
 		pageButtons.highlightPageButton(currentPage);
+	}
+
+	private void onPageDuplicateMenuItem(Page page)
+	{
+		try
+		{
+			client.currentProject().page(page.getId()).duplicate();
+		}
+		catch(PlayWallApiException e)
+		{
+			// TODO: Error Handling
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void onPageDeleteMenuItem(Page page)
