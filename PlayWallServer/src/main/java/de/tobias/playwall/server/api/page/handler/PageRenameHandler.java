@@ -8,8 +8,6 @@ import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
-import de.tobias.playwall.server.api.page.PageNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -41,31 +39,12 @@ class PageRenameHandler implements UndoableRequestHandler<PageRenameRequest>
 		final String longDescription = messageSource.getMessage("undo.description.long.page.rename", new Object[]{}, LocaleContextHolder.getLocale());
 
 		final UUID pageId = requestMessage.getPageId();
-		try
-		{
+		final Project project = projectController.getLoadedProject();
+		final String oldName = project.getPageById(pageId).map(Page::getName).orElse("");
 
-			final Project project = projectController.getLoadedProject();
-			final String oldName = project.getPageById(pageId).map(Page::getName).orElse("");
+		projectService.renamePage(project, pageId, requestMessage.getNewName());
 
-			projectService.renamePage(project, pageId, requestMessage.getNewName());
-
-			context.publishEvent(new PageRenameUpdate(pageId, requestMessage.getNewName()));
-			return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new PageRenameRequest(pageId, oldName)));
-		}
-		catch(PageNameAlreadyExistsException _)
-		{
-			final PageNameAlreadyExistsError error = new PageNameAlreadyExistsError(requestMessage.getNewName());
-			throw new PlayWallServerException(messageSource, error);
-		}
-		catch(ProjectNotLoadedException _)
-		{
-			final ProjectNotLoadedError error = new ProjectNotLoadedError();
-			throw new PlayWallServerException(messageSource, error);
-		}
-		catch(PageNotExistsException _)
-		{
-			final PageNotExistsError error = new PageNotExistsError(pageId);
-			throw new PlayWallServerException(messageSource, error);
-		}
+		context.publishEvent(new PageRenameUpdate(pageId, requestMessage.getNewName()));
+		return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new PageRenameRequest(pageId, oldName)));
 	}
 }

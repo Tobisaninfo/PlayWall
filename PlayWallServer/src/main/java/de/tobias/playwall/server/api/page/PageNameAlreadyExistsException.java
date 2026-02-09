@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
-public class PageNameAlreadyExistsException extends Exception
+public class PageNameAlreadyExistsException extends RuntimeException
 {
 	private final UUID pageId;
 	private final String name;

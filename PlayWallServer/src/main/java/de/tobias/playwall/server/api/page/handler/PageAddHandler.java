@@ -3,11 +3,9 @@ package de.tobias.playwall.server.api.page.handler;
 import de.tobias.playwall.common.api.page.request.PageAddRequest;
 import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.page.PageMapper;
-import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -34,18 +32,10 @@ class PageAddHandler implements UndoableRequestHandler<PageAddRequest>
 	@Override
 	public Optional<UndoItem> handleRequest(PageAddRequest requestMessage) throws IOException, PlayWallServerException
 	{
-		try
-		{
-			final Page page = projectService.addPage(projectController.getLoadedProject());
-			context.publishEvent(new PageAddUpdate(mapper.pageToPageDto(page)));
+		final Page page = projectService.addPage(projectController.getLoadedProject());
+		context.publishEvent(new PageAddUpdate(mapper.pageToPageDto(page)));
 
-			return Optional.of(getInverseOperation(requestMessage, page));
-		}
-		catch(ProjectNotLoadedException _)
-		{
-			final ProjectNotLoadedError error = new ProjectNotLoadedError();
-			throw new PlayWallServerException(messageSource, error);
-		}
+		return Optional.of(getInverseOperation(requestMessage, page));
 	}
 
 	private UndoItem getInverseOperation(PageAddRequest request, Page newPage)
