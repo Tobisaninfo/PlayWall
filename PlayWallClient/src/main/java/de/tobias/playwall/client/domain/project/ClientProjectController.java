@@ -29,15 +29,36 @@ public class ClientProjectController
 		}
 	}
 
+	public void updateProject(Project project)
+	{
+		this.project = project;
+
+		final Map<UUID, ClientPadController> newPadControllers = new HashMap<>();
+		for(Page page : project.getPages())
+		{
+			for(Pad pad : page.getPads())
+			{
+				final ClientPadController padController = getPadController(pad.getId());
+				if(padController == null)
+				{
+					final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
+					newPadControllers.put(pad.getId(), controller);
+				}
+				else
+				{
+					padController.setPad(pad);
+					newPadControllers.put(pad.getId(), padController);
+				}
+			}
+		}
+
+		padControllers.clear();
+		padControllers.putAll(newPadControllers);
+	}
+
 	public ClientPadController getPadController(UUID uuid)
 	{
 		return padControllers.get(uuid);
-	}
-
-	private void createPadController(Pad pad)
-	{
-		final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
-		padControllers.put(pad.getId(), controller);
 	}
 
 	public ClientPadController updatePad(Pad newPad)
@@ -117,7 +138,8 @@ public class ClientProjectController
 	{
 		for(Pad pad : page.getPads())
 		{
-			createPadController(pad);
+			final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
+			padControllers.put(pad.getId(), controller);
 		}
 	}
 }

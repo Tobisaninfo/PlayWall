@@ -18,10 +18,7 @@ import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
-import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectMetadata;
-import de.tobias.playwall.client.domain.project.ProjectMetadataMapper;
+import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
@@ -101,10 +98,12 @@ public class MainViewController extends ViewControllerBase
 	private final PadViewProvider padViewProvider;
 	private final PageMapper pageMapper;
 	private final PadMapper padMapper;
+	private final ProjectMapper projectMapper;
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final UpdateMessageEventHandler eventHandler;
 
 	private ProjectLoadedListener projectLoadedListener;
+	private ProjectListener projectListener;
 	private PageListener pageAddListener;
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
@@ -157,6 +156,8 @@ public class MainViewController extends ViewControllerBase
 
 		projectLoadedListener = new ProjectLoadedListener(this);
 		eventHandler.registerListener(projectLoadedListener);
+		projectListener = new ProjectListener(projectMapper, this);
+		eventHandler.registerListener(projectListener);
 		pageAddListener = new PageListener(projectController, this, pageMapper);
 		eventHandler.registerListener(pageAddListener);
 		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
@@ -232,6 +233,7 @@ public class MainViewController extends ViewControllerBase
 	private void onWindowClosed()
 	{
 		eventHandler.unregisterListener(projectLoadedListener);
+		eventHandler.unregisterListener(projectListener);
 		eventHandler.unregisterListener(pageAddListener);
 		eventHandler.unregisterListener(padUpdateListener);
 		eventHandler.unregisterListener(padLoadedListener);
@@ -321,6 +323,19 @@ public class MainViewController extends ViewControllerBase
 			// TODO:
 			Logger.error(e);
 		}
+	}
+
+	public void updateProject(Project project)
+	{
+		this.projectController.updateProject(project);
+
+		updateWindowProperties(project);
+		initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
+
+		buildPageButtons();
+		showPage(currentPage.getPosition());
+
+		Logger.info("Update project " + project.getMetadata().getName());
 	}
 
 	private void initializePadViews(int columns, int rows)

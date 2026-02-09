@@ -1,8 +1,15 @@
 package de.tobias.playwall.common.api.project.update;
 
-public class ProjectUpdate
+import de.tobias.playwall.common.api.project.model.ProjectDto;
+import de.tobias.playwall.common.net.UpdateMessage;
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
+@ToString(callSuper = true)
+public class ProjectUpdate extends UpdateMessage
 {
-	private ProjectUpdate()
-	{
-	}
+	private ProjectDto project;
 }

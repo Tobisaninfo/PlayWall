@@ -6,12 +6,10 @@ import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
+import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
-import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
-import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
-import de.tobias.playwall.server.api.project.ProjectNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.api.project.*;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -34,7 +32,9 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 	private final ProjectService projectService;
 	private final MessageSource messageSource;
 	private final ApplicationContext context;
+
 	private final ProjectMetadataMapper projectMetadataMapper;
+	private final ProjectMapper projectMapper;
 
 	@Override
 	public Optional<UndoItem> handleRequest(ProjectSettingsUpdateRequest requestMessage) throws PlayWallServerException
@@ -56,14 +56,23 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 			project.getMetadata().setTimeMode(requestMessage.getProjectMetadata().timeMode());
 			project.getMetadata().setDefaultColor(requestMessage.getProjectMetadata().defaultColor());
 			project.getMetadata().setPlayColor(requestMessage.getProjectMetadata().playColor());
+
+			boolean hasProjectSizeChanged = oldMetadata.getNumberOfHorizontalPads() != requestMessage.getProjectMetadata().numberOfHorizontalPads() ||
+											oldMetadata.getNumberOfVerticalPads() != requestMessage.getProjectMetadata().numberOfVerticalPads();
+
 			project.getMetadata().setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
 			project.getMetadata().setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
+
 			projectService.rename(project.getMetadata().getId(), requestMessage.getProjectMetadata().name());
-
-			final List<UUID> removedPads = projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
-			removedPads.forEach(projectController::unloadAndRemovePad);
-
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(project.getMetadata())));
+
+			if(hasProjectSizeChanged)
+			{
+				final List<UUID> removedPads = projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+				removedPads.forEach(projectController::unloadAndRemovePad);
+
+				context.publishEvent(new ProjectUpdate(projectMapper.projectToProjectDto(project)));
+			}
 
 			return Optional.of(inverseOperation);
 		}
