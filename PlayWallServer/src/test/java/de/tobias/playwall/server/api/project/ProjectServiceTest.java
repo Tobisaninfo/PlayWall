@@ -24,6 +24,7 @@ import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -379,11 +380,16 @@ class ProjectServiceTest
 
 		project.getMetadata().setNumberOfHorizontalPads(1);
 		project.getMetadata().setNumberOfVerticalPads(1);
-		projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+		final List<UUID> removedPads = projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
 
 		assertThat(project.getPages()).hasSize(1);
 		assertThat(project.getPages().getFirst().getPads())
 				.extracting(Pad::getName, Pad::getPosition)
 				.containsExactly(tuple("Test Pad 1", 0));
+		assertThat(removedPads).containsExactly(
+				UUID.fromString("895082d5-3655-4aca-96db-818fef99e9ef"),
+				UUID.fromString("f55f7691-2842-4d3f-9b64-08ddb0161398"),
+				UUID.fromString("c37d6bb6-49a7-4b72-964d-dc9a8571507a")
+		);
 	}
 }

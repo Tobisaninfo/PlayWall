@@ -208,7 +208,7 @@ public class ProjectService
 		return removed;
 	}
 
-	public void updateNumberOfPadsPerRowAndColumn(Project project, ProjectMetadata oldMetadata)
+	public List<UUID> updateNumberOfPadsPerRowAndColumn(Project project, ProjectMetadata oldMetadata)
 	{
 		final int newNumberOfHorizontalPads = project.getMetadata().getNumberOfHorizontalPads();
 		final int oldNumberOfHorizontalPads = oldMetadata.getNumberOfHorizontalPads();
@@ -221,22 +221,27 @@ public class ProjectService
 
 		if(columnDifference == 0 && rowDifference == 0)
 		{
-			return;
+			return List.of();
 		}
 
+		final List<UUID> removedPads = new ArrayList<>();
 		for(Page page : project.getPages())
 		{
 			final List<Pad> pads = page.getPads();
 
-			cleanPads(pads, oldNumberOfHorizontalPads, newNumberOfVerticalPads, newNumberOfHorizontalPads);
+			removedPads.addAll(cleanPads(pads, oldNumberOfHorizontalPads, newNumberOfVerticalPads, newNumberOfHorizontalPads));
 			addMissingPads(pads, newNumberOfVerticalPads, newNumberOfHorizontalPads);
 
 			pads.sort(Comparator.comparing(Pad::getPosition));
 		}
+
+		return removedPads;
 	}
 
-	private static void cleanPads(List<Pad> pads, int oldNumberOfHorizontalPads, int newNumberOfVerticalPads, int newNumberOfHorizontalPads)
+	private static List<UUID> cleanPads(List<Pad> pads, int oldNumberOfHorizontalPads, int newNumberOfVerticalPads, int newNumberOfHorizontalPads)
 	{
+		final List<UUID> removedPads = new ArrayList<>();
+
 		final Iterator<Pad> iterator = pads.iterator();
 		while(iterator.hasNext())
 		{
@@ -253,9 +258,11 @@ public class ProjectService
 			}
 			else
 			{
+				removedPads.add(pad.getId());
 				iterator.remove();
 			}
 		}
+		return removedPads;
 	}
 
 	private static void addMissingPads(List<Pad> pads, int newNumberOfVerticalPads, int newNumberOfHorizontalPads)

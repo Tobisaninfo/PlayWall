@@ -62,7 +62,7 @@ public class ProjectController
 				});
 	}
 
-	public void unloadPage(Page page)
+	public void unloadAndRemovePage(Page page)
 	{
 		page.getPads()
 				.stream().filter(pad -> padControllers.containsKey(pad.getId()))
@@ -71,6 +71,16 @@ public class ProjectController
 					controller.unload();
 					padControllers.remove(pad.getId());
 				});
+	}
+
+	public void unloadAndRemovePad(UUID padId)
+	{
+		final PadController controller = padControllers.get(padId);
+		if(controller != null)
+		{
+			controller.unload();
+			padControllers.remove(padId);
+		}
 	}
 
 	@SneakyThrows

@@ -54,7 +54,7 @@ class PageDeleteHandler implements UndoableRequestHandler<PageDeleteRequest>
 			final String longDescription = messageSource.getMessage("undo.description.long.page.delete", new Object[]{pageName}, LocaleContextHolder.getLocale());
 
 			// Stop playing pads on the page
-			projectController.unloadPage(page);
+			projectController.unloadAndRemovePage(page);
 
 			// Delete pad controllers
 			projectController.deletePadControllersForPage(page);

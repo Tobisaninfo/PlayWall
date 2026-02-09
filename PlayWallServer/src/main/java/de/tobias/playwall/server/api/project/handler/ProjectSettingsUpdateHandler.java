@@ -22,7 +22,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequestHandlerTyped(ProjectSettingsUpdateRequest.class)
 @RequiredArgsConstructor
@@ -57,7 +59,9 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 			project.getMetadata().setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
 			project.getMetadata().setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
 			projectService.rename(project.getMetadata().getId(), requestMessage.getProjectMetadata().name());
-			projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+
+			final List<UUID> removedPads = projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
+			removedPads.forEach(projectController::unloadAndRemovePad);
 
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(project.getMetadata())));
 
