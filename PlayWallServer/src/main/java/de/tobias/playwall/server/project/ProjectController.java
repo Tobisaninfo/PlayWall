@@ -86,7 +86,8 @@ public class ProjectController
 	@SneakyThrows
 	private void loadPads()
 	{
-		loadedProject.getPages().stream()
+		getLoadedProject()
+				.getPages().stream()
 				.flatMap(page -> page.getPads().stream())
 				.filter(pad -> pad.getContent() != null)
 				.forEach(this::createNewPadController);
@@ -111,12 +112,12 @@ public class ProjectController
 
 	public Pad getPad(UUID padId)
 	{
-		return loadedProject.getPad(padId);
+		return getLoadedProject().getPad(padId);
 	}
 
 	public Page getPageByPad(UUID padId)
 	{
-		return loadedProject.getPageByPad(padId);
+		return getLoadedProject().getPageByPad(padId);
 	}
 
 	public List<PadController> getPlayingPadControllers()
