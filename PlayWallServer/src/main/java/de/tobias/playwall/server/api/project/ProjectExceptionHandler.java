@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
@@ -19,6 +20,13 @@ public class ProjectExceptionHandler
 	ErrorMessage handleProjectNotExistsException(RequestMessage requestMessage, ProjectNotExistsException e)
 	{
 		final ProjectNotExistsError error = new ProjectNotExistsError(e.getProjectId());
+		return new ErrorMessage(requestMessage.getMessageId(), messageSource.getMessage(error.getLocalizationKey(), error.getMessageArguments(), LocaleContextHolder.getLocale()), error);
+	}
+
+	@WsExceptionHandler(ProjectNameAlreadyExistsException.class)
+	ErrorMessage handleProjectNameAlreadyExistsException(RequestMessage requestMessage, ProjectNameAlreadyExistsException e)
+	{
+		final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(e.getName());
 		return new ErrorMessage(requestMessage.getMessageId(), messageSource.getMessage(error.getLocalizationKey(), error.getMessageArguments(), LocaleContextHolder.getLocale()), error);
 	}
 }

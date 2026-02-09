@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ProjectNameAlreadyExistsException extends Exception
+public class ProjectNameAlreadyExistsException extends RuntimeException
 {
 	private final String name;
 }

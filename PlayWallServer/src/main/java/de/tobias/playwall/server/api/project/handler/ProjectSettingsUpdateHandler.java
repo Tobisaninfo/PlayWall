@@ -12,6 +12,9 @@ import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.project.*;
+import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
+import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
+import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -84,17 +87,10 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 
 			return Optional.of(inverseOperation);
 		}
-		catch(ProjectNameAlreadyExistsException _)
+		catch(ProjectNameAlreadyExistsException e)
 		{
 			project.setMetadata(oldMetadata);
-
-			final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(requestMessage.getProjectMetadata().name());
-			throw new PlayWallServerException(messageSource, error);
-		}
-		catch(ProjectNotExistsException _)
-		{
-			final ProjectNotExistsError error = new ProjectNotExistsError(project.getMetadata().getId());
-			throw new PlayWallServerException(messageSource, error);
+			throw e;
 		}
 	}
 
