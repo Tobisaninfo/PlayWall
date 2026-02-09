@@ -310,12 +310,13 @@ public class MainViewController extends ViewControllerBase
 			updateWindowProperties(project);
 			initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
 
-			volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
 
 			buildPageButtons();
 			showPage(0);
 
 			client.project(project.getMetadata().getId()).load();
+
+			volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
 			Logger.info("Loading project " + project.getMetadata().getName());
 		}
 		catch(PlayWallApiException e)
