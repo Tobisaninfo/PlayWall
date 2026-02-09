@@ -26,7 +26,6 @@ public class ProjectMetadata
 	}
 
 	@JsonView(List.class)
-	@EqualsAndHashCode.Exclude
 	private UUID id;
 
 	@JsonView(List.class)

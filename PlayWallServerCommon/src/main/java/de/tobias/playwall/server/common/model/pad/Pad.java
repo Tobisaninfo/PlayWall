@@ -15,7 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Pad
 {
-	@EqualsAndHashCode.Exclude
 	private UUID id;
 	private Integer position;
 	private String name;

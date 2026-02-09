@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class Page
 {
-	@EqualsAndHashCode.Exclude
 	private UUID id;
 	private Integer position;
 	private String name;
