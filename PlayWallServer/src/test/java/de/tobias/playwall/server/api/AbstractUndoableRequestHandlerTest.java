@@ -33,7 +33,7 @@ public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessag
 	protected void testInverseOperation(Project project, T requestMessage) throws Exception
 	{
 		projectController.loadProject(project).get();
-		final Project expected = project.copy();
+		final Project expected = project.copy(false);
 
 		// Execute request
 		requestExecutor.execute(requestMessage);
