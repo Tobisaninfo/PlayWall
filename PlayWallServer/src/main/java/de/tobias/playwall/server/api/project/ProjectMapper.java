@@ -10,4 +10,6 @@ import org.mapstruct.MappingConstants;
 public interface ProjectMapper
 {
 	ProjectDto projectToProjectDto(Project project);
+
+	Project projectDtoToProject(ProjectDto project);
 }

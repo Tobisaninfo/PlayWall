@@ -4,7 +4,6 @@ import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMapper;
 import de.tobias.playwall.client.event.EventListener;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
-import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -18,6 +17,6 @@ public class ProjectListener
 	{
 		final Project project = projectMapper.projectDtoToProject(message.getProject());
 
-		Platform.runLater(() -> mainViewController.updateProject(project));
+		mainViewController.updateProject(project);
 	}
 }

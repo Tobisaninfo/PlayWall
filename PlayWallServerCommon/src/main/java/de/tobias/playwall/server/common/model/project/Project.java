@@ -63,11 +63,11 @@ public class Project
 	}
 
 	@SuppressWarnings("java:S6204")
-	public Project copy()
+	public Project copy(boolean generateNewId)
 	{
 		return Project.builder()
-				.metadata(metadata.copy(true))
-				.pages(pages == null ? null : pages.stream().map(Page::copy).collect(Collectors.toList()))
+				.metadata(metadata.copy(generateNewId))
+				.pages(pages == null ? null : pages.stream().map(page -> page.copy(generateNewId)).collect(Collectors.toList()))
 				.build();
 	}
 }

@@ -24,10 +24,10 @@ public class Pad
 	private Color defaultColor;
 	private Color playColor;
 
-	public Pad copy()
+	public Pad copy(boolean generateNewId)
 	{
 		return Pad.builder()
-				.id(UUID.randomUUID())
+				.id(generateNewId ? UUID.randomUUID() : id)
 				.position(position)
 				.name(name)
 				.timeMode(timeMode)

@@ -4,6 +4,7 @@ import de.tobias.playwall.server.common.model.pad.Pad;
 import lombok.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,14 +28,19 @@ public class Page
 		return pads.stream().filter(p -> p.getPosition() == position).findFirst().orElse(null);
 	}
 
+	public Optional<Pad> getPad(UUID padId)
+	{
+		return pads.stream().filter(p -> p.getId().equals(padId)).findFirst();
+	}
+
 	@SuppressWarnings("java:S6204")
-	public Page copy()
+	public Page copy(boolean generateNewId)
 	{
 		return Page.builder()
-				.id(UUID.randomUUID())
+				.id(generateNewId ? UUID.randomUUID() : id)
 				.position(position)
 				.name(name)
-				.pads(pads == null ? null : pads.stream().map(Pad::copy).collect(Collectors.toList()))
+				.pads(pads == null ? null : pads.stream().map(pad -> pad.copy(generateNewId)).collect(Collectors.toList()))
 				.build();
 	}
 }

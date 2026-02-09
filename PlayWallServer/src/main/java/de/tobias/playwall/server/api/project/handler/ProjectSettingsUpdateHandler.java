@@ -1,10 +1,12 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.tobias.playwall.common.api.CompoundRequest;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
+import de.tobias.playwall.common.api.project.request.ProjectUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -48,7 +50,8 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 			throw new PlayWallServerException(messageSource, error);
 		}
 
-		final ProjectMetadata oldMetadata = project.getMetadata().copy(false);
+		final Project oldProject = project.copy(false);
+		final ProjectMetadata oldMetadata = oldProject.getMetadata();
 
 		try
 		{
@@ -72,6 +75,10 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 				removedPads.forEach(projectController::unloadAndRemovePad);
 
 				context.publishEvent(new ProjectUpdate(projectMapper.projectToProjectDto(project)));
+				return Optional.of(new UndoItem("", "", requestMessage, new CompoundRequest(List.of(
+						new ProjectSettingsUpdateRequest(projectMetadataMapper.projectMetadataToProjectMetadataDto(oldMetadata)),
+						new ProjectUpdateRequest(projectMapper.projectToProjectDto(oldProject))
+				))));
 			}
 
 			return Optional.of(inverseOperation);

@@ -30,6 +30,7 @@ import de.tobias.playwall.client.view.components.GlobalColorPicker;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.style.ModernStyleSizeHelper;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -329,13 +330,16 @@ public class MainViewController extends ViewControllerBase
 	{
 		this.projectController.updateProject(project);
 
-		updateWindowProperties(project);
-		initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
+		Platform.runLater(() -> {
 
-		buildPageButtons();
-		showPage(currentPage.getPosition());
+			updateWindowProperties(project);
+			initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
 
-		Logger.info("Update project " + project.getMetadata().getName());
+			buildPageButtons();
+			showPage(currentPage.getPosition());
+
+			Logger.info("Update project " + project.getMetadata().getName());
+		});
 	}
 
 	private void initializePadViews(int columns, int rows)

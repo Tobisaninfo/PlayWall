@@ -176,7 +176,7 @@ public class ProjectService
 		while(project.containsPageName(name));
 
 		final List<Pad> newPads = page.getPads().stream()
-				.map(Pad::copy)
+				.map(pad -> pad.copy(true))
 				.toList();
 
 		final int nextPagePosition = page.getPosition() + 1;
