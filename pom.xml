@@ -53,7 +53,7 @@
         <openjfx-monocle.version>21.0.2</openjfx-monocle.version>
         <awaitility.version>4.3.0</awaitility.version>
 
-        <maven-compiler.version>3.14.1</maven-compiler.version>
+        <maven-compiler.version>3.15.0</maven-compiler.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
