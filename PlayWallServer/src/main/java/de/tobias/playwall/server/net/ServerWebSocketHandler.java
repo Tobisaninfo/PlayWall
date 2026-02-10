@@ -1,7 +1,5 @@
 package de.tobias.playwall.server.net;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
@@ -18,6 +16,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
@@ -31,14 +30,14 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 {
 	private static final Set<WebSocketSession> SESSIONS = new HashSet<>();
 
-	private final ObjectMapper objectMapper;
+	private final JsonMapper objectMapper;
 	private final SystemTrayHandler systemTrayHandler;
 	private final RequestExecutor requestExecutor;
 
 	private final ProjectController controller;
 
 	@EventListener(UpdateMessage.class)
-	void handleUpdateMessageEvents(UpdateMessage message) throws JsonProcessingException
+	void handleUpdateMessageEvents(UpdateMessage message)
 	{
 		final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(message));
 		sendToClients(textResponse, SESSIONS);
@@ -66,7 +65,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 	}
 
 	@Override
-	protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws JsonProcessingException
+	protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message)
 	{
 		final RequestMessage parsedMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
 		log.debug("Received: {}", message.getPayload());

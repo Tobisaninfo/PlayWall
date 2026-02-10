@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
@@ -25,6 +24,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.file.Paths;
 import java.util.Map;
@@ -50,7 +50,7 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 	private ProjectService projectService;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@Autowired
 	private PageDeleteHandler handler;

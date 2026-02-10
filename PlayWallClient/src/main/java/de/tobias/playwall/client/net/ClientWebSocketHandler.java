@@ -1,14 +1,12 @@
 package de.tobias.playwall.client.net;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.common.net.*;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.WebSocket;
@@ -19,7 +17,7 @@ import java.util.concurrent.CompletionStage;
 @Service
 class ClientWebSocketHandler implements WebSocket.Listener
 {
-	private final ObjectMapper objectMapper;
+	private final JsonMapper objectMapper;
 	private final ResponseQueue responseQueue;
 
 	private final HttpClient httpClient = HttpClient.newBuilder().build();
@@ -33,7 +31,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	ClientWebSocketHandler(UpdateMessageEventHandler updateMessageEventHandler)
 	{
 		this.updateMessageEventHandler = updateMessageEventHandler;
-		this.objectMapper = new ObjectMapper().findAndRegisterModules();
+		this.objectMapper = JsonMapper.builder().findAndAddModules().build();
 		this.responseQueue = new ResponseQueue();
 	}
 
@@ -171,11 +169,6 @@ class ClientWebSocketHandler implements WebSocket.Listener
 
 				return (T) responseMessage;
 			}
-		}
-		catch(JsonProcessingException e)
-		{
-			Logger.error(e);
-			throw new UncheckedIOException(e);
 		}
 		catch(InterruptedException e)
 		{

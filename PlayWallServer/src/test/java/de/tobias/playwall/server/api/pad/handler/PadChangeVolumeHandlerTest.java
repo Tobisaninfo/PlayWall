@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.request.PadChangeVolumeRequest;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
@@ -14,13 +13,16 @@ import de.tobias.playwall.server.config.SyncAsyncConfig;
 import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -34,6 +36,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
 @Import(SyncAsyncConfig.class)
+@ExtendWith(MockitoExtension.class)
 class PadChangeVolumeHandlerTest
 {
 	@Autowired
@@ -46,7 +49,7 @@ class PadChangeVolumeHandlerTest
 	private AudioHandler audioHandler;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@Autowired
 	private ProjectController projectController;

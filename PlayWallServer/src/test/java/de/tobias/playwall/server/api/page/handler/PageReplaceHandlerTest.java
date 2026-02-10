@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.AudioPadContentDto;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.PadDto;
@@ -23,6 +22,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -49,7 +49,7 @@ class PageReplaceHandlerTest
 	private ProjectService projectService;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@Autowired
 	private PageReplaceHandler handler;

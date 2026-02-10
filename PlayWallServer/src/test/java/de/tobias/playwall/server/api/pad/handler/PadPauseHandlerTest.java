@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadPauseRequest;
 import de.tobias.playwall.server.TestUtils;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -31,7 +31,7 @@ class PadPauseHandlerTest
 	private AudioHandlerFactory audioHandlerFactory;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@Autowired
 	private ProjectController projectController;

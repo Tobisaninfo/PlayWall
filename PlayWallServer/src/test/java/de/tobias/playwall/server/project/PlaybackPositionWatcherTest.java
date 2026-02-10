@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.update.PadPlayPositionUpdate;
 import de.tobias.playwall.server.TestUtils;
@@ -15,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -37,7 +37,7 @@ class PlaybackPositionWatcherTest
 	private PlaybackPositionWatcher watcher;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@Autowired
 	private ProjectController projectController;

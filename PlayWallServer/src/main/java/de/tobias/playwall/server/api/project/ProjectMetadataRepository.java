@@ -1,12 +1,13 @@
 package de.tobias.playwall.server.api.project;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ObjectReader;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +25,7 @@ public class ProjectMetadataRepository
 	private static final String PROJECTS_FILENAME = "projects.json";
 
 	private final PathProvider pathProvider;
-	private final ObjectMapper mapper;
+	private final JsonMapper mapper;
 
 	private List<ProjectMetadata> allProjectsMetadata = new ArrayList<>();
 
@@ -37,9 +38,13 @@ public class ProjectMetadataRepository
 			saveProjects();
 		}
 
-		allProjectsMetadata = mapper.readValue(Files.newBufferedReader(path), new TypeReference<>()
-		{
-		});
+		final JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, ProjectMetadata.class);
+
+		ObjectReader reader = mapper
+				.readerWithView(ProjectMetadata.List.class)
+				.forType(type);
+
+		allProjectsMetadata = reader.readValue(Files.newBufferedReader(path));
 	}
 
 	public void saveProjects() throws IOException

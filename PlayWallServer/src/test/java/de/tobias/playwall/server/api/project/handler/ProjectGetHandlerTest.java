@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectGetRequest;
 import de.tobias.playwall.common.api.project.request.ProjectGetResponse;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 class ProjectGetHandlerTest
 {
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@MockitoBean
 	private ProjectRepository projectRepository;

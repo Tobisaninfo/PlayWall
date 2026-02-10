@@ -16,9 +16,9 @@ public final class ProjectMetadata
 {
 	private final UUID id;
 	private String name;
-	private final int numberOfHorizontalPads;
-	private final int numberOfVerticalPads;
-	private double volume;
+	private final Integer numberOfHorizontalPads;
+	private final Integer numberOfVerticalPads;
+	private Double volume;
 	private TimeMode timeMode;
 	private ModernColor defaultColor;
 	private ModernColor playColor;

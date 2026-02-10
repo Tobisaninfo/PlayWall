@@ -1,10 +1,9 @@
 package de.tobias.playwall.client.view.style.color;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import javafx.scene.paint.Color;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
@@ -62,15 +61,8 @@ public enum ModernColor
 	static
 	{
 		final InputStream inputStream = ApplicationUtils.getApplication().getClasspathResource("style", "colors", "ModernColor.json").getInputStream();
-		ObjectMapper mapper = new ObjectMapper();
-		try
-		{
-			colors = mapper.readValue(inputStream, ModernColorDefinition[].class);
-		}
-		catch(IOException e)
-		{
-			throw new RuntimeException(e);
-		}
+		final JsonMapper mapper = JsonMapper.builder().findAndAddModules().build();
+		colors = mapper.readValue(inputStream, ModernColorDefinition[].class);
 	}
 
 	public ModernColorDefinition getCurrentModernColor()

@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.net.RequestMessage;
@@ -11,6 +10,7 @@ import de.tobias.playwall.server.net.RequestHandlerFactory;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessage>
 {
 	@Autowired
-	protected ObjectMapper objectMapper;
+	protected JsonMapper objectMapper;
 
 	@Autowired
 	private RequestExecutor requestExecutor;

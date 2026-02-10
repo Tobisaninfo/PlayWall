@@ -1,12 +1,11 @@
 package de.tobias.playwall.server.api.project;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,7 +20,7 @@ public class ProjectRepository
 	private static final String FILE_EXTENSION = ".json";
 
 	private final PathProvider pathProvider;
-	private final ObjectMapper mapper;
+	private final JsonMapper mapper;
 
 	public Project loadProject(UUID id) throws IOException, ProjectNotExistsException
 	{
@@ -31,9 +30,7 @@ public class ProjectRepository
 			throw new ProjectNotExistsException(id);
 		}
 
-		return mapper.readValue(Files.newBufferedReader(path), new TypeReference<>()
-		{
-		});
+		return mapper.readValue(Files.newBufferedReader(path), Project.class);
 	}
 
 	public void saveProject(Project project) throws IOException

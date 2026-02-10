@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 @ToString
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
 @EqualsAndHashCode
 public class Page
 {

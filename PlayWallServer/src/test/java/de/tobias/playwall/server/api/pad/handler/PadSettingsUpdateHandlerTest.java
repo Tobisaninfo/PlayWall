@@ -17,6 +17,8 @@ import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.config.SyncAsyncConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -37,6 +39,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
 @Import(SyncAsyncConfig.class)
+@ExtendWith(MockitoExtension.class)
 class PadSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<PadSettingsUpdateRequest>
 {
 	@Autowired

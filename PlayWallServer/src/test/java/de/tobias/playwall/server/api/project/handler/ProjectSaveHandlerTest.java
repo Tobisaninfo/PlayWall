@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.request.ProjectSaveRequest;
 import de.tobias.playwall.server.TestUtils;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +30,7 @@ class ProjectSaveHandlerTest
 	private Path tempDir;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@MockitoBean
 	private ProjectRepository projectRepository;

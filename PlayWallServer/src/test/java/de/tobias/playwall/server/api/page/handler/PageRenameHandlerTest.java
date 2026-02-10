@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.page.PageDto;
 import de.tobias.playwall.common.api.page.request.PageAddResponse;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -37,7 +37,7 @@ class PageRenameHandlerTest
 	private ProjectService projectService;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@Autowired
 	private PageRenameHandler handler;

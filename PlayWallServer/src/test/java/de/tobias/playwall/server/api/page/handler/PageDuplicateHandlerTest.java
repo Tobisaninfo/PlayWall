@@ -1,7 +1,8 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tobias.playwall.common.api.page.request.PageDuplicateRequest;
+import de.tobias.playwall.common.api.page.PageDto;
+import de.tobias.playwall.common.api.page.request.PageAddResponse;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
 import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
@@ -44,7 +46,7 @@ class PageDuplicateHandlerTest extends AbstractUndoableRequestHandlerTest<PageDu
 	private ProjectService projectService;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	private JsonMapper objectMapper;
 
 	@Autowired
 	private PageDuplicateHandler handler;

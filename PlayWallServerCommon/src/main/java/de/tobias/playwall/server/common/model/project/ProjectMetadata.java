@@ -12,6 +12,8 @@ import java.util.UUID;
 @Setter
 @Builder
 @ToString
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
 @EqualsAndHashCode
 public class ProjectMetadata
 {
@@ -30,11 +32,11 @@ public class ProjectMetadata
 	@JsonView(List.class)
 	private String name;
 
-	private int numberOfHorizontalPads;
-	private int numberOfVerticalPads;
+	private Integer numberOfHorizontalPads;
+	private Integer numberOfVerticalPads;
 
 	@Builder.Default
-	private double volume = DEFAULT_VOLUME;
+	private Double volume = DEFAULT_VOLUME;
 
 	@Builder.Default
 	private TimeMode timeMode = TimeMode.ELAPSED;

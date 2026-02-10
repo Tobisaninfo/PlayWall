@@ -13,10 +13,9 @@ open module de.tobias.playwall.client {
 	requires de.tobias.playwall.common;
 	requires com.google.gson;
 
-	requires com.fasterxml.jackson.core;
+	requires tools.jackson.core;
 	requires com.fasterxml.jackson.annotation;
-	requires com.fasterxml.jackson.databind;
-	requires com.fasterxml.jackson.datatype.jsr310;
+	requires tools.jackson.databind;
 
 	requires org.apache.commons.cli;
 	requires io.github.classgraph;
