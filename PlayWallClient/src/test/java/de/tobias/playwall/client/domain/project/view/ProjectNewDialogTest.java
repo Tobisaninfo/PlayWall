@@ -52,9 +52,11 @@ class ProjectNewDialogTest extends AbstractViewControllerTest
 		});
 		WaitForAsyncUtils.waitForFxEvents();
 
-		projectNewDialog.getTextFieldName().setText("Test");
-		projectNewDialog.getSpinnerNumberOfHorizontalPads().getValueFactory().setValue(5);
-		projectNewDialog.getSpinnerNumberOfVerticalPads().getValueFactory().setValue(3);
+		Platform.runLater(() -> {
+			projectNewDialog.getTextFieldName().setText("Test");
+			projectNewDialog.getSpinnerNumberOfHorizontalPads().getValueFactory().setValue(5);
+			projectNewDialog.getSpinnerNumberOfVerticalPads().getValueFactory().setValue(3);
+		});
 
 		robot.clickOn(projectNewDialog.getSettingsPage().getSaveButton());
 
@@ -74,9 +76,11 @@ class ProjectNewDialogTest extends AbstractViewControllerTest
 		});
 		WaitForAsyncUtils.waitForFxEvents();
 
-		projectNewDialog.getTextFieldName().setText("Test");
-		projectNewDialog.getSpinnerNumberOfHorizontalPads().getValueFactory().setValue(5);
-		projectNewDialog.getSpinnerNumberOfVerticalPads().getValueFactory().setValue(3);
+		Platform.runLater(() -> {
+			projectNewDialog.getTextFieldName().setText("Test");
+			projectNewDialog.getSpinnerNumberOfHorizontalPads().getValueFactory().setValue(5);
+			projectNewDialog.getSpinnerNumberOfVerticalPads().getValueFactory().setValue(3);
+		});
 
 		robot.clickOn(projectNewDialog.getSettingsPage().getSaveButton());
 
