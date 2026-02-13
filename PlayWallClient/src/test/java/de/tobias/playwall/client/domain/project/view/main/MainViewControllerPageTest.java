@@ -102,11 +102,26 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem deleteMenuItem = contextMenu.getItems().get(1);
+		final MenuItem deleteMenuItem = contextMenu.getItems().get(2);
 		robot.interact(deleteMenuItem::fire);
 
 		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
 		verify(client).deletePage(argumentCaptor.capture());
+
+		assertThat(argumentCaptor.getValue()).isEqualTo(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"));
+	}
+
+	@Test
+	void testPageDuplicate(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
+		final MenuItem deleteMenuItem = contextMenu.getItems().get(1);
+		robot.interact(deleteMenuItem::fire);
+
+		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
+		verify(client).duplicatePage(argumentCaptor.capture());
 
 		assertThat(argumentCaptor.getValue()).isEqualTo(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"));
 	}
