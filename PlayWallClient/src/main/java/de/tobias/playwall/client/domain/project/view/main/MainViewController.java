@@ -383,8 +383,8 @@ public class MainViewController extends ViewControllerBase
 	private void onPageRenameMenuItem(Page page)
 	{
 		final TextInputDialog dialog = new TextInputDialog(page.getName());
-		dialog.setTitle(Localization.getString(Strings.UI_PAGE_RENAME));
-		dialog.setHeaderText(Localization.getString(Strings.UI_PAGE_RENAME));
+		dialog.setTitle(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
+		dialog.setHeaderText(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
 		dialog.setContentText(Localization.getString(Strings.UI_PAGE_RENAME_INPUT));
 		dialog.initOwner(getStage());
 
@@ -478,7 +478,7 @@ public class MainViewController extends ViewControllerBase
 
 	public void updateStyle()
 	{
-		styleable.renderStylesheets(getStage(), getCurrentPage(),  projectController.getProject().getMetadata());
+		styleable.renderStylesheets(getStage(), getCurrentPage(), projectController.getProject().getMetadata());
 	}
 
 	public PadView getPadViewForPosition(int position)
