@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.page.handler;
 
+import de.tobias.playwall.common.api.page.PageNameAlreadyExistsError;
 import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageRenameRequest;
 import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
@@ -70,6 +71,19 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 				});
 
 		assertThat(project.getPageById(pageId).orElseThrow().getName()).isEqualTo("Renamed Page");
+	}
+
+	@Test
+	void testRenamePagePageDuplicatedName() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
+		projectController.loadProject(project).get();
+
+		final UUID pageId = UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677");
+		assertThatThrownBy(() -> handler.handleRequest(new PageRenameRequest(pageId, "Seite 3")))
+				.isInstanceOf(PlayWallServerException.class)
+				.extracting(e -> ((PlayWallServerException) e).getError())
+				.isInstanceOf(PageNameAlreadyExistsError.class);
 	}
 
 	@Test

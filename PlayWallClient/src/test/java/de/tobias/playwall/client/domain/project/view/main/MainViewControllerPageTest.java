@@ -25,9 +25,9 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 class MainViewControllerPageTest extends AbstractViewControllerTest
@@ -180,5 +180,48 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		final ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 		verify(client).renamePage(eq(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")), argumentCaptor.capture());
 		assertThat(argumentCaptor.getValue()).isEqualTo("New Page Name");
+	}
+
+	@Test
+	void testPageRenameEmptyTextField(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
+		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
+		Platform.runLater(() -> robot.interact(deleteMenuItem::fire));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
+		textInputControl.setText("");
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		assertThat(robot.lookup(".text-input").queryTextInputControl()).isVisible();
+		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Der Name der Seite darf nicht leer sein.");
+
+		verify(client, never()).renamePage(any(), any());
+	}
+
+	@Test
+	void testPageRenameShowServerError(FxRobot robot) throws PlayWallApiException
+	{
+		doThrow(new PlayWallApiException("Server Rename Error", null)).when(client).renamePage(any(), any());
+
+		showMainView();
+
+		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
+		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
+		Platform.runLater(() -> robot.interact(deleteMenuItem::fire));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
+		textInputControl.setText("New Page Name");
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).renamePage(any(), any());
+
+		assertThat(robot.lookup("Server Rename Error").queryLabeled()).isVisible();
 	}
 }

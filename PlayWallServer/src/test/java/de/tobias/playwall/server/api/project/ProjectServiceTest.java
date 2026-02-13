@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -109,7 +110,7 @@ class ProjectServiceTest
 	}
 
 	@Test
-	void testRenamePage() throws PageNotExistsException
+	void testRenamePage() throws PageNotExistsException, PageNameAlreadyExistsException
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
@@ -118,6 +119,19 @@ class ProjectServiceTest
 		assertThat(project.getPageById(pageId).orElseThrow())
 				.extracting(Page::getPosition, Page::getName)
 				.containsExactly(0, "Updated Page Name");
+	}
+
+	@Test
+	void testRenamePageDuplicateName()
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
+		final UUID pageId = UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677");
+		assertThatThrownBy(() -> projectService.renamePage(project, pageId, "Seite 3"))
+				.isInstanceOf(PageNameAlreadyExistsException.class);
+
+		assertThat(project.getPageById(pageId).orElseThrow())
+				.extracting(Page::getPosition, Page::getName)
+				.containsExactly(0, "Seite 1");
 	}
 
 	@Test
