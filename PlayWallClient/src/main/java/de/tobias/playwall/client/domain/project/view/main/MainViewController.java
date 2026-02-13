@@ -407,7 +407,7 @@ public class MainViewController extends ViewControllerBase
 			}
 		});
 
-		Optional<String> result = dialog.showAndWait();
+		final Optional<String> result = dialog.showAndWait();
 		result.ifPresent(newPageName -> {
 			if(!newPageName.trim().isEmpty())
 			{
@@ -417,8 +417,8 @@ public class MainViewController extends ViewControllerBase
 				}
 				catch(PlayWallApiException e)
 				{
-					// TODO: Error Handling
-					throw new RuntimeException(e);
+					Logger.error(e);
+					showErrorMessage(e.getMessage());
 				}
 			}
 		});

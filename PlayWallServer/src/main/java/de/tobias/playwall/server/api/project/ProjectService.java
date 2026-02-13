@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
@@ -139,7 +140,7 @@ public class ProjectService
 		project.getPages().sort(Comparator.comparing(Page::getPosition));
 	}
 
-	public void renamePage(Project project, UUID pageId, String newName) throws PageNotExistsException
+	public void renamePage(Project project, UUID pageId, String newName) throws PageNotExistsException, PageNameAlreadyExistsException
 	{
 		final Optional<Page> pageOptional = project.getPageById(pageId);
 		if(pageOptional.isEmpty())
@@ -147,6 +148,12 @@ public class ProjectService
 			throw new PageNotExistsException(project.getMetadata().getId(), pageId);
 		}
 		final Page page = pageOptional.get();
+
+		if(project.containsPageName(newName) && !page.getName().equals(newName))
+		{
+			throw new PageNameAlreadyExistsException(pageId, newName);
+		}
+
 		page.setName(newName);
 	}
 
