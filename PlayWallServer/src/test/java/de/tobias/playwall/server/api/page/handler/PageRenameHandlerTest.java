@@ -1,6 +1,6 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.request.PageNotExistsError;
+import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageRenameRequest;
 import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;

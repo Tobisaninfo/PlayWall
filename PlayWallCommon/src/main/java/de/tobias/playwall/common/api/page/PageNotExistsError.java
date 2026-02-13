@@ -1,4 +1,4 @@
-package de.tobias.playwall.common.api.page.request;
+package de.tobias.playwall.common.api.page;
 
 import de.tobias.playwall.common.api.ServerError;
 import lombok.*;

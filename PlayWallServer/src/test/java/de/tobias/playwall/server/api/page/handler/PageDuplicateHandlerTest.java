@@ -1,9 +1,7 @@
 package de.tobias.playwall.server.api.page.handler;
 
 import de.tobias.playwall.common.api.page.request.PageDuplicateRequest;
-import de.tobias.playwall.common.api.page.PageDto;
-import de.tobias.playwall.common.api.page.request.PageAddResponse;
-import de.tobias.playwall.common.api.page.request.PageNotExistsError;
+import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.TestUtils;
