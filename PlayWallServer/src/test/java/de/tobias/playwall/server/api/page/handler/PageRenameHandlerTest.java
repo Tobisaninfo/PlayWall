@@ -1,8 +1,5 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tobias.playwall.common.api.page.PageDto;
-import de.tobias.playwall.common.api.page.request.PageAddResponse;
 import de.tobias.playwall.common.api.page.request.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageRenameRequest;
 import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
@@ -108,6 +105,6 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
 		final PageRenameRequest request = new PageRenameRequest(pageId, "Renamed Page");
 
-		testInverseOperation(project, handler, request);
+		testInverseOperation(project, request);
 	}
 }
