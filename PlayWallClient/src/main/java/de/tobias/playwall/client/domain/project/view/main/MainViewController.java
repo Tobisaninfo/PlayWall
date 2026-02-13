@@ -388,6 +388,25 @@ public class MainViewController extends ViewControllerBase
 		dialog.setContentText(Localization.getString(Strings.UI_PAGE_RENAME_INPUT));
 		dialog.initOwner(getStage());
 
+		final TextField textField = dialog.getEditor();
+
+		final Label errorLabel = new Label(Localization.getString(Strings.UI_PAGE_RENAME_ERROR_EMPTY));
+		errorLabel.getStyleClass().add("error-label");
+		errorLabel.setVisible(false);
+		errorLabel.setPadding(new Insets(10, 0, 0, 0));
+
+		final GridPane content = (GridPane) dialog.getDialogPane().getContent();
+		content.add(errorLabel, 1, 1);
+
+		final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+		okButton.addEventFilter(ActionEvent.ACTION, event -> {
+			if(textField.getText().trim().isEmpty())
+			{
+				errorLabel.setVisible(true);
+				event.consume();
+			}
+		});
+
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(newPageName -> {
 			if(!newPageName.trim().isEmpty())

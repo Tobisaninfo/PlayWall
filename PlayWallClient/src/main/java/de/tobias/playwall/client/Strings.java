@@ -18,6 +18,7 @@ public class Strings
 	public static final String UI_PAGE_RENAME = "ui.page.rename";
 	public static final String UI_PAGE_RENAME_TITLE = "ui.page.rename.title";
 	public static final String UI_PAGE_RENAME_INPUT = "ui.page.rename.input";
+	public static final String UI_PAGE_RENAME_ERROR_EMPTY = "ui.page.rename.error.empty";
 	public static final String UI_PAGE_DUPLICATE = "ui.page.duplicate";
 	public static final String UI_PAGE_DELETE = "ui.page.delete";
 

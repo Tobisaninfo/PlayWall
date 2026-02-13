@@ -4,3 +4,7 @@
 .dialog-pane:header *.header-panel {
     -fx-background-color: rgb(70, 70, 70);
 }
+
+.dialog-pane *.error-label {
+    -fx-text-fill: variables.$danger-color;
+}
