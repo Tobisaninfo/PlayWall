@@ -42,7 +42,7 @@ public class GlobalColorPicker extends ToggleButton
 		colorButton = initColorButton();
 		colorPicker = new ColorPicker(START_COLOR, ModernColor.values(), colorButton::updateColor);
 
-		colorButton.setOnAction((_) -> {
+		colorButton.setOnAction(_ -> {
 			colorPicker.hide();
 			colorPicker.show(colorButton);
 			this.setSelected(true);
@@ -76,19 +76,19 @@ public class GlobalColorPicker extends ToggleButton
 
 	private ColorButton initColorButton()
 	{
-		final ColorButton colorButton = new ColorButton();
+		final ColorButton button = new ColorButton();
 
-		colorButton.setMinWidth(PREVIEW_BOX_SIZE);
-		colorButton.setMinHeight(PREVIEW_BOX_SIZE);
-		colorButton.setMaxWidth(PREVIEW_BOX_SIZE);
-		colorButton.setMaxHeight(PREVIEW_BOX_SIZE);
-		colorButton.updateColor(START_COLOR);
-		colorButton.setGraphic(null);
+		button.setMinWidth(PREVIEW_BOX_SIZE);
+		button.setMinHeight(PREVIEW_BOX_SIZE);
+		button.setMaxWidth(PREVIEW_BOX_SIZE);
+		button.setMaxHeight(PREVIEW_BOX_SIZE);
+		button.updateColor(START_COLOR);
+		button.setGraphic(null);
 
-		return colorButton;
+		return button;
 	}
 
-	private void onSelected(Boolean newValue, ImageCursor imageCursor)
+	private void onSelected(boolean newValue, ImageCursor imageCursor)
 	{
 		if(newValue)
 		{

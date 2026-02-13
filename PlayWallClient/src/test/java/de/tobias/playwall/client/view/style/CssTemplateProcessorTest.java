@@ -62,7 +62,8 @@ class CssTemplateProcessorTest
 	@Test
 	void testProcessNullTemplate()
 	{
-		assertThatThrownBy(() -> CssTemplateProcessor.render(null, Map.of()))
+		final Map<String, String> variables = Map.of();
+		assertThatThrownBy(() -> CssTemplateProcessor.render(null, variables))
 				.isInstanceOf(IllegalArgumentException.class);
 	}
 }

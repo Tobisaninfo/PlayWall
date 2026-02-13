@@ -151,9 +151,7 @@ public class MainViewController extends ViewControllerBase
 		headerBar.setLeading(headerBox);
 
 		loadingOverlay = new LoadingView();
-		loadingOverlay.visibleProperty().addListener((_, _, newValue) -> {
-			pageButtons.setLoading(newValue);
-		});
+		loadingOverlay.visibleProperty().addListener((_, _, newValue) -> pageButtons.setLoading(newValue));
 		loadingOverlay.setVisible(true);
 		rootStackPane.getChildren().add(loadingOverlay);
 
