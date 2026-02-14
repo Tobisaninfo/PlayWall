@@ -386,6 +386,7 @@ public class MainViewController extends ViewControllerBase
 		dialog.setTitle(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
 		dialog.setHeaderText(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
 		dialog.setContentText(Localization.getString(Strings.UI_PAGE_RENAME_INPUT));
+		dialog.getDialogPane().setMinWidth(400);
 		dialog.initOwner(getStage());
 
 		final TextField textField = dialog.getEditor();
@@ -400,8 +401,23 @@ public class MainViewController extends ViewControllerBase
 
 		final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
 		okButton.addEventFilter(ActionEvent.ACTION, event -> {
-			if(textField.getText().trim().isEmpty())
+			final String newName = textField.getText().trim();
+
+			if(newName.isEmpty())
 			{
+				errorLabel.setText(Localization.getString(Strings.UI_PAGE_RENAME_ERROR_EMPTY));
+				errorLabel.setVisible(true);
+				event.consume();
+				return;
+			}
+
+			final List<String> usedPageNames = projectController.getProject().getPages().stream()
+					.map(Page::getName)
+					.toList();
+
+			if(usedPageNames.contains(newName))
+			{
+				errorLabel.setText(Localization.getString(Strings.UI_PAGE_RENAME_ERROR_DUPLICATE));
 				errorLabel.setVisible(true);
 				event.consume();
 			}

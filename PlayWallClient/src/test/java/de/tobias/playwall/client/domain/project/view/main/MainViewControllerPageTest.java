@@ -204,7 +204,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testPageRenameShowServerError(FxRobot robot) throws PlayWallApiException
+	void testPageRenameDuplicateName(FxRobot robot) throws PlayWallApiException
 	{
 		doThrow(new PlayWallApiException("Server Rename Error", null)).when(client).renamePage(any(), any());
 
@@ -216,12 +216,13 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
-		textInputControl.setText("New Page Name");
+		textInputControl.setText("Page 1");
 		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
-		verify(client).renamePage(any(), any());
+		assertThat(robot.lookup(".text-input").queryTextInputControl()).isVisible();
+		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Es existiert bereits eine Seite mit diesem Namen.");
 
-		assertThat(robot.lookup("Server Rename Error").queryLabeled()).isVisible();
+		verify(client, never()).renamePage(any(), any());
 	}
 }
