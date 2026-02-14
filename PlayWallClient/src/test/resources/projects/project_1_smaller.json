@@ -1,0 +1,195 @@
+{
+    "metadata": {
+        "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
+        "name": "Project 1",
+        "numberOfHorizontalPads": 3,
+        "numberOfVerticalPads": 3,
+        "volume": 1.0,
+        "timeMode": "ELAPSED",
+        "defaultColor": "GRAY1",
+        "playColor": "RED3"
+    },
+    "pages": [
+        {
+            "id": "1e76b8b3-2d58-4533-aa57-e2b66360e9ea",
+            "name": "Page 1",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "fc427184-2e55-4734-8148-5fb657963616",
+                    "name": "Test Pad",
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": {
+                        "@class": "de.tobias.playwall.common.api.pad.AudioPadContentDto",
+                        "mediaPath": "abc.mp3",
+                        "loop": false,
+                        "volume": 1.0
+                    }
+                },
+                {
+                    "id": "57accabc-7d19-473c-a0a1-ea5c61b85e18",
+                    "position": 1,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "d1401a7e-f57e-4b80-93dd-7cfe2db4ad73",
+                    "position": 2,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "bb423eed-6f02-421e-a2f1-372c1c05cc41",
+                    "position": 3,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "4b0f2594-beea-4203-b8d2-e5f6fccb4f8f",
+                    "position": 4,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "172d0227-eaf2-4a5f-bfac-698a52d0cbd0",
+                    "position": 5,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "66294840-0422-4aa3-8cfe-b473d3f36538",
+                    "position": 6,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "ffd33b7a-bab8-4ff8-9277-26be0c8ff6e4",
+                    "position": 7,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "8a5948aa-049b-4c98-8a99-2b7ba0f7f801",
+                    "position": 8,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                }
+            ]
+        },
+        {
+            "id": "44c78975-7e53-432e-8526-bdcc5209c54e",
+            "name": "Page 2",
+            "position": 1,
+            "pads": [
+                {
+                    "id": "33ee14cf-56d8-42bf-9aee-f5e3f22d2193",
+                    "name": "",
+                    "position": 0,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "94ad54b2-995a-4da6-87c8-b86e5b97d03e",
+                    "position": 1,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "841bae2a-08ff-4c8b-95f8-42bc1e199c72",
+                    "position": 2,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "b17017ed-b893-4de5-90ef-60676cb2ac74",
+                    "position": 3,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "b73bbe12-0a0e-41b8-981c-33e24cf0314e",
+                    "position": 4,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "a4d982f5-cd1c-430d-ba80-87827933e76a",
+                    "position": 5,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "ad9ed670-7cde-4fbd-ae6a-32dc9105fea4",
+                    "position": 6,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "37652e35-cb67-4e18-a7c6-a9f65b26b156",
+                    "position": 7,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "7314a44b-e4ac-443c-b8d5-015655712988",
+                    "position": 8,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                }
+            ]
+        }
+    ]
+}

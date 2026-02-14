@@ -10,6 +10,7 @@ import de.tobias.playwall.server.net.RequestHandlerFactory;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +25,7 @@ public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessag
 	private RequestExecutor requestExecutor;
 
 	@Autowired
+	@MockitoSpyBean
 	protected ProjectController projectController;
 
 	@Autowired

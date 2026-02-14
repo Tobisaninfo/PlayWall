@@ -13,6 +13,7 @@ import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -224,6 +225,41 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.numberOfVerticalPads(4)
 				.volume(1.0)
 				.timeMode(TimeMode.REMAINING)
+				.defaultColor(ModernColor.GRAY1)
+				.playColor(ModernColor.RED3)
+				.build());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	void testProjectSettingsChangeNumberOfPads(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+		context.registerLazy(Stage.class, _ -> new Stage());
+
+		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final List<Window> windows = new ArrayList<>(robot.listWindows());
+		final Stage stageSettings = (Stage) windows.getLast();
+
+		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
+
+		robot.lookup("#spinnerNumberOfHorizontalPads").queryAs(Spinner.class).getValueFactory().setValue(7);
+		robot.lookup("#spinnerNumberOfVerticalPads").queryAs(Spinner.class).getValueFactory().setValue(5);
+		robot.clickOn("#saveButton");
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).updateProjectSettings(ProjectMetadata.builder()
+				.name("Project 1")
+				.id(UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c"))
+				.numberOfHorizontalPads(7)
+				.numberOfVerticalPads(5)
+				.volume(1.0)
+				.timeMode(TimeMode.ELAPSED)
 				.defaultColor(ModernColor.GRAY1)
 				.playColor(ModernColor.RED3)
 				.build());

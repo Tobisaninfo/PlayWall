@@ -1,0 +1,56 @@
+{
+    "metadata": {
+        "id": "fee42392-44d2-478d-93f3-49bf6cee98b3",
+        "name": "Project 5",
+        "numberOfHorizontalPads": 2,
+        "numberOfVerticalPads": 2,
+        "volume": 1.0,
+        "timeMode": "ELAPSED",
+        "defaultColor": "GRAY1",
+        "playColor": "RED3"
+    },
+    "pages": [
+        {
+            "id": "af2b42e3-a87f-4d56-9995-417dc7c4e41c",
+            "name": "Page 1",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "3a9edcfd-c4a0-48c5-a34b-d2b9cdc12225",
+                    "name": "Test Pad 1",
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": {
+                        "@name": "AudioPadContent",
+                        "mediaPath": "abc.mp3",
+                        "loop": false,
+                        "volume": 1.0
+                    }
+                }
+            ]
+        },
+        {
+            "id": "e50774bf-1076-4c3c-9298-f83ebc599bf6",
+            "name": "Page 2",
+            "position": 1,
+            "pads": [
+                {
+                    "id": "0a589aed-3ead-4fe0-9c0a-4c7b1b83b8a6",
+                    "name": "Test Pad 5",
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": {
+                        "@name": "AudioPadContent",
+                        "mediaPath": "abc.mp3",
+                        "loop": false,
+                        "volume": 1.0
+                    }
+                }
+            ]
+        }
+    ]
+}

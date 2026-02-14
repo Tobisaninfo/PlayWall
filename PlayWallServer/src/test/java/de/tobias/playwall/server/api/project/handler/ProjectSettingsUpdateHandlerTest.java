@@ -93,21 +93,24 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 
 		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
 				.name("Fancy project name")
+				.numberOfHorizontalPads(3)
+				.numberOfVerticalPads(5)
+				.volume(1.0)
 				.timeMode(TimeMode.ELAPSED_AND_TOTAL)
 				.defaultColor(Color.DARK_RED1)
 				.playColor(Color.BLUE1)
 				.build());
 		handler.handleRequest(request);
 
-		assertThat(project.getMetadata()).extracting(ProjectMetadata::getName, ProjectMetadata::getTimeMode, ProjectMetadata::getDefaultColor, ProjectMetadata::getPlayColor)
-				.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1);
+		assertThat(project.getMetadata()).extracting(ProjectMetadata::getName, ProjectMetadata::getTimeMode, ProjectMetadata::getDefaultColor, ProjectMetadata::getPlayColor, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads)
+				.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, 3, 5);
 
 		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class))
 				.hasSize(1)
 				.first()
 				.satisfies(event -> assertThat(event.getProjectMetadata())
-						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor)
-						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1));
+						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor, ProjectMetadataDto::numberOfHorizontalPads, ProjectMetadataDto::numberOfVerticalPads)
+						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, 3, 5));
 	}
 
 	@Test
@@ -132,6 +135,12 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 
 		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
 				.name("Project 1")
+				.numberOfHorizontalPads(6)
+				.numberOfVerticalPads(4)
+				.volume(1.0)
+				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(Color.GRAY1)
+				.playColor(Color.RED3)
 				.build());
 		handler.handleRequest(request);
 
@@ -169,7 +178,31 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 
 		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
-				.name("Fancy project name")
+				.name("Fancy Project Name")
+				.numberOfHorizontalPads(6)
+				.numberOfVerticalPads(4)
+				.volume(1.0)
+				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(Color.GRAY1)
+				.playColor(Color.RED3)
+				.build());
+
+		testInverseOperation(project, request);
+	}
+
+	@Test
+	void testUndoOperationNumberOfPadsChanged() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+
+		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
+				.name("Fancy Project Name")
+				.numberOfHorizontalPads(3)
+				.numberOfVerticalPads(5)
+				.volume(1.0)
+				.timeMode(TimeMode.ELAPSED)
+				.defaultColor(Color.GRAY1)
+				.playColor(Color.RED3)
 				.build());
 
 		testInverseOperation(project, request);

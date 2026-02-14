@@ -23,4 +23,11 @@ public abstract class AbstractTest
 		final JsonMapper mapper = JsonMapper.builder().findAndAddModules().build();
 		return projectMapper.projectDtoToProject(mapper.readValue(resourceAsStream, ProjectDto.class));
 	}
+
+	protected ProjectDto loadProjectAsDto(String resourcePath)
+	{
+		final InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
+		final JsonMapper mapper = JsonMapper.builder().findAndAddModules().build();
+		return mapper.readValue(resourceAsStream, ProjectDto.class);
+	}
 }
