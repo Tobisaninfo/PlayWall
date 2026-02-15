@@ -48,7 +48,7 @@
         <commons-cli.version>1.11.0</commons-cli.version>
 
         <!-- Testing -->
-        <junit.version>6.0.2</junit.version>
+        <junit.version>6.0.3</junit.version>
         <testfx-core.version>4.0.18</testfx-core.version>
         <openjfx-monocle.version>21.0.2</openjfx-monocle.version>
         <awaitility.version>4.3.0</awaitility.version>
