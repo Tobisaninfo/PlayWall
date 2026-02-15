@@ -1,24 +1,21 @@
 package de.tobias.playwall.client.view.components;
 
-import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.view.PadView;
-import de.tobias.playwall.client.net.FluentClient;
-import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class GlobalColorPicker extends ToggleButton
 {
@@ -31,7 +28,8 @@ public class GlobalColorPicker extends ToggleButton
 	private final ColorPicker colorPicker;
 
 	private List<PadView> padViews;
-	private FluentClient client;
+
+	private BiConsumer<Pad, ModernColor> onColorChange;
 
 	public GlobalColorPicker()
 	{
@@ -149,22 +147,12 @@ public class GlobalColorPicker extends ToggleButton
 			return;
 		}
 
-		pad.setDefaultColor(colorPicker.getSelectedColor());
-
-		try
-		{
-			client.pad(pad.getId()).updateSettings(pad);
-		}
-		catch(PlayWallApiException e)
-		{
-			Logger.error(e.getMessage());
-			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getScene().getWindow()).showAndWait();
-		}
+		onColorChange.accept(pad, colorPicker.getSelectedColor());
 	}
 
-	public void init(List<PadView> padViews, FluentClient client)
+	public void init(List<PadView> padViews, BiConsumer<Pad, ModernColor> onColorChange)
 	{
 		this.padViews = padViews;
-		this.client = client;
+		this.onColorChange = onColorChange;
 	}
 }

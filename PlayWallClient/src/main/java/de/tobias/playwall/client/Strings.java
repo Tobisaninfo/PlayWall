@@ -81,6 +81,7 @@ public class Strings
 	public static final String UI_ERRORS_PAD_STOP  = "ui.errors.pad.stop";
 	public static final String UI_ERRORS_PAD_LOAD  = "ui.errors.pad.load";
 	public static final String UI_ERRORS_PAD_DELETE = "ui.errors.pad.delete";
+	public static final String UI_ERRORS_PAD_COLOR_UPDATE = "ui.errors.pad.color.update";
 	public static final String UI_ERRORS_PAD_SETTINGS_SAVE = "ui.errors.pad.settings.save";
 	public static final String UI_ERRORS_PAGE_ADD  = "ui.errors.page.add";
 	public static final String UI_ERRORS_PAGE_REORDER  = "ui.errors.page.reorder";

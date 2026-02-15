@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -177,7 +178,19 @@ public class MainViewController extends ViewControllerBase
 		undoHistoryUpdateListener = new UndoHistoryUpdateListener(this);
 		eventHandler.registerListener(undoHistoryUpdateListener);
 
-		globalColorPicker.init(padViews, client);
+		globalColorPicker.init(padViews, (pad, color) -> {
+			pad.setDefaultColor(color);
+
+			try
+			{
+				client.pad(pad.getId()).updateSettings(pad);
+			}
+			catch(PlayWallApiException e)
+			{
+				Logger.error(e.getMessage());
+				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_COLOR_UPDATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+			}
+		});
 
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
 			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
