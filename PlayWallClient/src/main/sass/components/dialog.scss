@@ -5,6 +5,28 @@
     -fx-background-color: rgb(70, 70, 70);
   }
 
+  &.information, &.confirmation, &.text-input-dialog {
+    &:header *.header-panel {
+      -fx-background-color: variables.$primary-color;
+    }
+  }
+
+  &.warning {
+    &:header *.header-panel {
+      -fx-background-color: variables.$settings-warning-color;
+
+      .text {
+        -fx-fill: #000000;
+      }
+    }
+  }
+
+  &.error {
+    &:header *.header-panel {
+      -fx-background-color: variables.$danger-color;
+    }
+  }
+
   *.error-label {
     -fx-text-fill: variables.$danger-color;
   }
