@@ -84,10 +84,8 @@ class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContent
 		final String longDescription = messageSource.getMessage("undo.description.long.pad.delete", new Object[]{pad.getPosition() + 1, pageName}, LocaleContextHolder.getLocale());
 
 		return new UndoItem(shortDescription, longDescription, request, new CompoundRequest(
-				List.of(
-						newMediaRequest,
-						new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad))
-				)
+				newMediaRequest,
+				new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad))
 		));
 	}
 }

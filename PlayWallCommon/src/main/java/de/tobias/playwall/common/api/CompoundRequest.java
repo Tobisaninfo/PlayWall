@@ -12,5 +12,11 @@ import java.util.List;
 @ToString(callSuper = true)
 public class CompoundRequest extends RequestMessage
 {
+
+	public CompoundRequest(RequestMessage... requests)
+	{
+		this.requests = List.of(requests);
+	}
+
 	private List<RequestMessage> requests;
 }

@@ -109,10 +109,8 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 		if(pad.getContent() == null)
 		{
 			return new UndoItem(shortDescription, longDescription, request, new CompoundRequest(
-					List.of(
-							new PadDeleteContentRequest(pad.getId()),
-							new PadUpdateNameRequest(pad.getId(), pad.getName())
-					)
+					new PadDeleteContentRequest(pad.getId()),
+					new PadUpdateNameRequest(pad.getId(), pad.getName())
 			));
 		}
 
@@ -120,9 +118,9 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 		{
 			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
 		};
-		return new UndoItem(shortDescription, longDescription, request, new CompoundRequest(List.of(
+		return new UndoItem(shortDescription, longDescription, request, new CompoundRequest(
 				reloadOldMediaRequest,
 				new PadSettingsUpdateRequest(pad.getId(), padMapper.padToPadDto(pad)) // Set old pad settings (name, loop, volume, ...)
-		)));
+		));
 	}
 }
