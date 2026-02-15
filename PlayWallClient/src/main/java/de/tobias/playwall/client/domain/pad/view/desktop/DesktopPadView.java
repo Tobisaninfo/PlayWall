@@ -2,7 +2,6 @@ package de.tobias.playwall.client.domain.pad.view.desktop;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
-import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
@@ -19,20 +18,21 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.FileChooserWrapper;
-import de.tobias.playwall.client.view.components.ErrorAlert;
-import de.tobias.playwall.common.api.StackTraceError;
+import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.Getter;
-import org.controlsfx.dialog.ExceptionDialog;
 
 import static de.tobias.playwall.client.domain.pad.view.control.PadStyleClasses.*;
 import static de.tobias.playwall.client.view.components.PseudoClasses.PLAY_CLASS;
@@ -73,6 +73,8 @@ public class DesktopPadView implements PadView
 	private final FluentClient fluentClient;
 	private FluentClient.PadBuilder padBuilder;
 
+	private final ErrorAlertBuilder errorAlertBuilder;
+
 	private final PadTimeUtils padTimeUtils;
 
 	private PadStatus previousStatus;
@@ -86,6 +88,7 @@ public class DesktopPadView implements PadView
 	{
 		fluentClient = AppContextHolder.getInstance().get(FluentClient.class);
 		padTimeUtils = AppContextHolder.getInstance().get(PadTimeUtils.class);
+		errorAlertBuilder = AppContextHolder.getInstance().get(ErrorAlertBuilder.class);
 		setupView();
 	}
 
@@ -365,7 +368,7 @@ public class DesktopPadView implements PadView
 		{
 			updateStatus(this.previousStatus);
 			Logger.error(ex);
-			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -380,7 +383,7 @@ public class DesktopPadView implements PadView
 		{
 			updateStatus(this.previousStatus);
 			Logger.error(ex);
-			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -395,7 +398,7 @@ public class DesktopPadView implements PadView
 		{
 			updateStatus(this.previousStatus);
 			Logger.error(ex);
-			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -412,7 +415,7 @@ public class DesktopPadView implements PadView
 			{
 				updateStatus(this.previousStatus);
 				Logger.error(ex);
-				ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
+				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 			}
 		});
 	}
