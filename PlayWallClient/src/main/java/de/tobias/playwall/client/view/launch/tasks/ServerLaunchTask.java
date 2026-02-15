@@ -24,30 +24,32 @@ public class ServerLaunchTask extends LaunchTask
 	{
 		Platform.runLater(() -> progressLabel.setText(Localization.getString("ui.application_loading")));
 
-		if(!commandLineOptions.hasOption(CommandLineOptions.STANDALONE))
+		if(commandLineOptions.hasOption(CommandLineOptions.STANDALONE))
 		{
-			Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
-			try
-			{
-				serverLauncher.launchServer(ServerLauncherProperties.builder().build());
-			}
-			catch(ServerLaunchException.NotFoundException e)
-			{
-				final String path = e.getPath().toString();
-				return new FailureResult(Localization.getString("ui.application_loading.error.server.not_found", path.replace("\\", "/")), e, false);
-			}
-			catch(ServerLaunchException.PortInUseException e)
-			{
-				return new FailureResult(Localization.getString("ui.application_loading.error.server.port_in_use", 10023), e, false);  // TODO: Port hard coded
-			}
-			catch(ServerLaunchException.GenericStartupException e)
-			{
-				return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.generic", e.getMessage())), e, true);
-			}
-			catch(ServerLaunchException.TimeoutException e)
-			{
-				return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.timeout")), e, true);
-			}
+			return new SuccessResult();
+		}
+
+		Runtime.getRuntime().addShutdownHook(new Thread(serverLauncher::stopServer));
+		try
+		{
+			serverLauncher.launchServer(ServerLauncherProperties.builder().build());
+		}
+		catch(ServerLaunchException.NotFoundException e)
+		{
+			final String path = e.getPath().toString();
+			return new FailureResult(Localization.getString("ui.application_loading.error.server.not_found", path.replace("\\", "/")), e, false);
+		}
+		catch(ServerLaunchException.PortInUseException e)
+		{
+			return new FailureResult(Localization.getString("ui.application_loading.error.server.port_in_use", 10023), e, false);  // TODO: Port hard coded
+		}
+		catch(ServerLaunchException.GenericStartupException e)
+		{
+			return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.generic", e.getMessage())), e, true);
+		}
+		catch(ServerLaunchException.TimeoutException e)
+		{
+			return new FailureResult(Localization.getString(Localization.getString("ui.application_loading.error.server.timeout")), e, true);
 		}
 		return new SuccessResult();
 	}

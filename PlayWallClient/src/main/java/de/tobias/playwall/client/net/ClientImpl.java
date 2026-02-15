@@ -5,8 +5,6 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadMapper;
-import de.tobias.playwall.client.domain.page.Page;
-import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMapper;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
@@ -34,7 +32,6 @@ class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
-	private final PageMapper pageMapper;
 	private final PadMapper padMapper;
 
 	private final ClientWebSocketHandler clientWebSocketHandler;
