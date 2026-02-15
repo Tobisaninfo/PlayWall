@@ -38,6 +38,7 @@ class ServerLauncherIT
 		context.registerLazySingleton(CommandLineOptions.class, _ -> options);
 		context.registerLazySingleton(App.class, _ -> ApplicationUtils.getApplication());
 
+		when(options.getServerPort()).thenReturn(10023);
 		when(options.hasOption(CommandLineOptions.SERVER_PATH)).thenReturn(true);
 		when(options.getOptionValue(CommandLineOptions.SERVER_PATH)).thenReturn(Paths.get("target/build/server").toAbsolutePath().toString());
 
