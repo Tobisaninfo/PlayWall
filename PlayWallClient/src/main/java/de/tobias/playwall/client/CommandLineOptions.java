@@ -15,12 +15,15 @@ import java.io.IOException;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = {@InjectConstructor})
 public class CommandLineOptions
 {
+	private static final int DEFAULT_PORT = 10023;
+
 	private final App app;
 
 	private CommandLine cmd;
 
 	public static final Option DEBUG = new Option(null, "debug", false, "Debug flag");
 	public static final Option STANDALONE = new Option(null, "standalone", false, "Do not start embedded server");
+	public static final Option SERVER_PORT = new Option(null, "port", true, "Server port. Only necessary if standalone is NOT set. Default: " + DEFAULT_PORT);
 	public static final Option WATCH_STYLESHEETS = new Option(null, "watch-stylesheets", false, "Install a file watch for stylesheets");
 	public static final Option SERVER_PATH = new Option(null, "server-path", true, "Specify path to embedded server");
 	public static final Option PROJECT = new Option(null, "project", true, "Skip launch dialog and open the specified project immediately if existing");
@@ -31,6 +34,7 @@ public class CommandLineOptions
 		final Options options = new Options();
 		options.addOption(DEBUG);
 		options.addOption(STANDALONE);
+		options.addOption(SERVER_PORT);
 		options.addOption(WATCH_STYLESHEETS);
 		options.addOption(SERVER_PATH);
 		options.addOption(PROJECT);
@@ -56,5 +60,15 @@ public class CommandLineOptions
 	public String getOptionValue(Option option)
 	{
 		return cmd.getOptionValue(option);
+	}
+
+	public int getServerPort()
+	{
+		if(cmd.hasOption(SERVER_PORT))
+		{
+			return Integer.parseInt(cmd.getOptionValue(SERVER_PORT));
+		}
+
+		return DEFAULT_PORT;
 	}
 }
