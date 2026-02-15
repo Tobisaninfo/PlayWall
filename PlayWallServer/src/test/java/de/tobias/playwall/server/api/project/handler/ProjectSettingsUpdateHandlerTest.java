@@ -7,6 +7,7 @@ import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
+import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.PlayWallServerException;
@@ -111,6 +112,12 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.satisfies(event -> assertThat(event.getProjectMetadata())
 						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor, ProjectMetadataDto::numberOfHorizontalPads, ProjectMetadataDto::numberOfVerticalPads)
 						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, 3, 5));
+
+		assertThat(applicationEvents.stream(ProjectUpdate.class))
+				.hasSize(1)
+				.first()
+				.satisfies(event -> assertThat(event.getProject().pages().getFirst().pads()).hasSize(15))
+		;
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.project.request.ProjectUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.TestUtils;
@@ -59,12 +60,14 @@ class ProjectUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 
 		assertThat(loadedProject.getPages().getFirst().getPads())
 				.hasSize(1)
-				.satisfies(pad -> assertThat(pad.getFirst().getId()).isEqualTo(UUID.fromString("3a9edcfd-c4a0-48c5-a34b-d2b9cdc12225")))
-				.satisfies(pad -> assertThat(pad.getFirst().getPosition()).isEqualTo(0));
+				.first()
+				.satisfies(pad -> assertThat(pad.getId()).isEqualTo(UUID.fromString("3a9edcfd-c4a0-48c5-a34b-d2b9cdc12225")))
+				.satisfies(pad -> assertThat(pad.getPosition()).isZero());
 		assertThat(loadedProject.getPages().get(1).getPads())
 				.hasSize(1)
-				.satisfies(pad -> assertThat(pad.getFirst().getId()).isEqualTo(UUID.fromString("0a589aed-3ead-4fe0-9c0a-4c7b1b83b8a6")))
-				.satisfies(pad -> assertThat(pad.getFirst().getPosition()).isEqualTo(0));
+				.first()
+				.satisfies(pad -> assertThat(pad.getId()).isEqualTo(UUID.fromString("0a589aed-3ead-4fe0-9c0a-4c7b1b83b8a6")))
+				.satisfies(pad -> assertThat(pad.getPosition()).isZero());
 
 		verify(projectController).unloadAndRemovePad(UUID.fromString("895082d5-3655-4aca-96db-818fef99e9ef"));
 		verify(projectController).unloadAndRemovePad(UUID.fromString("f55f7691-2842-4d3f-9b64-08ddb0161398"));
@@ -76,8 +79,10 @@ class ProjectUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 		assertThat(applicationEvents.stream(ProjectUpdate.class))
 				.hasSize(1)
 				.first()
-				.satisfies(event -> assertThat(event.getProject().pages().getFirst().pads()).hasSize(1))
-				.satisfies(event -> assertThat(event.getProject().pages().get(1).pads()).hasSize(1));
+				.satisfies(event -> assertThat(event.getProject().pages().getFirst().pads()).extracting(PadDto::getId)
+						.containsOnly(UUID.fromString("3a9edcfd-c4a0-48c5-a34b-d2b9cdc12225")))
+				.satisfies(event -> assertThat(event.getProject().pages().get(1).pads()).extracting(PadDto::getId)
+						.containsOnly(UUID.fromString("0a589aed-3ead-4fe0-9c0a-4c7b1b83b8a6")));
 
 		verify(projectController, never()).createNewPadController(any());
 	}
@@ -96,7 +101,7 @@ class ProjectUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 		assertThat(loadedProject.getPages().getFirst().getPads())
 				.hasSize(4)
 				.satisfies(pads -> assertThat(pads.getFirst().getId()).isEqualTo(UUID.fromString("3a9edcfd-c4a0-48c5-a34b-d2b9cdc12225")))
-				.satisfies(pads -> assertThat(pads.getFirst().getPosition()).isEqualTo(0))
+				.satisfies(pads -> assertThat(pads.getFirst().getPosition()).isZero())
 				.satisfies(pads -> assertThat(pads.get(1).getId()).isEqualTo(UUID.fromString("895082d5-3655-4aca-96db-818fef99e9ef")))
 				.satisfies(pads -> assertThat(pads.get(1).getPosition()).isEqualTo(1))
 				.satisfies(pads -> assertThat(pads.get(2).getId()).isEqualTo(UUID.fromString("f55f7691-2842-4d3f-9b64-08ddb0161398")))
@@ -106,7 +111,7 @@ class ProjectUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 		assertThat(loadedProject.getPages().get(1).getPads())
 				.hasSize(4)
 				.satisfies(pads -> assertThat(pads.getFirst().getId()).isEqualTo(UUID.fromString("0a589aed-3ead-4fe0-9c0a-4c7b1b83b8a6")))
-				.satisfies(pads -> assertThat(pads.getFirst().getPosition()).isEqualTo(0))
+				.satisfies(pads -> assertThat(pads.getFirst().getPosition()).isZero())
 				.satisfies(pads -> assertThat(pads.get(1).getId()).isEqualTo(UUID.fromString("14daf9a8-76ae-42c1-bef4-b9a273eac85d")))
 				.satisfies(pads -> assertThat(pads.get(1).getPosition()).isEqualTo(1))
 				.satisfies(pads -> assertThat(pads.get(2).getId()).isEqualTo(UUID.fromString("d7f7fec5-3a92-434b-90cb-4ceae54eed1c")))
