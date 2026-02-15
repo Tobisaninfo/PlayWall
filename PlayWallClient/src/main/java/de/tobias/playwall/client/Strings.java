@@ -80,6 +80,8 @@ public class Strings
 	public static final String UI_ERRORS_PAD_PAUSE  = "ui.errors.pad.pause";
 	public static final String UI_ERRORS_PAD_STOP  = "ui.errors.pad.stop";
 	public static final String UI_ERRORS_PAD_LOAD  = "ui.errors.pad.load";
+	public static final String UI_ERRORS_PAD_DELETE = "ui.errors.pad.delete";
+	public static final String UI_ERRORS_PAD_SETTINGS_SAVE = "ui.errors.pad.settings.save";
 	public static final String UI_ERRORS_PAGE_ADD  = "ui.errors.page.add";
 	public static final String UI_ERRORS_PAGE_REORDER  = "ui.errors.page.reorder";
 	public static final String UI_ERRORS_PAGE_DELETE  = "ui.errors.page.delete";
@@ -87,5 +89,7 @@ public class Strings
 	public static final String UI_ERRORS_SAVE  = "ui.errors.save";
 	public static final String UI_ERRORS_UNDO  = "ui.errors.undo";
 	public static final String UI_ERRORS_REDO  = "ui.errors.redo";
+	public static final String UI_ERRORS_PROJECT_ADD = "ui.errors.project.add";
 	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
+	public static final String UI_ERRORS_PROJECT_SETTINGS_SAVE = "ui.errors.project.settings.save";
 }

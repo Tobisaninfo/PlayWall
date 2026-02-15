@@ -11,6 +11,7 @@ import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ModalDialogBase;
+import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.settings.SettingsPageWithButtons;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -41,10 +42,13 @@ public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 	@Getter(AccessLevel.NONE)
 	private ProjectMetadata project;
 
+	private final ErrorAlertBuilder errorAlertBuilder;
+
 	@InjectConstructor
-	ProjectNewDialog(FluentClient client)
+	ProjectNewDialog(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
 	{
 		this.client = client;
+		this.errorAlertBuilder = errorAlertBuilder;
 	}
 
 	@Override
@@ -90,7 +94,7 @@ public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e.getMessage());
-			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_ADD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 

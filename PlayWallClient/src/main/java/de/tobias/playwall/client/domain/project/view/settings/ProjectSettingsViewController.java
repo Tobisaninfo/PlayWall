@@ -13,6 +13,7 @@ import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ParamDialogBase;
+import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
@@ -69,10 +70,13 @@ public class ProjectSettingsViewController extends ParamDialogBase<ProjectSettin
 
 	private Stage stage;
 
+	private final ErrorAlertBuilder errorAlertBuilder;
+
 	@InjectConstructor
-	public ProjectSettingsViewController(FluentClient client)
+	public ProjectSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
 	{
 		this.client = client;
+		this.errorAlertBuilder = errorAlertBuilder;
 	}
 
 	@Override
@@ -177,7 +181,7 @@ public class ProjectSettingsViewController extends ParamDialogBase<ProjectSettin
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e.getMessage());
-			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_SETTINGS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 

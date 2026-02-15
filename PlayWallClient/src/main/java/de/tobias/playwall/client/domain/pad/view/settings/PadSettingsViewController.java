@@ -210,7 +210,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e.getMessage());
-			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_SETTINGS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -233,7 +233,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e.getMessage());
-			Alerts.getInstance().createAlert(Alert.AlertType.WARNING, null, e.getMessage(), getContainingWindow()).showAndWait();
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_DELETE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
