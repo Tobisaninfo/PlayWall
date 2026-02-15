@@ -275,8 +275,8 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 			}
 			catch(PlayWallApiException ex)
 			{
-				// TODO: error handling
-				throw new RuntimeException(ex);
+				Logger.error(ex);
+				Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), getContainingWindow()).showAndWait();
 			}
 		});
 	}

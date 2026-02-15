@@ -35,13 +35,6 @@ public class ProjectCell extends ListCell<ProjectMetadata>
 				HBox.setHgrow(nameBox, Priority.ALWAYS);
 				rootBox.getChildren().add(nameBox);
 
-				// File not Exists
-				// TODO: Error Handling
-//				Path path = ref.getProjectPath();
-//				if((Files.notExists(path) || !ref.getMissedModules().isEmpty()))
-//				{
-//				}
-
 				setGraphic(rootBox);
 				this.ref = ref;
 			}

@@ -1,9 +1,13 @@
 package de.tobias.playwall.client.domain.pad.view.desktop;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
+import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.*;
 import de.tobias.playwall.client.domain.pad.view.PadIndexable;
@@ -21,10 +25,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
@@ -359,9 +360,9 @@ public class DesktopPadView implements PadView
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling
 			updateStatus(this.previousStatus);
-			throw new RuntimeException(ex);
+			Logger.error(ex);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -374,9 +375,9 @@ public class DesktopPadView implements PadView
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling
 			updateStatus(this.previousStatus);
-			throw new RuntimeException(ex);
+			Logger.error(ex);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -389,9 +390,9 @@ public class DesktopPadView implements PadView
 		}
 		catch(PlayWallApiException ex)
 		{
-			// TODO: error handling
 			updateStatus(this.previousStatus);
-			throw new RuntimeException(ex);
+			Logger.error(ex);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -406,9 +407,9 @@ public class DesktopPadView implements PadView
 			}
 			catch(PlayWallApiException ex)
 			{
-				// TODO: error handling
 				updateStatus(this.previousStatus);
-				throw new RuntimeException(ex);
+				Logger.error(ex);
+				Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
 			}
 		});
 	}

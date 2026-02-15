@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -249,7 +250,6 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: error handling
 			throw new RuntimeException(e);
 		}
 	}
@@ -322,8 +322,8 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			loadingOverlay.hide();
-			// TODO:
 			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PROJECT_LOAD), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -468,8 +468,8 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: Error Handling
-			throw new RuntimeException(e);
+			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_DUPLICATE), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -481,8 +481,8 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: Error Handling
-			throw new RuntimeException(e);
+			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_DELETE), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -495,8 +495,8 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: Error Handling
-			throw new RuntimeException(e);
+			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_REORDER), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -564,8 +564,8 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: Error Handling
-			throw new RuntimeException(e);
+			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_ADD), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -698,8 +698,8 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: error handling
-			throw new RuntimeException(e);
+			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_SAVE), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -712,8 +712,8 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: error handling
-			throw new RuntimeException(e);
+			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_UNDO), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -726,8 +726,8 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			// TODO: error handling
-			throw new RuntimeException(e);
+			Logger.error(e);
+			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_REDO), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 

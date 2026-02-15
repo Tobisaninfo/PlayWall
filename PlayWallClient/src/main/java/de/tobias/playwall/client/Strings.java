@@ -75,4 +75,17 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE  = "ui.settings.pad.view.title";
 	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
 
+	// ui - errors
+	public static final String UI_ERRORS_PAD_PLAY  = "ui.errors.pad.play";
+	public static final String UI_ERRORS_PAD_PAUSE  = "ui.errors.pad.pause";
+	public static final String UI_ERRORS_PAD_STOP  = "ui.errors.pad.stop";
+	public static final String UI_ERRORS_PAD_LOAD  = "ui.errors.pad.load";
+	public static final String UI_ERRORS_PAGE_ADD  = "ui.errors.page.add";
+	public static final String UI_ERRORS_PAGE_REORDER  = "ui.errors.page.reorder";
+	public static final String UI_ERRORS_PAGE_DELETE  = "ui.errors.page.delete";
+	public static final String UI_ERRORS_PAGE_DUPLICATE  = "ui.errors.page.duplicate";
+	public static final String UI_ERRORS_SAVE  = "ui.errors.save";
+	public static final String UI_ERRORS_UNDO  = "ui.errors.undo";
+	public static final String UI_ERRORS_REDO  = "ui.errors.redo";
+	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
 }
