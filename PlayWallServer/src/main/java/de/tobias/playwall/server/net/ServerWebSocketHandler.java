@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.net;
 
+import de.tobias.playwall.common.api.StackTraceError;
 import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
@@ -9,6 +10,7 @@ import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -92,7 +94,8 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 		}
 		catch(Exception e)
 		{
-			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), null);
+			final String stackTrace = ExceptionUtils.getStackTrace(e);
+			final ErrorMessage errorMessage = new ErrorMessage(parsedMessage.getMessageId(), e.getMessage(), new StackTraceError(stackTrace));
 			final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
 			sendToClients(textResponse, List.of(session));  // TODO: Do not send to all clients
 			log.error("Error processing request", e);

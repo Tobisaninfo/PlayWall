@@ -14,6 +14,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ParamDialogBase;
+import de.tobias.playwall.client.view.components.ErrorAlert;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.ViewConstants;
@@ -276,7 +277,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 			catch(PlayWallApiException ex)
 			{
 				Logger.error(ex);
-				Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), getContainingWindow()).showAndWait();
+				ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), getContainingWindow()).showAndWait();
 			}
 		});
 	}

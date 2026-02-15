@@ -27,6 +27,7 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.about.AboutDialog;
+import de.tobias.playwall.client.view.components.ErrorAlert;
 import de.tobias.playwall.client.view.components.GlobalColorPicker;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.VolumeSlider;
@@ -49,6 +50,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.ExceptionDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -323,7 +325,7 @@ public class MainViewController extends ViewControllerBase
 		{
 			loadingOverlay.hide();
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PROJECT_LOAD), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_LOAD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -469,7 +471,7 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_DUPLICATE), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DUPLICATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -482,7 +484,7 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_DELETE), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DELETE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -496,7 +498,7 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_REORDER), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_REORDER), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -565,7 +567,7 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAGE_ADD), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_ADD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -699,7 +701,7 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_SAVE), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -713,7 +715,7 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_UNDO), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_UNDO), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -727,7 +729,7 @@ public class MainViewController extends ViewControllerBase
 		catch(PlayWallApiException e)
 		{
 			Logger.error(e);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_REDO), e.getMessage(), getContainingWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_REDO), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 

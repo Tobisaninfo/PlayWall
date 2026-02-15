@@ -19,6 +19,8 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.FileChooserWrapper;
+import de.tobias.playwall.client.view.components.ErrorAlert;
+import de.tobias.playwall.common.api.StackTraceError;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -30,6 +32,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.Getter;
+import org.controlsfx.dialog.ExceptionDialog;
 
 import static de.tobias.playwall.client.domain.pad.view.control.PadStyleClasses.*;
 import static de.tobias.playwall.client.view.components.PseudoClasses.PLAY_CLASS;
@@ -362,7 +365,7 @@ public class DesktopPadView implements PadView
 		{
 			updateStatus(this.previousStatus);
 			Logger.error(ex);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -377,7 +380,7 @@ public class DesktopPadView implements PadView
 		{
 			updateStatus(this.previousStatus);
 			Logger.error(ex);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -392,7 +395,7 @@ public class DesktopPadView implements PadView
 		{
 			updateStatus(this.previousStatus);
 			Logger.error(ex);
-			Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
+			ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
 
@@ -409,7 +412,7 @@ public class DesktopPadView implements PadView
 			{
 				updateStatus(this.previousStatus);
 				Logger.error(ex);
-				Alerts.getInstance().createAlert(Alert.AlertType.ERROR, null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), superRoot.getScene().getWindow()).showAndWait();
+				ErrorAlert.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 			}
 		});
 	}

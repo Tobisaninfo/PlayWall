@@ -1,10 +1,21 @@
 @use "variables";
 
-/*noinspection CssInvalidPseudoSelector*/
-.dialog-pane:header *.header-panel {
+.dialog-pane {
+  &:header *.header-panel {
     -fx-background-color: rgb(70, 70, 70);
-}
+  }
 
-.dialog-pane *.error-label {
+  *.error-label {
     -fx-text-fill: variables.$danger-color;
+  }
+
+  .details-button {
+    .text {
+      -fx-fill: variables.$component-text-color;
+    }
+  }
+
+  .expandable-content {
+    -fx-padding: 0;
+  }
 }
