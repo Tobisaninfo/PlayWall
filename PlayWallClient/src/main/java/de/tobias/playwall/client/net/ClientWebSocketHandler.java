@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.net;
 
 import de.thecodelabs.logger.Logger;
+import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
@@ -26,11 +27,13 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	private final Object lock = new Object();
 
 	private final UpdateMessageEventHandler updateMessageEventHandler;
+	private final CommandLineOptions commandLineOptions;
 
 	@InjectConstructor
-	ClientWebSocketHandler(UpdateMessageEventHandler updateMessageEventHandler)
+	ClientWebSocketHandler(UpdateMessageEventHandler updateMessageEventHandler, CommandLineOptions commandLineOptions)
 	{
 		this.updateMessageEventHandler = updateMessageEventHandler;
+		this.commandLineOptions = commandLineOptions;
 		this.objectMapper = JsonMapper.builder().findAndAddModules().build();
 		this.responseQueue = new ResponseQueue();
 	}
@@ -39,7 +42,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		var webSocketBuilder = httpClient.newWebSocketBuilder();
 
-		final String url = "ws://localhost:10023/websocket";
+		final String url = "ws://localhost:" + commandLineOptions.getServerPort() + "/websocket";
 		for(var entry : headers.entrySet())
 		{
 			webSocketBuilder = webSocketBuilder.header(entry.getKey(), entry.getValue());

@@ -23,7 +23,7 @@ public class CommandLineOptions
 
 	public static final Option DEBUG = new Option(null, "debug", false, "Debug flag");
 	public static final Option STANDALONE = new Option(null, "standalone", false, "Do not start embedded server");
-	public static final Option SERVER_PORT = new Option(null, "port", true, "Server port. Only necessary if standalone is NOT set. Default: " + DEFAULT_PORT);
+	public static final Option SERVER_PORT = new Option(null, "port", true, "Server port. Default: " + DEFAULT_PORT);
 	public static final Option WATCH_STYLESHEETS = new Option(null, "watch-stylesheets", false, "Install a file watch for stylesheets");
 	public static final Option SERVER_PATH = new Option(null, "server-path", true, "Specify path to embedded server");
 	public static final Option PROJECT = new Option(null, "project", true, "Skip launch dialog and open the specified project immediately if existing");

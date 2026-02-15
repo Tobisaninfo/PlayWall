@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
+import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import lombok.AccessLevel;
@@ -29,6 +30,7 @@ public class ServerLauncher
 {
 	private final ServerPathLookup serverPathLookup;
 	private final App app;
+	private final CommandLineOptions commandLineOptions;
 
 	private Process serverProcess;
 
@@ -73,6 +75,7 @@ public class ServerLauncher
 			{
 				programArguments.add("--de.tobias.playwall.path-provider.base-directory-template=" + properties.getStoragePath());
 			}
+			programArguments.add("--server.port=" + commandLineOptions.getServerPort());
 
 			final List<String> processCommand = new ArrayList<>();
 			processCommand.add(javaExecutable.toAbsolutePath().toString());
