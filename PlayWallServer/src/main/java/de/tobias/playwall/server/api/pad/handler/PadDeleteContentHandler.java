@@ -3,11 +3,9 @@ package de.tobias.playwall.server.api.pad.handler;
 import de.tobias.playwall.common.api.CompoundRequest;
 import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
 import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
-import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -41,7 +39,7 @@ class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContent
 	}
 
 	@Override
-	public Optional<UndoItem> handleRequest(PadDeleteContentRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(PadDeleteContentRequest requestMessage)
 	{
 		final UndoItem inverseOperation = getInverseOperation(requestMessage);
 
@@ -52,11 +50,6 @@ class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContent
 		}
 
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
-		if(pad == null)
-		{
-			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
-			throw new PlayWallServerException(messageSource, error);
-		}
 
 		pad.setContent(null);
 		pad.setName(null);
@@ -68,7 +61,7 @@ class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContent
 	private UndoItem getInverseOperation(PadDeleteContentRequest request)
 	{
 		final Pad pad = projectController.getPad(request.getPadId());
-		if(pad == null || pad.getContent() == null)
+		if(pad.getContent() == null)
 		{
 			return null;
 		}

@@ -1,14 +1,13 @@
 package de.tobias.playwall.server.api.page.handler;
 
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
-import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -137,9 +136,7 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 
 		final UUID pageId = UUID.fromString("1e76b8b3-ad58-4533-aa57-e2b66360e9ea");
 		assertThatThrownBy(() -> handler.handleRequest(new PageDeleteRequest(pageId)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PageNotExistsError.class);
+				.isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
@@ -147,9 +144,7 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 	{
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
 		assertThatThrownBy(() -> handler.handleRequest(new PageDeleteRequest(pageId)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNotLoadedError.class);
+				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).deletePage(any(), any());
 	}

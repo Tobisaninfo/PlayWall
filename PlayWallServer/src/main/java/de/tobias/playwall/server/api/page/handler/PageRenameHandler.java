@@ -1,13 +1,8 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.PageNameAlreadyExistsError;
-import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageRenameRequest;
 import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
-import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -33,7 +28,7 @@ class PageRenameHandler implements UndoableRequestHandler<PageRenameRequest>
 	private final ApplicationContext context;
 
 	@Override
-	public Optional<UndoItem> handleRequest(PageRenameRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<UndoItem> handleRequest(PageRenameRequest requestMessage) throws IOException
 	{
 		final String shortDescription = messageSource.getMessage("undo.description.short.page.rename", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longDescription = messageSource.getMessage("undo.description.long.page.rename", new Object[]{}, LocaleContextHolder.getLocale());

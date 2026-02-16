@@ -1,12 +1,11 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectAddRequest;
 import de.tobias.playwall.common.api.project.request.ProjectAddResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
+import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
@@ -93,9 +92,7 @@ class ProjectAddHandlerTest
 		assertThat(projectMetadataRepository.getAllProjectMetadata()).hasSize(1);
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectAddRequest("Name1", 5, 4)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNameAlreadyExistsError.class);
+				.isInstanceOf(ProjectNameAlreadyExistsException.class);
 
 		assertThat(projectMetadataRepository.getAllProjectMetadata()).hasSize(1);
 	}

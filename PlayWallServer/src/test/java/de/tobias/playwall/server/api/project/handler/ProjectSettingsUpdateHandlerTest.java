@@ -3,14 +3,13 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -171,9 +170,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.build());
 
 		assertThatThrownBy(() -> handler.handleRequest(request))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNameAlreadyExistsError.class);
+				.isInstanceOf(ProjectNameAlreadyExistsException.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 		assertThat(project.getMetadata().getName()).isEqualTo("Project 1");

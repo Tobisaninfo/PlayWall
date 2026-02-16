@@ -2,12 +2,11 @@ package de.tobias.playwall.server.api.pad.handler;
 
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
-import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -118,9 +117,7 @@ class PadDeleteContentHandlerTest extends AbstractUndoableRequestHandlerTest<Pad
 		final PadDeleteContentRequest request = new PadDeleteContentRequest(padId);
 
 		assertThatThrownBy(() -> handler.handleRequest(request))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PadNotExistsError.class);
+				.isInstanceOf(PadNotExistsException.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 	}

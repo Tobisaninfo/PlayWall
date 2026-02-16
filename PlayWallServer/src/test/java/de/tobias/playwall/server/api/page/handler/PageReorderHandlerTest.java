@@ -75,12 +75,10 @@ class PageReorderHandlerTest extends AbstractUndoableRequestHandlerTest<PageReor
 		assertThat(applicationEvents.stream(PageReorderUpdate.class))
 				.hasSize(1)
 				.first()
-				.satisfies(update -> {
-					assertThat(update.getPositions()).containsExactlyInAnyOrderEntriesOf(Map.of(
-							UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677"), 1,
-							UUID.fromString("209e515b-4237-4fc3-968b-79da4356836d"), 0
-					));
-				});
+				.satisfies(update -> assertThat(update.getPositions()).containsExactlyInAnyOrderEntriesOf(Map.of(
+						UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677"), 1,
+						UUID.fromString("209e515b-4237-4fc3-968b-79da4356836d"), 0
+				)));
 	}
 
 	@Test

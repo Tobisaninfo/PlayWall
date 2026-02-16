@@ -1,17 +1,13 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.CompoundRequest;
-import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.request.ProjectUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
-import de.tobias.playwall.server.api.project.*;
+import de.tobias.playwall.server.api.project.ProjectMapper;
 import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
@@ -43,16 +39,11 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 	private final ProjectMapper projectMapper;
 
 	@Override
-	public Optional<UndoItem> handleRequest(ProjectSettingsUpdateRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(ProjectSettingsUpdateRequest requestMessage)
 	{
 		final UndoItem inverseOperation = getInverseOperation(requestMessage);
 
 		final Project project = projectController.getLoadedProject();
-		if(project == null)
-		{
-			final ProjectNotLoadedError error = new ProjectNotLoadedError();
-			throw new PlayWallServerException(messageSource, error);
-		}
 
 		final Project oldProject = project.copy(false);
 		final ProjectMetadata oldMetadata = oldProject.getMetadata();

@@ -1,11 +1,10 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadUpdateNameRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -88,9 +87,7 @@ class PadNameUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<PadUpd
 		final PadUpdateNameRequest request = new PadUpdateNameRequest(padId, "Lorem");
 
 		assertThatThrownBy(() -> handler.handleRequest(request))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PadNotExistsError.class);
+				.isInstanceOf(PadNotExistsException.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 	}

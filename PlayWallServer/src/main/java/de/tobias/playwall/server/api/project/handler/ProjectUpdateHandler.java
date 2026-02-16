@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.request.ProjectUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMapper;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
@@ -42,7 +41,7 @@ class ProjectUpdateHandler implements OneTimeActionRequestHandler<ProjectUpdateR
 	}
 
 	@Override
-	public void handleRequest(ProjectUpdateRequest requestMessage) throws IOException, PlayWallServerException
+	public void handleRequest(ProjectUpdateRequest requestMessage) throws IOException
 	{
 		final List<Pad> padsToBeLoaded = new ArrayList<>();
 

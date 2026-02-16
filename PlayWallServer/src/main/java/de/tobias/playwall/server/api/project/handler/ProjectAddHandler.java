@@ -1,18 +1,14 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectAddRequest;
 import de.tobias.playwall.common.api.project.request.ProjectAddResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
-import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.net.GetRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,20 +19,11 @@ class ProjectAddHandler implements GetRequestHandler<ProjectAddRequest> // TODO:
 {
 	private final ProjectService projectService;
 	private final ProjectMetadataMapper mapper;
-	private final MessageSource messageSource;
 
 	@Override
-	public Optional<ResponseMessage> handleRequest(ProjectAddRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<ResponseMessage> handleRequest(ProjectAddRequest requestMessage) throws IOException
 	{
-		try
-		{
-			final ProjectMetadata projectMetadata = projectService.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
-			return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectMetadataToProjectMetadataDto(projectMetadata)));
-		}
-		catch(ProjectNameAlreadyExistsException _)
-		{
-			final ProjectNameAlreadyExistsError error = new ProjectNameAlreadyExistsError(requestMessage.getName());
-			throw new PlayWallServerException(messageSource, error);
-		}
+		final ProjectMetadata projectMetadata = projectService.addProject(requestMessage.getName(), requestMessage.getNumberOfHorizontalPads(), requestMessage.getNumberOVerticalPads());
+		return Optional.of(new ProjectAddResponse(requestMessage.getMessageId(), mapper.projectMetadataToProjectMetadataDto(projectMetadata)));
 	}
 }

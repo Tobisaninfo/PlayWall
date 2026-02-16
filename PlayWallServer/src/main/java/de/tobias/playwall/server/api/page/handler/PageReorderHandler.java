@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.page.handler;
 
 import de.tobias.playwall.common.api.page.request.PageReorderRequest;
 import de.tobias.playwall.common.api.page.update.PageReorderUpdate;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -28,7 +27,7 @@ public class PageReorderHandler implements UndoableRequestHandler<PageReorderReq
 	private final MessageSource messageSource;
 
 	@Override
-	public Optional<UndoItem> handleRequest(PageReorderRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<UndoItem> handleRequest(PageReorderRequest requestMessage) throws IOException
 	{
 		final String shortDescription = messageSource.getMessage("undo.description.short.page.reorder", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longDescription = messageSource.getMessage("undo.description.long.page.reorder", new Object[]{}, LocaleContextHolder.getLocale());

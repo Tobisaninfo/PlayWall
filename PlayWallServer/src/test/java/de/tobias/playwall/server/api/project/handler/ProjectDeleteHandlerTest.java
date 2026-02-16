@@ -1,9 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectDeleteRequest;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
+import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +47,7 @@ class ProjectDeleteHandlerTest
 		when(projectRepository.deleteProject(id)).thenReturn(true);
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectDeleteRequest(id)))
-				.isInstanceOf(PlayWallServerException.class)
-				.hasMessage("Es existiert kein Projekt mit der ID \"fc427184-2e55-4734-8148-5fb657963616\".");
+				.isInstanceOf(ProjectNotExistsException.class);
 
 		verify(projectMetadataRepository).deleteProject(id);
 		verify(projectRepository, never()).deleteProject(id);
@@ -63,9 +61,7 @@ class ProjectDeleteHandlerTest
 		when(projectRepository.deleteProject(id)).thenReturn(false);
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectDeleteRequest(id)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNotExistsError.class);
+				.isInstanceOf(ProjectNotExistsException.class);
 
 		verify(projectMetadataRepository).deleteProject(id);
 		verify(projectRepository).deleteProject(id);

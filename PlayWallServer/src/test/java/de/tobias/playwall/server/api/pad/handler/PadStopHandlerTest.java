@@ -1,9 +1,8 @@
 package de.tobias.playwall.server.api.pad.handler;
 
-import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadStopRequest;
 import de.tobias.playwall.server.TestUtils;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -71,9 +70,7 @@ class PadStopHandlerTest
 		projectController.loadProject(project).get();
 
 		assertThatThrownBy(() -> handler.handleRequest(new PadStopRequest(padId)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PadNotExistsError.class);
+				.isInstanceOf(PadNotExistsException.class);
 
 		verify(audioHandler, never()).stop();
 	}

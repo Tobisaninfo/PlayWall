@@ -6,11 +6,9 @@ import de.tobias.playwall.common.api.page.request.PageInsertRequest;
 import de.tobias.playwall.common.api.page.request.PageReplaceRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.page.PageMapper;
-import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
+import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -35,14 +33,13 @@ class PageDeleteHandler implements UndoableRequestHandler<PageDeleteRequest>
 	private final MessageSource messageSource;
 
 	@Override
-	public Optional<UndoItem> handleRequest(PageDeleteRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(PageDeleteRequest requestMessage)
 	{
 		final Project project = projectController.getLoadedProject();
 		final Optional<Page> pageOptional = project.getPageById(requestMessage.getPageId());
 		if(pageOptional.isEmpty())
 		{
-			final PageNotExistsError error = new PageNotExistsError(requestMessage.getPageId());
-			throw new PlayWallServerException(messageSource, error);
+			throw new PageNotExistsException(project.getMetadata().getId(), requestMessage.getPageId());
 		}
 
 		final Page page = pageOptional.get();
@@ -61,8 +58,7 @@ class PageDeleteHandler implements UndoableRequestHandler<PageDeleteRequest>
 		final boolean success = projectService.deletePage(project, requestMessage.getPageId());
 		if(!success)
 		{
-			final PageNotExistsError error = new PageNotExistsError(requestMessage.getPageId());
-			throw new PlayWallServerException(messageSource, error);
+			throw new PageNotExistsException(project.getMetadata().getId(), requestMessage.getPageId());
 		}
 
 		context.publishEvent(new PageDeleteUpdate(requestMessage.getPageId(), project.getPagePositions()));

@@ -3,7 +3,6 @@ package de.tobias.playwall.server.api.page.handler;
 import de.tobias.playwall.common.api.page.request.PageAddRequest;
 import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.page.PageMapper;
 import de.tobias.playwall.server.api.project.ProjectService;
@@ -30,7 +29,7 @@ class PageAddHandler implements UndoableRequestHandler<PageAddRequest>
 	private final MessageSource messageSource;
 
 	@Override
-	public Optional<UndoItem> handleRequest(PageAddRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<UndoItem> handleRequest(PageAddRequest requestMessage) throws IOException
 	{
 		final Page page = projectService.addPage(projectController.getLoadedProject());
 		context.publishEvent(new PageAddUpdate(mapper.pageToPageDto(page)));

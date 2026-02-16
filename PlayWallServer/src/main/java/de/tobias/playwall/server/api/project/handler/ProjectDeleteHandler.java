@@ -1,13 +1,11 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.request.ProjectDeleteRequest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.net.OneTimeActionRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 
 import java.io.IOException;
 
@@ -16,10 +14,9 @@ import java.io.IOException;
 class ProjectDeleteHandler implements OneTimeActionRequestHandler<ProjectDeleteRequest>
 {
 	private final ProjectService projectService;
-	private final MessageSource messageSource;
 
 	@Override
-	public void handleRequest(ProjectDeleteRequest requestMessage) throws IOException, PlayWallServerException
+	public void handleRequest(ProjectDeleteRequest requestMessage) throws IOException
 	{
 		final boolean success = projectService.deleteProjectById(requestMessage.getProjectId());
 		if(success)
@@ -27,7 +24,6 @@ class ProjectDeleteHandler implements OneTimeActionRequestHandler<ProjectDeleteR
 			return;
 		}
 
-		final ProjectNotExistsError error = new ProjectNotExistsError(requestMessage.getProjectId());
-		throw new PlayWallServerException(messageSource, error);
+		throw new ProjectNotExistsException(requestMessage.getProjectId());
 	}
 }

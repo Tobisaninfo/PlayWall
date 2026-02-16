@@ -2,7 +2,6 @@ package de.tobias.playwall.server.net;
 
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.server.api.PlayWallServerException;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -12,5 +11,5 @@ import java.util.Optional;
  */
 public non-sealed interface GetRequestHandler<T extends RequestMessage> extends RequestHandler
 {
-	Optional<ResponseMessage> handleRequest(T requestMessage) throws IOException, PlayWallServerException;
+	Optional<ResponseMessage> handleRequest(T requestMessage) throws IOException;
 }

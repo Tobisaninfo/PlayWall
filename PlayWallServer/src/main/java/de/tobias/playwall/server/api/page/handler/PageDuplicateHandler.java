@@ -4,12 +4,8 @@ import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.request.PageDuplicateRequest;
 import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.page.PageMapper;
-import de.tobias.playwall.server.api.page.PageNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -35,30 +31,17 @@ class PageDuplicateHandler implements UndoableRequestHandler<PageDuplicateReques
 	private final ApplicationContext context;
 
 	@Override
-	public Optional<UndoItem> handleRequest(PageDuplicateRequest requestMessage) throws IOException, PlayWallServerException
+	public Optional<UndoItem> handleRequest(PageDuplicateRequest requestMessage) throws IOException
 	{
 		final String shortDescription = messageSource.getMessage("undo.description.short.page.duplicate", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longDescription = messageSource.getMessage("undo.description.long.page.duplicate", new Object[]{}, LocaleContextHolder.getLocale());
 
-		try
-		{
-			final Project project = projectController.getLoadedProject();
-			final Page page = projectService.duplicatePage(project, requestMessage.getPageId());
+		final Project project = projectController.getLoadedProject();
+		final Page page = projectService.duplicatePage(project, requestMessage.getPageId());
 
-			context.publishEvent(new PageInsertUpdate(mapper.pageToPageDto(page), page.getPosition(), project.getPagePositions()));
-			projectController.loadPage(page);
+		context.publishEvent(new PageInsertUpdate(mapper.pageToPageDto(page), page.getPosition(), project.getPagePositions()));
+		projectController.loadPage(page);
 
-			return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new PageDeleteRequest(page.getId())));
-		}
-		catch(ProjectNotLoadedException _)
-		{
-			final ProjectNotLoadedError error = new ProjectNotLoadedError();
-			throw new PlayWallServerException(messageSource, error);
-		}
-		catch(PageNotExistsException _)
-		{
-			final PageNotExistsError error = new PageNotExistsError(requestMessage.getPageId());
-			throw new PlayWallServerException(messageSource, error);
-		}
+		return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new PageDeleteRequest(page.getId())));
 	}
 }

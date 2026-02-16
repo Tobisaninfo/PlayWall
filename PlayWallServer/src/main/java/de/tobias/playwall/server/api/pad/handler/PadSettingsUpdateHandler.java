@@ -2,10 +2,8 @@ package de.tobias.playwall.server.api.pad.handler;
 
 import de.tobias.playwall.common.api.pad.AudioPadContentDto;
 import de.tobias.playwall.common.api.pad.PadContentDto;
-import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -40,16 +38,11 @@ class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpda
 	}
 
 	@Override
-	public Optional<UndoItem> handleRequest(PadSettingsUpdateRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(PadSettingsUpdateRequest requestMessage)
 	{
 		final UndoItem inverseOperation = getInverseOperation(requestMessage);
 
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
-		if(pad == null)
-		{
-			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
-			throw new PlayWallServerException(messageSource, error);
-		}
 
 		pad.setName(requestMessage.getPad().getName());
 		pad.setTimeMode(requestMessage.getPad().getTimeMode());
@@ -60,7 +53,7 @@ class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpda
 
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
-		return Optional.ofNullable(inverseOperation);
+		return Optional.of(inverseOperation);
 	}
 
 	private void updatePadContent(PadContentDto requestPadContent, Pad pad)
@@ -94,10 +87,6 @@ class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpda
 	private UndoItem getInverseOperation(PadSettingsUpdateRequest requestMessage)
 	{
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
-		if(pad == null)
-		{
-			return null;
-		}
 
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.settings", new Object[]{}, LocaleContextHolder.getLocale());
 		final String pageName = projectController.getPageByPad(pad.getId()).getName();

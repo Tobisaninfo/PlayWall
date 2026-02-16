@@ -1,12 +1,11 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
-import de.tobias.playwall.common.api.pad.request.PadNotExistsError;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -124,9 +123,7 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
 		assertThatThrownBy(() -> handler.handleRequest(request))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PadNotExistsError.class);
+				.isInstanceOf(PadNotExistsException.class);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
 		assertThat(applicationEvents.stream(PadLoadedUpdate.class)).isEmpty();

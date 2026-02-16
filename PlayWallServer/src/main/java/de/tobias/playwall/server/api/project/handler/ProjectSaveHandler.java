@@ -1,7 +1,6 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.request.ProjectSaveRequest;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -21,7 +20,7 @@ class ProjectSaveHandler implements OneTimeActionRequestHandler<ProjectSaveReque
 	private final ProjectMetadataRepository projectMetadataRepository;
 
 	@Override
-	public void handleRequest(ProjectSaveRequest requestMessage) throws IOException, PlayWallServerException
+	public void handleRequest(ProjectSaveRequest requestMessage) throws IOException
 	{
 		final Project loadedProject = projectController.getLoadedProject();
 		projectRepository.saveProject(loadedProject);

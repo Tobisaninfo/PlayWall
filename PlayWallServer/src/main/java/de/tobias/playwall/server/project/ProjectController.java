@@ -2,12 +2,14 @@ package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate;
+import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -96,7 +98,7 @@ public class ProjectController
 		context.publishEvent(new ProjectLoadedUpdate());
 	}
 
-	public Project getLoadedProject() throws ProjectNotLoadedException
+	public @NonNull Project getLoadedProject() throws ProjectNotLoadedException
 	{
 		if(loadedProject == null)
 		{
@@ -110,9 +112,15 @@ public class ProjectController
 		return padControllers.get(padId);
 	}
 
-	public Pad getPad(UUID padId)
+	public @NonNull Pad getPad(UUID padId)
 	{
-		return getLoadedProject().getPad(padId);
+		final Project project = getLoadedProject();
+		final Pad pad = project.getPad(padId);
+		if(pad == null)
+		{
+			throw new PadNotExistsException(project.getMetadata().getId(), padId);
+		}
+		return pad;
 	}
 
 	public Page getPageByPad(UUID padId)

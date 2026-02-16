@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.history.handler;
 
 import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.net.*;
@@ -21,7 +20,7 @@ class RedoHandler implements OneTimeActionRequestHandler<RedoRequest>
 	private final ApplicationContext context;
 
 	@Override
-	public void handleRequest(RedoRequest ignored) throws IOException, PlayWallServerException
+	public void handleRequest(RedoRequest ignored) throws IOException
 	{
 		final RequestMessage redoOperation = undoManager.getRedoOperation();
 

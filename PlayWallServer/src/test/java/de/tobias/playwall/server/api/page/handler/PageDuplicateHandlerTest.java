@@ -1,13 +1,12 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageDuplicateRequest;
 import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.pad.PadMapper;
+import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -95,19 +94,15 @@ class PageDuplicateHandlerTest extends AbstractUndoableRequestHandlerTest<PageDu
 
 		final UUID originalPage = UUID.fromString("1e76b8b3-2da8-4533-aa57-e2b66360e9ea");
 		assertThatThrownBy(() -> handler.handleRequest(new PageDuplicateRequest(originalPage)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PageNotExistsError.class);
+				.isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
-	void testDuplicatePageProjectNotLoaded() throws Exception
+	void testDuplicatePageProjectNotLoaded()
 	{
 		final UUID originalPage = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
 		assertThatThrownBy(() -> handler.handleRequest(new PageDuplicateRequest(originalPage)))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNotLoadedError.class);
+				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).duplicatePage(any(), any());
 	}

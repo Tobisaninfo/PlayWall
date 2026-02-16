@@ -1,7 +1,6 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import de.tobias.playwall.common.api.pad.request.AllPadsStopRequest;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.net.OneTimeActionRequestHandler;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.ProjectController;
@@ -16,7 +15,7 @@ class AllPadsStopHandler implements OneTimeActionRequestHandler<AllPadsStopReque
 	private final ProjectController projectController;
 
 	@Override
-	public void handleRequest(AllPadsStopRequest requestMessage) throws IOException, PlayWallServerException
+	public void handleRequest(AllPadsStopRequest requestMessage) throws IOException
 	{
 		projectController.stopAll();
 	}

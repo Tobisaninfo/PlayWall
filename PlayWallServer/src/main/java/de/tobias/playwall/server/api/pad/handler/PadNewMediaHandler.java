@@ -2,11 +2,13 @@ package de.tobias.playwall.server.api.pad.handler;
 
 import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playwall.common.api.CompoundRequest;
-import de.tobias.playwall.common.api.pad.request.*;
+import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
+import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
+import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
+import de.tobias.playwall.common.api.pad.request.PadUpdateNameRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.utils.FileFormats;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -48,7 +50,7 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 	}
 
 	@Override
-	public Optional<UndoItem> handleRequest(PadNewMediaRequest requestMessage) throws PlayWallServerException
+	public Optional<UndoItem> handleRequest(PadNewMediaRequest requestMessage)
 	{
 		final UndoItem undoItem = getInverseOperation(requestMessage);
 
@@ -58,11 +60,6 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 			oldController.unload();
 		}
 		final Pad pad = projectController.getPad(requestMessage.getPadId());
-		if(pad == null)
-		{
-			final PadNotExistsError error = new PadNotExistsError(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
-			throw new PlayWallServerException(messageSource, error);
-		}
 
 		final Path path = Paths.get(requestMessage.getPath());
 		final PadContent content = switch(FileFormats.getContentTypeForFile(path))
@@ -90,16 +87,12 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 		// Load pad async
 		asyncExecutor.execute(newPadController::load);
 
-		return Optional.ofNullable(undoItem);
+		return Optional.of(undoItem);
 	}
 
 	private UndoItem getInverseOperation(PadNewMediaRequest request)
 	{
 		final Pad pad = projectController.getPad(request.getPadId());
-		if(pad == null)
-		{
-			return null;
-		}
 
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.new.media", new Object[]{}, LocaleContextHolder.getLocale());
 		final String pageName = projectController.getPageByPad(pad.getId()).getName();

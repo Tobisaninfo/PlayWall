@@ -1,9 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.common.api.project.request.ProjectSaveRequest;
 import de.tobias.playwall.server.TestUtils;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
@@ -70,9 +69,7 @@ class ProjectSaveHandlerTest
 	void testProjectSaveRequestNoLoaded() throws Exception
 	{
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectSaveRequest()))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNotLoadedError.class);
+				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectRepository, never()).saveProject(any());
 	}

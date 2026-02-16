@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.page.handler;
 
 import de.tobias.playwall.common.api.page.request.PageReplaceRequest;
 import de.tobias.playwall.common.api.page.update.PageReplaceUpdate;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.page.PageMapper;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
@@ -23,7 +22,7 @@ class PageReplaceHandler implements OneTimeActionRequestHandler<PageReplaceReque
 	private final ApplicationContext context;
 
 	@Override
-	public void handleRequest(PageReplaceRequest requestMessage) throws PlayWallServerException
+	public void handleRequest(PageReplaceRequest requestMessage)
 	{
 			final Project project = projectController.getLoadedProject();
 			projectController.unloadAndRemovePage(project.getPages().get(requestMessage.getIndex()));

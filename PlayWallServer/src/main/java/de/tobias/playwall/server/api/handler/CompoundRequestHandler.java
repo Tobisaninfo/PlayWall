@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.handler;
 
 import de.tobias.playwall.common.api.CompoundRequest;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.net.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +17,7 @@ class CompoundRequestHandler implements OneTimeActionRequestHandler<CompoundRequ
 	private final ApplicationContext context;
 
 	@Override
-	public void handleRequest(CompoundRequest compoundRequest) throws IOException, PlayWallServerException
+	public void handleRequest(CompoundRequest compoundRequest) throws IOException
 	{
 		final RequestHandlerFactory requestHandlerFactory = context.getBean(RequestHandlerFactory.class);
 		for(RequestMessage requestMessage : compoundRequest.getRequests())

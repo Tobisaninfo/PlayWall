@@ -2,10 +2,9 @@ package de.tobias.playwall.server.api.page.handler;
 
 import de.tobias.playwall.common.api.page.request.PageAddRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -105,9 +104,7 @@ class PageAddHandlerTest extends AbstractUndoableRequestHandlerTest<PageAddReque
 	void testAddPageProjectNotLoaded() throws Exception
 	{
 		assertThatThrownBy(() -> handler.handleRequest(new PageAddRequest()))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNotLoadedError.class);
+				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).addProject(any(), anyInt(), anyInt());
 	}

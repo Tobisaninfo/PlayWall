@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.history.handler;
 
 import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.net.RequestMessage;
-import de.tobias.playwall.server.api.PlayWallServerException;
 import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.net.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ class UndoHandler implements OneTimeActionRequestHandler<UndoRequest>
 	private final ApplicationContext context;
 
 	@Override
-	public void handleRequest(UndoRequest ignored) throws IOException, PlayWallServerException
+	public void handleRequest(UndoRequest ignored) throws IOException
 	{
 		final RequestMessage undoOperation = undoManager.getUndoOperation();
 

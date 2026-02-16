@@ -1,13 +1,12 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.PageNameAlreadyExistsError;
-import de.tobias.playwall.common.api.page.PageNotExistsError;
 import de.tobias.playwall.common.api.page.request.PageRenameRequest;
 import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
-import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.PlayWallServerException;
+import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
+import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.project.ProjectController;
@@ -81,9 +80,7 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 
 		final UUID pageId = UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677");
 		assertThatThrownBy(() -> handler.handleRequest(new PageRenameRequest(pageId, "Seite 3")))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PageNameAlreadyExistsError.class);
+				.isInstanceOf(PageNameAlreadyExistsException.class);
 	}
 
 	@Test
@@ -94,19 +91,15 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 
 		final UUID pageId = UUID.fromString("1e76b8b3-2da8-4533-aa57-e2b66360e9ea");
 		assertThatThrownBy(() -> handler.handleRequest(new PageRenameRequest(pageId, "Renamed Page")))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(PageNotExistsError.class);
+				.isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
-	void testRenamePageProjectNotLoaded() throws Exception
+	void testRenamePageProjectNotLoaded()
 	{
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
 		assertThatThrownBy(() -> handler.handleRequest(new PageRenameRequest(pageId, "Renamed Page")))
-				.isInstanceOf(PlayWallServerException.class)
-				.extracting(e -> ((PlayWallServerException) e).getError())
-				.isInstanceOf(ProjectNotLoadedError.class);
+				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).renamePage(any(), any(), any());
 	}
