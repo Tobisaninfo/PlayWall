@@ -23,6 +23,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,8 +61,8 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 			project.getMetadata().setDefaultColor(requestMessage.getProjectMetadata().defaultColor());
 			project.getMetadata().setPlayColor(requestMessage.getProjectMetadata().playColor());
 
-			boolean hasProjectSizeChanged = oldMetadata.getNumberOfHorizontalPads() != requestMessage.getProjectMetadata().numberOfHorizontalPads() ||
-											oldMetadata.getNumberOfVerticalPads() != requestMessage.getProjectMetadata().numberOfVerticalPads();
+			boolean hasProjectSizeChanged = !Objects.equals(oldMetadata.getNumberOfHorizontalPads(), requestMessage.getProjectMetadata().numberOfHorizontalPads()) ||
+											!Objects.equals(oldMetadata.getNumberOfVerticalPads(), requestMessage.getProjectMetadata().numberOfVerticalPads());
 
 			project.getMetadata().setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
 			project.getMetadata().setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
