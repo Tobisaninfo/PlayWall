@@ -133,7 +133,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler
 						return "Unbekannt";
 					}
 
-					return MessageFormat.format("{0}:{1}", remoteAddress.getAddress().getHostAddress(), remoteAddress.getPort());
+					return MessageFormat.format("{0}:{1}", remoteAddress.getAddress().getHostAddress(), String.valueOf(remoteAddress.getPort()));
 				})
 				.toList());
 	}
