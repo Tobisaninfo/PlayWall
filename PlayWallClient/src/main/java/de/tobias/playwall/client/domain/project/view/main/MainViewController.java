@@ -146,7 +146,7 @@ public class MainViewController extends ViewControllerBase
 		logoImageView.setFitWidth(20);
 		logoImageView.setFitHeight(20);
 		final HBox headerBox = new HBox(logoImageView, projectTitleLabel, createMenu());
-		headerBox.setPadding(new Insets(0, 0, 0, 14));
+		headerBox.setPadding(new Insets(0, 0, 0, ViewConstants.DEFAULT_SPACING / 2));
 		headerBox.setAlignment(Pos.CENTER_LEFT);
 		headerBox.setSpacing(10);
 		HeaderBar.setDragType(projectTitleLabel, HeaderDragType.DRAGGABLE_SUBTREE);
