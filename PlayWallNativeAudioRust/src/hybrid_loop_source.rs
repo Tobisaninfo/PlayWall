@@ -1,5 +1,7 @@
-use jni::objects::GlobalRef;
-use jni::JavaVM;
+use jni::objects::{Global, JObject, JValue};
+use jni::signature::{MethodSignature, RuntimeMethodSignature};
+use jni::strings::JNIString;
+use jni::{Env, JavaVM, ScopeToken};
 use rodio::{Decoder, Source};
 use std::fs::File;
 use std::io::BufReader;
@@ -9,18 +11,22 @@ pub struct HybridLoopSource {
     path: String,
     current_source: Box<dyn Source<Item=f32> + Send>,
     jvm: &'static JavaVM,
-    java_callback_obj: GlobalRef,
+    java_callback_obj: Global<JObject<'static>>,
     looping_flag_ptr: *const bool,
     samples_played: u64,
     has_finished: bool,
-    env_cache: std::cell::RefCell<Option<jni::JNIEnv<'static>>>,
 }
 
 // GlobalRef ist Send, JavaVM ist Send/Sync, daher ist die Source sicher für Rodio
 unsafe impl Send for HybridLoopSource {}
 
 impl HybridLoopSource {
-    pub fn new(path: String, looping_flag_ptr: *const bool, jvm: &'static JavaVM, java_callback_obj: GlobalRef) -> Self {
+    pub fn new(
+        path: String,
+        looping_flag_ptr: *const bool,
+        jvm: &'static JavaVM,
+        java_callback_obj: Global<JObject<'static>>,
+    ) -> Self {
         let file = File::open(&path).expect("Failed to open file");
         let reader = BufReader::new(file);
         let source = Decoder::new(reader).expect("Failed to create decoder");
@@ -33,7 +39,6 @@ impl HybridLoopSource {
             looping_flag_ptr,
             samples_played: 0,
             has_finished: false,
-            env_cache: std::cell::RefCell::new(None),
         }
     }
 
@@ -46,33 +51,38 @@ impl HybridLoopSource {
             / (self.current_source.sample_rate() as f32 * self.current_source.channels() as f32)
     }
 
-    fn with_env<R>(&self, f: impl FnOnce(&mut jni::JNIEnv) -> R) -> Option<R> {
-        let mut cache = self.env_cache.borrow_mut();
+    fn with_env<R>(&self, f: impl FnOnce(&mut Env) -> R) -> R {
+        let mut token = ScopeToken::default();
 
-        if cache.is_none() {
-            // Wir nutzen permanent_attach, damit kein Guard beim Drop des Threads panikt
-            if let Ok(env) = self.jvm.attach_current_thread_permanently() {
-                *cache = Some(env);
-            }
+        if let Ok(mut guard) = unsafe { self.jvm.get_env_attachment(&mut token) } {
+            return f(guard.borrow_env_mut());
         }
 
-        cache.as_mut().map(|env| f(env))
+        self.jvm
+            .attach_current_thread(|env| Ok::<R, jni::errors::Error>(f(env)))
+            .ok()
+            .unwrap()
     }
 
     fn report_progress(&self) {
         self.with_env(|env| {
+            let param = &RuntimeMethodSignature::from_str("(D)V").unwrap();
+            let sig = MethodSignature::from(param);
+
             let _ = env.call_method(
                 &self.java_callback_obj,
-                "onProgress",
-                "(D)V",
-                &[jni::objects::JValue::Double(self.elapsed_seconds() as f64)],
+                JNIString::new("onProgress"),
+                sig,
+                &[JValue::Double(self.elapsed_seconds() as f64)],
             );
         });
     }
 
     fn report_eof(&self) {
         self.with_env(|env| {
-            let _ = env.call_method(&self.java_callback_obj, "onEof", "()V", &[]);
+            let param = &RuntimeMethodSignature::from_str("()V").unwrap();
+            let sig = MethodSignature::from(param);
+            let _ = env.call_method(&self.java_callback_obj, JNIString::new("onEof"), sig, &[]);
         });
     }
 }

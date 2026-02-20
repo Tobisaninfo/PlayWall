@@ -13,7 +13,7 @@ public class RustAudioHandler extends AudioHandler
 {
 	@SuppressWarnings("unused")
 	private long nativePointer;
-	private Runnable eofCallback;
+	private final Runnable eofCallback;
 	private Duration position = Duration.ZERO;
 
 	public RustAudioHandler(Runnable eofCallback)
