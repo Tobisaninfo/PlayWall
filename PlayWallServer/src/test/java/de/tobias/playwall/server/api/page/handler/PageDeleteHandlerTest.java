@@ -1,8 +1,8 @@
 package de.tobias.playwall.server.api.page.handler;
 
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
-import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.PageNotExistsError;
+import de.tobias.playwall.common.api.page.request.PageDeleteRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;

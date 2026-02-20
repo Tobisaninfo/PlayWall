@@ -39,7 +39,7 @@ public class ModernStyle implements Styleable
 	private String globalTemplateString;
 	private String padTemplateString;
 
-	private Set<Stage> stages = new LinkedHashSet<>();
+	private final Set<Stage> stages = new LinkedHashSet<>();
 
 	@SneakyThrows
 	@PostConstruct

@@ -1,7 +1,6 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;

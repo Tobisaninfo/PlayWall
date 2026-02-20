@@ -4,7 +4,6 @@ import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectMapper;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.common.api.project.model.ProjectDto;
@@ -26,8 +25,6 @@ class ProjectListenerTest extends AbstractViewControllerTest
 	private Stage stage;
 
 	private UpdateMessageEventHandler eventHandler;
-
-	private ProjectMapper projectMapper;
 
 	private Project project;
 

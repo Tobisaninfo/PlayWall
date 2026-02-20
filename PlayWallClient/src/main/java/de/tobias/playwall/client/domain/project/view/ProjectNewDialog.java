@@ -1,7 +1,6 @@
 package de.tobias.playwall.client.domain.project.view;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
@@ -16,7 +15,6 @@ import de.tobias.playwall.client.view.components.settings.SettingsPageWithButton
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;

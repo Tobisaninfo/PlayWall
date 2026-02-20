@@ -15,7 +15,6 @@ import javafx.scene.layout.HBox;
 
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class GlobalColorPicker extends ToggleButton
 {
