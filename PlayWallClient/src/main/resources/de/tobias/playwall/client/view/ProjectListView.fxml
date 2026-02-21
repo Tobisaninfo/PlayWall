@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
@@ -15,13 +16,7 @@
                         <Font size="25.0" />
                     </font>
                 </Label>
-                <VBox alignment="BOTTOM_LEFT" layoutX="109.0" layoutY="259.0" spacing="14.0" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Button fx:id="newProjectButton" layoutX="115.0" layoutY="259.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNewProjectButton" text="%launch.button.new" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="importProject" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%launch.button.import" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="settingsButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSettingsButton"  text="%launch.button.settings" VBox.vgrow="ALWAYS" />
-                    </children>
-                </VBox>
+                <VBox fx:id="buttonBox" alignment="BOTTOM_LEFT" layoutX="109.0" layoutY="259.0" spacing="14.0" VBox.vgrow="ALWAYS"/>
             </children>
             <HBox.margin>
                 <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
@@ -30,11 +25,7 @@
         <VBox spacing="14.0" HBox.hgrow="ALWAYS">
             <children>
                 <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" styleClass="dark-list" VBox.vgrow="ALWAYS" />
-                <HBox spacing="14.0">
-                    <children>
-                        <Button fx:id="deleteButton" layoutX="494.0" layoutY="305.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#onDeleteButton" text="%launch.button.delete" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="openButton" layoutX="568.0" layoutY="305.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#onOpenButton" text="%launch.button.open" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" HBox.hgrow="ALWAYS" />
-                    </children>
+                <HBox spacing="14.0" fx:id="projectButtonBox">
                     <padding>
                         <Insets bottom="14.0" left="14.0" right="14.0" />
                     </padding>

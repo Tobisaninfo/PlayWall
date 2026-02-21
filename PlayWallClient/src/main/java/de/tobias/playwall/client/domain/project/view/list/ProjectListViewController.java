@@ -4,6 +4,8 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -20,13 +22,19 @@ import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ViewControllerBase;
+import de.tobias.playwall.client.view.components.PlayWallButton;
+import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
@@ -54,16 +62,9 @@ public class ProjectListViewController extends ViewControllerBase
 	private ListView<ProjectMetadata> projectListView;
 
 	@FXML
-	private Button newProjectButton;
+	private VBox buttonBox;
 	@FXML
-	private Button importProjectButton;
-	@FXML
-	private Button settingsButton;
-
-	@FXML
-	private Button openButton;
-	@FXML
-	private Button deleteButton;
+	private HBox projectButtonBox;
 
 	private final App app;
 	private final FluentClient client;
@@ -79,8 +80,45 @@ public class ProjectListViewController extends ViewControllerBase
 		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		imageView.setImage(new Image(IMAGE));
 
-		openButton.setDisable(true);
+		final Button newProjectButton = new PlayWallButton(Localization.getString("launch.button.new"), FontAwesomeType.FOLDER_PLUS_SOLID);
+		newProjectButton.setId("newProjectButton");
+		newProjectButton.setMaxWidth(Double.MAX_VALUE);
+		newProjectButton.setOnAction(this::onNewProjectButton);
+
+		final Button importProjectButton = new PlayWallButton(Localization.getString("launch.button.import"), FontAwesomeType.FILE_IMPORT_SOLID);
+		importProjectButton.setId("importProjectButton");
+		importProjectButton.setMaxWidth(Double.MAX_VALUE);
+		importProjectButton.setDisable(true);
+
+		final HBox box = new HBox(ViewConstants.DEFAULT_SPACING);
+		box.setMaxWidth(Double.MAX_VALUE);
+		box.getChildren().addAll(newProjectButton, importProjectButton);
+		HBox.setHgrow(newProjectButton, Priority.ALWAYS);
+		HBox.setHgrow(importProjectButton, Priority.ALWAYS);
+
+		final Button openSettingsButton = new PlayWallButton(Localization.getString("launch.button.settings"), FontAwesomeType.GEAR_SOLID);
+		openSettingsButton.setId("openSettingsButton");
+		openSettingsButton.setMaxWidth(Double.MAX_VALUE);
+		openSettingsButton.setOnAction(this::onOpenSettingsButton);
+
+		buttonBox.getChildren().addAll(box, openSettingsButton);
+
+		final Button deleteButton = new PlayWallButton(Localization.getString("launch.button.delete"), FontAwesomeType.TRASH_CAN_SOLID);
+		deleteButton.setId("deleteButton");
+		deleteButton.setMaxWidth(Double.MAX_VALUE);
+		deleteButton.setMinHeight(35.0);
+		deleteButton.setOnAction(this::onDeleteButton);
 		deleteButton.setDisable(true);
+
+		final Button openButton = new PlayWallButton(Localization.getString("launch.button.open"), FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID);
+		openButton.setId("deleteButton");
+		openButton.setMaxWidth(Double.MAX_VALUE);
+		openButton.setMinHeight(35.0);
+		openButton.setOnAction(this::onOpenButton);
+		openButton.setDisable(true);
+		projectButtonBox.getChildren().addAll(deleteButton, openButton);
+		HBox.setHgrow(deleteButton, Priority.ALWAYS);
+		HBox.setHgrow(openButton, Priority.ALWAYS);
 
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
@@ -95,8 +133,8 @@ public class ProjectListViewController extends ViewControllerBase
 		// Mouse Double Click on the list
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
-			   mouseEvent.getClickCount() == 2 &&
-			   !projectListView.getSelectionModel().isEmpty())
+					mouseEvent.getClickCount() == 2 &&
+					!projectListView.getSelectionModel().isEmpty())
 			{
 				openProject(getSelectedProject().getId());
 			}
@@ -118,7 +156,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onDeleteButton()
+	private void onDeleteButton(ActionEvent event)
 	{
 		final ProjectMetadata selectedProject = getSelectedProject();
 		if(selectedProject == null)
@@ -148,7 +186,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onNewProjectButton()
+	private void onNewProjectButton(ActionEvent event)
 	{
 		final ProjectNewDialog dialog = AppContextHolder.getInstance().get(ProjectNewDialog.class);
 		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(getContainingWindow());
@@ -160,7 +198,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onOpenButton()
+	private void onOpenButton(ActionEvent event)
 	{
 		openProject(getSelectedProject().getId());
 	}
@@ -184,7 +222,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onSettingsButton()
+	private void onOpenSettingsButton(ActionEvent event)
 	{
 		final ProgramSettingsViewController programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
 		programSettingsViewController.showAndWait(new ProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
