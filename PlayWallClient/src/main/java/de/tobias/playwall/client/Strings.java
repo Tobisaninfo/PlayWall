@@ -75,6 +75,10 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE  = "ui.settings.pad.view.title";
 	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
 
+	// ui - settings - program
+	public static final String UI_SETTINGS_PROGRAM_TITLE  = "ui.settings.program.title";
+	public static final String UI_SETTINGS_PROGRAM_GENERAL_TITLE  = "ui.settings.program.general.title";
+
 	// ui - errors
 	public static final String UI_ERRORS_PAD_PLAY  = "ui.errors.pad.play";
 	public static final String UI_ERRORS_PAD_PAUSE  = "ui.errors.pad.pause";
@@ -93,4 +97,5 @@ public class Strings
 	public static final String UI_ERRORS_PROJECT_ADD = "ui.errors.project.add";
 	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
 	public static final String UI_ERRORS_PROJECT_SETTINGS_SAVE = "ui.errors.project.settings.save";
+	public static final String UI_ERRORS_PROGRAM_SETTINGS_SAVE = "ui.errors.program.settings.save";
 }

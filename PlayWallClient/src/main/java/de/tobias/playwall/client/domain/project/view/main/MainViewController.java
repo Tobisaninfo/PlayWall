@@ -20,6 +20,8 @@ import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
+import de.tobias.playwall.client.domain.settings.Settings;
+import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
@@ -124,6 +126,7 @@ public class MainViewController extends ViewControllerBase
 	private final ClientProjectController projectController;
 
 	private ProjectSettingsViewController projectSettingsViewController;
+	private ProgramSettingsViewController programSettingsViewController;
 
 	@Override
 	@SuppressWarnings({"java:S1874", "deprecation"})
@@ -604,7 +607,7 @@ public class MainViewController extends ViewControllerBase
 		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
 		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave), new KeyCharacterCombination("S", KeyCombination.SHORTCUT_DOWN));
 		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.of(this::onMenuItemProjectSettings), new KeyCharacterCombination(",", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
-		final MenuItem menuItemSettings = createMenuItem(Strings.UI_MENU_FILE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.empty());
+		final MenuItem menuItemSettings = createMenuItem(Strings.UI_MENU_FILE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.of(this::onMenuItemSettings));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
 		menu.getItems().addAll(
@@ -759,5 +762,16 @@ public class MainViewController extends ViewControllerBase
 		}
 
 		projectSettingsViewController.showAndWait(new ProjectSettingsViewController.Param(projectController.getProject().getMetadata()), getContainingWindow());
+	}
+
+	private void onMenuItemSettings(ActionEvent event)
+	{
+		if(programSettingsViewController == null)
+		{
+			programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
+		}
+
+		// TODO use real settings
+		programSettingsViewController.showAndWait(new ProgramSettingsViewController.Param(new Settings()), getContainingWindow());
 	}
 }

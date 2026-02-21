@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
+<?import javafx.scene.layout.VBox?>
+<SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
+              xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+</SettingsPage>
+

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Base class for a page in the pad settings dialog.
+ * Base class for a page in the project settings dialog.
  */
 public abstract class BaseProjectSettingsViewController extends BaseSettingsViewController<BaseProjectSettingsViewController.Param>
 {
