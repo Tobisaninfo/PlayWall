@@ -18,6 +18,7 @@ import de.tobias.playwall.common.api.page.request.*;
 import de.tobias.playwall.common.api.project.request.*;
 import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.api.settings.SettingsGetResponse;
+import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
 import de.tobias.playwall.common.utils.MapUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -246,6 +247,6 @@ class ClientImpl implements Client
 	@Override
 	public void updateProgramSettings(Settings settings) throws PlayWallApiException
 	{
-		// TODO PW-98
+		clientWebSocketHandler.send(new SettingsUpdateRequest(settingsMapper.settingToSettingsDto(settings)));
 	}
 }
