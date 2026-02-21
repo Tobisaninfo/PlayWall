@@ -11,5 +11,5 @@ import lombok.*;
 @ToString(callSuper = true)
 public class SettingsUpdate extends UpdateMessage
 {
-	private SettingsDto settingsDto;
+	private SettingsDto settings;
 }

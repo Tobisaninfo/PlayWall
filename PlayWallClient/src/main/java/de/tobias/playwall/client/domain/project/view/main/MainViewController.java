@@ -20,7 +20,7 @@ import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
-import de.tobias.playwall.client.domain.settings.Settings;
+import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
@@ -124,6 +124,7 @@ public class MainViewController extends ViewControllerBase
 	private final List<PadView> padViews = new ArrayList<>();
 
 	private final ClientProjectController projectController;
+	private final ClientSettingsController settingsController;
 
 	private ProjectSettingsViewController projectSettingsViewController;
 	private ProgramSettingsViewController programSettingsViewController;
@@ -771,7 +772,6 @@ public class MainViewController extends ViewControllerBase
 			programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
 		}
 
-		// TODO use real settings
-		programSettingsViewController.showAndWait(new ProgramSettingsViewController.Param(new Settings()), getContainingWindow());
+		programSettingsViewController.showAndWait(new ProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
 	}
 }

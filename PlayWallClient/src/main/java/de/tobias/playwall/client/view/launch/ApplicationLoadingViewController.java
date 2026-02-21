@@ -12,6 +12,7 @@ import de.tobias.playwall.client.appcontext.*;
 import de.tobias.playwall.client.domain.project.view.list.ProjectListViewController;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.launch.tasks.ClientConnectLaunchTask;
+import de.tobias.playwall.client.view.launch.tasks.FetchProgramSettingsLaunchTask;
 import de.tobias.playwall.client.view.launch.tasks.LaunchTask;
 import de.tobias.playwall.client.view.launch.tasks.ServerLaunchTask;
 import javafx.application.Platform;
@@ -44,13 +45,15 @@ public class ApplicationLoadingViewController extends ViewControllerBase
 	private final App app;
 	private final ServerLaunchTask serverLaunchTask;
 	private final ClientConnectLaunchTask connectLaunchTask;
+	private final FetchProgramSettingsLaunchTask fetchProgramSettingsLaunchTask;
 
 	@InjectConstructor
-	ApplicationLoadingViewController(App app, ServerLaunchTask serverLaunchTask, ClientConnectLaunchTask connectLaunchTask)
+	ApplicationLoadingViewController(App app, ServerLaunchTask serverLaunchTask, ClientConnectLaunchTask connectLaunchTask, FetchProgramSettingsLaunchTask fetchProgramSettingsLaunchTask)
 	{
 		this.app = app;
 		this.serverLaunchTask = serverLaunchTask;
 		this.connectLaunchTask = connectLaunchTask;
+		this.fetchProgramSettingsLaunchTask = fetchProgramSettingsLaunchTask;
 	}
 
 	@Override
@@ -73,7 +76,7 @@ public class ApplicationLoadingViewController extends ViewControllerBase
 		Worker.runLater(() -> {
 			LaunchTask.LaunchResult result = new LaunchTask.SuccessResult();
 
-			final List<LaunchTask> tasks = List.of(serverLaunchTask, connectLaunchTask);
+			final List<LaunchTask> tasks = List.of(serverLaunchTask, connectLaunchTask, fetchProgramSettingsLaunchTask);
 			for(LaunchTask task : tasks)
 			{
 				result = task.launch(loadingLabel);
