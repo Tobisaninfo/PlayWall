@@ -68,7 +68,7 @@ class ProjectNewDialogTest extends AbstractViewControllerTest
 	@Test
 	void testCreateProjectNameDuplicate(FxRobot robot) throws PlayWallApiException
 	{
-		when(client.addProject(any(), anyInt(), anyInt())).thenThrow(new PlayWallApiException("Das Projekt mit dem Namen \"Test\" konnte nicht angelegt werden. Es existiert ein Projekt mit diesem Namen.", new ProjectNameAlreadyExistsError("Test")));
+		when(client.addProject(any(), anyInt(), anyInt())).thenThrow(new PlayWallApiException("Das Projekt mit dem Namen \"Test\" konnte nicht angelegt werden. Es existiert bereits ein Projekt mit diesem Namen.", new ProjectNameAlreadyExistsError("Test")));
 
 		Platform.runLater(() -> {
 			projectNewDialog = context.get(ProjectNewDialog.class);
@@ -87,7 +87,7 @@ class ProjectNewDialogTest extends AbstractViewControllerTest
 		verify(client).addProject("Test", 5, 3);
 		assertThat(stage.isShowing()).isTrue();
 
-		Assertions.assertThat(robot.lookup(".label.content").queryLabeled()).hasText("Das Projekt mit dem Namen \"Test\" konnte nicht angelegt werden. Es existiert ein Projekt mit diesem Namen.");
+		Assertions.assertThat(robot.lookup(".label.content").queryLabeled()).hasText("Das Projekt mit dem Namen \"Test\" konnte nicht angelegt werden. Es existiert bereits ein Projekt mit diesem Namen.");
 	}
 
 	@Test

@@ -176,7 +176,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		final List<Window> windows = new ArrayList<>(robot.listWindows());
 		final Stage stageSettings = (Stage) windows.getLast();
 
-		doThrow(new PlayWallApiException("Das Projekt mit dem Namen \"Project 2\" konnte nicht angelegt werden. Es existiert ein Projekt mit diesem Namen.", new ProjectNameAlreadyExistsError("Project 2")))
+		doThrow(new PlayWallApiException("Das Projekt mit dem Namen \"Project 2\" konnte nicht angelegt werden. Es existiert bereits ein Projekt mit diesem Namen.", new ProjectNameAlreadyExistsError("Project 2")))
 				.when(client).updateProjectSettings(any());
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
@@ -186,7 +186,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 
 		WaitForAsyncUtils.waitForFxEvents();
 
-		Assertions.assertThat(robot.lookup(".label.content").queryLabeled()).hasText("Das Projekt mit dem Namen \"Project 2\" konnte nicht angelegt werden. Es existiert ein Projekt mit diesem Namen.");
+		Assertions.assertThat(robot.lookup(".label.content").queryLabeled()).hasText("Das Projekt mit dem Namen \"Project 2\" konnte nicht angelegt werden. Es existiert bereits ein Projekt mit diesem Namen.");
 	}
 
 	@Test
