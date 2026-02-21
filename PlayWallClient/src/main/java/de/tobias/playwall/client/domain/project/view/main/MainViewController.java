@@ -21,6 +21,8 @@ import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
+import de.tobias.playwall.client.domain.settings.SettingsMapper;
+import de.tobias.playwall.client.domain.settings.view.main.SettingsListener;
 import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
@@ -106,6 +108,7 @@ public class MainViewController extends ViewControllerBase
 	private final PadMapper padMapper;
 	private final ProjectMapper projectMapper;
 	private final ProjectMetadataMapper projectMetadataMapper;
+	private final SettingsMapper settingsMapper;
 	private final UpdateMessageEventHandler eventHandler;
 
 	private ProjectLoadedListener projectLoadedListener;
@@ -117,6 +120,7 @@ public class MainViewController extends ViewControllerBase
 	private PadPlayPositionListener padPlayPositionListener;
 	private ProjectSettingsUpdateListener projectSettingsUpdateListener;
 	private UndoHistoryUpdateListener undoHistoryUpdateListener;
+	private SettingsListener settingsListener;
 
 	private SnackBar notificationPane;
 
@@ -180,6 +184,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(projectSettingsUpdateListener);
 		undoHistoryUpdateListener = new UndoHistoryUpdateListener(this);
 		eventHandler.registerListener(undoHistoryUpdateListener);
+		settingsListener = new SettingsListener(settingsMapper, settingsController);
+		eventHandler.registerListener(settingsListener);
 
 		globalColorPicker.init(padViews, (pad, color) -> {
 			pad.setDefaultColor(color);
@@ -261,6 +267,7 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.unregisterListener(padPlayPositionListener);
 		eventHandler.unregisterListener(projectSettingsUpdateListener);
 		eventHandler.unregisterListener(undoHistoryUpdateListener);
+		eventHandler.unregisterListener(settingsListener);
 
 		try
 		{
