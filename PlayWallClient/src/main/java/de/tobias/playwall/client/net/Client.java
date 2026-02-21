@@ -3,6 +3,7 @@ package de.tobias.playwall.client.net;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.settings.Settings;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -67,4 +68,8 @@ public interface Client
 	void updateProjectSettings(ProjectMetadata projectMetadata) throws PlayWallApiException;
 
 	void stopAllPads() throws PlayWallApiException;
+
+	Settings getProgramSettings() throws PlayWallApiException;
+
+	void updateProgramSettings(Settings settings) throws PlayWallApiException;
 }

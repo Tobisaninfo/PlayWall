@@ -5,6 +5,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.settings.Settings;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -196,7 +197,6 @@ class FluentClientImpl implements FluentClient
 			delegate.pause(padId);
 		}
 
-
 		@Override
 		public void stop() throws PlayWallApiException
 		{
@@ -233,4 +233,27 @@ class FluentClientImpl implements FluentClient
 	{
 		return new PadBuilderImpl(padId);
 	}
+
+	private class SettingsBuilderImpl implements SettingsBuilder
+	{
+		@Override
+		public Settings get() throws PlayWallApiException
+		{
+			return delegate.getProgramSettings();
+		}
+
+		@Override
+		public void update(Settings settings) throws PlayWallApiException
+		{
+			delegate.updateProgramSettings(settings);
+		}
+	}
+
+	@Override
+	public SettingsBuilder settings()
+	{
+		return new SettingsBuilderImpl();
+	}
+
+
 }

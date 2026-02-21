@@ -9,11 +9,15 @@ import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMapper;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.ProjectMetadataMapper;
+import de.tobias.playwall.client.domain.settings.Settings;
+import de.tobias.playwall.client.domain.settings.SettingsMapper;
 import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.api.pad.request.*;
 import de.tobias.playwall.common.api.page.request.*;
 import de.tobias.playwall.common.api.project.request.*;
+import de.tobias.playwall.common.api.settings.SettingsGetRequest;
+import de.tobias.playwall.common.api.settings.SettingsGetResponse;
 import de.tobias.playwall.common.utils.MapUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,7 @@ class ClientImpl implements Client
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
 	private final PadMapper padMapper;
+	private final SettingsMapper settingsMapper;
 
 	private final ClientWebSocketHandler clientWebSocketHandler;
 
@@ -229,5 +234,18 @@ class ClientImpl implements Client
 	public void stopAllPads() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new AllPadsStopRequest());
+	}
+
+	@Override
+	public Settings getProgramSettings() throws PlayWallApiException
+	{
+		final SettingsGetResponse response = clientWebSocketHandler.send(new SettingsGetRequest());
+		return settingsMapper.settingsDtoToSettings(response.getSettings());
+	}
+
+	@Override
+	public void updateProgramSettings(Settings settings) throws PlayWallApiException
+	{
+		// TODO PW-98
 	}
 }

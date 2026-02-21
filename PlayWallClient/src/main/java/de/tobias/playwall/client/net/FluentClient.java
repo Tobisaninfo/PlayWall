@@ -3,6 +3,7 @@ package de.tobias.playwall.client.net;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.settings.Settings;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -87,4 +88,13 @@ public interface FluentClient
 	}
 
 	PadBuilder pad(UUID padId);
+
+	SettingsBuilder settings();
+
+	interface SettingsBuilder
+	{
+		Settings get() throws PlayWallApiException;
+
+		void update(Settings settings) throws PlayWallApiException;
+	}
 }
