@@ -34,5 +34,26 @@ jobs:
       - name: Show Java Version
         run: java -version
 
-      - name: Build with Maven
-        run: mvn -e --no-transfer-progress -P build-rust,custom-jdk,build-aot-cache,package-executables deploy
+      - name: Setup Developer ID Certificate
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo "${{ secrets.DEVELOPER_ID_P12_BASE64 }}" | base64 --decode > /tmp/developer_id.p12
+          echo "${{ secrets.AC_KEY }}" | base64 --decode > /tmp/ac_private_key.p8
+          security create-keychain -p "" /tmp/build.keychain
+          security import /tmp/developer_id.p12 -k /tmp/build.keychain -P "${{ secrets.CERT_PASSWORD }}" -T /usr/bin/codesign
+          security list-keychains -s /tmp/build.keychain
+          security unlock-keychain -p "" /tmp/build.keychain
+
+      - name: Build with Maven (Mac)
+        if: matrix.os == 'macos-latest'
+        run: mvn -e --no-transfer-progress -P build-rust,custom-jdk,build-aot-cache,package-executables,sign-dmg,sign-rust -DskipTests deploy -Dmac.sign.identity="${MAC_SIGN_IDENTITY}" -Dmac.notary.key="${MAC_NOTARY_KEY}" -Dmac.notary.key.id="${MAC_NOTARY_KEY_ID}" -Dmac.notary.issuer="${MAC_NOTARY_ISSUER}"
+        env:
+          MAC_SIGN_KEYCHAIN: /tmp/build.keychain
+          MAC_SIGN_IDENTITY: ${{ secrets.MAC_SIGN_IDENTITY }}
+          MAC_NOTARY_KEY: /tmp/ac_private_key.p8
+          MAC_NOTARY_KEY_ID: ${{ secrets.AC_KEY_ID }}
+          MAC_NOTARY_ISSUER: ${{ secrets.AC_ISSUER }}
+
+      - name: Build with Maven (Windows)
+        if: matrix.os == 'windows-latest'
+        run: mvn -e --no-transfer-progress -P build-rust,custom-jdk,build-aot-cache,package-executables -DskipTests deploy

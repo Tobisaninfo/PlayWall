@@ -76,5 +76,41 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>sign-rust</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-dylib</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>codesign</executable>
+                                    <arguments>
+                                        <argument>--force</argument>
+                                        <argument>--options</argument>
+                                        <argument>runtime</argument>
+                                        <argument>--timestamp</argument>
+                                        <argument>--keychain</argument>
+                                        <argument>${mac.sign.keychain}</argument>
+                                        <argument>--sign</argument>
+                                        <argument>${mac.sign.identity}</argument>
+                                        <argument>libPlayWallNativeAudioRust.dylib</argument>
+                                    </arguments>
+                                    <workingDirectory>${project.basedir}/target/release</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>

@@ -31,6 +31,8 @@
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
         </failsafe.argLineBase>
         <failsafe.argLine>${failsafe.argLineBase}</failsafe.argLine>
+
+        <dmg.file>${project.build.directory}/installer/PlayWall-${revision-version}.dmg</dmg.file>
     </properties>
 
     <dependencyManagement>
@@ -346,6 +348,12 @@
                                     <icon>${app.icon}</icon>
                                     <vendor>TheCodeLabs</vendor>
 
+                                    <!-- Mac specific -->
+                                    <macAppCategory>public.app-category.music</macAppCategory>
+                                    <macPackageIdentifier>de.tobias.playwall</macPackageIdentifier>
+                                    <macSign>true</macSign>
+                                    <macSigningKeyUserName>${mac.sign.identity}</macSigningKeyUserName>
+
                                     <!-- Windows specific -->
                                     <winMenu>true</winMenu>
                                     <winShortcut>true</winShortcut>
@@ -376,6 +384,80 @@
                                             <classifier>installer</classifier>
                                         </artifact>
                                     </artifacts>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>sign-dmg</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-dmg</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>codesign</executable>
+                                    <arguments>
+                                        <argument>--force</argument>
+                                        <argument>--keychain</argument>
+                                        <argument>${mac.sign.keychain}</argument>
+                                        <argument>--sign</argument>
+                                        <argument>${mac.sign.identity}</argument>
+                                        <argument>${dmg.file}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+
+                            <!-- NOTARIZE -->
+                            <execution>
+                                <id>notarize-dmg</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>xcrun</executable>
+                                    <arguments>
+                                        <argument>notarytool</argument>
+                                        <argument>submit</argument>
+                                        <argument>${dmg.file}</argument>
+                                        <argument>--key</argument>
+                                        <argument>${mac.notary.key}</argument>
+                                        <argument>--key-id</argument>
+                                        <argument>${mac.notary.key.id}</argument>
+                                        <argument>--issuer</argument>
+                                        <argument>${mac.notary.issuer}</argument>
+                                        <argument>--wait</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+
+                            <!-- STAPLE -->
+                            <execution>
+                                <id>staple-dmg</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>xcrun</executable>
+                                    <arguments>
+                                        <argument>stapler</argument>
+                                        <argument>staple</argument>
+                                        <argument>${dmg.file}</argument>
+                                    </arguments>
                                 </configuration>
                             </execution>
                         </executions>
