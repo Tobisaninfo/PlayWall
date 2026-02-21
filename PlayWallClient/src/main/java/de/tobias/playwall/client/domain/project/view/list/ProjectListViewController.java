@@ -14,6 +14,8 @@ import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
+import de.tobias.playwall.client.domain.settings.ClientSettingsController;
+import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
@@ -55,6 +57,8 @@ public class ProjectListViewController extends ViewControllerBase
 	private Button newProjectButton;
 	@FXML
 	private Button importProjectButton;
+	@FXML
+	private Button settingsButton;
 
 	@FXML
 	private Button openButton;
@@ -64,6 +68,7 @@ public class ProjectListViewController extends ViewControllerBase
 	private final App app;
 	private final FluentClient client;
 	private final ClientProjectController projectController;
+	private final ClientSettingsController settingsController;
 	private final CommandLineOptions commandLineOptions;
 	private final UpdateMessageEventHandler updateMessageEventHandler;
 
@@ -176,6 +181,13 @@ public class ProjectListViewController extends ViewControllerBase
 			Logger.error(e.getMessage());
 			showErrorMessage(e.getMessage());
 		}
+	}
+
+	@FXML
+	private void onSettingsButton()
+	{
+		final ProgramSettingsViewController programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
+		programSettingsViewController.showAndWait(new ProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
 	}
 
 	void fetchProjects()

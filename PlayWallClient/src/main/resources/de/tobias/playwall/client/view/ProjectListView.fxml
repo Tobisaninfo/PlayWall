@@ -19,6 +19,7 @@
                     <children>
                         <Button fx:id="newProjectButton" layoutX="115.0" layoutY="259.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onNewProjectButton" text="%launch.button.new" VBox.vgrow="ALWAYS" />
                         <Button fx:id="importProject" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%launch.button.import" VBox.vgrow="ALWAYS" />
+                        <Button fx:id="settingsButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSettingsButton"  text="%launch.button.settings" VBox.vgrow="ALWAYS" />
                     </children>
                 </VBox>
             </children>
