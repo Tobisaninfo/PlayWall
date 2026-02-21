@@ -418,7 +418,7 @@ public class MainViewController extends ViewControllerBase
 			button.setContextMenu(new ContextMenu(
 					createMenuItem(Strings.UI_PAGE_RENAME, FontAwesomeType.PENCIL_SOLID, Optional.of(_ -> onPageRenameMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
-					createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)))
+					createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_CAN_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)))
 			));
 		});
 

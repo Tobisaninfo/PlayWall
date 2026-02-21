@@ -42,7 +42,6 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite hinzufügen"))));
 		data.add(new IconEntry(FontAwesomeType.PENCIL_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite umbenennen"))));
 		data.add(new IconEntry(FontAwesomeType.COPY_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite duplizieren"))));
-		data.add(new IconEntry(FontAwesomeType.TRASH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"))));
 		data.add(new IconEntry(FontAwesomeType.PAINTBRUSH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Farbmodus (globaler Colorpicker"))));
 		data.add(new IconEntry(FontAwesomeType.FILE_IMPORT_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt importieren"))));
 		data.add(new IconEntry(FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt öffnen"))));
@@ -62,7 +61,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"))));
 		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Datei"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
-		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Launch Dialog - Projekt entfernen"))));
+		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Launch Dialog - Projekt entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"))));
 		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Lautstärke"))));
 		data.add(new IconEntry(FontAwesomeType.IMAGE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige"))));
 		data.add(new IconEntry(FontAwesomeType.CLOCK_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Zeitanzeige"))));
