@@ -8,7 +8,7 @@
     <children>
         <VBox fx:id="boxCategories" minWidth="200.0" prefWidth="200.0" spacing="14.0">
             <children>
-                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="%ui.settings.project">
+                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="%ui.settings.program.title">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
