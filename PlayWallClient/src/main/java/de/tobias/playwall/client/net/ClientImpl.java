@@ -5,10 +5,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadMapper;
-import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectMapper;
-import de.tobias.playwall.client.domain.project.ProjectMetadata;
-import de.tobias.playwall.client.domain.project.ProjectMetadataMapper;
+import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
 import de.tobias.playwall.common.api.history.RedoRequest;
@@ -24,8 +21,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,6 +34,7 @@ class ClientImpl implements Client
 	private final ProjectMapper projectMapper;
 	private final PadMapper padMapper;
 	private final SettingsMapper settingsMapper;
+	private final AllProjectsInfoMapper allProjectsInfoMapper;
 
 	private final ClientWebSocketHandler clientWebSocketHandler;
 
@@ -94,13 +90,10 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public List<ProjectMetadata> getProjects() throws PlayWallApiException
+	public AllProjectsInfo getProjects() throws PlayWallApiException
 	{
 		final ProjectListResponse response = clientWebSocketHandler.send(new ProjectListRequest());
-		return response.getProjects().stream()
-				.map(projectMetadataMapper::projectMetadataDtoToProjectMetadata)
-				.sorted(Comparator.comparing(ProjectMetadata::getName))
-				.toList();
+		return allProjectsInfoMapper.allProjectsInfoDtoToAllProjectsInfo(response.getAllProjectsInfo());
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectAddRequest;
 import de.tobias.playwall.common.api.project.request.ProjectAddResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
-import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
+import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -43,7 +43,7 @@ class ProjectAddHandlerTest
 	private PathProvider pathProvider;
 
 	@MockitoSpyBean
-	private ProjectMetadataRepository projectMetadataRepository;
+	private AllProjectsInfoRepository allProjectsInfoRepository;
 
 	@MockitoSpyBean
 	private ProjectRepository projectRepository;
@@ -60,7 +60,8 @@ class ProjectAddHandlerTest
 	{
 		when(pathProvider.getPathForConfig(any())).thenReturn(tempDir.resolve("projects.json"));
 		Files.deleteIfExists(tempDir.resolve("projects.json"));
-		projectMetadataRepository.getAllProjectMetadata().clear();
+		allProjectsInfoRepository.loadAllProjectsInfo();
+		allProjectsInfoRepository.getAllProjectMetadata().clear();
 	}
 
 	@Test
@@ -68,7 +69,7 @@ class ProjectAddHandlerTest
 	{
 		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectAddRequest("Name1", 5, 4));
 
-		verify(projectMetadataRepository).addProject("Name1", 5, 4);
+		verify(allProjectsInfoRepository).addProject("Name1", 5, 4);
 		verify(projectRepository).saveProject(projectCaptor.capture());
 
 		assertThat(response).isNotEmpty();
@@ -88,12 +89,12 @@ class ProjectAddHandlerTest
 	@Test
 	void testAddProjectNameAlreadyExists() throws Exception
 	{
-		projectMetadataRepository.addProject("Name1", 3, 3);
-		assertThat(projectMetadataRepository.getAllProjectMetadata()).hasSize(1);
+		allProjectsInfoRepository.addProject("Name1", 3, 3);
+		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).hasSize(1);
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectAddRequest("Name1", 5, 4)))
 				.isInstanceOf(ProjectNameAlreadyExistsException.class);
 
-		assertThat(projectMetadataRepository.getAllProjectMetadata()).hasSize(1);
+		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).hasSize(1);
 	}
 }

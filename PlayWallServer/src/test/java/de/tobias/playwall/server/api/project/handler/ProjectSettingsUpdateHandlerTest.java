@@ -80,7 +80,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				""");
 
 		when(pathProvider.getPathForConfig(any())).thenReturn(projectsFile);
-		projectService.getAllProjectMetadata();
+		projectService.getAllProjectsInfo();
 		projectController.unloadProject();
 	}
 

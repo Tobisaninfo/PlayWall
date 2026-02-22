@@ -4,6 +4,7 @@ import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
+import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +19,19 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProjectService
 {
-	private final ProjectMetadataRepository projectMetadataRepository;
+	private final AllProjectsInfoRepository allProjectsInfoRepository;
 	private final ProjectRepository projectRepository;
 	private final MessageSource messageSource;
 
-	public List<ProjectMetadata> getAllProjectMetadata() throws IOException
+	public AllProjectsInfo getAllProjectsInfo() throws IOException
 	{
-		projectMetadataRepository.loadAllProjectsMetadata();
-		return projectMetadataRepository.getAllProjectMetadata();
+		allProjectsInfoRepository.loadAllProjectsInfo();
+		return allProjectsInfoRepository.getAllProjectsInfo();
 	}
 
 	public boolean deleteProjectById(UUID id) throws IOException
 	{
-		final boolean isSuccess = projectMetadataRepository.deleteProject(id);
+		final boolean isSuccess = allProjectsInfoRepository.deleteProject(id);
 		if(isSuccess)
 		{
 			return projectRepository.deleteProject(id);
@@ -56,7 +57,7 @@ public class ProjectService
 	 */
 	public ProjectMetadata addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException, ProjectNameAlreadyExistsException
 	{
-		final ProjectMetadata projectMetadata = projectMetadataRepository.addProject(name, numberOfHorizontalPads, numberOfVerticalPads);
+		final ProjectMetadata projectMetadata = allProjectsInfoRepository.addProject(name, numberOfHorizontalPads, numberOfVerticalPads);
 
 		final Project project = Project.builder()
 				.metadata(projectMetadata)
@@ -71,7 +72,13 @@ public class ProjectService
 
 	public void rename(UUID projectId, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException
 	{
-		projectMetadataRepository.renameProject(projectId, name);
+		allProjectsInfoRepository.renameProject(projectId, name);
+	}
+
+	public void onProjectOpened(UUID id) throws IOException
+	{
+		allProjectsInfoRepository.onProjectOpened(id);
+		allProjectsInfoRepository.saveAllProjectsInfo();
 	}
 
 	public Page addPage(Project project)

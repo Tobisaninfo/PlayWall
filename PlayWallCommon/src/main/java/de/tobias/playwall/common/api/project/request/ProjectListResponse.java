@@ -1,10 +1,9 @@
 package de.tobias.playwall.common.api.project.request;
 
-import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import de.tobias.playwall.common.api.project.model.AllProjectsInfoDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import lombok.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -13,11 +12,11 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class ProjectListResponse extends ResponseMessage
 {
-	private List<ProjectMetadataDto> projects;
+	private AllProjectsInfoDto allProjectsInfo;
 
-	public ProjectListResponse(UUID messageId, List<ProjectMetadataDto> projects)
+	public ProjectListResponse(UUID messageId, AllProjectsInfoDto allProjectsInfo)
 	{
 		super(messageId);
-		this.projects = projects;
+		this.allProjectsInfo = allProjectsInfo;
 	}
 }

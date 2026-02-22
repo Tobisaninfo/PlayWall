@@ -22,5 +22,6 @@ class ProjectLoadHandler implements OneTimeActionRequestHandler<ProjectLoadReque
 	{
 		final Project project = projectService.getProjectById(requestMessage.getProjectId());
 		projectController.loadProject(project);
+		projectService.onProjectOpened(requestMessage.getProjectId());
 	}
 }

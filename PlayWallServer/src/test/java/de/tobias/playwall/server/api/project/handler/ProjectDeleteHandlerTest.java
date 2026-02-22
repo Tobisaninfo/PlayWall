@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.request.ProjectDeleteRequest;
-import de.tobias.playwall.server.api.project.ProjectMetadataRepository;
+import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class ProjectDeleteHandlerTest
 {
 	@MockitoBean
-	private ProjectMetadataRepository projectMetadataRepository;
+	private AllProjectsInfoRepository allProjectsInfoRepository;
 
 	@MockitoBean
 	private ProjectRepository projectRepository;
@@ -30,12 +30,12 @@ class ProjectDeleteHandlerTest
 	void testDeleteProjectSuccessful() throws Exception
 	{
 		final UUID id = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		when(projectMetadataRepository.deleteProject(id)).thenReturn(true);
+		when(allProjectsInfoRepository.deleteProject(id)).thenReturn(true);
 		when(projectRepository.deleteProject(id)).thenReturn(true);
 
 		handler.handleRequest(new ProjectDeleteRequest(id));
 
-		verify(projectMetadataRepository).deleteProject(id);
+		verify(allProjectsInfoRepository).deleteProject(id);
 		verify(projectRepository).deleteProject(id);
 	}
 
@@ -43,13 +43,13 @@ class ProjectDeleteHandlerTest
 	void testDeleteProjectNotFoundMetadata() throws Exception
 	{
 		final UUID id = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		when(projectMetadataRepository.deleteProject(id)).thenReturn(false);
+		when(allProjectsInfoRepository.deleteProject(id)).thenReturn(false);
 		when(projectRepository.deleteProject(id)).thenReturn(true);
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectDeleteRequest(id)))
 				.isInstanceOf(ProjectNotExistsException.class);
 
-		verify(projectMetadataRepository).deleteProject(id);
+		verify(allProjectsInfoRepository).deleteProject(id);
 		verify(projectRepository, never()).deleteProject(id);
 	}
 
@@ -57,13 +57,13 @@ class ProjectDeleteHandlerTest
 	void testDeleteProjectNotFoundProjectFile() throws Exception
 	{
 		final UUID id = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		when(projectMetadataRepository.deleteProject(id)).thenReturn(true);
+		when(allProjectsInfoRepository.deleteProject(id)).thenReturn(true);
 		when(projectRepository.deleteProject(id)).thenReturn(false);
 
 		assertThatThrownBy(() -> handler.handleRequest(new ProjectDeleteRequest(id)))
 				.isInstanceOf(ProjectNotExistsException.class);
 
-		verify(projectMetadataRepository).deleteProject(id);
+		verify(allProjectsInfoRepository).deleteProject(id);
 		verify(projectRepository).deleteProject(id);
 	}
 }

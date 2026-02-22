@@ -46,7 +46,7 @@ class ProjectServiceTest
 	@MockitoSpyBean
 	private ProjectRepository projectRepository;
 	@MockitoSpyBean
-	private ProjectMetadataRepository projectMetadataRepository;
+	private AllProjectsInfoRepository allProjectsInfoRepository;
 
 	@Autowired
 	private ProjectService projectService;
@@ -61,7 +61,7 @@ class ProjectServiceTest
 	void beforeEach() throws IOException
 	{
 		when(pathProvider.getPathForConfig(any())).thenReturn(tempDir.resolve("projects.json"));
-		projectMetadataRepository.clearProjects();
+		allProjectsInfoRepository.clearProjects();
 	}
 
 	@Test
@@ -69,7 +69,7 @@ class ProjectServiceTest
 	{
 		final ProjectMetadata createdProject = projectService.addProject("New Project", 5, 4);
 
-		verify(projectMetadataRepository).addProject("New Project", 5, 4);
+		verify(allProjectsInfoRepository).addProject("New Project", 5, 4);
 		verify(projectRepository).saveProject(projectCaptor.capture());
 
 		assertThat(createdProject.getId()).isNotNull();

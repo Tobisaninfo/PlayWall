@@ -3,15 +3,18 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import de.tobias.playwall.common.api.project.request.ProjectLoadRequest;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.common.storage.PathProvider;
 import de.tobias.playwall.server.config.SyncAsyncConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -20,6 +23,9 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
@@ -35,6 +41,12 @@ import static org.mockito.Mockito.when;
 @Import(SyncAsyncConfig.class)
 class ProjectLoadHandlerTest
 {
+	@TempDir
+	private Path tempDir;
+
+	@MockitoBean
+	private PathProvider pathProvider;
+
 	@Autowired
 	private ApplicationEvents applicationEvents;
 
@@ -50,11 +62,18 @@ class ProjectLoadHandlerTest
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
 
+	@Autowired
+	private AllProjectsInfoRepository allProjectsInfoRepository;
+
 	@BeforeEach
-	void init()
+	void init() throws IOException
 	{
 		final AudioHandler audioHandler = mock(AudioHandler.class);
 		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
+
+		when(pathProvider.getPathForConfig(any())).thenReturn(tempDir.resolve("projects.json"));
+		Files.deleteIfExists(tempDir.resolve("projects.json"));
+		allProjectsInfoRepository.loadAllProjectsInfo();
 	}
 
 	@Test
@@ -70,6 +89,8 @@ class ProjectLoadHandlerTest
 		handler.handleRequest(new ProjectLoadRequest(projectId));
 
 		assertThat(applicationEvents.stream(PadLoadedUpdate.class)).hasSize(2);
+
+		assertThat(allProjectsInfoRepository.getRecentProjectIds()).containsExactly(projectId);
 	}
 
 	@Test

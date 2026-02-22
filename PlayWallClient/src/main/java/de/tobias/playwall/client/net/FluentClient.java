@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.net;
 
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
@@ -22,7 +23,7 @@ public interface FluentClient
 
 	interface ProjectsBuilder
 	{
-		List<ProjectMetadata> list() throws PlayWallApiException;
+		AllProjectsInfo list() throws PlayWallApiException;
 
 		ProjectMetadata add(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws PlayWallApiException;
 	}

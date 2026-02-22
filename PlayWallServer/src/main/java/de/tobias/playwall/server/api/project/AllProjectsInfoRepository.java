@@ -1,12 +1,12 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.JavaType;
-import tools.jackson.databind.ObjectReader;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -20,57 +20,55 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProjectMetadataRepository
+public class AllProjectsInfoRepository
 {
 	private static final String PROJECTS_FILENAME = "projects.json";
 
 	private final PathProvider pathProvider;
 	private final JsonMapper mapper;
 
-	private List<ProjectMetadata> allProjectsMetadata = new ArrayList<>();
+	@Getter
+	private AllProjectsInfo allProjectsInfo;
 
-	void loadAllProjectsMetadata() throws IOException
+	public void loadAllProjectsInfo() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		if(!Files.exists(path))
 		{
 			log.debug("No projects.json found, creating empty file in: \"{}\"", path);
-			saveProjects();
+			allProjectsInfo = AllProjectsInfo.builder().build();
+			saveAllProjectsInfo();
 		}
 
-		final JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, ProjectMetadata.class);
-
-		ObjectReader reader = mapper
-				.readerWithView(ProjectMetadata.List.class)
-				.forType(type);
-
-		allProjectsMetadata = reader.readValue(Files.newBufferedReader(path));
+		allProjectsInfo = mapper.readValue(Files.newBufferedReader(path), AllProjectsInfo.class);
 	}
 
-	public void saveProjects() throws IOException
+	public void saveAllProjectsInfo() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
-		mapper.writerWithView(ProjectMetadata.List.class).writeValue(Files.newBufferedWriter(path), allProjectsMetadata);
+		mapper.writeValue(Files.newBufferedWriter(path), allProjectsInfo);
 	}
 
 	void clearProjects() throws IOException
 	{
-		this.allProjectsMetadata = new ArrayList<>();
-		saveProjects();
+		this.allProjectsInfo.setAllProjectsMetadata(new ArrayList<>());
+		this.allProjectsInfo.getRecentProjects().clear();
+		saveAllProjectsInfo();
 	}
 
 	public List<ProjectMetadata> getAllProjectMetadata()
 	{
-		return allProjectsMetadata;
+		return this.allProjectsInfo.getAllProjectsMetadata();
 	}
 
 	public boolean deleteProject(UUID id) throws IOException
 	{
-		final boolean isSuccess = allProjectsMetadata.removeIf(project -> project.getId().equals(id));
+		final boolean isSuccess = allProjectsInfo.getAllProjectsMetadata().removeIf(project -> project.getId().equals(id));
 		if(isSuccess)
 		{
-			saveProjects();
+			allProjectsInfo.getRecentProjects().removeIf(i -> i.equals(id));
+			saveAllProjectsInfo();
 		}
 		return isSuccess;
 	}
@@ -90,8 +88,8 @@ public class ProjectMetadataRepository
 				.numberOfVerticalPads(numberOfVerticalPads)
 				.volume(1.0)
 				.build();
-		allProjectsMetadata.add(newProjectMetadata);
-		saveProjects();
+		allProjectsInfo.getAllProjectsMetadata().add(newProjectMetadata);
+		saveAllProjectsInfo();
 
 		return newProjectMetadata;
 	}
@@ -107,13 +105,23 @@ public class ProjectMetadataRepository
 		getProjectMetadataById(id).setName(name);
 	}
 
+	public void onProjectOpened(UUID id)
+	{
+		allProjectsInfo.getRecentProjects().push(id);
+	}
+
+	public List<UUID> getRecentProjectIds()
+	{
+		return allProjectsInfo.getRecentProjects().stream().toList();
+	}
+
 	ProjectMetadata getProjectMetadataById(UUID id) throws ProjectNotExistsException
 	{
-		return allProjectsMetadata.stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
+		return allProjectsInfo.getAllProjectsMetadata().stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
 	}
 
 	private Optional<ProjectMetadata> getProjectMetadataByName(String name)
 	{
-		return allProjectsMetadata.stream().filter(project -> project.getName().equals(name)).findFirst();
+		return allProjectsInfo.getAllProjectsMetadata().stream().filter(project -> project.getName().equals(name)).findFirst();
 	}
 }
