@@ -66,6 +66,15 @@ public class ProjectListViewController extends ViewControllerBase
 	@FXML
 	private HBox projectButtonBox;
 
+	@Getter
+	private PlayWallButton newProjectButton;
+
+	@Getter
+	private PlayWallButton openButton;
+
+	@Getter
+	private PlayWallButton deleteButton;
+
 	private final App app;
 	private final FluentClient client;
 	private final ClientProjectController projectController;
@@ -80,12 +89,12 @@ public class ProjectListViewController extends ViewControllerBase
 		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		imageView.setImage(new Image(IMAGE));
 
-		final Button newProjectButton = new PlayWallButton(Localization.getString("launch.button.new"), FontAwesomeType.FOLDER_PLUS_SOLID);
+		newProjectButton = new PlayWallButton(Localization.getString("launch.button.new"), FontAwesomeType.FOLDER_PLUS_SOLID);
 		newProjectButton.setId("newProjectButton");
 		newProjectButton.setMaxWidth(Double.MAX_VALUE);
 		newProjectButton.setOnAction(this::onNewProjectButton);
 
-		final Button importProjectButton = new PlayWallButton(Localization.getString("launch.button.import"), FontAwesomeType.FILE_IMPORT_SOLID);
+		final PlayWallButton importProjectButton = new PlayWallButton(Localization.getString("launch.button.import"), FontAwesomeType.FILE_IMPORT_SOLID);
 		importProjectButton.setId("importProjectButton");
 		importProjectButton.setMaxWidth(Double.MAX_VALUE);
 		importProjectButton.setDisable(true);
@@ -96,21 +105,21 @@ public class ProjectListViewController extends ViewControllerBase
 		HBox.setHgrow(newProjectButton, Priority.ALWAYS);
 		HBox.setHgrow(importProjectButton, Priority.ALWAYS);
 
-		final Button openSettingsButton = new PlayWallButton(Localization.getString("launch.button.settings"), FontAwesomeType.GEAR_SOLID);
+		final PlayWallButton openSettingsButton = new PlayWallButton(Localization.getString("launch.button.settings"), FontAwesomeType.GEAR_SOLID);
 		openSettingsButton.setId("openSettingsButton");
 		openSettingsButton.setMaxWidth(Double.MAX_VALUE);
 		openSettingsButton.setOnAction(this::onOpenSettingsButton);
 
 		buttonBox.getChildren().addAll(box, openSettingsButton);
 
-		final Button deleteButton = new PlayWallButton(Localization.getString("launch.button.delete"), FontAwesomeType.TRASH_CAN_SOLID);
+		deleteButton = new PlayWallButton(Localization.getString("launch.button.delete"), FontAwesomeType.TRASH_CAN_SOLID);
 		deleteButton.setId("deleteButton");
 		deleteButton.setMaxWidth(Double.MAX_VALUE);
 		deleteButton.setMinHeight(35.0);
 		deleteButton.setOnAction(this::onDeleteButton);
 		deleteButton.setDisable(true);
 
-		final Button openButton = new PlayWallButton(Localization.getString("launch.button.open"), FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID);
+		openButton = new PlayWallButton(Localization.getString("launch.button.open"), FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID);
 		openButton.setId("deleteButton");
 		openButton.setMaxWidth(Double.MAX_VALUE);
 		openButton.setMinHeight(35.0);
