@@ -11,6 +11,7 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
@@ -27,7 +28,10 @@ import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -41,6 +45,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -242,7 +247,18 @@ public class ProjectListViewController extends ViewControllerBase
 		Platform.runLater(() -> {
 			try
 			{
-				projectListView.getItems().setAll(client.projects().list());
+				final AllProjectsInfo allProjectsInfo = client.projects().list();
+				projectListView.getItems().setAll(allProjectsInfo.getAllProjectsMetadata());
+
+				final List<UUID> recentProjectIds = allProjectsInfo.getRecentProjectIds();
+
+				if(settingsController.getSettings().isAutoLoadLatestProjectOnStart() && !recentProjectIds.isEmpty())
+				{
+					projectListView.getItems().stream()
+							.filter(p -> p.getId().equals(recentProjectIds.getFirst()))
+							.findFirst()
+							.ifPresent(p -> openProject(p.getId()));
+				}
 
 				if(commandLineOptions.hasOption(CommandLineOptions.PROJECT))
 				{
