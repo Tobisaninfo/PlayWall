@@ -4,10 +4,13 @@ import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
+import de.tobias.playwall.client.domain.settings.ClientSettingsController;
+import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -39,6 +42,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	private final MainViewController mainViewController = mock(MainViewController.class);
 	private final ProjectNewDialog projectNewDialog = mock(ProjectNewDialog.class);
 	private final CommandLineOptions commandLineOptions = mock(CommandLineOptions.class);
+	private final ClientSettingsController settingsController = mock(ClientSettingsController.class);
 
 	private ProjectListViewController launchDialog;
 	private Stage stage;
@@ -51,9 +55,14 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		context.registerLazySingleton(MainViewController.class, _ -> mainViewController);
 		context.registerLazySingleton(ProjectNewDialog.class, _ -> projectNewDialog);
 		context.registerLazySingleton(CommandLineOptions.class, _ -> commandLineOptions);
+		context.registerLazySingleton(ClientSettingsController.class, _ -> settingsController);
 		context.registerLazy(Stage.class, _ -> stage);
 
 		context.registerLazySingleton(Client.class, _ -> client);
+
+		when(settingsController.getSettings()).thenReturn(Settings.builder()
+				.autoLoadLatestProjectOnStart(false)
+				.build());
 	}
 
 	// List projects
@@ -61,7 +70,10 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testProjectListDisplayAllProjects() throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3)));
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3)))
+				.recentProjectIds(List.of(PROJECT_ID))
+				.build());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -75,7 +87,10 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testProjectListDisplayPlaceholder() throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of());
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of())
+				.recentProjectIds(List.of())
+				.build());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -94,6 +109,11 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3);
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(metadata))
+				.recentProjectIds(List.of())
+				.build());
+
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
 			stage.show();
@@ -103,6 +123,11 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 
 		final Project project = new Project(PROJECT_METADATA_1, List.of());
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(project);
+
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(metadata))
+				.recentProjectIds(List.of())
+				.build());
 
 		robot.clickOn(launchDialog.getNewProjectButton());
 		WaitForAsyncUtils.waitForFxEvents();
@@ -119,6 +144,11 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	void testNewProjectDialogCanceled(FxRobot robot) throws PlayWallApiException
 	{
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.empty());
+
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of())
+				.recentProjectIds(List.of())
+				.build());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -138,7 +168,11 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testOpenProjectDoubleClick(FxRobot robot) throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 
 		Platform.runLater(() -> {
@@ -159,7 +193,10 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testOpenProjectButtonClick(FxRobot robot) throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 
 		Platform.runLater(() -> {
@@ -181,7 +218,10 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testOpenProjectError(FxRobot robot) throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
 		when(client.getProject(PROJECT_METADATA_1.getId())).thenThrow(new PlayWallApiException("Fehler beim öffnen des Projekts", null));
 
 		Platform.runLater(() -> {
@@ -206,7 +246,10 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testProjectDeleteOkay(FxRobot robot) throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -226,7 +269,10 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testProjectDeleteCancel(FxRobot robot) throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);
@@ -246,7 +292,10 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testProjectDeleteError(FxRobot robot) throws PlayWallApiException
 	{
-		when(client.getProjects()).thenReturn(List.of(PROJECT_METADATA_1));
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
 
 		Platform.runLater(() -> {
 			launchDialog = context.get(ProjectListViewController.class);

@@ -67,16 +67,20 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 		final Path projectsFile = tempDir.resolve("projects.json");
 
 		Files.writeString(projectsFile, """
-				[
-				     {
-				         "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
-				         "name": "Project 1"
-				     },
-				      {
-				         "id": "14bd0090-6322-4133-966d-b78296565a7f",
-				         "name": "Project 2"
-				     }
-				 ]
+				{
+					"recentProjects": [],
+					"allProjectsMetadata":
+					[
+						 {
+							 "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
+							 "name": "Project 1"
+						 },
+						  {
+							 "id": "14bd0090-6322-4133-966d-b78296565a7f",
+							 "name": "Project 2"
+						 }
+					 ]
+				 }
 				""");
 
 		when(pathProvider.getPathForConfig(any())).thenReturn(projectsFile);
