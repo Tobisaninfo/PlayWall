@@ -2,7 +2,7 @@ use jni::objects::{Global, JObject, JValue};
 use jni::signature::{MethodSignature, RuntimeMethodSignature};
 use jni::strings::JNIString;
 use jni::{Env, JavaVM, ScopeToken};
-use rodio::{Decoder, Source};
+use rodio::{ChannelCount, Decoder, SampleRate, Source};
 use std::fs::File;
 use std::io::BufReader;
 use std::time::Duration;
@@ -48,7 +48,7 @@ impl HybridLoopSource {
 
     fn elapsed_seconds(&self) -> f32 {
         self.samples_played as f32
-            / (self.current_source.sample_rate() as f32 * self.current_source.channels() as f32)
+            / (self.current_source.sample_rate().get() as f32 * self.current_source.channels().get() as f32)
     }
 
     fn with_env<R>(&self, f: impl FnOnce(&mut Env) -> R) -> R {
@@ -126,11 +126,11 @@ impl Source for HybridLoopSource {
         self.current_source.current_span_len()
     }
 
-    fn channels(&self) -> u16 {
+    fn channels(&self) -> ChannelCount {
         self.current_source.channels()
     }
 
-    fn sample_rate(&self) -> u32 {
+    fn sample_rate(&self) -> SampleRate {
         self.current_source.sample_rate()
     }
 

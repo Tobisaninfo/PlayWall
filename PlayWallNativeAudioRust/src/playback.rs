@@ -6,7 +6,7 @@ use jni::strings::JNIString;
 use jni::sys::{jboolean, jdouble};
 use jni::EnvUnowned;
 use rodio::cpal::traits::HostTrait;
-use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
+use rodio::{DeviceSinkBuilder, DeviceTrait, Player};
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -32,19 +32,20 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 let device = if let Some(ref name) = audio_handler.device_name {
                     host.output_devices()
                         .unwrap()
-                        .find(|d| d.name().unwrap_or_default() == *name)
+                        .find(|d| d.description().unwrap().name() == *name)
                 } else {
                     None
                 };
 
                 let stream_builder = if let Some(d) = device {
-                    OutputStreamBuilder::from_device(d)
+                    DeviceSinkBuilder::from_device(d)
                 } else {
-                    OutputStreamBuilder::from_default_device()
+                    DeviceSinkBuilder::from_default_device()
                 };
 
-                let stream_handler = stream_builder.unwrap().open_stream().unwrap();
-                let sink = Sink::connect_new(stream_handler.mixer());
+                let mut stream_handler = stream_builder.unwrap().open_stream().unwrap();
+                stream_handler.log_on_drop(false);
+                let sink = Player::connect_new(stream_handler.mixer());
                 audio_handler.setAudioHandlerStream(AudioStreamHandler {
                     stream_handler,
                     sink,

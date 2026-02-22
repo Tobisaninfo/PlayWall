@@ -6,7 +6,7 @@ use jni::strings::JNIString;
 use jni::sys::{jboolean, jint, jobjectArray, jsize};
 use jni::EnvUnowned;
 use rodio::cpal::traits::HostTrait;
-use rodio::{DeviceTrait, OutputStreamBuilder, Sink};
+use rodio::{DeviceSinkBuilder, DeviceTrait, Player};
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -32,12 +32,12 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             let param = &RuntimeMethodSignature::from_str("(Ljava/lang/String;IIZ)V").unwrap();
             let sig = MethodSignature::from(param);
 
-            let deviceName: JString = env.new_string(device.name().unwrap()).unwrap();
+            let deviceName: JString = env.new_string(device.description().unwrap().name()).unwrap();
             let stream_config = device.default_output_config().unwrap().config();
             let channels = stream_config.channels as jint;
-            let sample_rate = stream_config.sample_rate.0 as jint;
+            let sample_rate = stream_config.sample_rate as jint;
             let default_device =
-                (device.name().unwrap() == default_device.name().unwrap()) as jboolean;
+                (device.description().unwrap().name() == default_device.description().unwrap().name()) as jboolean;
 
             let java_audio_device = env
                 .new_object(
@@ -71,7 +71,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         let device: Option<_> = host
             .output_devices()
             .unwrap()
-            .find(|device| device.name().unwrap() == device_name_str);
+            .find(|device| device.description().unwrap().name() == device_name_str);
 
         if device.is_none() {
             env.throw_new(
@@ -86,11 +86,11 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         }
 
         with_audio_handler(&mut env, object, |_, audio_handler| {
-            let stream_handler = OutputStreamBuilder::from_device(device.unwrap())
+            let stream_handler = DeviceSinkBuilder::from_device(device.unwrap())
                 .unwrap()
                 .open_stream()
                 .unwrap();
-            let sink = Sink::connect_new(stream_handler.mixer());
+            let sink = Player::connect_new(stream_handler.mixer());
             audio_handler.setAudioHandlerStream(AudioStreamHandler {
                 stream_handler,
                 sink,

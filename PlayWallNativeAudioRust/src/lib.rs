@@ -11,7 +11,7 @@ use jni::strings::JNIString;
 use jni::sys::{jboolean, jlong};
 use jni::{Env, EnvUnowned, JavaVM};
 use lazy_static::lazy_static;
-use rodio::{OutputStream, Sink};
+use rodio::{MixerDeviceSink, Player};
 use std::fs::File;
 use std::sync::RwLock;
 use symphonia::core::io::MediaSourceStream;
@@ -61,8 +61,8 @@ impl AudioHandler {
 
 #[allow(dead_code)]
 struct AudioStreamHandler {
-    stream_handler: OutputStream,
-    sink: Sink,
+    stream_handler: MixerDeviceSink,
+    sink: Player,
 }
 
 lazy_static! {
