@@ -29,7 +29,7 @@ class SettingsUpdateHandler implements UndoableRequestHandler<SettingsUpdateRequ
 	@Override
 	public Optional<UndoItem> handleRequest(SettingsUpdateRequest requestMessage) throws IOException
 	{
-		final UndoItem inverseOperation = getInverseOperation(requestMessage);
+		final UndoItem inverseOperation = getInverseOperation(requestMessage, settingsRepository.loadSettings());
 
 		final Settings settings = settingsMapper.settingsDtoToSettings(requestMessage.getSettings());
 		settingsRepository.saveSettings(settings);
@@ -39,9 +39,8 @@ class SettingsUpdateHandler implements UndoableRequestHandler<SettingsUpdateRequ
 		return Optional.of(inverseOperation);
 	}
 
-	private UndoItem getInverseOperation(SettingsUpdateRequest request)
+	private UndoItem getInverseOperation(SettingsUpdateRequest request, Settings oldSettings)
 	{
-		final Settings oldSettings = settingsMapper.settingsDtoToSettings(request.getSettings());
 		final String shortDescription = messageSource.getMessage("undo.description.short.program.settings", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longDescription = messageSource.getMessage("undo.description.long.program.settings", new Object[]{}, LocaleContextHolder.getLocale());
 		return new UndoItem(shortDescription, longDescription, request, new SettingsUpdateRequest(settingsMapper.settingsToSettingsDto(oldSettings)));

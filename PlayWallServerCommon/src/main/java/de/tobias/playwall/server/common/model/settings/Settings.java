@@ -7,10 +7,15 @@ import lombok.*;
 @Builder
 @ToString
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
 @EqualsAndHashCode
 public class Settings
 {
-	public static final Settings DEFAULT = Settings.builder().build();
+	public static final Settings DEFAULT = Settings.builder()
+			.autoLoadLatestProjectOnStart(false)
+			.build();
 
 	private final int VERSION = 1;
+
+	private boolean autoLoadLatestProjectOnStart;
 }

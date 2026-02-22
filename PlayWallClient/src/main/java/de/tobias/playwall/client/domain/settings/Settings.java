@@ -10,4 +10,5 @@ import lombok.*;
 @Builder
 public final class Settings
 {
+	private boolean autoLoadLatestProjectOnStart;
 }

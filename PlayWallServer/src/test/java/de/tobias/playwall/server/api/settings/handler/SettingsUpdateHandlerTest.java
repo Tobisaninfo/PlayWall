@@ -60,7 +60,8 @@ class SettingsUpdateHandlerTest
 
 		Files.writeString(projectsFile, """
 				{
-					"VERSION": 1
+					"VERSION": 1,
+					"autoLoadLatestProjectOnStart": false
 				}
 				""");
 
@@ -70,29 +71,48 @@ class SettingsUpdateHandlerTest
 	@Test
 	void testSettingsUpdateHandler() throws Exception
 	{
-		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder().build());
+		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder()
+				.autoLoadLatestProjectOnStart(true)
+				.build());
 
 		handler.handleRequest(request);
 
-		assertThat(applicationEvents.stream(SettingsUpdate.class)).hasSize(1);
+		assertThat(applicationEvents.stream(SettingsUpdate.class))
+				.hasSize(1)
+				.first()
+				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
+						.autoLoadLatestProjectOnStart(true)
+						.build()));
+
 	}
 
 	@Test
 	@SuppressWarnings({"unchecked", "rawtypes", "java:S1871"})
 	void testUndoOperation() throws Exception
 	{
-		final Settings settings = TestUtils.loadSettings(objectMapper, "settings.json");
-
-		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder().build());
+		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder()
+				.autoLoadLatestProjectOnStart(true)
+				.build());
 
 		requestExecutor.execute(request);
 
-		// TODO: PW-98
-//		assertThat(settings).isNotEqualTo(Settings.builder().build());
-//
-//		final OneTimeActionRequestHandler undoHandler = (OneTimeActionRequestHandler) requestHandlerFactory.getRequestHandler(UndoRequest.class).orElseThrow();
-//		undoHandler.handleRequest(new UndoRequest());
-//
-//		assertThat(settings).isEqualTo(Settings.builder().build());
+		assertThat(applicationEvents.stream(SettingsUpdate.class))
+				.hasSize(1)
+				.first()
+				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
+						.autoLoadLatestProjectOnStart(true)
+						.build()));
+
+		applicationEvents.clear();
+
+		final OneTimeActionRequestHandler undoHandler = (OneTimeActionRequestHandler) requestHandlerFactory.getRequestHandler(UndoRequest.class).orElseThrow();
+		undoHandler.handleRequest(new UndoRequest());
+
+		assertThat(applicationEvents.stream(SettingsUpdate.class))
+				.hasSize(1)
+				.first()
+				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
+						.autoLoadLatestProjectOnStart(false)
+						.build()));
 	}
 }

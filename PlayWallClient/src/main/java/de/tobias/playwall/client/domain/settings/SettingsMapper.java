@@ -12,11 +12,15 @@ public class SettingsMapper
 {
 	public Settings settingsDtoToSettings(SettingsDto settingsDto)
 	{
-		return Settings.builder().build();
+		return Settings.builder()
+				.autoLoadLatestProjectOnStart(settingsDto.autoLoadLatestProjectOnStart())
+				.build();
 	}
 
 	public SettingsDto settingToSettingsDto(Settings settings)
 	{
-		return SettingsDto.builder().build();
+		return SettingsDto.builder()
+				.autoLoadLatestProjectOnStart(settings.isAutoLoadLatestProjectOnStart())
+				.build();
 	}
 }
