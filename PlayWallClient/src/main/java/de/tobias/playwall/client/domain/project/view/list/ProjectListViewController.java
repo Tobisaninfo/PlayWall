@@ -227,8 +227,8 @@ public class ProjectListViewController extends ViewControllerBase
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
 			controller.showStage();
-			controller.updateMenuRecentProjects(allProjectsInfo);
 			controller.showProject(project);
+			controller.updateMenuRecentProjects(allProjectsInfo);
 			closeStage();
 		}
 		catch(PlayWallApiException e)

@@ -638,6 +638,11 @@ public class MainViewController extends ViewControllerBase
 
 		for(UUID recentProjectId : allProjectsInfo.getRecentProjectIds())
 		{
+			if(recentProjectId.equals(projectController.getProject().getMetadata().getId()))
+			{
+				continue;
+			}
+
 			allProjectsInfo.getAllProjectsMetadata().stream()
 					.filter(m -> m.getId().equals(recentProjectId))
 					.findFirst()
