@@ -87,6 +87,8 @@ public class ProjectListViewController extends ViewControllerBase
 	private final CommandLineOptions commandLineOptions;
 	private final UpdateMessageEventHandler updateMessageEventHandler;
 
+	private AllProjectsInfo allProjectsInfo;
+
 	@Override
 	public void init()
 	{
@@ -225,6 +227,7 @@ public class ProjectListViewController extends ViewControllerBase
 
 			final MainViewController controller = AppContextHolder.getInstance().get(MainViewController.class);
 			controller.showStage();
+			controller.updateMenuRecentProjects(allProjectsInfo);
 			controller.showProject(project);
 			closeStage();
 		}
@@ -247,7 +250,7 @@ public class ProjectListViewController extends ViewControllerBase
 		Platform.runLater(() -> {
 			try
 			{
-				final AllProjectsInfo allProjectsInfo = client.projects().list();
+				allProjectsInfo = client.projects().list();
 				projectListView.getItems().setAll(allProjectsInfo.getAllProjectsMetadata());
 
 				final List<UUID> recentProjectIds = allProjectsInfo.getRecentProjectIds();

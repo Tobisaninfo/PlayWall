@@ -99,6 +99,7 @@ public class MainViewController extends ViewControllerBase
 
 	private MenuItem undoMenuItem;
 	private MenuItem redoMenuItem;
+	private Menu menuRecentProject;
 
 	private final ErrorAlertBuilder errorAlertBuilder;
 
@@ -334,7 +335,6 @@ public class MainViewController extends ViewControllerBase
 
 			updateWindowProperties(project);
 			initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
-
 
 			buildPageButtons();
 			showPage(0);
@@ -611,7 +611,7 @@ public class MainViewController extends ViewControllerBase
 	private Menu createMenuFile()
 	{
 		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID, Optional.empty());
-		final Menu menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
+		menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
 		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
 		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave), new KeyCharacterCombination("S", KeyCombination.SHORTCUT_DOWN));
 		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.of(this::onMenuItemProjectSettings), new KeyCharacterCombination(",", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
@@ -630,6 +630,38 @@ public class MainViewController extends ViewControllerBase
 		);
 
 		return menu;
+	}
+
+	public void updateMenuRecentProjects(AllProjectsInfo allProjectsInfo)
+	{
+		menuRecentProject.getItems().clear();
+
+		for(UUID recentProjectId : allProjectsInfo.getRecentProjectIds())
+		{
+			allProjectsInfo.getAllProjectsMetadata().stream()
+					.filter(m -> m.getId().equals(recentProjectId))
+					.findFirst()
+					.ifPresent(metadata -> {
+						final MenuItem menuItem = new MenuItem(metadata.getName());
+						menuItem.setOnAction(_ -> onOpenRecentProject(recentProjectId));
+						menuRecentProject.getItems().add(menuItem);
+					});
+		}
+	}
+
+	private void onOpenRecentProject(UUID recentProjectId)
+	{
+		try
+		{
+			final Project project = client.project(recentProjectId).get();
+			showProject(project);
+			updateMenuRecentProjects(client.projects().list());
+		}
+		catch(PlayWallApiException e)
+		{
+			Logger.error(e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_LOAD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
 	}
 
 	private Menu createMenuEdit()
