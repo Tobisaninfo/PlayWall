@@ -2,7 +2,6 @@ package de.tobias.playwall.client.domain.project;
 
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
