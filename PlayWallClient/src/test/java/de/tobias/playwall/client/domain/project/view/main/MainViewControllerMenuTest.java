@@ -3,11 +3,13 @@ package de.tobias.playwall.client.domain.project.view.main;
 import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.about.AboutDialog;
 import javafx.application.Platform;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
@@ -16,8 +18,9 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
 class MainViewControllerMenuTest extends AbstractViewControllerTest
@@ -28,6 +31,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 	private Stage stage;
 
 	private Project project;
+	private Project projectEmpty;
 
 	private final Client client = mock(Client.class);
 
@@ -41,6 +45,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		context.registerLazySingleton(Client.class, _ -> client);
 
 		project = loadProject("projects/project_1.json");
+		projectEmpty = loadProject("projects/project_empty.json");
 	}
 
 	private void showMainView()
@@ -90,5 +95,36 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		robot.clickOn(robot.lookup(".menu-item").lookup("Über PlayWall").queryLabeled());
 
 		verify(dialog).showAndWait(stage);
+	}
+
+	@Test
+	void testMenuRecentFiles(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		final AllProjectsInfo allProjectsInfo = AllProjectsInfo.builder()
+				.recentProjectIds(List.of(projectEmpty.getMetadata().getId(), project.getMetadata().getId()))
+				.allProjectsMetadata(List.of(project.getMetadata(), projectEmpty.getMetadata()))
+				.build();
+
+		Platform.runLater(() -> mainViewController.updateMenuRecentProjects(allProjectsInfo));
+
+		when(client.getProject(projectEmpty.getMetadata().getId())).thenReturn(projectEmpty);
+		when(client.getProjects()).thenReturn(allProjectsInfo);
+
+		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Zuletzt verwendete Projekte").queryLabeled());
+		assertThat(mainViewController.getMenuRecentProjects().getItems())
+				.hasSize(1)
+				.first()
+				.extracting(MenuItem::getText)
+				.isEqualTo("Project Empty");
+
+
+		robot.clickOn(robot.lookup(".menu-item").lookup("Project Empty").queryLabeled());
+
+		WaitForAsyncUtils.waitForFxEvents();
+
+		assertThat(stage.getTitle()).isEqualTo("PlayWall - Project Empty");
 	}
 }

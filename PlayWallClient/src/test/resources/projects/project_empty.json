@@ -1,0 +1,57 @@
+{
+    "metadata": {
+        "id": "54837229-b574-484c-bfa4-64868e74e01e",
+        "name": "Project Empty",
+        "numberOfHorizontalPads": 2,
+        "numberOfVerticalPads": 2,
+        "volume": 1.0,
+        "timeMode": "ELAPSED",
+        "defaultColor": "GRAY1",
+        "playColor": "RED3"
+    },
+    "pages": [
+        {
+            "id": "1e76b8b3-2d58-4533-aa57-e2b66360e9ea",
+            "name": "Page 1",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "fc427184-2e55-4734-8148-5fb657963616",
+                    "name": null,
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "57accabc-7d19-473c-a0a1-ea5c61b85e18",
+                    "position": 1,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "d1401a7e-f57e-4b80-93dd-7cfe2db4ad73",
+                    "position": 2,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                },
+                {
+                    "id": "cd4beb53-824c-45c3-afc4-14b34e18d010",
+                    "position": 3,
+                    "name": null,
+                    "timeMode": "ELAPSED",
+                    "defaultColor": null,
+                    "playColor": null,
+                    "content": null
+                }
+            ]
+        }
+    ]
+}

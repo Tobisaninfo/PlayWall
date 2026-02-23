@@ -99,7 +99,9 @@ public class MainViewController extends ViewControllerBase
 
 	private MenuItem undoMenuItem;
 	private MenuItem redoMenuItem;
-	private Menu menuRecentProject;
+
+	@Getter(AccessLevel.PROTECTED)
+	private Menu menuRecentProjects;
 
 	private final ErrorAlertBuilder errorAlertBuilder;
 
@@ -611,7 +613,7 @@ public class MainViewController extends ViewControllerBase
 	private Menu createMenuFile()
 	{
 		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID, Optional.empty());
-		menuRecentProject = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
+		menuRecentProjects = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
 		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
 		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave), new KeyCharacterCombination("S", KeyCombination.SHORTCUT_DOWN));
 		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.of(this::onMenuItemProjectSettings), new KeyCharacterCombination(",", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
@@ -620,7 +622,7 @@ public class MainViewController extends ViewControllerBase
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_FILE));
 		menu.getItems().addAll(
 				menuItemNewProject,
-				menuRecentProject,
+				menuRecentProjects,
 				menuItemManageProject,
 				menuItemSaveProject,
 				new SeparatorMenuItem(),
@@ -634,7 +636,7 @@ public class MainViewController extends ViewControllerBase
 
 	public void updateMenuRecentProjects(AllProjectsInfo allProjectsInfo)
 	{
-		menuRecentProject.getItems().clear();
+		menuRecentProjects.getItems().clear();
 
 		for(UUID recentProjectId : allProjectsInfo.getRecentProjectIds())
 		{
@@ -649,7 +651,7 @@ public class MainViewController extends ViewControllerBase
 					.ifPresent(metadata -> {
 						final MenuItem menuItem = new MenuItem(metadata.getName());
 						menuItem.setOnAction(_ -> onOpenRecentProject(recentProjectId));
-						menuRecentProject.getItems().add(menuItem);
+						menuRecentProjects.getItems().add(menuItem);
 					});
 		}
 	}
