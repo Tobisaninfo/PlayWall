@@ -12,6 +12,7 @@ import de.tobias.playwall.client.domain.pad.*;
 import de.tobias.playwall.client.domain.pad.view.PadIndexable;
 import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.control.*;
+import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
@@ -454,6 +455,6 @@ public class DesktopPadView implements PadView
 			padSettingsViewController = AppContextHolder.getInstance().get(PadSettingsViewController.class);
 		}
 
-		padSettingsViewController.showAndWait(new PadSettingsViewController.Param(padController.getPad()), superRoot.getScene().getWindow());
+		padSettingsViewController.showAndWait(new BasePadSettingsViewController.Param(padController.getPad(), padSettingsViewController), superRoot.getScene().getWindow());
 	}
 }

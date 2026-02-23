@@ -19,10 +19,12 @@ import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
+import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
 import de.tobias.playwall.client.domain.settings.view.main.SettingsListener;
+import de.tobias.playwall.client.domain.settings.view.settings.BaseProgramSettingsViewController;
 import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
@@ -808,7 +810,7 @@ public class MainViewController extends ViewControllerBase
 			projectSettingsViewController = AppContextHolder.getInstance().get(ProjectSettingsViewController.class);
 		}
 
-		projectSettingsViewController.showAndWait(new ProjectSettingsViewController.Param(projectController.getProject().getMetadata()), getContainingWindow());
+		projectSettingsViewController.showAndWait(new BaseProjectSettingsViewController.Param(projectController.getProject().getMetadata()), getContainingWindow());
 	}
 
 	private void onMenuItemSettings(ActionEvent event)
@@ -818,6 +820,6 @@ public class MainViewController extends ViewControllerBase
 			programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
 		}
 
-		programSettingsViewController.showAndWait(new ProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
+		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
 	}
 }

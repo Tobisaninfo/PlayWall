@@ -12,12 +12,11 @@ import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.FileChooserWrapper;
-import de.tobias.playwall.client.view.ParamDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.PlayWallButton;
-import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
+import de.tobias.playwall.client.view.settings.BaseSettingsDialogController;
 import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -31,16 +30,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 
@@ -52,42 +45,17 @@ import static de.thecodelabs.utils.util.Localization.getString;
  * On save all settings from all pages will be applied.
  */
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsView")
-public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewController.Param>
+public class PadSettingsViewController extends BaseSettingsDialogController<BasePadSettingsViewController.Param>
 {
-	@AllArgsConstructor
-	public static class Param
-	{
-		private Pad pad;
-	}
-
-	@FXML
-	private VBox boxCategories;
-
-	@FXML
-	private VBox settingsPageContainer;
-
-	@FXML
-	private HBox boxButtons;
-
-	@Getter(AccessLevel.NONE)
-	private final FluentClient client;
-
-	private final List<BasePadSettingsViewController> settingViewController = new ArrayList<>();
-
 	@Getter(AccessLevel.NONE)
 	private Pad pad;
 
-	private Stage stage;
-
 	private Button buttonDelete;
-
-	private final ErrorAlertBuilder errorAlertBuilder;
 
 	@InjectConstructor
 	public PadSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
 	{
-		this.client = client;
-		this.errorAlertBuilder = errorAlertBuilder;
+		super(client, errorAlertBuilder);
 	}
 
 	@Override
@@ -103,51 +71,8 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		selectCategory(categoryGeneral);
 	}
 
-	private SettingsCategory createSettingsCategory(Class<? extends BasePadSettingsViewController> controllerClass, String localizationKey, FontAwesomeType icon)
-	{
-		final BasePadSettingsViewController viewController = AppContextHolder.getInstance().get(controllerClass);
-		settingViewController.add(viewController);
-
-		final SettingsCategory category = new SettingsCategory(Localization.getString(localizationKey), icon, viewController);
-		category.setOnAction(this::onSelectCategory);
-		boxCategories.getChildren().add(category);
-		return category;
-	}
-
 	@Override
-	protected void initStage(NVCStage stageContainer, Stage stage)
-	{
-		super.initStage(stageContainer, stage);
-
-		this.stage = stage;
-
-		stage.setResizable(true);
-
-		stage.setWidth(850);
-		stage.setHeight(500);
-
-		stage.setMinWidth(850);
-		stage.setMinHeight(500);
-	}
-
-	private void onSelectCategory(ActionEvent event)
-	{
-		selectCategory((SettingsCategory) event.getSource());
-	}
-
-	private void selectCategory(SettingsCategory category)
-	{
-		boxCategories.getChildren().forEach(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, false));
-		boxCategories.getChildren().stream()
-				.filter(c -> c.equals(category))
-				.findFirst()
-				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, true));
-
-		settingsPageContainer.getChildren().setAll(category.getSettingsPageController().getSettingsPage());
-	}
-
-	@Override
-	public void initParameter(Param param)
+	public void initParameter(BasePadSettingsViewController.Param param)
 	{
 		this.pad = param.pad;
 
@@ -165,7 +90,8 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 		buttonDelete.setVisible(pad.getContent() != null);
 	}
 
-	private void initButtons()
+	@Override
+	protected void initButtons()
 	{
 		buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
 		buttonDelete.setId("deleteButton");
@@ -197,7 +123,7 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 	}
 
 	@FXML
-	private void saveButtonHandler(ActionEvent event)
+	protected void saveButtonHandler(ActionEvent event)
 	{
 		settingViewController.forEach(controller -> controller.applySettings(new BasePadSettingsViewController.Param(pad, this)));
 
@@ -211,14 +137,6 @@ public class PadSettingsViewController extends ParamDialogBase<PadSettingsViewCo
 			Logger.error(e.getMessage());
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_SETTINGS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
-	}
-
-	@FXML
-	private void cancelButtonHandler(ActionEvent event)
-	{
-		settingViewController.forEach(BaseSettingsViewController::cleanup);
-
-		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
