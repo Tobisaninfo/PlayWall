@@ -649,7 +649,7 @@ public class MainViewController extends ViewControllerBase
 						.map(metadataOptional -> {
 							final ProjectMetadata metadata = metadataOptional.get();
 							final MenuItem menuItem = new MenuItem(metadata.getName());
-							menuItem.setOnAction(_ -> onOpenRecentProject(UUID.fromString(menuItem.getId())));
+							menuItem.setOnAction(_ -> onOpenRecentProject(metadata.getId()));
 							return menuItem;
 						})
 						.toList()
