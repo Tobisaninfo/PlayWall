@@ -20,7 +20,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -68,17 +67,6 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 	@Override
 	protected void initButtons()
 	{
-		final Button saveButton = new PlayWallButton(Localization.getString("ui.settings.button.save"), FontAwesomeType.FLOPPY_DISK_SOLID);
-		saveButton.setId("saveButton");
-		saveButton.setDefaultButton(true);
-		saveButton.setOnAction(this::saveButtonHandler);
-
-		final Button cancelButton = new PlayWallButton(Localization.getString("ui.settings.button.cancel"), FontAwesomeType.XMARK_SOLID);
-		cancelButton.setId("cancelButton");
-		cancelButton.setOnAction(this::cancelButtonHandler);
-
-		boxButtons.getChildren().addAll(cancelButton, saveButton);
-
 		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
 				() -> settingViewController.stream()
 						.allMatch(vc -> vc.getIsValidProperty().get()),

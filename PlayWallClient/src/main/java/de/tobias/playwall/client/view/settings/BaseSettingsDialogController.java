@@ -8,6 +8,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.ParamDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
+import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
@@ -26,6 +27,9 @@ import java.util.List;
  */
 public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 {
+	@FXML
+	protected PlayWallButton saveButton;
+
 	@FXML
 	protected VBox boxCategories;
 

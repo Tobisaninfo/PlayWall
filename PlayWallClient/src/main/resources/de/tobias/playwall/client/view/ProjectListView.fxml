@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.tobias.playwall.client.view.components.PlayWallButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<HBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <VBox alignment="CENTER" prefHeight="389.0" prefWidth="346.0" spacing="7.0">
-            <children>
-                <ImageView fx:id="imageView" fitHeight="144.0" fitWidth="140.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-                <Label fx:id="infoLabel" alignment="CENTER" layoutX="24.0" layoutY="212.0" prefHeight="39.0" prefWidth="310.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="212.0">
-                    <font>
-                        <Font size="25.0" />
-                    </font>
-                </Label>
-                <VBox fx:id="buttonBox" alignment="BOTTOM_LEFT" layoutX="109.0" layoutY="259.0" spacing="14.0" VBox.vgrow="ALWAYS"/>
-            </children>
-            <HBox.margin>
-                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
-            </HBox.margin>
-        </VBox>
-        <VBox spacing="14.0" HBox.hgrow="ALWAYS">
-            <children>
-                <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" styleClass="dark-list" VBox.vgrow="ALWAYS" />
-                <HBox spacing="14.0" fx:id="projectButtonBox">
-                    <padding>
-                        <Insets bottom="14.0" left="14.0" right="14.0" />
-                    </padding>
+
+<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox alignment="CENTER" prefHeight="389.0" prefWidth="346.0" spacing="7.0">
+        <ImageView fx:id="imageView" fitHeight="144.0" fitWidth="140.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+        <Label fx:id="infoLabel" alignment="CENTER" layoutX="24.0" layoutY="212.0" prefHeight="39.0" prefWidth="310.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="212.0">
+            <font>
+                <Font size="25.0" />
+            </font>
+        </Label>
+        <VBox fx:id="buttonBox" alignment="BOTTOM_LEFT" layoutX="109.0" layoutY="259.0" spacing="14.0" VBox.vgrow="ALWAYS">
+                <HBox maxWidth="1.7976931348623157E308" spacing="14.0">
+                    <PlayWallButton fx:id="newProjectButton" icon="FOLDER_PLUS_SOLID" maxWidth="Infinity" onAction="#onNewProjectButton" text="%launch.button.new" HBox.hgrow="ALWAYS"/>
+                    <PlayWallButton fx:id="importProjectButton" icon="FILE_IMPORT_SOLID" maxWidth="Infinity" onAction="#onNewProjectButton" text="%launch.button.import" HBox.hgrow="ALWAYS" disable="true"/>
                 </HBox>
-            </children>
+                <PlayWallButton fx:id="openSettingsButton" icon="GEAR_SOLID" maxWidth="Infinity" onAction="#onOpenSettingsButton" text="%launch.button.settings" />
         </VBox>
-    </children>
+        <HBox.margin>
+            <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+        </HBox.margin>
+    </VBox>
+    <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+        <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" styleClass="dark-list" VBox.vgrow="ALWAYS" />
+        <HBox fx:id="projectButtonBox" spacing="14.0">
+            <padding>
+                <Insets bottom="14.0" left="14.0" right="14.0" />
+            </padding>
+            <PlayWallButton fx:id="deleteButton" icon="TRASH_CAN_SOLID" maxWidth="Infinity" minHeight="35.0" onAction="#onDeleteButton" text="%launch.button.delete" HBox.hgrow="ALWAYS" disable="true"/>
+            <PlayWallButton fx:id="openButton" icon="UP_RIGHT_FROM_SQUARE_SOLID" maxWidth="Infinity" minHeight="35.0" onAction="#onOpenButton" text="%launch.button.open" HBox.hgrow="ALWAYS" disable="true"/>
+        </HBox>
+    </VBox>
 </HBox>

@@ -78,9 +78,11 @@ public class ProjectListViewController extends ViewControllerBase
 	@Getter
 	private PlayWallButton openSettingsButton;
 
+	@FXML
 	@Getter
 	private PlayWallButton openButton;
 
+	@FXML
 	@Getter
 	private PlayWallButton deleteButton;
 
@@ -99,46 +101,6 @@ public class ProjectListViewController extends ViewControllerBase
 		// Setup launch screen labels and image
 		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		imageView.setImage(new Image(IMAGE));
-
-		newProjectButton = new PlayWallButton(Localization.getString("launch.button.new"), FontAwesomeType.FOLDER_PLUS_SOLID);
-		newProjectButton.setId("newProjectButton");
-		newProjectButton.setMaxWidth(Double.MAX_VALUE);
-		newProjectButton.setOnAction(this::onNewProjectButton);
-
-		final PlayWallButton importProjectButton = new PlayWallButton(Localization.getString("launch.button.import"), FontAwesomeType.FILE_IMPORT_SOLID);
-		importProjectButton.setId("importProjectButton");
-		importProjectButton.setMaxWidth(Double.MAX_VALUE);
-		importProjectButton.setDisable(true);
-
-		final HBox box = new HBox(ViewConstants.DEFAULT_SPACING);
-		box.setMaxWidth(Double.MAX_VALUE);
-		box.getChildren().addAll(newProjectButton, importProjectButton);
-		HBox.setHgrow(newProjectButton, Priority.ALWAYS);
-		HBox.setHgrow(importProjectButton, Priority.ALWAYS);
-
-		openSettingsButton = new PlayWallButton(Localization.getString("launch.button.settings"), FontAwesomeType.GEAR_SOLID);
-		openSettingsButton.setId("openSettingsButton");
-		openSettingsButton.setMaxWidth(Double.MAX_VALUE);
-		openSettingsButton.setOnAction(this::onOpenSettingsButton);
-
-		buttonBox.getChildren().addAll(box, openSettingsButton);
-
-		deleteButton = new PlayWallButton(Localization.getString("launch.button.delete"), FontAwesomeType.TRASH_CAN_SOLID);
-		deleteButton.setId("deleteButton");
-		deleteButton.setMaxWidth(Double.MAX_VALUE);
-		deleteButton.setMinHeight(35.0);
-		deleteButton.setOnAction(this::onDeleteButton);
-		deleteButton.setDisable(true);
-
-		openButton = new PlayWallButton(Localization.getString("launch.button.open"), FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID);
-		openButton.setId("deleteButton");
-		openButton.setMaxWidth(Double.MAX_VALUE);
-		openButton.setMinHeight(35.0);
-		openButton.setOnAction(this::onOpenButton);
-		openButton.setDisable(true);
-		projectButtonBox.getChildren().addAll(deleteButton, openButton);
-		HBox.setHgrow(deleteButton, Priority.ALWAYS);
-		HBox.setHgrow(openButton, Priority.ALWAYS);
 
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
@@ -176,7 +138,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onDeleteButton(ActionEvent event)
+	public void onDeleteButton()
 	{
 		final ProjectMetadata selectedProject = getSelectedProject();
 		if(selectedProject == null)
@@ -206,7 +168,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onNewProjectButton(ActionEvent event)
+	public void onNewProjectButton()
 	{
 		final ProjectNewDialog dialog = AppContextHolder.getInstance().get(ProjectNewDialog.class);
 		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(getContainingWindow());
@@ -218,7 +180,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onOpenButton(ActionEvent event)
+	public void onOpenButton()
 	{
 		openProject(getSelectedProject().getId());
 	}
@@ -243,7 +205,7 @@ public class ProjectListViewController extends ViewControllerBase
 	}
 
 	@FXML
-	private void onOpenSettingsButton(ActionEvent event)
+	public void onOpenSettingsButton()
 	{
 		final ProgramSettingsViewController programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
 		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());

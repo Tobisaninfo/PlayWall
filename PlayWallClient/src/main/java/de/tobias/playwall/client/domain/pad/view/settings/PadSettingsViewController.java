@@ -14,7 +14,6 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.PlayWallButton;
-import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.settings.BaseSettingsDialogController;
 import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
@@ -25,10 +24,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Window;
@@ -47,10 +43,11 @@ import static de.thecodelabs.utils.util.Localization.getString;
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsView")
 public class PadSettingsViewController extends BaseSettingsDialogController<BasePadSettingsViewController.Param>
 {
+	@FXML
+	private PlayWallButton deleteButton;
+
 	@Getter(AccessLevel.NONE)
 	private Pad pad;
-
-	private Button buttonDelete;
 
 	@InjectConstructor
 	public PadSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
@@ -87,30 +84,12 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 			stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_TITLE, pad.getReadablePosition(), pad.getName()));
 		}
 
-		buttonDelete.setVisible(pad.getContent() != null);
+		deleteButton.setVisible(pad.getContent() != null);
 	}
 
 	@Override
 	protected void initButtons()
 	{
-		buttonDelete = new PlayWallButton(Localization.getString(Strings.UI_SETTINGS_PAD_FILE_DELETE), FontAwesomeType.TRASH_CAN_SOLID);
-		buttonDelete.setId("deleteButton");
-		buttonDelete.getStyleClass().add(ViewConstants.DANGER_STYLECLASS);
-		buttonDelete.setOnAction(this::deleteButtonHandler);
-
-		final Button saveButton = new PlayWallButton(Localization.getString("ui.settings.button.save"), FontAwesomeType.FLOPPY_DISK_SOLID);
-		saveButton.setId("saveButton");
-		saveButton.setDefaultButton(true);
-		saveButton.setOnAction(this::saveButtonHandler);
-
-		final Button cancelButton = new PlayWallButton(Localization.getString("ui.settings.button.cancel"), FontAwesomeType.XMARK_SOLID);
-		cancelButton.setId("cancelButton");
-		cancelButton.setOnAction(this::cancelButtonHandler);
-
-		final Region spacer = new Region();
-		boxButtons.getChildren().addAll(buttonDelete, spacer, cancelButton, saveButton);
-		HBox.setHgrow(spacer, Priority.ALWAYS);
-
 		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
 				() -> settingViewController.stream()
 						.allMatch(vc -> vc.getIsValidProperty().get()),
@@ -140,7 +119,7 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 	}
 
 	@FXML
-	private void deleteButtonHandler(ActionEvent event)
+	public void deleteButtonHandler(ActionEvent event)
 	{
 		try
 		{

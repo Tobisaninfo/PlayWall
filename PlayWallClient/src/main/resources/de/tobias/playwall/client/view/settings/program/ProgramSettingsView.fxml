@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<?import de.tobias.playwall.client.view.components.PlayWallButton?>
 <HBox maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox fx:id="boxCategories" minWidth="200.0" prefWidth="200.0" spacing="14.0">
@@ -22,11 +23,10 @@
             <padding>
                 <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
             </padding>
-         <VBox fx:id="settingsPageContainer" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"></VBox>
+         <VBox fx:id="settingsPageContainer" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"/>
          <HBox fx:id="boxButtons" alignment="CENTER_RIGHT" spacing="14.0">
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
+            <PlayWallButton fx:id="cancelButton" icon="XMARK_SOLID" onAction="#cancelButtonHandler" text="%ui.settings.button.cancel"/>
+            <PlayWallButton fx:id="saveButton" icon="FLOPPY_DISK_SOLID" onAction="#saveButtonHandler" text="%ui.settings.button.save" defaultButton="true"/>
          </HBox>
         </VBox>
     </children>
