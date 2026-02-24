@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
+import de.tobias.playwall.server.common.model.project.Views;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -40,14 +41,16 @@ public class AllProjectsInfoRepository
 			saveAllProjectsInfo();
 		}
 
-		allProjectsInfo = mapper.readValue(Files.newBufferedReader(path), AllProjectsInfo.class);
+		allProjectsInfo = mapper.readerWithView(Views.AllProjectsInfo.class)
+				.forType(AllProjectsInfo.class)
+				.readValue(Files.newBufferedReader(path));
 	}
 
 	public void saveAllProjectsInfo() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
-		mapper.writeValue(Files.newBufferedWriter(path), allProjectsInfo);
+		mapper.writerWithView(Views.AllProjectsInfo.class).writeValue(Files.newBufferedWriter(path), allProjectsInfo);
 	}
 
 	void clearProjects() throws IOException

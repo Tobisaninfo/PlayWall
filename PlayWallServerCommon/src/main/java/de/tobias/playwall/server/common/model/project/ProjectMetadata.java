@@ -21,14 +21,10 @@ public class ProjectMetadata
 
 	private final int VERSION = 1;
 
-	public interface List
-	{
-	}
-
-	@JsonView(List.class)
+	@JsonView(Views.AllProjectsInfo.class)
 	private UUID id;
 
-	@JsonView(List.class)
+	@JsonView(Views.AllProjectsInfo.class)
 	private String name;
 
 	private Integer numberOfHorizontalPads;
