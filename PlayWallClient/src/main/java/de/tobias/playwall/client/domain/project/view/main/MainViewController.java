@@ -638,24 +638,22 @@ public class MainViewController extends ViewControllerBase
 
 	public void updateMenuRecentProjects(AllProjectsInfo allProjectsInfo)
 	{
-		menuRecentProjects.getItems().clear();
-
-		for(UUID recentProjectId : allProjectsInfo.getRecentProjectIds())
-		{
-			if(recentProjectId.equals(projectController.getProject().getMetadata().getId()))
-			{
-				continue;
-			}
-
-			allProjectsInfo.getAllProjectsMetadata().stream()
-					.filter(m -> m.getId().equals(recentProjectId))
-					.findFirst()
-					.ifPresent(metadata -> {
-						final MenuItem menuItem = new MenuItem(metadata.getName());
-						menuItem.setOnAction(_ -> onOpenRecentProject(recentProjectId));
-						menuRecentProjects.getItems().add(menuItem);
-					});
-		}
+		menuRecentProjects.getItems().setAll(
+				allProjectsInfo.getRecentProjectIds().stream()
+						.filter(id -> id.equals(projectController.getProject().getMetadata().getId()))
+						.map(id -> allProjectsInfo.getAllProjectsMetadata().stream()
+								.filter(m -> m.getId().equals(id))
+								.findFirst()
+						)
+						.filter(Optional::isPresent)
+						.map(metadataOptional -> {
+							final ProjectMetadata metadata = metadataOptional.get();
+							final MenuItem menuItem = new MenuItem(metadata.getName());
+							menuItem.setOnAction(_ -> onOpenRecentProject(UUID.fromString(menuItem.getId())));
+							return menuItem;
+						})
+						.toList()
+		);
 	}
 
 	private void onOpenRecentProject(UUID recentProjectId)
