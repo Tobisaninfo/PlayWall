@@ -72,9 +72,11 @@ public class ProjectListViewController extends ViewControllerBase
 	@FXML
 	private HBox projectButtonBox;
 
+	@FXML
 	@Getter
 	private PlayWallButton newProjectButton;
 
+	@FXML
 	@Getter
 	private PlayWallButton openSettingsButton;
 
