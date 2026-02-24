@@ -52,7 +52,7 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 	protected final ErrorAlertBuilder errorAlertBuilder;
 
 	@InjectConstructor
-	public BaseSettingsDialogController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
+	protected BaseSettingsDialogController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
 	{
 		this.client = client;
 		this.errorAlertBuilder = errorAlertBuilder;

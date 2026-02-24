@@ -41,10 +41,10 @@ public class PlayWallButton extends Button
 			return;
 		}
 
-		final FontIcon icon = new FontIcon(iconType);
-		icon.setSize(16);
-		icon.setMouseTransparent(true);
-		setGraphic(icon);
+		final FontIcon fontIcon = new FontIcon(iconType);
+		fontIcon.setSize(16);
+		fontIcon.setMouseTransparent(true);
+		setGraphic(fontIcon);
 	}
 
 	public ObjectProperty<FontAwesomeType> iconProperty()
