@@ -24,7 +24,7 @@ public class SettingsRepository
 	public Settings loadSettings() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(SETTINGS_FILENAME);
-		if(!Files.exists(path))
+		if(Files.notExists(path))
 		{
 			log.debug("No settings.json found, creating default settings file in: \"{}\"", path);
 			saveSettings(Settings.DEFAULT);
