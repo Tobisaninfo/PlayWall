@@ -11,13 +11,8 @@ import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
-import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.settings.BaseSettingsDialogController;
-import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import lombok.AccessLevel;
@@ -62,20 +57,6 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 		settingViewController.forEach(controller -> controller.initParameter(new BaseProgramSettingsViewController.Param(settings)));
 
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PROGRAM_TITLE));
-	}
-
-	@Override
-	protected void initButtons()
-	{
-		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
-				() -> settingViewController.stream()
-						.allMatch(vc -> vc.getIsValidProperty().get()),
-				settingViewController.stream()
-						.map(BaseSettingsViewController::getIsValidProperty)
-						.toArray(Observable[]::new)
-		);
-
-		saveButton.disableProperty().bind(allValidBinding.not());
 	}
 
 	@FXML

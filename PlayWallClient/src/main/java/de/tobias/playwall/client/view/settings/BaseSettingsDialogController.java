@@ -10,6 +10,9 @@ import de.tobias.playwall.client.view.ParamDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
+import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -98,7 +101,18 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 		settingsPageContainer.getChildren().setAll(category.getSettingsPageController().getSettingsPage());
 	}
 
-	protected abstract void initButtons();
+	protected void initButtons()
+	{
+		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
+				() -> settingViewController.stream()
+						.allMatch(vc -> vc.getIsValidProperty().get()),
+				settingViewController.stream()
+						.map(BaseSettingsViewController::getIsValidProperty)
+						.toArray(Observable[]::new)
+		);
+
+		saveButton.disableProperty().bind(allValidBinding.not());
+	}
 
 	@FXML
 	protected abstract void saveButtonHandler(ActionEvent event);

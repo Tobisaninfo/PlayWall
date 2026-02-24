@@ -64,20 +64,6 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PROJECT_TITLE, projectMetadata.getName()));
 	}
 
-	@Override
-	protected void initButtons()
-	{
-		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
-				() -> settingViewController.stream()
-						.allMatch(vc -> vc.getIsValidProperty().get()),
-				settingViewController.stream()
-						.map(BaseSettingsViewController::getIsValidProperty)
-						.toArray(Observable[]::new)
-		);
-
-		saveButton.disableProperty().bind(allValidBinding.not());
-	}
-
 	@FXML
 	protected void saveButtonHandler(ActionEvent event)
 	{
