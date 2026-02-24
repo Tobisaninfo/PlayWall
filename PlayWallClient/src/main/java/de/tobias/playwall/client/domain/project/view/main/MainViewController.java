@@ -640,7 +640,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		menuRecentProjects.getItems().setAll(
 				allProjectsInfo.getRecentProjectIds().stream()
-						.filter(id -> id.equals(projectController.getProject().getMetadata().getId()))
+						.filter(id -> !id.equals(projectController.getProject().getMetadata().getId()))
 						.map(id -> allProjectsInfo.getAllProjectsMetadata().stream()
 								.filter(m -> m.getId().equals(id))
 								.findFirst()
