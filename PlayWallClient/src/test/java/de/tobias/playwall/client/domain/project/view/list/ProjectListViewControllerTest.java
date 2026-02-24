@@ -11,6 +11,7 @@ import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.Settings;
+import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -41,6 +42,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 
 	private final MainViewController mainViewController = mock(MainViewController.class);
 	private final ProjectNewDialog projectNewDialog = mock(ProjectNewDialog.class);
+	private final ProgramSettingsViewController programSettingsViewController = mock(ProgramSettingsViewController.class);
 	private final CommandLineOptions commandLineOptions = mock(CommandLineOptions.class);
 	private final ClientSettingsController settingsController = mock(ClientSettingsController.class);
 
@@ -54,6 +56,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		context = AppContextHolder.getInstance();
 		context.registerLazySingleton(MainViewController.class, _ -> mainViewController);
 		context.registerLazySingleton(ProjectNewDialog.class, _ -> projectNewDialog);
+		context.registerLazySingleton(ProgramSettingsViewController.class, _ -> programSettingsViewController);
 		context.registerLazySingleton(CommandLineOptions.class, _ -> commandLineOptions);
 		context.registerLazySingleton(ClientSettingsController.class, _ -> settingsController);
 		context.registerLazy(Stage.class, _ -> stage);
@@ -315,5 +318,30 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 
 		assertThat(robot.lookup(".label.content").queryLabeled()).hasText("Projekt kann nicht gelöscht werden");
 		verify(client, never()).getProjects();
+	}
+
+	// Settings
+
+
+	@Test
+	void testOpenSettingsView(FxRobot robot) throws PlayWallApiException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3)))
+				.recentProjectIds(List.of(PROJECT_ID))
+				.build());
+
+		Platform.runLater(() -> {
+			launchDialog = context.get(ProjectListViewController.class);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// open settings
+		robot.clickOn(launchDialog.getOpenSettingsButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(programSettingsViewController).showAndWait(any(), any());
+		assertThat(stage.isShowing()).isTrue();
 	}
 }

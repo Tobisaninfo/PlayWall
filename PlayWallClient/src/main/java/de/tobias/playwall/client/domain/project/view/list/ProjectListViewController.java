@@ -76,6 +76,9 @@ public class ProjectListViewController extends ViewControllerBase
 	private PlayWallButton newProjectButton;
 
 	@Getter
+	private PlayWallButton openSettingsButton;
+
+	@Getter
 	private PlayWallButton openButton;
 
 	@Getter
@@ -113,7 +116,7 @@ public class ProjectListViewController extends ViewControllerBase
 		HBox.setHgrow(newProjectButton, Priority.ALWAYS);
 		HBox.setHgrow(importProjectButton, Priority.ALWAYS);
 
-		final PlayWallButton openSettingsButton = new PlayWallButton(Localization.getString("launch.button.settings"), FontAwesomeType.GEAR_SOLID);
+		openSettingsButton = new PlayWallButton(Localization.getString("launch.button.settings"), FontAwesomeType.GEAR_SOLID);
 		openSettingsButton.setId("openSettingsButton");
 		openSettingsButton.setMaxWidth(Double.MAX_VALUE);
 		openSettingsButton.setOnAction(this::onOpenSettingsButton);
