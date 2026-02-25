@@ -2,7 +2,9 @@ package de.tobias.playwall.client.domain.project;
 
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.AudioPadContent;
+import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
@@ -89,5 +91,21 @@ class ClientProjectControllerTest extends AbstractTest
 				.satisfies(padController -> assertThat(padController.getPad()).isEqualTo(pad1));
 		assertThat(controller.getPadController(pad2.getId())).isNotNull()
 				.satisfies(padController -> assertThat(padController.getPad()).isEqualTo(pad2));
+	}
+
+	@Test
+	void testAsAtLeastOnePadPlayingFalse()
+	{
+		assertThat(controller.isAtLeastOnePadPlaying()).isFalse();
+	}
+
+	@Test
+	void testAsAtLeastOnePadPlayingTrue()
+	{
+		final UUID padId = UUID.fromString("46ea0972-f5b4-433a-8841-19ccf7aa6f31");
+		final ClientPadController padController = controller.getPadController(padId);
+		padController.setStatus(PadStatus.PLAY);
+
+		assertThat(controller.isAtLeastOnePadPlaying()).isTrue();
 	}
 }

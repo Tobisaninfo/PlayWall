@@ -82,6 +82,7 @@ public class Strings
 	public static final String UI_SETTINGS_UNSAVED_CHANGES_MODE_BASE  = "ui.settings.program.exit.unsaved-changes.mode.";
 	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_TITLE = "ui.dialog.program.exit.unsaved-changes.title";
 	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_CONTENT = "ui.dialog.program.exit.unsaved-changes.content";
+	public static final String UI_EXIT_WARNING_PLAYING = "ui.program.exit.warning.playing";
 
 	// ui - errors
 	public static final String UI_ERRORS_PAD_PLAY  = "ui.errors.pad.play";

@@ -294,6 +294,12 @@ public class MainViewController extends ViewControllerBase
 
 	private boolean closeRequest()
 	{
+		if(projectController.isAtLeastOnePadPlaying())
+		{
+			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING));
+			return false;
+		}
+
 		try
 		{
 			final boolean isSaved = client.currentProject().isSaved();

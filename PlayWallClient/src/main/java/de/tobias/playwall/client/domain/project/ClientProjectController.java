@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
 import lombok.Getter;
 
@@ -141,5 +142,11 @@ public class ClientProjectController
 			final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
 			padControllers.put(pad.getId(), controller);
 		}
+	}
+
+	public boolean isAtLeastOnePadPlaying()
+	{
+		return padControllers.values().stream()
+				.anyMatch(padController -> padController.getStatus() != null && padController.getStatus().equals(PadStatus.PLAY));
 	}
 }
