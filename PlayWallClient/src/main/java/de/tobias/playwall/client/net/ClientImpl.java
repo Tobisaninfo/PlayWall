@@ -124,6 +124,13 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public boolean isSaved() throws PlayWallApiException
+	{
+		final ProjectGetSaveStatusResponse response = clientWebSocketHandler.send(new ProjectGetSaveStatusRequest());
+		return response.isSaved();
+	}
+
+	@Override
 	public void saveProject() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new ProjectSaveRequest());

@@ -109,6 +109,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public boolean isSaved() throws PlayWallApiException
+		{
+			return delegate.isSaved();
+		}
+
+		@Override
 		public void save() throws PlayWallApiException
 		{
 			delegate.saveProject();
