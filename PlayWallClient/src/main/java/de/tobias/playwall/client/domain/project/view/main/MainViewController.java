@@ -48,6 +48,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.AccessLevel;
@@ -62,6 +63,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static de.thecodelabs.utils.util.Localization.getString;
 import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
@@ -292,6 +294,44 @@ public class MainViewController extends ViewControllerBase
 
 	private boolean closeRequest()
 	{
+		try
+		{
+			final boolean isSaved = client.currentProject().isSaved();
+			if(isSaved)
+			{
+				return true;
+			}
+
+			switch(settingsController.getSettings().getUnsavedChangesMode())
+			{
+				case ASK ->
+				{
+					final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+					alert.setTitle(getString(Strings.UI_DIALOG_EXIT_UNSAVED_CHANGES_TITLE));
+					alert.setContentText(getString(Strings.UI_DIALOG_EXIT_UNSAVED_CHANGES_CONTENT));
+					alert.initOwner(getContainingWindow());
+					alert.initModality(Modality.WINDOW_MODAL);
+					alert.getDialogPane().setMinHeight(Double.NEGATIVE_INFINITY);
+					final Optional<ButtonType> selectedButtonOptional = alert.showAndWait();
+					return selectedButtonOptional.isPresent() && selectedButtonOptional.get() == ButtonType.OK;
+				}
+				case SAVE ->
+				{
+					client.currentProject().save();
+					return true;
+				}
+				case DISCARD ->
+				{
+					return true;
+				}
+			}
+		}
+		catch(PlayWallApiException e)
+		{
+			Logger.error(e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_SAVE_STATUS), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+
 		return true;
 	}
 

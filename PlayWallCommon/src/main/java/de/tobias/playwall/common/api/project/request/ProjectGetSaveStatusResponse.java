@@ -11,11 +11,11 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class ProjectGetSaveStatusResponse extends ResponseMessage
 {
-	private boolean isSaved;
+	private boolean saved;
 
-	public ProjectGetSaveStatusResponse(UUID messageId, boolean isSaved)
+	public ProjectGetSaveStatusResponse(UUID messageId, boolean saved)
 	{
 		super(messageId);
-		this.isSaved = isSaved;
+		this.saved = saved;
 	}
 }

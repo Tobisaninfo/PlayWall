@@ -80,6 +80,8 @@ public class Strings
 	public static final String UI_SETTINGS_PROGRAM_TITLE  = "ui.settings.program.title";
 	public static final String UI_SETTINGS_PROGRAM_GENERAL_TITLE  = "ui.settings.program.general.title";
 	public static final String UI_SETTINGS_UNSAVED_CHANGES_MODE_BASE  = "ui.settings.program.exit.unsaved-changes.mode.";
+	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_TITLE = "ui.dialog.program.exit.unsaved-changes.title";
+	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_CONTENT = "ui.dialog.program.exit.unsaved-changes.content";
 
 	// ui - errors
 	public static final String UI_ERRORS_PAD_PLAY  = "ui.errors.pad.play";
@@ -98,6 +100,7 @@ public class Strings
 	public static final String UI_ERRORS_REDO  = "ui.errors.redo";
 	public static final String UI_ERRORS_PROJECT_ADD = "ui.errors.project.add";
 	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
+	public static final String UI_ERRORS_PROJECT_SAVE_STATUS  = "ui.errors.project.save.status";
 	public static final String UI_ERRORS_PROJECT_SETTINGS_SAVE = "ui.errors.project.settings.save";
 	public static final String UI_ERRORS_PROGRAM_SETTINGS_SAVE = "ui.errors.program.settings.save";
 }
