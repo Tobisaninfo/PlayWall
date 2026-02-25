@@ -699,6 +699,11 @@ public class MainViewController extends ViewControllerBase
 
 	private void onOpenRecentProject(UUID recentProjectId)
 	{
+		if(!closeRequest())
+		{
+			return;
+		}
+
 		try
 		{
 			final Project project = client.project(recentProjectId).get();
