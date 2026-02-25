@@ -36,7 +36,7 @@ class UndoHistoryUpdateListener implements UpdateMessageEventListener<UndoHistor
 
 		if(message.getMessage() != null)
 		{
-			controller.showNotification(message.getMessage());
+			controller.showNotification(message.getMessage(), false);
 		}
 	}
 

@@ -1,11 +1,27 @@
 @use "variables";
 
 .notification-pane {
-    -fx-background-color: rgb(29, 56, 87);
+    .notification-bar {
+        -fx-background-color: rgb(29, 56, 87);
+
+        .label {
+            -fx-text-fill: #CCCCCC;
+        }
+    }
+}
+
+.notification-pane.warning {
+    .notification-bar {
+        -fx-background-color: variables.$notification-warning-color;
+
+        .label {
+            -fx-text-fill: black;
+        }
+    }
 }
 
 .notification-pane.top .notification-bar > .pane {
-    -fx-background-color: rgb(29, 56, 87);
+    -fx-background-color: transparent;
     -fx-effect: none;
     -fx-border-width: 0 0 2px 0;
     -fx-border-color: rgb(85, 85, 85);
@@ -13,7 +29,6 @@
 
 .notification-pane .notification-bar > .pane .label {
     -fx-padding: 0 0 0 14px;
-    -fx-text-fill: #CCCCCC;
 }
 
 .notification-pane .notification-bar > .pane .close-button {
@@ -21,6 +36,6 @@
 }
 
 .notification-pane .notification-bar > .pane .close-button:hover {
-  -fx-background-color: variables.$component-hover-background-color;
-  -fx-text-fill: variables.$component-text-color !important;
+    -fx-background-color: variables.$component-hover-background-color;
+    -fx-text-fill: variables.$component-text-color !important;
 }

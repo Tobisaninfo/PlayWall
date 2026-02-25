@@ -296,7 +296,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		if(projectController.isAtLeastOnePadPlaying())
 		{
-			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING));
+			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING), true);
 			return false;
 		}
 
@@ -624,8 +624,17 @@ public class MainViewController extends ViewControllerBase
 				.findFirst().orElse(null);
 	}
 
-	public void showNotification(String message)
+	public void showNotification(String message, boolean isWarning)
 	{
+		if(isWarning)
+		{
+			notificationPane.getStyleClass().add(ViewConstants.WARNING_STYLECLASS);
+		}
+		else
+		{
+			notificationPane.getStyleClass().remove(ViewConstants.WARNING_STYLECLASS);
+		}
+
 		notificationPane.showAndHide(message, ViewConstants.DEFAULT_SNACKBAR_SHOW);
 	}
 
