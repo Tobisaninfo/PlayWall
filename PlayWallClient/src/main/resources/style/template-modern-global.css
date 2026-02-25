@@ -11,9 +11,6 @@
 }
 
 .pad-playbar${#class} .bar {
-	-fx-background-insets: 0 0 0 0;
-	-fx-padding: 0.25em;
-
 	-fx-background-color: ${#playbarBarColor};
 }
 

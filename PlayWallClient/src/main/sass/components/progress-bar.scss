@@ -3,13 +3,13 @@
 .progress-bar {
     .track {
         -fx-background-radius: 2px;
-      -fx-base: variables.$component-background-color;
-      -fx-background-color: variables.$component-background-color;
+        -fx-base: variables.$component-background-color;
+        -fx-background-color: variables.$component-background-color;
     }
 
     .bar {
         -fx-background-insets: 0 0 0 0;
-        -fx-padding: 0.25em;
+        -fx-padding: 0.35em;
 
         -fx-background-color: #EEEEEE;
     }
