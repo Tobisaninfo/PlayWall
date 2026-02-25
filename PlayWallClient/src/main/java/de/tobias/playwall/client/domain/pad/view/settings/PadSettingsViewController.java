@@ -133,7 +133,7 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 		alert.setContentText(getString(Strings.UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT));
 		alert.initOwner(owner);
 		alert.initModality(Modality.WINDOW_MODAL);
-		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		alert.getDialogPane().setMinHeight(Double.NEGATIVE_INFINITY);
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ -> showFileChooser(event));
 	}
 

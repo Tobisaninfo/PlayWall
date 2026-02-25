@@ -149,7 +149,7 @@ public class ProjectListViewController extends ViewControllerBase
 		alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_DELETE_CONTENT, selectedProject.getName()));
 		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
-		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		alert.getDialogPane().setMinHeight(Double.NEGATIVE_INFINITY);
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
 		{
 			try
