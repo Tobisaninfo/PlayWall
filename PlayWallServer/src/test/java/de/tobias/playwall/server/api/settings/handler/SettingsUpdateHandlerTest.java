@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.settings.handler;
 import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
 import de.tobias.playwall.common.api.settings.model.SettingsDto;
+import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import de.tobias.playwall.common.api.settings.update.SettingsUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.common.model.settings.Settings;
@@ -61,7 +62,8 @@ class SettingsUpdateHandlerTest
 		Files.writeString(projectsFile, """
 				{
 					"VERSION": 1,
-					"autoLoadLatestProjectOnStart": false
+					"autoLoadLatestProjectOnStart": false,
+					"unsavedChangesMode": "ASK"
 				}
 				""");
 
@@ -73,6 +75,7 @@ class SettingsUpdateHandlerTest
 	{
 		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder()
 				.autoLoadLatestProjectOnStart(true)
+				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.build());
 
 		handler.handleRequest(request);
@@ -82,6 +85,7 @@ class SettingsUpdateHandlerTest
 				.first()
 				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
 						.autoLoadLatestProjectOnStart(true)
+						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 						.build()));
 
 	}
@@ -92,6 +96,7 @@ class SettingsUpdateHandlerTest
 	{
 		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder()
 				.autoLoadLatestProjectOnStart(true)
+				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.build());
 
 		requestExecutor.execute(request);
@@ -101,6 +106,7 @@ class SettingsUpdateHandlerTest
 				.first()
 				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
 						.autoLoadLatestProjectOnStart(true)
+						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 						.build()));
 
 		applicationEvents.clear();
@@ -113,6 +119,7 @@ class SettingsUpdateHandlerTest
 				.first()
 				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
 						.autoLoadLatestProjectOnStart(false)
+						.unsavedChangesMode(UnsavedChangesMode.ASK)
 						.build()));
 	}
 }

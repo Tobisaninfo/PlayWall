@@ -8,6 +8,7 @@ import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -316,10 +317,17 @@ public class MainViewController extends ViewControllerBase
 					alert.setTitle(getString(Strings.UI_DIALOG_EXIT_UNSAVED_CHANGES_TITLE));
 					alert.setContentText(getString(Strings.UI_DIALOG_EXIT_UNSAVED_CHANGES_CONTENT));
 					alert.initOwner(getContainingWindow());
-					alert.initModality(Modality.WINDOW_MODAL);
-					alert.getDialogPane().setMinHeight(Double.NEGATIVE_INFINITY);
-					final Optional<ButtonType> selectedButtonOptional = alert.showAndWait();
-					return selectedButtonOptional.isPresent() && selectedButtonOptional.get() == ButtonType.OK;
+					if(AppContextHolder.getInstance().getEnvironment() != AppContext.Environment.GUI_TESTING)
+					{
+						alert.initModality(Modality.WINDOW_MODAL);
+						alert.getDialogPane().setMinHeight(Double.NEGATIVE_INFINITY);
+						final Optional<ButtonType> selectedButtonOptional = alert.showAndWait();
+						return selectedButtonOptional.isPresent() && selectedButtonOptional.get() == ButtonType.OK;
+					}
+					else
+					{
+						return false;
+					}
 				}
 				case SAVE ->
 				{

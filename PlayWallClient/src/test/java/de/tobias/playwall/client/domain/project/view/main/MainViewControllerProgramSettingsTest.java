@@ -8,8 +8,10 @@ import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import javafx.application.Platform;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.junit.jupiter.api.Test;
@@ -80,12 +82,15 @@ class MainViewControllerProgramSettingsTest extends AbstractViewControllerTest
 		assertThat(stageSettings.getTitle()).isEqualTo("Programmeinstellungen");
 
 		robot.lookup("#checkboxStartAutoLoadLatestProject").queryAs(CheckBox.class).setSelected(true);
+		final ComboBox<?> comboBoxUnsavedChanges = robot.lookup("#comboBoxUnsavedChanges").queryAs(ComboBox.class);
+		robot.interact(() -> comboBoxUnsavedChanges.getSelectionModel().select(2));
 		robot.clickOn("#saveButton");
 
 		WaitForAsyncUtils.waitForFxEvents();
 
 		verify(client).updateProgramSettings(Settings.builder()
 				.autoLoadLatestProjectOnStart(true)
+				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.build());
 	}
 }

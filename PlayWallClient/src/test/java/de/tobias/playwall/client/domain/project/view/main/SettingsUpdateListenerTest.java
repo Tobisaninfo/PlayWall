@@ -8,6 +8,7 @@ import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.common.api.settings.model.SettingsDto;
+import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import de.tobias.playwall.common.api.settings.update.SettingsUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -62,9 +63,11 @@ class SettingsUpdateListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new SettingsUpdate(SettingsDto.builder()
 				.autoLoadLatestProjectOnStart(true)
+				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.build()));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		assertThat(settingsController.getSettings().isAutoLoadLatestProjectOnStart()).isTrue();
+		assertThat(settingsController.getSettings().getUnsavedChangesMode()).isEqualTo(UnsavedChangesMode.DISCARD);
 	}
 }
