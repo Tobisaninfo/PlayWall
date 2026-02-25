@@ -79,6 +79,7 @@ public class Strings
 	// ui - settings - program
 	public static final String UI_SETTINGS_PROGRAM_TITLE  = "ui.settings.program.title";
 	public static final String UI_SETTINGS_PROGRAM_GENERAL_TITLE  = "ui.settings.program.general.title";
+	public static final String UI_SETTINGS_UNSAVED_CHANGES_MODE_BASE  = "ui.settings.program.exit.unsaved-changes.mode.";
 
 	// ui - errors
 	public static final String UI_ERRORS_PAD_PLAY  = "ui.errors.pad.play";

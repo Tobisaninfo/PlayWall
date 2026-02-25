@@ -14,6 +14,7 @@ public class SettingsMapper
 	{
 		return Settings.builder()
 				.autoLoadLatestProjectOnStart(settingsDto.autoLoadLatestProjectOnStart())
+				.unsavedChangesMode(settingsDto.unsavedChangesMode())
 				.build();
 	}
 
@@ -21,6 +22,7 @@ public class SettingsMapper
 	{
 		return SettingsDto.builder()
 				.autoLoadLatestProjectOnStart(settings.isAutoLoadLatestProjectOnStart())
+				.unsavedChangesMode(settings.getUnsavedChangesMode())
 				.build();
 	}
 }

@@ -92,6 +92,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.PEN_TO_SQUARE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Name"))));
 		data.add(new IconEntry(FontAwesomeType.TABLE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Anzahl Kacheln pro Seite"))));
 		data.add(new IconEntry(FontAwesomeType.POWER_OFF_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Programmstart"))));
+		data.add(new IconEntry(FontAwesomeType.ARROW_RIGHT_FROM_BRACKET_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Beenden des Programms"))));
 
 		// test unused
 		data.add(new IconEntry(FontAwesomeType.CAKE_CANDLES_SOLID, List.of(new IconUsage(IconUsageCategory.UNDEFINED, "Ungenutzt"))));

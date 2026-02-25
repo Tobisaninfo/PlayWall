@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.settings;
 
+import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import lombok.*;
 
 @Getter
@@ -11,4 +12,5 @@ import lombok.*;
 public final class Settings
 {
 	private boolean autoLoadLatestProjectOnStart;
+	private UnsavedChangesMode unsavedChangesMode;
 }

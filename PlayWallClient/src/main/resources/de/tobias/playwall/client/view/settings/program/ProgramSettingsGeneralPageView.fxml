@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
-<?import javafx.scene.layout.VBox?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
 <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <SettingsRow icon="POWER_OFF_SOLID" title="%ui.settings.program.start.title">
         <CheckBox fx:id="checkboxStartAutoLoadLatestProject" text="%ui.settings.program.start.autoLoadLatestProject"/>
     </SettingsRow>
     <Separator/>
+    <SettingsRow icon="ARROW_RIGHT_FROM_BRACKET_SOLID" title="%ui.settings.program.exit.title">
+        <VBox alignment="CENTER_LEFT" spacing="14">
+            <Label text="%ui.settings.program.exit.unsaved-changes"/>
+            <ComboBox fx:id="comboBoxUnsavedChanges" prefWidth="300"/>
+        </VBox>
+    </SettingsRow>
 </SettingsPage>
 
