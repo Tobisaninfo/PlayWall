@@ -94,6 +94,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.timeMode(TimeMode.ELAPSED)
 				.defaultColor(ModernColor.GRAY1)
 				.playColor(ModernColor.RED3)
+				.eofWarningTime(5.0)
 				.build());
 	}
 
@@ -159,6 +160,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.timeMode(TimeMode.ELAPSED)
 				.defaultColor(ModernColor.GRAY1)
 				.playColor(ModernColor.RED3)
+				.eofWarningTime(5.0)
 				.build());
 	}
 
@@ -227,6 +229,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.timeMode(TimeMode.REMAINING)
 				.defaultColor(ModernColor.GRAY1)
 				.playColor(ModernColor.RED3)
+				.eofWarningTime(5.0)
 				.build());
 	}
 
@@ -262,6 +265,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.timeMode(TimeMode.ELAPSED)
 				.defaultColor(ModernColor.GRAY1)
 				.playColor(ModernColor.RED3)
+				.eofWarningTime(5.0)
 				.build());
 	}
 }

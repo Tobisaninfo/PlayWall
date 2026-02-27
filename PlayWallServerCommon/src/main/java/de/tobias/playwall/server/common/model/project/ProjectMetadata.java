@@ -42,6 +42,9 @@ public class ProjectMetadata
 	@Builder.Default
 	private Color playColor = Color.RED3;
 
+	@Builder.Default
+	private Double eofWarningTime = 5.0;
+
 	@JsonIgnore
 	public int getNumberOfPadsPerPage()
 	{

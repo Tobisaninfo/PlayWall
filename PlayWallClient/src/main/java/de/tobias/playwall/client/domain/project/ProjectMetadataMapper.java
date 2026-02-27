@@ -12,13 +12,33 @@ public class ProjectMetadataMapper
 {
 	private final ColorMapper colorMapper;
 
-	public ProjectMetadata projectMetadataDtoToProjectMetadata(ProjectMetadataDto project)
+	public ProjectMetadata projectMetadataDtoToProjectMetadata(ProjectMetadataDto metadataDto)
 	{
-		return new ProjectMetadata(project.id(), project.name(), project.numberOfHorizontalPads(), project.numberOfVerticalPads(), project.volume(), project.timeMode(), colorMapper.colorToModernColor(project.defaultColor()), colorMapper.colorToModernColor(project.playColor()));
+		return new ProjectMetadata(
+				metadataDto.id(),
+				metadataDto.name(),
+				metadataDto.numberOfHorizontalPads(),
+				metadataDto.numberOfVerticalPads(),
+				metadataDto.volume(),
+				metadataDto.timeMode(),
+				colorMapper.colorToModernColor(metadataDto.defaultColor()),
+				colorMapper.colorToModernColor(metadataDto.playColor()),
+				metadataDto.eofWarningTime()
+		);
 	}
 
-	public ProjectMetadataDto projectMetadataToProjectMetadataDto(ProjectMetadata project)
+	public ProjectMetadataDto projectMetadataToProjectMetadataDto(ProjectMetadata metadata)
 	{
-		return new ProjectMetadataDto(project.getId(), project.getName(), project.getNumberOfHorizontalPads(), project.getNumberOfVerticalPads(), project.getVolume(), project.getTimeMode(), colorMapper.modernColorToColor(project.getDefaultColor()), colorMapper.modernColorToColor(project.getPlayColor()));
+		return new ProjectMetadataDto(
+				metadata.getId(),
+				metadata.getName(),
+				metadata.getNumberOfHorizontalPads(),
+				metadata.getNumberOfVerticalPads(),
+				metadata.getVolume(),
+				metadata.getTimeMode(),
+				colorMapper.modernColorToColor(metadata.getDefaultColor()),
+				colorMapper.modernColorToColor(metadata.getPlayColor()),
+				metadata.getEofWarningTime()
+		);
 	}
 }
