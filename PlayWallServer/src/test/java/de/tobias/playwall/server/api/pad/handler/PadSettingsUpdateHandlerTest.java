@@ -73,6 +73,7 @@ class PadSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Pa
 				.timeMode(TimeMode.ELAPSED_AND_TOTAL)
 				.defaultColor(Color.BLUE1)
 				.playColor(Color.LIGHT_BLUE2)
+				.eofWarningTime(2.0)
 				.content(AudioPadContentDto.builder().mediaPath(oldMediaPath).loop(false).build())
 				.build());
 		handler.handleRequest(request);
@@ -87,6 +88,7 @@ class PadSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Pa
 				.satisfies(event -> assertThat(event.getPad().getTimeMode()).isEqualTo(TimeMode.ELAPSED_AND_TOTAL))
 				.satisfies(event -> assertThat(event.getPad().getDefaultColor()).isEqualTo(Color.BLUE1))
 				.satisfies(event -> assertThat(event.getPad().getPlayColor()).isEqualTo(Color.LIGHT_BLUE2))
+				.satisfies(event -> assertThat(event.getPad().getEofWarningTime()).isEqualTo(2.0))
 				.satisfies(event -> assertThat(((AudioPadContentDto) event.getPad().getContent()).isLoop()).isFalse());
 	}
 
