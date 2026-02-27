@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import javafx.util.Duration;
 import lombok.AllArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 class PadPlayPositionListener implements UpdateMessageEventListener<PadPlayPositionUpdate>
 {
@@ -19,9 +21,10 @@ class PadPlayPositionListener implements UpdateMessageEventListener<PadPlayPosit
 	{
 		for(PadPlayPositionUpdate.PadPlayPosition position : message.getPositions())
 		{
-			projectController.getPadController(position.padId()).setPosition(Duration.millis(position.millis()));
+			final UUID padId = position.padId();
+			projectController.getPadController(padId).setPosition(Duration.millis(position.millis()));
 
-			final PadView padView = mainViewController.getPadViewForPadId(position.padId());
+			final PadView padView = mainViewController.getPadViewForPadId(padId);
 			if(padView != null)
 			{
 				Platform.runLater(padView::updateTimeNodes);

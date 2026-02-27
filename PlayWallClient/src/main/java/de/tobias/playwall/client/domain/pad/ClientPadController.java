@@ -5,6 +5,8 @@ import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 public class ClientPadController
@@ -21,5 +23,24 @@ public class ClientPadController
 	{
 		this.pad = pad;
 		this.projectMetadata = projectMetadata;
+	}
+
+	public boolean isWarningThresholdReached()
+	{
+		final Duration remaining = getRemainingTime();
+		final double warningThreshold = getEffectiveEofWarningTime();
+
+		return remaining.toSeconds() < warningThreshold;
+	}
+
+	private Duration getRemainingTime()
+	{
+		return duration.subtract(position);
+	}
+
+	public double getEffectiveEofWarningTime()
+	{
+		return Optional.ofNullable(pad.getEofWarningTime())
+				.orElse(projectMetadata.getEofWarningTime());
 	}
 }

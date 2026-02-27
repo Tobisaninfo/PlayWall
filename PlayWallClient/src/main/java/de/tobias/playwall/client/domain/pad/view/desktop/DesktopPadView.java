@@ -14,6 +14,7 @@ import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.control.*;
 import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
+import de.tobias.playwall.client.domain.project.view.main.WarningFlashAnimation;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.NodeWalker;
@@ -22,10 +23,10 @@ import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -84,6 +85,8 @@ public class DesktopPadView implements PadView
 
 	@Getter
 	private ClientPadController padController;
+
+	private final WarningFlashAnimation warningAnimation = new WarningFlashAnimation(this, PLAY_CLASS);
 
 	public DesktopPadView()
 	{
@@ -185,11 +188,20 @@ public class DesktopPadView implements PadView
 		return superRoot;
 	}
 
+	public void pseudoClassStateChanged(PseudoClass pseudoClass, boolean isActive)
+	{
+		NodeWalker.getAllNodes(superRoot)
+				.forEach(node -> node.pseudoClassStateChanged(pseudoClass, isActive));
+		Logger.trace("Pad(" + padController.getPad().getId() + ") PseudoClass: " + pseudoClass + " -> " + isActive);
+	}
+
 	@Override
 	public void updateFromPad(int currentPage, ClientPadController controller)
 	{
 		this.padController = controller;
 		updateTooltip();
+
+		warningAnimation.stop();
 
 		if(padController == null)
 		{
@@ -246,6 +258,8 @@ public class DesktopPadView implements PadView
 		removeStyleClasses();
 
 		busyView.showProgress(false);
+
+		warningAnimation.stop();
 	}
 
 	private void updateTooltip()
@@ -281,8 +295,7 @@ public class DesktopPadView implements PadView
 				this.updateButtonStates();
 				this.updateTimeNodes();
 
-				NodeWalker.getAllNodes(superRoot)
-						.forEach(node -> node.pseudoClassStateChanged(PLAY_CLASS, status == PadStatus.PLAY));
+				pseudoClassStateChanged(PLAY_CLASS, status == PadStatus.PLAY);
 			});
 		}
 	}
@@ -312,13 +325,27 @@ public class DesktopPadView implements PadView
 		if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
 		{
 			updateTimeLabelByTimeMode(duration, position);
-
 			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
 		}
 		else
 		{
 			this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
 			this.playBar.setProgress(0.0);
+		}
+
+		// Start warning animation if the threshold is reached
+		if(status == PadStatus.PLAY && position != null && padController.isWarningThresholdReached())
+		{
+			// ⚠️do not join conditions, elsewhere the animation is instantly stopped on the "else if" case
+			if(!warningAnimation.isRunning())
+			{
+				warningAnimation.start();
+			}
+		}
+		// Stop animation if any of the above conditions are not met and a animation is running
+		else if(warningAnimation.isRunning())
+		{
+			warningAnimation.stop();
 		}
 	}
 
@@ -344,7 +371,7 @@ public class DesktopPadView implements PadView
 
 	public void addStyleClasses(PadIndex index)
 	{
-		NodeWalker.getAllNodes((Parent) getRootNode())
+		NodeWalker.getAllNodes(superRoot)
 				.stream()
 				.filter(PadIndexable.class::isInstance)
 				.forEach(node -> ((PadIndexable) node).setIndex(index));
@@ -352,7 +379,7 @@ public class DesktopPadView implements PadView
 
 	public void removeStyleClasses()
 	{
-		NodeWalker.getAllNodes((Parent) getRootNode())
+		NodeWalker.getAllNodes(superRoot)
 				.stream()
 				.filter(PadIndexable.class::isInstance)
 				.forEach(node -> ((PadIndexable) node).setIndex(null));
