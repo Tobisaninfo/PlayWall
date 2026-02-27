@@ -22,6 +22,7 @@ public class Pad
 	private TimeMode timeMode;
 	private Color defaultColor;
 	private Color playColor;
+	private Double eofWarningTime;
 
 	public Pad copy(boolean generateNewId)
 	{

@@ -22,6 +22,7 @@ public class Pad
 	private TimeMode timeMode;
 	private ModernColor defaultColor;
 	private ModernColor playColor;
+	private Double eofWarningTime;
 
 	public String getReadablePosition()
 	{

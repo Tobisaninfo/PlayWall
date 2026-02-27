@@ -43,7 +43,7 @@ class ProjectNewDialogTest extends AbstractViewControllerTest
 	@Test
 	void testCreateProjectOkay(FxRobot robot) throws PlayWallApiException
 	{
-		final ProjectMetadata metadata = new ProjectMetadata(UUID.randomUUID(), "Test", 5, 3, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3);
+		final ProjectMetadata metadata = new ProjectMetadata(UUID.randomUUID(), "Test", 5, 3, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, null);
 		when(client.addProject(any(), anyInt(), anyInt())).thenReturn(metadata);
 
 		Platform.runLater(() -> {

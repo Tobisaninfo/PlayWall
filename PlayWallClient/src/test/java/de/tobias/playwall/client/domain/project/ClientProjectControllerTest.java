@@ -78,8 +78,8 @@ class ClientProjectControllerTest extends AbstractTest
 	@Test
 	void testAddPage()
 	{
-		final Pad pad1 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3);
-		final Pad pad2 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3);
+		final Pad pad1 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3, null);
+		final Pad pad2 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3, null);
 		final Page newPage = new Page(UUID.randomUUID(), "Seite 3", 2, List.of(pad1, pad2));
 
 		controller.addPage(newPage);

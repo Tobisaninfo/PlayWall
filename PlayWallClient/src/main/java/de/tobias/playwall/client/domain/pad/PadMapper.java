@@ -23,6 +23,7 @@ public class PadMapper
 				.timeMode(pad.getTimeMode())
 				.defaultColor(colorMapper.colorToModernColor(pad.getDefaultColor()))
 				.playColor(colorMapper.colorToModernColor(pad.getPlayColor()))
+				.eofWarningTime(pad.getEofWarningTime())
 				.content(padContentMapper.padContentDtoToPadContent(pad.getContent()))
 				.build();
 	}
@@ -36,6 +37,7 @@ public class PadMapper
 				.timeMode(pad.getTimeMode())
 				.defaultColor(colorMapper.modernColorToColor(pad.getDefaultColor()))
 				.playColor(colorMapper.modernColorToColor(pad.getPlayColor()))
+				.eofWarningTime(pad.getEofWarningTime())
 				.content(padContentMapper.padContentToPadContentDto(pad.getContent()))
 				.build();
 	}
