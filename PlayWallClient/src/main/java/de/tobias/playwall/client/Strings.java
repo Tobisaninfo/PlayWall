@@ -74,6 +74,7 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_GENERAL_TITLE  = "ui.settings.pad.general.title";
 	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE  = "ui.settings.pad.view.title";
 	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
+	public static final String UI_SETTINGS_PROJECT_WARNING_EOF_SEC = "ui.settings.project.warning.eof.sec";
 
 	// ui - settings - program
 	public static final String UI_SETTINGS_PROGRAM_TITLE  = "ui.settings.program.title";

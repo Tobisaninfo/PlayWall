@@ -37,7 +37,8 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID, List.of(
 				new IconUsage(IconUsageCategory.GENERAL, "Benachrichtigung"),
 				new IconUsage(IconUsageCategory.PAD, "Medienfehler"),
-				new IconUsage(IconUsageCategory.PAD, "Medium nicht gefunden")
+				new IconUsage(IconUsageCategory.PAD, "Medium nicht gefunden"),
+				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Warnhinweise")
 		)));
 		data.add(new IconEntry(FontAwesomeType.PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite hinzufügen"))));
 		data.add(new IconEntry(FontAwesomeType.PENCIL_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite umbenennen"))));

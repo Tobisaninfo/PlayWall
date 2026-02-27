@@ -1,9 +1,15 @@
 package de.tobias.playwall.client.domain.project.view.settings;
 
+import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
@@ -23,10 +29,30 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 	@FXML
 	private Spinner<Integer> spinnerNumberOfVerticalPads;
 
+	@FXML
+	private Slider eofWarningTimeSlider;
+	@FXML
+	private Label eofWarningTimeLabel;
+
 	@InjectConstructor
 	public ProjectSettingsGeneralViewController(FluentClient client)
 	{
 		super(client);
+	}
+
+	@Override
+	protected void init()
+	{
+		super.init();
+		eofWarningTimeLabel.textProperty().bind(
+				Bindings.createStringBinding(
+						() -> Localization.getString(
+								Strings.UI_SETTINGS_PROJECT_WARNING_EOF_SEC,
+								String.format("%.1f", eofWarningTimeSlider.getValue())
+						),
+						eofWarningTimeSlider.valueProperty()
+				)
+		);
 	}
 
 	@Override
@@ -35,6 +61,7 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 		textFieldName.setText(param.getProjectMetadata().getName());
 		spinnerNumberOfHorizontalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfHorizontalPads());
 		spinnerNumberOfVerticalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfVerticalPads());
+		eofWarningTimeSlider.setValue(param.getProjectMetadata().getEofWarningTime());
 
 		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty()
 				.and(spinnerNumberOfHorizontalPads.valueProperty().isNotNull()
@@ -44,9 +71,12 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 	@Override
 	public void applySettings(Param param)
 	{
-		param.getProjectMetadata().setName(textFieldName.getText());
-		param.getProjectMetadata().setNumberOfHorizontalPads(spinnerNumberOfHorizontalPads.getValue());
-		param.getProjectMetadata().setNumberOfVerticalPads(spinnerNumberOfVerticalPads.getValue());
+		final ProjectMetadata projectMetadata = param.getProjectMetadata();
+
+		projectMetadata.setName(textFieldName.getText());
+		projectMetadata.setNumberOfHorizontalPads(spinnerNumberOfHorizontalPads.getValue());
+		projectMetadata.setNumberOfVerticalPads(spinnerNumberOfVerticalPads.getValue());
+		projectMetadata.setEofWarningTime(eofWarningTimeSlider.getValue());
 	}
 
 	@Override
