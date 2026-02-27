@@ -5,11 +5,34 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.geometry.Insets?>
+<SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
+              xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="%ui.settings.pad.general.name">
         <TextField fx:id="textFieldName" prefWidth="300"/>
     </SettingsRow>
 
     <Separator/>
+
+    <VBox fx:id="contentContainer"/>
+
+    <SettingsRow icon="TRIANGLE_EXCLAMATION_SOLID" title="Warnhinweise">
+        <CheckBox fx:id="eofWarningTimeCheckbox" text="%ui.settings.pad.settings.override"/>
+        <VBox fx:id="eofWarningTimeContainer" spacing="14">
+            <padding>
+                <Insets top="14.0"/>
+            </padding>
+            <Label text="Warnhinweise ab Restdauer"/>
+            <HBox spacing="14">
+                <Slider fx:id="eofWarningTimeSlider" max="10" showTickLabels="true" minWidth="250" showTickMarks="true"
+                        majorTickUnit="1" blockIncrement="0.1"/>
+                <Label fx:id="eofWarningTimeLabel"/>
+            </HBox>
+        </VBox>
+    </SettingsRow>
 </SettingsPage>
 
