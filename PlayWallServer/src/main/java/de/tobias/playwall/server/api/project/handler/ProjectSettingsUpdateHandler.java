@@ -50,19 +50,22 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 
 		try
 		{
-			project.getMetadata().setName(requestMessage.getProjectMetadata().name());
-			project.getMetadata().setTimeMode(requestMessage.getProjectMetadata().timeMode());
-			project.getMetadata().setDefaultColor(requestMessage.getProjectMetadata().defaultColor());
-			project.getMetadata().setPlayColor(requestMessage.getProjectMetadata().playColor());
+			final ProjectMetadata metadata = project.getMetadata();
+
+			metadata.setName(requestMessage.getProjectMetadata().name());
+			metadata.setTimeMode(requestMessage.getProjectMetadata().timeMode());
+			metadata.setDefaultColor(requestMessage.getProjectMetadata().defaultColor());
+			metadata.setPlayColor(requestMessage.getProjectMetadata().playColor());
+			metadata.setEofWarningTime(requestMessage.getProjectMetadata().eofWarningTime());
 
 			boolean hasProjectSizeChanged = !Objects.equals(oldMetadata.getNumberOfHorizontalPads(), requestMessage.getProjectMetadata().numberOfHorizontalPads()) ||
 											!Objects.equals(oldMetadata.getNumberOfVerticalPads(), requestMessage.getProjectMetadata().numberOfVerticalPads());
 
-			project.getMetadata().setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
-			project.getMetadata().setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
+			metadata.setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
+			metadata.setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
 
-			projectService.rename(project.getMetadata().getId(), requestMessage.getProjectMetadata().name());
-			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(project.getMetadata())));
+			projectService.rename(metadata.getId(), requestMessage.getProjectMetadata().name());
+			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(metadata)));
 
 			if(hasProjectSizeChanged)
 			{

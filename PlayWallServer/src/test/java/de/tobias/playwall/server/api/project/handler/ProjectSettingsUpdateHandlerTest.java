@@ -151,6 +151,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.timeMode(TimeMode.ELAPSED)
 				.defaultColor(Color.GRAY1)
 				.playColor(Color.RED3)
+				.eofWarningTime(2.0)
 				.build());
 		handler.handleRequest(request);
 
@@ -193,6 +194,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.timeMode(TimeMode.ELAPSED)
 				.defaultColor(Color.GRAY1)
 				.playColor(Color.RED3)
+				.eofWarningTime(2.0)
 				.build());
 
 		testInverseOperation(project, request);

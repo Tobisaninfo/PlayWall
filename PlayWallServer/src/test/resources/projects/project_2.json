@@ -7,7 +7,8 @@
         "volume": 1.0,
         "timeMode": "ELAPSED",
         "defaultColor": "GRAY1",
-        "playColor": "RED3"
+        "playColor": "RED3",
+        "eofWarningTime": 5.0
     },
     "pages": [
     ]
