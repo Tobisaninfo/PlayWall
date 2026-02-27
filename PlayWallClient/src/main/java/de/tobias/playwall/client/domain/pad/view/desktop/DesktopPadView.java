@@ -37,6 +37,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.Getter;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static de.tobias.playwall.client.domain.pad.view.control.PadStyleClasses.*;
 import static de.tobias.playwall.client.view.components.PseudoClasses.PLAY_CLASS;
 
@@ -199,6 +202,11 @@ public class DesktopPadView implements PadView
 		NodeWalker.getAllNodes(superRoot)
 				.forEach(node -> node.pseudoClassStateChanged(pseudoClass, isActive));
 		Logger.trace("Pad(" + padController.getPad().getId() + ") PseudoClass: " + pseudoClass + " -> " + isActive);
+	}
+
+	public Set<PseudoClass> getPseudoClassStates()
+	{
+		return NodeWalker.getAllNodes(superRoot).stream().flatMap(node -> node.getPseudoClassStates().stream()).collect(Collectors.toSet());
 	}
 
 	@Override
