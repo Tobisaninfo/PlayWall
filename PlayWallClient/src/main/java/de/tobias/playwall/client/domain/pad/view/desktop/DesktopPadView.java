@@ -7,6 +7,7 @@ import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.*;
 import de.tobias.playwall.client.domain.pad.view.PadIndexable;
@@ -86,13 +87,18 @@ public class DesktopPadView implements PadView
 	@Getter
 	private ClientPadController padController;
 
-	private final WarningFlashAnimation warningAnimation = new WarningFlashAnimation(this, PLAY_CLASS);
+	private final WarningFlashAnimation warningAnimation;
 
 	public DesktopPadView()
 	{
-		fluentClient = AppContextHolder.getInstance().get(FluentClient.class);
-		padTimeUtils = AppContextHolder.getInstance().get(PadTimeUtils.class);
-		errorAlertBuilder = AppContextHolder.getInstance().get(ErrorAlertBuilder.class);
+		final AppContext context = AppContextHolder.getInstance();
+
+		fluentClient = context.get(FluentClient.class);
+		padTimeUtils = context.get(PadTimeUtils.class);
+		errorAlertBuilder = context.get(ErrorAlertBuilder.class);
+		warningAnimation = context.get(WarningFlashAnimation.class);
+		warningAnimation.init(this, PLAY_CLASS);
+
 		setupView();
 	}
 

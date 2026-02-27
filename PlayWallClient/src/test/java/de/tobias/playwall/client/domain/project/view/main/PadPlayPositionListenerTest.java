@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class PadPlayPositionListenerTest extends AbstractViewControllerTest
 {
@@ -38,6 +38,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 	private Project project;
 
 	private final Client client = mock(Client.class);
+	private final WarningFlashAnimation warningFlashAnimation = mock(WarningFlashAnimation.class);
 
 	@Start
 	private void start(Stage stage)
@@ -47,11 +48,14 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> stage);
 
 		context.registerLazySingleton(Client.class, _ -> client);
+		context.registerLazySingleton(WarningFlashAnimation.class, _ -> warningFlashAnimation);
 
 		eventHandler = context.get(UpdateMessageEventHandler.class);
 
 		project = loadProject("projects/project_1.json");
 	}
+
+	// Play Position
 
 	@Test
 	void testPlayPositionListenerOnPlay()
@@ -137,5 +141,136 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		assertThat(padView.getTimeLabel().getText()).isEqualTo("0:10");
 		assertThat(padView.getPlayBar().getProgress()).isZero();
+	}
+
+	// Eof Warning
+
+	@Test
+	void testEofWarningWithProjectSettingsInvoked()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
+			stage.show();
+			mainViewController.showPage(0);
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L)));
+		eventHandler.fireEvent(update);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(warningFlashAnimation).start();
+	}
+
+	@Test
+	void testEofWarningWithProjectSettingsInvokedOnlyOnce()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
+			stage.show();
+			mainViewController.showPage(0);
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		eventHandler.fireEvent(new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L))));
+		WaitForAsyncUtils.waitForFxEvents();
+		when(warningFlashAnimation.isRunning()).thenReturn(true);
+		eventHandler.fireEvent(new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 7000L))));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(warningFlashAnimation, times(1)).start();
+	}
+
+	@Test
+	void testEofWarningWithProjectSettingsNotInvoked()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
+			stage.show();
+			mainViewController.showPage(0);
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 4000L)));
+		eventHandler.fireEvent(update);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(warningFlashAnimation, never()).start();
+	}
+
+	@Test
+	void testEofWarningWithPadSettingsInvoked()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
+			stage.show();
+			mainViewController.showPage(0);
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		project.getPad(padId).setEofWarningTime(3.0);
+
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 8000L)));
+		eventHandler.fireEvent(update);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(warningFlashAnimation).start();
+	}
+
+	@Test
+	void testEofWarningWithPadSettingsNotInvoked()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
+			stage.show();
+			mainViewController.showPage(0);
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		project.getPad(padId).setEofWarningTime(3.0);
+
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L)));
+		eventHandler.fireEvent(update);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(warningFlashAnimation, never()).start();
 	}
 }

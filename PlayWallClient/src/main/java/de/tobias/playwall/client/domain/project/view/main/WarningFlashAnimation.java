@@ -1,21 +1,26 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
 import de.thecodelabs.logger.Logger;
+import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.css.PseudoClass;
 import javafx.util.Duration;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@Service(singleton = false)
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class WarningFlashAnimation
 {
-	private final DesktopPadView padView;
-	private final PseudoClass pseudoClass;
+	private DesktopPadView padView;
+	private PseudoClass pseudoClass;
 
 	private Timeline toggleTimeline;
 
-	public WarningFlashAnimation(DesktopPadView padView, PseudoClass pseudoClass)
+	public void init(DesktopPadView padView, PseudoClass pseudoClass)
 	{
 		this.padView = padView;
 		this.pseudoClass = pseudoClass;
