@@ -20,5 +20,11 @@ open module de.tobias.playwall.client {
 	requires org.apache.commons.cli;
 	requires io.github.classgraph;
 
+	requires org.slf4j;
+	requires org.apache.logging.log4j.slf4j2.impl;
+	requires org.apache.logging.log4j;
+	requires org.apache.logging.log4j.core;
+	requires java.xml;
+
 	requires static lombok;
 }

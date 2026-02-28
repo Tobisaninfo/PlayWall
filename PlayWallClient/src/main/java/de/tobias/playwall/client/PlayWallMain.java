@@ -1,7 +1,5 @@
 package de.tobias.playwall.client;
 
-import de.thecodelabs.logger.FileOutputOption;
-import de.thecodelabs.logger.LogLevelFilter;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
@@ -18,13 +16,17 @@ import de.tobias.playwall.client.view.launch.ApplicationLoadingViewController;
 import de.tobias.playwall.client.view.style.AppIconProvider;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.slf4j.LoggerFactory;
 
 public class PlayWallMain extends Application
 {
+	private static org.slf4j.Logger logger;
+
 	public static void main(String[] args)
 	{
-		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logger.error(e));
+		Thread.setDefaultUncaughtExceptionHandler((_, e) -> logger.error("Uncaught error in thread execution", e));
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
 
@@ -36,13 +38,14 @@ public class PlayWallMain extends Application
 
 	private static void applicationWillStart(App app)
 	{
-		Logger.init(app.getPath(PathType.LOG), app.isDebug() ? FileOutputOption.DISABLED : FileOutputOption.COMBINED);
-		if(app.isDebug())
-		{
-			Logger.setLevelFilter(LogLevelFilter.DEBUG);
-			Logger.addFilter(message -> !message.getCaller().getClassName().contains("org.apache.commons.logging.impl.SLF4JLog"));
-		}
-		Logger.info("Logging initialized (Running in LogLevel: {0})", Logger.getLevelFilter().toString());
+		System.setProperty("app.logdir", app.getPath(PathType.LOG).toAbsolutePath().toString());
+		System.setProperty("app.debug", String.valueOf(app.isDebug()));
+
+		final Level level = app.isDebug() ? Level.DEBUG : Level.INFO;
+		Configurator.setRootLevel(level);
+
+		logger = LoggerFactory.getLogger(PlayWallMain.class);
+		logger.info("Logging initialized (Running in LogLevel: {})", level);
 	}
 
 	@Override

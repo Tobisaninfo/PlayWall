@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss} %style{%-30t}{bright,white} %highlight{%-5level}{
+                    FATAL=red blink,
+                    ERROR=red bold,
+                    WARN=yellow bold,
+                    INFO=green,
+                    DEBUG=cyan,
+                    TRACE=white} %style{%c{1}}{bright,blue} - %msg%n
+                </Pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="FileAppender"
+                     fileName="${sys:app.logdir}/PlayWall.log"
+                     filePattern="${sys:app.logdir}/PlayWall-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+        <Async name="ConsoleAndFile">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileAppender"/>
+        </Async>
+
+        <Routing name="Routing">
+            <Routes pattern="${sys:app.debug:-false}">
+                <Route key="true" ref="Console"/>
+                <Route key="false" ref="ConsoleAndFile"/>
+            </Routes>
+        </Routing>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Routing"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

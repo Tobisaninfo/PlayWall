@@ -35,7 +35,10 @@
         <spring-boot-dependencies.version>4.0.3</spring-boot-dependencies.version>
         <jackson.version>3.0.4</jackson.version>
         <lombok.version>1.18.42</lombok.version>
+
         <slf4j-api.version>2.0.17</slf4j-api.version>
+        <log4j2.version>2.25.3</log4j2.version>
+        <jansi.version>2.4.1</jansi.version>
 
         <mapstruct.version>1.6.3</mapstruct.version>
 
