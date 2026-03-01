@@ -5,9 +5,12 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.settings.ClientSettingsController;
+import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.about.AboutDialog;
+import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
@@ -32,7 +35,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 
 	private Project project;
 	private Project projectEmpty;
-
+	private final ClientSettingsController settingsController = mock(ClientSettingsController.class);
 	private final Client client = mock(Client.class);
 
 	@Start
@@ -43,6 +46,11 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> stage);
 
 		context.registerLazySingleton(Client.class, _ -> client);
+		context.registerLazySingleton(ClientSettingsController.class, _ -> settingsController);
+		when(settingsController.getSettings()).thenReturn(Settings.builder()
+				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
+				.autoLoadLatestProjectOnStart(false)
+				.build());
 
 		project = loadProject("projects/project_1.json");
 		projectEmpty = loadProject("projects/project_empty.json");
