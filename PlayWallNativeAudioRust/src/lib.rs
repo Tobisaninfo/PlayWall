@@ -5,6 +5,7 @@ mod logger;
 mod output_devices;
 mod playback;
 
+use crate::logger::JavaLayer;
 use jni::errors::ThrowRuntimeExAndDefault;
 use jni::objects::{JClass, JObject, JString, JValue};
 use jni::signature::{FieldSignature, RuntimeFieldSignature};
@@ -22,8 +23,7 @@ use tracing::{debug, trace};
 use tracing_subscriber;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
-use tracing_subscriber::{EnvFilter, fmt};
-use crate::logger::JavaLayer;
+use tracing_subscriber::EnvFilter;
 
 struct AudioHandler {
     media_path: Option<String>,
