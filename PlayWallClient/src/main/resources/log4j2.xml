@@ -19,7 +19,7 @@
         <RollingFile name="FileAppender"
                      fileName="${sys:app.logdir}/PlayWall.log"
                      filePattern="${sys:app.logdir}/PlayWall-%d{yyyy-MM-dd}.log.gz">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1} - %msg%n"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level [%t] @ [%c{1}.%M:%L]: %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
                 <SizeBasedTriggeringPolicy size="10MB"/>
@@ -27,7 +27,7 @@
             <DefaultRolloverStrategy max="30"/>
         </RollingFile>
 
-        <Async name="ConsoleAndFile">
+        <Async name="ConsoleAndFile" includeLocation="true">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileAppender"/>
         </Async>
