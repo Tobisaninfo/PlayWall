@@ -1,6 +1,7 @@
 #![allow(non_snake_case)]
 
 mod hybrid_loop_source;
+mod logger;
 mod output_devices;
 mod playback;
 
@@ -8,7 +9,7 @@ use jni::errors::ThrowRuntimeExAndDefault;
 use jni::objects::{JClass, JObject, JString, JValue};
 use jni::signature::{FieldSignature, RuntimeFieldSignature};
 use jni::strings::JNIString;
-use jni::sys::{jboolean, jlong};
+use jni::sys::{jboolean, jint, jlong};
 use jni::{Env, EnvUnowned, JavaVM};
 use lazy_static::lazy_static;
 use rodio::{MixerDeviceSink, Player};
@@ -22,6 +23,7 @@ use tracing_subscriber;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{EnvFilter, fmt};
+use crate::logger::JavaLayer;
 
 struct AudioHandler {
     media_path: Option<String>,
@@ -73,7 +75,7 @@ lazy_static! {
 pub extern "system" fn JNI_OnLoad(
     vm: *mut jni::sys::JavaVM,
     _reserved: *mut std::ffi::c_void,
-) -> jni::sys::jint {
+) -> jint {
     let vm = unsafe { JavaVM::from_raw(vm) };
     let mut guard = JVM.write().unwrap();
     *guard = Some(vm);
@@ -88,11 +90,14 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 ) {
     let _ = env.with_env(|_| {
         let log_level_str: String = logLevel.to_string();
-        let filter = EnvFilter::new(&log_level_str).add_directive("jni=warn".parse().unwrap());
-        let _ = tracing_subscriber::registry()
-            .with(fmt::layer())
+        let filter = EnvFilter::new(log_level_str).add_directive("jni=warn".parse().unwrap());
+
+        let subscriber = tracing_subscriber::registry()
             .with(filter)
-            .try_init();
+            // .with(fmt::layer())
+            .with(JavaLayer);
+
+        let _ = subscriber.try_init();
 
         debug!("Initialized rust audio component");
         Ok::<(), jni::errors::Error>(())
