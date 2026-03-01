@@ -43,7 +43,11 @@
 
     <Loggers>
         <Root level="info">
-            <AppenderRef ref="Routing"/>
+            <AppenderRef ref="Routing">
+                <MarkerFilter marker="PadPlayPositionUpdate"
+                              onMatch="DENY"
+                              onMismatch="NEUTRAL"/>
+            </AppenderRef>
         </Root>
     </Loggers>
 

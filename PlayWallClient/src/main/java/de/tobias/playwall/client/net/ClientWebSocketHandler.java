@@ -6,6 +6,8 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.common.net.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.net.URI;
@@ -95,8 +97,9 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		try
 		{
-			log.debug("Received: {}", data);
 			final BaseMessage message = objectMapper.readValue(data, BaseMessage.class);
+			final Marker marker = MarkerFactory.getMarker(message.getClass().getSimpleName());
+			log.debug(marker, "Received: {}", data);
 
 			if(message instanceof ResponseMessage responseMessage)
 			{
