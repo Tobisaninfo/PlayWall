@@ -3,6 +3,8 @@ package de.tobias.playwall.client;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.logger.LoggerBridge;
+import de.thecodelabs.utils.logger.Slf4JBridge;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
@@ -44,6 +46,7 @@ public class PlayWallMain extends Application
 		final Level level = app.isDebug() ? Level.DEBUG : Level.INFO;
 		Configurator.setRootLevel(level);
 
+		LoggerBridge.setImplementation(new Slf4JBridge());
 		log = LoggerFactory.getLogger(PlayWallMain.class);
 		log.info("Logging initialized (Running in LogLevel: {})", level);
 	}
