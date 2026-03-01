@@ -6,7 +6,7 @@ version = 4
 name = "PlayWallNativeAudioRust"
 version = "0.1.0"
 dependencies = [
- "jni 0.22.1",
+ "jni 0.22.2",
  "lazy_static",
  "rodio",
  "symphonia",
@@ -301,17 +301,16 @@ dependencies = [
 
 [[package]]
 name = "jni"
-version = "0.22.1"
+version = "0.22.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2fc3e99c2f191cafcbc52f44ae7352145cc7a8e7e3242f0b5b173b75b7467af"
+checksum = "004cad2989693095826dade4735429d1c427e79df7cc4013a919d3a7719b884b"
 dependencies = [
- "cesu8",
  "cfg-if",
  "combine",
  "jni-macros",
  "jni-sys 0.4.1",
  "log",
- "paste",
+ "simd_cesu8",
  "thiserror 2.0.18",
  "walkdir",
  "windows-link",
@@ -319,15 +318,14 @@ dependencies = [
 
 [[package]]
 name = "jni-macros"
-version = "0.22.0"
+version = "0.22.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cf8534090fdcb2891c0b24a46db1a11154747c83f59efd732d8fb75a7b2e48c"
+checksum = "1c3d1da60c95c98847b26b9d45f4360fee718b31de746df016d9cd6de916a7ef"
 dependencies = [
- "cesu8",
- "proc-macro-crate",
  "proc-macro2",
  "quote",
  "rustc_version",
+ "simd_cesu8",
  "syn",
 ]
 
@@ -627,12 +625,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
 
 [[package]]
-name = "paste"
-version = "1.0.15"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
-
-[[package]]
 name = "pin-project-lite"
 version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -833,6 +825,22 @@ checksum = "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6"
 dependencies = [
  "lazy_static",
 ]
+
+[[package]]
+name = "simd_cesu8"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "19e75ccd3404ef387c23d4cf34a30d49eab8f2aeb17e5ad575aacad434170daf"
+dependencies = [
+ "rustc_version",
+ "simdutf8",
+]
+
+[[package]]
+name = "simdutf8"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
 
 [[package]]
 name = "smallvec"
