@@ -17,8 +17,8 @@
         </Console>
 
         <RollingFile name="FileAppender"
-                     fileName="${sys:app.logdir}/PlayWall.log"
-                     filePattern="${sys:app.logdir}/PlayWall-%d{yyyy-MM-dd}.log.gz">
+                     fileName="${sys:app.logdir}/client.log"
+                     filePattern="${sys:app.logdir}/client-%d{yyyy-MM-dd}.log.gz">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level [%t] @ [%c{1}.%M:%L]: %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
