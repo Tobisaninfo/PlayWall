@@ -117,7 +117,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		}
 		catch(Exception e)
 		{
-			log.error("Cannot process input", e);
+			log.error("Cannot process input {}", data, e);
 		}
 	}
 
