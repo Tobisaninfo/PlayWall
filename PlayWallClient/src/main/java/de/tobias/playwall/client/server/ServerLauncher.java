@@ -12,7 +12,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -94,10 +93,6 @@ public class ServerLauncher
 			log.info("Server starting");
 
 			awaitServerStartUpWithTimeout(properties.getStartupTimeoutSeconds());
-
-			final Thread thread = new Thread(this::printServerLog);
-			thread.setDaemon(true);
-			thread.start();
 		}
 		catch(URISyntaxException | IOException e)
 		{
@@ -171,27 +166,6 @@ public class ServerLauncher
 		{
 			log.error("Server failed to start: \n{}", String.join("\n", lines));
 			throw new ServerLaunchException.GenericStartupException();
-		}
-	}
-
-	@SneakyThrows
-	private void printServerLog()
-	{
-		try(BufferedWriter writer = Files.newBufferedWriter(app.getPath(PathType.LOG, "client_server.log")))
-		{
-			try(BufferedReader reader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream())))
-			{
-				String line;
-				while((line = reader.readLine()) != null)
-				{
-					writer.write(line);
-					writer.newLine();
-					writer.flush();
-				}
-			}
-			serverProcess.waitFor();
-			writer.write("Server exit code " + serverProcess.exitValue());
-			writer.newLine();
 		}
 	}
 
