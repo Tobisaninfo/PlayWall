@@ -13,7 +13,7 @@
 
     <Separator/>
 
-    <SettingsRow icon="TABLE_SOLID" title="Anzahl Kacheln pro Seite">
+    <SettingsRow icon="TABLE_SOLID" title="%ui.settings.project.general.numberOfPads">
         <HBox alignment="CENTER_LEFT" spacing="10">
             <Label minWidth="75" prefWidth="75" text="Horizontal"/>
             <Spinner fx:id="spinnerNumberOfHorizontalPads" editable="true" max="10" min="3"/>
@@ -27,8 +27,8 @@
 
     <Separator/>
 
-    <SettingsRow icon="TRIANGLE_EXCLAMATION_SOLID" title="Warnhinweise">
-        <Label text="Warnhinweise ab Restdauer"/>
+    <SettingsRow icon="TRIANGLE_EXCLAMATION_SOLID" title="%ui.settings.pad.eof-warning.title">
+        <Label text="%ui.settings.pad.eof-warning.label"/>
         <HBox spacing="14">
             <Slider fx:id="eofWarningTimeSlider" max="10" showTickLabels="true" minWidth="250" showTickMarks="true"
                     majorTickUnit="1" blockIncrement="0.1"/>

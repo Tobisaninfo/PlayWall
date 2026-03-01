@@ -20,13 +20,13 @@
 
     <VBox fx:id="contentContainer"/>
 
-    <SettingsRow icon="TRIANGLE_EXCLAMATION_SOLID" title="Warnhinweise">
+    <SettingsRow icon="TRIANGLE_EXCLAMATION_SOLID" title="%ui.settings.pad.eof-warning.title">
         <CheckBox fx:id="eofWarningTimeCheckbox" text="%ui.settings.pad.settings.override"/>
         <VBox fx:id="eofWarningTimeContainer" spacing="14">
             <padding>
                 <Insets top="14.0"/>
             </padding>
-            <Label text="Warnhinweise ab Restdauer"/>
+            <Label text="%ui.settings.pad.eof-warning.label"/>
             <HBox spacing="14">
                 <Slider fx:id="eofWarningTimeSlider" max="10" showTickLabels="true" minWidth="250" showTickMarks="true"
                         majorTickUnit="1" blockIncrement="0.1"/>
