@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.view.about;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -22,6 +21,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.io.IOException;
@@ -33,6 +33,7 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "AboutDialog")
+@Slf4j
 public class AboutDialog extends ModalDialogBase<Void>
 {
 	@FXML
@@ -110,7 +111,7 @@ public class AboutDialog extends ModalDialogBase<Void>
 			}
 			catch(IOException | URISyntaxException e)
 			{
-				Logger.error(e);
+				log.error("Cannot open link", e);
 			}
 		}
 	}

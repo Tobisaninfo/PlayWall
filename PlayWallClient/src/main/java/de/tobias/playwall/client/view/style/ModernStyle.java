@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.view.style;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -18,6 +17,7 @@ import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Service(superclass = Styleable.class)
+@Slf4j
 public class ModernStyle implements Styleable
 {
 	@InjectField
@@ -73,7 +74,7 @@ public class ModernStyle implements Styleable
 				key.pollEvents();
 				Platform.runLater(() -> {
 					this.stages.forEach(this::applyToStage);
-					Logger.debug("Reloaded Stylesheets");
+					log.debug("Reloaded Stylesheets");
 				});
 				key.reset();
 			}
@@ -109,7 +110,7 @@ public class ModernStyle implements Styleable
 		}
 		catch(IOException e)
 		{
-			Logger.error(e);
+			log.error("Error in writing stylesheet to disk", e);
 		}
 
 		stage.getScene().getStylesheets().remove(renderedCss.toUri().toString());

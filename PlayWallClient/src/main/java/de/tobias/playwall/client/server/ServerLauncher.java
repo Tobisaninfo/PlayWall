@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.server;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
@@ -10,6 +9,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = {@InjectConstructor})
+@Slf4j
 public class ServerLauncher
 {
 	private final ServerPathLookup serverPathLookup;
@@ -39,9 +40,9 @@ public class ServerLauncher
 	{
 		try
 		{
-			Logger.info("Server starting, checking files");
+			log.info("Server starting, checking files");
 			Path resourceFolder = serverPathLookup.getServerInstallationFolder();
-			Logger.info("Server folder: " + resourceFolder.toAbsolutePath());
+			log.info("Server folder: {}", resourceFolder.toAbsolutePath());
 
 			if(Files.notExists(resourceFolder))
 			{
@@ -64,7 +65,7 @@ public class ServerLauncher
 			}
 
 			javaExecutable.toFile().setExecutable(true);
-			Logger.debug("Set execute permission for: " + javaExecutable.toAbsolutePath());
+			log.debug("Set execute permission for: {}", javaExecutable.toAbsolutePath());
 
 			final Path loggingPath = app.getPath(PathType.LOG, "server.log");
 
@@ -83,14 +84,14 @@ public class ServerLauncher
 			processCommand.add("-jar");
 			processCommand.add(serverJar.toString());
 			processCommand.addAll(programArguments);
-			Logger.info("Server command: " + String.join(" ", processCommand));
+			log.info("Server command: {}", String.join(" ", processCommand));
 
 			final ProcessBuilder processBuilder = new ProcessBuilder(processCommand);
 			processBuilder.directory(resourceFolder.toFile());
 			processBuilder.redirectErrorStream(true);
 			serverProcess = processBuilder.start();
 
-			Logger.info("Server starting");
+			log.info("Server starting");
 
 			awaitServerStartUpWithTimeout(properties.getStartupTimeoutSeconds());
 
@@ -157,7 +158,7 @@ public class ServerLauncher
 			if(readyPattern.matcher(line).find())
 			{
 				started = true;
-				Logger.info("Server successfully started");
+				log.info("Server successfully started");
 				break;
 			}
 			if(portUsedPattern.matcher(line).find())
@@ -168,7 +169,7 @@ public class ServerLauncher
 
 		if(!started)
 		{
-			Logger.error("Server failed to start: \n" + String.join("\n", lines));
+			log.error("Server failed to start: \n{}", String.join("\n", lines));
 			throw new ServerLaunchException.GenericStartupException();
 		}
 	}
@@ -188,10 +189,6 @@ public class ServerLauncher
 					writer.flush();
 				}
 			}
-			catch(IOException e)
-			{
-				Logger.error(e);
-			}
 			serverProcess.waitFor();
 			writer.write("Server exit code " + serverProcess.exitValue());
 			writer.newLine();
@@ -202,23 +199,23 @@ public class ServerLauncher
 	{
 		if(serverProcess != null && serverProcess.isAlive())
 		{
-			Logger.info("Server stopping...");
+			log.info("Server stopping...");
 			serverProcess.destroy();
 			try
 			{
 				if(!serverProcess.waitFor(3, java.util.concurrent.TimeUnit.SECONDS))
 				{
-					Logger.info("Server not responding, force kill...");
+					log.info("Server not responding, force kill...");
 					serverProcess.destroyForcibly();
 				}
 			}
 			catch(InterruptedException _)
 			{
 				Thread.currentThread().interrupt();
-				Logger.info("Server shutdown interrupted, forcing termination...");
+				log.info("Server shutdown interrupted, forcing termination...");
 				serverProcess.destroyForcibly();
 			}
-			Logger.info("Server stopped");
+			log.info("Server stopped");
 		}
 	}
 }

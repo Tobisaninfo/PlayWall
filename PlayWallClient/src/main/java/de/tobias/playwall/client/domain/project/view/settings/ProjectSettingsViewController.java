@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view.settings;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
@@ -11,17 +10,13 @@ import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
-import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.settings.BaseSettingsDialogController;
-import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Viewcontroller for the project settings dialog.
@@ -31,6 +26,7 @@ import lombok.Getter;
  * On save all settings from all pages will be applied.
  */
 @ViewController(path = "de/tobias/playwall/client/view/settings/project", view = "ProjectSettingsView")
+@Slf4j
 public class ProjectSettingsViewController extends BaseSettingsDialogController<BaseProjectSettingsViewController.Param>
 {
 	@Getter(AccessLevel.NONE)
@@ -76,7 +72,7 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e.getMessage());
+			log.error("Cannot update project settings", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_SETTINGS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}

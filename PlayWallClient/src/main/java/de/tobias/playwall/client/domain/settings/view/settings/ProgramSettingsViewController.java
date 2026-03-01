@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.settings.view.settings;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
@@ -17,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Viewcontroller for the program settings dialog.
@@ -26,6 +26,7 @@ import lombok.Getter;
  * On save all settings from all pages will be applied.
  */
 @ViewController(path = "de/tobias/playwall/client/view/settings/program", view = "ProgramSettingsView")
+@Slf4j
 public class ProgramSettingsViewController extends BaseSettingsDialogController<BaseProgramSettingsViewController.Param>
 {
 	@Getter(AccessLevel.NONE)
@@ -71,7 +72,7 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e.getMessage());
+			log.error("Cannit update programm settings", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROGRAM_SETTINGS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}

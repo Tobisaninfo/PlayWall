@@ -1,5 +1,4 @@
 open module de.tobias.playwall.client {
-	requires de.thecodelabs.libLogger;
 	requires de.thecodelabs.libJfx;
 	requires de.thecodelabs.libUtils;
 	requires de.thecodelabs.libStorage;

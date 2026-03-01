@@ -1,11 +1,11 @@
 package de.tobias.playwall.client.appcontext.loader;
 
-import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.PlayWallMain;
 import de.tobias.playwall.client.appcontext.*;
 import io.github.classgraph.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public final class AppContextLoader
 {
 	public static void setupDependencies(AppContext appContext)
@@ -58,16 +59,16 @@ public final class AppContextLoader
 				if(isSingleton)
 				{
 					appContext.registerLazySingleton(superclass, loadFunction);
-					Logger.debug("Registering singleton component {0}", superclass);
+					log.debug("Registering singleton component {}", superclass);
 				}
 				else
 				{
 					appContext.registerLazy(superclass, loadFunction);
-					Logger.debug("Registering component {0}", superclass);
+					log.debug("Registering component {}", superclass);
 				}
 			}
 		}
-		Logger.info("Dependency injection setup took {0}ms", System.currentTimeMillis() - start);
+		log.info("Dependency injection setup took {}ms", System.currentTimeMillis() - start);
 	}
 
 	private static Constructor<?> getInjectConstructor(Class<?> loadedClass)

@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -54,6 +53,7 @@ import javafx.stage.StageStyle;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
@@ -67,6 +67,7 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 @RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
 @Getter(AccessLevel.PACKAGE)
+@Slf4j
 public class MainViewController extends ViewControllerBase
 {
 	private static final int PROJECT_NAME_MAX_NUMBER_OF_CHARACTERS_IN_HEADER_BAR = 60;
@@ -201,7 +202,7 @@ public class MainViewController extends ViewControllerBase
 			}
 			catch(PlayWallApiException e)
 			{
-				Logger.error(e.getMessage());
+				log.error("Cannot color pad", e);
 				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_COLOR_UPDATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 			}
 		});
@@ -218,7 +219,7 @@ public class MainViewController extends ViewControllerBase
 			}
 			catch(PlayWallApiException e)
 			{
-				Logger.error(e.getMessage());
+				log.error("Cannot update global volume", e);
 			}
 		});
 		pageAddButton.setGraphic(new FontIcon(FontAwesomeType.PLUS_SOLID));
@@ -346,12 +347,12 @@ public class MainViewController extends ViewControllerBase
 			client.project(project.getMetadata().getId()).load();
 
 			volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
-			Logger.info("Loading project " + project.getMetadata().getName());
+			log.info("Loading project {}", project.getMetadata().getName());
 		}
 		catch(PlayWallApiException e)
 		{
 			loadingOverlay.hide();
-			Logger.error(e);
+			log.error("Cannot show project", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_LOAD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -368,7 +369,7 @@ public class MainViewController extends ViewControllerBase
 			buildPageButtons();
 			showPage(currentPage.getPosition());
 
-			Logger.info("Update project " + project.getMetadata().getName());
+			log.info("Update project {}", project.getMetadata().getName());
 		});
 	}
 
@@ -482,7 +483,7 @@ public class MainViewController extends ViewControllerBase
 				}
 				catch(PlayWallApiException e)
 				{
-					Logger.error(e);
+					log.error("Cannot rename page", e);
 					showErrorMessage(e.getMessage());
 				}
 			}
@@ -497,7 +498,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot duplicate page", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DUPLICATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -510,7 +511,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot delete page", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DELETE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -524,7 +525,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot reorder page", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_REORDER), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -593,7 +594,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot add page", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_ADD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -666,7 +667,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot open recent project", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_LOAD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -762,7 +763,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot save project", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -776,7 +777,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot perform undo", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_UNDO), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -790,7 +791,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Cannot perform redo", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_REDO), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}

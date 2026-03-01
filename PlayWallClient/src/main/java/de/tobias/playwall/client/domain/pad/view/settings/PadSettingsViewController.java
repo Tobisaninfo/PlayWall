@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.pad.view.settings;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
@@ -17,9 +16,6 @@ import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.settings.BaseSettingsDialogController;
 import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -30,6 +26,7 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 
@@ -41,6 +38,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
  * On save all settings from all pages will be applied.
  */
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsView")
+@Slf4j
 public class PadSettingsViewController extends BaseSettingsDialogController<BasePadSettingsViewController.Param>
 {
 	@FXML
@@ -99,7 +97,7 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e.getMessage());
+			log.error("Cannot update pad settings", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_SETTINGS_SAVE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -114,7 +112,7 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e.getMessage());
+			log.error("Cannot delete pad", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_DELETE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
@@ -161,7 +159,7 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 			}
 			catch(PlayWallApiException ex)
 			{
-				Logger.error(ex);
+				log.error("Cannot load new media", ex);
 				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), getContainingWindow()).showAndWait();
 			}
 		});

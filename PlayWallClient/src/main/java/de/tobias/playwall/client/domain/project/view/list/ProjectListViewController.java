@@ -1,11 +1,8 @@
 package de.tobias.playwall.client.domain.project.view.list;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
-import de.thecodelabs.utils.ui.icon.FontAwesomeType;
-import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -25,9 +22,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.components.PlayWallButton;
-import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -37,7 +32,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -45,6 +39,7 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +50,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "ProjectListView")
 @RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
+@Slf4j
 public class ProjectListViewController extends ViewControllerBase
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
@@ -163,7 +159,7 @@ public class ProjectListViewController extends ViewControllerBase
 			}
 			catch(PlayWallApiException e)
 			{
-				Logger.error(e.getMessage());
+				log.error("Cannot delete project", e);
 				showErrorMessage(e.getMessage());
 			}
 		});
@@ -201,7 +197,7 @@ public class ProjectListViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e.getMessage());
+			log.error("Cannot open project", e);
 			showErrorMessage(e.getMessage());
 		}
 	}
@@ -244,7 +240,7 @@ public class ProjectListViewController extends ViewControllerBase
 			}
 			catch(PlayWallApiException e)
 			{
-				Logger.error(e.getMessage());
+				log.error("Cannot fetch projects", e);
 				showErrorMessage(e.getMessage());
 			}
 		});

@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.pad.view.settings.content;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
@@ -19,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -26,6 +26,7 @@ import java.util.UUID;
 /**
  * Settings related to {@link AudioPadContent}
  */
+@Slf4j
 public class AudioPadContentSettingsContainer extends BasePadContentSettingsContainer<AudioPadContent>
 {
 	private CheckBox checkboxPlaybackLoop;
@@ -110,7 +111,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 			}
 			catch(PlayWallApiException e)
 			{
-				Logger.error(e.getMessage());
+				log.error("Cannot change pad volume", e);
 			}
 		});
 
@@ -139,7 +140,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e.getMessage());
+			log.error("Cannot reset pad volume", e);
 		}
 	}
 

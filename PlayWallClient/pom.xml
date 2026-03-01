@@ -115,10 +115,6 @@
         </dependency>
         <dependency>
             <groupId>de.thecodelabs</groupId>
-            <artifactId>libLogger</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.thecodelabs</groupId>
             <artifactId>libJfx</artifactId>
         </dependency>
         <dependency>

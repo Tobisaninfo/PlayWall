@@ -1,11 +1,11 @@
 package de.tobias.playwall.client.net;
 
-import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.common.net.*;
+import lombok.extern.slf4j.Slf4j;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.net.URI;
@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @Service
+@Slf4j
 class ClientWebSocketHandler implements WebSocket.Listener
 {
 	private final JsonMapper objectMapper;
@@ -70,7 +71,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	@Override
 	public void onOpen(WebSocket webSocket)
 	{
-		Logger.debug("Connected to websocket: " + webSocket);
+		log.debug("Connected to websocket: {}", webSocket);
 		WebSocket.Listener.super.onOpen(webSocket);
 	}
 
@@ -94,7 +95,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		try
 		{
-			Logger.debug("Received: " + data);
+			log.debug("Received: {}", data);
 			final BaseMessage message = objectMapper.readValue(data, BaseMessage.class);
 
 			if(message instanceof ResponseMessage responseMessage)
@@ -102,7 +103,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 				synchronized(lock)
 				{
 					responseQueue.enqueueResponse(responseMessage.getMessageId(), responseMessage);
-					Logger.trace("NotifyAll");
+					log.trace("NotifyAll");
 					lock.notifyAll();
 				}
 			}
@@ -113,7 +114,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		}
 		catch(Exception e)
 		{
-			Logger.error(e);
+			log.error("Cannot process input", e);
 		}
 	}
 
@@ -122,19 +123,19 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		if(statusCode == WebSocketCloseStatus.NO_STATUS.getCode())
 		{
-			Logger.debug("Disconnected: No status");
+			log.debug("Disconnected: No status");
 		}
 		else if(statusCode == WebSocketCloseStatus.SHUTDOWN.getCode())
 		{
-			Logger.debug("Idle Timeout");
+			log.debug("Idle Timeout");
 		}
 		else if(statusCode == WebSocketCloseStatus.SERVER_CLOSED.getCode())
 		{
-			Logger.debug("Disconnected: connection refused");
+			log.debug("Disconnected: connection refused");
 		}
 		else
 		{
-			Logger.debug("Disconnected");
+			log.debug("Disconnected");
 		}
 		return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
 	}
@@ -142,7 +143,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	@Override
 	public void onError(WebSocket webSocket, Throwable error)
 	{
-		Logger.error(error);
+		log.error("Websocket on error", error);
 	}
 
 	@SuppressWarnings({"unchecked", "java:S112"})
@@ -151,7 +152,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		try
 		{
 			final String data = objectMapper.writeValueAsString(message);
-			Logger.debug("Sending: " + data);
+			log.debug("Sending: {}", data);
 
 			synchronized(lock)
 			{
@@ -160,10 +161,10 @@ class ClientWebSocketHandler implements WebSocket.Listener
 				Optional<ResponseMessage> messageOptional;
 				while((messageOptional = this.responseQueue.dequeueResponse(message.getMessageId())).isEmpty())
 				{
-					Logger.trace("Waiting for response for message id " + message.getMessageId());
+					log.trace("Waiting for response for message id {}", message.getMessageId());
 					lock.wait(100L);
 				}
-				Logger.trace("Return response for message id " + message.getMessageId());
+				log.trace("Return response for message id {}", message.getMessageId());
 				final ResponseMessage responseMessage = messageOptional.get();
 				if(responseMessage instanceof ErrorMessage errorMessage)
 				{
@@ -187,7 +188,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 			return false;
 		}
 
-		Logger.trace("Send: " + data);
+		log.trace("Send: {}", data);
 		ws.sendText(data, true);
 		return true;
 	}

@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.pad.view.desktop;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -36,6 +35,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +44,7 @@ import static de.tobias.playwall.client.domain.pad.view.control.PadStyleClasses.
 import static de.tobias.playwall.client.view.components.PseudoClasses.PLAY_CLASS;
 
 @Getter
+@Slf4j
 public class DesktopPadView implements PadView
 {
 	private Tooltip tooltip;
@@ -409,7 +410,7 @@ public class DesktopPadView implements PadView
 		catch(PlayWallApiException ex)
 		{
 			updateStatus(this.previousStatus);
-			Logger.error(ex);
+			log.error("Cannot perform play action", ex);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
@@ -424,7 +425,7 @@ public class DesktopPadView implements PadView
 		catch(PlayWallApiException ex)
 		{
 			updateStatus(this.previousStatus);
-			Logger.error(ex);
+			log.error("Cannot perform pause action", ex);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
@@ -439,7 +440,7 @@ public class DesktopPadView implements PadView
 		catch(PlayWallApiException ex)
 		{
 			updateStatus(this.previousStatus);
-			Logger.error(ex);
+			log.error("Cannot perform stop action", ex);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
@@ -456,7 +457,7 @@ public class DesktopPadView implements PadView
 			catch(PlayWallApiException ex)
 			{
 				updateStatus(this.previousStatus);
-				Logger.error(ex);
+				log.error("Cannot load new media", ex);
 				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 			}
 		});

@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.view.launch;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.application.system.NativeApplication;
@@ -26,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +33,7 @@ import java.util.Optional;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "ApplicationLoadingView", applyToStage = false)
+@Slf4j
 public class ApplicationLoadingViewController extends ViewControllerBase
 {
 	@FXML
@@ -90,7 +91,7 @@ public class ApplicationLoadingViewController extends ViewControllerBase
 			{
 				case LaunchTask.FailureResult failureResult ->
 				{
-					Logger.error(failureResult.getThrowable());
+					log.error("Cannot load application", failureResult.getThrowable());
 					Platform.runLater(() -> showLaunchErrorDialog(failureResult));
 				}
 				case LaunchTask.SuccessResult _ -> Platform.runLater(() -> {

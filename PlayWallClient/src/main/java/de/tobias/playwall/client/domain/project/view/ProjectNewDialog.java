@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
@@ -20,9 +19,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @ViewController(path = "de/tobias/playwall/client/view/dialog", view = "ProjectNewDialog")
 @Getter(AccessLevel.PACKAGE)
+@Slf4j
 public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 {
 	@FXML
@@ -91,7 +92,7 @@ public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e.getMessage());
+			log.error("Cannot create new project", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_ADD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}

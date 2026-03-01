@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.net;
 
-import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
@@ -19,6 +18,7 @@ import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
 import de.tobias.playwall.common.utils.MapUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -28,6 +28,7 @@ import static de.tobias.playwall.common.utils.MapUtils.entry;
 
 @Service(superclass = Client.class)
 @RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
+@Slf4j
 class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
@@ -42,10 +43,10 @@ class ClientImpl implements Client
 	public void connect()
 	{
 		final String clientId = UUID.randomUUID().toString();
-		Logger.info("Connect to server with client id {0}", clientId);
+		log.info("Connect to server with client id {}", clientId);
 
 		clientWebSocketHandler.connect(MapUtils.create(entry("clientId", clientId)));
-		Logger.info("Connected");
+		log.info("Connected");
 	}
 
 	@Override
@@ -53,7 +54,7 @@ class ClientImpl implements Client
 	{
 		for(int i = 1; i <= numberOfRetries; i++)
 		{
-			Logger.info("Connect to server (Attempt: {0}/{1})", i, numberOfRetries);
+			log.info("Connect to server (Attempt: {}/{})", i, numberOfRetries);
 			try
 			{
 				connect();
@@ -67,7 +68,7 @@ class ClientImpl implements Client
 					throw e;
 				}
 
-				Logger.error("Failed to connect to the PlayWall server", e);
+				log.error("Failed to connect to the PlayWall server", e);
 				try
 				{
 					Thread.sleep(1000);

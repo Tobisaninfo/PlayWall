@@ -1,6 +1,5 @@
 package de.tobias.playwall.client;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -18,15 +17,16 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PlayWallMain extends Application
 {
-	private static org.slf4j.Logger logger;
+	private static Logger log;
 
 	public static void main(String[] args)
 	{
-		Thread.setDefaultUncaughtExceptionHandler((_, e) -> logger.error("Uncaught error in thread execution", e));
+		Thread.setDefaultUncaughtExceptionHandler((_, e) -> log.error("Uncaught error in thread execution", e));
 		Localization.setDelegate(new PlayWallLocalizationDelegate());
 		Localization.load();
 
@@ -44,8 +44,8 @@ public class PlayWallMain extends Application
 		final Level level = app.isDebug() ? Level.DEBUG : Level.INFO;
 		Configurator.setRootLevel(level);
 
-		logger = LoggerFactory.getLogger(PlayWallMain.class);
-		logger.info("Logging initialized (Running in LogLevel: {})", level);
+		log = LoggerFactory.getLogger(PlayWallMain.class);
+		log.info("Logging initialized (Running in LogLevel: {})", level);
 	}
 
 	@Override
@@ -58,8 +58,8 @@ public class PlayWallMain extends Application
 			AppContextLoader.setupDependencies(appContext);
 			AppContextHolder.setInstance(appContext);
 
-			Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
-			Logger.info("Run Path: {0}", SystemUtils.getRunPath());
+			log.info("Running on Java: {} ({})", System.getProperty("java.version"), System.getProperty("java.vendor"));
+			log.info("Run Path: {}", SystemUtils.getRunPath());
 
 			loadAppIcon();
 
@@ -67,7 +67,7 @@ public class PlayWallMain extends Application
 		}
 		catch(Exception e)
 		{
-			Logger.error(e);
+			log.error("Error initializing app", e);
 			throw e;
 		}
 	}
@@ -85,7 +85,7 @@ public class PlayWallMain extends Application
 		}
 		catch(Exception e)
 		{
-			Logger.error(e);
+			log.error("Error starting app", e);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class PlayWallMain extends Application
 		}
 		catch(Exception e)
 		{
-			Logger.error(e);
+			log.error("Error stopping app", e);
 		}
 	}
 

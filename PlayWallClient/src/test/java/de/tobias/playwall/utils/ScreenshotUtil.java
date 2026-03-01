@@ -1,9 +1,9 @@
 package de.tobias.playwall.utils;
 
-import de.thecodelabs.logger.Logger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import lombok.extern.slf4j.Slf4j;
 import org.testfx.api.FxRobot;
 
 import javax.imageio.ImageIO;
@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Slf4j
 public class ScreenshotUtil
 {
 	public static void takeScreenshot(Node node, String filename)
@@ -32,7 +33,7 @@ public class ScreenshotUtil
 		}
 		catch(IOException e)
 		{
-			Logger.error(e);
+			log.error("Cannot save screenshot", e);
 		}
 	}
 }
