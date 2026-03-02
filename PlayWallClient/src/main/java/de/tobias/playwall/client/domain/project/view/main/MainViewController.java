@@ -640,7 +640,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		else
 		{
-			notificationPane.getStyleClass().remove(ViewConstants.WARNING_STYLECLASS);
+			notificationPane.getStyleClass().removeIf(style -> style.equals(ViewConstants.WARNING_STYLECLASS));
 		}
 
 		notificationPane.showAndHide(message, ViewConstants.DEFAULT_SNACKBAR_SHOW);
