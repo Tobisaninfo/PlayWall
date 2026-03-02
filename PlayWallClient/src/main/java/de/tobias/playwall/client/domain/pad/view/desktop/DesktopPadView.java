@@ -202,7 +202,7 @@ public class DesktopPadView implements PadView
 	{
 		NodeWalker.getAllNodes(superRoot)
 				.forEach(node -> node.pseudoClassStateChanged(pseudoClass, isActive));
-		Logger.trace("Pad(" + padController.getPad().getId() + ") PseudoClass: " + pseudoClass + " -> " + isActive);
+		log.trace("Pad({}) PseudoClass: {} -> {}", padController.getPad().getId(), pseudoClass, isActive);
 	}
 
 	public Set<PseudoClass> getPseudoClassStates()

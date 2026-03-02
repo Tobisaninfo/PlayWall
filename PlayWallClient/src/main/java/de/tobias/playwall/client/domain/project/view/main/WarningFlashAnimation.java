@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
-import de.thecodelabs.logger.Logger;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import javafx.animation.Animation;
@@ -10,9 +9,11 @@ import javafx.css.PseudoClass;
 import javafx.util.Duration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service(singleton = false)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
+@Slf4j
 public class WarningFlashAnimation
 {
 	private DesktopPadView padView;
@@ -29,7 +30,7 @@ public class WarningFlashAnimation
 	public void start()
 	{
 		stop();
-		Logger.trace("Start warning animation");
+		log.trace("Start warning animation");
 
 		toggleTimeline = new Timeline(
 				new KeyFrame(Duration.ZERO, e -> padView.pseudoClassStateChanged(pseudoClass, false)),
@@ -42,7 +43,7 @@ public class WarningFlashAnimation
 
 	public void stop()
 	{
-		Logger.trace("Stop warning animation");
+		log.trace("Stop warning animation");
 		if(toggleTimeline != null)
 		{
 			toggleTimeline.stop();
