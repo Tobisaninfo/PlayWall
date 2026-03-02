@@ -342,7 +342,7 @@ public class MainViewController extends ViewControllerBase
 		}
 		catch(PlayWallApiException e)
 		{
-			Logger.error(e);
+			log.error("Error fetching project save status", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_SAVE_STATUS), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 
