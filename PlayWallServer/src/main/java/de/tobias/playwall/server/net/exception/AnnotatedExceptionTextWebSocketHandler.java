@@ -1,11 +1,14 @@
 package de.tobias.playwall.server.net.exception;
 
 import de.tobias.playwall.common.api.StackTraceError;
+import de.tobias.playwall.common.net.BaseMessage;
 import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.socket.TextMessage;
@@ -53,7 +56,7 @@ public abstract class AnnotatedExceptionTextWebSocketHandler extends TextWebSock
 	}
 
 	@Override
-	public final void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception
+	public final void handleTextMessage(WebSocketSession session, TextMessage message)
 	{
 		log.debug("Received: {}", message.getPayload());
 		final RequestMessage requestMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
@@ -66,14 +69,12 @@ public abstract class AnnotatedExceptionTextWebSocketHandler extends TextWebSock
 			final ErrorMessage errorMessage = dispatchException(requestMessage, e);
 			if(errorMessage != null)
 			{
-				final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(errorMessage));
-				sendToClients(textResponse, List.of(session));
+				sendToClients(errorMessage, List.of(session));
 			}
 			else
 			{
 				final String stackTrace = ExceptionUtils.getStackTrace(e);
-				final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(new ErrorMessage(requestMessage.getMessageId(), e.getMessage(), new StackTraceError(stackTrace))));
-				sendToClients(textResponse, List.of(session));
+				sendToClients(new ErrorMessage(requestMessage.getMessageId(), e.getMessage(), new StackTraceError(stackTrace)), List.of(session));
 				log.error("Error processing request", e);
 			}
 		}
@@ -106,9 +107,11 @@ public abstract class AnnotatedExceptionTextWebSocketHandler extends TextWebSock
 		return null;
 	}
 
-	protected synchronized void sendToClients(TextMessage textResponse, Collection<WebSocketSession> sessions)
+	protected synchronized void sendToClients(BaseMessage message, Collection<WebSocketSession> sessions)
 	{
-		log.debug("Sending: {}", textResponse.getPayload());
+		final Marker marker = MarkerFactory.getMarker(message.getClass().getSimpleName());
+		final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(message));
+		log.debug(marker, "Sending: {}", textResponse.getPayload());
 
 		for(WebSocketSession webSocketSession : sessions)
 		{

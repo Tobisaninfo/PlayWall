@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.net;
 
-import de.tobias.playwall.common.api.StackTraceError;
 import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.net.UpdateMessage;
@@ -9,15 +8,11 @@ import de.tobias.playwall.server.net.exception.AnnotatedExceptionTextWebSocketHa
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.net.InetSocketAddress;
 import java.text.MessageFormat;
@@ -34,7 +29,6 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 {
 	private static final Set<WebSocketSession> SESSIONS = new HashSet<>();
 
-	private final JsonMapper objectMapper;
 	private final SystemTrayHandler systemTrayHandler;
 	private final RequestExecutor requestExecutor;
 
@@ -43,8 +37,7 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 	@EventListener(UpdateMessage.class)
 	void handleUpdateMessageEvents(UpdateMessage message)
 	{
-		final TextMessage textResponse = new TextMessage(objectMapper.writeValueAsString(message));
-		sendToClients(textResponse, SESSIONS);
+		sendToClients(message, SESSIONS);
 	}
 
 	@Override
@@ -72,16 +65,7 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 	protected void doHandleTextMessage(WebSocketSession session, RequestMessage requestMessage) throws Exception
 	{
 		final Optional<ResponseMessage> responseMessageOptional = requestExecutor.execute(requestMessage);
-		final TextMessage textResponse;
-		if(responseMessageOptional.isPresent())
-		{
-			textResponse = new TextMessage(objectMapper.writeValueAsString(responseMessageOptional.get()));
-		}
-		else
-		{
-			textResponse = new TextMessage(objectMapper.writeValueAsString(new ResponseMessage(requestMessage.getMessageId())));
-		}
-		sendToClients(textResponse, List.of(session));
+		sendToClients(responseMessageOptional.orElse(new ResponseMessage(requestMessage.getMessageId())), List.of(session));
 	}
 
 	private void updateSystemTray()
