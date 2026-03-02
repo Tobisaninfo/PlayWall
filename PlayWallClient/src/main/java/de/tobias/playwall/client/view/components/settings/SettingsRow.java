@@ -43,7 +43,7 @@ public class SettingsRow extends GridPane
 		fontIcon.setSize(16);
 
 		final HBox leftBox = new HBox(ViewConstants.DEFAULT_SPACING, fontIcon, labelName);
-		leftBox.setAlignment(Pos.CENTER_LEFT);
+		leftBox.setAlignment(Pos.TOP_LEFT);
 
 		setVgap(ViewConstants.DEFAULT_SPACING);
 		setHgap(ViewConstants.DEFAULT_SPACING);
