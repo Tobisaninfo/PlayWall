@@ -72,18 +72,6 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	@Disabled("Not working in headless mode")
-	void testMenuSaveKeyboardShortcut(FxRobot robot) throws PlayWallApiException
-	{
-		showMainView();
-
-		robot.push(KeyCode.SHORTCUT, KeyCode.S);
-
-		verify(client).saveProject();
-		assertThat(robot.lookup(".notification-bar").lookup(".label").queryLabeled()).hasText("Projekt gespeichert");
-	}
-
-	@Test
 	void testMenuAbout(FxRobot robot)
 	{
 		final AboutDialog dialog = mock(AboutDialog.class);
