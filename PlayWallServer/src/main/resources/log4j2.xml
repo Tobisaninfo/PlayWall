@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%highlight{[%-5level]}{
+                    FATAL=red blink,
+                    ERROR=red bold,
+                    WARN=yellow bold,
+                    INFO=green,
+                    DEBUG=cyan,
+                    TRACE=white} %style{%d{HH:mm:ss:SSSS}}{blue} @ %style{[%30t]}{white} @ %style{[%c{1.}.%M:%L]}{cyan}:
+                    %msg%n
+                </Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console">
+                <MarkerFilter marker="PadPlayPositionUpdate"
+                              onMatch="DENY"
+                              onMismatch="NEUTRAL"/>
+            </AppenderRef>
+        </Root>
+    </Loggers>
+
+</Configuration>
