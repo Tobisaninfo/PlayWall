@@ -827,7 +827,7 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			client.currentProject().save();
-			notificationPane.showAndHide(Localization.getString("ui.notification.project.saved"), ViewConstants.DEFAULT_SNACKBAR_SHOW);
+			showNotification(Localization.getString("ui.notification.project.saved"), false);
 		}
 		catch(PlayWallApiException e)
 		{
