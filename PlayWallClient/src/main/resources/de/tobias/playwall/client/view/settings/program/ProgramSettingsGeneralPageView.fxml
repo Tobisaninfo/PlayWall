@@ -14,10 +14,8 @@
     </SettingsRow>
     <Separator/>
     <SettingsRow icon="ARROW_RIGHT_FROM_BRACKET_SOLID" title="%ui.settings.program.exit.title">
-        <VBox alignment="CENTER_LEFT" spacing="14">
-            <Label text="%ui.settings.program.exit.unsaved-changes"/>
-            <ComboBox fx:id="comboBoxUnsavedChanges" prefWidth="300"/>
-        </VBox>
+        <Label text="%ui.settings.program.exit.unsaved-changes"/>
+        <ComboBox fx:id="comboBoxUnsavedChanges" prefWidth="300"/>
     </SettingsRow>
 </SettingsPage>
 
