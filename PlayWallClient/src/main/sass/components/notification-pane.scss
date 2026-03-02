@@ -2,10 +2,10 @@
 
 .notification-pane {
     .notification-bar {
-        -fx-background-color: rgb(29, 56, 87);
+        -fx-background-color: variables.$primary-color;
 
         .label {
-            -fx-text-fill: #CCCCCC;
+            -fx-text-fill: variables.$component-text-color;
         }
     }
 }
@@ -28,7 +28,7 @@
 }
 
 .notification-pane .notification-bar > .pane .label {
-    -fx-padding: 0 0 0 14px;
+    -fx-padding: 0 0 0 7px;
 }
 
 .notification-pane .notification-bar > .pane .close-button {
