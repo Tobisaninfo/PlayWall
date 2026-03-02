@@ -66,11 +66,10 @@ public class ServerLauncher
 			javaExecutable.toFile().setExecutable(true);
 			log.debug("Set execute permission for: {}", javaExecutable.toAbsolutePath());
 
-			final Path loggingPath = app.getPath(PathType.LOG, "server.log");
+			final Path loggingPath = app.getPath(PathType.LOG);
 
-			final List<String> jvmOptions = List.of("--enable-native-access=ALL-UNNAMED");
+			final List<String> jvmOptions = List.of("--enable-native-access=ALL-UNNAMED", "-Dapp.logdir=" + loggingPath.toString());
 			final List<String> programArguments = new ArrayList<>();
-			programArguments.add("--logging.file.name=" + loggingPath.toString());
 			if(properties.getStoragePath() != null)
 			{
 				programArguments.add("--de.tobias.playwall.path-provider.base-directory-template=" + properties.getStoragePath());
