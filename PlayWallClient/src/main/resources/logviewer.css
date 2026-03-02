@@ -1,0 +1,91 @@
+/* ── Global ───────────────────────────────────────────────────── */
+.root {
+    -fx-font-family: "Segoe UI", "SF Pro Text", "Ubuntu", sans-serif;
+    -fx-font-size: 12px;
+}
+
+/* ── TableView ────────────────────────────────────────────────── */
+.table-view {
+    -fx-background-color: #0f1117;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #161b22;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: #30363d;
+    -fx-border-width: 0 1 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #8b949e;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.table-row-cell {
+    -fx-background-color: #0f1117;
+    -fx-border-color: #21262d;
+    -fx-border-width: 0 0 1 0;
+    -fx-font-family: "Consolas", "JetBrains Mono", "Fira Code", Monospace;
+    -fx-font-size: 12px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #13181f;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #1f2d3d;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #1c2128;
+}
+
+.table-cell {
+    -fx-text-fill: #c9d1d9;
+    -fx-border-color: transparent;
+    -fx-padding: 3 8 3 8;
+}
+
+/* ── ScrollBar ────────────────────────────────────────────────── */
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: #161b22;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #30363d;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* ── ToggleButton active state ────────────────────────────────── */
+.toggle-button:selected {
+    -fx-opacity: 1.0;
+}
+
+.toggle-button:unselected {
+    -fx-opacity: 0.4;
+}
+
+/* ── Dialog ───────────────────────────────────────────────────── */
+.dialog-pane .button-bar .button {
+    -fx-background-color: #21262d;
+    -fx-text-fill: #c9d1d9;
+    -fx-border-color: #30363d;
+}
+
+.text-area {
+    -fx-font-family: "Consolas", "JetBrains Mono", Monospace;
+}

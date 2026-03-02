@@ -1,4 +1,5 @@
 open module de.tobias.playwall.common {
+	exports de.tobias.playwall.common;
 	exports de.tobias.playwall.common.net;
 	exports de.tobias.playwall.common.utils;
 	exports de.tobias.playwall.common.api;
@@ -20,5 +21,6 @@ open module de.tobias.playwall.common {
 
 	requires com.fasterxml.jackson.annotation;
 	requires de.thecodelabs.libUtils;
+	requires org.apache.logging.log4j.core;
 	requires static lombok;
 }

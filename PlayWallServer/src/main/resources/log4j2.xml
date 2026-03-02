@@ -29,6 +29,18 @@
             <DefaultRolloverStrategy max="30"/>
         </RollingFile>
 
+        <RemoteLogViewerAppender
+                name="Remote"
+                host="localhost"
+                port="4712"
+                appName="PlayWallServer">
+        </RemoteLogViewerAppender>
+
+        <Async name="ConsoleAndRemote" includeLocation="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Remote"/>
+        </Async>
+
         <Async name="ConsoleAndFile" includeLocation="true">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileAppender"/>
@@ -36,7 +48,7 @@
 
         <Routing name="Routing">
             <Routes pattern="${sys:app.debug:-false}">
-                <Route key="true" ref="Console"/>
+                <Route key="true" ref="ConsoleAndRemote"/>
                 <Route key="false" ref="ConsoleAndFile"/>
             </Routes>
         </Routing>
