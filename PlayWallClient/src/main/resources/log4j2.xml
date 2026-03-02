@@ -5,15 +5,16 @@
 
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout>
+                <!-- @formatter:off-->
                 <Pattern>%highlight{[%-5level]}{
                     FATAL=red blink,
                     ERROR=red bold,
                     WARN=yellow bold,
                     INFO=green,
                     DEBUG=cyan,
-                    TRACE=white} %style{%d{HH:mm:ss:SSSS}}{blue} @ %style{[%-30t]}{white} @
-                    %style{[%c{1.}.%M:%L]}{cyan}: %msg%n
+                    TRACE=white} %style{%d{HH:mm:ss:SSSS}}{blue} @ %style{[%t]}{white} @ %style{[%c{1.}.%M:%L]}{cyan}: %msg%n
                 </Pattern>
+                <!-- @formatter:on-->
             </PatternLayout>
         </Console>
 
