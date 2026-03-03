@@ -22,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -63,6 +64,14 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 		initButtons();
 
 		selectCategory(categoryGeneral);
+	}
+
+	@Override
+	protected void initStage(NVCStage stageContainer, Stage stage)
+	{
+		super.initStage(stageContainer, stage);
+
+		stage.setHeight(580);
 	}
 
 	@Override
