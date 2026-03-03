@@ -33,6 +33,8 @@ public interface Client
 
 	void loadProject(UUID projectId) throws PlayWallApiException;
 
+	void closeProject() throws PlayWallApiException;
+
 	boolean isSaved() throws PlayWallApiException;
 
 	void saveProject() throws PlayWallApiException;

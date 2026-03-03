@@ -42,6 +42,8 @@ public interface FluentClient
 
 	interface ProjectCurrentBuilder
 	{
+		void close() throws PlayWallApiException;
+
 		boolean isSaved() throws PlayWallApiException;
 
 		void save() throws PlayWallApiException;
