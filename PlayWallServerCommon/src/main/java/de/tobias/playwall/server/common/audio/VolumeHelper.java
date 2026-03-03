@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.audio;
 
+import de.tobias.playwall.server.common.model.project.Project;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -34,5 +35,21 @@ public class VolumeHelper
 		}
 
 		return Math.pow(volume, 2);
+	}
+
+	/**
+	 * Calculates the effective volume based on the pad volume and global volume.
+	 */
+	public static double calculateVolume(Project project, double padVolume)
+	{
+		return calculateVolume(project.getMetadata().getVolume(), padVolume);
+	}
+
+	/**
+	 * Calculates the effective volume based on the pad volume and global volume.
+	 */
+	public static double calculateVolume(double globalVolume, double padVolume)
+	{
+		return globalVolume * padVolume;
 	}
 }

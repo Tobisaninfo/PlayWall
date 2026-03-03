@@ -41,7 +41,8 @@ class GlobalChangeVolumeHandler implements OneTimeActionRequestHandler<GlobaleCh
 					final PadController padController = projectController.getPadController(pad.getId());
 					if(padController != null)
 					{
-						padController.setVolume(requestMessage.getVolume() * audioPadContent.getVolume());
+						final double effectiveVolume = VolumeHelper.calculateVolume(requestMessage.getVolume(), audioPadContent.getVolume());
+						padController.setVolume(effectiveVolume);
 					}
 				}
 			}

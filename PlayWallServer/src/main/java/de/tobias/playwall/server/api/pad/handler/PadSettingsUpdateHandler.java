@@ -6,6 +6,7 @@ import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
+import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.pad.PadContent;
@@ -79,7 +80,9 @@ class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpda
 				if(padController != null)
 				{
 					padController.setLooping(requestAudioPadContent.isLoop());
-					padController.setVolume(requestAudioPadContent.getVolume());
+
+					final double effectiveVolume = VolumeHelper.calculateVolume(projectController.getLoadedProject(), requestAudioPadContent.getVolume());
+					padController.setVolume(effectiveVolume);
 				}
 			}
 		}
