@@ -19,6 +19,7 @@ import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
+import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
@@ -678,7 +679,7 @@ public class MainViewController extends ViewControllerBase
 
 	private Menu createMenuFile()
 	{
-		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID, Optional.empty());
+		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID, Optional.of(this::onMenuItemNewProject), new KeyCharacterCombination("N", KeyCombination.SHORTCUT_DOWN));
 		menuRecentProjects = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
 		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
 		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave), new KeyCharacterCombination("S", KeyCombination.SHORTCUT_DOWN));
@@ -820,6 +821,13 @@ public class MainViewController extends ViewControllerBase
 		icon.setAlignment(Pos.CENTER);
 
 		return icon;
+	}
+
+	private void onMenuItemNewProject(ActionEvent event)
+	{
+		final ProjectNewDialog dialog = AppContextHolder.getInstance().get(ProjectNewDialog.class);
+		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(getContainingWindow());
+		projectOptional.ifPresent(projectMetadata -> onOpenRecentProject(projectMetadata.getId()));
 	}
 
 	private void onMenuItemSave(ActionEvent event)
