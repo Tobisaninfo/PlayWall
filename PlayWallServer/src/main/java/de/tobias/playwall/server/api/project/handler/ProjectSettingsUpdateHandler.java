@@ -16,6 +16,7 @@ import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -37,6 +38,16 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
+
+	private String shortDescription;
+	private String longDescription;
+
+	@PostConstruct
+	void init()
+	{
+		shortDescription = messageSource.getMessage("undo.description.short.project.settings", new Object[]{}, LocaleContextHolder.getLocale());
+		longDescription = messageSource.getMessage("undo.description.long.project.settings", new Object[]{}, LocaleContextHolder.getLocale());
+	}
 
 	@Override
 	public Optional<UndoItem> handleRequest(ProjectSettingsUpdateRequest requestMessage)
@@ -73,7 +84,7 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 				removedPads.forEach(projectController::unloadAndRemovePad);
 
 				context.publishEvent(new ProjectUpdate(projectMapper.projectToProjectDto(project)));
-				return Optional.of(new UndoItem("", "", requestMessage, new CompoundRequest(List.of(
+				return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new CompoundRequest(List.of(
 						new ProjectSettingsUpdateRequest(projectMetadataMapper.projectMetadataToProjectMetadataDto(oldMetadata)),
 						new ProjectUpdateRequest(projectMapper.projectToProjectDto(oldProject))
 				))));
@@ -91,8 +102,6 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 	private UndoItem getInverseOperation(ProjectSettingsUpdateRequest request)
 	{
 		final ProjectMetadataDto oldMetadata = projectMetadataMapper.projectMetadataToProjectMetadataDto(projectController.getLoadedProject().getMetadata());
-		final String shortDescription = messageSource.getMessage("undo.description.short.project.settings", new Object[]{}, LocaleContextHolder.getLocale());
-		final String longDescription = messageSource.getMessage("undo.description.long.project.settings", new Object[]{}, LocaleContextHolder.getLocale());
 		return new UndoItem(shortDescription, longDescription, request, new ProjectSettingsUpdateRequest(oldMetadata));
 	}
 }
