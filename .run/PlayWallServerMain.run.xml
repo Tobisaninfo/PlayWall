@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="PlayWallServerMain" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <envs>
+      <env name="RUST_BACKTRACE" value="1"/>
+    </envs>
     <module name="PlayWallServer" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="de.tobias.playwall.server.PlayWallServerMain" />
     <option name="VM_PARAMETERS" value="--enable-native-access=ALL-UNNAMED" />
