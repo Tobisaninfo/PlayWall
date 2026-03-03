@@ -85,6 +85,8 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.timeMode(null)
 				.defaultColor(null)
 				.playColor(null)
+				.eofWarningTime(null)
+				.introDuration(0.0)
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
