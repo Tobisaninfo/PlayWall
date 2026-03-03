@@ -5,11 +5,15 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.about.AboutDialog;
+import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
@@ -20,6 +24,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.testfx.assertions.api.Assertions.assertThat;
@@ -34,6 +39,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 	private Project project;
 	private Project projectEmpty;
 	private final ClientSettingsController settingsController = mock(ClientSettingsController.class);
+	private final ProjectNewDialog projectNewDialog = mock(ProjectNewDialog.class);
 	private final Client client = mock(Client.class);
 
 	@Start
@@ -45,6 +51,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 
 		context.registerLazySingleton(Client.class, _ -> client);
 		context.registerLazySingleton(ClientSettingsController.class, _ -> settingsController);
+		context.registerLazySingleton(ProjectNewDialog.class, _ -> projectNewDialog);
 		when(settingsController.getSettings()).thenReturn(Settings.builder()
 				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.autoLoadLatestProjectOnStart(false)
@@ -119,6 +126,29 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 
 		WaitForAsyncUtils.waitForFxEvents();
 
+		assertThat(stage.getTitle()).isEqualTo("PlayWall - Project Empty");
+	}
+
+	@Test
+	void testMenuNewProject(FxRobot robot) throws PlayWallApiException
+	{
+		ProjectMetadata metadata = new ProjectMetadata(projectEmpty.getMetadata().getId(), projectEmpty.getMetadata().getName(), 2, 2, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, null);
+		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
+		when(client.getProject(projectEmpty.getMetadata().getId())).thenReturn(projectEmpty);
+
+		final AllProjectsInfo allProjectsInfo = AllProjectsInfo.builder()
+				.recentProjectIds(List.of(projectEmpty.getMetadata().getId(), project.getMetadata().getId()))
+				.allProjectsMetadata(List.of(project.getMetadata(), projectEmpty.getMetadata()))
+				.build();
+		when(client.getProjects()).thenReturn(allProjectsInfo);
+
+		showMainView();
+
+		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Neues Projekt").queryLabeled());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// open project
 		assertThat(stage.getTitle()).isEqualTo("PlayWall - Project Empty");
 	}
 }
