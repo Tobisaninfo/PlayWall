@@ -1,15 +1,22 @@
-use jni::objects::{Global, JClass, JStaticMethodID, JString, JValue};
+use jni::objects::{JClass, JStaticMethodID, JString, JValue};
+use jni::refs::Global;
 use jni::signature::{MethodSignature, Primitive, ReturnType, RuntimeMethodSignature};
 use jni::strings::JNIString;
 use jni::sys::jint;
-use std::cell::RefCell;
+use std::sync::OnceLock;
 use tracing::field::{Field, Visit};
 use tracing::{Event, Subscriber};
 use tracing_subscriber::{layer::Context, Layer};
 
-thread_local! {
-    static CACHE: RefCell<Option<(Global<JClass<'static>>, JStaticMethodID)>> = RefCell::new(None);
+struct MethodCache {
+    class_global: Global<JClass<'static>>,
+    method_id: JStaticMethodID,
 }
+
+unsafe impl Send for MethodCache {}
+unsafe impl Sync for MethodCache {}
+
+static CACHE: OnceLock<MethodCache> = OnceLock::new();
 
 pub struct JavaLayer;
 
@@ -39,44 +46,42 @@ where
         };
 
         jvm.attach_current_thread(|env| {
-            CACHE.with(|c| {
-                let mut c = c.borrow_mut();
-                if c.is_none() {
-                    let local_class: JClass = env
-                        .find_class(JNIString::new(
-                            "de/tobias/playwall/nativeaudio/audio/rust/RustLogger",
-                        ))
-                        .expect("Failed to find RustLogger class");
+            let cache = CACHE.get_or_init(|| {
+                let local_class: JClass = env
+                    .find_class(JNIString::new(
+                        "de/tobias/playwall/nativeaudio/audio/rust/RustLogger",
+                    ))
+                    .expect("Failed to find RustLogger class");
 
-                    let class_global: Global<JClass> = env
-                        .new_global_ref(local_class)
-                        .expect("Failed to create global ref");
+                let class_global: Global<JClass<'static>> = env
+                    .new_global_ref(local_class)
+                    .expect("Failed to create global ref");
 
-                    let param =
-                        &RuntimeMethodSignature::from_str("(ILjava/lang/String;)V").unwrap();
-                    let sig = MethodSignature::from(param);
+                let param =
+                    &RuntimeMethodSignature::from_str("(ILjava/lang/String;)V").unwrap();
+                let sig = MethodSignature::from(param);
 
-                    let method_id: JStaticMethodID = env
-                        .get_static_method_id(&class_global, JNIString::new("logFromRust"), sig)
-                        .expect("Failed to get method ID");
+                let method_id: JStaticMethodID = env
+                    .get_static_method_id(&class_global, JNIString::new("logFromRust"), sig)
+                    .expect("Failed to get method ID");
 
-                    *c = Some((class_global, method_id));
-                }
-
-                let (class_global, method_id) = c.as_ref().unwrap();
-
-                let jmsg: JString = env.new_string(msg).unwrap();
-
-                unsafe {
-                    env.call_static_method_unchecked(
-                        class_global,
-                        *method_id,
-                        ReturnType::Primitive(Primitive::Void),
-                        &[JValue::Int(level).as_jni(), JValue::Object(&jmsg).as_jni()],
-                    )
-                        .unwrap();
+                MethodCache {
+                    class_global,
+                    method_id,
                 }
             });
+
+            let jmsg: JString = env.new_string(msg).unwrap();
+
+            unsafe {
+                env.call_static_method_unchecked(
+                    &cache.class_global,
+                    cache.method_id,
+                    ReturnType::Primitive(Primitive::Void),
+                    &[JValue::Int(level).as_jni(), JValue::Object(&jmsg).as_jni()],
+                )
+                    .unwrap();
+            }
 
             Ok::<(), jni::errors::Error>(())
         })
