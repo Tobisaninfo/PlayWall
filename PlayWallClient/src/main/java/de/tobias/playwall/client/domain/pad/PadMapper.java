@@ -24,6 +24,7 @@ public class PadMapper
 				.defaultColor(colorMapper.colorToModernColor(pad.getDefaultColor()))
 				.playColor(colorMapper.colorToModernColor(pad.getPlayColor()))
 				.eofWarningTime(pad.getEofWarningTime())
+				.introDuration(pad.getIntroDuration())
 				.content(padContentMapper.padContentDtoToPadContent(pad.getContent()))
 				.build();
 	}
@@ -38,6 +39,7 @@ public class PadMapper
 				.defaultColor(colorMapper.modernColorToColor(pad.getDefaultColor()))
 				.playColor(colorMapper.modernColorToColor(pad.getPlayColor()))
 				.eofWarningTime(pad.getEofWarningTime())
+				.introDuration(pad.getIntroDuration())
 				.content(padContentMapper.padContentToPadContentDto(pad.getContent()))
 				.build();
 	}

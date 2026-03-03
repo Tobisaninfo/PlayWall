@@ -23,6 +23,7 @@ public class Pad
 	private Color defaultColor;
 	private Color playColor;
 	private Double eofWarningTime;
+	private Double introDuration;
 
 	public Pad copy(boolean generateNewId)
 	{
@@ -34,6 +35,7 @@ public class Pad
 				.defaultColor(defaultColor)
 				.playColor(playColor)
 				.eofWarningTime(eofWarningTime)
+				.introDuration(introDuration)
 				.content(content == null ? null : content.copy())
 				.build();
 	}

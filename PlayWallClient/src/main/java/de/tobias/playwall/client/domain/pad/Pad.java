@@ -23,6 +23,7 @@ public class Pad
 	private ModernColor defaultColor;
 	private ModernColor playColor;
 	private Double eofWarningTime;
+	private Double introDuration;
 
 	public String getReadablePosition()
 	{
@@ -39,6 +40,7 @@ public class Pad
 				.defaultColor(defaultColor)
 				.playColor(playColor)
 				.eofWarningTime(eofWarningTime)
+				.introDuration(introDuration)
 				.content(content == null ? null : content.copy())
 				.build();
 	}

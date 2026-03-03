@@ -24,5 +24,6 @@ public class PadDto
 	private Color defaultColor;
 	private Color playColor;
 	private Double eofWarningTime;
+	private Double introDuration;
 }
 
