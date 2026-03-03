@@ -69,15 +69,13 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 			metadata.setPlayColor(requestMessage.getProjectMetadata().playColor());
 			metadata.setEofWarningTime(requestMessage.getProjectMetadata().eofWarningTime());
 
-			boolean hasProjectSizeChanged = !Objects.equals(oldMetadata.getNumberOfHorizontalPads(), requestMessage.getProjectMetadata().numberOfHorizontalPads()) ||
-											!Objects.equals(oldMetadata.getNumberOfVerticalPads(), requestMessage.getProjectMetadata().numberOfVerticalPads());
-
 			metadata.setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
 			metadata.setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
 
 			projectService.rename(metadata.getId(), requestMessage.getProjectMetadata().name());
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(metadata)));
 
+			final boolean hasProjectSizeChanged = hasProjectSizeChanged(requestMessage, oldMetadata);
 			if(hasProjectSizeChanged)
 			{
 				final List<UUID> removedPads = projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
@@ -97,6 +95,16 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 			project.setMetadata(oldMetadata);
 			throw e;
 		}
+	}
+
+	private static boolean hasProjectSizeChanged(ProjectSettingsUpdateRequest requestMessage, ProjectMetadata oldMetadata)
+	{
+		if(!Objects.equals(oldMetadata.getNumberOfHorizontalPads(), requestMessage.getProjectMetadata().numberOfHorizontalPads()))
+		{
+			return true;
+		}
+
+		return !Objects.equals(oldMetadata.getNumberOfVerticalPads(), requestMessage.getProjectMetadata().numberOfVerticalPads());
 	}
 
 	private UndoItem getInverseOperation(ProjectSettingsUpdateRequest request)
