@@ -10,10 +10,7 @@ import de.tobias.playwall.client.domain.pad.view.settings.content.PadContentSett
 import de.tobias.playwall.client.net.FluentClient;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 /**
@@ -36,6 +33,8 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 	private Slider eofWarningTimeSlider;
 	@FXML
 	private Label eofWarningTimeLabel;
+	@FXML
+	private Spinner<Double> spinnerIntroDuration;
 
 	private BasePadContentSettingsContainer<? extends PadContent> padContentSettingsContainer;
 
@@ -63,6 +62,10 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 						eofWarningTimeSlider.valueProperty()
 				)
 		);
+
+		final SpinnerValueFactory.DoubleSpinnerValueFactory valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, Double.MAX_VALUE, 0.0, 0.1);
+		valueFactory.setConverter(new DoubleStringConverter());
+		spinnerIntroDuration.setValueFactory(valueFactory);
 	}
 
 	@Override
@@ -84,9 +87,13 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 		eofWarningTimeCheckbox.setSelected(param.pad.getEofWarningTime() != null);
 		eofWarningTimeSlider.setValue(param.pad.getEofWarningTime() != null ? param.pad.getEofWarningTime() : 0);
 
+		spinnerIntroDuration.getValueFactory().setValue(param.pad.getIntroDuration() == null ? 0.0 : param.pad.getIntroDuration());
+
 		if(param.getPad().getContent() != null)
 		{
-			this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty().and(padContentSettingsContainer.getIsValidProperty()));
+			this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty()
+					.and(padContentSettingsContainer.getIsValidProperty())
+					.and(spinnerIntroDuration.valueProperty().isNotNull()));
 		}
 		else
 		{
@@ -106,6 +113,7 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 		}
 
 		param.pad.setEofWarningTime(eofWarningTimeCheckbox.isSelected() ? eofWarningTimeSlider.getValue() : null);
+		param.pad.setIntroDuration(spinnerIntroDuration.getValueFactory().getValue());
 	}
 
 	@Override
