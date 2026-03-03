@@ -14,7 +14,7 @@ import java.util.Optional;
  *
  * @param <R> Return type of the dialog.
  */
-public abstract class ModalDialogBase<R> extends ViewControllerBase
+public abstract class ModalDialogBase<R> extends ViewControllerBase implements CloseRequest
 {
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
@@ -24,7 +24,10 @@ public abstract class ModalDialogBase<R> extends ViewControllerBase
 		{
 			stage.initModality(Modality.WINDOW_MODAL);
 		}
-		stageContainer.addCloseKeyShortcut(stageContainer::close);
+		stageContainer.addCloseKeyShortcut(() -> {
+			onCloseRequest();
+			stageContainer.close();
+		});
 	}
 
 	protected R getResultValue()

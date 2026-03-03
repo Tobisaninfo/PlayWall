@@ -21,7 +21,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import lombok.AccessLevel;
@@ -163,5 +162,11 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), getContainingWindow()).showAndWait();
 			}
 		});
+	}
+
+	@Override
+	public void onCloseRequest()
+	{
+		settingViewController.forEach(BaseSettingsViewController::cleanup);
 	}
 }

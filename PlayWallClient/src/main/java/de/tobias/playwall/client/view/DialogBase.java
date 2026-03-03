@@ -4,13 +4,16 @@ import de.thecodelabs.utils.ui.NVCStage;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class DialogBase extends ViewControllerBase
+public class DialogBase extends ViewControllerBase implements CloseRequest
 {
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		super.initStage(stageContainer, stage);
-		stageContainer.addCloseKeyShortcut(stageContainer::close);
+		stageContainer.addCloseKeyShortcut(() -> {
+			onCloseRequest();
+			stageContainer.close();
+		});
 	}
 
 	public void showAndWait(Window owner)

@@ -14,7 +14,7 @@ import java.util.Optional;
  *
  * @param <R> Return type of the dialog.
  */
-public abstract class ParamModalDialogBase<P, R> extends ViewControllerBase implements ParamView<P>
+public abstract class ParamModalDialogBase<P, R> extends ViewControllerBase implements ParamView<P>, CloseRequest
 {
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
@@ -24,7 +24,10 @@ public abstract class ParamModalDialogBase<P, R> extends ViewControllerBase impl
 		{
 			stage.initModality(Modality.WINDOW_MODAL);
 		}
-		stageContainer.addCloseKeyShortcut(stageContainer::close);
+		stageContainer.addCloseKeyShortcut(() -> {
+			onCloseRequest();
+			stageContainer.close();
+		});
 	}
 
 	protected R getResultValue()
