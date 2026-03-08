@@ -40,9 +40,6 @@
 
     <SettingsRow icon="STOPWATCH_SOLID" title="%ui.settings.pad.intro.title">
         <HBox spacing="14" alignment="CENTER_LEFT">
-            <padding>
-                <Insets top="14.0"/>
-            </padding>
             <Spinner fx:id="spinnerIntroDuration" editable="true" prefWidth="100"/>
             <Label text="%ui.settings.pad.intro.label"/>
         </HBox>
