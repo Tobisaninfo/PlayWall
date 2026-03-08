@@ -55,6 +55,7 @@
         <testfx-core.version>4.0.18</testfx-core.version>
         <openjfx-monocle.version>21.0.2</openjfx-monocle.version>
         <awaitility.version>4.3.0</awaitility.version>
+        <instancio-core.version>5.5.1</instancio-core.version>
 
         <maven-compiler.version>3.15.0</maven-compiler.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>

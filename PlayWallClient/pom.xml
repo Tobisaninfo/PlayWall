@@ -167,7 +167,15 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
+            <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.instancio</groupId>
+            <artifactId>instancio-core</artifactId>
+            <version>${instancio-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

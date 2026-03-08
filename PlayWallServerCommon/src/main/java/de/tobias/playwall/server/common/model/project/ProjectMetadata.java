@@ -62,6 +62,7 @@ public class ProjectMetadata
 				.timeMode(timeMode)
 				.defaultColor(defaultColor)
 				.playColor(playColor)
+				.eofWarningTime(eofWarningTime)
 				.build();
 	}
 }
