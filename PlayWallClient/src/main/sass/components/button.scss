@@ -1,7 +1,7 @@
 @use "variables";
 
 .button {
-    -fx-background-color: #5c5c5c;
+    -fx-background-color: variables.$component-background-color;
     -fx-text-fill: variables.$component-text-color;
     -fx-background-radius: 3px;
     -fx-font-size: 1.1em;
