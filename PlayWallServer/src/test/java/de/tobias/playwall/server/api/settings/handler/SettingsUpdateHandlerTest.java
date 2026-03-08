@@ -5,8 +5,6 @@ import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
 import de.tobias.playwall.common.api.settings.model.SettingsDto;
 import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import de.tobias.playwall.common.api.settings.update.SettingsUpdate;
-import de.tobias.playwall.server.TestUtils;
-import de.tobias.playwall.server.common.model.settings.Settings;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import de.tobias.playwall.server.net.OneTimeActionRequestHandler;
 import de.tobias.playwall.server.net.RequestExecutor;

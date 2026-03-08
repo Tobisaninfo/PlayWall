@@ -1,7 +1,6 @@
 package de.tobias.playwall.client.view;
 
 import de.thecodelabs.utils.ui.NVCStage;
-import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 

@@ -13,8 +13,6 @@ import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import javafx.application.Platform;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.junit.jupiter.api.Test;
