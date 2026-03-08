@@ -1,0 +1,47 @@
+@use "variables";
+
+.spinner {
+    -fx-border-color: variables.$component-border-color;
+    -fx-border-width: variables.$component-border-width;
+    -fx-border-radius: variables.$component-border-radius;
+}
+
+.spinner .increment-arrow-button, .decrement-arrow-button {
+    -fx-background-color: #5c5c5c;
+    -fx-text-fill: variables.$component-text-color;
+    -fx-background-radius: 0px;
+    -fx-font-size: 1.1em;
+    -fx-border-width: 0;
+
+    &:focused {
+        -fx-background-color: variables.$primary-color;
+        -fx-text-fill: variables.$component-text-color;
+    }
+
+    &:hover {
+        -fx-background-color: variables.$component-hover-background-color;
+        -fx-text-fill: variables.$component-text-color;
+    }
+
+    &:default {
+        -fx-background-color: variables.$primary-color;
+        -fx-text-fill: variables.$component-text-color;
+    }
+}
+
+.spinner .increment-arrow-button {
+    -fx-background-radius: 0 3px 0 0;
+}
+
+.spinner .decrement-arrow-button {
+    -fx-background-radius: 0 0 3px 0;
+}
+
+.spinner .text-field {
+    -fx-background-color: variables.$component-hover-background-color;
+    -fx-border-width: 0;
+}
+
+.spinner .text-field:focused {
+    -fx-background-color: variables.$component-hover-background-color;
+}
