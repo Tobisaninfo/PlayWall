@@ -1,12 +1,12 @@
 @use "variables";
 
 .toggle-button {
-  -fx-background-color: variables.$component-background-color;
-  -fx-text-fill: variables.$component-text-color;
+    -fx-background-color: variables.$component-background-color;
+    -fx-text-fill: variables.$component-text-color;
 
     &:hover {
-      -fx-background-color: variables.$component-hover-background-color;
-      -fx-text-fill: variables.$component-text-color !important;
+        -fx-background-color: variables.$component-hover-background-color;
+        -fx-text-fill: variables.$component-text-color !important;
     }
 
     &:selected {

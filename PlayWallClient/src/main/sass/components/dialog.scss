@@ -1,43 +1,43 @@
 @use "variables";
 
 .dialog-pane {
-  &:header *.header-panel {
-    -fx-background-color: rgb(70, 70, 70);
-  }
-
-  &.information, &.confirmation, &.text-input-dialog {
     &:header *.header-panel {
-      -fx-background-color: variables.$primary-color;
+        -fx-background-color: rgb(70, 70, 70);
     }
-  }
 
-  &.warning {
-    &:header *.header-panel {
-      -fx-background-color: variables.$settings-warning-color;
-
-      .text {
-        -fx-fill: #000000;
-      }
+    &.information, &.confirmation, &.text-input-dialog {
+        &:header *.header-panel {
+            -fx-background-color: variables.$primary-color;
+        }
     }
-  }
 
-  &.error {
-    &:header *.header-panel {
-      -fx-background-color: variables.$danger-color;
+    &.warning {
+        &:header *.header-panel {
+            -fx-background-color: variables.$settings-warning-color;
+
+            .text {
+                -fx-fill: #000000;
+            }
+        }
     }
-  }
 
-  *.error-label {
-    -fx-text-fill: variables.$danger-color;
-  }
-
-  .details-button {
-    .text {
-      -fx-fill: variables.$component-text-color;
+    &.error {
+        &:header *.header-panel {
+            -fx-background-color: variables.$danger-color;
+        }
     }
-  }
 
-  .expandable-content {
-    -fx-padding: 0;
-  }
+    *.error-label {
+        -fx-text-fill: variables.$danger-color;
+    }
+
+    .details-button {
+        .text {
+            -fx-fill: variables.$component-text-color;
+        }
+    }
+
+    .expandable-content {
+        -fx-padding: 0;
+    }
 }

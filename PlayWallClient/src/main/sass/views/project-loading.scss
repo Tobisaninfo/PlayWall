@@ -1,28 +1,28 @@
 @use "../components/variables";
 
 .project-loading--overlay {
-  -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-background-color: rgba(0, 0, 0, 0.4);
 }
 
 .project-loading--box {
-  -fx-background-color: #cccccc;
-  -fx-padding: 20;
-  -fx-background-radius: 10;
+    -fx-background-color: #cccccc;
+    -fx-padding: 20;
+    -fx-background-radius: 10;
 }
 
 .project-loading--progres-bar .track {
-  -fx-background-radius: 2px;
-  -fx-base: #333333;
-  -fx-background-color: #333333AA;
+    -fx-background-radius: 2px;
+    -fx-base: #333333;
+    -fx-background-color: #333333AA;
 }
 
 .project-loading--progres-bar .bar {
-  -fx-background-insets: 0 0 0 0;
-  -fx-padding: 0.25em;
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 0.25em;
 
-  -fx-background-color: #FFFFFF;
+    -fx-background-color: #FFFFFF;
 }
 
 .project-loading--label {
-  -fx-text-fill: #333333;
+    -fx-text-fill: #333333;
 }

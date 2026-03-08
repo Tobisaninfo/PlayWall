@@ -6,10 +6,10 @@
     }
 
     &:top *.tab {
-      -fx-background-color: variables.$component-background-color;
+        -fx-background-color: variables.$component-background-color;
 
         &:selected {
-          -fx-background-color: variables.$primary-color;
+            -fx-background-color: variables.$primary-color;
             -fx-focus-color: transparent;
             -fx-faint-focus-color: transparent;
         }

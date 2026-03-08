@@ -14,16 +14,18 @@
     &:focused {
         -fx-background-color: variables.$primary-color;
         -fx-text-fill: variables.$component-text-color;
-    &.danger {
-        -fx-background-color: variables.$danger-color;
+
+        &.danger {
+            -fx-background-color: variables.$danger-color;
         }
     }
 
     &:hover {
         -fx-background-color: variables.$component-hover-background-color;
         -fx-text-fill: variables.$component-text-color;
-    &.danger {
-        -fx-background-color: variables.$danger-color;
+
+        &.danger {
+            -fx-background-color: variables.$danger-color;
         }
     }
 
