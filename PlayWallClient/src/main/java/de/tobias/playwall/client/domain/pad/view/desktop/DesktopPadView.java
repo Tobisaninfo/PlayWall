@@ -21,6 +21,7 @@ import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
+import de.tobias.playwall.client.view.components.drag.FileDragOptionView;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
@@ -76,6 +77,7 @@ public class DesktopPadView implements PadView
 	private StackPane superRoot;
 	private VBox root;
 	private BusyView busyView;
+	private FileDragOptionView fileDragOptionView;
 
 	private Label cueInLayer;
 
@@ -116,6 +118,7 @@ public class DesktopPadView implements PadView
 		superRoot = new PadStackPane(STYLE_CLASS_PAD, STYLE_CLASS_PAD_INDEX);
 		root = new PadVBox(STYLE_CLASS_PAD_BUTTON_ROOT);
 		busyView = new BusyView(superRoot);
+		fileDragOptionView = new FileDragOptionView(superRoot);
 
 		cueInLayer = PadLabel.empty(STYLE_CLASS_PAD_CUE_IN, STYLE_CLASS_PAD_CUE_IN_INDEX);
 		cueInLayer.prefHeightProperty().bind(root.heightProperty());

@@ -95,6 +95,9 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.POWER_OFF_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Programmstart"))));
 		data.add(new IconEntry(FontAwesomeType.ARROW_RIGHT_FROM_BRACKET_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Beenden des Programms"))));
 
+		// File drag and drop
+		data.add(new IconEntry(FontAwesomeType.MUSIC_SOLID, List.of(new IconUsage(IconUsageCategory.DRAG_AND_DROP, "Audio"))));
+
 		// test unused
 		data.add(new IconEntry(FontAwesomeType.CAKE_CANDLES_SOLID, List.of(new IconUsage(IconUsageCategory.UNDEFINED, "Ungenutzt"))));
 
