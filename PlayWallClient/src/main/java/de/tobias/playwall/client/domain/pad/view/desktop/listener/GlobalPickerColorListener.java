@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import java.util.function.BiConsumer;
 
 @AllArgsConstructor
-public class GlobalPickerColorListener implements PadInputListener
+public class GlobalPickerColorListener extends PadInputListener
 {
 
 	private final GlobalColorPicker colorPicker;

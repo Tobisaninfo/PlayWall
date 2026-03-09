@@ -17,6 +17,7 @@ import de.tobias.playwall.client.domain.pad.PadMapper;
 import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.pad.view.desktop.PadEventDispatcher;
+import de.tobias.playwall.client.domain.pad.view.desktop.listener.FileDragListener;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalPickerColorListener;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
@@ -237,6 +238,7 @@ public class MainViewController extends ViewControllerBase
 		pageAddButton.setMaxHeight(25);
 		pageAddButton.setMaxWidth(25);
 
+		eventDispatcher.addPadInputListener(new FileDragListener());
 	}
 
 	@Override
