@@ -34,9 +34,11 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,6 +80,7 @@ public class DesktopPadView implements PadView
 	private Label cueInLayer;
 
 	private final FluentClient fluentClient;
+	private Pad pad;
 	private FluentClient.PadBuilder padBuilder;
 
 	private final ErrorAlertBuilder errorAlertBuilder;
@@ -90,7 +93,6 @@ public class DesktopPadView implements PadView
 	private PadStatus status;
 	private PadSettingsViewController padSettingsViewController;
 
-	@Getter
 	private ClientPadController padController;
 
 	private final WarningFlashAnimation warningAnimation;
@@ -235,7 +237,7 @@ public class DesktopPadView implements PadView
 			reset();
 			return;
 		}
-		final Pad pad = padController.getPad();
+		pad = padController.getPad();
 		padBuilder = fluentClient.pad(pad.getId());
 		namePreviewLabel.setText(pad.getName());
 
@@ -460,19 +462,22 @@ public class DesktopPadView implements PadView
 	private void onNewAction(ActionEvent event)
 	{
 		final FileChooserWrapper fileChooser = AppContextHolder.getInstance().get(FileChooserWrapper.class);
-		fileChooser.showByActionEvent(event).ifPresent(path -> {
-			try
-			{
-				padBuilder.newMedia(path);
-				updateStatus(PadStatus.READY);
-			}
-			catch(PlayWallApiException ex)
-			{
-				updateStatus(this.previousStatus);
-				log.error("Cannot load new media", ex);
-				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
-			}
-		});
+		fileChooser.showByActionEvent(event).ifPresent(this::handleNewMediaPath);
+	}
+
+	public void handleNewMediaPath(Path path)
+	{
+		try
+		{
+			padBuilder.newMedia(path);
+			updateStatus(PadStatus.READY);
+		}
+		catch(PlayWallApiException ex)
+		{
+			updateStatus(this.previousStatus);
+			log.error("Cannot load new media", ex);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
+		}
 	}
 
 	private void updateButtonStates()
