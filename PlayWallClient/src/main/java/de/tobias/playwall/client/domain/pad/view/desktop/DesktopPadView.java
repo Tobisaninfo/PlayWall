@@ -82,6 +82,8 @@ public class DesktopPadView implements PadView
 
 	private final ErrorAlertBuilder errorAlertBuilder;
 
+	private final PadEventDispatcher eventDispatcher;
+
 	private final PadTimeUtils padTimeUtils;
 
 	private PadStatus previousStatus;
@@ -102,6 +104,7 @@ public class DesktopPadView implements PadView
 		errorAlertBuilder = context.get(ErrorAlertBuilder.class);
 		warningAnimation = context.get(WarningFlashAnimation.class);
 		warningAnimation.init(this, PLAY_CLASS);
+		eventDispatcher = context.get(PadEventDispatcher.class);
 
 		setupView();
 	}
@@ -190,6 +193,12 @@ public class DesktopPadView implements PadView
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
 
 		updateStatus(PadStatus.EMPTY);
+
+		// Setup listeners
+
+		superRoot.setOnMouseClicked(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onMouseClicked(this, event)));
+		superRoot.setOnDragDetected(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onDragDetected(this, event)));
+		superRoot.setOnMouseDragEntered(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onMouseDragEntered(this, event)));
 	}
 
 	@Override

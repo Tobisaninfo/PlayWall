@@ -2,19 +2,15 @@ package de.tobias.playwall.client.view.components;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playwall.client.domain.pad.Pad;
-import de.tobias.playwall.client.domain.pad.view.PadView;
+import de.tobias.playwall.client.domain.pad.view.desktop.PadEventDispatcher;
+import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalPickerColorListener;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
-
-import java.util.List;
-import java.util.function.BiConsumer;
 
 public class GlobalColorPicker extends ToggleButton
 {
@@ -26,9 +22,8 @@ public class GlobalColorPicker extends ToggleButton
 	private final ColorButton colorButton;
 	private final ColorPicker colorPicker;
 
-	private List<PadView> padViews;
-
-	private BiConsumer<Pad, ModernColor> onColorChange;
+	private PadEventDispatcher eventDispatcher;
+	private GlobalPickerColorListener listener;
 
 	public GlobalColorPicker()
 	{
@@ -90,68 +85,23 @@ public class GlobalColorPicker extends ToggleButton
 		if(newValue)
 		{
 			getScene().setCursor(imageCursor);
-
-			for(PadView padView : padViews)
-			{
-				addPadViewListeners(padView);
-			}
+			eventDispatcher.addPadInputListener(listener);
 		}
 		else
 		{
 			getScene().setCursor(Cursor.DEFAULT);
-
-			for(PadView padView : padViews)
-			{
-				padView.getRootNode().setOnMouseClicked(null);
-				padView.getRootNode().setOnDragDetected(null);
-				padView.getRootNode().setOnMouseDragEntered(null);
-				padView.disableSettingsButton(false);
-			}
+			eventDispatcher.removePadInputListener(listener);
 		}
 	}
 
-	private void addPadViewListeners(PadView padView)
+	public void init(PadEventDispatcher eventDispatcher, GlobalPickerColorListener listener)
 	{
-		padView.getRootNode().setOnMouseClicked(event -> {
-			if(event.getButton() == MouseButton.PRIMARY)
-			{
-				updatePadColor(padView);
-			}
-		});
-
-		padView.getRootNode().setOnDragDetected(event -> {
-			if(event.isPrimaryButtonDown())
-			{
-				padView.getRootNode().startFullDrag();
-				updatePadColor(padView);
-				event.consume();
-			}
-		});
-
-		padView.getRootNode().setOnMouseDragEntered(event -> {
-			if(event.isPrimaryButtonDown())
-			{
-				updatePadColor(padView);
-			}
-		});
-
-		padView.disableSettingsButton(true);
+		this.eventDispatcher = eventDispatcher;
+		this.listener = listener;
 	}
 
-	private void updatePadColor(PadView padView)
+	public ModernColor getSelectedColor()
 	{
-		final Pad pad = padView.getPadController().getPad();
-		if(pad.getDefaultColor() == colorPicker.getSelectedColor())
-		{
-			return;
-		}
-
-		onColorChange.accept(pad, colorPicker.getSelectedColor());
-	}
-
-	public void init(List<PadView> padViews, BiConsumer<Pad, ModernColor> onColorChange)
-	{
-		this.padViews = padViews;
-		this.onColorChange = onColorChange;
+		return colorPicker.getSelectedColor();
 	}
 }

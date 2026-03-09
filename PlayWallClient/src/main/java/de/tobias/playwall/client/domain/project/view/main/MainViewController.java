@@ -16,6 +16,8 @@ import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadMapper;
 import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
+import de.tobias.playwall.client.domain.pad.view.desktop.PadEventDispatcher;
+import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalPickerColorListener;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
@@ -120,6 +122,7 @@ public class MainViewController extends ViewControllerBase
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final SettingsMapper settingsMapper;
 	private final UpdateMessageEventHandler eventHandler;
+	private final PadEventDispatcher eventDispatcher;
 
 	private ProjectLoadedListener projectLoadedListener;
 	private ProjectListener projectListener;
@@ -197,7 +200,7 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
-		globalColorPicker.init(padViews, (pad, color) -> {
+		globalColorPicker.init(eventDispatcher, new GlobalPickerColorListener(globalColorPicker, (pad, color) -> {
 			pad.setDefaultColor(color);
 
 			try
@@ -209,7 +212,7 @@ public class MainViewController extends ViewControllerBase
 				log.error("Cannot color pad", e);
 				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_COLOR_UPDATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 			}
-		});
+		}));
 
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
 			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
