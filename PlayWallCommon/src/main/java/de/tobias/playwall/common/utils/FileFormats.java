@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class FileFormats
@@ -20,9 +21,14 @@ public class FileFormats
 
 	public static final List<FileFormat> FILE_FORMATS = List.of(new FileFormat(PadContentType.AUDIO, List.of("mp3", "wav", "flac")));
 
-	public static PadContentType getContentTypeForFile(Path path)
+	public static Optional<PadContentType> tryContentTypeForFile(Path path)
 	{
 		final String extension = PathUtils.getFileExtension(path).toLowerCase();
-		return FILE_FORMATS.stream().filter(format -> format.extensions().contains(extension)).findFirst().orElseThrow(() -> new IllegalArgumentException("Unsupported file extension " + extension)).contentType();
+		return FILE_FORMATS.stream().filter(format -> format.extensions().contains(extension)).findFirst().map(FileFormat::contentType);
+	}
+
+	public static PadContentType getContentTypeForFile(Path path)
+	{
+		return tryContentTypeForFile(path).orElseThrow(() -> new IllegalArgumentException("Unsupported file extension"));
 	}
 }

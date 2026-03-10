@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
-import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.view.components.drag.FileDragOption;
 import javafx.scene.input.DragEvent;
@@ -8,9 +7,9 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class FileDragListener extends PadInputListener
@@ -20,29 +19,11 @@ public class FileDragListener extends PadInputListener
 	{
 		if(event.getDragboard().hasFiles())
 		{
-			padView.getFileDragOptionView().showOptions(List.of(new FileDragOption()
-			{
-				@Override
-				public void handleDrag(DesktopPadView padView, DragEvent event)
-				{
-					final Dragboard dragboard = event.getDragboard();
-					final List<File> files = dragboard.getFiles();
-					final Path path = files.getFirst().toPath();
-					padView.handleNewMediaPath(path);
-				}
+			List<FileDragOption> fileDragOptions = new ArrayList<>();
+			final Optional<NewFileDragOption> newMediaDragOption = NewFileDragOption.create(event.getDragboard().getFiles().getFirst().toPath());
+			newMediaDragOption.ifPresent(fileDragOptions::add);
 
-				@Override
-				public String getLabel()
-				{
-					return "Audio";
-				}
-
-				@Override
-				public FontAwesomeType getIcon()
-				{
-					return FontAwesomeType.MUSIC_SOLID;
-				}
-			}));
+			padView.getFileDragOptionView().showOptions(fileDragOptions);
 			event.acceptTransferModes(TransferMode.LINK);
 			event.consume();
 		}
