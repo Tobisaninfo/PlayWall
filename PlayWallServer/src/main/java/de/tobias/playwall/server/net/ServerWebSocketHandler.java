@@ -6,9 +6,10 @@ import de.tobias.playwall.common.net.UpdateMessage;
 import de.tobias.playwall.server.SystemTrayHandler;
 import de.tobias.playwall.server.net.exception.AnnotatedExceptionTextWebSocketHandler;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
@@ -23,7 +24,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @SuppressWarnings({"java:S3740"})
 public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandler
 {
@@ -34,11 +35,19 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 
 	private final ProjectController controller;
 
+    private boolean isShutdown = false;
+
 	@EventListener(UpdateMessage.class)
 	void handleUpdateMessageEvents(UpdateMessage message)
 	{
 		sendToClients(message, SESSIONS);
 	}
+
+    @EventListener(ContextClosedEvent.class)
+    void shutdown()
+    {
+        isShutdown = true;
+    }
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session)
@@ -53,7 +62,10 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 	{
 		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
 		SESSIONS.remove(session);
-		updateSystemTray();
+
+        if (!isShutdown) {
+            updateSystemTray();
+        }
 
 		if(SESSIONS.isEmpty())
 		{
