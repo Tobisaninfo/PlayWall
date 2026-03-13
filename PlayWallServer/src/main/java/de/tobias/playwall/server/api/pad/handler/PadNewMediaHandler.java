@@ -11,6 +11,7 @@ import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.utils.FileFormats;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
+import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.pad.PadContent;
@@ -85,7 +86,18 @@ class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
 		// Load pad async
-		asyncExecutor.execute(newPadController::load);
+		asyncExecutor.execute(() -> {
+			newPadController.load();
+			switch(content)
+			{
+				//noinspection DataFlowIssue
+				case AudioPadContent audioPadContent ->
+				{
+					final double effectiveVolume = VolumeHelper.calculateVolume(projectController.getLoadedProject(), audioPadContent.getVolume());
+					newPadController.setVolume(effectiveVolume);
+				}
+			}
+		});
 
 		return Optional.of(undoItem);
 	}
