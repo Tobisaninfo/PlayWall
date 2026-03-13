@@ -14,7 +14,6 @@ import java.util.function.BiConsumer;
 @AllArgsConstructor
 public class GlobalPickerColorListener extends PadInputListener
 {
-
 	private final GlobalColorPicker colorPicker;
 	private final BiConsumer<Pad, ModernColor> onColorChange;
 

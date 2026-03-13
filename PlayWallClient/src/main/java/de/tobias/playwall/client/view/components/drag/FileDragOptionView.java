@@ -20,7 +20,6 @@ import java.util.Collection;
 
 public class FileDragOptionView
 {
-
 	private final HBox optionPane;
 	private final Pane parent;
 
@@ -41,7 +40,6 @@ public class FileDragOptionView
 
 		inTransition = createTransition(true);
 		outTransition = createTransition(false);
-
 	}
 
 	private Transition createTransition(boolean in)
@@ -77,7 +75,9 @@ public class FileDragOptionView
 		parallelTransition.setOnFinished(_ ->
 		{
 			if(!in)
+			{
 				parent.getChildren().remove(optionPane);
+			}
 		});
 		return parallelTransition;
 	}
@@ -87,47 +87,49 @@ public class FileDragOptionView
 
 	public void showOptions(Collection<? extends FileDragOption> options)
 	{
-		if(!parent.getChildren().contains(optionPane))
+		if(parent.getChildren().contains(optionPane))
 		{
-			selectedOption = null;
+			return;
+		}
 
-			parent.getChildren().add(optionPane);
-			optionPane.getChildren().clear();
+		selectedOption = null;
 
-			options.stream().sorted().forEach(option -> {
-				final Label label = new Label();
-				label.getStyleClass().add("dnd-file-option");
-				label.setText(option.getLabel());
+		parent.getChildren().add(optionPane);
+		optionPane.getChildren().clear();
 
-				final FontIcon graphics = new FontIcon(option.getIcon());
-				graphics.setStyle("-fx-text-fill: white;");
-				label.setGraphic(graphics);
-				label.setWrapText(true);
+		options.stream().sorted().forEach(option -> {
+			final Label label = new Label();
+			label.getStyleClass().add("dnd-file-option");
+			label.setText(option.getLabel());
 
-				label.setOnDragOver(_ ->
-				{
-					label.pseudoClassStateChanged(PseudoClasses.DRAG_CLASS, true);
-					selectedOption = option;
-				});
-				label.setOnDragExited(_ ->
-				{
-					label.pseudoClassStateChanged(PseudoClasses.DRAG_CLASS, false);
-					selectedOption = null;
-				});
+			final FontIcon graphics = new FontIcon(option.getIcon());
+			graphics.setStyle("-fx-text-fill: white;");
+			label.setGraphic(graphics);
+			label.setWrapText(true);
 
-				label.setAlignment(Pos.CENTER);
-				label.setTextAlignment(TextAlignment.CENTER);
-				label.setContentDisplay(ContentDisplay.TOP);
-
-				label.maxWidthProperty().bind(optionPane.widthProperty().divide(options.size()).subtract(12.5));
-				label.setMaxHeight(Double.MAX_VALUE);
-				HBox.setHgrow(label, Priority.ALWAYS);
-
-				optionPane.getChildren().add(label);
+			label.setOnDragOver(_ ->
+			{
+				label.pseudoClassStateChanged(PseudoClasses.DRAG_CLASS, true);
+				selectedOption = option;
+			});
+			label.setOnDragExited(_ ->
+			{
+				label.pseudoClassStateChanged(PseudoClasses.DRAG_CLASS, false);
+				selectedOption = null;
 			});
 
-			inTransition.play();
-		}
+			label.setAlignment(Pos.CENTER);
+			label.setTextAlignment(TextAlignment.CENTER);
+			label.setContentDisplay(ContentDisplay.TOP);
+
+			label.maxWidthProperty().bind(optionPane.widthProperty().divide(options.size()).subtract(12.5));
+			label.setMaxHeight(Double.MAX_VALUE);
+			HBox.setHgrow(label, Priority.ALWAYS);
+
+			optionPane.getChildren().add(label);
+		});
+
+		inTransition.play();
 	}
 
 	public void hide()
