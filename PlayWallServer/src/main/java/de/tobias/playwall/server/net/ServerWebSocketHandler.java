@@ -35,7 +35,7 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 
 	private final ProjectController controller;
 
-    private boolean isShutdown = false;
+	private boolean isShutdown = false;
 
 	@EventListener(UpdateMessage.class)
 	void handleUpdateMessageEvents(UpdateMessage message)
@@ -43,11 +43,11 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 		sendToClients(message, SESSIONS);
 	}
 
-    @EventListener(ContextClosedEvent.class)
-    void shutdown()
-    {
-        isShutdown = true;
-    }
+	@EventListener(ContextClosedEvent.class)
+	void shutdown()
+	{
+		isShutdown = true;
+	}
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session)
@@ -63,9 +63,10 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 		log.debug("Client connection closed to {} for reason {}", session.getRemoteAddress(), status);
 		SESSIONS.remove(session);
 
-        if (!isShutdown) {
-            updateSystemTray();
-        }
+		if(!isShutdown)
+		{
+			updateSystemTray();
+		}
 
 		if(SESSIONS.isEmpty())
 		{
