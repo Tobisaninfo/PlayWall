@@ -22,8 +22,15 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
+
 public class PlayWallMain extends Application
 {
+	static
+	{
+		Locale.setDefault(Locale.GERMAN);
+	}
+
 	private static Logger log;
 
 	public static void main(String[] args)
