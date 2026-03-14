@@ -28,8 +28,7 @@ public class PageButtons extends FlowPane
 {
 	public static class PageReorderEvent extends Event
 	{
-		public static final EventType<ActionEvent> REORDER =
-				new EventType<>(Event.ANY, "REORDER");
+		public static final EventType<ActionEvent> REORDER = new EventType<>(Event.ANY, "REORDER");
 
 		@Getter
 		private final transient List<Page> pages;
@@ -43,6 +42,7 @@ public class PageButtons extends FlowPane
 
 	private static final DataFormat PAGE_BUTTON_DND = new DataFormat("application/x-playwall-page-button");
 	public static final String PAGE_BUTTON_DRAGGING_STYLECLASS = "page-button-dragging";
+	private static final double PLACEHOLDER_SWITCH_THRESHOLD_PX = 6.0;
 
 	private Button draggedPageButton;
 	private int originalDraggedIndex = -1;
@@ -89,6 +89,7 @@ public class PageButtons extends FlowPane
 			e.acceptTransferModes(TransferMode.MOVE);
 
 			int targetIndex = computeInsertIndexForPointer(e.getSceneX(), e.getSceneY());
+			targetIndex = applyPlaceholderSwitchThreshold(targetIndex, e.getSceneX(), e.getSceneY());
 			movePlaceholderToIndex(targetIndex);
 
 			e.consume();
@@ -262,6 +263,60 @@ public class PageButtons extends FlowPane
 		}
 
 		return Math.min(bestIndex, maxIndex);
+	}
+
+	private int applyPlaceholderSwitchThreshold(int targetIndex, double sceneX, double sceneY)
+	{
+		int currentIndex = getChildren().indexOf(dropPlaceholder);
+		if(currentIndex < 0 || currentIndex == targetIndex)
+		{
+			return targetIndex;
+		}
+
+		if(Math.abs(targetIndex - currentIndex) > 1)
+		{
+			return targetIndex;
+		}
+
+		final int crossedIndex = targetIndex > currentIndex ? currentIndex + 1 : currentIndex - 1;
+
+		final Node crossedNode = getPageButtonAt(crossedIndex);
+		if(crossedNode == null)
+		{
+			return targetIndex;
+		}
+
+		final Bounds bounds = crossedNode.localToScene(crossedNode.getBoundsInLocal());
+		final double midX = (bounds.getMinX() + bounds.getMaxX()) / 2.0;
+		final boolean sameRow = sceneY >= bounds.getMinY() && sceneY <= bounds.getMaxY();
+
+		if(targetIndex > currentIndex)
+		{
+			if(sameRow && sceneX < midX + PLACEHOLDER_SWITCH_THRESHOLD_PX)
+			{
+				return currentIndex;
+			}
+		}
+		else
+		{
+			if(sameRow && sceneX > midX - PLACEHOLDER_SWITCH_THRESHOLD_PX)
+			{
+				return currentIndex;
+			}
+		}
+
+		return targetIndex;
+	}
+
+	private Node getPageButtonAt(int index)
+	{
+		if(index < 0 || index >= getChildren().size())
+		{
+			return null;
+		}
+
+		Node node = getChildren().get(index);
+		return isPageButton(node) ? node : null;
 	}
 
 	private void movePlaceholderToIndex(int targetIndex)
