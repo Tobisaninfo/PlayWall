@@ -12,6 +12,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
@@ -42,6 +43,7 @@ public class PageButtons extends FlowPane
 	}
 
 	private static final DataFormat PAGE_BUTTON_DND = new DataFormat("application/x-playwall-page-button");
+	private static final int MAX_NUMBER_OF_CHARACTERS = 50;
 	public static final String PAGE_BUTTON_DRAGGING_STYLECLASS = "page-button-dragging";
 	private static final double PLACEHOLDER_SWITCH_THRESHOLD_PX = 6.0;
 
@@ -137,7 +139,8 @@ public class PageButtons extends FlowPane
 		getChildren().removeIf(node -> node.getUserData() != null);
 		for(Page page : pages)
 		{
-			final Button button = new Button(StringUtils.substring(page.getName(), 0, 50));
+			final Button button = new Button(limitText(page.getName()));
+			button.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
 			button.getStyleClass().add("page-button");
 			button.setFocusTraversable(false);
 			button.setUserData(page);
@@ -148,6 +151,16 @@ public class PageButtons extends FlowPane
 
 			getChildren().add(getChildren().size() - 1, button);
 		}
+	}
+
+	private String limitText(String text)
+	{
+		if(text.length() <= MAX_NUMBER_OF_CHARACTERS)
+		{
+			return text;
+		}
+
+		return text.substring(0, MAX_NUMBER_OF_CHARACTERS - 3) + "...";
 	}
 
 	private void startPageButtonDrag(MouseEvent e, Button button)
