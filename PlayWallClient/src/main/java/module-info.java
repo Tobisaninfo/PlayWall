@@ -16,6 +16,8 @@ open module de.tobias.playwall.client {
 	requires com.fasterxml.jackson.annotation;
 	requires tools.jackson.databind;
 
+	requires org.apache.commons.lang3;
+
 	requires org.apache.commons.cli;
 	requires io.github.classgraph;
 

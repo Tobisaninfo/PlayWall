@@ -18,6 +18,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +137,7 @@ public class PageButtons extends FlowPane
 		getChildren().removeIf(node -> node.getUserData() != null);
 		for(Page page : pages)
 		{
-			final Button button = new Button(page.getName());
+			final Button button = new Button(StringUtils.substring(page.getName(), 0, 50));
 			button.getStyleClass().add("page-button");
 			button.setFocusTraversable(false);
 			button.setUserData(page);
