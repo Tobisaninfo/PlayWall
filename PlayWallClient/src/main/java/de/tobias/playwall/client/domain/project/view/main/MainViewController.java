@@ -7,6 +7,7 @@ import de.thecodelabs.utils.ui.icon.FontIconType;
 import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
+import de.tobias.playwall.client.log.LogViewer;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -792,12 +793,14 @@ public class MainViewController extends ViewControllerBase
 	private Menu createMenuInfo()
 	{
 		final MenuItem menuItemAbout = createMenuItem(Strings.UI_MENU_INFO_ABOUT, FontAwesomeType.CIRCLE_INFO_SOLID, Optional.of(this::onMenuItemAbout));
+		final MenuItem menuItemLog = createMenuItem(Strings.UI_MENU_INFO_LOG, FontAwesomeType.INBOX_SOLID, Optional.of(this::onMenuItemLog));
 		final MenuItem menuItemUpdates = createMenuItem(Strings.UI_MENU_INFO_UPDATES, FontAwesomeType.ARROWS_ROTATE_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_INFO));
 		menu.getItems().addAll(
 				menuItemAbout,
 				new SeparatorMenuItem(),
+				menuItemLog,
 				menuItemUpdates
 		);
 
@@ -880,6 +883,12 @@ public class MainViewController extends ViewControllerBase
 			log.error("Cannot perform redo", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_REDO), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
+	}
+
+	private void onMenuItemLog(ActionEvent event)
+	{
+		final LogViewer logViewer = AppContextHolder.getInstance().get(LogViewer.class);
+		logViewer.showStage();
 	}
 
 	private void onMenuItemAbout(ActionEvent event)

@@ -1,4 +1,4 @@
-package de.tobias.playwall.client;
+package de.tobias.playwall.client.log;
 
 import de.tobias.playwall.common.api.LogEntry;
 
@@ -15,7 +15,6 @@ import java.util.function.Consumer;
  */
 public class LogServer
 {
-
 	public static final int DEFAULT_PORT = 4712;
 
 	private final int port;
@@ -52,6 +51,7 @@ public class LogServer
 				if(running) System.err.println("[LogServer] Error: " + e.getMessage());
 			}
 		});
+		Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
 	}
 
 	private void handleClient(Socket socket)

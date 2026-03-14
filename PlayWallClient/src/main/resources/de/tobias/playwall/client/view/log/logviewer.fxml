@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            styleClass="root-pane"
+            minWidth="900" minHeight="550">
+
+    <top>
+        <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+            <padding>
+                <Insets top="10" bottom="10" left="14" right="14"/>
+            </padding>
+
+            <Label text="LOG VIEWER" styleClass="toolbar-title">
+                <font>
+                    <Font name="Monospace Bold" size="15"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Level:" styleClass="label-muted"/>
+            <ToggleButton fx:id="btnTrace" text="TRACE" styleClass="level-btn, level-trace" onAction="#updateFilter"/>
+            <ToggleButton fx:id="btnDebug" text="DEBUG" styleClass="level-btn, level-debug" onAction="#updateFilter"/>
+            <ToggleButton fx:id="btnInfo" text="INFO" styleClass="level-btn, level-info" onAction="#updateFilter"/>
+            <ToggleButton fx:id="btnWarn" text="WARN" styleClass="level-btn, level-warn" onAction="#updateFilter"/>
+            <ToggleButton fx:id="btnError" text="ERROR" styleClass="level-btn, level-error" onAction="#updateFilter"/>
+            <ToggleButton fx:id="btnFatal" text="FATAL" styleClass="level-btn, level-fatal" onAction="#updateFilter"/>
+            <Region prefWidth="12"/>
+            <Label text="Source:" styleClass="label-muted"/>
+            <ComboBox fx:id="sourceFilter" prefWidth="160" styleClass="filter-combo" onAction="#updateFilter"/>
+            <TextField fx:id="searchField" prefWidth="200" promptText="Filter message..." styleClass="filter-field"/>
+            <Button text="Clear" styleClass="btn-danger" onAction="#clearEntries"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TableView fx:id="table" styleClass="log-table">
+            <columns>
+                <TableColumn fx:id="colTime" text="Time" prefWidth="120" maxWidth="120"/>
+                <TableColumn fx:id="colLevel" text="Level" prefWidth="65" maxWidth="65"/>
+                <TableColumn fx:id="colSource" text="Application" prefWidth="110" maxWidth="130"/>
+                <TableColumn fx:id="colLogger" text="Logger" prefWidth="140" maxWidth="200"/>
+                <TableColumn fx:id="colMsg" text="Message"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="16">
+            <padding>
+                <Insets top="5" right="14" bottom="5" left="14"/>
+            </padding>
+
+            <Label fx:id="connectedLabel" text="● 0 Connections" styleClass="status-disconnected"/>
+            <Label fx:id="statusLabel" styleClass="label-muted small"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

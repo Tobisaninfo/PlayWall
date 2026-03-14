@@ -12,6 +12,8 @@ import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
+import de.tobias.playwall.client.log.LogServer;
+import de.tobias.playwall.client.log.LogStore;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.view.launch.ApplicationLoadingViewController;
 import de.tobias.playwall.client.view.style.AppIconProvider;
@@ -67,6 +69,17 @@ public class PlayWallMain extends Application
 			appContext.registerLazySingleton(App.class, _ -> ApplicationUtils.getApplication());
 			AppContextLoader.setupDependencies(appContext);
 			AppContextHolder.setInstance(appContext);
+
+
+			try
+			{
+				final LogServer logServer = new LogServer(LogServer.DEFAULT_PORT, appContext.get(LogStore.class)::onEntry);
+				logServer.start();
+			}
+			catch(Exception e)
+			{
+				log.error("Error starting log server", e);
+			}
 
 			log.info("Running on Java: {} ({})", System.getProperty("java.version"), System.getProperty("java.vendor"));
 			log.info("Run Path: {}", SystemUtils.getRunPath());
