@@ -5,37 +5,45 @@
 <?import de.tobias.playwall.client.view.components.VolumeSlider?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.*?>
-<StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-           prefHeight="400.0"
-           prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <VBox prefHeight="-Infinity" prefWidth="-Infinity">
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <HeaderBar fx:id="headerBar" style="-fx-background-color: #333333" BorderPane.alignment="TOP_CENTER"/>
+    </top>
+    <center>
+        <StackPane fx:id="rootStackPane">
             <children>
-                <HeaderBar fx:id="headerBar" style="-fx-background-color: #333333"/>
-                <HBox fx:id="toolbar" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0"
-                      styleClass="tool-bar">
+                <VBox prefHeight="-Infinity" prefWidth="-Infinity" BorderPane.alignment="CENTER">
                     <children>
-                        <PageButtons fx:id="pageButtons" onPageReorder="#onPageReorder" alignment="CENTER_LEFT"
-                                     hgap="14.0"
-                                  maxWidth="1.7976931348623157E308" vgap="14.0">
+                        <HBox fx:id="toolbar" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0"
+                              styleClass="tool-bar">
                             <children>
-                                <Button fx:id="pageAddButton" styleClass="circle" onAction="#onPageAdd" focusTraversable="false"/>
+                                <PageButtons fx:id="pageButtons" onPageReorder="#onPageReorder" alignment="CENTER_LEFT"
+                                             hgap="14.0"
+                                             maxWidth="1.7976931348623157E308" vgap="14.0">
+                                    <children>
+                                        <Button fx:id="pageAddButton" styleClass="circle" onAction="#onPageAdd"
+                                                focusTraversable="false"/>
+                                    </children>
+                                </PageButtons>
+                                <GlobalColorPicker fx:id="globalColorPicker" mnemonicParsing="false"/>
+                                <VolumeSlider fx:id="volumeSlider" maxValue="100" minWidth="200"/>
                             </children>
-                        </PageButtons>
-                        <GlobalColorPicker fx:id="globalColorPicker" mnemonicParsing="false"/>
-                        <VolumeSlider fx:id="volumeSlider" maxValue="100" minWidth="200"/>
+                        </HBox>
+                        <AnchorPane fx:id="gridContainer" VBox.vgrow="ALWAYS">
+                            <children>
+                                <GridPane fx:id="padGridPane" maxHeight="1.7976931348623157E308"
+                                          maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0"
+                                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                          AnchorPane.topAnchor="0.0"
+                                          VBox.vgrow="ALWAYS">
+                                </GridPane>
+                            </children>
+                        </AnchorPane>
                     </children>
-                </HBox>
-                <AnchorPane fx:id="gridContainer" VBox.vgrow="ALWAYS">
-                    <children>
-                        <GridPane fx:id="padGridPane" maxHeight="1.7976931348623157E308"
-                                  maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0"
-                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-                                  VBox.vgrow="ALWAYS">
-                        </GridPane>
-                    </children>
-                </AnchorPane>
+                </VBox>
             </children>
-        </VBox>
-    </children>
-</StackPane>
+        </StackPane>
+    </center>
+</BorderPane>
