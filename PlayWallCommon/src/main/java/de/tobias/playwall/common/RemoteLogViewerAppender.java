@@ -98,6 +98,8 @@ public class RemoteLogViewerAppender extends AbstractAppender
 				event.getTimeMillis(),
 				level,
 				event.getLoggerName(),
+				event.getSource().getMethodName(),
+				event.getSource().getLineNumber(),
 				event.getMessage().getFormattedMessage(),
 				throwableStr,
 				appName

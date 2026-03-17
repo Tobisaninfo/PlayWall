@@ -172,7 +172,7 @@ public class LogViewer extends NVC
 		sb.append("Zeit     : ").append(e.getFormattedTime()).append("\n");
 		sb.append("Level    : ").append(e.level()).append("\n");
 		sb.append("Anwendung: ").append(e.source()).append("\n");
-		sb.append("Logger   : ").append(e.loggerName()).append("\n\n");
+		sb.append("Source   : ").append(e.loggerName()).append("#").append(e.method()).append(":").append(e.line()).append("\n\n");
 		sb.append("Nachricht:\n").append(e.message());
 		if(e.throwable() != null)
 		{

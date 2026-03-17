@@ -6,8 +6,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public record LogEntry(long timestamp, Level level, String loggerName, String message, String throwable,
-					   String source) implements Serializable
+public record LogEntry(long timestamp, Level level, String loggerName, String method, int line, String message,
+					   String throwable, String source) implements Serializable
 {
 	@Serial
 	private static final long serialVersionUID = 1L;
