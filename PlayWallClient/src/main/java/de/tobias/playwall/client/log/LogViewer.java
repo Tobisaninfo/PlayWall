@@ -9,6 +9,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -61,6 +63,7 @@ public class LogViewer extends NVC
 
 	private final Set<LogEntry.Level> activeLevels = EnumSet.allOf(LogEntry.Level.class);
 	private FilteredList<LogEntry> filteredEntries;
+	private SortedList<LogEntry> sortedEntries;
 
 	private final LogStore logStore;
 	private ListChangeListener<LogEntry> logEntryListChangeListener;
@@ -69,6 +72,7 @@ public class LogViewer extends NVC
 	public void init()
 	{
 		filteredEntries = new FilteredList<>(logStore.getAllEntries(), e -> true);
+		sortedEntries = new SortedList<>(filteredEntries, Comparator.comparing(LogEntry::getTimestamp));
 
 		colTime.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFormattedTime()));
 		colLevel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLevel().name()));
@@ -79,7 +83,7 @@ public class LogViewer extends NVC
 		colLevel.setCellFactory(tc -> new LevelCell());
 
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-		table.setItems(filteredEntries);
+		table.setItems(sortedEntries);
 		table.setRowFactory(_ -> {
 			final TableRow<LogEntry> row = new TableRow<>();
 			row.setOnMouseClicked(evt -> {
