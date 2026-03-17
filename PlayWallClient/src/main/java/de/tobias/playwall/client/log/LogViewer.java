@@ -166,7 +166,7 @@ public class LogViewer extends NVC
 		TextArea ta = new TextArea();
 		ta.setEditable(false);
 		ta.setStyle("-fx-control-inner-background: #0d1117; -fx-text-fill: #c9d1d9; -fx-font-family: Monospace;");
-		ta.setPrefSize(700, 400);
+		ta.setPrefSize(900, 400);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("Zeit     : ").append(e.getFormattedTime()).append("\n");
