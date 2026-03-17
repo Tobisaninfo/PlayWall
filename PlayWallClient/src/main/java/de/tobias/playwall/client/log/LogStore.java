@@ -27,9 +27,9 @@ public class LogStore
 			allEntries.add(entry);
 
 			// Track sources
-			if(!sources.contains(entry.getSource()))
+			if(!sources.contains(entry.source()))
 			{
-				sources.add(entry.getSource());
+				sources.add(entry.source());
 			}
 		});
 	}

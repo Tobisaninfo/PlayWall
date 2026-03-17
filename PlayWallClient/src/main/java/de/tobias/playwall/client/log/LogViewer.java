@@ -72,13 +72,13 @@ public class LogViewer extends NVC
 	public void init()
 	{
 		filteredEntries = new FilteredList<>(logStore.getAllEntries(), e -> true);
-		sortedEntries = new SortedList<>(filteredEntries, Comparator.comparing(LogEntry::getTimestamp));
+		sortedEntries = new SortedList<>(filteredEntries, Comparator.comparing(LogEntry::timestamp));
 
 		colTime.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFormattedTime()));
-		colLevel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLevel().name()));
-		colSource.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSource()));
+		colLevel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().level().name()));
+		colSource.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().source()));
 		colLogger.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getShortLoggerName()));
-		colMsg.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMessage()));
+		colMsg.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().message()));
 
 		colLevel.setCellFactory(tc -> new LevelCell());
 
@@ -140,10 +140,10 @@ public class LogViewer extends NVC
 		String search = searchField.getText().toLowerCase();
 
 		filteredEntries.setPredicate(entry -> {
-			if(!activeLevels.contains(entry.getLevel())) return false;
+			if(!activeLevels.contains(entry.level())) return false;
 			if(srcFilter != null && !srcFilter.equals("Alle Quellen")
-			   && !entry.getSource().equals(srcFilter)) return false;
-			if(!search.isBlank() && !entry.getMessage().toLowerCase().contains(search)) return false;
+			   && !entry.source().equals(srcFilter)) return false;
+			if(!search.isBlank() && !entry.message().toLowerCase().contains(search)) return false;
 			return true;
 		});
 	}
@@ -170,13 +170,13 @@ public class LogViewer extends NVC
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("Zeit     : ").append(e.getFormattedTime()).append("\n");
-		sb.append("Level    : ").append(e.getLevel()).append("\n");
-		sb.append("Anwendung: ").append(e.getSource()).append("\n");
-		sb.append("Logger   : ").append(e.getLoggerName()).append("\n\n");
-		sb.append("Nachricht:\n").append(e.getMessage());
-		if(e.getThrowable() != null)
+		sb.append("Level    : ").append(e.level()).append("\n");
+		sb.append("Anwendung: ").append(e.source()).append("\n");
+		sb.append("Logger   : ").append(e.loggerName()).append("\n\n");
+		sb.append("Nachricht:\n").append(e.message());
+		if(e.throwable() != null)
 		{
-			sb.append("\n\nException:\n").append(e.getThrowable());
+			sb.append("\n\nException:\n").append(e.throwable());
 		}
 		ta.setText(sb.toString());
 
