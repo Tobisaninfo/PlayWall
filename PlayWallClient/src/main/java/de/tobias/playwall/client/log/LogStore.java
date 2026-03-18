@@ -15,7 +15,7 @@ public class LogStore
 	@Getter
 	private final ObservableList<LogEntry> allEntries = FXCollections.observableArrayList();
 	@Getter
-	private final ObservableList<String> sources = FXCollections.observableArrayList("Alle Quellen");
+	private final ObservableList<String> sources = FXCollections.observableArrayList();
 
 	public void onEntry(LogEntry entry)
 	{
@@ -26,7 +26,6 @@ public class LogStore
 			}
 			allEntries.add(entry);
 
-			// Track sources
 			if(!sources.contains(entry.source()))
 			{
 				sources.add(entry.source());

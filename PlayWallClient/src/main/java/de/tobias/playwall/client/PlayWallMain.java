@@ -74,6 +74,7 @@ public class PlayWallMain extends Application
 			try
 			{
 				final LogServer logServer = new LogServer(LogServer.DEFAULT_PORT, appContext.get(LogStore.class)::onEntry);
+				appContext.registerLazySingleton(LogServer.class, _ -> logServer);
 				logServer.start();
 			}
 			catch(Exception e)

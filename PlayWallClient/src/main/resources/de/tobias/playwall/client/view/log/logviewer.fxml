@@ -55,7 +55,7 @@
                 <Insets top="5" right="14" bottom="5" left="14"/>
             </padding>
 
-            <Label fx:id="connectedLabel" text="● 0 Connections" styleClass="status-disconnected"/>
+            <Label fx:id="connectedLabel" styleClass="status-disconnected"/>
             <Label fx:id="statusLabel" styleClass="label-muted small"/>
         </HBox>
     </bottom>

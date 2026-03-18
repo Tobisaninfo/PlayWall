@@ -25,6 +25,8 @@ import java.util.Set;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = @InjectConstructor)
 public class LogViewer extends NVC
 {
+	private static final String ALL_SOURCES = "Alle Quellen";
+
 	@FXML
 	private ToggleButton btnTrace;
 	@FXML
@@ -63,16 +65,21 @@ public class LogViewer extends NVC
 
 	private final Set<LogEntry.Level> activeLevels = EnumSet.allOf(LogEntry.Level.class);
 	private FilteredList<LogEntry> filteredEntries;
-	private SortedList<LogEntry> sortedEntries;
-
-	private final LogStore logStore;
 	private ListChangeListener<LogEntry> logEntryListChangeListener;
+
+	private final LogServer logServer;
+	private final LogStore logStore;
 
 	@Override
 	public void init()
 	{
+		if(!logStore.getSources().contains(ALL_SOURCES))
+		{
+			logStore.getSources().addFirst(ALL_SOURCES);
+		}
+
 		filteredEntries = new FilteredList<>(logStore.getAllEntries(), e -> true);
-		sortedEntries = new SortedList<>(filteredEntries, Comparator.comparing(LogEntry::timestamp));
+		final SortedList<LogEntry> sortedEntries = new SortedList<>(filteredEntries, Comparator.comparing(LogEntry::timestamp));
 
 		colTime.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFormattedTime()));
 		colLevel.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().level().name()));
@@ -97,6 +104,7 @@ public class LogViewer extends NVC
 		sourceFilter.setValue(logStore.getSources().getFirst());
 
 		statusLabel.textProperty().bind(Bindings.size(logStore.getAllEntries()).asString().map(s -> s + " Einträge"));
+		connectedLabel.textProperty().bind(logServer.activeConnectionsProperty().asString().map(s -> "● " + s + " Connections"));
 
 		searchField.textProperty().addListener((_, _, _) -> updateFilter(null));
 
@@ -109,7 +117,9 @@ public class LogViewer extends NVC
 		logStore.getAllEntries().addListener(logEntryListChangeListener);
 
 		for(ToggleButton b : new ToggleButton[]{btnTrace, btnDebug, btnInfo, btnWarn, btnError, btnFatal})
+		{
 			b.setSelected(true);
+		}
 
 		updateFilter(null);
 	}
@@ -117,7 +127,7 @@ public class LogViewer extends NVC
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
-		stage.setTitle("Zentraler Log-Viewer");
+		stage.setTitle("Log-Viewer");
 		stage.setMinWidth(900);
 		stage.setMinHeight(550);
 		stage.getScene().getStylesheets().addFirst("style/logviewer.css");
@@ -136,14 +146,22 @@ public class LogViewer extends NVC
 		if(btnError.isSelected()) activeLevels.add(LogEntry.Level.ERROR);
 		if(btnFatal.isSelected()) activeLevels.add(LogEntry.Level.FATAL);
 
-		String srcFilter = sourceFilter.getValue();
-		String search = searchField.getText().toLowerCase();
+		final String srcFilter = sourceFilter.getValue();
+		final String search = searchField.getText().toLowerCase();
 
 		filteredEntries.setPredicate(entry -> {
-			if(!activeLevels.contains(entry.level())) return false;
-			if(srcFilter != null && !srcFilter.equals("Alle Quellen")
-			   && !entry.source().equals(srcFilter)) return false;
-			if(!search.isBlank() && !entry.message().toLowerCase().contains(search)) return false;
+			if(!activeLevels.contains(entry.level()))
+			{
+				return false;
+			}
+			if(srcFilter != null && !srcFilter.equals(ALL_SOURCES) && !entry.source().equals(srcFilter))
+			{
+				return false;
+			}
+			if(!search.isBlank() && !entry.message().toLowerCase().contains(search))
+			{
+				return false;
+			}
 			return true;
 		});
 	}
@@ -154,21 +172,19 @@ public class LogViewer extends NVC
 		logStore.clearMessages();
 	}
 
-	// ─── Detail Dialog ───────────────────────────────────────────────────────
-
 	private void showDetail(LogEntry e)
 	{
-		Dialog<Void> dialog = new Dialog<>();
+		final Dialog<Void> dialog = new Dialog<>();
 		dialog.setTitle("Log Detail");
 		dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
 		dialog.getDialogPane().setStyle("-fx-background-color: #161b22;");
 
-		TextArea ta = new TextArea();
+		final TextArea ta = new TextArea();
 		ta.setEditable(false);
 		ta.setStyle("-fx-control-inner-background: #0d1117; -fx-text-fill: #c9d1d9; -fx-font-family: Monospace;");
 		ta.setPrefSize(900, 400);
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("Zeit     : ").append(e.getFormattedTime()).append("\n");
 		sb.append("Level    : ").append(e.level()).append("\n");
 		sb.append("Anwendung: ").append(e.source()).append("\n");

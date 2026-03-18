@@ -27,15 +27,16 @@ public class RemoteLogViewerAppender extends AbstractAppender
 	private final int port;
 	private final String appName;
 
-	private volatile ObjectOutputStream oos;
-	private volatile Socket socket;
+	private ObjectOutputStream oos;
+	private Socket socket;
 	private final BlockingQueue<LogEntry> queue = new LinkedBlockingQueue<>(5000);
 	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-		Thread t = new Thread(r, "remote-log-appender");
+		final Thread t = new Thread(r, "remote-log-appender");
 		t.setDaemon(true);
 		return t;
 	});
 
+	@SuppressWarnings("java:S107")
 	protected RemoteLogViewerAppender(String name, Filter filter, Layout<? extends Serializable> layout,
 									  boolean ignoreExceptions, Property[] properties,
 									  String host, int port, String appName)
@@ -69,11 +70,11 @@ public class RemoteLogViewerAppender extends AbstractAppender
 	public void start()
 	{
 		super.start();
-		// Sender thread
 		scheduler.scheduleWithFixedDelay(this::trySend, 0, 500, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
+	@SuppressWarnings("java:S899")
 	public void append(LogEvent event)
 	{
 		LogEntry.Level level;
@@ -81,7 +82,7 @@ public class RemoteLogViewerAppender extends AbstractAppender
 		{
 			level = LogEntry.Level.valueOf(event.getLevel().name());
 		}
-		catch(IllegalArgumentException e)
+		catch(IllegalArgumentException _)
 		{
 			level = LogEntry.Level.DEBUG;
 		}
@@ -94,7 +95,7 @@ public class RemoteLogViewerAppender extends AbstractAppender
 			throwableStr = sw.toString();
 		}
 
-		LogEntry entry = new LogEntry(
+		final LogEntry entry = new LogEntry(
 				event.getTimeMillis(),
 				level,
 				event.getLoggerName(),
@@ -119,9 +120,9 @@ public class RemoteLogViewerAppender extends AbstractAppender
 				oos.writeObject(entry);
 			}
 			oos.flush();
-			oos.reset(); // prevent memory leak from object cache
+			oos.reset();
 		}
-		catch(Exception e)
+		catch(Exception _)
 		{
 			closeConnection();
 		}
@@ -144,15 +145,17 @@ public class RemoteLogViewerAppender extends AbstractAppender
 		{
 			if(oos != null) oos.close();
 		}
-		catch(Exception ignored)
+		catch(Exception _)
 		{
+			// Ignored
 		}
 		try
 		{
 			if(socket != null) socket.close();
 		}
-		catch(Exception ignored)
+		catch(Exception _)
 		{
+			// Ignored
 		}
 		oos = null;
 		socket = null;

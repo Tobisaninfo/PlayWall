@@ -41,15 +41,16 @@
             <AppenderRef ref="Remote"/>
         </Async>
 
-        <Async name="ConsoleAndFile" includeLocation="true">
+        <Async name="ConsoleAndFileAndRemote" includeLocation="true">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="Remote"/>
         </Async>
 
         <Routing name="Routing">
             <Routes pattern="${sys:app.debug:-false}">
                 <Route key="true" ref="ConsoleAndRemote"/>
-                <Route key="false" ref="ConsoleAndFile"/>
+                <Route key="false" ref="ConsoleAndFileAndRemote"/>
             </Routes>
         </Routing>
 
