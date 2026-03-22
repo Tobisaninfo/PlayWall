@@ -81,7 +81,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		robot.clickOn(robot.lookup(".menu-item").lookup("Projekt speichern").queryLabeled());
 
 		verify(client).saveProject();
-		assertThat(robot.lookup(".notification-bar").lookup(".label").queryLabeled()).hasText("Projekt gespeichert");
+		assertThat(robot.lookup(".toast").lookup(".message").queryLabeled()).hasText("Projekt gespeichert");
 	}
 
 	@Test
