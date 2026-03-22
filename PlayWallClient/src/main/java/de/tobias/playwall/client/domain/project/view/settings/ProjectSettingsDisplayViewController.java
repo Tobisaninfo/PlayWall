@@ -27,10 +27,14 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	private ColorButton buttonColorPlay;
 
 	@FXML
+	private ColorButton buttonColorIntro;
+
+	@FXML
 	private ComboBox<TimeMode> comboBoxTime;
 
 	private ColorPicker colorPickerDefault;
 	private ColorPicker colorPickerPlay;
+	private ColorPicker colorPickerIntro;
 
 	@InjectConstructor
 	public ProjectSettingsDisplayViewController(FluentClient client)
@@ -57,6 +61,10 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 		colorPickerPlay = new ColorPicker(playColor, ModernColor.values(), newColor -> buttonColorPlay.updateColor(newColor));
 		buttonColorPlay.updateColor(playColor);
 
+		final ModernColor introColor = param.getProjectMetadata().getIntroColor();
+		colorPickerIntro = new ColorPicker(introColor, ModernColor.values(), newColor -> buttonColorIntro.updateColor(newColor));
+		buttonColorIntro.updateColor(introColor);
+
 		comboBoxTime.getSelectionModel().select(param.projectMetadata.getTimeMode());
 
 		this.isValidProperty.set(true);
@@ -68,6 +76,7 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 		param.getProjectMetadata().setTimeMode(comboBoxTime.getSelectionModel().getSelectedItem());
 		param.getProjectMetadata().setDefaultColor(colorPickerDefault.getSelectedColor());
 		param.getProjectMetadata().setPlayColor(colorPickerPlay.getSelectedColor());
+		param.getProjectMetadata().setIntroColor(colorPickerIntro.getSelectedColor());
 	}
 
 	@Override
@@ -88,5 +97,12 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	{
 		colorPickerPlay.hide();
 		colorPickerPlay.show(buttonColorPlay);
+	}
+
+	@FXML
+	public void onButtonColorIntro(ActionEvent event)
+	{
+		colorPickerIntro.hide();
+		colorPickerIntro.show(buttonColorIntro);
 	}
 }
