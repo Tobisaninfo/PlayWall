@@ -24,8 +24,8 @@ public class MaterialToastManager
 
 	private static final Map<ToastType, FontAwesomeType> ICONS = Map.of(
 			ToastType.SUCCESS, FontAwesomeType.CHECK_SOLID,
-			ToastType.WARNING, FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID,
-			ToastType.ERROR, FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID,
+			ToastType.WARNING, FontAwesomeType.CIRCLE_EXCLAMATION_SOLID,
+			ToastType.ERROR, FontAwesomeType.CIRCLE_XMARK_SOLID,
 			ToastType.INFO, FontAwesomeType.INFO_SOLID
 	);
 

@@ -98,6 +98,12 @@ public class IconDeclaration
 		// File drag and drop
 		data.add(new IconEntry(FontAwesomeType.MUSIC_SOLID, List.of(new IconUsage(IconUsageCategory.DRAG_AND_DROP, "Audio"))));
 
+		// Toast
+		data.add(new IconEntry(FontAwesomeType.INFO_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Toast Info"))));
+		data.add(new IconEntry(FontAwesomeType.CHECK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Toast Success"))));
+		data.add(new IconEntry(FontAwesomeType.CIRCLE_EXCLAMATION_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Toast Warning"))));
+		data.add(new IconEntry(FontAwesomeType.CIRCLE_XMARK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Toast Error"))));
+
 		// test unused
 		data.add(new IconEntry(FontAwesomeType.CAKE_CANDLES_SOLID, List.of(new IconUsage(IconUsageCategory.UNDEFINED, "Ungenutzt"))));
 
