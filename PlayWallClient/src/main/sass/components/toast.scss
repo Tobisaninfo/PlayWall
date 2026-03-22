@@ -50,9 +50,19 @@ $levels: (
     }
 
     .close-button {
-        -fx-font-size: 11px;
-        -fx-text-fill: #BDBDBD;
+        .icon {
+            -fx-fill: #999999;
+        }
+
+        &:hover {
+            -fx-background-color: #CDCDCD;
+            -fx-background-radius: 5px;
+        }
+
+        -fx-font-size: 20px;
         -fx-cursor: hand;
-        -fx-padding: 4 6 4 6;
+        -fx-padding: 6;
+        -fx-min-width: 20px;
+        -fx-min-height: 20px;
     }
 }

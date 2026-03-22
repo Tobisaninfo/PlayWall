@@ -118,8 +118,8 @@ public class MaterialToastManager
 		messageLabel.setMaxWidth(210);
 		messageLabel.setMinHeight(Region.USE_PREF_SIZE);
 
-		final Label closeBtn = new Label("✕");
-		closeBtn.getStyleClass().add("close-button");
+		final FontIcon closeIcon = new FontIcon(FontAwesomeType.XMARK_SOLID);
+		closeIcon.getStyleClass().add("close-button");
 
 		final VBox textBox = new VBox(3, titleLabel, messageLabel);
 		textBox.setAlignment(Pos.TOP_LEFT);
@@ -130,7 +130,7 @@ public class MaterialToastManager
 		content.setPadding(new Insets(0, 0, 0, 12));
 		HBox.setHgrow(textBox, Priority.ALWAYS);
 
-		final HBox row = new HBox(content, closeBtn);
+		final HBox row = new HBox(content, closeIcon);
 		row.setAlignment(Pos.TOP_RIGHT);
 		row.setPadding(new Insets(12, 8, 12, 0));
 		HBox.setHgrow(content, Priority.ALWAYS);
@@ -146,7 +146,7 @@ public class MaterialToastManager
 		toast.setMaxWidth(TOAST_WIDTH);
 		toast.setMaxHeight(Region.USE_COMPUTED_SIZE);
 
-		closeBtn.setOnMouseClicked(e -> dismiss(toast));
+		closeIcon.setOnMouseClicked(_ -> dismiss(toast));
 
 		return toast;
 	}
