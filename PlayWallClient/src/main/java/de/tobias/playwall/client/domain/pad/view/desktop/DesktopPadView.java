@@ -35,7 +35,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,7 +78,7 @@ public class DesktopPadView implements PadView
 	private BusyView busyView;
 	private FileDragOptionView fileDragOptionView;
 
-	private Label cueInLayer;
+	private Label introLayer;
 
 	private final FluentClient fluentClient;
 	private Pad pad;
@@ -120,9 +119,9 @@ public class DesktopPadView implements PadView
 		busyView = new BusyView(superRoot);
 		fileDragOptionView = new FileDragOptionView(superRoot);
 
-		cueInLayer = PadLabel.empty(STYLE_CLASS_PAD_CUE_IN, STYLE_CLASS_PAD_CUE_IN_INDEX);
-		cueInLayer.prefHeightProperty().bind(root.heightProperty());
-		final VBox cueInContainer = new VBox(cueInLayer);
+		introLayer = PadLabel.empty(STYLE_CLASS_PAD_CUE_IN, STYLE_CLASS_PAD_CUE_IN_INDEX);
+		introLayer.prefHeightProperty().bind(root.heightProperty());
+		final VBox introContainer = new VBox(introLayer);
 
 		indexLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 		timeLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
@@ -195,7 +194,7 @@ public class DesktopPadView implements PadView
 		}
 
 		root.getChildren().addAll(infoBox, previewBox, playBar, buttonBox);
-		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
+		superRoot.getChildren().addAll(introContainer, root, notFoundLabel);
 
 		updateStatus(PadStatus.EMPTY);
 
@@ -280,7 +279,7 @@ public class DesktopPadView implements PadView
 	{
 		namePreviewLabel.setText(null);
 		timeLabel.setText(null);
-		cueInLayer.setPrefWidth(0);
+		introLayer.setPrefWidth(0);
 
 		loopLabel.setVisible(false);
 		triggerLabel.setVisible(false);
@@ -340,7 +339,7 @@ public class DesktopPadView implements PadView
 		{
 			this.timeLabel.setText(null);
 			this.playBar.setProgress(0.0);
-			this.cueInLayer.setPrefWidth(0);
+			this.introLayer.setPrefWidth(0);
 
 			return;
 		}
@@ -352,7 +351,7 @@ public class DesktopPadView implements PadView
 		{
 			this.timeLabel.setText(null);
 			this.playBar.setProgress(0.0);
-			this.cueInLayer.setPrefWidth(0);
+			this.introLayer.setPrefWidth(0);
 
 			return;
 		}
@@ -367,7 +366,7 @@ public class DesktopPadView implements PadView
 		{
 			this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
 			this.playBar.setProgress(0.0);
-			this.cueInLayer.setPrefWidth(0);
+			this.introLayer.setPrefWidth(0);
 		}
 
 		// Start warning animation if the threshold is reached
@@ -530,7 +529,7 @@ public class DesktopPadView implements PadView
 		Double introDuration = pad.getIntroDuration();
 		if(introDuration == null)
 		{
-			cueInLayer.setPrefWidth(0);
+			introLayer.setPrefWidth(0);
 			return;
 		}
 
@@ -539,11 +538,11 @@ public class DesktopPadView implements PadView
 		final double currentPosition = padController.getPosition().toMillis();
 		if(currentPosition > introDuration)
 		{
-			cueInLayer.setPrefWidth(0);
+			introLayer.setPrefWidth(0);
 			return;
 		}
 
 		final double progress = currentPosition / introDuration;
-		cueInLayer.setPrefWidth(root.getWidth() * progress);
+		introLayer.setPrefWidth(root.getWidth() * progress);
 	}
 }

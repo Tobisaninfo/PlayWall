@@ -19,7 +19,7 @@
 }
 
 .pad-cue-in${#class} {
-	-fx-background-color: ${#padCueInColor};
+	-fx-background-color: ${#padIntroColor};
 }
 
 .pad-info${#class} {

@@ -132,7 +132,7 @@ public class ModernStyle implements Styleable
 		values.put("playbarBarColor", color.getPlaybarTrackColor());
 
 		values.put("padColor", color.paint());
-		values.put("padCueInColor", ModernColor.BLUE1.paint()); // TODO: From configuruation
+		values.put("padIntroColor", ModernColor.BLUE1.paint()); // TODO: From configuruation
 
 		values.put("fontColor", color.getFontColor());
 		values.put("infoFontSize", String.valueOf(13)); // TODO: From configuruation
@@ -164,7 +164,7 @@ public class ModernStyle implements Styleable
 		values.put("playbarBarColor", color.getPlaybarTrackColor());
 
 		values.put("padColor", color.paint());
-		values.put("padCueInColor", ModernColor.BLUE1.paint()); // TODO: From configuruation
+		values.put("padIntroColor", ModernColor.BLUE1.paint()); // TODO: From configuruation
 
 		values.put("fontColor", color.getFontColor());
 		return CssTemplateProcessor.render(padTemplateString, values);
