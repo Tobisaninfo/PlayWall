@@ -13,9 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MaterialToastManager
 {
@@ -36,6 +34,7 @@ public class MaterialToastManager
 	);
 
 	private final List<Node> activeToasts = new ArrayList<>();
+	private final Set<Node> dismissingToasts = new HashSet<>();
 	private final Pane overlay;
 
 	private static final double TOAST_WIDTH = 320;
@@ -153,18 +152,22 @@ public class MaterialToastManager
 
 	private void dismiss(Node toast)
 	{
+		if(!dismissingToasts.add(toast))
+		{
+			return;
+		}
+
+		activeToasts.remove(toast);
+		repositionToasts(true);
+
 		final FadeTransition fadeOut = new FadeTransition(Duration.millis(200), toast);
-		fadeOut.setFromValue(1);
+		fadeOut.setFromValue(toast.getOpacity());
 		fadeOut.setToValue(0);
 
-		final TranslateTransition slideOut = new TranslateTransition(Duration.millis(200), toast);
-		slideOut.setToY(10);
-
-		final ParallelTransition out = new ParallelTransition(fadeOut, slideOut);
+		final ParallelTransition out = new ParallelTransition(fadeOut);
 		out.setOnFinished(_ -> {
 			overlay.getChildren().remove(toast);
-			activeToasts.remove(toast);
-			repositionToasts(true);
+			dismissingToasts.remove(toast);
 		});
 		out.play();
 	}
@@ -175,15 +178,22 @@ public class MaterialToastManager
 
 		for(Node t : activeToasts)
 		{
-			double toastHeight = t.getLayoutBounds().getHeight();
-			double x = overlay.getWidth() - TOAST_WIDTH - MARGIN;
+			final double toastHeight = t.getLayoutBounds().getHeight();
+			final double x = overlay.getWidth() - TOAST_WIDTH - MARGIN;
 
 			y -= toastHeight;
 
 			if(animate)
 			{
-				TranslateTransition move = new TranslateTransition(Duration.millis(200), t);
-				move.setToY(y - t.getLayoutY());
+				final double currentAbsY = t.getLayoutY() + t.getTranslateY();
+				final double delta = y - currentAbsY;
+
+				t.setLayoutY(y);
+				t.setTranslateY(-delta);
+
+				final TranslateTransition move = new TranslateTransition(Duration.millis(200), t);
+				move.setFromY(-delta);
+				move.setToY(0);
 				move.setInterpolator(Interpolator.EASE_BOTH);
 				move.play();
 			}
@@ -191,6 +201,7 @@ public class MaterialToastManager
 			{
 				t.setLayoutX(x);
 				t.setLayoutY(y);
+				t.setTranslateY(0);
 			}
 
 			y -= GAP;
