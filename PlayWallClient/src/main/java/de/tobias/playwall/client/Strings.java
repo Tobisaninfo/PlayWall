@@ -6,6 +6,11 @@ public class Strings
 	{
 	}
 
+	public static final String UI_NOTIFICATION_SUCCESS = "ui.notification.success";
+	public static final String UI_NOTIFICATION_INFO = "ui.notification.info";
+	public static final String UI_NOTIFICATION_WARNING = "ui.notification.warning";
+	public static final String UI_NOTIFICATION_ERROR = "ui.notification.error";
+
 	public static final String UI_DIALOG_LAUNCH_TITLE = "ui.dialog.launch.title";
 	public static final String UI_DIALOG_NEW_PROJECT_TITLE = "ui.dialog.project.create.title";
 

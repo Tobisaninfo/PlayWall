@@ -296,7 +296,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		if(projectController.isAtLeastOnePadPlaying())
 		{
-			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING), true);
+			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING), MaterialToastManager.ToastType.WARNING);
 			return false;
 		}
 
@@ -636,9 +636,21 @@ public class MainViewController extends ViewControllerBase
 				.findFirst().orElse(null);
 	}
 
-	public void showNotification(String message, boolean isWarning)
+	public void showNotification(String message, MaterialToastManager.ToastType toastType)
 	{
-		materialToastManager.show("Info", message, isWarning ? MaterialToastManager.ToastType.WARNING : MaterialToastManager.ToastType.INFO);
+		if(!Platform.isFxApplicationThread())
+		{
+			Platform.runLater(() -> showNotification(message, toastType));
+			return;
+		}
+		final String title = switch(toastType)
+		{
+			case SUCCESS -> Localization.getString(Strings.UI_NOTIFICATION_SUCCESS);
+			case INFO -> Localization.getString(Strings.UI_NOTIFICATION_INFO);
+			case WARNING -> Localization.getString(Strings.UI_NOTIFICATION_WARNING);
+			case ERROR -> Localization.getString(Strings.UI_NOTIFICATION_ERROR);
+		};
+		materialToastManager.show(title, message, toastType);
 	}
 
 	// Action Handlers
@@ -829,7 +841,7 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			client.currentProject().save();
-			showNotification(Localization.getString("ui.notification.project.saved"), false);
+			showNotification(Localization.getString("ui.notification.project.saved"), MaterialToastManager.ToastType.SUCCESS);
 		}
 		catch(PlayWallApiException e)
 		{
