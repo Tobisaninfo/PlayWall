@@ -72,6 +72,7 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 		super.initStage(stageContainer, stage);
 
 		stage.setHeight(580);
+		stage.setWidth(1040);
 	}
 
 	@Override

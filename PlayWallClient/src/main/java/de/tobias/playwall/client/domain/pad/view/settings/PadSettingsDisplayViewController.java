@@ -35,10 +35,17 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	private ColorButton buttonColorPlay;
 
 	@FXML
+	private CheckBox checkboxColorIntro;
+
+	@FXML
+	private ColorButton buttonColorIntro;
+
+	@FXML
 	private ComboBox<TimeMode> comboBoxTime;
 
 	private ColorPicker colorPickerDefault;
 	private ColorPicker colorPickerPlay;
+	private ColorPicker colorPickerIntro;
 
 	@InjectConstructor
 	public PadSettingsDisplayViewController(FluentClient client, PadContentSettingsContainerFactory padContentSettingsContainerFactory)
@@ -60,6 +67,7 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	{
 		colorPickerDefault = initColorPicker(param.getPad().getDefaultColor(), buttonColorDefault, checkboxColorDefault);
 		colorPickerPlay = initColorPicker(param.getPad().getPlayColor(), buttonColorPlay, checkboxColorPlay);
+		colorPickerIntro = initColorPicker(param.getPad().getIntroColor(), buttonColorIntro, checkboxColorIntro);
 
 		comboBoxTime.getSelectionModel().select(param.pad.getTimeMode());
 
@@ -103,6 +111,13 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 			playColor = colorPickerPlay.getSelectedColor();
 		}
 		param.pad.setPlayColor(playColor);
+
+		ModernColor introColor = null;
+		if(checkboxColorIntro.isSelected())
+		{
+			introColor = colorPickerIntro.getSelectedColor();
+		}
+		param.pad.setIntroColor(introColor);
 	}
 
 	@Override
@@ -123,5 +138,12 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	{
 		colorPickerPlay.hide();
 		colorPickerPlay.show(buttonColorPlay);
+	}
+
+	@FXML
+	public void onButtonColorIntro(ActionEvent event)
+	{
+		colorPickerIntro.hide();
+		colorPickerIntro.show(buttonColorIntro);
 	}
 }
