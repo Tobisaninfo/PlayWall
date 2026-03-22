@@ -22,15 +22,11 @@ public class MaterialToastManager
 		SUCCESS, WARNING, ERROR, INFO
 	}
 
-	private record ToastConfig(String accent, FontAwesomeType icon)
-	{
-	}
-
-	private static final Map<ToastType, ToastConfig> CONFIGS = Map.of(
-			ToastType.SUCCESS, new ToastConfig("#4CAF50", FontAwesomeType.CHECK_SOLID),
-			ToastType.WARNING, new ToastConfig("#FF9800", FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID),
-			ToastType.ERROR, new ToastConfig("#F44336", FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID),
-			ToastType.INFO, new ToastConfig("#2196F3", FontAwesomeType.INFO_SOLID)
+	private static final Map<ToastType, FontAwesomeType> ICONS = Map.of(
+			ToastType.SUCCESS, FontAwesomeType.CHECK_SOLID,
+			ToastType.WARNING, FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID,
+			ToastType.ERROR, FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID,
+			ToastType.INFO, FontAwesomeType.INFO_SOLID
 	);
 
 	private final List<Node> activeToasts = new ArrayList<>();
@@ -86,20 +82,18 @@ public class MaterialToastManager
 		});
 
 		final PauseTransition wait = new PauseTransition(Duration.seconds(4));
-		wait.setOnFinished(e -> dismiss(toast));
+		wait.setOnFinished(_ -> dismiss(toast));
 		wait.play();
 	}
 
 	private Node buildToast(String title, String message, ToastType type)
 	{
-		final ToastConfig config = CONFIGS.get(type);
-
 		final Region accent = new Region();
 		accent.setPrefWidth(4);
 		accent.setMinWidth(4);
 		accent.getStyleClass().addAll("accent", type.name().toLowerCase());
 
-		final FontIcon iconLabel = new FontIcon(config.icon());
+		final FontIcon iconLabel = new FontIcon(ICONS.get(type));
 
 		final StackPane iconCircle = new StackPane(iconLabel);
 		iconCircle.setMaxSize(28, 28);
