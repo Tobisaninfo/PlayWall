@@ -49,6 +49,7 @@ class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpda
 		pad.setTimeMode(requestMessage.getPad().getTimeMode());
 		pad.setDefaultColor(requestMessage.getPad().getDefaultColor());
 		pad.setPlayColor(requestMessage.getPad().getPlayColor());
+		pad.setIntroColor(requestMessage.getPad().getIntroColor());
 		pad.setEofWarningTime(requestMessage.getPad().getEofWarningTime());
 		pad.setIntroDuration(requestMessage.getPad().getIntroDuration());
 

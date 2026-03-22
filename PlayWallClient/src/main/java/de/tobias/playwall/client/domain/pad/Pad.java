@@ -22,6 +22,7 @@ public class Pad
 	private TimeMode timeMode;
 	private ModernColor defaultColor;
 	private ModernColor playColor;
+	private ModernColor introColor;
 	private Double eofWarningTime;
 	private Double introDuration;
 
@@ -39,6 +40,7 @@ public class Pad
 				.timeMode(timeMode)
 				.defaultColor(defaultColor)
 				.playColor(playColor)
+				.introColor(introColor)
 				.eofWarningTime(eofWarningTime)
 				.introDuration(introDuration)
 				.content(content == null ? null : content.copy())

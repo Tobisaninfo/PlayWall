@@ -23,6 +23,7 @@ public class PadDto
 	private TimeMode timeMode;
 	private Color defaultColor;
 	private Color playColor;
+	private Color introColor;
 	private Double eofWarningTime;
 	private Double introDuration;
 }

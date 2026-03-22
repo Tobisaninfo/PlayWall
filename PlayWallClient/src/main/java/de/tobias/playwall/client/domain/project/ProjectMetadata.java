@@ -22,6 +22,7 @@ public final class ProjectMetadata
 	private TimeMode timeMode;
 	private ModernColor defaultColor;
 	private ModernColor playColor;
+	private ModernColor introColor;
 	private Double eofWarningTime;
 
 	public int getNumberOfPadsPerPage()

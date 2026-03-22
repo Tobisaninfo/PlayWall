@@ -8,6 +8,7 @@
         "timeMode": "ELAPSED",
         "defaultColor": "GRAY1",
         "playColor": "RED3",
+        "introColor": null,
         "eofWarningTime": 5.0
     },
     "pages": [
@@ -23,6 +24,7 @@
                     "timeMode": null,
                     "defaultColor": null,
                     "playColor": null,
+                    "introColor": null,
                     "content": null
                 },
                 {
@@ -32,6 +34,7 @@
                     "timeMode": "ELAPSED",
                     "defaultColor": null,
                     "playColor": null,
+                    "introColor": null,
                     "content": null
                 },
                 {
@@ -41,6 +44,7 @@
                     "timeMode": "ELAPSED",
                     "defaultColor": null,
                     "playColor": null,
+                    "introColor": null,
                     "content": null
                 },
                 {
@@ -50,6 +54,7 @@
                     "timeMode": "ELAPSED",
                     "defaultColor": null,
                     "playColor": null,
+                    "introColor": null,
                     "content": null
                 }
             ]

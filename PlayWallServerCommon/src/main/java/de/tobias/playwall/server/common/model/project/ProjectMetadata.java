@@ -43,6 +43,9 @@ public class ProjectMetadata
 	private Color playColor = Color.RED3;
 
 	@Builder.Default
+	private Color introColor = Color.BLUE1;
+
+	@Builder.Default
 	private Double eofWarningTime = 5.0;
 
 	@JsonIgnore
@@ -62,6 +65,7 @@ public class ProjectMetadata
 				.timeMode(timeMode)
 				.defaultColor(defaultColor)
 				.playColor(playColor)
+				.introColor(introColor)
 				.eofWarningTime(eofWarningTime)
 				.build();
 	}
