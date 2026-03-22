@@ -1,4 +1,4 @@
 
-.pad${#prefix}-cue-in {
+.pad${#prefix}-intro {
     -fx-background-color: ${#padIntroColor} !important;
 }

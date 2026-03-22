@@ -119,7 +119,7 @@ public class DesktopPadView implements PadView
 		busyView = new BusyView(superRoot);
 		fileDragOptionView = new FileDragOptionView(superRoot);
 
-		introLayer = PadLabel.empty(STYLE_CLASS_PAD_CUE_IN, STYLE_CLASS_PAD_CUE_IN_INDEX);
+		introLayer = PadLabel.empty(STYLE_CLASS_PAD_INTRO, STYLE_CLASS_PAD_INTRO_INDEX);
 		introLayer.prefHeightProperty().bind(root.heightProperty());
 		final VBox introContainer = new VBox(introLayer);
 

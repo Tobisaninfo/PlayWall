@@ -18,7 +18,7 @@
 	-fx-background-color: ${#padColor};
 }
 
-.pad-cue-in${#class} {
+.pad-intro${#class} {
 	-fx-background-color: ${#padIntroColor};
 }
 
