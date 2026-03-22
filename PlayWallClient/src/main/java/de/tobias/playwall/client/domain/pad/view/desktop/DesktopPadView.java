@@ -280,6 +280,7 @@ public class DesktopPadView implements PadView
 	{
 		namePreviewLabel.setText(null);
 		timeLabel.setText(null);
+		cueInLayer.setPrefWidth(0);
 
 		loopLabel.setVisible(false);
 		triggerLabel.setVisible(false);
@@ -339,6 +340,7 @@ public class DesktopPadView implements PadView
 		{
 			this.timeLabel.setText(null);
 			this.playBar.setProgress(0.0);
+			this.cueInLayer.setPrefWidth(0);
 
 			return;
 		}
@@ -350,6 +352,7 @@ public class DesktopPadView implements PadView
 		{
 			this.timeLabel.setText(null);
 			this.playBar.setProgress(0.0);
+			this.cueInLayer.setPrefWidth(0);
 
 			return;
 		}
@@ -358,11 +361,13 @@ public class DesktopPadView implements PadView
 		{
 			updateTimeLabelByTimeMode(duration, position);
 			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
+			updateIntroLayer();
 		}
 		else
 		{
 			this.timeLabel.setText(padTimeUtils.formatDurationToString(duration));
 			this.playBar.setProgress(0.0);
+			this.cueInLayer.setPrefWidth(0);
 		}
 
 		// Start warning animation if the threshold is reached
@@ -518,5 +523,27 @@ public class DesktopPadView implements PadView
 		}
 
 		padSettingsViewController.showAndWait(new BasePadSettingsViewController.Param(padController.getPad(), padSettingsViewController), superRoot.getScene().getWindow());
+	}
+
+	private void updateIntroLayer()
+	{
+		Double introDuration = pad.getIntroDuration();
+		if(introDuration == null)
+		{
+			cueInLayer.setPrefWidth(0);
+			return;
+		}
+
+		introDuration *= 1000;
+
+		final double currentPosition = padController.getPosition().toMillis();
+		if(currentPosition > introDuration)
+		{
+			cueInLayer.setPrefWidth(0);
+			return;
+		}
+
+		final double progress = currentPosition / introDuration;
+		cueInLayer.setPrefWidth(root.getWidth() * progress);
 	}
 }
