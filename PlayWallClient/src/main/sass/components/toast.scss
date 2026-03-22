@@ -1,0 +1,58 @@
+$accent-blue: #2196F3;
+$accent-green: #4CAF50;
+$accent-yellow: #FF9800;
+$accent-red: #F44336;
+
+$levels: (
+        success: $accent-green,
+        info: $accent-blue,
+        warning: $accent-yellow,
+        error: $accent-red,
+);
+
+@mixin level-colors() {
+    @each $name, $color in $levels {
+        &.#{$name} {
+            -fx-background-color: $color;
+        }
+    }
+}
+
+.toast {
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 8, 0, 0, 3);
+
+    &:hover {
+        -fx-background-color: #FAFAFA;
+        -fx-background-radius: 4px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.26), 12, 0, 0, 5);
+    }
+
+    .accent {
+        @include level-colors();
+    }
+
+    .icon-circle {
+        @include level-colors();
+        -fx-background-radius: 50%;
+    }
+
+    .title {
+        -fx-font-size: 13px;
+        -fx-font-weight: bold;
+        -fx-text-fill: #212121;
+    }
+
+    .message {
+        -fx-font-size: 12px;
+        -fx-text-fill: #757575;
+    }
+
+    .close-button {
+        -fx-font-size: 11px;
+        -fx-text-fill: #BDBDBD;
+        -fx-cursor: hand;
+        -fx-padding: 4 6 4 6;
+    }
+}
