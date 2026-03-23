@@ -18,8 +18,8 @@
 	-fx-background-color: ${#padColor};
 }
 
-.pad-cue-in${#class} {
-	-fx-background-color: ${#padCueInColor};
+.pad-intro${#class} {
+	-fx-background-color: ${#padIntroColor};
 }
 
 .pad-info${#class} {

@@ -23,6 +23,7 @@ public class ProjectMetadataMapper
 				metadataDto.timeMode(),
 				colorMapper.colorToModernColor(metadataDto.defaultColor()),
 				colorMapper.colorToModernColor(metadataDto.playColor()),
+				colorMapper.colorToModernColor(metadataDto.introColor()),
 				metadataDto.eofWarningTime()
 		);
 	}
@@ -38,6 +39,7 @@ public class ProjectMetadataMapper
 				metadata.getTimeMode(),
 				colorMapper.modernColorToColor(metadata.getDefaultColor()),
 				colorMapper.modernColorToColor(metadata.getPlayColor()),
+				colorMapper.modernColorToColor(metadata.getIntroColor()),
 				metadata.getEofWarningTime()
 		);
 	}

@@ -39,6 +39,7 @@ public class ModernStyle implements Styleable
 
 	private String globalTemplateString;
 	private String padTemplateString;
+	private String padIntroTemplateString;
 
 	private final Set<Stage> stages = new LinkedHashSet<>();
 
@@ -48,6 +49,7 @@ public class ModernStyle implements Styleable
 	{
 		globalTemplateString = Minifier.minifyCss(app.getClasspathResource("style/template-modern-global.css").getAsString());
 		padTemplateString = Minifier.minifyCss(app.getClasspathResource("style/template-modern-pad.css").getAsString());
+		padIntroTemplateString = Minifier.minifyCss(app.getClasspathResource("style/template-modern-pad-intro.css").getAsString());
 
 		if(commandLineOptions.hasOption(CommandLineOptions.WATCH_STYLESHEETS))
 		{
@@ -119,11 +121,11 @@ public class ModernStyle implements Styleable
 
 	private void renderGlobalTemplate(StringBuilder builder, ProjectMetadata projectMetadata)
 	{
-		builder.append(renderGlobalTemplate(projectMetadata.getDefaultColor(), ""))
-				.append(renderGlobalTemplate(projectMetadata.getPlayColor(), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
+		builder.append(renderGlobalTemplate(projectMetadata.getDefaultColor(), projectMetadata.getIntroColor(), ""))
+				.append(renderGlobalTemplate(projectMetadata.getPlayColor(), projectMetadata.getIntroColor(), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
 	}
 
-	private String renderGlobalTemplate(ModernColor color, String pseudoClass)
+	private String renderGlobalTemplate(ModernColor color, ModernColor introColor, String pseudoClass)
 	{
 		final Map<String, String> values = new HashMap<>();
 		values.put("class", pseudoClass);
@@ -132,7 +134,7 @@ public class ModernStyle implements Styleable
 		values.put("playbarBarColor", color.getPlaybarTrackColor());
 
 		values.put("padColor", color.paint());
-		values.put("padCueInColor", ModernColor.BLUE1.paint()); // TODO: From configuruation
+		values.put("padIntroColor", introColor.paint());
 
 		values.put("fontColor", color.getFontColor());
 		values.put("infoFontSize", String.valueOf(13)); // TODO: From configuruation
@@ -152,6 +154,11 @@ public class ModernStyle implements Styleable
 		{
 			builder.append(renderPadTemplate(padIndex, pad.getPlayColor(), MessageFormat.format(":{0}", PseudoClasses.PLAY_CLASS.getPseudoClassName())));
 		}
+
+		if(pad.getIntroColor() != null)
+		{
+			builder.append(renderPadIntroTemplate(padIndex, pad.getIntroColor()));
+		}
 	}
 
 	private String renderPadTemplate(PadIndex padIndex, ModernColor color, String pseudoClass)
@@ -162,11 +169,16 @@ public class ModernStyle implements Styleable
 		values.put("buttonColor", color.getButtonColor());
 		values.put("playbarTrackColor", color.getPlaybarColor());
 		values.put("playbarBarColor", color.getPlaybarTrackColor());
-
 		values.put("padColor", color.paint());
-		values.put("padCueInColor", ModernColor.BLUE1.paint()); // TODO: From configuruation
-
 		values.put("fontColor", color.getFontColor());
 		return CssTemplateProcessor.render(padTemplateString, values);
+	}
+
+	private String renderPadIntroTemplate(PadIndex padIndex, ModernColor introColor)
+	{
+		final Map<String, String> values = new HashMap<>();
+		values.put("prefix", String.valueOf(padIndex));
+		values.put("padIntroColor", introColor.paint());
+		return CssTemplateProcessor.render(padIntroTemplateString, values);
 	}
 }

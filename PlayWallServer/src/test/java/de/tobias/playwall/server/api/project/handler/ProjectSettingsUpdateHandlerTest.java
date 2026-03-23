@@ -103,18 +103,19 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.timeMode(TimeMode.ELAPSED_AND_TOTAL)
 				.defaultColor(Color.DARK_RED1)
 				.playColor(Color.BLUE1)
+				.introColor(Color.LIGHT_GREEN2)
 				.build());
 		handler.handleRequest(request);
 
-		assertThat(project.getMetadata()).extracting(ProjectMetadata::getName, ProjectMetadata::getTimeMode, ProjectMetadata::getDefaultColor, ProjectMetadata::getPlayColor, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads)
-				.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, 3, 5);
+		assertThat(project.getMetadata()).extracting(ProjectMetadata::getName, ProjectMetadata::getTimeMode, ProjectMetadata::getDefaultColor, ProjectMetadata::getPlayColor, ProjectMetadata::getIntroColor, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads)
+				.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, Color.LIGHT_GREEN2, 3, 5);
 
 		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class))
 				.hasSize(1)
 				.first()
 				.satisfies(event -> assertThat(event.getProjectMetadata())
-						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor, ProjectMetadataDto::numberOfHorizontalPads, ProjectMetadataDto::numberOfVerticalPads)
-						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, 3, 5));
+						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor, ProjectMetadataDto::introColor, ProjectMetadataDto::numberOfHorizontalPads, ProjectMetadataDto::numberOfVerticalPads)
+						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, Color.LIGHT_GREEN2, 3, 5));
 
 		assertThat(applicationEvents.stream(ProjectUpdate.class))
 				.hasSize(1)

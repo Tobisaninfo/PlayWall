@@ -9,6 +9,6 @@ import java.util.UUID;
 @Builder
 public record ProjectMetadataDto(UUID id, String name, Integer numberOfHorizontalPads, Integer numberOfVerticalPads,
 								 Double volume, TimeMode timeMode, Color defaultColor, Color playColor,
-								 Double eofWarningTime)
+								 Color introColor, Double eofWarningTime)
 {
 }

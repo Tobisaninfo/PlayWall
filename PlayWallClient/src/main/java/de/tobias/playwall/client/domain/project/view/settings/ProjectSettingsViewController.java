@@ -14,6 +14,7 @@ import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.settings.BaseSettingsDialogController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,14 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 		initButtons();
 
 		selectCategory(categoryGeneral);
+	}
+
+	@Override
+	protected void initStage(NVCStage stageContainer, Stage stage)
+	{
+		super.initStage(stageContainer, stage);
+
+		stage.setWidth(1040);
 	}
 
 	@Override
