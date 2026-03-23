@@ -17,11 +17,6 @@ import java.util.*;
 
 public class MaterialToastManager
 {
-	public enum ToastType
-	{
-		SUCCESS, WARNING, ERROR, INFO
-	}
-
 	private static final Map<ToastType, FontAwesomeType> ICONS = Map.of(
 			ToastType.SUCCESS, FontAwesomeType.CHECK_SOLID,
 			ToastType.WARNING, FontAwesomeType.CIRCLE_EXCLAMATION_SOLID,

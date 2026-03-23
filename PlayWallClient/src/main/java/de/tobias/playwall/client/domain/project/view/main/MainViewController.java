@@ -41,6 +41,7 @@ import de.tobias.playwall.client.view.components.GlobalColorPicker;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.style.ModernStyleSizeHelper;
+import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -296,7 +297,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		if(projectController.isAtLeastOnePadPlaying())
 		{
-			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING), MaterialToastManager.ToastType.WARNING);
+			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING), ToastType.WARNING);
 			return false;
 		}
 
@@ -636,7 +637,7 @@ public class MainViewController extends ViewControllerBase
 				.findFirst().orElse(null);
 	}
 
-	public void showNotification(String message, MaterialToastManager.ToastType toastType)
+	public void showNotification(String message, ToastType toastType)
 	{
 		if(!Platform.isFxApplicationThread())
 		{
@@ -841,7 +842,7 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			client.currentProject().save();
-			showNotification(Localization.getString("ui.notification.project.saved"), MaterialToastManager.ToastType.SUCCESS);
+			showNotification(Localization.getString("ui.notification.project.saved"), ToastType.SUCCESS);
 		}
 		catch(PlayWallApiException e)
 		{

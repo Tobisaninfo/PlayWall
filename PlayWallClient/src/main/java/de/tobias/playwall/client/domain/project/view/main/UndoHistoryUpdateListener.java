@@ -4,6 +4,7 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.client.view.toast.MaterialToastManager;
+import de.tobias.playwall.client.view.toast.ToastType;
 import de.tobias.playwall.common.api.history.UndoHistoryUpdate;
 import lombok.AllArgsConstructor;
 
@@ -37,7 +38,7 @@ class UndoHistoryUpdateListener implements UpdateMessageEventListener<UndoHistor
 
 		if(message.getMessage() != null)
 		{
-			controller.showNotification(message.getMessage(), MaterialToastManager.ToastType.INFO);
+			controller.showNotification(message.getMessage(), ToastType.INFO);
 		}
 	}
 
