@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -57,6 +58,15 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 
 		this.searchTextField.setPromptText(Localization.getString("ui.project.management.search.prompt"));
 		this.projectListView.setCellFactory(_ -> new ProjectManagementCell());
+		projectListView.setOnMouseClicked(mouseEvent -> {
+			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
+			   mouseEvent.getClickCount() == 2 &&
+			   !projectListView.getSelectionModel().isEmpty())
+			{
+				closeStage();
+				mainViewController.closeCurrentProjectAndOpenProject(getSelectedProject().getId());
+			}
+		});
 
 		try
 		{
@@ -82,6 +92,11 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		stage.setTitle(Localization.getString("ui.project.management.title"));
 		stage.setMinHeight(500);
 		stage.setMinWidth(400);
+	}
+
+	private ProjectMetadata getSelectedProject()
+	{
+		return projectListView.getSelectionModel().getSelectedItem();
 	}
 
 	@FXML
