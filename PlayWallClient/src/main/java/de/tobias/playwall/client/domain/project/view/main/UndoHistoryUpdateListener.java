@@ -3,7 +3,7 @@ package de.tobias.playwall.client.domain.project.view.main;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
-import de.tobias.playwall.client.view.MaterialToastManager;
+import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.common.api.history.UndoHistoryUpdate;
 import lombok.AllArgsConstructor;
 

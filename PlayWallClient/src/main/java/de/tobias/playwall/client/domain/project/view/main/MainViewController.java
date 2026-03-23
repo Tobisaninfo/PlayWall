@@ -33,7 +33,7 @@ import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.Size;
-import de.tobias.playwall.client.view.MaterialToastManager;
+import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.about.AboutDialog;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;

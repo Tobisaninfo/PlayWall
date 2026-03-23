@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.view;
+package de.tobias.playwall.client.view.toast;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
