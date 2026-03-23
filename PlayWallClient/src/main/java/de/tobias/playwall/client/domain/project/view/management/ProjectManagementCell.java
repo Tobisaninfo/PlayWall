@@ -1,16 +1,32 @@
 package de.tobias.playwall.client.domain.project.view.management;
 
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
+import javafx.geometry.Side;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 
 public class ProjectManagementCell extends ListCell<ProjectMetadata>
 {
 	private ProjectMetadata ref;
+
+	private final ContextMenu contextMenu;
+
+	public ProjectManagementCell()
+	{
+		contextMenu = new ContextMenu();
+
+		final MenuItem renameMenu = new MenuItem(Localization.getString("project.button.rename"), new FontIcon(FontAwesomeType.PEN_SOLID));
+		final MenuItem duplicateMenu = new MenuItem(Localization.getString("project.button.duplicate"), new FontIcon(FontAwesomeType.CLONE_SOLID));
+		final MenuItem exportMenu = new MenuItem(Localization.getString("project.button.export"), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
+		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_SOLID));
+
+		contextMenu.getItems().addAll(renameMenu, duplicateMenu, exportMenu, new SeparatorMenuItem(), deleteMenu);
+	}
 
 	@Override
 	protected void updateItem(ProjectMetadata ref, boolean empty)
@@ -20,22 +36,21 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 		{
 			if(this.ref == null || this.ref != ref)
 			{
-				HBox rootBox = new HBox(14);
-				VBox nameBox = new VBox(3);
+				final HBox row = new HBox();
+				row.setAlignment(Pos.CENTER_LEFT);
 
-				// init
-				rootBox.setAlignment(Pos.CENTER_LEFT);
-
-				// Project Name
-				Label projectNameLabel = new Label();
+				final Label projectNameLabel = new Label();
+				projectNameLabel.setMaxWidth(Double.MAX_VALUE);
 				projectNameLabel.textProperty().setValue(ref.getName());
 				projectNameLabel.getStyleClass().add("project-management--project-name");
-				nameBox.getChildren().add(projectNameLabel);
 
-				HBox.setHgrow(nameBox, Priority.ALWAYS);
-				rootBox.getChildren().add(nameBox);
+				final Button menuButton = new Button("", new FontIcon(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID));
+				menuButton.setOnAction(e -> contextMenu.show(menuButton, Side.LEFT, 0, 0));
 
-				setGraphic(rootBox);
+				row.getChildren().addAll(projectNameLabel, menuButton);
+				HBox.setHgrow(projectNameLabel, Priority.ALWAYS);
+
+				setGraphic(row);
 				this.ref = ref;
 			}
 		}
