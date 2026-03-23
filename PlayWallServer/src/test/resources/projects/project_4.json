@@ -8,6 +8,7 @@
         "timeMode": "ELAPSED",
         "defaultColor": "GRAY1",
         "playColor": "RED3",
+        "introColor": "BLUE1",
         "eofWarningTime": 5.0
     },
     "pages": [
@@ -18,6 +19,7 @@
             "timeMode": null,
             "defaultColor": null,
             "playColor": null,
+            "introColor": null,
             "pads": [
                 {
                     "id": "fc427184-2e55-4734-8148-5fb657963616",
@@ -34,6 +36,7 @@
             "timeMode": null,
             "defaultColor": null,
             "playColor": null,
+            "introColor": null,
             "pads": [
                 {
                     "id": "535e5130-2e46-4865-bb24-e2a55ac793f7",

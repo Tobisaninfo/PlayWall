@@ -81,7 +81,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		robot.clickOn(robot.lookup(".menu-item").lookup("Projekt speichern").queryLabeled());
 
 		verify(client).saveProject();
-		assertThat(robot.lookup(".notification-bar").lookup(".label").queryLabeled()).hasText("Projekt gespeichert");
+		assertThat(robot.lookup(".toast").lookup(".message").queryLabeled()).hasText("Projekt gespeichert");
 	}
 
 	@Test
@@ -132,7 +132,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 	@Test
 	void testMenuNewProject(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(projectEmpty.getMetadata().getId(), projectEmpty.getMetadata().getName(), 2, 2, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, null);
+		ProjectMetadata metadata = new ProjectMetadata(projectEmpty.getMetadata().getId(), projectEmpty.getMetadata().getName(), 2, 2, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null);
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 		when(client.getProject(projectEmpty.getMetadata().getId())).thenReturn(projectEmpty);
 

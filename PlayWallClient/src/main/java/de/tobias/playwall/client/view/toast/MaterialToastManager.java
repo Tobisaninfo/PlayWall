@@ -1,0 +1,200 @@
+package de.tobias.playwall.client.view.toast;
+
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.tobias.playwall.client.view.components.ViewConstants;
+import javafx.animation.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class MaterialToastManager
+{
+	private final List<Node> activeToasts = new ArrayList<>();
+	private final Set<Node> dismissingToasts = new HashSet<>();
+	private final Pane overlay;
+
+	private static final double TOAST_WIDTH = 320;
+	private static final double GAP = 8;
+	private static final double MARGIN = 16;
+
+	private static final Duration DURATION_FADE_IN = Duration.millis(250);
+	private static final Duration DURATION_PAUSE = Duration.seconds(4);
+	private static final Duration DURATION_FADE_OUT = Duration.millis(250);
+
+	public MaterialToastManager(StackPane parent)
+	{
+		this.overlay = new Pane();
+		this.overlay.setPickOnBounds(false);
+
+		parent.getChildren().add(overlay);
+
+		overlay.prefWidthProperty().bind(parent.widthProperty());
+		overlay.prefHeightProperty().bind(parent.heightProperty());
+	}
+
+	public void show(String title, String message, ToastType type)
+	{
+		final Node toast = buildToast(title, message, type);
+
+		toast.setOpacity(0);
+		overlay.getChildren().add(toast);
+		activeToasts.add(toast);
+
+		toast.layoutBoundsProperty().addListener(new ChangeListener<>()
+		{
+			@Override
+			public void changed(ObservableValue<? extends Bounds> obs, Bounds oldVal, Bounds newVal)
+			{
+				if(newVal.getHeight() > 0)
+				{
+					toast.layoutBoundsProperty().removeListener(this);
+
+					repositionToasts(false);
+
+					final FadeTransition fadeIn = new FadeTransition(DURATION_FADE_IN, toast);
+					fadeIn.setFromValue(0);
+					fadeIn.setToValue(1);
+
+					final TranslateTransition slideIn = new TranslateTransition(DURATION_FADE_IN, toast);
+					slideIn.setFromY(10);
+					slideIn.setToY(0);
+					slideIn.setInterpolator(Interpolator.EASE_OUT);
+
+					new ParallelTransition(fadeIn, slideIn).play();
+				}
+			}
+		});
+
+		final PauseTransition wait = new PauseTransition(DURATION_PAUSE);
+		wait.setOnFinished(_ -> dismiss(toast));
+		wait.play();
+	}
+
+	private Node buildToast(String title, String message, ToastType type)
+	{
+		final Region accent = new Region();
+		accent.setPrefWidth(6);
+		accent.setMinWidth(6);
+		accent.getStyleClass().addAll("accent", type.name().toLowerCase());
+
+		final FontIcon iconLabel = new FontIcon(type.getIcon());
+
+		final StackPane iconCircle = new StackPane(iconLabel);
+		iconCircle.setMaxSize(28, 28);
+		iconCircle.setPrefSize(28, 28);
+		iconCircle.setMinSize(28, 28);
+		iconCircle.getStyleClass().addAll("icon-circle", type.name().toLowerCase());
+		StackPane.setAlignment(iconLabel, Pos.CENTER);
+
+		final Label titleLabel = new Label(title);
+		titleLabel.getStyleClass().add("title");
+
+		final Label messageLabel = new Label(message);
+		messageLabel.getStyleClass().add("message");
+		messageLabel.setWrapText(true);
+		messageLabel.setMaxWidth(210);
+		messageLabel.setMinHeight(Region.USE_PREF_SIZE);
+
+		final FontIcon closeIcon = new FontIcon(FontAwesomeType.XMARK_SOLID);
+		closeIcon.getStyleClass().add("close-button");
+
+		final VBox textBox = new VBox(3, titleLabel, messageLabel);
+		textBox.setAlignment(Pos.TOP_LEFT);
+		VBox.setVgrow(messageLabel, Priority.ALWAYS);
+
+		final HBox content = new HBox(ViewConstants.DEFAULT_SPACING, iconCircle, textBox);
+		content.setAlignment(Pos.TOP_LEFT);
+		content.setPadding(new Insets(0, 0, 0, ViewConstants.DEFAULT_SPACING));
+		HBox.setHgrow(textBox, Priority.ALWAYS);
+
+		final HBox row = new HBox(content, closeIcon);
+		row.setAlignment(Pos.TOP_RIGHT);
+		row.setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 8, ViewConstants.DEFAULT_SPACING, 0));
+		HBox.setHgrow(content, Priority.ALWAYS);
+
+		final HBox outer = new HBox(accent, row);
+		outer.setAlignment(Pos.TOP_LEFT);
+		HBox.setHgrow(row, Priority.ALWAYS);
+		HBox.setHgrow(accent, Priority.NEVER);
+
+		final VBox toast = new VBox(outer);
+		toast.getStyleClass().add("toast");
+		toast.setPrefWidth(TOAST_WIDTH);
+		toast.setMaxWidth(TOAST_WIDTH);
+		toast.setMaxHeight(Region.USE_COMPUTED_SIZE);
+
+		closeIcon.setOnMouseClicked(_ -> dismiss(toast));
+
+		return toast;
+	}
+
+	private void dismiss(Node toast)
+	{
+		if(!dismissingToasts.add(toast))
+		{
+			return;
+		}
+
+		activeToasts.remove(toast);
+		repositionToasts(true);
+
+		final FadeTransition fadeOut = new FadeTransition(DURATION_FADE_OUT, toast);
+		fadeOut.setFromValue(toast.getOpacity());
+		fadeOut.setToValue(0);
+
+		final ParallelTransition out = new ParallelTransition(fadeOut);
+		out.setOnFinished(_ -> {
+			overlay.getChildren().remove(toast);
+			dismissingToasts.remove(toast);
+		});
+		out.play();
+	}
+
+	private void repositionToasts(boolean animate)
+	{
+		double y = overlay.getHeight() - MARGIN;
+
+		for(Node t : activeToasts)
+		{
+			final double toastHeight = t.getLayoutBounds().getHeight();
+			final double x = overlay.getWidth() - TOAST_WIDTH - MARGIN;
+
+			y -= toastHeight;
+
+			if(animate)
+			{
+				final double currentAbsY = t.getLayoutY() + t.getTranslateY();
+				final double delta = y - currentAbsY;
+
+				t.setLayoutY(y);
+				t.setTranslateY(-delta);
+
+				final TranslateTransition move = new TranslateTransition(DURATION_FADE_OUT, t);
+				move.setFromY(-delta);
+				move.setToY(0);
+				move.setInterpolator(Interpolator.EASE_BOTH);
+				move.play();
+			}
+			else
+			{
+				t.setLayoutX(x);
+				t.setLayoutY(y);
+				t.setTranslateY(0);
+			}
+
+			y -= GAP;
+		}
+	}
+}

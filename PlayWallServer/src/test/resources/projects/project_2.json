@@ -8,6 +8,7 @@
         "timeMode": "ELAPSED",
         "defaultColor": "GRAY1",
         "playColor": "RED3",
+        "introColor": "BLUE1",
         "eofWarningTime": 5.0
     },
     "pages": [

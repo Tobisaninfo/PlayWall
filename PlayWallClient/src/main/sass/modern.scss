@@ -20,7 +20,6 @@
 @include meta.load-css("components/radiobutton");
 @include meta.load-css("components/slider");
 @include meta.load-css("components/tabs");
-@include meta.load-css("components/notification-pane");
 @include meta.load-css("components/menu");
 @include meta.load-css("components/toggle-button");
 @include meta.load-css("components/list");
@@ -37,6 +36,7 @@
 @include meta.load-css("components/drag");
 @include meta.load-css("components/scroll-pane");
 @include meta.load-css("components/spinner");
+@include meta.load-css("components/toast");
 
 @include meta.load-css("views/about-view");
 @include meta.load-css("views/application-loading-view");

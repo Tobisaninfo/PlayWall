@@ -31,8 +31,8 @@ public class PadStyleClasses
 	public static final String STYLE_CLASS_PAD_PLAYBAR = "pad-playbar";
 	public static final String STYLE_CLASS_PAD_PLAYBAR_INDEX = "pad${index}-playbar";
 
-	public static final String STYLE_CLASS_PAD_CUE_IN = "pad-cue-in";
-	public static final String STYLE_CLASS_PAD_CUE_IN_INDEX = "pad${index}-cue-in";
+	public static final String STYLE_CLASS_PAD_INTRO = "pad-intro";
+	public static final String STYLE_CLASS_PAD_INTRO_INDEX = "pad${index}-intro";
 
 	public static String replaceIndex(String styleClass, PadIndex index)
 	{

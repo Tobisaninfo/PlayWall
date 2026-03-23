@@ -16,6 +16,10 @@
                 <Label alignment="CENTER" prefWidth="150.0" text="%ui.settings.pad.view.color.play" wrapText="true" VBox.vgrow="ALWAYS" />
                 <ColorButton fx:id="buttonColorPlay" focusTraversable="false" mnemonicParsing="false" onAction="#onButtonColorPlay" minWidth="150.0" prefWidth="150.0" />
             </VBox>
+            <VBox spacing="14.0">
+                <Label alignment="CENTER" prefWidth="150.0" text="%ui.settings.pad.view.color.intro" wrapText="true" VBox.vgrow="ALWAYS" />
+                <ColorButton fx:id="buttonColorIntro" focusTraversable="false" mnemonicParsing="false" onAction="#onButtonColorIntro" minWidth="150.0" prefWidth="150.0" />
+            </VBox>
         </HBox>
     </SettingsRow>
     <Separator/>

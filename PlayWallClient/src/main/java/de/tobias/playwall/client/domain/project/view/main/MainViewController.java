@@ -4,7 +4,6 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.icon.FontIconType;
-import de.thecodelabs.utils.ui.scene.SnackBar;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.log.LogViewer;
@@ -35,6 +34,7 @@ import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.Size;
+import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.about.AboutDialog;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
@@ -42,6 +42,7 @@ import de.tobias.playwall.client.view.components.GlobalColorPicker;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.style.ModernStyleSizeHelper;
+import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -61,7 +62,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.controlsfx.control.action.Action;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +137,7 @@ public class MainViewController extends ViewControllerBase
 	private UndoHistoryUpdateListener undoHistoryUpdateListener;
 	private SettingsListener settingsListener;
 
-	private SnackBar notificationPane;
+	private MaterialToastManager materialToastManager;
 
 	private Page currentPage;
 	private final List<PadView> padViews = new ArrayList<>();
@@ -154,13 +154,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		padGridPane.getStyleClass().add("pad-grid");
 
-		notificationPane = new SnackBar(padGridPane, new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID));
-		final Action closeAction = new Action(_ -> notificationPane.hide());
-		closeAction.setGraphic(new FontIcon(FontAwesomeType.XMARK_SOLID));
-		notificationPane.getActions().add(closeAction);
-		notificationPane.setCloseButtonVisible(false);
-		gridContainer.getChildren().add(notificationPane);
-		setAnchor(notificationPane, 0, 0, 0, 0);
+		materialToastManager = new MaterialToastManager(rootStackPane);
 
 		projectTitleLabel = new Label();
 		projectTitleLabel.getStyleClass().add("window-title");
@@ -304,7 +298,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		if(projectController.isAtLeastOnePadPlaying())
 		{
-			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING), true);
+			showNotification(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING), ToastType.WARNING);
 			return false;
 		}
 
@@ -644,18 +638,21 @@ public class MainViewController extends ViewControllerBase
 				.findFirst().orElse(null);
 	}
 
-	public void showNotification(String message, boolean isWarning)
+	public void showNotification(String message, ToastType toastType)
 	{
-		if(isWarning)
+		if(!Platform.isFxApplicationThread())
 		{
-			notificationPane.getStyleClass().add(ViewConstants.WARNING_STYLECLASS);
+			Platform.runLater(() -> showNotification(message, toastType));
+			return;
 		}
-		else
+		final String title = switch(toastType)
 		{
-			notificationPane.getStyleClass().removeIf(style -> style.equals(ViewConstants.WARNING_STYLECLASS));
-		}
-
-		notificationPane.showAndHide(message, ViewConstants.DEFAULT_SNACKBAR_SHOW);
+			case SUCCESS -> Localization.getString(Strings.UI_NOTIFICATION_SUCCESS);
+			case INFO -> Localization.getString(Strings.UI_NOTIFICATION_INFO);
+			case WARNING -> Localization.getString(Strings.UI_NOTIFICATION_WARNING);
+			case ERROR -> Localization.getString(Strings.UI_NOTIFICATION_ERROR);
+		};
+		materialToastManager.show(title, message, toastType);
 	}
 
 	// Action Handlers
@@ -848,7 +845,7 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			client.currentProject().save();
-			showNotification(Localization.getString("ui.notification.project.saved"), false);
+			showNotification(Localization.getString("ui.notification.project.saved"), ToastType.SUCCESS);
 		}
 		catch(PlayWallApiException e)
 		{

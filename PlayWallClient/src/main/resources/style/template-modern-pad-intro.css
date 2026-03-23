@@ -1,0 +1,4 @@
+
+.pad${#prefix}-intro {
+    -fx-background-color: ${#padIntroColor} !important;
+}
