@@ -2,6 +2,7 @@ package de.tobias.playwall.client.view.toast;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.animation.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -113,14 +114,14 @@ public class MaterialToastManager
 		textBox.setAlignment(Pos.TOP_LEFT);
 		VBox.setVgrow(messageLabel, Priority.ALWAYS);
 
-		final HBox content = new HBox(12, iconCircle, textBox);
+		final HBox content = new HBox(ViewConstants.DEFAULT_SPACING, iconCircle, textBox);
 		content.setAlignment(Pos.TOP_LEFT);
-		content.setPadding(new Insets(0, 0, 0, 12));
+		content.setPadding(new Insets(0, 0, 0, ViewConstants.DEFAULT_SPACING));
 		HBox.setHgrow(textBox, Priority.ALWAYS);
 
 		final HBox row = new HBox(content, closeIcon);
 		row.setAlignment(Pos.TOP_RIGHT);
-		row.setPadding(new Insets(12, 8, 12, 0));
+		row.setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 8, ViewConstants.DEFAULT_SPACING, 0));
 		HBox.setHgrow(content, Priority.ALWAYS);
 
 		final HBox outer = new HBox(accent, row);
