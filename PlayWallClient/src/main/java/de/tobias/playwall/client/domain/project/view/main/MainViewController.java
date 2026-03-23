@@ -23,6 +23,7 @@ import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
+import de.tobias.playwall.client.domain.project.view.management.ProjectManagementViewController;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
@@ -751,7 +752,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		final MenuItem menuItemNewProject = createMenuItem(Strings.UI_MENU_FILE_NEW_PROJECT, FontAwesomeType.FOLDER_PLUS_SOLID, Optional.of(this::onMenuItemNewProject), new KeyCharacterCombination("N", KeyCombination.SHORTCUT_DOWN));
 		menuRecentProjects = new Menu(Localization.getString(Strings.UI_MENU_FILE_RECENT_PROJECT), createFontIcon(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID));
-		final MenuItem menuItemManageProject = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.empty());
+		final MenuItem menuItemManageProjects = createMenuItem(Strings.UI_MENU_FILE_MANAGE_PROJECTS, FontAwesomeType.FOLDER_TREE_SOLID, Optional.of(this::onMenuItemManageProjects), new KeyCharacterCombination("O", KeyCombination.SHORTCUT_DOWN));
 		final MenuItem menuItemSaveProject = createMenuItem(Strings.UI_MENU_FILE_SAVE_PROJECT, FontAwesomeType.FLOPPY_DISK_SOLID, Optional.of(this::onMenuItemSave), new KeyCharacterCombination("S", KeyCombination.SHORTCUT_DOWN));
 		final MenuItem menuItemProjectSettings = createMenuItem(Strings.UI_MENU_FILE_PROJECT_SETTINGS, FontAwesomeType.FILE_PEN_SOLID, Optional.of(this::onMenuItemProjectSettings), new KeyCharacterCombination(",", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
 		final MenuItem menuItemSettings = createMenuItem(Strings.UI_MENU_FILE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.of(this::onMenuItemSettings), new KeyCharacterCombination(",", KeyCombination.SHORTCUT_DOWN));
@@ -760,7 +761,7 @@ public class MainViewController extends ViewControllerBase
 		menu.getItems().addAll(
 				menuItemNewProject,
 				menuRecentProjects,
-				menuItemManageProject,
+				menuItemManageProjects,
 				menuItemSaveProject,
 				new SeparatorMenuItem(),
 				menuItemProjectSettings,
@@ -918,6 +919,12 @@ public class MainViewController extends ViewControllerBase
 		final ProjectNewDialog dialog = AppContextHolder.getInstance().get(ProjectNewDialog.class);
 		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(getContainingWindow());
 		projectOptional.ifPresent(projectMetadata -> onOpenRecentProject(projectMetadata.getId()));
+	}
+
+	private void onMenuItemManageProjects(ActionEvent event)
+	{
+		final ProjectManagementViewController controller = AppContextHolder.getInstance().get(ProjectManagementViewController.class);
+		controller.showAndWait(new ProjectManagementViewController.Param(this), getContainingWindow());
 	}
 
 	private void onMenuItemSave(ActionEvent event)

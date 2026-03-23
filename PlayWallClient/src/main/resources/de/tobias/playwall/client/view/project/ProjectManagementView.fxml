@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.tobias.playwall.client.view.components.PlayWallButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<?import javafx.scene.control.Label?>
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <TextField fx:id="searchTextField"/>
+    <Label text="Projekte"/>
+    <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" styleClass="dark-list" VBox.vgrow="ALWAYS"/>
+    <HBox fx:id="projectButtonBox" spacing="14.0">
+        <PlayWallButton fx:id="importButton" icon="FILE_IMPORT_SOLID" maxWidth="Infinity"
+                        minHeight="35.0" onAction="#onImportButton" text="%project.button.import" HBox.hgrow="ALWAYS"/>
+        <PlayWallButton fx:id="newButton" icon="FOLDER_PLUS_SOLID" maxWidth="Infinity"
+                        minHeight="35.0" onAction="#onNewButton" text="%project.button.new" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <padding>
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+    </padding>
+</VBox>
