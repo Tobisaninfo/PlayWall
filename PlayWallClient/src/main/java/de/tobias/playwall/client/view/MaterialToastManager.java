@@ -37,6 +37,10 @@ public class MaterialToastManager
 	private static final double GAP = 8;
 	private static final double MARGIN = 16;
 
+	private static final Duration DURATION_FADE_IN = Duration.millis(250);
+	private static final Duration DURATION_PAUSE = Duration.seconds(4);
+	private static final Duration DURATION_FADE_OUT = Duration.millis(250);
+
 	public MaterialToastManager(StackPane parent)
 	{
 		this.overlay = new Pane();
@@ -67,11 +71,11 @@ public class MaterialToastManager
 
 					repositionToasts(false);
 
-					final FadeTransition fadeIn = new FadeTransition(Duration.millis(250), toast);
+					final FadeTransition fadeIn = new FadeTransition(DURATION_FADE_IN, toast);
 					fadeIn.setFromValue(0);
 					fadeIn.setToValue(1);
 
-					final TranslateTransition slideIn = new TranslateTransition(Duration.millis(250), toast);
+					final TranslateTransition slideIn = new TranslateTransition(DURATION_FADE_IN, toast);
 					slideIn.setFromY(10);
 					slideIn.setToY(0);
 					slideIn.setInterpolator(Interpolator.EASE_OUT);
@@ -81,7 +85,7 @@ public class MaterialToastManager
 			}
 		});
 
-		final PauseTransition wait = new PauseTransition(Duration.seconds(4));
+		final PauseTransition wait = new PauseTransition(DURATION_PAUSE);
 		wait.setOnFinished(_ -> dismiss(toast));
 		wait.play();
 	}
@@ -154,7 +158,7 @@ public class MaterialToastManager
 		activeToasts.remove(toast);
 		repositionToasts(true);
 
-		final FadeTransition fadeOut = new FadeTransition(Duration.millis(200), toast);
+		final FadeTransition fadeOut = new FadeTransition(DURATION_FADE_OUT, toast);
 		fadeOut.setFromValue(toast.getOpacity());
 		fadeOut.setToValue(0);
 
@@ -185,7 +189,7 @@ public class MaterialToastManager
 				t.setLayoutY(y);
 				t.setTranslateY(-delta);
 
-				final TranslateTransition move = new TranslateTransition(Duration.millis(200), t);
+				final TranslateTransition move = new TranslateTransition(DURATION_FADE_OUT, t);
 				move.setFromY(-delta);
 				move.setToY(0);
 				move.setInterpolator(Interpolator.EASE_BOTH);
