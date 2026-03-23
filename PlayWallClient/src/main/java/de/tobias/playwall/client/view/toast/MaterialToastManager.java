@@ -13,17 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MaterialToastManager
 {
-	private static final Map<ToastType, FontAwesomeType> ICONS = Map.of(
-			ToastType.SUCCESS, FontAwesomeType.CHECK_SOLID,
-			ToastType.WARNING, FontAwesomeType.CIRCLE_EXCLAMATION_SOLID,
-			ToastType.ERROR, FontAwesomeType.CIRCLE_XMARK_SOLID,
-			ToastType.INFO, FontAwesomeType.INFO_SOLID
-	);
-
 	private final List<Node> activeToasts = new ArrayList<>();
 	private final Set<Node> dismissingToasts = new HashSet<>();
 	private final Pane overlay;
@@ -92,7 +88,7 @@ public class MaterialToastManager
 		accent.setMinWidth(6);
 		accent.getStyleClass().addAll("accent", type.name().toLowerCase());
 
-		final FontIcon iconLabel = new FontIcon(ICONS.get(type));
+		final FontIcon iconLabel = new FontIcon(type.getIcon());
 
 		final StackPane iconCircle = new StackPane(iconLabel);
 		iconCircle.setMaxSize(28, 28);
