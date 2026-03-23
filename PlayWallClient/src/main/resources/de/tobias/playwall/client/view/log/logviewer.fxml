@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -16,13 +15,9 @@
                 <Insets top="10" bottom="10" left="14" right="14"/>
             </padding>
 
-            <Label text="LOG VIEWER" styleClass="toolbar-title">
-                <font>
-                    <Font name="Monospace Bold" size="15"/>
-                </font>
-            </Label>
+            <Label text="LOG VIEWER" styleClass="toolbar-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Level:" styleClass="label-muted"/>
+            <Label text="Level:" styleClass="label"/>
             <ToggleButton fx:id="btnTrace" text="TRACE" styleClass="level-btn, level-trace" onAction="#updateFilter"/>
             <ToggleButton fx:id="btnDebug" text="DEBUG" styleClass="level-btn, level-debug" onAction="#updateFilter"/>
             <ToggleButton fx:id="btnInfo" text="INFO" styleClass="level-btn, level-info" onAction="#updateFilter"/>
@@ -30,9 +25,10 @@
             <ToggleButton fx:id="btnError" text="ERROR" styleClass="level-btn, level-error" onAction="#updateFilter"/>
             <ToggleButton fx:id="btnFatal" text="FATAL" styleClass="level-btn, level-fatal" onAction="#updateFilter"/>
             <Region prefWidth="12"/>
-            <Label text="Source:" styleClass="label-muted"/>
+            <Label text="Source:" styleClass="label"/>
             <ComboBox fx:id="sourceFilter" prefWidth="160" styleClass="filter-combo" onAction="#updateFilter"/>
             <TextField fx:id="searchField" prefWidth="200" promptText="Filter message..." styleClass="filter-field"/>
+            <Region prefWidth="12"/>
             <Button text="Clear" styleClass="btn-danger" onAction="#clearEntries"/>
         </HBox>
     </top>
@@ -55,8 +51,8 @@
                 <Insets top="5" right="14" bottom="5" left="14"/>
             </padding>
 
-            <Label fx:id="connectedLabel" styleClass="status-disconnected"/>
-            <Label fx:id="statusLabel" styleClass="label-muted small"/>
+            <Label fx:id="connectedLabel" styleClass="status-connected"/>
+            <Label fx:id="statusLabel" styleClass="small"/>
         </HBox>
     </bottom>
 

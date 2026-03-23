@@ -4,6 +4,7 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.view.style.AppIconProvider;
 import de.tobias.playwall.common.api.LogEntry;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -60,8 +61,8 @@ public class LogViewer extends NVC
 	private Label statusLabel;
 	@FXML
 	private Label connectedLabel;
-	@FXML
-	private Label portLabel;
+
+	private final AppIconProvider iconProvider;
 
 	private final Set<LogEntry.Level> activeLevels = EnumSet.allOf(LogEntry.Level.class);
 	private FilteredList<LogEntry> filteredEntries;
@@ -127,11 +128,12 @@ public class LogViewer extends NVC
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
-		stage.setTitle("Log-Viewer");
+		stage.setTitle("Log Viewer");
 		stage.setMinWidth(900);
 		stage.setMinHeight(550);
 		stage.getScene().getStylesheets().addFirst("style/logviewer.css");
 		stage.setOnHidden(_ -> logStore.getAllEntries().removeListener(logEntryListChangeListener));
+		stage.getIcons().add(iconProvider.getStageIcon());
 		stageContainer.addCloseKeyShortcut(stageContainer::close);
 	}
 
