@@ -785,14 +785,14 @@ public class MainViewController extends ViewControllerBase
 						.map(metadataOptional -> {
 							final ProjectMetadata metadata = metadataOptional.get();
 							final MenuItem menuItem = new MenuItem(metadata.getName());
-							menuItem.setOnAction(_ -> onOpenRecentProject(metadata.getId()));
+							menuItem.setOnAction(_ -> closeCurrentProjectAndOpenProject(metadata.getId()));
 							return menuItem;
 						})
 						.toList()
 		);
 	}
 
-	private void onOpenRecentProject(UUID recentProjectId)
+	public void closeCurrentProjectAndOpenProject(UUID recentProjectId)
 	{
 		if(!closeRequest())
 		{
@@ -918,7 +918,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		final ProjectNewDialog dialog = AppContextHolder.getInstance().get(ProjectNewDialog.class);
 		final Optional<ProjectMetadata> projectOptional = dialog.showAndWait(getContainingWindow());
-		projectOptional.ifPresent(projectMetadata -> onOpenRecentProject(projectMetadata.getId()));
+		projectOptional.ifPresent(projectMetadata -> closeCurrentProjectAndOpenProject(projectMetadata.getId()));
 	}
 
 	private void onMenuItemManageProjects(ActionEvent event)
