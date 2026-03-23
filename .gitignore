@@ -8,3 +8,4 @@
 *.log
 
 PlayWallClient/screenshots/
+/scenicView.properties

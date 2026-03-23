@@ -26,4 +26,6 @@ open module de.tobias.playwall.client {
 	requires java.xml;
 
 	requires static lombok;
+
+	requires org.scenicview.scenicview;
 }
