@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.view;
 
+import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.tobias.playwall.client.appcontext.AppContext;
@@ -24,14 +25,20 @@ public class ViewControllerBase extends NVC
 	@InjectField
 	protected AppContext.Environment environment;
 
+	@InjectField
+	protected App app;
+
 	@Override
 	protected void initStage(NVCStage stageContainer, Stage stage)
 	{
 		styleable.applyToStage(stage);
 		stage.getIcons().add(iconProvider.getStageIcon());
 
-		ObservableMap<KeyCombination, Runnable> accelerators = stage.getScene().getAccelerators();
-		Runnable openDevTools = () -> ScenicView.show(stage.getScene());
-		accelerators.put(new KeyCodeCombination(KeyCode.F12, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN), openDevTools);
+		if(app.isDebug())
+		{
+			final ObservableMap<KeyCombination, Runnable> accelerators = stage.getScene().getAccelerators();
+			final Runnable openDevTools = () -> ScenicView.show(stage.getScene());
+			accelerators.put(new KeyCodeCombination(KeyCode.F12, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN), openDevTools);
+		}
 	}
 }
