@@ -32,6 +32,7 @@ public class GlobalColorPicker extends ToggleButton
 		icon.setMouseTransparent(true);
 
 		colorButton = initColorButton();
+		colorButton.setFocusTraversable(false);
 		colorPicker = new ColorPicker(START_COLOR, ModernColor.values(), colorButton::updateColor);
 
 		colorButton.setOnAction(_ -> {
@@ -45,6 +46,7 @@ public class GlobalColorPicker extends ToggleButton
 
 		this.setGraphic(box);
 		this.setAlignment(Pos.CENTER_RIGHT);
+		this.setFocusTraversable(false);
 
 		this.setSelected(false);
 
