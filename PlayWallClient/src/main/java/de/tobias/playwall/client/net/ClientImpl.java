@@ -7,6 +7,8 @@ import de.tobias.playwall.client.domain.pad.PadMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
+import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.history.RedoRequest;
 import de.tobias.playwall.common.api.history.UndoRequest;
 import de.tobias.playwall.common.api.pad.request.*;
@@ -22,7 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static de.tobias.playwall.common.utils.MapUtils.entry;
 
@@ -36,6 +40,7 @@ class ClientImpl implements Client
 	private final PadMapper padMapper;
 	private final SettingsMapper settingsMapper;
 	private final AllProjectsInfoMapper allProjectsInfoMapper;
+	private final ColorMapper colorMapper;
 
 	private final ClientWebSocketHandler clientWebSocketHandler;
 
@@ -242,6 +247,18 @@ class ClientImpl implements Client
 	public void stopAllPads() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new AllPadsStopRequest());
+	}
+
+	@Override
+	public void batchColorPads(Set<UUID> padIds, ModernColor color) throws PlayWallApiException
+	{
+		final Color mappedColor = colorMapper.modernColorToColor(color);
+		final Map<UUID, Color> padColors = padIds.stream().collect(Collectors.toMap(
+				id -> id,
+				_ -> mappedColor
+		));
+
+		clientWebSocketHandler.send(new BatchColorPadsRequest(padColors));
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.icon.FontIconType;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
-import de.tobias.playwall.client.log.LogViewer;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -31,10 +30,10 @@ import de.tobias.playwall.client.domain.settings.view.main.SettingsListener;
 import de.tobias.playwall.client.domain.settings.view.settings.BaseProgramSettingsViewController;
 import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import de.tobias.playwall.client.log.LogViewer;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.Size;
-import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.about.AboutDialog;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
@@ -42,6 +41,8 @@ import de.tobias.playwall.client.view.components.GlobalColorPicker;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.style.ModernStyleSizeHelper;
+import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -63,10 +64,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static de.thecodelabs.utils.util.Localization.getString;
@@ -196,19 +194,7 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
-		globalColorPicker.init(eventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, (pad, color) -> {
-			pad.setDefaultColor(color);
-
-			try
-			{
-				client.pad(pad.getId()).updateSettings(pad);
-			}
-			catch(PlayWallApiException e)
-			{
-				log.error("Cannot color pad", e);
-				errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_COLOR_UPDATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-			}
-		}));
+		globalColorPicker.init(eventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, this::onColorChange, this::onColorSubmit));
 
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
 			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
@@ -912,5 +898,24 @@ public class MainViewController extends ViewControllerBase
 		}
 
 		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
+	}
+
+	private void onColorChange(Pad pad, ModernColor color)
+	{
+		pad.setDefaultColor(color);
+		updateStyle();
+	}
+
+	private void onColorSubmit(Set<UUID> padIds, ModernColor color)
+	{
+		try
+		{
+			client.currentProject().batchColorPads(padIds, color);
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot color pads", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_COLOR_UPDATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
 	}
 }

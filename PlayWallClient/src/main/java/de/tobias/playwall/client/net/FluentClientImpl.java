@@ -7,12 +7,14 @@ import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("ClassCanBeRecord")
@@ -165,6 +167,12 @@ class FluentClientImpl implements FluentClient
 		public void stopAllPads() throws PlayWallApiException
 		{
 			delegate.stopAllPads();
+		}
+
+		@Override
+		public void batchColorPads(Set<UUID> padIds, ModernColor color) throws PlayWallApiException
+		{
+			delegate.batchColorPads(padIds, color);
 		}
 	}
 

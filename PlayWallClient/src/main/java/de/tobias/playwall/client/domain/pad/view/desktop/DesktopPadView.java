@@ -206,6 +206,7 @@ public class DesktopPadView implements PadView
 		superRoot.setOnDragOver(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onDragOver(this, event)));
 		superRoot.setOnDragDropped(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onDragDropped(this, event)));
 		superRoot.setOnDragExited(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onMouseDragExited(this, event)));
+		superRoot.setOnMouseReleased(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onMouseReleased(this, event)));
 	}
 
 	@Override
