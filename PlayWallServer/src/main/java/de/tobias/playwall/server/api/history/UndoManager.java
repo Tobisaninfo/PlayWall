@@ -84,7 +84,7 @@ public class UndoManager
 		context.publishEvent(new UndoHistoryUpdate(nextUndoOperation, nextRedoOperation, message));
 	}
 
-	void clear()
+	public void clear()
 	{
 		history.clear();
 		cursor = 0;

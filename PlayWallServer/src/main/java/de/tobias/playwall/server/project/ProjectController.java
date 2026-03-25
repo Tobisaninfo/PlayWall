@@ -2,6 +2,7 @@ package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate;
+import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.pad.Pad;
@@ -30,13 +31,14 @@ public class ProjectController
 	private final ApplicationContext context;
 	private final PadContentControllerFactory padControllerFactory;
 	private Project loadedProject;
+	private final UndoManager undoManager;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
 	@Async
 	public CompletableFuture<Void> loadProject(Project project)
 	{
-		unloadPads();
+		unloadProject();
 		loadedProject = project;
 		loadPads();
 		return CompletableFuture.completedFuture(null);
@@ -46,6 +48,7 @@ public class ProjectController
 	{
 		unloadPads();
 		loadedProject = null;
+		undoManager.clear();
 	}
 
 	private void unloadPads()

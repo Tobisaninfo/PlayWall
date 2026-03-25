@@ -1,8 +1,13 @@
 package de.tobias.playwall.server.api.project.handler;
 
+import de.tobias.playwall.common.api.common.Color;
+import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
+import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectLoadRequest;
+import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
@@ -12,6 +17,7 @@ import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import de.tobias.playwall.server.config.SyncAsyncConfig;
+import de.tobias.playwall.server.net.RequestExecutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -59,11 +65,17 @@ class ProjectLoadHandlerTest
 	@Autowired
 	private ProjectLoadHandler handler;
 
+	@Autowired
+	private RequestExecutor requestExecutor;
+
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
 
 	@Autowired
 	private AllProjectsInfoRepository allProjectsInfoRepository;
+
+	@Autowired
+	private UndoManager undoManager;
 
 	@BeforeEach
 	void init() throws IOException
@@ -71,13 +83,31 @@ class ProjectLoadHandlerTest
 		final AudioHandler audioHandler = mock(AudioHandler.class);
 		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
 
-		when(pathProvider.getPathForConfig(any())).thenReturn(tempDir.resolve("projects.json"));
-		Files.deleteIfExists(tempDir.resolve("projects.json"));
+		final Path projectsFile = tempDir.resolve("projects.json");
+
+		Files.writeString(projectsFile, """
+				{
+					"recentProjects": [],
+					"allProjectsMetadata":
+					[
+						 {
+							 "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
+							 "name": "Project 1"
+						 },
+						  {
+							 "id": "14bd0090-6322-4133-966d-b78296565a7f",
+							 "name": "Project 2"
+						 }
+					 ]
+				 }
+				""");
+
+		when(pathProvider.getPathForConfig(any())).thenReturn(projectsFile);
 		allProjectsInfoRepository.loadAllProjectsInfo();
 	}
 
 	@Test
-	void testProjectGetRequestSuccessful() throws Exception
+	void testProjectLoadRequestSuccessful() throws Exception
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
@@ -91,10 +121,12 @@ class ProjectLoadHandlerTest
 		assertThat(applicationEvents.stream(PadLoadedUpdate.class)).hasSize(2);
 
 		assertThat(allProjectsInfoRepository.getRecentProjectIds()).containsExactly(projectId);
+
+		assertThat(undoManager.getUndoOperation()).isEqualTo(null);
 	}
 
 	@Test
-	void testProjectGetRequestNotFound() throws Exception
+	void testProjectLoadRequestNotFound() throws Exception
 	{
 		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
 		when(projectRepository.loadProject(projectId)).thenThrow(new ProjectNotExistsException(projectId));
@@ -102,5 +134,39 @@ class ProjectLoadHandlerTest
 		final ProjectLoadRequest request = new ProjectLoadRequest(projectId);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotExistsException.class);
+	}
+
+	@Test
+	void testProjectLoadRequestCheckUndoManagerIsCleared() throws Exception
+	{
+		final Project project1 = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		final UUID projectId1 = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
+		when(projectRepository.loadProject(projectId1)).thenReturn(project1);
+
+		final Project project2 = TestUtils.loadProject(objectMapper, "projects/project_2.json");
+		final UUID projectId2 = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
+		when(projectRepository.loadProject(projectId2)).thenReturn(project2);
+
+		// load first project
+		handler.handleRequest(new ProjectLoadRequest(projectId1));
+
+		// create an undoable action
+		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
+				.name("Fancy project name")
+				.numberOfHorizontalPads(3)
+				.numberOfVerticalPads(5)
+				.volume(1.0)
+				.timeMode(TimeMode.ELAPSED_AND_TOTAL)
+				.defaultColor(Color.DARK_RED1)
+				.playColor(Color.BLUE1)
+				.introColor(Color.LIGHT_GREEN2)
+				.build());
+
+		requestExecutor.execute(request);
+
+		// load second project
+		handler.handleRequest(new ProjectLoadRequest(projectId2));
+
+		assertThat(undoManager.getUndoOperation()).isNull();
 	}
 }
