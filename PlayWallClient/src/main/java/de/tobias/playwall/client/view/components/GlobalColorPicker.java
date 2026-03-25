@@ -8,6 +8,7 @@ import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
+import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
@@ -24,6 +25,7 @@ public class GlobalColorPicker extends ToggleButton
 
 	private PadEventDispatcher eventDispatcher;
 	private GlobalPickerColorListener listener;
+	private Node nodeThatShouldUseImageCursor;
 
 	public GlobalColorPicker()
 	{
@@ -86,19 +88,20 @@ public class GlobalColorPicker extends ToggleButton
 	{
 		if(newValue)
 		{
-			getScene().setCursor(imageCursor);
+			nodeThatShouldUseImageCursor.setCursor(imageCursor);
 			eventDispatcher.addPadInputListener(listener);
 		}
 		else
 		{
-			getScene().setCursor(Cursor.DEFAULT);
+			nodeThatShouldUseImageCursor.setCursor(Cursor.DEFAULT);
 			eventDispatcher.removePadInputListener(listener);
 		}
 	}
 
-	public void init(PadEventDispatcher eventDispatcher, GlobalPickerColorListener listener)
+	public void init(PadEventDispatcher eventDispatcher,  Node nodeThatShouldUseImageCursor, GlobalPickerColorListener listener)
 	{
 		this.eventDispatcher = eventDispatcher;
+		this.nodeThatShouldUseImageCursor = nodeThatShouldUseImageCursor;
 		this.listener = listener;
 	}
 

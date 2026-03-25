@@ -196,7 +196,7 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
-		globalColorPicker.init(eventDispatcher, new GlobalPickerColorListener(globalColorPicker, (pad, color) -> {
+		globalColorPicker.init(eventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, (pad, color) -> {
 			pad.setDefaultColor(color);
 
 			try
