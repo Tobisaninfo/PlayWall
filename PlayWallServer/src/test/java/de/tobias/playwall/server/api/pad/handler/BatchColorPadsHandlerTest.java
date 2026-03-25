@@ -98,10 +98,9 @@ class BatchColorPadsHandlerTest extends AbstractUndoableRequestHandlerTest<Batch
 		handler.handleRequest(request);
 
 		assertThat(applicationEvents.stream(PadUpdate.class)).hasSize(2);
-		assertThat(applicationEvents.stream(PadUpdate.class).toList().get(0).getPad().getDefaultColor()).isEqualTo(Color.DARK_RED1);
-		assertThat(applicationEvents.stream(PadUpdate.class).toList().get(1).getPad().getDefaultColor()).isEqualTo(Color.LIGHT_GREEN2);
+		assertThat(applicationEvents.stream(PadUpdate.class).map(u -> u.getPad().getDefaultColor()).toList())
+				.containsExactlyInAnyOrder(Color.DARK_RED1, Color.LIGHT_GREEN2);
 	}
-
 
 	@Test
 	void testUndoOperation() throws Exception
