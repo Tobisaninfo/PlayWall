@@ -60,8 +60,8 @@ public class GlobalColorPicker extends ToggleButton
 			);
 			final ImageCursor imageCursor = new ImageCursor(
 					cursorImage,
-					cursorImage.getWidth() / 2.0,
-					cursorImage.getHeight() / 2.0
+					0,
+					cursorImage.getHeight()
 			);
 
 			onSelected(newValue, imageCursor);
