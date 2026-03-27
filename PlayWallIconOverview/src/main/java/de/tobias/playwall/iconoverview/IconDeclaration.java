@@ -41,7 +41,7 @@ public class IconDeclaration
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Warnhinweise")
 		)));
 		data.add(new IconEntry(FontAwesomeType.PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite hinzufügen"))));
-		data.add(new IconEntry(FontAwesomeType.PENCIL_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite umbenennen"))));
+		data.add(new IconEntry(FontAwesomeType.PEN_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite umbenennen"))));
 		data.add(new IconEntry(FontAwesomeType.COPY_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite duplizieren"))));
 		data.add(new IconEntry(FontAwesomeType.PAINTBRUSH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Farbmodus (globaler Colorpicker"))));
 		data.add(new IconEntry(FontAwesomeType.FILE_IMPORT_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt importieren"))));
@@ -62,13 +62,16 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"))));
 		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Datei"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
-		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Launch Dialog - Projekt entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"))));
+		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Launch Dialog - Projekt entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"), new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt löschen"))));
 		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Lautstärke"))));
 		data.add(new IconEntry(FontAwesomeType.STOPWATCH_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Intro Dauer"))));
 		data.add(new IconEntry(FontAwesomeType.IMAGE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige"))));
 		data.add(new IconEntry(FontAwesomeType.CLOCK_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Zeitanzeige"))));
 		data.add(new IconEntry(FontAwesomeType.PALETTE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Farbe"))));
 		data.add(new IconEntry(FontAwesomeType.CIRCLE_ARROW_DOWN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Farbe - Colorpicker"))));
+		data.add(new IconEntry(FontAwesomeType.PEN_SOLID, List.of(new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt löschen"))));
+		data.add(new IconEntry(FontAwesomeType.CLONE_SOLID, List.of(new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt klonen"))));
+		data.add(new IconEntry(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID, List.of(new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Mehr"))));
 
 		// menu
 		data.add(new IconEntry(FontAwesomeType.ARROWS_ROTATE_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Nach Updates suchen"))));

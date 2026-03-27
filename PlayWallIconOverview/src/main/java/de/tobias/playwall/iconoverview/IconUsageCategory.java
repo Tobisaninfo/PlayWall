@@ -12,6 +12,7 @@ public enum IconUsageCategory
 	PAD("Pad", "#134074FF", "#FFFFFFFF"),
 	MENU("Menü", "#94D2BDFF", "#000000FF"),
 	MAIN_WINDOW("Hauptfenster", "#E0BAD7FF", "#000000FF"),
+	PROJECT_MANAGEMENT("Projektverwaltung", "#E0BAD7FF", "#000000FF"),
 	SETTINGS("Einstellungen", "#FFD166FF", "#000000FF"),
 	DRAG_AND_DROP("Drag'n'Drop", "#FF0166FF", "#FFFFFFFF");
 

@@ -31,7 +31,7 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 		final MenuItem renameMenu = new MenuItem(Localization.getString("project.button.rename"), new FontIcon(FontAwesomeType.PEN_SOLID));
 		final MenuItem duplicateMenu = new MenuItem(Localization.getString("project.button.duplicate"), new FontIcon(FontAwesomeType.CLONE_SOLID));
 		final MenuItem exportMenu = new MenuItem(Localization.getString("project.button.export"), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
-		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_SOLID));
+		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_CAN_SOLID));
 
 		contextMenu.getItems().addAll(renameMenu, duplicateMenu, exportMenu, new SeparatorMenuItem(), deleteMenu);
 	}
