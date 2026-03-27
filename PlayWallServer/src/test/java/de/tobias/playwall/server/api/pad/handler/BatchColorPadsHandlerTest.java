@@ -12,16 +12,12 @@ import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,9 +30,6 @@ import static org.mockito.Mockito.when;
 @RecordApplicationEvents
 class BatchColorPadsHandlerTest extends AbstractUndoableRequestHandlerTest<BatchColorPadsRequest>
 {
-	@TempDir
-	private Path tempDir;
-
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
 
@@ -53,32 +46,11 @@ class BatchColorPadsHandlerTest extends AbstractUndoableRequestHandlerTest<Batch
 	private PathProvider pathProvider;
 
 	@BeforeEach
-	void beforeEach() throws IOException
+	void beforeEach()
 	{
 		final AudioHandler audioHandler = mock(AudioHandler.class);
 		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
 
-		final Path projectsFile = tempDir.resolve("projects.json");
-
-		Files.writeString(projectsFile, """
-				{
-					"recentProjects": [],
-					"allProjectsMetadata":
-					[
-						 {
-							 "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
-							 "name": "Project 1"
-						 },
-						  {
-							 "id": "14bd0090-6322-4133-966d-b78296565a7f",
-							 "name": "Project 2"
-						 }
-					 ]
-				 }
-				""");
-
-		when(pathProvider.getPathForConfig(any())).thenReturn(projectsFile);
-		projectService.getAllProjectsInfo();
 		projectController.unloadProject();
 	}
 
