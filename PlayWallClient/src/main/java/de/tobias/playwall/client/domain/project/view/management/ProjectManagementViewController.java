@@ -5,6 +5,7 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
@@ -49,6 +50,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	private Button newButton;
 
 	private final FluentClient client;
+	private final ClientProjectController projectController;
 	private MainViewController mainViewController;
 
 	@Override
@@ -57,7 +59,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		super.init();
 
 		this.searchTextField.setPromptText(Localization.getString("ui.project.management.search.prompt"));
-		this.projectListView.setCellFactory(_ -> new ProjectManagementCell());
+		this.projectListView.setCellFactory(_ -> new ProjectManagementCell(projectController));
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
 			   mouseEvent.getClickCount() == 2 &&
