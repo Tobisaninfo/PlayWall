@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
+import de.tobias.playwall.client.domain.project.view.management.ProjectManagementViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.net.Client;
@@ -150,5 +151,26 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 
 		// open project
 		assertThat(stage.getTitle()).isEqualTo("PlayWall - Project Empty");
+	}
+
+	@Test
+	void testMenuOpenProject(FxRobot robot) throws PlayWallApiException
+	{
+		final ProjectManagementViewController dialog = mock(ProjectManagementViewController.class);
+		AppContextHolder.getInstance().registerLazySingleton(ProjectManagementViewController.class, _ -> dialog);
+
+		final AllProjectsInfo allProjectsInfo = AllProjectsInfo.builder()
+				.recentProjectIds(List.of(projectEmpty.getMetadata().getId(), project.getMetadata().getId()))
+				.allProjectsMetadata(List.of(project.getMetadata(), projectEmpty.getMetadata()))
+				.build();
+		when(client.getProjects()).thenReturn(allProjectsInfo);
+
+		showMainView();
+
+		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekte verwalten").queryLabeled());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(dialog).showAndWait(any(), eq(stage));
 	}
 }

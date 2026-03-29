@@ -13,27 +13,29 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.shape.Circle;
+import lombok.Getter;
 
 import java.util.Objects;
 
 public class ProjectManagementCell extends ListCell<ProjectMetadata>
 {
 	private final ClientProjectController projectController;
-	private final ContextMenu contextMenu;
+	@Getter
+	private final ContextMenu buttonContextMenu;
 
 	private ProjectMetadata ref;
 
 	public ProjectManagementCell(ClientProjectController projectController)
 	{
 		this.projectController = projectController;
-		contextMenu = new ContextMenu();
+		buttonContextMenu = new ContextMenu();
 
 		final MenuItem renameMenu = new MenuItem(Localization.getString("project.button.rename"), new FontIcon(FontAwesomeType.PEN_SOLID));
 		final MenuItem duplicateMenu = new MenuItem(Localization.getString("project.button.duplicate"), new FontIcon(FontAwesomeType.CLONE_SOLID));
 		final MenuItem exportMenu = new MenuItem(Localization.getString("project.button.export"), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
 		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_CAN_SOLID));
 
-		contextMenu.getItems().addAll(renameMenu, duplicateMenu, exportMenu, new SeparatorMenuItem(), deleteMenu);
+		buttonContextMenu.getItems().addAll(renameMenu, duplicateMenu, exportMenu, new SeparatorMenuItem(), deleteMenu);
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 				projectNameLabel.getStyleClass().add("project-management--project-name");
 
 				final Button menuButton = new Button("", new FontIcon(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID));
-				menuButton.setOnAction(e -> contextMenu.show(menuButton, Side.LEFT, 0, 0));
+				menuButton.setOnAction(e -> buttonContextMenu.show(menuButton, Side.LEFT, 0, 0));
 
 				row.getChildren().addAll(circle, projectNameLabel, menuButton);
 				HBox.setHgrow(projectNameLabel, Priority.ALWAYS);
