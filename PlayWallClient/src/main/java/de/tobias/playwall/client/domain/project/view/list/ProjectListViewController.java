@@ -12,6 +12,7 @@ import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
@@ -143,12 +144,7 @@ public class ProjectListViewController extends ViewControllerBase
 			return;
 		}
 
-		final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle(getString(Strings.UI_DIALOG_PROJECT_DELETE_TITLE, selectedProject.getName()));
-		alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_DELETE_CONTENT, selectedProject.getName()));
-		alert.initOwner(getContainingWindow());
-		alert.initModality(Modality.WINDOW_MODAL);
-		alert.getDialogPane().setMinHeight(Double.NEGATIVE_INFINITY);
+		final Alert alert = new ProjectDeleteDialog(selectedProject, getContainingWindow());
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
 		{
 			try
