@@ -125,4 +125,23 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		verify(mainViewController).closeCurrentProjectAndOpenProject(PROJECT_ID_2);
 		assertThat(stage.isShowing()).isFalse();
 	}
+
+	@Test
+	void testProjectDeleteOkay(FxRobot robot) throws PlayWallApiException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+
+		openStage();
+
+		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
+		Platform.runLater(() -> cell.getButtonContextMenu().getItems().get(4).fire());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		verify(client).deleteProject(PROJECT_ID_1);
+	}
 }
