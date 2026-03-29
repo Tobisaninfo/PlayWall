@@ -2,6 +2,7 @@ package de.tobias.playwall.client.domain.project.view.management;
 
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -9,6 +10,7 @@ import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
+import de.tobias.playwall.client.domain.project.view.list.ProjectListViewController;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
@@ -50,6 +52,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 
 	private final FluentClient client;
 	private final ClientProjectController projectController;
+
 	private MainViewController mainViewController;
 
 	@Override
@@ -96,11 +99,27 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 
 	private void onDeleteProject(ProjectMetadata project)
 	{
+		final boolean isActiveProject = isActiveProject(project);
+		if(isActiveProject && projectController.isAtLeastOnePadPlaying())
+		{
+			showErrorMessage(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING));
+			return;
+		}
+
+
 		final Alert alert = new ProjectDeleteDialog(project, getContainingWindow());
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
 		{
 			try
 			{
+
+				if(isActiveProject)
+				{
+					closeStage();
+					mainViewController.closeStage();
+					AppContextHolder.getInstance().get(ProjectListViewController.class).showStage();
+				}
+
 				client.project(project.getId()).delete();
 				fetchProjects();
 			}
@@ -148,5 +167,10 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 			closeStage();
 			mainViewController.closeCurrentProjectAndOpenProject(projectMetadata.getId());
 		});
+	}
+
+	private boolean isActiveProject(ProjectMetadata project)
+	{
+		return projectController.getProject().getMetadata().getId().equals(project.getId());
 	}
 }

@@ -8,6 +8,7 @@ import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
+import de.tobias.playwall.client.domain.project.view.list.ProjectListViewController;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
@@ -45,6 +46,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 	private final MainViewController mainViewController = mock(MainViewController.class);
 	private final ClientProjectController projectController = mock(ClientProjectController.class);
 	private final ProjectNewDialog projectNewDialog = mock(ProjectNewDialog.class);
+	private final ProjectListViewController projectListViewController = mock(ProjectListViewController.class);
 
 	private Stage stage;
 
@@ -58,6 +60,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		context.registerLazySingleton(Client.class, _ -> client);
 		context.registerLazySingleton(MainViewController.class, _ -> mainViewController);
 		context.registerLazySingleton(ProjectNewDialog.class, _ -> projectNewDialog);
+		context.registerLazySingleton(ProjectListViewController.class, _ -> projectListViewController);
 		context.registerLazySingleton(ClientProjectController.class, _ -> projectController);
 	}
 
@@ -127,7 +130,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testProjectDeleteOkay(FxRobot robot) throws PlayWallApiException
+	void testDeleteCurrentProject(FxRobot robot) throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
 				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
@@ -142,6 +145,57 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+
+		verify(mainViewController).closeStage();
+		assertThat(stage.isShowing()).isFalse();
+		verify(projectListViewController).showStage();
+
+		verify(client).deleteProject(PROJECT_ID_1);
+	}
+
+	@Test
+	void testDeletePlayingProject(FxRobot robot) throws PlayWallApiException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+		when(projectController.isAtLeastOnePadPlaying()).thenReturn(true);
+
+		openStage();
+
+		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
+		Platform.runLater(() -> cell.getButtonContextMenu().getItems().get(4).fire());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		assertThat(robot.lookup(".label.content").queryLabeled()).hasText("Das Projekt kann nicht geschlossen werden, solange noch Kacheln wiedergegeben werden!");
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+
+		verify(client, never()).deleteProject(PROJECT_ID_1);
+	}
+
+	@Test
+	void testDeleteOtherProject(FxRobot robot) throws PlayWallApiException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_2, List.of()));
+
+		openStage();
+
+		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
+		Platform.runLater(() -> cell.getButtonContextMenu().getItems().get(4).fire());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+
+		verify(mainViewController, never()).closeStage();
+		assertThat(stage.isShowing()).isTrue();
+		verify(projectListViewController, never()).showStage();
+
 		verify(client).deleteProject(PROJECT_ID_1);
 	}
 }
