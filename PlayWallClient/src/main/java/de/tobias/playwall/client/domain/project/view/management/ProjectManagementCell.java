@@ -16,16 +16,23 @@ import javafx.scene.shape.Circle;
 import lombok.Getter;
 
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 public class ProjectManagementCell extends ListCell<ProjectMetadata>
 {
+	public enum ProjectManagementCellAction
+	{
+		DELETE
+	}
+
 	private final ClientProjectController projectController;
 	@Getter
 	private final ContextMenu buttonContextMenu;
 
 	private ProjectMetadata ref;
 
-	public ProjectManagementCell(ClientProjectController projectController)
+	public ProjectManagementCell(ClientProjectController projectController,
+								 BiConsumer<ProjectManagementCellAction, ProjectMetadata> actionHandler)
 	{
 		this.projectController = projectController;
 		buttonContextMenu = new ContextMenu();
@@ -34,6 +41,13 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 		final MenuItem duplicateMenu = new MenuItem(Localization.getString("project.button.duplicate"), new FontIcon(FontAwesomeType.CLONE_SOLID));
 		final MenuItem exportMenu = new MenuItem(Localization.getString("project.button.export"), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
 		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_CAN_SOLID));
+
+		deleteMenu.setOnAction(_ -> {
+			if(ref != null)
+			{
+				actionHandler.accept(ProjectManagementCellAction.DELETE, ref);
+			}
+		});
 
 		buttonContextMenu.getItems().addAll(renameMenu, duplicateMenu, exportMenu, new SeparatorMenuItem(), deleteMenu);
 	}

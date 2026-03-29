@@ -17,6 +17,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,13 +32,14 @@ class ProjectManagementCellTest extends ApplicationTest
 	private static final ProjectMetadata PROJECT_METADATA_2 = new ProjectMetadata(PROJECT_ID_2, "Test 2", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null);
 
 	private final ClientProjectController projectController = mock(ClientProjectController.class);
+	private final BiConsumer<ProjectManagementCell.ProjectManagementCellAction, ProjectMetadata> onContextMenuAction = mock(BiConsumer.class);
 
 	@Test
 	void testCellWithActiveProject()
 	{
 		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 
-		final ProjectManagementCell cell = new ProjectManagementCell(projectController);
+		final ProjectManagementCell cell = new ProjectManagementCell(projectController, onContextMenuAction);
 
 		interact(() -> cell.updateItem(PROJECT_METADATA_1, false));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -60,7 +62,7 @@ class ProjectManagementCellTest extends ApplicationTest
 	{
 		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_2, List.of()));
 
-		final ProjectManagementCell cell = new ProjectManagementCell(projectController);
+		final ProjectManagementCell cell = new ProjectManagementCell(projectController, onContextMenuAction);
 
 		interact(() -> cell.updateItem(PROJECT_METADATA_1, false));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -75,7 +77,7 @@ class ProjectManagementCellTest extends ApplicationTest
 	@Test
 	void testCellEmptyState()
 	{
-		final ProjectManagementCell cell = new ProjectManagementCell(projectController);
+		final ProjectManagementCell cell = new ProjectManagementCell(projectController, onContextMenuAction);
 
 		interact(() -> cell.updateItem(null, true));
 		WaitForAsyncUtils.waitForFxEvents();

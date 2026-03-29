@@ -7,15 +7,14 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ParamDialogBase;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
@@ -59,7 +58,8 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		super.init();
 
 		this.searchTextField.setPromptText(Localization.getString("ui.project.management.search.prompt"));
-		this.projectListView.setCellFactory(_ -> new ProjectManagementCell(projectController));
+		this.projectListView.setCellFactory(_ -> new ProjectManagementCell(projectController, this::onProjectCellAction));
+
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
 			   mouseEvent.getClickCount() == 2 &&
@@ -70,14 +70,46 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 			}
 		});
 
+		fetchProjects();
+	}
+
+	private void fetchProjects()
+	{
 		try
 		{
 			projectListView.getItems().setAll(client.projects().list().getAllProjectsMetadata());
 		}
 		catch(PlayWallApiException e)
 		{
-			throw new RuntimeException(e); // TODO
+			log.error("Cannot fetch project", e);
+			showErrorMessage(e.getMessage());
 		}
+	}
+
+	private void onProjectCellAction(ProjectManagementCell.ProjectManagementCellAction action, ProjectMetadata project)
+	{
+		switch(action)
+		{
+			case DELETE -> onDeleteProject(project);
+		}
+	}
+
+	private void onDeleteProject(ProjectMetadata project)
+	{
+		final Alert alert = new ProjectDeleteDialog(project, getContainingWindow());
+		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->
+		{
+			try
+			{
+				client.project(project.getId()).delete();
+				fetchProjects();
+			}
+			catch(PlayWallApiException e)
+			{
+				log.error("Cannot delete project", e);
+				showErrorMessage(e.getMessage());
+			}
+		});
 	}
 
 	@Override
