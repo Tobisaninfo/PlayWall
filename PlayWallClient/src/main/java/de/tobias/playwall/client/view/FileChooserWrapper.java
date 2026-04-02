@@ -44,9 +44,37 @@ public class FileChooserWrapper
 		return this;
 	}
 
+	public FileChooserWrapper setInitialFilename(String filename)
+	{
+		fileChooser.setInitialFileName(filename);
+		return this;
+	}
+
 	public Optional<Path> showOpenFile(Window owner)
 	{
-		// Last Folder
+		selectLastUsedFolder();
+
+		final File selectedFile = fileChooser.showOpenDialog(owner);
+		if(selectedFile != null)
+		{
+			app.getUserDefaults().setData(OPEN_FOLDER, selectedFile.getParent());
+		}
+		return Optional.ofNullable(selectedFile).map(File::toPath);
+	}
+
+	public Optional<Path> showSaveFile(Window owner)
+	{
+		selectLastUsedFolder();
+		final File selectedFile = fileChooser.showSaveDialog(owner);
+		if(selectedFile != null)
+		{
+			app.getUserDefaults().setData(OPEN_FOLDER, selectedFile.getParent());
+		}
+		return Optional.ofNullable(selectedFile).map(File::toPath);
+	}
+
+	private void selectLastUsedFolder()
+	{
 		final JsonElement openFolder = app.getUserDefaults().getData(OPEN_FOLDER);
 		if(openFolder != null)
 		{
@@ -56,13 +84,6 @@ public class FileChooserWrapper
 				fileChooser.setInitialDirectory(folder);
 			}
 		}
-
-		final File selectedFile = fileChooser.showOpenDialog(owner);
-		if(selectedFile != null)
-		{
-			app.getUserDefaults().setData(OPEN_FOLDER, selectedFile.getParent());
-		}
-		return Optional.ofNullable(selectedFile).map(File::toPath);
 	}
 
 	public Optional<Path> showByActionEvent(ActionEvent event)

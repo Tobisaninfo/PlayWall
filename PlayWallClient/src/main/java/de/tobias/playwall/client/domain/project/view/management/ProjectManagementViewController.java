@@ -7,6 +7,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.project.ProjectExport;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
@@ -14,10 +15,14 @@ import de.tobias.playwall.client.domain.project.view.list.ProjectListViewControl
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.utils.MimeType;
+import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ParamDialogBase;
+import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,6 +30,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 @Getter(AccessLevel.PACKAGE)
@@ -52,6 +61,8 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 
 	private final FluentClient client;
 	private final ClientProjectController projectController;
+	private final ErrorAlertBuilder errorAlertBuilder;
+	private final FileChooserWrapper fileChooserWrapper;
 
 	private MainViewController mainViewController;
 
@@ -94,6 +105,36 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		switch(action)
 		{
 			case DELETE -> onDeleteProject(project);
+			case EXPORT -> onExportProject(project);
+		}
+	}
+
+	private void onExportProject(ProjectMetadata project)
+	{
+		try
+		{
+			final ProjectExport export = client.project(project.getId()).export();
+
+			final String extension = MimeType.getByMimeType(export.mimetype()).getExtension();
+			fileChooserWrapper.setExtensionFilter(List.of(new FileChooser.ExtensionFilter(Localization.getString("MimeType." + export.mimetype()), extension)));
+			fileChooserWrapper.setInitialFilename(project.getName() + "." + extension);
+			final Optional<Path> pathOptional = fileChooserWrapper.showSaveFile(getContainingWindow());
+			if(pathOptional.isEmpty())
+			{
+				return;
+			}
+			final Path path = pathOptional.get();
+			Files.write(path, export.data());
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot export project", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_EXPORT), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+		catch(IOException e)
+		{
+			log.error("Cannot export project", e);
+			// TODO
 		}
 	}
 
@@ -105,7 +146,6 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 			showErrorMessage(Localization.getString(Strings.UI_EXIT_WARNING_PLAYING));
 			return;
 		}
-
 
 		final Alert alert = new ProjectDeleteDialog(project, getContainingWindow());
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(_ ->

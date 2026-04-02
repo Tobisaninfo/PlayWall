@@ -117,6 +117,7 @@ public class Strings
 	public static final String UI_ERRORS_PROJECT_ADD = "ui.errors.project.add";
 	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
 	public static final String UI_ERRORS_PROJECT_SAVE_STATUS  = "ui.errors.project.save.status";
+	public static final String UI_ERRORS_PROJECT_EXPORT = "ui.errors.project.export";
 	public static final String UI_ERRORS_PROJECT_SETTINGS_SAVE = "ui.errors.project.settings.save";
 	public static final String UI_ERRORS_PROGRAM_SETTINGS_SAVE = "ui.errors.program.settings.save";
 }
