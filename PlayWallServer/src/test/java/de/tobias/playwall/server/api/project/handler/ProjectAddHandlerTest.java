@@ -59,6 +59,7 @@ class ProjectAddHandlerTest
 	void init()
 	{
 		when(pathProvider.getPathForConfig(any())).thenReturn(tempDir.resolve("projects.json"));
+		when(pathProvider.getPathForProject(any())).thenReturn(tempDir.resolve("project.json"));
 		Files.deleteIfExists(tempDir.resolve("projects.json"));
 		allProjectsInfoRepository.loadAllProjectsInfo();
 		allProjectsInfoRepository.getAllProjectMetadata().clear();

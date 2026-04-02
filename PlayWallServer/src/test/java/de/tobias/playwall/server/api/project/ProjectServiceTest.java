@@ -61,6 +61,8 @@ class ProjectServiceTest
 	void beforeEach() throws IOException
 	{
 		when(pathProvider.getPathForConfig(any())).thenReturn(tempDir.resolve("projects.json"));
+		when(pathProvider.getPathForProject(any())).thenReturn(tempDir.resolve("project.json"));
+		allProjectsInfoRepository.loadAllProjectsInfo();
 		allProjectsInfoRepository.clearProjects();
 	}
 
