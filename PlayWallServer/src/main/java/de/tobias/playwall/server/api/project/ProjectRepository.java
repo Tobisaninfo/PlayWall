@@ -54,6 +54,6 @@ public class ProjectRepository
 
 	private Path getProjectPath(UUID id)
 	{
-		return pathProvider.getPathForConfig(id + FILE_EXTENSION);
+		return pathProvider.getPathForProject(id + FILE_EXTENSION);
 	}
 }
