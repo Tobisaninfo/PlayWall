@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -153,6 +154,13 @@ class ClientImpl implements Client
 	public void saveProject() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new ProjectSaveRequest());
+	}
+
+	@Override
+	public ProjectExport exportProject(UUID projectId) throws PlayWallApiException
+	{
+		final ProjectExportResponse responseMessage = clientWebSocketHandler.send(new ProjectExportRequest(projectId));
+		return new ProjectExport(responseMessage.getMimetype(), Base64.getDecoder().decode(responseMessage.getBase64()));
 	}
 
 	@Override
