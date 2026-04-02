@@ -12,6 +12,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.shape.Circle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
@@ -19,7 +22,9 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 import static org.testfx.assertions.api.Assertions.assertThat;
 
@@ -86,8 +91,17 @@ class ProjectManagementCellTest extends ApplicationTest
 		assertThat(cell.getGraphic()).isNull();
 	}
 
-	@Test
-	void testDeleteAction()
+	static Stream<Arguments> actionArguments()
+	{
+		return Stream.of(
+				of(2, ProjectManagementCell.ProjectManagementCellAction.EXPORT),
+				of(4, ProjectManagementCell.ProjectManagementCellAction.DELETE)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("actionArguments")
+	void testDeleteAction(int index, ProjectManagementCell.ProjectManagementCellAction action)
 	{
 		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 
@@ -96,13 +110,13 @@ class ProjectManagementCellTest extends ApplicationTest
 		interact(() -> cell.updateItem(PROJECT_METADATA_1, false));
 		WaitForAsyncUtils.waitForFxEvents();
 
-		interact(() -> cell.getButtonContextMenu().getItems().get(4).fire());
+		interact(() -> cell.getButtonContextMenu().getItems().get(index).fire());
 
 		final ArgumentCaptor<ProjectManagementCell.ProjectManagementCellAction> actionCaptor = ArgumentCaptor.forClass(ProjectManagementCell.ProjectManagementCellAction.class);
 		final ArgumentCaptor<ProjectMetadata> projectCaptor = ArgumentCaptor.forClass(ProjectMetadata.class);
 		verify(onContextMenuAction).accept(actionCaptor.capture(), projectCaptor.capture());
 
-		assertThat(actionCaptor.getValue()).isEqualTo(ProjectManagementCell.ProjectManagementCellAction.DELETE);
+		assertThat(actionCaptor.getValue()).isEqualTo(action);
 		assertThat(projectCaptor.getValue()).isEqualTo(PROJECT_METADATA_1);
 	}
 }
