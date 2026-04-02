@@ -97,9 +97,8 @@ public class ProjectService
 		{
 			throw new IllegalArgumentException("Unsupported mimetype: " + mimeType);
 		}
-		final byte[] bytes = Base64.getDecoder().decode(data);
 
-		final Project project = jsonMapper.readValue(bytes, Project.class);
+		final Project project = jsonMapper.readValue(data, Project.class);
 		project.getMetadata().setId(UUID.randomUUID());
 
 		allProjectsInfoRepository.importProject(project);

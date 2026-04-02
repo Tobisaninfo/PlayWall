@@ -111,7 +111,7 @@ public class AllProjectsInfoRepository
 				name = project.getMetadata().getName() + " " + copyIndex;
 				copyIndex++;
 			}
-			while(isProjectNameUsed(project.getMetadata().getName()));
+			while(isProjectNameUsed(name));
 			project.getMetadata().setName(name);
 		}
 
@@ -150,7 +150,7 @@ public class AllProjectsInfoRepository
 		return allProjectsInfo.getAllProjectsMetadata().stream().filter(project -> project.getName().equals(name)).findFirst();
 	}
 
-	private boolean isProjectNameUsed(String name)
+	public boolean isProjectNameUsed(String name)
 	{
 		return allProjectsInfo.getAllProjectsMetadata().stream().anyMatch(project -> project.getName().equals(name));
 	}
