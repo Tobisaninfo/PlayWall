@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
+import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.model.project.Views;
 import de.tobias.playwall.server.common.storage.PathProvider;
@@ -97,6 +98,27 @@ public class AllProjectsInfoRepository
 		return newProjectMetadata;
 	}
 
+	public void importProject(Project project) throws IOException
+	{
+		project.getMetadata().setId(UUID.randomUUID());
+
+		if(isProjectNameUsed(project.getMetadata().getName()))
+		{
+			String name;
+			int copyIndex = 1;
+			do
+			{
+				name = project.getMetadata().getName() + " " + copyIndex;
+				copyIndex++;
+			}
+			while(isProjectNameUsed(project.getMetadata().getName()));
+			project.getMetadata().setName(name);
+		}
+
+		allProjectsInfo.getAllProjectsMetadata().add(project.getMetadata());
+		saveAllProjectsInfo();
+	}
+
 	public void renameProject(UUID id, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException
 	{
 		final Optional<ProjectMetadata> existingProjectOptional = getProjectMetadataByName(name);
@@ -126,5 +148,10 @@ public class AllProjectsInfoRepository
 	private Optional<ProjectMetadata> getProjectMetadataByName(String name)
 	{
 		return allProjectsInfo.getAllProjectsMetadata().stream().filter(project -> project.getName().equals(name)).findFirst();
+	}
+
+	private boolean isProjectNameUsed(String name)
+	{
+		return allProjectsInfo.getAllProjectsMetadata().stream().anyMatch(project -> project.getName().equals(name));
 	}
 }

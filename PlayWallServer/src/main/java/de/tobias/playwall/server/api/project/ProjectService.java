@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MimeType;
+import org.springframework.util.MimeTypeUtils;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.util.*;
@@ -22,6 +25,7 @@ public class ProjectService
 	private final AllProjectsInfoRepository allProjectsInfoRepository;
 	private final ProjectRepository projectRepository;
 	private final MessageSource messageSource;
+	private final JsonMapper jsonMapper;
 
 	public AllProjectsInfo getAllProjectsInfo() throws IOException
 	{
@@ -84,6 +88,24 @@ public class ProjectService
 	public byte[] exportProject(UUID projectId) throws IOException
 	{
 		return projectRepository.getProjectFile(projectId);
+	}
+
+	public UUID importProject(String mimetype, byte[] data) throws IOException
+	{
+		final MimeType mimeType = MimeType.valueOf(mimetype);
+		if(!mimeType.equals(MimeTypeUtils.APPLICATION_JSON))
+		{
+			throw new IllegalArgumentException("Unsupported mimetype: " + mimeType);
+		}
+		final byte[] bytes = Base64.getDecoder().decode(data);
+
+		final Project project = jsonMapper.readValue(bytes, Project.class);
+		project.getMetadata().setId(UUID.randomUUID());
+
+		allProjectsInfoRepository.importProject(project);
+		projectRepository.saveProject(project);
+
+		return project.getMetadata().getId();
 	}
 
 	public Page addPage(Project project)
