@@ -24,7 +24,7 @@ public class ProjectRepository
 
 	public Project loadProject(UUID id) throws IOException, ProjectNotExistsException
 	{
-		final Path path = pathProvider.getPathForConfig(id + FILE_EXTENSION);
+		final Path path = getProjectPath(id);
 		if(!Files.exists(path))
 		{
 			throw new ProjectNotExistsException(id);
@@ -35,14 +35,25 @@ public class ProjectRepository
 
 	public void saveProject(Project project) throws IOException
 	{
-		final Path path = pathProvider.getPathForConfig(project.getMetadata().getId() + FILE_EXTENSION);
+		final Path path = getProjectPath(project.getMetadata().getId());
 		Files.createDirectories(path.getParent());
 		mapper.writeValue(Files.newBufferedWriter(path), project);
 	}
 
 	public boolean deleteProject(UUID id) throws IOException
 	{
-		final Path path = pathProvider.getPathForConfig(id + FILE_EXTENSION);
+		final Path path = getProjectPath(id);
 		return Files.deleteIfExists(path);
+	}
+
+	public byte[] getProjectFile(UUID id) throws IOException
+	{
+		final Path path = getProjectPath(id);
+		return Files.readAllBytes(path);
+	}
+
+	private Path getProjectPath(UUID id)
+	{
+		return pathProvider.getPathForConfig(id + FILE_EXTENSION);
 	}
 }

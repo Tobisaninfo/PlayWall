@@ -81,6 +81,11 @@ public class ProjectService
 		allProjectsInfoRepository.saveAllProjectsInfo();
 	}
 
+	public byte[] exportProject(UUID projectId) throws IOException
+	{
+		return projectRepository.getProjectFile(projectId);
+	}
+
 	public Page addPage(Project project)
 	{
 		final int nextPagePosition = project.getPages().size();
