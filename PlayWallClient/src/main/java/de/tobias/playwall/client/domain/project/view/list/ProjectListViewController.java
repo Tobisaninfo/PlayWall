@@ -182,7 +182,7 @@ public class ProjectListViewController extends ViewControllerBase
 	public void onImportProjectButton()
 	{
 		final MimeType mimeType = MimeType.APPLICATION_JSON;
-		fileChooserWrapper.setExtensionFilter(List.of(new FileChooser.ExtensionFilter(Localization.getString("MimeType." + mimeType.getMimeTypeValue()), mimeType.getExtension())));
+		fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
 		final Optional<Path> pathOptional = fileChooserWrapper.showOpenFile(getContainingWindow());
 		if(pathOptional.isEmpty())
 		{

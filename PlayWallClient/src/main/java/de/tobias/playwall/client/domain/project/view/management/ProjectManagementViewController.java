@@ -22,7 +22,6 @@ import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -115,9 +114,9 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		{
 			final ProjectFile export = client.project(project.getId()).export();
 
-			final String extension = MimeType.getByMimeType(export.mimetype()).getExtension();
-			fileChooserWrapper.setExtensionFilter(List.of(new FileChooser.ExtensionFilter(Localization.getString("MimeType." + export.mimetype()), extension)));
-			fileChooserWrapper.setInitialFilename(project.getName() + "." + extension);
+			final MimeType mimeType = MimeType.getByMimeType(export.mimetype());
+			fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
+			fileChooserWrapper.setInitialFilename(project.getName() + "." + mimeType.getExtension());
 			final Optional<Path> pathOptional = fileChooserWrapper.showSaveFile(getContainingWindow());
 			if(pathOptional.isEmpty())
 			{
@@ -196,7 +195,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	private void onImportButton()
 	{
 		final MimeType mimeType = MimeType.APPLICATION_JSON;
-		fileChooserWrapper.setExtensionFilter(List.of(new FileChooser.ExtensionFilter(Localization.getString("MimeType." + mimeType.getMimeTypeValue()), mimeType.getExtension())));
+		fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
 		final Optional<Path> pathOptional = fileChooserWrapper.showOpenFile(getContainingWindow());
 		if(pathOptional.isEmpty())
 		{

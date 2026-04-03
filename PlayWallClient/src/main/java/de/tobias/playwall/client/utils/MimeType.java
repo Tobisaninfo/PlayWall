@@ -1,5 +1,7 @@
 package de.tobias.playwall.client.utils;
 
+import de.thecodelabs.utils.util.Localization;
+import javafx.stage.FileChooser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,6 +13,11 @@ public enum MimeType
 
 	private final String mimeTypeValue;
 	private final String extension;
+
+	public FileChooser.ExtensionFilter toExtensionFilter()
+	{
+		return new FileChooser.ExtensionFilter(Localization.getString("MimeType." + mimeTypeValue), extension);
+	}
 
 	public static MimeType getByMimeType(String mimeType)
 	{
