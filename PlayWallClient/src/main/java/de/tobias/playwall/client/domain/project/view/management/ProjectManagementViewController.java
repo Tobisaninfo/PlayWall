@@ -192,7 +192,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	}
 
 	@FXML
-	private void onImportButton()
+	void onImportButton()
 	{
 		final MimeType mimeType = MimeType.APPLICATION_JSON;
 		fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));

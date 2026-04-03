@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentCaptor;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.robot.Motion;
@@ -83,7 +84,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testListProjects(FxRobot robot) throws PlayWallApiException
+	void testListProjects() throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
 				.allProjectsMetadata(List.of(PROJECT_METADATA_1, PROJECT_METADATA_2))
@@ -138,7 +139,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testExportProject(FxRobot robot) throws PlayWallApiException, IOException
+	void testExportProject() throws PlayWallApiException, IOException
 	{
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
 				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
@@ -158,6 +159,36 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 
 		assertThat(Files.exists(targetPath)).isTrue();
 		assertThat(Files.readAllBytes(targetPath)).isEqualTo(new byte[]{1, 2, 3});
+	}
+
+	@Test
+	void testImportProject() throws PlayWallApiException, IOException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+
+		openStage();
+
+		clearInvocations(client);
+
+		final Path targetPath = tempDir.resolve("test.json");
+		Files.write(targetPath, new byte[]{1, 2, 3});
+		when(fileChooserWrapper.showOpenFile(any())).thenReturn(Optional.of(targetPath));
+
+		viewController.onImportButton();
+
+		final ArgumentCaptor<ProjectFile> captor = ArgumentCaptor.forClass(ProjectFile.class);
+		verify(client).importProject(captor.capture());
+		assertThat(captor.getValue())
+				.satisfies(value -> {
+					assertThat(value.mimetype()).isEqualTo("application/json");
+					assertThat(value.data()).isEqualTo(new byte[]{1, 2, 3});
+				});
+
+		verify(client).getProjects();
 	}
 
 	@Test

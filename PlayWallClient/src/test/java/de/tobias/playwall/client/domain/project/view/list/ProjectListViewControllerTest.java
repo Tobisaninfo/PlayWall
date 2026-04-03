@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.project.ProjectFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
@@ -14,17 +15,24 @@ import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentCaptor;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.robot.Motion;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,6 +45,9 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	private static final UUID PROJECT_ID = UUID.randomUUID();
 	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null);
 
+	@TempDir
+	private Path tempDir;
+
 	private AppContext context;
 	private final Client client = mock(Client.class);
 
@@ -45,6 +56,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	private final ProgramSettingsViewController programSettingsViewController = mock(ProgramSettingsViewController.class);
 	private final CommandLineOptions commandLineOptions = mock(CommandLineOptions.class);
 	private final ClientSettingsController settingsController = mock(ClientSettingsController.class);
+	private final FileChooserWrapper fileChooserWrapper = mock(FileChooserWrapper.class);
 
 	private ProjectListViewController launchDialog;
 	private Stage stage;
@@ -59,6 +71,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		context.registerLazySingleton(ProgramSettingsViewController.class, _ -> programSettingsViewController);
 		context.registerLazySingleton(CommandLineOptions.class, _ -> commandLineOptions);
 		context.registerLazySingleton(ClientSettingsController.class, _ -> settingsController);
+		context.registerLazySingleton(FileChooserWrapper.class, _ -> fileChooserWrapper);
 		context.registerLazy(Stage.class, _ -> stage);
 
 		context.registerLazySingleton(Client.class, _ -> client);
@@ -164,6 +177,46 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		verify(client, never()).getProjects();
+	}
+
+	// Import project
+
+	@Test
+	void testImportProject() throws PlayWallApiException, IOException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+
+		Platform.runLater(() -> {
+			launchDialog = context.get(ProjectListViewController.class);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		clearInvocations(client);
+
+		final Path targetPath = tempDir.resolve("test.json");
+		Files.write(targetPath, new byte[]{1, 2, 3});
+		when(fileChooserWrapper.showOpenFile(any())).thenReturn(Optional.of(targetPath));
+
+		Platform.runLater(() -> {
+			launchDialog.onImportProjectButton();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final ArgumentCaptor<ProjectFile> captor = ArgumentCaptor.forClass(ProjectFile.class);
+		verify(client).importProject(captor.capture());
+		Assertions.assertThat(captor.getValue())
+				.satisfies(value -> {
+					Assertions.assertThat(value.mimetype()).isEqualTo("application/json");
+					Assertions.assertThat(value.data()).isEqualTo(new byte[]{1, 2, 3});
+				});
+
+		verify(mainViewController).showStage();
+		verify(mainViewController).showProject(any());
+		assertThat(stage.isShowing()).isFalse();
 	}
 
 	// Open
