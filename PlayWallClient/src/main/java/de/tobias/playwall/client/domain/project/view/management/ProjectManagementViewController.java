@@ -195,7 +195,28 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	@FXML
 	private void onImportButton()
 	{
-
+		final MimeType mimeType = MimeType.APPLICATION_JSON;
+		fileChooserWrapper.setExtensionFilter(List.of(new FileChooser.ExtensionFilter(Localization.getString("MimeType." + mimeType.getMimeTypeValue()), mimeType.getExtension())));
+		final Optional<Path> pathOptional = fileChooserWrapper.showOpenFile(getContainingWindow());
+		if(pathOptional.isEmpty())
+		{
+			return;
+		}
+		try
+		{
+			final byte[] bytes = Files.readAllBytes(pathOptional.get());
+			client.projects().importProject(new ProjectFile(mimeType.getMimeTypeValue(), bytes));
+			fetchProjects();
+		}
+		catch(IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot import project", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_IMPORT), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
 	}
 
 	@FXML
