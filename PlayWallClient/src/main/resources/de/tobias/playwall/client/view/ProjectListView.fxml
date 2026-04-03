@@ -21,7 +21,8 @@
         <VBox fx:id="buttonBox" alignment="BOTTOM_LEFT" layoutX="109.0" layoutY="259.0" spacing="14.0" VBox.vgrow="ALWAYS">
                 <HBox maxWidth="1.7976931348623157E308" spacing="14.0">
                     <PlayWallButton fx:id="newProjectButton" icon="FOLDER_PLUS_SOLID" maxWidth="Infinity" onAction="#onNewProjectButton" text="%launch.button.new" HBox.hgrow="ALWAYS"/>
-                    <PlayWallButton fx:id="importProjectButton" icon="FILE_IMPORT_SOLID" maxWidth="Infinity" onAction="#onNewProjectButton" text="%launch.button.import" HBox.hgrow="ALWAYS" disable="true"/>
+                    <PlayWallButton fx:id="importProjectButton" icon="FILE_IMPORT_SOLID" maxWidth="Infinity"
+                                    onAction="#onImportProjectButton" text="%launch.button.import" HBox.hgrow="ALWAYS"/>
                 </HBox>
                 <PlayWallButton fx:id="openSettingsButton" icon="GEAR_SOLID" maxWidth="Infinity" onAction="#onOpenSettingsButton" text="%launch.button.settings" />
         </VBox>

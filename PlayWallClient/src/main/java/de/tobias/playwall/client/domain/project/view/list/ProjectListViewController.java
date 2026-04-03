@@ -3,15 +3,13 @@ package de.tobias.playwall.client.domain.project.view.list;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
-import de.tobias.playwall.client.domain.project.AllProjectsInfo;
-import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
@@ -21,7 +19,10 @@ import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsVi
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.utils.MimeType;
+import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ViewControllerBase;
+import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -34,13 +35,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -90,6 +94,8 @@ public class ProjectListViewController extends ViewControllerBase
 	private final ClientSettingsController settingsController;
 	private final CommandLineOptions commandLineOptions;
 	private final UpdateMessageEventHandler updateMessageEventHandler;
+	private final FileChooserWrapper fileChooserWrapper;
+	private final ErrorAlertBuilder errorAlertBuilder;
 
 	private AllProjectsInfo allProjectsInfo;
 
@@ -113,8 +119,8 @@ public class ProjectListViewController extends ViewControllerBase
 		// Mouse Double Click on the list
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
-					mouseEvent.getClickCount() == 2 &&
-					!projectListView.getSelectionModel().isEmpty())
+			   mouseEvent.getClickCount() == 2 &&
+			   !projectListView.getSelectionModel().isEmpty())
 			{
 				openProject(getSelectedProject().getId());
 			}
@@ -170,6 +176,34 @@ public class ProjectListViewController extends ViewControllerBase
 			fetchProjects();
 			openProject(projectOptional.get().getId());
 		}
+	}
+
+	@FXML
+	public void onImportProjectButton()
+	{
+		final MimeType mimeType = MimeType.APPLICATION_JSON;
+		fileChooserWrapper.setExtensionFilter(List.of(new FileChooser.ExtensionFilter(Localization.getString("MimeType." + mimeType.getMimeTypeValue()), mimeType.getExtension())));
+		final Optional<Path> pathOptional = fileChooserWrapper.showOpenFile(getContainingWindow());
+		if(pathOptional.isEmpty())
+		{
+			return;
+		}
+		try
+		{
+			final byte[] bytes = Files.readAllBytes(pathOptional.get());
+			final UUID uuid = client.projects().importProject(new ProjectFile(mimeType.getMimeTypeValue(), bytes));
+			openProject(uuid);
+		}
+		catch(IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot import project", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_IMPORT), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+
 	}
 
 	@FXML
