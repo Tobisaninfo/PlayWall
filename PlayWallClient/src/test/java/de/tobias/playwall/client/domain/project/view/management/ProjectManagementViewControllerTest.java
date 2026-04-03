@@ -150,7 +150,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 
 		final Path targetPath = tempDir.resolve("test.json");
 		when(fileChooserWrapper.showSaveFile(any())).thenReturn(Optional.of(targetPath));
-		when(client.exportProject(any())).thenReturn(new ProjectExport(MimeType.APPLICATION_JSON.getMimeTypeValue(), new byte[]{1, 2, 3}));
+		when(client.exportProject(any())).thenReturn(new ProjectFile(MimeType.APPLICATION_JSON.getMimeTypeValue(), new byte[]{1, 2, 3}));
 
 		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
 		Platform.runLater(() -> cell.getButtonContextMenu().getItems().get(2).fire());

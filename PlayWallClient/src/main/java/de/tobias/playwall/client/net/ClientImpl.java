@@ -17,6 +17,7 @@ import de.tobias.playwall.common.api.project.request.*;
 import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.api.settings.SettingsGetResponse;
 import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
+import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.utils.MapUtils;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
@@ -157,10 +158,17 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public ProjectExport exportProject(UUID projectId) throws PlayWallApiException
+	public ProjectFile exportProject(UUID projectId) throws PlayWallApiException
 	{
 		final ProjectExportResponse responseMessage = clientWebSocketHandler.send(new ProjectExportRequest(projectId));
-		return new ProjectExport(responseMessage.getMimetype(), Base64.getDecoder().decode(responseMessage.getBase64()));
+		return new ProjectFile(responseMessage.getMimetype(), Base64.getDecoder().decode(responseMessage.getBase64()));
+	}
+
+	@Override
+	public UUID importProject(ProjectFile projectFile) throws PlayWallApiException
+	{
+		final ProjectImportResponse responseMessage = clientWebSocketHandler.send(new ProjectImportRequest(projectFile.mimetype(), Base64.getEncoder().encodeToString(projectFile.data())));
+		return responseMessage.getProjectId();
 	}
 
 	@Override

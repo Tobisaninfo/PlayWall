@@ -5,7 +5,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectExport;
+import de.tobias.playwall.client.domain.project.ProjectFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -82,6 +82,12 @@ class FluentClientImpl implements FluentClient
 		{
 			return delegate.addProject(name, numberOfHorizontalPads, numberOfVerticalPads);
 		}
+
+		@Override
+		public UUID importProject(ProjectFile projectFile) throws PlayWallApiException
+		{
+			return delegate.importProject(projectFile);
+		}
 	}
 
 	@AllArgsConstructor
@@ -108,7 +114,7 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public ProjectExport export() throws PlayWallApiException
+		public ProjectFile export() throws PlayWallApiException
 		{
 			return delegate.exportProject(projectId);
 		}

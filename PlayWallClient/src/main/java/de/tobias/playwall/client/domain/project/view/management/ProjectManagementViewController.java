@@ -7,7 +7,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.domain.project.ProjectExport;
+import de.tobias.playwall.client.domain.project.ProjectFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
@@ -113,7 +113,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	{
 		try
 		{
-			final ProjectExport export = client.project(project.getId()).export();
+			final ProjectFile export = client.project(project.getId()).export();
 
 			final String extension = MimeType.getByMimeType(export.mimetype()).getExtension();
 			fileChooserWrapper.setExtensionFilter(List.of(new FileChooser.ExtensionFilter(Localization.getString("MimeType." + export.mimetype()), extension)));

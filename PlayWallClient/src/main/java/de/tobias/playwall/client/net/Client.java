@@ -3,7 +3,7 @@ package de.tobias.playwall.client.net;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectExport;
+import de.tobias.playwall.client.domain.project.ProjectFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -45,7 +45,9 @@ public interface Client
 
 	void saveProject() throws PlayWallApiException;
 
-	ProjectExport exportProject(UUID projectId) throws PlayWallApiException;
+	ProjectFile exportProject(UUID projectId) throws PlayWallApiException;
+
+	UUID importProject(ProjectFile projectFile) throws PlayWallApiException;
 
 	void undo() throws PlayWallApiException;
 
