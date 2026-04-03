@@ -30,6 +30,11 @@ public class ErrorAlertBuilder
 		return createErrorAlert(title, headerText, contentText, stackStrace, owner);
 	}
 
+	public Alert createErrorAlert(String title, String headerText, String contentText, Window owner)
+	{
+		return createErrorAlert(title, headerText, contentText, (String) null, owner);
+	}
+
 	public Alert createErrorAlert(String title, String headerText, String contentText, String stackTrace, Window owner)
 	{
 		final Alert alert = Alerts.getInstance().createAlert(Alert.AlertType.ERROR, title, headerText, contentText, owner);

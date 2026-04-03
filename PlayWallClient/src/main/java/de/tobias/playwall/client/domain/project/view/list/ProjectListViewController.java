@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view.list;
 
-import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -35,7 +34,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -88,7 +86,6 @@ public class ProjectListViewController extends ViewControllerBase
 	@Getter
 	private PlayWallButton deleteButton;
 
-	private final App app;
 	private final FluentClient client;
 	private final ClientProjectController projectController;
 	private final ClientSettingsController settingsController;
@@ -196,7 +193,8 @@ public class ProjectListViewController extends ViewControllerBase
 		}
 		catch(IOException e)
 		{
-			throw new RuntimeException(e);
+			log.error("Cannot read file", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_IMPORT), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 		catch(PlayWallApiException e)
 		{

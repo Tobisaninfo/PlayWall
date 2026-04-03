@@ -132,8 +132,8 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		}
 		catch(IOException e)
 		{
-			log.error("Cannot export project", e);
-			// TODO
+			log.error("Cannot write file", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_EXPORT), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 	}
 
@@ -209,7 +209,8 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		}
 		catch(IOException e)
 		{
-			throw new RuntimeException(e);
+			log.error("Cannot read file", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_IMPORT), e.getMessage(), getContainingWindow()).showAndWait();
 		}
 		catch(PlayWallApiException e)
 		{
