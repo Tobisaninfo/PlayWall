@@ -139,6 +139,27 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 	}
 
 	@Test
+	void testDuplicateProject() throws PlayWallApiException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+
+		openStage();
+
+		clearInvocations(client);
+
+		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
+		Platform.runLater(() -> cell.getButtonContextMenu().getItems().get(1).fire());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).duplicateProject(PROJECT_ID_1);
+		verify(client).getProjects();
+	}
+
+	@Test
 	void testExportProject() throws PlayWallApiException, IOException
 	{
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
