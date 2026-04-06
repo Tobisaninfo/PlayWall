@@ -85,6 +85,16 @@ public class ProjectService
 		allProjectsInfoRepository.saveAllProjectsInfo();
 	}
 
+	public UUID duplicateProject(UUID projectId) throws IOException
+	{
+		final Project project = projectRepository.loadProject(projectId);
+
+		allProjectsInfoRepository.importProject(project);
+		projectRepository.saveProject(project);
+
+		return project.getMetadata().getId();
+	}
+
 	public byte[] exportProject(UUID projectId) throws IOException
 	{
 		return projectRepository.getProjectFile(projectId);
@@ -99,7 +109,6 @@ public class ProjectService
 		}
 
 		final Project project = jsonMapper.readValue(data, Project.class);
-		project.getMetadata().setId(UUID.randomUUID());
 
 		allProjectsInfoRepository.importProject(project);
 		projectRepository.saveProject(project);
