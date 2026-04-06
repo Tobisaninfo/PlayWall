@@ -22,6 +22,7 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 {
 	public enum ProjectManagementCellAction
 	{
+		DUPLICATE,
 		EXPORT,
 		DELETE
 	}
@@ -43,6 +44,12 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 		final MenuItem exportMenu = new MenuItem(Localization.getString("project.button.export"), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
 		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_CAN_SOLID));
 
+		duplicateMenu.setOnAction(_ -> {
+			if(ref != null)
+			{
+				actionHandler.accept(ProjectManagementCellAction.DUPLICATE, ref);
+			}
+		});
 		exportMenu.setOnAction(_ -> {
 			if(ref != null)
 			{

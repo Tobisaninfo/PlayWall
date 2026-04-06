@@ -103,8 +103,23 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	{
 		switch(action)
 		{
+			case DUPLICATE -> onDuplicate(project);
 			case DELETE -> onDeleteProject(project);
 			case EXPORT -> onExportProject(project);
+		}
+	}
+
+	private void onDuplicate(ProjectMetadata project)
+	{
+		try
+		{
+			client.project(project.getId()).duplicate();
+			fetchProjects();
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot export project", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_DUPLICATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
