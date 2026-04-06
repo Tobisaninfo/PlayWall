@@ -17,7 +17,6 @@ import de.tobias.playwall.common.api.project.request.*;
 import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.api.settings.SettingsGetResponse;
 import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
-import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.common.utils.MapUtils;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
@@ -155,6 +154,13 @@ class ClientImpl implements Client
 	public void saveProject() throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new ProjectSaveRequest());
+	}
+
+	@Override
+	public UUID duplicateProject(UUID projectId) throws PlayWallApiException
+	{
+		final ProjectDuplicateResponse responseMessage = clientWebSocketHandler.send(new ProjectDuplicateRequest(projectId));
+		return responseMessage.getProjectId();
 	}
 
 	@Override

@@ -45,6 +45,8 @@ public interface Client
 
 	void saveProject() throws PlayWallApiException;
 
+	UUID duplicateProject(UUID projectId) throws PlayWallApiException;
+
 	ProjectFile exportProject(UUID projectId) throws PlayWallApiException;
 
 	UUID importProject(ProjectFile projectFile) throws PlayWallApiException;

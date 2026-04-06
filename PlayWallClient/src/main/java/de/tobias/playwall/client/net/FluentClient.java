@@ -45,6 +45,8 @@ public interface FluentClient
 
 		void load() throws PlayWallApiException;
 
+		UUID duplicate() throws PlayWallApiException;
+
 		ProjectFile export() throws PlayWallApiException;
 	}
 

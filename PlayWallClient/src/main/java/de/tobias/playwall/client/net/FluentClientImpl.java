@@ -114,6 +114,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public UUID duplicate() throws PlayWallApiException
+		{
+			return delegate.duplicateProject(projectId);
+		}
+
+		@Override
 		public ProjectFile export() throws PlayWallApiException
 		{
 			return delegate.exportProject(projectId);
