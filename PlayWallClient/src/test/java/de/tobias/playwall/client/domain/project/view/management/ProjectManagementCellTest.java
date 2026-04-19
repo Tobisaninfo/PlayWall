@@ -94,6 +94,7 @@ class ProjectManagementCellTest extends ApplicationTest
 	static Stream<Arguments> actionArguments()
 	{
 		return Stream.of(
+				of(0, ProjectManagementCell.ProjectManagementCellAction.RENAME),
 				of(1, ProjectManagementCell.ProjectManagementCellAction.DUPLICATE),
 				of(2, ProjectManagementCell.ProjectManagementCellAction.EXPORT),
 				of(4, ProjectManagementCell.ProjectManagementCellAction.DELETE)

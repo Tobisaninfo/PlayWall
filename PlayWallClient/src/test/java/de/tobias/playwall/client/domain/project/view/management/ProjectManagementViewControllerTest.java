@@ -15,6 +15,7 @@ import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.control.TextInputControl;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -139,6 +140,58 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 	}
 
 	@Test
+	void testRenameProject(FxRobot robot) throws PlayWallApiException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1))
+				.recentProjectIds(List.of())
+				.build());
+		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+
+		openStage();
+		clearInvocations(client);
+
+		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
+		Platform.runLater(() -> cell.getButtonContextMenu().getItems().getFirst().fire());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
+		textInputControl.setText("New Name");
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).renameProject(PROJECT_ID_1, "New Name");
+		verify(client).getProjects();
+	}
+
+	@Test
+	void testRenameProjectInvalidInput(FxRobot robot) throws PlayWallApiException
+	{
+		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
+				.allProjectsMetadata(List.of(PROJECT_METADATA_1, PROJECT_METADATA_2))
+				.recentProjectIds(List.of())
+				.build());
+		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
+
+		openStage();
+		clearInvocations(client);
+
+		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
+		Platform.runLater(() -> cell.getButtonContextMenu().getItems().getFirst().fire());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
+		textInputControl.setText("Test 2");
+		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		assertThat(robot.lookup(".text-input").queryTextInputControl()).isVisible();
+		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Der Name des Projekts existiert bereits.");
+
+		verify(client, never()).renameProject(any(), any());
+	}
+
+	@Test
 	void testDuplicateProject() throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
@@ -148,7 +201,6 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 
 		openStage();
-
 		clearInvocations(client);
 
 		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
@@ -192,7 +244,6 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		when(projectController.getProject()).thenReturn(new Project(PROJECT_METADATA_1, List.of()));
 
 		openStage();
-
 		clearInvocations(client);
 
 		final Path targetPath = tempDir.resolve("test.json");
