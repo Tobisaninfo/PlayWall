@@ -159,7 +159,7 @@ class ClientImpl implements Client
 	@Override
 	public void renameProject(UUID projectId, String newName) throws PlayWallApiException
 	{
-
+		clientWebSocketHandler.send(new ProjectRenameRequest(projectId, newName));
 	}
 
 	@Override

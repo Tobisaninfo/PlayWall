@@ -114,9 +114,9 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public void rename(String trim) throws PlayWallApiException
+		public void rename(String newValue) throws PlayWallApiException
 		{
-
+			delegate.renameProject(projectId, newValue);
 		}
 
 		@Override

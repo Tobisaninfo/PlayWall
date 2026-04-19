@@ -135,6 +135,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 			try
 			{
 				client.project(project.getId()).rename(newProjectName.trim());
+				fetchProjects();
 			}
 			catch(PlayWallApiException e)
 			{
