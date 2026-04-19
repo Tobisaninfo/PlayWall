@@ -101,6 +101,11 @@ public class ProjectController
 		context.publishEvent(new ProjectLoadedUpdate());
 	}
 
+	public boolean isAnyProjectLoaded()
+	{
+		return loadedProject != null;
+	}
+
 	public @NonNull Project getLoadedProject() throws ProjectNotLoadedException
 	{
 		if(loadedProject == null)

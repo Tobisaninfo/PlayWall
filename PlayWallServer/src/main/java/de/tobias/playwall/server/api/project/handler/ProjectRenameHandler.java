@@ -26,7 +26,7 @@ class ProjectRenameHandler implements OneTimeActionRequestHandler<ProjectRenameR
 	{
 		projectService.rename(requestMessage.getProjectId(), requestMessage.getNewName());
 
-		if(requestMessage.getProjectId().equals(projectController.getLoadedProject().getMetadata().getId()))
+		if(projectController.isAnyProjectLoaded() && requestMessage.getProjectId().equals(projectController.getLoadedProject().getMetadata().getId()))
 		{
 			projectController.getLoadedProject().getMetadata().setName(requestMessage.getNewName());
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(projectController.getLoadedProject().getMetadata())));

@@ -2,7 +2,6 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
-import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
@@ -134,7 +133,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 
-		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class)).isEmpty();
 	}
 
 	@Test
@@ -178,7 +177,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNameAlreadyExistsException.class);
 
-		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class)).isEmpty();
 		assertThat(project.getMetadata().getName()).isEqualTo("Project 1");
 	}
 
