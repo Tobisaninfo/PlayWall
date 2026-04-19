@@ -45,6 +45,8 @@ public interface FluentClient
 
 		void load() throws PlayWallApiException;
 
+		void rename(String trim) throws PlayWallApiException;
+
 		UUID duplicate() throws PlayWallApiException;
 
 		ProjectFile export() throws PlayWallApiException;

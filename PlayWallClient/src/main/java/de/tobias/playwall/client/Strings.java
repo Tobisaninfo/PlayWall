@@ -20,6 +20,10 @@ public class Strings
 	public static final String UI_DIALOG_PROJECT_DELETE_CONTENT = "ui.dialog.project.delete.content";
 	public static final String UI_PLACEHOLDER_PROJECT = "ui.placeholder.project";
 
+	public static final String UI_PROJECT_RENAME = "ui.project.rename";
+	public static final String UI_PROJECT_RENAME_TITLE = "ui.project.rename.title";
+	public static final String UI_PROJECT_RENAME_INPUT = "ui.project.rename.input";
+
 	public static final String UI_PAGE_RENAME = "ui.page.rename";
 	public static final String UI_PAGE_RENAME_TITLE = "ui.page.rename.title";
 	public static final String UI_PAGE_RENAME_INPUT = "ui.page.rename.input";
@@ -117,6 +121,8 @@ public class Strings
 	public static final String UI_ERRORS_PROJECT_ADD = "ui.errors.project.add";
 	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
 	public static final String UI_ERRORS_PROJECT_SAVE_STATUS  = "ui.errors.project.save.status";
+	public static final String UI_ERRORS_PROJECT_RENAME_EMPTY = "ui.errors.project.rename.empty";
+	public static final String UI_ERRORS_PROJECT_RENAME_DUPLICATE = "ui.errors.project.rename.duplicate";
 	public static final String UI_ERRORS_PROJECT_DUPLICATE = "ui.errors.project.duplicate";
 	public static final String UI_ERRORS_PROJECT_EXPORT = "ui.errors.project.export";
 	public static final String UI_ERRORS_PROJECT_IMPORT = "ui.errors.project.import";

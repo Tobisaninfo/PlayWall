@@ -114,6 +114,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public void rename(String trim) throws PlayWallApiException
+		{
+
+		}
+
+		@Override
 		public UUID duplicate() throws PlayWallApiException
 		{
 			return delegate.duplicateProject(projectId);

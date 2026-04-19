@@ -45,6 +45,8 @@ public interface Client
 
 	void saveProject() throws PlayWallApiException;
 
+	void renameProject(UUID projectId, String newName) throws PlayWallApiException;
+
 	UUID duplicateProject(UUID projectId) throws PlayWallApiException;
 
 	ProjectFile exportProject(UUID projectId) throws PlayWallApiException;

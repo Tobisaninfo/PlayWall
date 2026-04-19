@@ -19,6 +19,7 @@ import de.tobias.playwall.client.utils.MimeType;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ParamDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
+import de.tobias.playwall.client.view.components.TextInputErrorLabelDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -103,10 +104,44 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	{
 		switch(action)
 		{
+			case RENAME -> onRename(project);
 			case DUPLICATE -> onDuplicate(project);
 			case DELETE -> onDeleteProject(project);
 			case EXPORT -> onExportProject(project);
 		}
+	}
+
+	private void onRename(ProjectMetadata project)
+	{
+		final TextInputErrorLabelDialog dialog = new TextInputErrorLabelDialog(project.getName(), newValue -> {
+			if(newValue.isEmpty())
+			{
+				return Localization.getString(Strings.UI_ERRORS_PROJECT_RENAME_EMPTY);
+			}
+			final List<String> usedNames = projectListView.getItems().stream()
+					.map(ProjectMetadata::getName)
+					.toList();
+			return usedNames.contains(newValue) ? Localization.getString(Strings.UI_ERRORS_PROJECT_RENAME_DUPLICATE) : null;
+		});
+		dialog.setTitle(Localization.getString(Strings.UI_PROJECT_RENAME_TITLE));
+		dialog.setHeaderText(Localization.getString(Strings.UI_PROJECT_RENAME_TITLE));
+		dialog.setContentText(Localization.getString(Strings.UI_PROJECT_RENAME_INPUT));
+		dialog.createErrorLabel();
+		dialog.getDialogPane().setMinWidth(400);
+		dialog.initOwner(getContainingWindow());
+
+		final Optional<String> result = dialog.showAndWait();
+		result.ifPresent(newProjectName -> {
+			try
+			{
+				client.project(project.getId()).rename(newProjectName.trim());
+			}
+			catch(PlayWallApiException e)
+			{
+				log.error("Cannot rename project", e);
+				showErrorMessage(e.getMessage());
+			}
+		});
 	}
 
 	private void onDuplicate(ProjectMetadata project)

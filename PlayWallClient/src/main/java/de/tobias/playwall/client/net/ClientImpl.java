@@ -157,6 +157,12 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public void renameProject(UUID projectId, String newName) throws PlayWallApiException
+	{
+
+	}
+
+	@Override
 	public UUID duplicateProject(UUID projectId) throws PlayWallApiException
 	{
 		final ProjectDuplicateResponse responseMessage = clientWebSocketHandler.send(new ProjectDuplicateRequest(projectId));

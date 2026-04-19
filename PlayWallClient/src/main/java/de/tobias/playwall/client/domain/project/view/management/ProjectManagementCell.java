@@ -22,6 +22,7 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 {
 	public enum ProjectManagementCellAction
 	{
+		RENAME,
 		DUPLICATE,
 		EXPORT,
 		DELETE
@@ -44,6 +45,12 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 		final MenuItem exportMenu = new MenuItem(Localization.getString("project.button.export"), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
 		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_CAN_SOLID));
 
+		renameMenu.setOnAction(_ -> {
+			if(ref != null)
+			{
+				actionHandler.accept(ProjectManagementCellAction.RENAME, ref);
+			}
+		});
 		duplicateMenu.setOnAction(_ -> {
 			if(ref != null)
 			{
@@ -89,7 +96,7 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 				projectNameLabel.getStyleClass().add("project-management--project-name");
 
 				final Button menuButton = new Button("", new FontIcon(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID));
-				menuButton.setOnAction(e -> buttonContextMenu.show(menuButton, Side.LEFT, 0, 0));
+				menuButton.setOnAction(_ -> buttonContextMenu.show(menuButton, Side.LEFT, 0, 0));
 
 				row.getChildren().addAll(circle, projectNameLabel, menuButton);
 				HBox.setHgrow(projectNameLabel, Priority.ALWAYS);
