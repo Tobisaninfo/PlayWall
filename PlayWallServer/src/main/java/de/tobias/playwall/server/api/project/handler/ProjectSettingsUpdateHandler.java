@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -50,7 +51,7 @@ class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSett
 	}
 
 	@Override
-	public Optional<UndoItem> handleRequest(ProjectSettingsUpdateRequest requestMessage)
+	public Optional<UndoItem> handleRequest(ProjectSettingsUpdateRequest requestMessage) throws IOException
 	{
 		final UndoItem inverseOperation = getInverseOperation(requestMessage);
 

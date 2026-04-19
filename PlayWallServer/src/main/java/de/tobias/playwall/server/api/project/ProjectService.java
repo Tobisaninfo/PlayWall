@@ -74,7 +74,7 @@ public class ProjectService
 		return projectMetadata;
 	}
 
-	public void rename(UUID projectId, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException
+	public void rename(UUID projectId, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException, IOException
 	{
 		allProjectsInfoRepository.renameProject(projectId, name);
 	}

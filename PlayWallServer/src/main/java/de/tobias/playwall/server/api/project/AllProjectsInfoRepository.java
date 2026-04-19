@@ -119,7 +119,7 @@ public class AllProjectsInfoRepository
 		saveAllProjectsInfo();
 	}
 
-	public void renameProject(UUID id, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException
+	public void renameProject(UUID id, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException, IOException
 	{
 		final Optional<ProjectMetadata> existingProjectOptional = getProjectMetadataByName(name);
 		if(existingProjectOptional.isPresent() && !existingProjectOptional.get().getId().equals(id))
@@ -128,6 +128,7 @@ public class AllProjectsInfoRepository
 		}
 
 		getProjectMetadataById(id).setName(name);
+		saveAllProjectsInfo();
 	}
 
 	public void onProjectOpened(UUID id)
