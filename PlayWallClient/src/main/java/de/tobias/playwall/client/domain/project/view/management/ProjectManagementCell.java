@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project.view.management;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.view.components.ViewConstants;
@@ -34,16 +35,16 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 
 	private ProjectMetadata ref;
 
-	public ProjectManagementCell(ClientProjectController projectController,
+	ProjectManagementCell(ClientProjectController projectController,
 								 BiConsumer<ProjectManagementCellAction, ProjectMetadata> actionHandler)
 	{
 		this.projectController = projectController;
 		buttonContextMenu = new ContextMenu();
 
-		final MenuItem renameMenu = new MenuItem(Localization.getString("project.button.rename"), new FontIcon(FontAwesomeType.PEN_SOLID));
-		final MenuItem duplicateMenu = new MenuItem(Localization.getString("project.button.duplicate"), new FontIcon(FontAwesomeType.CLONE_SOLID));
-		final MenuItem exportMenu = new MenuItem(Localization.getString("project.button.export"), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
-		final MenuItem deleteMenu = new MenuItem(Localization.getString("project.button.delete"), new FontIcon(FontAwesomeType.TRASH_CAN_SOLID));
+		final MenuItem renameMenu = new MenuItem(Localization.getString(Strings.UI_PROJECT_BUTTON_RENAME), new FontIcon(FontAwesomeType.PEN_SOLID));
+		final MenuItem duplicateMenu = new MenuItem(Localization.getString(Strings.UI_PROJECT_BUTTON_DUPLICATE), new FontIcon(FontAwesomeType.CLONE_SOLID));
+		final MenuItem exportMenu = new MenuItem(Localization.getString(Strings.UI_PROJECT_BUTTON_EXPORT), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
+		final MenuItem deleteMenu = new MenuItem(Localization.getString(Strings.UI_PROJECT_BUTTON_DELETE), new FontIcon(FontAwesomeType.TRASH_CAN_SOLID));
 
 		renameMenu.setOnAction(_ -> {
 			if(ref != null)
