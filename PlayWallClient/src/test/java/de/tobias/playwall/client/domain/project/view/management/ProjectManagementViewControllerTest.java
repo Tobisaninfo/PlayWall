@@ -155,7 +155,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		Platform.runLater(() -> cell.getButtonContextMenu().getItems().getFirst().fire());
 		WaitForAsyncUtils.waitForFxEvents();
 
-		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
+		final TextInputControl textInputControl = robot.lookup(".text-input-dialog .text-field").queryTextInputControl();
 		textInputControl.setText("New Name");
 		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
