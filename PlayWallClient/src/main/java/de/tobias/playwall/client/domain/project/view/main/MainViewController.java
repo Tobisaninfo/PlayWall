@@ -502,46 +502,22 @@ public class MainViewController extends ViewControllerBase
 
 	private void onPageRenameMenuItem(Page page)
 	{
-		final TextInputDialog dialog = new TextInputDialog(page.getName());
-		dialog.setTitle(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
-		dialog.setHeaderText(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
-		dialog.setContentText(Localization.getString(Strings.UI_PAGE_RENAME_INPUT));
-		dialog.getDialogPane().setMinWidth(400);
-		dialog.initOwner(getStage());
-
-		final TextField textField = dialog.getEditor();
-
-		final Label errorLabel = new Label(Localization.getString(Strings.UI_PAGE_RENAME_ERROR_EMPTY));
-		errorLabel.getStyleClass().add("error-label");
-		errorLabel.setVisible(false);
-		errorLabel.setPadding(new Insets(10, 0, 0, 0));
-
-		final GridPane content = (GridPane) dialog.getDialogPane().getContent();
-		content.add(errorLabel, 1, 1);
-
-		final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-		okButton.addEventFilter(ActionEvent.ACTION, event -> {
-			final String newName = textField.getText().trim();
-
-			if(newName.isEmpty())
+		final TextInputErrorLabelDialog dialog = new TextInputErrorLabelDialog(page.getName(), newValue -> {
+			if(newValue.isEmpty())
 			{
-				errorLabel.setText(Localization.getString(Strings.UI_PAGE_RENAME_ERROR_EMPTY));
-				errorLabel.setVisible(true);
-				event.consume();
-				return;
+				return Localization.getString(Strings.UI_PAGE_RENAME_ERROR_EMPTY);
 			}
-
 			final List<String> usedPageNames = projectController.getProject().getPages().stream()
 					.map(Page::getName)
 					.toList();
-
-			if(usedPageNames.contains(newName))
-			{
-				errorLabel.setText(Localization.getString(Strings.UI_PAGE_RENAME_ERROR_DUPLICATE));
-				errorLabel.setVisible(true);
-				event.consume();
-			}
+			return usedPageNames.contains(newValue) ? Localization.getString(Strings.UI_PAGE_RENAME_ERROR_DUPLICATE) : null;
 		});
+		dialog.setTitle(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
+		dialog.setHeaderText(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
+		dialog.setContentText(Localization.getString(Strings.UI_PAGE_RENAME_INPUT));
+		dialog.createErrorLabel();
+		dialog.getDialogPane().setMinWidth(400);
+		dialog.initOwner(getStage());
 
 		final Optional<String> result = dialog.showAndWait();
 		result.ifPresent(newPageName -> {
