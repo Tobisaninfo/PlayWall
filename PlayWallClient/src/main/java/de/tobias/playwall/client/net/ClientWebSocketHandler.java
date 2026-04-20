@@ -5,6 +5,8 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.common.net.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
@@ -32,6 +34,9 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	private final UpdateMessageEventHandler updateMessageEventHandler;
 	private final CommandLineOptions commandLineOptions;
 
+	private final ObjectProperty<ConnectionState> connectionState = new SimpleObjectProperty<>();
+	private volatile boolean intentionalDisconnect = false;
+
 	@InjectConstructor
 	ClientWebSocketHandler(UpdateMessageEventHandler updateMessageEventHandler, CommandLineOptions commandLineOptions)
 	{
@@ -43,6 +48,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 
 	public void connect(Map<String, String> headers)
 	{
+		intentionalDisconnect = false;
 		var webSocketBuilder = httpClient.newWebSocketBuilder();
 
 		final String url = "ws://localhost:" + commandLineOptions.getServerPort() + "/websocket";
@@ -63,6 +69,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 			return;
 		}
 
+		intentionalDisconnect = true;
 		ws.sendClose(WebSocket.NORMAL_CLOSURE, "Client closed connection");
 		ws.abort();
 		ws = null;
@@ -75,6 +82,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	{
 		log.debug("Connected to websocket: {}", webSocket);
 		WebSocket.Listener.super.onOpen(webSocket);
+		connectionState.set(ConnectionState.CONNECTED);
 	}
 
 	private StringBuilder text = new StringBuilder();
@@ -140,6 +148,12 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		{
 			log.debug("Disconnected");
 		}
+
+		if(!intentionalDisconnect)
+		{
+			connectionState.set(ConnectionState.DISCONNECTED);
+		}
+
 		return WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
 	}
 
@@ -147,6 +161,7 @@ class ClientWebSocketHandler implements WebSocket.Listener
 	public void onError(WebSocket webSocket, Throwable error)
 	{
 		log.error("Websocket on error", error);
+		connectionState.set(ConnectionState.DISCONNECTED);
 	}
 
 	@SuppressWarnings({"unchecked", "java:S112"})
@@ -194,5 +209,20 @@ class ClientWebSocketHandler implements WebSocket.Listener
 		log.trace("Send: {}", data);
 		ws.sendText(data, true);
 		return true;
+	}
+
+	public ConnectionState getConnectionState()
+	{
+		return connectionState.get();
+	}
+
+	public ObjectProperty<ConnectionState> connectionStateProperty()
+	{
+		return connectionState;
+	}
+
+	void setConnectionState(ConnectionState state)
+	{
+		connectionState.set(state);
 	}
 }

@@ -18,6 +18,7 @@ import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.api.settings.SettingsGetResponse;
 import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
 import de.tobias.playwall.common.utils.MapUtils;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,12 @@ class ClientImpl implements Client
 	private final ClientWebSocketHandler clientWebSocketHandler;
 
 	@Override
+	public ReadOnlyObjectProperty<ConnectionState> connectionStateProperty()
+	{
+		return clientWebSocketHandler.connectionStateProperty();
+	}
+
+	@Override
 	public void connect()
 	{
 		final String clientId = UUID.randomUUID().toString();
@@ -60,6 +67,7 @@ class ClientImpl implements Client
 		for(int i = 1; i <= numberOfRetries; i++)
 		{
 			log.info("Connect to server (Attempt: {}/{})", i, numberOfRetries);
+			clientWebSocketHandler.setConnectionState(ConnectionState.RECONNECTING);
 			try
 			{
 				connect();

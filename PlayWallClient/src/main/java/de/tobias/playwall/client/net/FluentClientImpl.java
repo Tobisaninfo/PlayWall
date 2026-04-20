@@ -8,6 +8,7 @@ import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,12 @@ import java.util.UUID;
 class FluentClientImpl implements FluentClient
 {
 	private final Client delegate;
+
+	@Override
+	public ReadOnlyObjectProperty<ConnectionState> connectionStateProperty()
+	{
+		return delegate.connectionStateProperty();
+	}
 
 	@Override
 	public void connect()

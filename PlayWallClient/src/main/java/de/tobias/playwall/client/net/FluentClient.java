@@ -6,6 +6,7 @@ import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
+import javafx.beans.property.ReadOnlyObjectProperty;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -14,6 +15,8 @@ import java.util.UUID;
 
 public interface FluentClient
 {
+	ReadOnlyObjectProperty<ConnectionState> connectionStateProperty();
+
 	void connect();
 
 	void connectWithRetries(int numberOfRetries, Client.ConnectingListener listener);

@@ -90,6 +90,14 @@ public class Strings
 	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_CONTENT = "ui.dialog.program.exit.unsaved-changes.content";
 	public static final String UI_EXIT_WARNING_PLAYING = "ui.program.exit.warning.playing";
 
+	// ui - connection
+	public static final String UI_CONNECTION_STATE_CONNECTED = "ui.connection.state.connected";
+	public static final String UI_CONNECTION_STATE_RECONNECTING = "ui.connection.state.reconnecting";
+	public static final String UI_CONNECTION_STATE_DISCONNECTED = "ui.connection.state.disconnected";
+	public static final String UI_CONNECTION_LOST_TITLE = "ui.connection.lost.title";
+	public static final String UI_CONNECTION_LOST_DESCRIPTION = "ui.connection.lost.description";
+	public static final String UI_CONNECTION_LOST_BUTTON_CLOSE = "ui.connection.lost.button.close";
+
 	// ui - errors
 	public static final String UI_ERRORS_PAD_PLAY  = "ui.errors.pad.play";
 	public static final String UI_ERRORS_PAD_PAUSE  = "ui.errors.pad.pause";

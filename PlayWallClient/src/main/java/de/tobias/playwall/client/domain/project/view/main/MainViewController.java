@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -8,6 +9,7 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContext;
+import de.tobias.playwall.client.net.ConnectionState;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -65,6 +67,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static de.thecodelabs.utils.util.Localization.getString;
@@ -105,6 +108,10 @@ public class MainViewController extends ViewControllerBase
 	private VolumeSlider volumeSlider;
 
 	private LoadingView loadingOverlay;
+	private ConnectionLostOverlay connectionLostOverlay;
+
+	private Label connectionStatusLabel;
+	private final AtomicBoolean isReconnecting = new AtomicBoolean(false);
 
 	private MenuItem undoMenuItem;
 	private MenuItem redoMenuItem;
@@ -168,10 +175,20 @@ public class MainViewController extends ViewControllerBase
 
 		headerBar.setLeading(headerBox);
 
+		connectionStatusLabel = new Label();
+		headerBar.setTrailing(connectionStatusLabel);
+
 		loadingOverlay = new LoadingView();
 		loadingOverlay.visibleProperty().addListener((_, _, newValue) -> pageButtons.setLoading(newValue));
 		loadingOverlay.setVisible(true);
 		rootStackPane.getChildren().add(loadingOverlay);
+
+		connectionLostOverlay = new ConnectionLostOverlay(() -> closeStage());
+		rootStackPane.getChildren().add(connectionLostOverlay);
+
+		client.connectionStateProperty().addListener((_, _, newState) ->
+				Platform.runLater(() -> onConnectionStateChanged(newState)));
+		onConnectionStateChanged(client.connectionStateProperty().get());
 
 		projectLoadedListener = new ProjectLoadedListener(this);
 		eventHandler.registerListener(projectLoadedListener);
@@ -639,6 +656,54 @@ public class MainViewController extends ViewControllerBase
 			case ERROR -> Localization.getString(Strings.UI_NOTIFICATION_ERROR);
 		};
 		materialToastManager.show(title, message, toastType);
+	}
+
+	private void onConnectionStateChanged(ConnectionState state)
+	{
+		switch(state)
+		{
+			case CONNECTED ->
+			{
+				connectionStatusLabel.setText("● " + Localization.getString(Strings.UI_CONNECTION_STATE_CONNECTED));
+				connectionStatusLabel.setStyle("-fx-font-size: 11px; -fx-padding: 0 8 0 0; -fx-text-fill: #4CAF50;");
+				connectionLostOverlay.setVisible(false);
+			}
+			case RECONNECTING ->
+			{
+				connectionStatusLabel.setText("● " + Localization.getString(Strings.UI_CONNECTION_STATE_RECONNECTING));
+				connectionStatusLabel.setStyle("-fx-font-size: 11px; -fx-padding: 0 8 0 0; -fx-text-fill: #FF9800;");
+			}
+			case DISCONNECTED ->
+			{
+				connectionStatusLabel.setText("● " + Localization.getString(Strings.UI_CONNECTION_STATE_DISCONNECTED));
+				connectionStatusLabel.setStyle("-fx-font-size: 11px; -fx-padding: 0 8 0 0; -fx-text-fill: #F44336;");
+				if(isReconnecting.compareAndSet(false, true))
+				{
+					startReconnecting();
+				}
+			}
+		}
+	}
+
+	private void startReconnecting()
+	{
+		final int maxRetries = 5;
+		Worker.runLater(() -> {
+			try
+			{
+				client.connectWithRetries(maxRetries, (currentTry, max) ->
+						log.info("Reconnect attempt {}/{} failed", currentTry, max));
+			}
+			catch(Exception e)
+			{
+				log.error("Reconnect failed after {} attempts", maxRetries, e);
+				Platform.runLater(() -> connectionLostOverlay.setVisible(true));
+			}
+			finally
+			{
+				isReconnecting.set(false);
+			}
+		});
 	}
 
 	// Action Handlers
