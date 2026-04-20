@@ -1,0 +1,42 @@
+@use "../components/variables";
+
+.connection-lost-overlay {
+    .background {
+        -fx-background-color: rgba(0, 0, 0, 0.65);
+    }
+
+    .content {
+        -fx-background-color: #2B2B2B;
+        -fx-background-radius: 6px;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 20, 0, 0, 4);
+    }
+
+    .button {
+        -fx-font-weight: bold;
+    }
+
+    .accent {
+        -fx-background-color: variables.$danger-color;
+    }
+
+    .icon {
+        -fx-fill: variables.$danger-color;
+        -fx-font-size: 15px;
+        -fx-font-weight: bold;
+    }
+
+    .title {
+        -fx-text-fill: #FFFFFF;
+        -fx-font-size: 15px;
+        -fx-font-weight: bold;
+    }
+
+    .description {
+        -fx-text-fill: #BBBBBB;
+        -fx-font-size: 12px;
+    }
+
+    .separator {
+        -fx-background-color: #444444;
+    }
+}
