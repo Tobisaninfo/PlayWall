@@ -69,7 +69,7 @@
         <dart-sass.version>1.83.0</dart-sass.version>
         <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
         <jpackage-maven-plugin.version>1.7.4</jpackage-maven-plugin.version>
-        <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.6.0.6792</sonar-maven-plugin.version>
 
         <cwd>.</cwd>
         <sonar.coverage.jacoco.xmlReportPaths>
