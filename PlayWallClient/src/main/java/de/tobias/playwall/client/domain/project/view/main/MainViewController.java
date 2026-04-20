@@ -181,7 +181,7 @@ public class MainViewController extends ViewControllerBase
 		loadingOverlay.setVisible(true);
 		rootStackPane.getChildren().add(loadingOverlay);
 
-		connectionLostOverlay = new ConnectionLostOverlay(() -> closeStage());
+		connectionLostOverlay = new ConnectionLostOverlay(Platform::exit);
 		rootStackPane.getChildren().add(connectionLostOverlay);
 
 		client.connectionStateProperty().addListener((_, _, newState) ->
