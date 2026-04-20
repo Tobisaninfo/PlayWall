@@ -1,3 +1,5 @@
+@use "../components/variables";
+
 .main-view--current-page-button {
     -fx-background-color: #dbdbdb !important;
     -fx-text-fill: #333333 !important;
@@ -14,4 +16,21 @@
     -fx-border-color: rgba(255, 255, 255, 0.35);
     -fx-border-radius: 6;
     -fx-border-width: 1;
+}
+
+.connection-status {
+    -fx-font-size: 11px;
+    -fx-padding: 0 8 0 0;
+
+    &:success {
+        -fx-text-fill: variables.$success-color;
+    }
+
+    &:warning {
+        -fx-text-fill: variables.$warning-color;
+    }
+
+    &:danger {
+        -fx-text-fill: variables.$danger-color;
+    }
 }

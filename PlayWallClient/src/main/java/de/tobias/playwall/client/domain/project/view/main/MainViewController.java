@@ -38,15 +38,13 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.about.AboutDialog;
-import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
-import de.tobias.playwall.client.view.components.GlobalColorPicker;
-import de.tobias.playwall.client.view.components.ViewConstants;
-import de.tobias.playwall.client.view.components.VolumeSlider;
+import de.tobias.playwall.client.view.components.*;
 import de.tobias.playwall.client.view.style.ModernStyleSizeHelper;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Platform;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -177,6 +175,7 @@ public class MainViewController extends ViewControllerBase
 		headerBar.setLeading(headerBox);
 
 		connectionStatusLabel = new Label();
+		connectionStatusLabel.getStyleClass().add("connection-status");
 		headerBar.setTrailing(connectionStatusLabel);
 
 		loadingOverlay = new LoadingView();
@@ -666,23 +665,24 @@ public class MainViewController extends ViewControllerBase
 
 	private void onConnectionStateChanged(ConnectionState state)
 	{
+		connectionStatusLabel.getPseudoClassStates().forEach(pseudoClass -> connectionStatusLabel.pseudoClassStateChanged(pseudoClass, false));
 		switch(state)
 		{
 			case CONNECTED ->
 			{
 				connectionStatusLabel.setText("● " + Localization.getString(Strings.UI_CONNECTION_STATE_CONNECTED));
-				connectionStatusLabel.setStyle("-fx-font-size: 11px; -fx-padding: 0 8 0 0; -fx-text-fill: #4CAF50;");
+				connectionStatusLabel.pseudoClassStateChanged(PseudoClasses.SUCCESS_CLASS, true);
 				connectionLostOverlay.setVisible(false);
 			}
 			case RECONNECTING ->
 			{
 				connectionStatusLabel.setText("● " + Localization.getString(Strings.UI_CONNECTION_STATE_RECONNECTING));
-				connectionStatusLabel.setStyle("-fx-font-size: 11px; -fx-padding: 0 8 0 0; -fx-text-fill: #FF9800;");
+				connectionStatusLabel.pseudoClassStateChanged(PseudoClasses.WARNING_CLASS, true);
 			}
 			case DISCONNECTED ->
 			{
 				connectionStatusLabel.setText("● " + Localization.getString(Strings.UI_CONNECTION_STATE_DISCONNECTED));
-				connectionStatusLabel.setStyle("-fx-font-size: 11px; -fx-padding: 0 8 0 0; -fx-text-fill: #F44336;");
+				connectionStatusLabel.pseudoClassStateChanged(PseudoClasses.DANGER_CLASS, true);
 				if(isReconnecting.compareAndSet(false, true))
 				{
 					startReconnecting();

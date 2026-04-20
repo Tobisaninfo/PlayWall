@@ -13,4 +13,8 @@ public class PseudoClasses
 	public static final PseudoClass DRAG_CLASS = PseudoClass.getPseudoClass("drag");
 
 	public static final PseudoClass SELECTED = PseudoClass.getPseudoClass("selected");
+
+	public static final PseudoClass SUCCESS_CLASS = PseudoClass.getPseudoClass("success");
+	public static final PseudoClass WARNING_CLASS = PseudoClass.getPseudoClass("warning");
+	public static final PseudoClass DANGER_CLASS = PseudoClass.getPseudoClass("danger");
 }
