@@ -36,6 +36,7 @@ public class MaterialToastManager
 	public MaterialToastManager(StackPane parent)
 	{
 		this.overlay = new Pane();
+		this.overlay.getStyleClass().add("toast-overlay");
 		this.overlay.setPickOnBounds(false);
 
 		parent.getChildren().add(overlay);

@@ -9,7 +9,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContext;
-import de.tobias.playwall.client.net.ConnectionState;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -33,6 +32,7 @@ import de.tobias.playwall.client.domain.settings.view.settings.BaseProgramSettin
 import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsViewController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.log.LogViewer;
+import de.tobias.playwall.client.net.ConnectionState;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.Size;
@@ -44,7 +44,6 @@ import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Platform;
-import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -64,7 +63,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -847,7 +845,7 @@ public class MainViewController extends ViewControllerBase
 	private Menu createMenuInfo()
 	{
 		final MenuItem menuItemAbout = createMenuItem(Strings.UI_MENU_INFO_ABOUT, FontAwesomeType.CIRCLE_INFO_SOLID, Optional.of(this::onMenuItemAbout));
-		final MenuItem menuItemLog = createMenuItem(Strings.UI_MENU_INFO_LOG, FontAwesomeType.INBOX_SOLID, Optional.of(this::onMenuItemLog));
+		final MenuItem menuItemLog = createMenuItem(Strings.UI_MENU_INFO_LOG, FontAwesomeType.INBOX_SOLID, Optional.of(this::onMenuItemLog), true);
 		final MenuItem menuItemUpdates = createMenuItem(Strings.UI_MENU_INFO_UPDATES, FontAwesomeType.ARROWS_ROTATE_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_INFO));
@@ -863,15 +861,25 @@ public class MainViewController extends ViewControllerBase
 
 	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType, Optional<EventHandler<ActionEvent>> eventHandler)
 	{
-		return createMenuItem(localizationKey, fontIconType, eventHandler, KeyCombination.NO_MATCH);
+		return createMenuItem(localizationKey, fontIconType, eventHandler, false);
+	}
+
+	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType, Optional<EventHandler<ActionEvent>> eventHandler, boolean overrideOverlayPolicy)
+	{
+		return createMenuItem(localizationKey, fontIconType, eventHandler, KeyCombination.NO_MATCH, overrideOverlayPolicy);
 	}
 
 	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType, Optional<EventHandler<ActionEvent>> eventHandler, KeyCombination shortcut)
 	{
+		return createMenuItem(localizationKey, fontIconType, eventHandler, shortcut, false);
+	}
+
+	private MenuItem createMenuItem(String localizationKey, FontIconType fontIconType, Optional<EventHandler<ActionEvent>> eventHandler, KeyCombination shortcut, boolean overrideOverlayPolicy)
+	{
 		final MenuItem menuItem = new MenuItem(Localization.getString(localizationKey), createFontIcon(fontIconType));
 		menuItem.setAccelerator(shortcut);
 		eventHandler.ifPresent(handler -> menuItem.setOnAction(event -> {
-			if(loadingOverlay.isVisible())
+			if(isAnyOverlayVisible() && !overrideOverlayPolicy)
 			{
 				return;
 			}
@@ -879,6 +887,11 @@ public class MainViewController extends ViewControllerBase
 		}));
 		menuItem.setDisable(eventHandler.isEmpty());
 		return menuItem;
+	}
+
+	private boolean isAnyOverlayVisible()
+	{
+		return rootStackPane.getChildren().subList(2, rootStackPane.getChildren().size()).stream().anyMatch(Node::isVisible);
 	}
 
 	private FontIcon createFontIcon(FontIconType fontIconType)
