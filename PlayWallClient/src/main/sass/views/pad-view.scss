@@ -1,5 +1,7 @@
+@use "../components/variables";
+
 .pad-grid {
-    -fx-background-color: rgb(60, 60, 60);
+    -fx-background-color: variables.$background-color;
 
     -fx-hgap: 7px;
     -fx-vgap: 7px;
