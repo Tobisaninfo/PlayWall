@@ -184,9 +184,12 @@ public class MainViewController extends ViewControllerBase
 		connectionLostOverlay = new ConnectionLostOverlay(Platform::exit);
 		rootStackPane.getChildren().add(connectionLostOverlay);
 
-		client.connectionStateProperty().addListener((_, _, newState) ->
-				Platform.runLater(() -> onConnectionStateChanged(newState)));
-		onConnectionStateChanged(client.connectionStateProperty().get());
+		if(client.connectionStateProperty() != null)
+		{
+			client.connectionStateProperty().addListener((_, _, newState) ->
+					Platform.runLater(() -> onConnectionStateChanged(newState)));
+			onConnectionStateChanged(client.connectionStateProperty().get());
+		}
 
 		projectLoadedListener = new ProjectLoadedListener(this);
 		eventHandler.registerListener(projectLoadedListener);
