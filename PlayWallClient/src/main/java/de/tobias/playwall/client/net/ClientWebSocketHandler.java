@@ -179,6 +179,11 @@ class ClientWebSocketHandler implements WebSocket.Listener
 				Optional<ResponseMessage> messageOptional;
 				while((messageOptional = this.responseQueue.dequeueResponse(message.getMessageId())).isEmpty())
 				{
+					if(connectionState.get() != ConnectionState.CONNECTED)
+					{
+						throw new RuntimeException("Cannot receive response, connection is not connected.");
+					}
+
 					log.trace("Waiting for response for message id {}", message.getMessageId());
 					lock.wait(100L);
 				}

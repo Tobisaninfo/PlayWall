@@ -66,6 +66,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -348,6 +349,11 @@ public class MainViewController extends ViewControllerBase
 		{
 			log.error("Error fetching project save status", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_SAVE_STATUS), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+		catch(RuntimeException e)
+		{
+			log.error("Error fetching project save status", e);
+			return true;
 		}
 
 		return true;
