@@ -16,7 +16,7 @@ public enum MimeType
 
 	public FileChooser.ExtensionFilter toExtensionFilter()
 	{
-		return new FileChooser.ExtensionFilter(Localization.getString("MimeType." + mimeTypeValue), extension);
+		return new FileChooser.ExtensionFilter(Localization.getString("MimeType." + mimeTypeValue), "*." + extension);
 	}
 
 	public static MimeType getByMimeType(String mimeType)
