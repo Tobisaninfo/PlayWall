@@ -36,7 +36,7 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 	private ProjectMetadata ref;
 
 	ProjectManagementCell(ClientProjectController projectController,
-								 BiConsumer<ProjectManagementCellAction, ProjectMetadata> actionHandler)
+	                      BiConsumer<ProjectManagementCellAction, ProjectMetadata> actionHandler)
 	{
 		this.projectController = projectController;
 		buttonContextMenu = new ContextMenu();
@@ -78,41 +78,44 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 	protected void updateItem(ProjectMetadata ref, boolean empty)
 	{
 		super.updateItem(ref, empty);
-		if(!empty)
-		{
-			if(this.ref == null || this.ref != ref)
-			{
-				final HBox row = new HBox();
-				row.setAlignment(Pos.CENTER_LEFT);
-				row.setSpacing(ViewConstants.DEFAULT_SPACING);
-				row.setPadding(new Insets(0, ViewConstants.DEFAULT_SPACING, 0, ViewConstants.DEFAULT_SPACING));
-
-				final Circle circle = new Circle(4);
-				circle.getStyleClass().add("project-management--circle");
-				circle.setVisible(Objects.equals(projectController.getProject().getMetadata().getId(), ref.getId()));
-
-				final Label projectNameLabel = new Label();
-				projectNameLabel.setMaxWidth(Double.MAX_VALUE);
-				projectNameLabel.textProperty().setValue(ref.getName());
-				projectNameLabel.getStyleClass().add("project-management--project-name");
-
-				final Button menuButton = new Button("", new FontIcon(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID));
-				menuButton.setOnAction(_ -> buttonContextMenu.show(menuButton, Side.LEFT, 0, 0));
-
-				row.getChildren().addAll(circle, projectNameLabel, menuButton);
-				HBox.setHgrow(projectNameLabel, Priority.ALWAYS);
-
-				setGraphic(row);
-				this.ref = ref;
-			}
-		}
-		else
+		if(empty)
 		{
 			this.ref = null;
 			textProperty().unbind();
 
 			setGraphic(null);
 			setText("");
+
+			return;
 		}
+
+		// already up to date
+		if(this.ref != null && this.ref == ref)
+		{
+			return;
+		}
+
+		final HBox row = new HBox();
+		row.setAlignment(Pos.CENTER_LEFT);
+		row.setSpacing(ViewConstants.DEFAULT_SPACING);
+		row.setPadding(new Insets(0, ViewConstants.DEFAULT_SPACING, 0, ViewConstants.DEFAULT_SPACING));
+
+		final Circle circle = new Circle(4);
+		circle.getStyleClass().add("project-management--circle");
+		circle.setVisible(Objects.equals(projectController.getProject().getMetadata().getId(), ref.getId()));
+
+		final Label projectNameLabel = new Label();
+		projectNameLabel.setMaxWidth(Double.MAX_VALUE);
+		projectNameLabel.textProperty().setValue(ref.getName());
+		projectNameLabel.getStyleClass().add("project-management--project-name");
+
+		final Button menuButton = new Button("", new FontIcon(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID));
+		menuButton.setOnAction(_ -> buttonContextMenu.show(menuButton, Side.LEFT, 0, 0));
+
+		row.getChildren().addAll(circle, projectNameLabel, menuButton);
+		HBox.setHgrow(projectNameLabel, Priority.ALWAYS);
+
+		setGraphic(row);
+		this.ref = ref;
 	}
 }
