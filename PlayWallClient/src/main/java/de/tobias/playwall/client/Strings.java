@@ -28,6 +28,7 @@ public class Strings
 	public static final String UI_PROJECT_BUTTON_DUPLICATE = "project.button.duplicate";
 	public static final String UI_PROJECT_BUTTON_DELETE = "project.button.delete";
 	public static final String UI_PROJECT_BUTTON_EXPORT = "project.button.export";
+	public static final String UI_PROJECT_SELECTED_TOOLTIP = "project.selected.tooltip";
 	public static final String UI_PAGE_RENAME = "ui.page.rename";
 	public static final String UI_PAGE_RENAME_TITLE = "ui.page.rename.title";
 	public static final String UI_PAGE_RENAME_INPUT = "ui.page.rename.input";

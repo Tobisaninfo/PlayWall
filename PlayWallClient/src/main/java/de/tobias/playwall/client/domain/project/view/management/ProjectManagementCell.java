@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 import lombok.Getter;
 
 import java.util.Objects;
@@ -100,9 +101,13 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 		row.setSpacing(ViewConstants.DEFAULT_SPACING);
 		row.setPadding(new Insets(0, ViewConstants.DEFAULT_SPACING, 0, ViewConstants.DEFAULT_SPACING));
 
-		final Circle circle = new Circle(4);
+		final Circle circle = new Circle(6);
 		circle.getStyleClass().add("project-management--circle");
 		circle.setVisible(Objects.equals(projectController.getProject().getMetadata().getId(), ref.getId()));
+
+		final Tooltip tooltip = new Tooltip(Localization.getString(Strings.UI_PROJECT_SELECTED_TOOLTIP));
+		tooltip.setShowDelay(Duration.millis(300));
+		Tooltip.install(circle, tooltip);
 
 		final Label projectNameLabel = new Label();
 		projectNameLabel.setMaxWidth(Double.MAX_VALUE);
