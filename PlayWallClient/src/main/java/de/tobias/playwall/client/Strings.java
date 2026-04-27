@@ -97,6 +97,7 @@ public class Strings
 	public static final String UI_CONNECTION_LOST_TITLE = "ui.connection.lost.title";
 	public static final String UI_CONNECTION_LOST_DESCRIPTION = "ui.connection.lost.description";
 	public static final String UI_CONNECTION_LOST_BUTTON_CLOSE = "ui.connection.lost.button.close";
+	public static final String UI_CONNECTION_LOST_BUTTON_SHOW_LOGS = "ui.button.show_log";
 
 	// ui - errors
 	public static final String UI_ERRORS_PAD_PLAY  = "ui.errors.pad.play";

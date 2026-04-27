@@ -1,9 +1,13 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,7 +22,7 @@ import javafx.scene.layout.VBox;
 
 public class ConnectionLostOverlay extends StackPane
 {
-	public ConnectionLostOverlay(Runnable onClose)
+	public ConnectionLostOverlay(Runnable onClose, App app)
 	{
 		final Region background = new Region();
 		background.getStyleClass().add("background");
@@ -46,12 +50,16 @@ public class ConnectionLostOverlay extends StackPane
 		separator.setPrefHeight(1);
 		separator.setMaxWidth(Double.MAX_VALUE);
 
+		final Button showLogsButton = new Button(Localization.getString(Strings.UI_CONNECTION_LOST_BUTTON_SHOW_LOGS));
+		showLogsButton.setOnAction(_ -> NativeApplication.sharedInstance().showFileInFileViewer(app.getPath(PathType.LOG)));
+
 		final Button closeButton = new Button(Localization.getString(Strings.UI_CONNECTION_LOST_BUTTON_CLOSE));
 		closeButton.getStyleClass().add("danger");
 		closeButton.setOnAction(_ -> onClose.run());
 
-		final HBox buttonBar = new HBox(closeButton);
+		final HBox buttonBar = new HBox(showLogsButton, closeButton);
 		buttonBar.setAlignment(Pos.CENTER_RIGHT);
+		buttonBar.setSpacing(ViewConstants.DEFAULT_SPACING);
 		buttonBar.setPadding(new Insets(4, 0, 0, 0));
 
 		final VBox body = new VBox(12, titleRow, descriptionLabel, separator, buttonBar);
