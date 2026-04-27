@@ -24,6 +24,8 @@ public class ConnectionLostOverlay extends StackPane
 {
 	public ConnectionLostOverlay(Runnable onClose, App app)
 	{
+		this.getStyleClass().add("overlay");
+
 		final Region background = new Region();
 		background.getStyleClass().add("background");
 		background.setPrefSize(Double.MAX_VALUE, Double.MAX_VALUE);

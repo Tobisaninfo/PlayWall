@@ -898,7 +898,10 @@ public class MainViewController extends ViewControllerBase
 
 	private boolean isAnyOverlayVisible()
 	{
-		return rootStackPane.getChildren().subList(2, rootStackPane.getChildren().size()).stream().anyMatch(Node::isVisible);
+		return rootStackPane.getChildren()
+				.stream()
+				.filter(node -> node.getStyleClass().contains("overlay"))
+				.anyMatch(Node::isVisible);
 	}
 
 	private FontIcon createFontIcon(FontIconType fontIconType)

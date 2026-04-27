@@ -29,6 +29,8 @@ public class LoadingView extends StackPane
 
 	public LoadingView()
 	{
+		this.getStyleClass().add("overlay");
+
 		// dunkler Hintergrund
 		final Region background = new Region();
 		background.getStyleClass().add("project-loading--overlay");
