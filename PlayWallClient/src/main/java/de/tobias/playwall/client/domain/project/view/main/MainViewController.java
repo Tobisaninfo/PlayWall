@@ -704,7 +704,11 @@ public class MainViewController extends ViewControllerBase
 			catch(Exception e)
 			{
 				log.error("Reconnect failed after {} attempts", maxRetries, e);
-				Platform.runLater(() -> connectionLostOverlay.setVisible(true));
+				Platform.runLater(() -> {
+					connectionStatusLabel.setText("● " + Localization.getString(Strings.UI_CONNECTION_STATE_DISCONNECTED));
+					connectionStatusLabel.pseudoClassStateChanged(PseudoClasses.DANGER_CLASS, true);
+					connectionLostOverlay.setVisible(true);
+				});
 			}
 			finally
 			{
