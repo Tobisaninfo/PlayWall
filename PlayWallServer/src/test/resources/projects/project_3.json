@@ -9,7 +9,8 @@
         "defaultColor": "GRAY1",
         "playColor": "RED3",
         "introColor": "BLUE1",
-        "eofWarningTime": 5.0
+        "eofWarningTime": 5.0,
+        "VERSION": 1
     },
     "pages": [
         {

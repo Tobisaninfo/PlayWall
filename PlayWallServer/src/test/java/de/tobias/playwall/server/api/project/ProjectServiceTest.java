@@ -23,8 +23,13 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -393,5 +398,48 @@ class ProjectServiceTest
 				UUID.fromString("f55f7691-2842-4d3f-9b64-08ddb0161398"),
 				UUID.fromString("c37d6bb6-49a7-4b72-964d-dc9a8571507a")
 		);
+	}
+
+	@Test
+	void test_importProject() throws URISyntaxException, IOException
+	{
+		final Path projectPath = Paths.get(Objects.requireNonNull(ProjectServiceTest.class.getClassLoader().getResource("projects/project_1.json")).toURI());
+		final byte[] bytes = Files.readAllBytes(projectPath);
+
+		final UUID uuid = projectService.importProject("application/json", bytes);
+		assertThat(uuid).isNotNull();
+	}
+
+	@Test
+	void test_importProject_noProject() throws URISyntaxException, IOException
+	{
+		final Path projectPath = Paths.get(Objects.requireNonNull(ProjectServiceTest.class.getClassLoader().getResource("projects/no_project.json")).toURI());
+		final byte[] bytes = Files.readAllBytes(projectPath);
+
+		assertThatThrownBy(() -> projectService.importProject("application/json", bytes))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("Die ausgewählte Datei ist keine gültige PlayWall Projektdatei");
+	}
+
+	@Test
+	void test_importProject_unsupportedVersion() throws URISyntaxException, IOException
+	{
+		final Path projectPath = Paths.get(Objects.requireNonNull(ProjectServiceTest.class.getClassLoader().getResource("projects/project_unsupported.json")).toURI());
+		final byte[] bytes = Files.readAllBytes(projectPath);
+
+		assertThatThrownBy(() -> projectService.importProject("application/json", bytes))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("Die ausgewählte Datei ist keine gültige PlayWall Projektdatei");
+	}
+
+	@Test
+	void test_importProject_versionTooOld() throws URISyntaxException, IOException
+	{
+		final Path projectPath = Paths.get(Objects.requireNonNull(ProjectServiceTest.class.getClassLoader().getResource("projects/project_too_old.json")).toURI());
+		final byte[] bytes = Files.readAllBytes(projectPath);
+
+		assertThatThrownBy(() -> projectService.importProject("application/json", bytes))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("Die Projektdatei ist zu alt. Version: 0 Mindestversion: 1");
 	}
 }

@@ -8,11 +8,13 @@ import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -20,8 +22,12 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectService
 {
+	private static final int MINIMUM_VERSION = 1;
+	private static final int LATEST_VERSION = 1;
+
 	private final AllProjectsInfoRepository allProjectsInfoRepository;
 	private final ProjectRepository projectRepository;
 	private final MessageSource messageSource;
@@ -108,12 +114,56 @@ public class ProjectService
 			throw new IllegalArgumentException("Unsupported mimetype: " + mimeType);
 		}
 
+		final int version = parseVersion(data);
+		if(version < MINIMUM_VERSION)
+		{
+			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.version.too_old", new Object[]{version, MINIMUM_VERSION}, LocaleContextHolder.getLocale()));
+		}
+
+		if(version > LATEST_VERSION)
+		{
+			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()));
+		}
+
 		final Project project = jsonMapper.readValue(data, Project.class);
 
 		allProjectsInfoRepository.importProject(project);
 		projectRepository.saveProject(project);
 
 		return project.getMetadata().getId();
+	}
+
+	private int parseVersion(byte[] data)
+	{
+		try
+		{
+			final JsonNode root = jsonMapper.readTree(data);
+			if(!root.has("metadata"))
+			{
+				throw new NullPointerException("No metadata found");
+			}
+
+			final JsonNode metadata = root.path("metadata");
+			if(!metadata.has("VERSION"))
+			{
+				throw new NullPointerException("No version found");
+			}
+
+			final JsonNode versionNode = metadata.path("VERSION");
+			if(versionNode.asString().isEmpty())
+			{
+				throw new NullPointerException("Empty version");
+			}
+
+			final int version = versionNode.asInt();
+			log.debug("Parsing BudgetMaster database with version {}", version);
+			return version;
+		}
+		catch(Exception e)
+		{
+			log.debug("Error parsing project file version", e);
+			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()), e);
+		}
 	}
 
 	public Page addPage(Project project)
