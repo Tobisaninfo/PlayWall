@@ -98,7 +98,8 @@ class ProjectGetSaveStatusHandlerTest
 	@Test
 	void testProjectSaveRequestNoLoaded()
 	{
-		assertThatThrownBy(() -> handler.handleRequest(new ProjectGetSaveStatusRequest()))
+		final ProjectGetSaveStatusRequest request = new ProjectGetSaveStatusRequest();
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 	}
 }

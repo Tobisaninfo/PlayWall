@@ -160,11 +160,7 @@ public class LogViewer extends NVC
 			{
 				return false;
 			}
-			if(!search.isBlank() && !entry.message().toLowerCase().contains(search))
-			{
-				return false;
-			}
-			return true;
+			return search.isBlank() || entry.message().toLowerCase().contains(search);
 		});
 	}
 

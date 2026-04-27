@@ -43,7 +43,6 @@ public class ApplicationLoadingViewController extends ViewControllerBase
 	@FXML
 	private Label loadingLabel;
 
-	private final App app;
 	private final ServerLaunchTask serverLaunchTask;
 	private final ClientConnectLaunchTask connectLaunchTask;
 	private final FetchProgramSettingsLaunchTask fetchProgramSettingsLaunchTask;

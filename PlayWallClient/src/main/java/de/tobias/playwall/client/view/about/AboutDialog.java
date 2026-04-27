@@ -60,14 +60,6 @@ public class AboutDialog extends ModalDialogBase<Void>
 	@FXML
 	private Label graphicsLabel;
 
-	private final App app;
-
-	@InjectConstructor
-	public AboutDialog(App app)
-	{
-		this.app = app;
-	}
-
 	@Override
 	public void init()
 	{

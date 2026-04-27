@@ -122,7 +122,7 @@ class ProjectLoadHandlerTest
 
 		assertThat(allProjectsInfoRepository.getRecentProjectIds()).containsExactly(projectId);
 
-		assertThat(undoManager.getUndoOperation()).isEqualTo(null);
+		assertThat(undoManager.getUndoOperation()).isNull();
 	}
 
 	@Test
