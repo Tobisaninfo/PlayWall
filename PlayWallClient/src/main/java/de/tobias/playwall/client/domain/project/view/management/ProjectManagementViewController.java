@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,8 +77,8 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
-			   mouseEvent.getClickCount() == 2 &&
-			   !projectListView.getSelectionModel().isEmpty())
+					mouseEvent.getClickCount() == 2 &&
+					!projectListView.getSelectionModel().isEmpty())
 			{
 				closeStage();
 				mainViewController.closeCurrentProjectAndOpenProject(getSelectedProject().getId());
@@ -91,7 +92,11 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	{
 		try
 		{
-			projectListView.getItems().setAll(client.projects().list().getAllProjectsMetadata());
+			final List<ProjectMetadata> projectsMetadata = client.projects().list().getAllProjectsMetadata();
+			final List<ProjectMetadata> projectMetadataSorted = projectsMetadata.stream()
+					.sorted(Comparator.comparing(ProjectMetadata::getName))
+					.toList();
+			projectListView.getItems().setAll(projectMetadataSorted);
 		}
 		catch(PlayWallApiException e)
 		{
