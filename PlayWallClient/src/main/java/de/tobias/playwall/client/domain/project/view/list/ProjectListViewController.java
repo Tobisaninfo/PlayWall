@@ -38,6 +38,7 @@ import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -95,6 +96,9 @@ public class ProjectListViewController extends ViewControllerBase
 	private final ErrorAlertBuilder errorAlertBuilder;
 
 	private AllProjectsInfo allProjectsInfo;
+
+	@Setter
+	private boolean isAppStart = true;
 
 	@Override
 	public void init()
@@ -246,7 +250,7 @@ public class ProjectListViewController extends ViewControllerBase
 
 				final List<UUID> recentProjectIds = allProjectsInfo.getRecentProjectIds();
 
-				if(settingsController.getSettings().isAutoLoadLatestProjectOnStart() && !recentProjectIds.isEmpty())
+				if(isAppStart && settingsController.getSettings().isAutoLoadLatestProjectOnStart() && !recentProjectIds.isEmpty())
 				{
 					projectListView.getItems().stream()
 							.filter(p -> p.getId().equals(recentProjectIds.getFirst()))

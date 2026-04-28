@@ -208,12 +208,13 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		{
 			try
 			{
-
 				if(isActiveProject)
 				{
 					closeStage();
 					mainViewController.closeStage();
-					AppContextHolder.getInstance().get(ProjectListViewController.class).showStage();
+					final ProjectListViewController projectListViewController = AppContextHolder.getInstance().get(ProjectListViewController.class);
+					projectListViewController.setAppStart(false);
+					projectListViewController.showStage();
 				}
 
 				client.project(project.getId()).delete();
