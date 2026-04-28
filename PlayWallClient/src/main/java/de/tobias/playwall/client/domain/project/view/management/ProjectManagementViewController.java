@@ -36,6 +36,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view/project", view = "ProjectManagementView")
@@ -260,8 +261,9 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		try
 		{
 			final byte[] bytes = Files.readAllBytes(pathOptional.get());
-			client.projects().importProject(new ProjectFile(mimeType.getMimeTypeValue(), bytes));
+			final UUID importedProjectId = client.projects().importProject(new ProjectFile(mimeType.getMimeTypeValue(), bytes));
 			fetchProjects();
+			selectProjectById(importedProjectId);
 		}
 		catch(IOException e)
 		{
@@ -289,5 +291,13 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	private boolean isActiveProject(ProjectMetadata project)
 	{
 		return projectController.getProject().getMetadata().getId().equals(project.getId());
+	}
+
+	private void selectProjectById(UUID id)
+	{
+		projectListView.getItems().stream()
+				.filter(project -> project.getId().equals(id))
+				.findFirst()
+				.ifPresent(p -> projectListView.getSelectionModel().select(p));
 	}
 }
