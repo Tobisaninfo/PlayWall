@@ -61,6 +61,7 @@ public class PlayWallMain extends Application
 	}
 
 	@Override
+	@SuppressWarnings({"java:S2629", "java:S2139"})
 	public void init()
 	{
 		try
@@ -70,17 +71,7 @@ public class PlayWallMain extends Application
 			AppContextLoader.setupDependencies(appContext);
 			AppContextHolder.setInstance(appContext);
 
-
-			try
-			{
-				final LogServer logServer = new LogServer(LogServer.DEFAULT_PORT, appContext.get(LogStore.class)::onEntry);
-				appContext.registerLazySingleton(LogServer.class, _ -> logServer);
-				logServer.start();
-			}
-			catch(Exception e)
-			{
-				log.error("Error starting log server", e);
-			}
+			startLogServer(appContext);
 
 			log.info("Running on Java: {} ({})", System.getProperty("java.version"), System.getProperty("java.vendor"));
 			log.info("Run Path: {}", SystemUtils.getRunPath());
@@ -93,6 +84,20 @@ public class PlayWallMain extends Application
 		{
 			log.error("Error initializing app", e);
 			throw e;
+		}
+	}
+
+	private static void startLogServer(AppContext appContext)
+	{
+		try
+		{
+			final LogServer logServer = new LogServer(LogServer.DEFAULT_PORT, appContext.get(LogStore.class)::onEntry);
+			appContext.registerLazySingleton(LogServer.class, _ -> logServer);
+			logServer.start();
+		}
+		catch(Exception e)
+		{
+			log.error("Error starting log server", e);
 		}
 	}
 
