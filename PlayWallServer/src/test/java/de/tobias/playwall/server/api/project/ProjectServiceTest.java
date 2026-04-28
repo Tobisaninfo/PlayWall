@@ -23,7 +23,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -148,7 +147,8 @@ class ProjectServiceTest
 	void test_renamePage_unknownPage()
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		assertThatThrownBy(() -> projectService.renamePage(project, UUID.randomUUID(), "Updated Page Name")).isInstanceOf(PageNotExistsException.class);
+		final UUID uuid = UUID.randomUUID();
+		assertThatThrownBy(() -> projectService.renamePage(project, uuid, "Updated Page Name")).isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
@@ -213,7 +213,8 @@ class ProjectServiceTest
 	void test_duplicatePage_unknownPage()
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		assertThatThrownBy(() -> projectService.duplicatePage(project, UUID.randomUUID())).isInstanceOf(PageNotExistsException.class);
+		final UUID uuid = UUID.randomUUID();
+		assertThatThrownBy(() -> projectService.duplicatePage(project, uuid)).isInstanceOf(PageNotExistsException.class);
 	}
 
 	@Test
@@ -410,6 +411,7 @@ class ProjectServiceTest
 		assertThat(uuid).isNotNull();
 	}
 
+	@SuppressWarnings("java:S5976")
 	@Test
 	void test_importProject_noProject() throws URISyntaxException, IOException
 	{
