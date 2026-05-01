@@ -156,7 +156,7 @@ public class ProjectService
 			}
 
 			final int version = versionNode.asInt();
-			log.debug("Parsing BudgetMaster database with version {}", version);
+			log.debug("Parsing PlayWall project file with version {}", version);
 			return version;
 		}
 		catch(Exception e)
