@@ -1,27 +1,49 @@
+// === Backgrounds ===
 $background-color: #333333;
 
 $component-background-color: #5c5c5c;
 $component-background-color-dark: #3c3c3c;
 $component-background-color-odd: #7c7c7c;
 
+// === Text ===
 $component-text-color: #eeeeee;
 $component-text-color-deactivated: #888888;
+$component-text-size: 14;
+$component-font-size-control: 1.1em;
 
+// === Interactive states ===
 $component-hover-background-color: #878787;
 
+// === Borders & Radius ===
 $component-border-color: #CCCCCC;
 $component-border-width: 1px;
 $component-border-radius: 6px;
+$border-radius-sm: 3px;
 
+// === Popups / Overlays (context menu, list-view, combobox dropdown) ===
+$popup-border-radius: 10px;
+$popup-border-color: rgba(255, 255, 255, 0.11);
+$popup-hover-color: rgba(255, 255, 255, 0.07);
+
+// === Form controls ===
+$control-indicator-color: #3E4251;
+$selected-light-background: #dbdbdb;
+$selected-light-text: #333333;
+
+// === Text fields ===
 $textfield-background: transparent;
 $textfield-prompt-color: #777777;
-$component-text-size: 14;
 
+// === Separators ===
 $seperator-color: #222222;
 
+// === Semantic colors ===
 $primary-color: #316DCE;
 $settings-selected-background-color: #FFFFFF;
 $notification-warning-color: #F7BA4D;
 $success-color: #4CAF50;
 $warning-color: #F6AE2D;
 $danger-color: #C0392B;
+
+// === Dialog ===
+$dialog-header-background: rgb(70, 70, 70);

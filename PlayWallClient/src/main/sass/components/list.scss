@@ -1,17 +1,11 @@
 @use "variables";
 
-$color-hover: rgba(255, 255, 255, 0.07);
-$color-border: rgba(255, 255, 255, 0.11);
-
-$radius-list: 10;
-$radius-item: 6;
-
 .list-view {
     -fx-background-color: darken(variables.$component-background-color, 10%);
-    -fx-background-radius: $radius-list;
-    -fx-border-color: $color-border;
+    -fx-background-radius: variables.$popup-border-radius;
+    -fx-border-color: variables.$popup-border-color;
     -fx-border-width: 1;
-    -fx-border-radius: $radius-list;
+    -fx-border-radius: variables.$popup-border-radius;
     -fx-padding: 4;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
@@ -19,7 +13,7 @@ $radius-item: 6;
 
     .list-cell {
         -fx-background-color: transparent;
-        -fx-background-radius: $radius-item;
+        -fx-background-radius: variables.$component-border-radius;
         -fx-padding: 6 10;
         -fx-text-fill: variables.$component-text-color;
         -fx-opacity: 1;
@@ -29,24 +23,24 @@ $radius-item: 6;
         }
 
         &:filled:hover {
-            -fx-background-color: $color-hover;
-            -fx-background-radius: $radius-item;
+            -fx-background-color: variables.$popup-hover-color;
+            -fx-background-radius: variables.$component-border-radius;
         }
 
         &:filled:selected {
             -fx-background-color: variables.$primary-color;
-            -fx-background-radius: $radius-item;
+            -fx-background-radius: variables.$component-border-radius;
             -fx-text-fill: variables.$component-text-color;
         }
 
         &:filled:selected:hover {
             -fx-background-color: variables.$primary-color;
-            -fx-background-radius: $radius-item;
+            -fx-background-radius: variables.$component-border-radius;
         }
 
         &:filled:focused:selected {
             -fx-background-color: variables.$primary-color;
-            -fx-background-radius: $radius-item;
+            -fx-background-radius: variables.$component-border-radius;
         }
 
         &:filled:selected:disabled,

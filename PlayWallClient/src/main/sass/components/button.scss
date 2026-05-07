@@ -3,8 +3,8 @@
 .button {
     -fx-background-color: variables.$component-background-color;
     -fx-text-fill: variables.$component-text-color;
-    -fx-background-radius: 3px;
-    -fx-font-size: 1.1em;
+    -fx-background-radius: variables.$border-radius-sm;
+    -fx-font-size: variables.$component-font-size-control;
     -fx-border-width: 0;
 
     &.danger {

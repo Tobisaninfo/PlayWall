@@ -11,6 +11,6 @@
         -fx-background-insets: 0 0 0 0;
         -fx-padding: 0.35em !important;
 
-        -fx-background-color: #EEEEEE;
+        -fx-background-color: variables.$component-text-color;
     }
 }

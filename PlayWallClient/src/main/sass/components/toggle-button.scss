@@ -10,7 +10,7 @@
     }
 
     &:selected {
-        -fx-background-color: #dbdbdb;
-        -fx-text-fill: #333333 !important;
+        -fx-background-color: variables.$selected-light-background;
+        -fx-text-fill: variables.$selected-light-text !important;
     }
 }

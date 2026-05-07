@@ -1,8 +1,8 @@
 @use "../components/variables";
 
 .main-view--current-page-button {
-    -fx-background-color: #dbdbdb !important;
-    -fx-text-fill: #333333 !important;
+    -fx-background-color: variables.$selected-light-background !important;
+    -fx-text-fill: variables.$background-color !important;
 }
 
 .page-button-dragging {
@@ -11,10 +11,10 @@
 
 .page-button-drop-placeholder {
     -fx-background-color: rgba(255, 255, 255, 0.12);
-    -fx-background-radius: 6;
+    -fx-background-radius: variables.$component-border-radius;
 
     -fx-border-color: rgba(255, 255, 255, 0.35);
-    -fx-border-radius: 6;
+    -fx-border-radius: variables.$component-border-radius;
     -fx-border-width: 1;
 }
 

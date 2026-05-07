@@ -1,20 +1,8 @@
 @use "variables";
 @use 'sass:color';
 
-$color-accent: variables.$primary-color;
-
-$color-text-primary: variables.$component-text-color;
-$color-text-dim: darken(variables.$component-text-color, 20%);
-
-$color-border-popup: rgba(255, 255, 255, 0.11);
-$color-hover-bar: rgba(255, 255, 255, 0.07);
-
 $font-size-base: 1em;
 $font-size-small: 0.9em;
-
-$radius-popup: 10;
-$radius-item: 6;
-$radius-bar-btn: 5;
 
 .menu-bar {
     -fx-background-color: variables.$background-color;
@@ -23,13 +11,13 @@ $radius-bar-btn: 5;
     // Menu Button inside Menu Bar
     > .container > .menu-button {
         -fx-background-color: transparent;
-        -fx-background-radius: $radius-bar-btn;
-        -fx-text-fill: $color-text-primary;
+        -fx-background-radius: variables.$border-radius-sm;
+        -fx-text-fill: variables.$component-text-color;
         -fx-font-size: $font-size-base;
         -fx-padding: 4 10;
 
         &:hover {
-            -fx-background-color: $color-hover-bar;
+            -fx-background-color: variables.$popup-hover-color;
         }
 
         &:showing {
@@ -40,17 +28,17 @@ $radius-bar-btn: 5;
 
 .context-menu {
     -fx-background-color: variables.$component-background-color;
-    -fx-background-radius: $radius-popup;
-    -fx-border-color: $color-border-popup;
+    -fx-background-radius: variables.$popup-border-radius;
+    -fx-border-color: variables.$popup-border-color;
     -fx-border-width: 1;
-    -fx-border-radius: $radius-popup;
+    -fx-border-radius: variables.$popup-border-radius;
     -fx-padding: 4;
 
     > .background,
     .menu-item-container,
     .context-menu-content {
         -fx-background-color: variables.$component-background-color;
-        -fx-background-radius: $radius-popup;
+        -fx-background-radius: variables.$popup-border-radius;
     }
 
     .separator {
@@ -66,24 +54,24 @@ $radius-bar-btn: 5;
 
 .menu-item {
     -fx-background-color: transparent;
-    -fx-background-radius: $radius-item;
+    -fx-background-radius: variables.$component-border-radius;
     -fx-padding: 6 10;
 
     &:hover,
     &:focused {
-        -fx-background-color: $color-accent;
-        -fx-background-radius: $radius-item;
+        -fx-background-color: variables.$primary-color;
+        -fx-background-radius: variables.$component-border-radius;
     }
 
     > .label {
-        -fx-text-fill: $color-text-primary;
+        -fx-text-fill: variables.$component-text-color;
         -fx-font-size: $font-size-base;
         -fx-font-weight: normal;
     }
 
     &:hover > .label,
     &:focused > .label {
-        -fx-text-fill: $color-text-primary;
+        -fx-text-fill: variables.$component-text-color;
     }
 
     &:disabled > .label {
@@ -91,7 +79,7 @@ $radius-bar-btn: 5;
     }
 
     > .accelerator-text {
-        -fx-text-fill: $color-text-dim;
+        -fx-text-fill: darken(variables.$component-text-color, 20%);
         -fx-font-size: $font-size-small;
         -fx-padding: 0 0 0 24;
     }
@@ -103,18 +91,18 @@ $radius-bar-btn: 5;
 
 .menu {
     -fx-background-color: transparent;
-    -fx-background-radius: $radius-item;
+    -fx-background-radius: variables.$component-border-radius;
     -fx-padding: 6 10 6 12;
 
     &:hover,
     &:focused,
     &:showing {
-        -fx-background-color: $color-accent;
-        -fx-background-radius: $radius-item;
+        -fx-background-color: variables.$primary-color;
+        -fx-background-radius: variables.$component-border-radius;
     }
 
     > .label {
-        -fx-text-fill: $color-text-primary;
+        -fx-text-fill: variables.$component-text-color;
         -fx-font-size: $font-size-base;
         -fx-font-weight: normal;
     }
@@ -122,13 +110,13 @@ $radius-bar-btn: 5;
     &:hover > .label,
     &:focused > .label,
     &:showing > .label {
-        -fx-text-fill: $color-text-primary;
+        -fx-text-fill: variables.$component-text-color;
     }
 
     &:hover > .arrow-button > .arrow,
     &:focused > .arrow-button > .arrow,
     &:showing > .arrow-button > .arrow {
-        -fx-background-color: $color-text-primary;
+        -fx-background-color: variables.$component-text-color;
     }
 
     > .graphic-container {
@@ -139,6 +127,6 @@ $radius-bar-btn: 5;
 
 .radio-menu-item > .left-container > .radio,
 .check-menu-item > .left-container > .check {
-    -fx-background-color: $color-accent;
+    -fx-background-color: variables.$primary-color;
     -fx-padding: 3;
 }

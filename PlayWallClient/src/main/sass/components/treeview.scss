@@ -3,7 +3,7 @@
 
 .tree-view {
 
-    -fx-base: rgb(60, 60, 60);
+    -fx-base: variables.$component-background-color-dark;
 
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
@@ -12,7 +12,7 @@
         -fx-skin: "javafx.scene.control.skin.TreeCellSkin";
         -fx-background-color: -fx-base;
         -fx-padding: 5px;
-        -fx-text-fill: #FFFFFF;
+        -fx-text-fill: variables.$component-text-color;
         -fx-opacity: 1;
     }
 

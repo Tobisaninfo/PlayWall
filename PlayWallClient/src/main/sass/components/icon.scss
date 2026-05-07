@@ -1,7 +1,9 @@
+@use "variables";
+
 .icon {
     -fx-fill: white;
 }
 
 .toggle-button:selected .icon {
-    -fx-fill: #333333;
+    -fx-fill: variables.$background-color;
 }

@@ -5,15 +5,15 @@
 }
 
 .project-loading--box {
-    -fx-background-color: #cccccc;
+    -fx-background-color: variables.$component-border-color;
     -fx-padding: 20;
-    -fx-background-radius: 10;
+    -fx-background-radius: variables.$popup-border-radius;
 }
 
 .project-loading--progres-bar .track {
     -fx-background-radius: 2px;
-    -fx-base: #333333;
-    -fx-background-color: #333333AA;
+    -fx-base: variables.$background-color;
+    -fx-background-color: rgba(variables.$background-color, 0.67);
 }
 
 .project-loading--progres-bar .bar {
@@ -24,5 +24,5 @@
 }
 
 .project-loading--label {
-    -fx-text-fill: #333333;
+    -fx-text-fill: variables.$background-color;
 }

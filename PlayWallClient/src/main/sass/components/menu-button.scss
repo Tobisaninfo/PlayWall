@@ -3,7 +3,7 @@
 .menu-button {
     -fx-background-color: variables.$component-background-color;
     -fx-text-fill: variables.$component-text-color;
-    -fx-background-radius: 3px;
+    -fx-background-radius: variables.$border-radius-sm;
     -fx-border-width: 0;
     -fx-pref-height: 30px;
 

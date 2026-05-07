@@ -69,7 +69,7 @@
         -fx-text-fill: variables.$component-text-color;
         -fx-font-size: variables.$component-text-size;
         -fx-padding: 7px 10px;
-        -fx-background-radius: 6px;
+        -fx-background-radius: variables.$component-border-radius;
         -fx-cell-size: 34px;
 
         &:hover {

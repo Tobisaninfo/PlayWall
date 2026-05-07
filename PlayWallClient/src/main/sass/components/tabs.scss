@@ -2,7 +2,7 @@
 
 .tab-pane {
     &:top *.tab-header-background {
-        -fx-background-color: #333333;
+        -fx-background-color: variables.$background-color;
     }
 
     &:top *.tab {

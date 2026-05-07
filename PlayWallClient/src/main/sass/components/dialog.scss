@@ -2,7 +2,7 @@
 
 .dialog-pane {
     &:header *.header-panel {
-        -fx-background-color: rgb(70, 70, 70);
+        -fx-background-color: variables.$dialog-header-background;
     }
 
     &.information, &.confirmation, &.text-input-dialog {

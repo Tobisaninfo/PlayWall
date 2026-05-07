@@ -4,8 +4,8 @@
     .box {
         -fx-background-color: transparent;
         -fx-background-insets: 1;
-        -fx-border-color: #CCCCCC;
-        -fx-border-radius: 3px;
+        -fx-border-color: variables.$component-border-color;
+        -fx-border-radius: variables.$border-radius-sm;
         -fx-border-width: 2px;
     }
 
@@ -19,10 +19,10 @@
     }
 
     &:selected .mark {
-        -fx-background-color: #3E4251;
+        -fx-background-color: variables.$control-indicator-color;
     }
 
     &:selected .box {
-        -fx-background-color: #CCCCCC;
+        -fx-background-color: variables.$component-border-color;
     }
 }
