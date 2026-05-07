@@ -1,92 +1,57 @@
 @use "variables";
 
-.list-view {
-    -fx-base: rgb(60, 60, 60);
+$color-hover: rgba(255, 255, 255, 0.07);
+$color-border: rgba(255, 255, 255, 0.11);
 
+$radius-list: 10;
+$radius-item: 6;
+
+.list-view {
+    -fx-background-color: darken(variables.$component-background-color, 10%);
+    -fx-background-radius: $radius-list;
+    -fx-border-color: $color-border;
+    -fx-border-width: 1;
+    -fx-border-radius: $radius-list;
+    -fx-padding: 4;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-background-insets: 0;
-    -fx-padding: 0;
 
     .list-cell {
-        -fx-skin: "javafx.scene.control.skin.ListCellSkin";
-        -fx-background-color: -fx-base;
-        -fx-padding: 4px;
+        -fx-background-color: transparent;
+        -fx-background-radius: $radius-item;
+        -fx-padding: 6 10;
+        -fx-text-fill: variables.$component-text-color;
         -fx-opacity: 1;
 
-        & .label {
-            -fx-text-fill: #FFFFFF;
-        }
-
-        &:filled {
-            -fx-border-width: 0px 0px 1px 0px;
-        }
-
-        &:odd:filled {
-            -fx-background-color: derive(-fx-hover-base, -10%);
-        }
-    }
-
-    .list-view:focused {
-        .list-cell:focused {
-            -fx-background-color: derive(-fx-hover-base, -50%);
-            -fx-background-insets: 0, 1, 2;
-
-            &:odd {
-                @extend .list-cell, :focused;
-            }
-        }
-
-        /* When the list-cell is selected and focused */
-        .list-cell:filled:focused:selected {
-            -fx-background-color: derive(-fx-hover-base, -50%);
-            -fx-background-insets: 0, 1, 2;
-            -fx-background: derive(-fx-base, -50%);
+        > .label {
             -fx-text-fill: variables.$component-text-color;
         }
 
-        .list-cell:filled:selected {
-            -fx-background: derive(-fx-base, -50%);
-            -fx-background-color: derive(-fx-hover-base, -50%);
-            -fx-text-fill: variables.$component-text-color;
-
-            &:hover {
-                @extend .list-cell, :filled, :selected;
-            }
+        &:filled:hover {
+            -fx-background-color: $color-hover;
+            -fx-background-radius: $radius-item;
         }
 
-        .list-cell:filled:focused:selected:hover {
-            -fx-background: derive(-fx-base, -50%);
-            -fx-background-color: derive(-fx-hover-base, -50%);
-            -fx-background-insets: 0, 1, 2;
+        &:filled:selected {
+            -fx-background-color: variables.$primary-color;
+            -fx-background-radius: $radius-item;
             -fx-text-fill: variables.$component-text-color;
         }
-    }
 
-    /* When the ListView is _not_ focused, we show alternate selection colors */
-    .list-cell:filled:selected:focused, .list-cell:filled:selected, .list-view:horizontal .list-cell:filled:selected {
-        -fx-background-color: derive(-fx-base, +50%);
-        -fx-text-fill: variables.$component-text-color;
-    }
+        &:filled:selected:hover {
+            -fx-background-color: variables.$primary-color;
+            -fx-background-radius: $radius-item;
+        }
 
-    .list-cell:filled:selected:focused:disabled, .list-cell:filled:selected:disabled {
-        -fx-opacity: derive(-fx-hover-base, -50%);
-    }
+        &:filled:focused:selected {
+            -fx-background-color: variables.$primary-color;
+            -fx-background-radius: $radius-item;
+        }
 
-    .list-cell:filled:hover {
-        -fx-background-color: -fx-hover-base;
-        -fx-text-fill: variables.$component-text-color;
-    }
-
-    .list-view:focused .list-cell:filled:focused:hover {
-        -fx-background-color: derive(-fx-hover-base, -50%);
-
-        -fx-background-insets: 0, 1, 2;
-        -fx-text-fill: variables.$component-text-color;
-    }
-
-    .list-view:horizontal .list-cell:filled:selected, .list-view:horizontal .list-cell:filled:selected:hover {
-        -fx-background-color: derive(-fx-hover-base, -50%);
-        -fx-text-fill: variables.$component-text-color;
+        &:filled:selected:disabled,
+        &:filled:disabled {
+            -fx-opacity: 0.5;
+        }
     }
 }

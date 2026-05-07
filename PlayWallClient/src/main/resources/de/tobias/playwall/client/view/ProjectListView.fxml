@@ -31,7 +31,8 @@
         </HBox.margin>
     </VBox>
     <VBox spacing="14.0" HBox.hgrow="ALWAYS">
-        <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" styleClass="dark-list" VBox.vgrow="ALWAYS" />
+        <ListView id="projectList" fx:id="projectListView" styleClass="launch-dialog--list" fixedCellSize="40.0"
+                  VBox.vgrow="ALWAYS"/>
         <HBox fx:id="projectButtonBox" spacing="14.0">
             <padding>
                 <Insets bottom="14.0" left="14.0" right="14.0" />
