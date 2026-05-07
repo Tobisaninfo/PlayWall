@@ -1,22 +1,144 @@
 @use "variables";
+@use 'sass:color';
+
+$color-accent: variables.$primary-color;
+
+$color-text-primary: variables.$component-text-color;
+$color-text-dim: darken(variables.$component-text-color, 20%);
+
+$color-border-popup: rgba(255, 255, 255, 0.11);
+$color-hover-bar: rgba(255, 255, 255, 0.07);
+
+$font-size-base: 1em;
+$font-size-small: 0.9em;
+
+$radius-popup: 10;
+$radius-item: 6;
+$radius-bar-btn: 5;
 
 .menu-bar {
     -fx-background-color: variables.$background-color;
+    -fx-padding: 0 8;
 
-    .menu-button {
-        -fx-background-color: variables.$background-color;
+    // Menu Button inside Menu Bar
+    > .container > .menu-button {
+        -fx-background-color: transparent;
+        -fx-background-radius: $radius-bar-btn;
+        -fx-text-fill: $color-text-primary;
+        -fx-font-size: $font-size-base;
+        -fx-padding: 4 10;
+
+        &:hover {
+            -fx-background-color: $color-hover-bar;
+        }
+
+        &:showing {
+            -fx-background-color: variables.$primary-color;
+        }
+    }
+}
+
+.context-menu {
+    -fx-background-color: variables.$component-background-color;
+    -fx-background-radius: $radius-popup;
+    -fx-border-color: $color-border-popup;
+    -fx-border-width: 1;
+    -fx-border-radius: $radius-popup;
+    -fx-padding: 4;
+
+    > .background,
+    .menu-item-container,
+    .context-menu-content {
+        -fx-background-color: variables.$component-background-color;
+        -fx-background-radius: $radius-popup;
     }
 
-    .menu:showing, .menu:hover {
-        -fx-background-color: variables.$primary-color;
-        -fx-background-radius: 0px;
+    .separator {
+        -fx-padding: 3 0;
+
+        > .line {
+            -fx-border-color: variables.$seperator-color;
+            -fx-border-width: 0.5 0 0 0;
+            -fx-padding: 0;
+        }
     }
 }
 
 .menu-item {
-    -fx-font-size: 12px;
+    -fx-background-color: transparent;
+    -fx-background-radius: $radius-item;
+    -fx-padding: 6 10;
 
-    &:selected, &:focused {
-        -fx-background-color: variables.$primary-color;
+    &:hover,
+    &:focused {
+        -fx-background-color: $color-accent;
+        -fx-background-radius: $radius-item;
     }
+
+    > .label {
+        -fx-text-fill: $color-text-primary;
+        -fx-font-size: $font-size-base;
+        -fx-font-weight: normal;
+    }
+
+    &:hover > .label,
+    &:focused > .label {
+        -fx-text-fill: $color-text-primary;
+    }
+
+    &:disabled > .label {
+        -fx-text-fill: variables.$component-text-color-deactivated;
+    }
+
+    > .accelerator-text {
+        -fx-text-fill: $color-text-dim;
+        -fx-font-size: $font-size-small;
+        -fx-padding: 0 0 0 24;
+    }
+
+    > .graphic-container {
+        -fx-padding: 0 8 0 0;
+    }
+}
+
+.menu {
+    -fx-background-color: transparent;
+    -fx-background-radius: $radius-item;
+    -fx-padding: 6 10 6 12;
+
+    &:hover,
+    &:focused,
+    &:showing {
+        -fx-background-color: $color-accent;
+        -fx-background-radius: $radius-item;
+    }
+
+    > .label {
+        -fx-text-fill: $color-text-primary;
+        -fx-font-size: $font-size-base;
+        -fx-font-weight: normal;
+    }
+
+    &:hover > .label,
+    &:focused > .label,
+    &:showing > .label {
+        -fx-text-fill: $color-text-primary;
+    }
+
+    &:hover > .arrow-button > .arrow,
+    &:focused > .arrow-button > .arrow,
+    &:showing > .arrow-button > .arrow {
+        -fx-background-color: $color-text-primary;
+    }
+
+    > .graphic-container {
+        -fx-padding: 0 8 0 0;
+    }
+}
+
+
+.radio-menu-item > .left-container > .radio,
+.check-menu-item > .left-container > .check {
+    -fx-background-color: $color-accent;
+    -fx-padding: 3;
 }
