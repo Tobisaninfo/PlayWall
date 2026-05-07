@@ -10,7 +10,7 @@
     -fx-text-fill: variables.$component-text-color;
     -fx-prompt-text-fill: variables.$textfield-prompt-color;
 
-    -fx-font-size: variables.$textfield-font-size;
+    -fx-font-size: variables.$component-text-size;
 
     &:error {
         -fx-border-color: red !important;
