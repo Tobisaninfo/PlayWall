@@ -3,17 +3,21 @@
 .menu-button {
     -fx-background-color: variables.$component-background-color;
     -fx-text-fill: variables.$component-text-color;
-    -fx-background-radius: variables.$border-radius-sm;
+    -fx-background-radius: variables.$component-border-radius;
+    -fx-font-size: variables.$component-text-size;
     -fx-border-width: 0;
-    -fx-pref-height: 30px;
-
-    &:hover {
-        -fx-background-color: variables.$component-hover-background-color;
-        -fx-text-fill: variables.$component-text-color !important;
-    }
+    -fx-padding: 2 6;
 
     &:default {
         -fx-background-color: variables.$primary-color;
-        -fx-text-fill: variables.$component-text-color !important;
+        -fx-text-fill: variables.$component-text-color;
+    }
+
+    &:hover, &:focused {
+        -fx-background-color: variables.$component-hover-background-color;
+
+        &:default {
+            -fx-background-color: variables.$primary-color-hover;
+        }
     }
 }
