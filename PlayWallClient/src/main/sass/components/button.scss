@@ -6,6 +6,7 @@
     -fx-background-radius: variables.$component-border-radius;
     -fx-font-size: variables.$component-text-size;
     -fx-border-width: 0;
+    -fx-padding: 6 16 6 16;
 
     &.danger {
         -fx-background-color: variables.$danger-color;
