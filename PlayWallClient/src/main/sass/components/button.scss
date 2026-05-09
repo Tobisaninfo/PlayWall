@@ -11,26 +11,20 @@
         -fx-background-color: variables.$danger-color;
     }
 
-    &:focused {
-        -fx-background-color: variables.$primary-color;
-        -fx-text-fill: variables.$component-text-color;
-
-        &.danger {
-            -fx-background-color: variables.$danger-color;
-        }
-    }
-
-    &:hover {
-        -fx-background-color: variables.$component-hover-background-color;
-        -fx-text-fill: variables.$component-text-color;
-
-        &.danger {
-            -fx-background-color: variables.$danger-color;
-        }
-    }
-
     &:default {
         -fx-background-color: variables.$primary-color;
         -fx-text-fill: variables.$component-text-color;
+    }
+
+    &:hover, &:focused {
+        -fx-background-color: variables.$component-hover-background-color;
+
+        &:default {
+            -fx-background-color: variables.$primary-color-hover;
+        }
+
+        &.danger {
+            -fx-background-color: variables.$danger-color-hover;
+        }
     }
 }
