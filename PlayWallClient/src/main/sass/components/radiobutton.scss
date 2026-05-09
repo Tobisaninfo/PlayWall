@@ -18,11 +18,29 @@
         -fx-scale-y: 1.5;
     }
 
-    &:selected .radio {
-        -fx-background-color: variables.$control-indicator-color;
+    &:hover, &:focused {
+        .radio {
+            -fx-border-color: variables.$primary-color-hover;
+        }
     }
 
-    &:selected .dot {
-        -fx-background-color: variables.$component-border-color;
+    &:selected {
+        .dot {
+            -fx-background-color: variables.$component-border-color;
+        }
+
+        .radio {
+            -fx-background-color: variables.$control-indicator-color;
+        }
+
+        &:hover {
+            .radio {
+                -fx-border-color: variables.$primary-color-hover;
+            }
+
+            .dot {
+                -fx-background-color: variables.$primary-color-hover;
+            }
+        }
     }
 }
