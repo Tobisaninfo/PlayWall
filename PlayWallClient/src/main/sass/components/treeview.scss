@@ -1,78 +1,44 @@
 @use "variables";
 
-
 .tree-view {
-
-    -fx-base: variables.$component-background-color-dark;
-
+    -fx-background-color: variables.$component-background-color-dark;
+    -fx-background-radius: variables.$popup-border-radius;
+    -fx-border-color: variables.$popup-border-color;
+    -fx-border-width: 1;
+    -fx-border-radius: variables.$popup-border-radius;
+    -fx-background-insets: 0;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+    -fx-padding: 4;
 
     .tree-cell {
-        -fx-skin: "javafx.scene.control.skin.TreeCellSkin";
-        -fx-background-color: -fx-base;
-        -fx-padding: 5px;
+        -fx-background-color: transparent;
+        -fx-background-radius: variables.$component-border-radius;
+        -fx-padding: 6 10;
         -fx-text-fill: variables.$component-text-color;
         -fx-opacity: 1;
-    }
 
-    .tree-view:focused {
-        .tree-cell:focused {
-            -fx-background-color: derive(-fx-hover-base, -50%);
-            -fx-background-insets: 0, 1, 2;
+        .tree-disclosure-node .arrow {
+            -fx-background-color: variables.$component-text-color;
         }
 
-        .tree-cell:filled:focused:selected {
-            -fx-background-color: derive(-fx-hover-base, -50%);
-            -fx-background-insets: 0, 1, 2;
-            -fx-background: derive(-fx-base, -50%);
-            -fx-text-fill: variables.$component-text-color;
+        &:filled:hover {
+            -fx-background-color: variables.$popup-hover-color;
         }
 
-        .tree-cell:filled:selected {
-            -fx-background-color: variables.$primary-color;
-            -fx-text-fill: variables.$component-text-color;
-
-            &:hover {
-                @extend .tree-cell, :filled, :selected;
-            }
-        }
-
-        .tree-cell:filled:focused:selected:hover {
+        &:filled:selected,
+        &:filled:focused:selected {
             -fx-background-color: variables.$primary-color;
             -fx-text-fill: variables.$component-text-color;
         }
+
+        &:filled:selected:hover {
+            -fx-background-color: variables.$primary-color-hover;
+        }
+
+        &:filled:selected:disabled,
+        &:filled:disabled {
+            -fx-opacity: 0.5;
+        }
     }
-
-    .tree-cell:filled:selected:focused, .tree-cell:filled:selected, .tree-view:horizontal .tree-cell:filled:selected {
-        -fx-background-color: derive(-fx-base, +50%);
-        -fx-text-fill: variables.$component-text-color;
-    }
-
-    .tree-cell:filled:selected:focused:disabled, .tree-cell:filled:selected:disabled {
-        -fx-opacity: derive(-fx-hover-base, -50%);
-    }
-
-    .tree-cell:filled:hover {
-        -fx-background-color: variables.$primary-color;
-        -fx-text-fill: variables.$component-text-color;
-    }
-
-    .tree-view:focused .tree-cell:filled:focused:hover {
-        -fx-background-color: variables.$primary-color;
-        -fx-text-fill: variables.$component-text-color;
-    }
-
-    .tree-view:horizontal .tree-cell:filled:selected, .tree-view:horizontal .tree-cell:filled:selected:hover {
-        -fx-background-color: variables.$primary-color;
-        -fx-text-fill: variables.$component-text-color;
-    }
-}
-
-.tree-cell .tree-disclosure-node .arrow {
-    -fx-background-color: variables.$component-text-color;
-}
-
-.tree-cell:expanded .tree-disclosure-node .arrow {
-    -fx-background-color: variables.$component-text-color;
 }
