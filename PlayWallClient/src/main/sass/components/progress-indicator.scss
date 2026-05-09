@@ -1,6 +1,10 @@
 .progress-indicator {
     -fx-progress-color: white;
 
+    .spinner {
+        -fx-border-width: 0;
+    }
+
     .percentage {
         -fx-fill: white;
     }
