@@ -78,6 +78,10 @@ $font-size-small: 0.9em;
         -fx-text-fill: variables.$component-text-color-deactivated;
     }
 
+    &.danger:hover, &.danger:focused {
+        -fx-background-color: variables.$danger-color;
+    }
+
     > .accelerator-text {
         -fx-text-fill: darken(variables.$component-text-color, 20%);
         -fx-font-size: $font-size-small;
