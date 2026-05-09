@@ -46,12 +46,6 @@
             }
         }
     }
-
-    &:disabled {
-        -fx-opacity: 0.45;
-        -fx-cursor: default;
-        -fx-border-color: variables.$component-text-color-deactivated;
-    }
 }
 
 .combo-box-popup {
@@ -60,6 +54,7 @@
     .list-view {
         -fx-background-color: variables.$component-background-color;
         -fx-background-radius: variables.$component-border-radius;
+        -fx-border-radius: variables.$component-border-radius;
         -fx-padding: 4px;
         -fx-effect: null;
     }
@@ -69,23 +64,21 @@
         -fx-text-fill: variables.$component-text-color;
         -fx-font-size: variables.$component-text-size;
         -fx-padding: 7px 10px;
-        -fx-background-radius: variables.$component-border-radius;
         -fx-cell-size: 34px;
 
         &:hover {
             -fx-background-color: variables.$component-hover-background-color;
         }
 
-        &:selected,
-        &:focused {
+        &:selected {
             -fx-background-color: variables.$primary-color;
             -fx-text-fill: variables.$component-text-color;
             -fx-font-weight: 500;
             -fx-effect: null;
-        }
 
-        &:selected:hover {
-            -fx-background-color: derive(variables.$primary-color, -10%);
+            &:hover {
+                -fx-background-color: variables.$primary-color-hover !important;
+            }
         }
 
         &:empty {
