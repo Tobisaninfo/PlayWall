@@ -24,11 +24,11 @@
     }
 
     .increment-arrow-button {
-        -fx-background-radius: 0 variables.$border-radius-sm 0 0;
+        -fx-background-radius: 0 variables.$component-border-radius-sm 0 0;
     }
 
     .decrement-arrow-button {
-        -fx-background-radius: 0 0 variables.$border-radius-sm 0;
+        -fx-background-radius: 0 0 variables.$component-border-radius-sm 0;
     }
 
     .text-field {

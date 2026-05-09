@@ -5,7 +5,7 @@
     -slider-track-color: variables.$component-background-color;
 
     .track {
-        -fx-background-radius: variables.$border-radius-sm;
+        -fx-background-radius: variables.$component-border-radius-sm;
         -fx-background-insets: 1px;
 
         -fx-background-color: -fx-shadow-highlight-color,
