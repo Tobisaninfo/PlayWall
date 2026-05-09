@@ -9,11 +9,11 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.ParamDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.PlayWallButton;
+import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
@@ -92,11 +92,11 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 
 	protected void selectCategory(SettingsCategory category)
 	{
-		boxCategories.getChildren().forEach(c -> c.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false));
+		boxCategories.getChildren().forEach(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, false));
 		boxCategories.getChildren().stream()
 				.filter(c -> c.equals(category))
 				.findFirst()
-				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true));
+				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, true));
 
 		settingsPageContainer.getChildren().setAll(category.getSettingsPageController().getSettingsPage());
 	}

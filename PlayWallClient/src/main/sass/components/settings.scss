@@ -13,10 +13,10 @@
     -fx-background-color: variables.$primary-color;
     -fx-padding: 7px 14px 7px 14px;
     -fx-alignment: top-left;
-    -fx-background-radius: 7px;
+    -fx-background-radius: variables.$component-border-radius;
 
     .icon {
-        -fx-fill: variables.$settings-selected-background-color;
+        -fx-fill: variables.$on-primary-color;
     }
 
     .settings-category-icon-warning .icon {
@@ -24,12 +24,16 @@
     }
 
     .settings-category-label {
-        -fx-text-fill: variables.$settings-selected-background-color;
+        -fx-text-fill: variables.$on-primary-color;
         -fx-font-size: 14px;
     }
 
-    &:selected, &:focused {
-        -fx-background-color: variables.$settings-selected-background-color;
+    &:hover, &:focused {
+        -fx-background-color: variables.$on-primary-color-hover;
+    }
+
+    &:selected {
+        -fx-background-color: variables.$on-primary-color;
 
         .icon {
             -fx-fill: variables.$primary-color;
@@ -44,7 +48,7 @@
         }
 
         &:hover {
-            -fx-background-color: variables.$settings-selected-background-color;
+            -fx-background-color: variables.$on-primary-color;
 
             .icon {
                 -fx-fill: variables.$primary-color;
@@ -57,22 +61,6 @@
             .settings-category-label {
                 -fx-text-fill: variables.$primary-color;
             }
-        }
-    }
-
-    &:hover {
-        -fx-background-color: variables.$primary-color;
-
-        .icon {
-            -fx-fill: variables.$settings-selected-background-color;
-        }
-
-        .settings-category-icon-warning .icon {
-            -fx-fill: variables.$warning-color;
-        }
-
-        .settings-category-label {
-            -fx-text-fill: variables.$settings-selected-background-color;
         }
     }
 }
