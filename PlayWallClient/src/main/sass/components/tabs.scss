@@ -1,17 +1,74 @@
 @use "variables";
 
 .tab-pane {
-    &:top *.tab-header-background {
-        -fx-background-color: variables.$background-color;
-    }
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 
-    &:top *.tab {
-        -fx-background-color: variables.$component-background-color;
+    > .tab-header-area {
+        -fx-padding: 0 0 4 0;
 
-        &:selected {
-            -fx-background-color: variables.$primary-color;
+        > .tab-header-background {
+            -fx-background-color: transparent;
+        }
+
+        > .headers-region > .tab {
+            -fx-background-color: transparent;
+            -fx-background-radius: variables.$component-border-radius;
+            -fx-padding: 6 16;
             -fx-focus-color: transparent;
             -fx-faint-focus-color: transparent;
+
+            > .tab-container > .tab-label {
+                -fx-text-fill: variables.$component-text-color;
+                -fx-font-size: variables.$component-text-size;
+            }
+
+            > .tab-container > .tab-close-button {
+                -fx-background-color: variables.$component-text-color;
+                -fx-opacity: 0.6;
+            }
+
+            &:hover {
+                -fx-background-color: variables.$component-hover-background-color;
+
+                > .tab-container > .tab-close-button {
+                    -fx-opacity: 1;
+                }
+            }
+
+            &:selected {
+                -fx-background-color: variables.$primary-color;
+
+                > .tab-container > .tab-label {
+                    -fx-text-fill: variables.$on-primary-color;
+                }
+
+                > .tab-container > .tab-close-button {
+                    -fx-background-color: variables.$on-primary-color;
+                    -fx-opacity: 0.8;
+                }
+
+                &:hover {
+                    -fx-background-color: variables.$primary-color-hover;
+
+                    > .tab-container > .tab-close-button {
+                        -fx-opacity: 1;
+                    }
+                }
+            }
+
+            &:disabled {
+                -fx-opacity: 0.4;
+            }
         }
+    }
+
+    > .tab-content-area {
+        -fx-background-color: variables.$component-background-color-dark;
+        -fx-background-radius: variables.$popup-border-radius;
+        -fx-border-color: variables.$popup-border-color;
+        -fx-border-width: 1;
+        -fx-border-radius: variables.$popup-border-radius;
+        -fx-padding: 12;
     }
 }
