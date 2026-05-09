@@ -1,13 +1,10 @@
-$accent-blue: #2196F3;
-$accent-green: #4CAF50;
-$accent-yellow: #FF9800;
-$accent-red: #F44336;
+@use "variables";
 
 $levels: (
-        success: $accent-green,
-        info: $accent-blue,
-        warning: $accent-yellow,
-        error: $accent-red,
+        success: variables.$success-color,
+        info: variables.$primary-color,
+        warning: variables.$warning-color,
+        error: variables.$danger-color,
 );
 
 @mixin level-colors() {
