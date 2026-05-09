@@ -4,6 +4,7 @@
     -fx-border-color: variables.$component-border-color;
     -fx-border-width: variables.$component-border-width;
     -fx-border-radius: variables.$component-border-radius;
+    -fx-background-radius: variables.$component-border-radius;
 
     .increment-arrow-button, .decrement-arrow-button {
         -fx-background-color: variables.$component-background-color;
@@ -24,19 +25,20 @@
     }
 
     .increment-arrow-button {
-        -fx-background-radius: 0 variables.$component-border-radius-sm 0 0;
+        -fx-background-radius: 0 variables.$component-border-radius 0 0;
     }
 
     .decrement-arrow-button {
-        -fx-background-radius: 0 0 variables.$component-border-radius-sm 0;
+        -fx-background-radius: 0 0 variables.$component-border-radius 0;
     }
 
     .text-field {
         -fx-background-color: variables.$component-background-color;
         -fx-border-width: 0;
+        -fx-background-radius: variables.$component-border-radius 0 0 variables.$component-border-radius;
     }
 
-    .text-field:focused {
-        -fx-background-color: variables.$component-background-color;
+    .text-field:focused, .text-field:hover {
+        -fx-background-color: variables.$component-hover-background-color;
     }
 }
