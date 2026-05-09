@@ -9,7 +9,7 @@
         -fx-background-color: variables.$component-background-color;
         -fx-text-fill: variables.$component-text-color;
         -fx-background-radius: 0px;
-        -fx-font-size: variables.$component-font-size-control;
+        -fx-font-size: variables.$component-text-size;
         -fx-border-width: 0;
 
         &:focused {
