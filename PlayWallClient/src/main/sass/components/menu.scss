@@ -83,7 +83,7 @@ $font-size-small: 0.9em;
     }
 
     > .accelerator-text {
-        -fx-text-fill: darken(variables.$component-text-color, 20%);
+        -fx-text-fill: variables.$component-text-color-hint;
         -fx-font-size: $font-size-small;
         -fx-padding: 0 0 0 24;
     }
