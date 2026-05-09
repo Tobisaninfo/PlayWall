@@ -8,7 +8,7 @@
     // Menu Button inside Menu Bar
     > .container > .menu-button {
         -fx-background-color: transparent;
-        -fx-background-radius: variables.$component-border-radius-sm;
+        -fx-background-radius: variables.$component-border-radius;
         -fx-text-fill: variables.$component-text-color;
         -fx-font-size: variables.$component-text-size;
         -fx-padding: 4 10;
@@ -42,7 +42,7 @@
         -fx-padding: 3 0;
 
         > .line {
-            -fx-border-color: variables.$seperator-color;
+            -fx-border-color: variables.$seperator-color-menu;
             -fx-border-width: 0.5 0 0 0;
             -fx-padding: 0;
         }

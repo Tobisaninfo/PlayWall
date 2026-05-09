@@ -1,0 +1,10 @@
+@use "variables";
+
+.separator {
+    -fx-padding: 3 0;
+    -fx-base: variables.$seperator-color-on-background;
+
+    > .line {
+        -fx-border-width: 0.5;
+    }
+}
