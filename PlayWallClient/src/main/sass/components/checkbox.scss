@@ -5,7 +5,7 @@
         -fx-background-color: transparent;
         -fx-background-insets: 1;
         -fx-border-color: variables.$component-border-color;
-        -fx-border-radius: variables.$border-radius-sm;
+        -fx-border-radius: variables.$component-border-radius-sm;
         -fx-border-width: 2px;
     }
 
@@ -24,5 +24,18 @@
 
     &:selected .box {
         -fx-background-color: variables.$component-border-color;
+    }
+
+    &:hover, &:focused {
+        .box {
+            -fx-border-color: variables.$primary-color-hover;
+        }
+    }
+
+    &:selected:hover, &:selected:focused {
+        .box {
+            -fx-background-color: variables.$primary-color-hover;
+            -fx-border-color: variables.$primary-color-hover;
+        }
     }
 }
