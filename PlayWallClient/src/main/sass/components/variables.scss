@@ -3,7 +3,8 @@ $background-color: #333333;
 
 $component-background-color: #5c5c5c;
 $component-background-color-dark: #484848;
-$component-background-color-odd: #7c7c7c;
+$component-background-color-light: #7c7c7c;
+$component-background-color-hover: #878787;
 
 // === Text ===
 $component-text-color: #eeeeee;
@@ -12,20 +13,15 @@ $component-text-color-deactivated: #888888;
 $component-text-size: 14px;
 $component-text-size-sm: 12px;
 
-// === Interactive states ===
-$component-hover-background-color: #878787;
-
 // === Borders & Radius ===
-$component-border-color: #CCCCCC;
-$component-border-color-hover: #FFFFFF;
+$component-border-color-light: #CCCCCC;
+$component-border-color-light-hover: #FFFFFF;
+$component-border-color-dark: rgba(255, 255, 255, 0.11);
+$component-border-color-dark-hover: rgba(255, 255, 255, 0.07);
 $component-border-width: 1px;
 $component-border-radius: 6px;
 $component-border-radius-sm: 3px;
-
-// === Popups / Overlays (context menu, list-view, combobox dropdown) ===
-$popup-border-radius: 10px;
-$popup-border-color: rgba(255, 255, 255, 0.11);
-$popup-hover-color: rgba(255, 255, 255, 0.07);
+$component-border-radius-lg: 10px;
 
 // === Form controls ===
 $control-indicator-color: #3E4251;

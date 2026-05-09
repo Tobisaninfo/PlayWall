@@ -2,10 +2,10 @@
 
 .tree-view {
     -fx-background-color: variables.$component-background-color-dark;
-    -fx-background-radius: variables.$popup-border-radius;
-    -fx-border-color: variables.$popup-border-color;
+    -fx-background-radius: variables.$component-border-radius-lg;
+    -fx-border-color: $component-border-color-dark;
     -fx-border-width: 1;
-    -fx-border-radius: variables.$popup-border-radius;
+    -fx-border-radius: variables.$component-border-radius-lg;
     -fx-background-insets: 0;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
@@ -23,7 +23,7 @@
         }
 
         &:filled:hover {
-            -fx-background-color: variables.$popup-hover-color;
+            -fx-background-color: $component-border-color-dark-hover;
         }
 
         &:filled:selected,

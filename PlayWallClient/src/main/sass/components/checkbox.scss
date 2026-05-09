@@ -4,7 +4,7 @@
     .box {
         -fx-background-color: transparent;
         -fx-background-insets: 1;
-        -fx-border-color: variables.$component-border-color;
+        -fx-border-color: $component-border-color-light;
         -fx-border-radius: variables.$component-border-radius-sm;
         -fx-border-width: 2px;
     }
@@ -23,7 +23,7 @@
     }
 
     &:selected .box {
-        -fx-background-color: variables.$component-border-color;
+        -fx-background-color: $component-border-color-light;
     }
 
     &:hover, &:focused {

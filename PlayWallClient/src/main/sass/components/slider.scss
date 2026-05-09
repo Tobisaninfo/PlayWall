@@ -14,7 +14,7 @@
     }
 
     .thumb {
-        -fx-background-color: variables.$component-border-color;
+        -fx-background-color: $component-border-color-light;
         -fx-padding: 0.333333em;
         -fx-scale-x: 2;
         -fx-scale-y: 2;

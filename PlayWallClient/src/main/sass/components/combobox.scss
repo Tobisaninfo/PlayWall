@@ -36,7 +36,7 @@
     }
 
     &:hover {
-        -fx-background-color: variables.$component-hover-background-color;
+        -fx-background-color: $component-background-color-hover;
     }
 
     &:showing {
@@ -67,7 +67,7 @@
         -fx-cell-size: 34px;
 
         &:hover {
-            -fx-background-color: variables.$component-hover-background-color;
+            -fx-background-color: $component-background-color-hover;
         }
 
         &:selected {
