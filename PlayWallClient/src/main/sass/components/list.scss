@@ -1,7 +1,7 @@
 @use "variables";
 
 .list-view {
-    -fx-background-color: darken(variables.$component-background-color, 10%);
+    -fx-background-color: variables.$component-background-color-dark;
     -fx-background-radius: variables.$popup-border-radius;
     -fx-border-color: variables.$popup-border-color;
     -fx-border-width: 1;
