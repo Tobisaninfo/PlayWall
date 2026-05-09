@@ -9,3 +9,5 @@
 
 PlayWallClient/screenshots/
 /scenicView.properties
+
+.claude/settings.local.json
