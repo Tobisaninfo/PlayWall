@@ -1,9 +1,6 @@
 @use "variables";
 @use 'sass:color';
 
-$font-size-base: 1em;
-$font-size-small: 0.9em;
-
 .menu-bar {
     -fx-background-color: variables.$background-color;
     -fx-padding: 0 8;
@@ -13,7 +10,7 @@ $font-size-small: 0.9em;
         -fx-background-color: transparent;
         -fx-background-radius: variables.$border-radius-sm;
         -fx-text-fill: variables.$component-text-color;
-        -fx-font-size: $font-size-base;
+        -fx-font-size: variables.$component-text-size;
         -fx-padding: 4 10;
 
         &:hover {
@@ -65,7 +62,7 @@ $font-size-small: 0.9em;
 
     > .label {
         -fx-text-fill: variables.$component-text-color;
-        -fx-font-size: $font-size-base;
+        -fx-font-size: variables.$component-text-size;
         -fx-font-weight: normal;
     }
 
@@ -84,7 +81,7 @@ $font-size-small: 0.9em;
 
     > .accelerator-text {
         -fx-text-fill: variables.$component-text-color-hint;
-        -fx-font-size: $font-size-small;
+        -fx-font-size: variables.$component-text-size-sm;
         -fx-padding: 0 0 0 24;
     }
 
@@ -107,7 +104,7 @@ $font-size-small: 0.9em;
 
     > .label {
         -fx-text-fill: variables.$component-text-color;
-        -fx-font-size: $font-size-base;
+        -fx-font-size: variables.$component-text-size;
         -fx-font-weight: normal;
     }
 
