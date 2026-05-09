@@ -140,13 +140,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		final Node button1 = robot.lookup(".page-button").nth(0).queryAs(Node.class);
 		final Node button2 = robot.lookup(".page-button").nth(1).queryAs(Node.class);
 
-
-		Point2D destination = button2.localToScreen(
-				button2.getBoundsInLocal().getCenterX(),
-				button2.getBoundsInLocal().getCenterY()
-		);
-
-		robot.drag(button1).moveTo(destination).drop();
+		robot.drag(button1).moveTo(button2, new Point2D(20, 0)).drop();
 		WaitForAsyncUtils.waitForFxEvents();
 
 		//noinspection unchecked
