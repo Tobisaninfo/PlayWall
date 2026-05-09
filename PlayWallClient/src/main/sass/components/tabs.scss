@@ -29,7 +29,7 @@
             }
 
             &:hover {
-                -fx-background-color: $component-background-color-hover;
+                -fx-background-color: variables.$component-background-color-hover;
 
                 > .tab-container > .tab-close-button {
                     -fx-opacity: 1;
@@ -66,7 +66,7 @@
     > .tab-content-area {
         -fx-background-color: variables.$component-background-color-dark;
         -fx-background-radius: variables.$component-border-radius-lg;
-        -fx-border-color: $component-border-color-dark;
+        -fx-border-color: variables.$component-border-color-dark;
         -fx-border-width: 1;
         -fx-border-radius: variables.$component-border-radius-lg;
         -fx-padding: 12;

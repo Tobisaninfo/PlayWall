@@ -1,11 +1,13 @@
+@use "variables";
+
 .progress-indicator {
-    -fx-progress-color: white;
+    -fx-progress-color: variables.$on-primary-color;
 
     .spinner {
         -fx-border-width: 0;
     }
 
     .percentage {
-        -fx-fill: white;
+        -fx-fill: variables.$on-primary-color;
     }
 }

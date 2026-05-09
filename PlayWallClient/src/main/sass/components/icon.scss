@@ -1,5 +1,5 @@
 @use "variables";
 
 .icon {
-    -fx-fill: white;
+    -fx-fill: variables.$component-text-color;
 }

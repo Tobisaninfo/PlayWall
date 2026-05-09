@@ -1,5 +1,4 @@
 @use "variables";
-@use 'sass:color';
 
 .menu-bar {
     -fx-background-color: variables.$background-color;
@@ -14,7 +13,7 @@
         -fx-padding: 4 10;
 
         &:hover {
-            -fx-background-color: $component-border-color-dark-hover;
+            -fx-background-color: variables.$component-border-color-dark-hover;
         }
 
         &:showing {
@@ -26,7 +25,7 @@
 .context-menu {
     -fx-background-color: variables.$component-background-color;
     -fx-background-radius: variables.$component-border-radius-lg;
-    -fx-border-color: $component-border-color-dark;
+    -fx-border-color: variables.$component-border-color-dark;
     -fx-border-width: 1;
     -fx-border-radius: variables.$component-border-radius-lg;
     -fx-padding: 4;
@@ -57,18 +56,12 @@
     &:hover,
     &:focused {
         -fx-background-color: variables.$primary-color;
-        -fx-background-radius: variables.$component-border-radius;
     }
 
     > .label {
         -fx-text-fill: variables.$component-text-color;
         -fx-font-size: variables.$component-text-size;
         -fx-font-weight: normal;
-    }
-
-    &:hover > .label,
-    &:focused > .label {
-        -fx-text-fill: variables.$component-text-color;
     }
 
     &:disabled > .label {
@@ -99,19 +92,12 @@
     &:focused,
     &:showing {
         -fx-background-color: variables.$primary-color;
-        -fx-background-radius: variables.$component-border-radius;
     }
 
     > .label {
         -fx-text-fill: variables.$component-text-color;
         -fx-font-size: variables.$component-text-size;
         -fx-font-weight: normal;
-    }
-
-    &:hover > .label,
-    &:focused > .label,
-    &:showing > .label {
-        -fx-text-fill: variables.$component-text-color;
     }
 
     &:hover > .arrow-button > .arrow,

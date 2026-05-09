@@ -32,13 +32,13 @@
 
     &:horizontal .thumb,
     &:vertical .thumb {
-        -fx-background-color: $component-background-color-light;
+        -fx-background-color: variables.$component-background-color-light;
         -fx-background-insets: 2;
         -fx-background-radius: 2em;
     }
 
     &:horizontal .thumb:hover,
     &:vertical .thumb:hover {
-        -fx-background-color: $component-background-color-hover;
+        -fx-background-color: variables.$component-background-color-hover;
     }
 }

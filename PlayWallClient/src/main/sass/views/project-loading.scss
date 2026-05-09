@@ -5,7 +5,7 @@
 }
 
 .project-loading--box {
-    -fx-background-color: $component-border-color-light;
+    -fx-background-color: variables.$component-border-color-light;
     -fx-padding: 20;
     -fx-background-radius: variables.$component-border-radius-lg;
 }

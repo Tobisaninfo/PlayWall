@@ -14,7 +14,7 @@
     }
 
     &:hover, &:focused {
-        -fx-background-color: $component-background-color-hover;
+        -fx-background-color: variables.$component-background-color-hover;
 
         &:default {
             -fx-background-color: variables.$primary-color-hover;

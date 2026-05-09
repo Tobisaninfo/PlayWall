@@ -2,7 +2,7 @@
 
 .text-field {
     -fx-background-color: variables.$component-background-color;
-    -fx-border-color: $component-border-color-light;
+    -fx-border-color: variables.$component-border-color-light;
     -fx-border-width: variables.$component-border-width;
     -fx-border-radius: variables.$component-border-radius;
 
@@ -12,8 +12,8 @@
     -fx-font-size: variables.$component-text-size;
 
     &:hover, &:focused {
-        -fx-border-color: $component-border-color-light-hover;
-        -fx-background-color: $component-background-color-hover;
+        -fx-border-color: variables.$component-border-color-light-hover;
+        -fx-background-color: variables.$component-background-color-hover;
     }
 
     &:disabled {

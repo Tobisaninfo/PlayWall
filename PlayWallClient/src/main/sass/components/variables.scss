@@ -30,7 +30,6 @@ $selected-light-background-hover: #b6b6b6;
 $selected-light-text: #333333;
 
 // === Text fields ===
-$textfield-background: transparent;
 $textfield-prompt-color: #777777;
 
 // === Separators ===
@@ -41,8 +40,7 @@ $seperator-color-menu: #222222;
 $primary-color: #316DCE;
 $primary-color-hover: #5f8fe0;
 $on-primary-color: #FFFFFF;
-$on-primary-color-hover: #5f8fe0;
-$notification-warning-color: #F7BA4D;
+$on-primary-color-hover: $primary-color-hover;
 $success-color: #4CAF50;
 $warning-color: #F6AE2D;
 $danger-color: #C0392B;

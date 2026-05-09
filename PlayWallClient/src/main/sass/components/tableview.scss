@@ -3,7 +3,7 @@
 .table-view {
     -fx-background-color: variables.$component-background-color-dark;
     -fx-background-radius: variables.$component-border-radius-lg;
-    -fx-border-color: $component-border-color-dark;
+    -fx-border-color: variables.$component-border-color-dark;
     -fx-border-width: 1;
     -fx-border-radius: variables.$component-border-radius-lg;
     -fx-background-insets: 0;
@@ -45,12 +45,8 @@
     -fx-background-radius: variables.$component-border-radius;
     -fx-text-fill: variables.$component-text-color;
 
-    &:odd {
-        -fx-background-color: transparent;
-    }
-
     &:hover {
-        -fx-background-color: $component-border-color-dark-hover;
+        -fx-background-color: variables.$component-border-color-dark-hover;
     }
 
     &:selected, &:focused:selected {
