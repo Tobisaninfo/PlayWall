@@ -66,9 +66,12 @@ public class Strings
 
 	// ui - dialog - about
 	public static final String UI_DIALOG_ABOUT_GRAPHICS = "ui.dialog.about.graphics";
-	public static final String UI_DIALOG_ABOUT_LIBRARIES = "ui.dialog.about.libraries";
+	public static final String UI_DIALOG_ABOUT_LIBRARIES_LINK = "ui.dialog.about.libraries.link";
 	public static final String UI_DIALOG_ABOUT_WEBSITE = "ui.dialog.about.website";
 	public static final String UI_DIALOG_ABOUT_CODE = "ui.dialog.about.code";
+
+	// ui - dialog - libraries
+	public static final String UI_DIALOG_LIBRARIES_TITLE = "ui.dialog.libraries.title";
 
 	// ui - settings - pad
 	public static final String UI_SETTINGS_PAD_TITLE  = "ui.settings.pad.title";

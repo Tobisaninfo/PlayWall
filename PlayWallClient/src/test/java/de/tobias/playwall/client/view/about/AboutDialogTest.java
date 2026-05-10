@@ -40,7 +40,7 @@ class AboutDialogTest extends AbstractViewControllerTest
 		assertThat(aboutDialog.getVersionLabel()).hasText("0.0.1");
 		assertThat(aboutDialog.getAuthorLabel()).hasText("TheCodeLabs");
 		assertThat(aboutDialog.getGraphicsLabel()).hasText("Robert Goldmann");
-		assertThat(aboutDialog.getLibsLabel()).hasText("ControlsFX (8.40.10), dom4j (1.6.1), snakeyaml (1.11), guava (15.0), gagawa (1.0.1), TinySound (1.1.1), JLayer (1.0.1), JSPF (1.0.2), json-smart (1.2).");
+		assertThat(aboutDialog.getLibsLink()).hasText("Bibliotheken anzeigen…");
 		assertThat(aboutDialog.getPlatformLabel().getText()).isNotBlank();
 		assertThat(((Hyperlink) aboutDialog.getWebsiteContainer().getChildren().get(1)).getText()).isEqualTo("https://playwall.thecodelabs.de");
 		assertThat(((Hyperlink) aboutDialog.getCodeContainer().getChildren().get(1)).getText()).isEqualTo("https://thecodelabs.de/PlayWall/PlayWall");

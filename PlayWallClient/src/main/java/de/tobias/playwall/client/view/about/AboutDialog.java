@@ -6,8 +6,8 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.view.ModalDialogBase;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -37,7 +37,7 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 public class AboutDialog extends ModalDialogBase<Void>
 {
 	@FXML
-	private Label libsLabel;
+	private Hyperlink libsLink;
 
 	@FXML
 	private HBox codeContainer;
@@ -68,7 +68,9 @@ public class AboutDialog extends ModalDialogBase<Void>
 		versionLabel.setText(info.getVersion());
 		authorLabel.setText(info.getAuthor());
 		graphicsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_GRAPHICS));
-		libsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_LIBRARIES));
+		libsLink.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_LIBRARIES_LINK));
+		libsLink.setPadding(Insets.EMPTY);
+		libsLink.setFocusTraversable(false);
 
 		platformLabel.setText(String.format("%s (%s) + %s (%s)", System.getProperty("java.version"),
 				System.getProperty("java.vendor"), System.getProperty("javafx.version"),
@@ -91,6 +93,13 @@ public class AboutDialog extends ModalDialogBase<Void>
 			openWebsite(url);
 		});
 		codeContainer.getChildren().add(codeLink);
+	}
+
+	@FXML
+	private void openLibrariesDialog()
+	{
+		final LibrariesDialog librariesDialog = AppContextHolder.getInstance().get(LibrariesDialog.class);
+		librariesDialog.showAndWait(getContainingWindow());
 	}
 
 	private void openWebsite(String url)

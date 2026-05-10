@@ -64,7 +64,7 @@
                             <children>
                                 <Label alignment="CENTER_RIGHT" minWidth="75.0" prefWidth="75.0" text="%about.label.libraries"
                                        textAlignment="RIGHT"/>
-                                <Label fx:id="libsLabel" text="controlsfx" wrapText="true"/>
+                                <Hyperlink fx:id="libsLink" onAction="#openLibrariesDialog"/>
                             </children>
                         </HBox>
                         <Label maxWidth="1.7976931348623157E308"

@@ -75,6 +75,7 @@
         <sonar.coverage.jacoco.xmlReportPaths>
             ${cwd}/coverage/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
+        <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -135,6 +136,32 @@
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>aggregate-third-party</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>aggregate-add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/PlayWallClient/target/classes/license</outputDirectory>
+                            <thirdPartyFilename>THIRD-PARTY.csv</thirdPartyFilename>
+                            <fileTemplate>${project.basedir}/PlayWallClient/src/main/license/third-party.ftl
+                            </fileTemplate>
+                            <excludedScopes>test,provided</excludedScopes>
+                            <excludedGroups>de\.tobias\.playwall</excludedGroups>
+                            <failIfWarning>false</failIfWarning>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <TableView fx:id="table" focusTraversable="false">
+            <columns>
+                <TableColumn fx:id="colName" text="%ui.dialog.libraries.col.name" prefWidth="200" minWidth="120"/>
+                <TableColumn fx:id="colVersion" text="%ui.dialog.libraries.col.version" prefWidth="100" maxWidth="120"/>
+                <TableColumn fx:id="colLicense" text="%ui.dialog.libraries.col.license" prefWidth="300"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
