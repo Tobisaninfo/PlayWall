@@ -487,10 +487,13 @@ public class MainViewController extends ViewControllerBase
 	{
 		pageButtons.buildPageButtons(projectController.getProject().getPages(), (button, page) -> {
 			button.setOnAction(_ -> showPage(page));
+			final MenuItem deleteMenuItem = createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_CAN_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)));
+			deleteMenuItem.getStyleClass().add("danger");
 			button.setContextMenu(new ContextMenu(
 					createMenuItem(Strings.UI_PAGE_RENAME, FontAwesomeType.PEN_SOLID, Optional.of(_ -> onPageRenameMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
-					createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_CAN_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)))
+					new SeparatorMenuItem(),
+					deleteMenuItem
 			));
 		});
 
