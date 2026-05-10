@@ -86,8 +86,8 @@ public class MaterialToastManager
 	private Node buildToast(String title, String message, ToastType type)
 	{
 		final Region accent = new Region();
-		accent.setPrefWidth(6);
-		accent.setMinWidth(6);
+		accent.setPrefWidth(7);
+		accent.setMinWidth(7);
 		accent.getStyleClass().addAll("accent", type.name().toLowerCase());
 
 		final FontIcon iconLabel = new FontIcon(type.getIcon());

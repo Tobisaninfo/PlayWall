@@ -17,17 +17,19 @@ $levels: (
 
 .toast {
     -fx-background-color: variables.$toast-background;
-    -fx-background-radius: 4px;
+    -fx-background-radius: variables.$component-border-radius;
+    -fx-border-radius: variables.$component-border-radius;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 8, 0, 0, 3);
 
     &:hover {
         -fx-background-color: variables.$toast-background-hover;
-        -fx-background-radius: 4px;
         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.26), 12, 0, 0, 5);
     }
 
     .accent {
         @include level-colors();
+
+        -fx-background-radius: variables.$component-border-radius 0 0 variables.$component-border-radius;
     }
 
     .icon-circle {
@@ -44,6 +46,10 @@ $levels: (
     .message {
         -fx-font-size: 12px;
         -fx-text-fill: variables.$toast-message-color;
+    }
+
+    .icon {
+        -fx-fill: #FFFFFF;
     }
 
     .close-button {
