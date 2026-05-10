@@ -31,6 +31,6 @@
     }
 
     &:danger {
-        -fx-text-fill: variables.$danger-color;
+        -fx-text-fill: variables.$danger-text-color;
     }
 }

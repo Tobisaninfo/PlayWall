@@ -4,11 +4,11 @@ $background-color: #333333;
 $component-background-color: #5c5c5c;
 $component-background-color-dark: #484848;
 $component-background-color-light: #7c7c7c;
-$component-background-color-hover: #878787;
+$component-background-color-hover: #6C6C6C;
 
 // === Text ===
 $component-text-color: #eeeeee;
-$component-text-color-hint: #aaaaaa;
+$component-text-color-hint: #d4d4d4;
 $component-text-color-deactivated: #888888;
 $component-text-size: 14px;
 $component-text-size-sm: 12px;
@@ -33,18 +33,19 @@ $selected-light-text: #333333;
 $textfield-prompt-color: #999999;
 
 // === Separators ===
-$seperator-color-on-background: #000000;
+$seperator-color-on-background: #555;
 $seperator-color-menu: #222222;
 
 // === Semantic colors ===
 $primary-color: #316DCE;
-$primary-color-hover: #5f8fe0;
+$primary-color-hover: #3E72CF;
 $on-primary-color: #FFFFFF;
-$on-primary-color-hover: $primary-color-hover;
+$on-primary-color-hover: #5f8fe0;
 $success-color: #4CAF50;
 $warning-color: #F6AE2D;
 $danger-color: #C0392B;
 $danger-color-hover: #e05545;
+$danger-text-color: #FF6B6B;
 
 // === Dialog ===
 $dialog-header-background: rgb(70, 70, 70);
