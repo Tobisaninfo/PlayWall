@@ -13,7 +13,6 @@
 
     &:hover, &:focused {
         -fx-border-color: variables.$component-border-color-light-hover;
-        -fx-background-color: variables.$component-background-color-hover;
     }
 
     &:disabled {
