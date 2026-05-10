@@ -1,3 +1,5 @@
+@use "../components/variables";
+
 .launch-dialog--list {
     -fx-background-radius: 0;
     -fx-border-radius: 0;
@@ -6,6 +8,6 @@
 
 .launch-dialog--project-name {
     -fx-font-size: 14px;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: variables.$component-text-color;
     -fx-font-weight: bold;
 }

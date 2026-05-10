@@ -16,12 +16,12 @@ $levels: (
 }
 
 .toast {
-    -fx-background-color: white;
+    -fx-background-color: variables.$toast-background;
     -fx-background-radius: 4px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 8, 0, 0, 3);
 
     &:hover {
-        -fx-background-color: #FAFAFA;
+        -fx-background-color: variables.$toast-background-hover;
         -fx-background-radius: 4px;
         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.26), 12, 0, 0, 5);
     }
@@ -38,21 +38,21 @@ $levels: (
     .title {
         -fx-font-size: 13px;
         -fx-font-weight: bold;
-        -fx-text-fill: #212121;
+        -fx-text-fill: variables.$toast-title-color;
     }
 
     .message {
         -fx-font-size: 12px;
-        -fx-text-fill: #757575;
+        -fx-text-fill: variables.$toast-message-color;
     }
 
     .close-button {
         .icon {
-            -fx-fill: #999999;
+            -fx-fill: variables.$toast-icon-color;
         }
 
         &:hover {
-            -fx-background-color: #CDCDCD;
+            -fx-background-color: variables.$toast-close-hover-background;
             -fx-background-radius: 5px;
         }
 

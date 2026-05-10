@@ -2,7 +2,7 @@
 
 .project-management--project-name {
     -fx-font-size: 14px;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: variables.$component-text-color;
     -fx-font-weight: bold;
 }
 

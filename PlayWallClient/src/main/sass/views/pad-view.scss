@@ -27,7 +27,7 @@
 }
 
 .pad-info {
-    -fx-text-fill: white;
+    -fx-text-fill: variables.$component-text-color;
     -fx-font-size: 15px;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .pad-button:hover {
-    -fx-background-color: #00000030;
+    -fx-background-color: variables.$pad-button-hover;
 }
 
 .pad:drag {
