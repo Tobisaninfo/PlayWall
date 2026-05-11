@@ -355,7 +355,7 @@ public class DesktopPadView implements PadView
 		final Duration position = padController.getPosition();
 		final Duration duration = padController.getDuration();
 
-		if(duration == null)
+		if(duration == null || status == PadStatus.EMPTY || status == PadStatus.ERROR)
 		{
 			this.timeLabel.setText(null);
 			this.playBar.setProgress(0.0);
