@@ -66,8 +66,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                     &*(jvm_ref as *const jni::JavaVM)
                 };
 
-                let source =
-                    HybridLoopSource::new(path.clone(), looping_ptr, jvm_static, global_obj)?;
+                let source = HybridLoopSource::new(path.clone(), looping_ptr, jvm_static, global_obj)
+                    .map_err(|e| io::Error::new(e.kind(), format!("{}: {}", path, e)))?;
 
                 sink.set_volume(audio_handler.volume);
                 sink.append(source);

@@ -121,10 +121,10 @@ impl Iterator for HybridLoopSource {
 
         if self.is_looping_enabled() {
             let source = File::open(&self.path)
-                .map_err(|e| (e.to_string(), "java/io/FileNotFoundException"))
+                .map_err(|e| (format!("{}: {}", self.path, e), "java/io/FileNotFoundException"))
                 .and_then(|file| {
                     Decoder::new(BufReader::new(file))
-                        .map_err(|e| (e.to_string(), "java/io/IOException"))
+                        .map_err(|e| (format!("{}: {}", self.path, e), "java/io/IOException"))
                 });
 
             return match source {

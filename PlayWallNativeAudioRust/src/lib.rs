@@ -231,10 +231,10 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                     trace!("Loaded media");
                 });
             }
-            Err(_) => {
+            Err(err) => {
                 env.throw_new(
                     JNIString::new("java/io/FileNotFoundException"),
-                    JNIString::new(format!("File not found: {}", &path_str)),
+                    JNIString::new(format!("{}: {}", path_str, err.to_string())),
                 )?;
             }
         }
