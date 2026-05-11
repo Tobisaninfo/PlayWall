@@ -45,9 +45,9 @@ public class GlobalColorPicker extends ToggleButton
 
 		final HBox box = new HBox(icon, colorButton);
 		box.setSpacing(ViewConstants.DEFAULT_SPACING / 2);
+		box.setAlignment(Pos.CENTER);
 
 		this.setGraphic(box);
-		this.setAlignment(Pos.CENTER_RIGHT);
 		this.setFocusTraversable(false);
 
 		this.setSelected(false);
