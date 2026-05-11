@@ -81,7 +81,6 @@ public class DesktopPadView implements PadView
 	private Label introLayer;
 
 	private final FluentClient fluentClient;
-	private Pad pad;
 	private FluentClient.PadBuilder padBuilder;
 
 	private final ErrorAlertBuilder errorAlertBuilder;
@@ -244,7 +243,8 @@ public class DesktopPadView implements PadView
 			reset();
 			return;
 		}
-		pad = padController.getPad();
+
+		final Pad pad = padController.getPad();
 		padBuilder = fluentClient.pad(pad.getId());
 		namePreviewLabel.setText(pad.getName());
 
@@ -535,7 +535,7 @@ public class DesktopPadView implements PadView
 
 	private void updateIntroLayer()
 	{
-		Double introDuration = pad.getIntroDuration();
+		Double introDuration = padController.getPad().getIntroDuration();
 		if(introDuration == null)
 		{
 			introLayer.setPrefWidth(0);
