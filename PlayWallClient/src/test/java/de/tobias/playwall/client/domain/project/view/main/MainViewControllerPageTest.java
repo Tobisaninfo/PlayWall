@@ -102,8 +102,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem deleteMenuItem = contextMenu.getItems().get(2);
-		robot.interact(deleteMenuItem::fire);
+		final MenuItem menuItem = contextMenu.getItems().get(3);
+		robot.interact(menuItem::fire);
 
 		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
 		verify(client).deletePage(argumentCaptor.capture());
@@ -117,8 +117,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem deleteMenuItem = contextMenu.getItems().get(1);
-		robot.interact(deleteMenuItem::fire);
+		final MenuItem menuItem = contextMenu.getItems().get(1);
+		robot.interact(menuItem::fire);
 
 		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
 		verify(client).duplicatePage(argumentCaptor.capture());
@@ -162,8 +162,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
-		Platform.runLater(() -> robot.interact(deleteMenuItem::fire));
+		final MenuItem menuItem = contextMenu.getItems().getFirst();
+		Platform.runLater(() -> robot.interact(menuItem::fire));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
@@ -182,8 +182,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
-		Platform.runLater(() -> robot.interact(deleteMenuItem::fire));
+		final MenuItem menuItem = contextMenu.getItems().getFirst();
+		Platform.runLater(() -> robot.interact(menuItem::fire));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
@@ -205,8 +205,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem deleteMenuItem = contextMenu.getItems().getFirst();
-		Platform.runLater(() -> robot.interact(deleteMenuItem::fire));
+		final MenuItem menuItem = contextMenu.getItems().getFirst();
+		Platform.runLater(() -> robot.interact(menuItem::fire));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
