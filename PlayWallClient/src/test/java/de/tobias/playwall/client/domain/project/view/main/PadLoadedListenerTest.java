@@ -9,7 +9,9 @@ import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
+import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -65,6 +67,7 @@ class PadLoadedListenerTest extends AbstractViewControllerTest
 
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, false));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -93,6 +96,7 @@ class PadLoadedListenerTest extends AbstractViewControllerTest
 
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 
 		assertThat(padView.getTimeLabel().getText()).isNull();
 
