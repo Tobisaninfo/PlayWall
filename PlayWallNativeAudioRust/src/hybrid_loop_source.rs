@@ -4,7 +4,7 @@ use jni::strings::JNIString;
 use jni::{Env, JavaVM, ScopeToken};
 use rodio::{ChannelCount, Decoder, SampleRate, Source};
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{self, BufReader};
 use std::time::Duration;
 
 pub struct HybridLoopSource {
@@ -26,12 +26,13 @@ impl HybridLoopSource {
         looping_flag_ptr: *const bool,
         jvm: &'static JavaVM,
         java_callback_obj: Global<JObject<'static>>,
-    ) -> Self {
-        let file = File::open(&path).expect("Failed to open file");
+    ) -> io::Result<Self> {
+        let file = File::open(&path)?;
         let reader = BufReader::new(file);
-        let source = Decoder::new(reader).expect("Failed to create decoder");
+        let source = Decoder::new(reader)
+            .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 
-        Self {
+        Ok(Self {
             path,
             current_source: Box::new(source),
             jvm,
@@ -39,7 +40,7 @@ impl HybridLoopSource {
             looping_flag_ptr,
             samples_played: 0,
             has_finished: false,
-        }
+        })
     }
 
     fn is_looping_enabled(&self) -> bool {

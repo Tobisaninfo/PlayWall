@@ -7,6 +7,7 @@ use jni::sys::{jboolean, jdouble};
 use jni::EnvUnowned;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceSinkBuilder, DeviceTrait, Player};
+use std::io;
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -17,14 +18,14 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     e.with_env(|mut e| -> jni::errors::Result<()> {
         let global_obj = e.new_global_ref(&obj)?;
 
-        with_audio_handler(&mut e, obj, |env, audio_handler| {
+        let result = with_audio_handler(&mut e, obj, |env, audio_handler| -> io::Result<()> {
             if audio_handler.media_path.is_none() {
                 env.throw_new(
                     JNIString::new("java/lang/IllegalStateException"),
                     JNIString::new("No media loaded"),
                 )
                     .ok();
-                return;
+                return Ok(());
             }
 
             if audio_handler.audio_stream_handler.is_none() {
@@ -66,7 +67,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 };
 
                 let source =
-                    HybridLoopSource::new(path.clone(), looping_ptr, jvm_static, global_obj);
+                    HybridLoopSource::new(path.clone(), looping_ptr, jvm_static, global_obj)?;
 
                 sink.set_volume(audio_handler.volume);
                 sink.append(source);
@@ -76,7 +77,21 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 sink.play();
                 trace!("Play (from existing audio handler, already playing)");
             }
+            Ok(())
         });
+
+        if let Some(Err(io_err)) = result {
+            let exception_class = if io_err.kind() == io::ErrorKind::NotFound {
+                "java/io/FileNotFoundException"
+            } else {
+                "java/io/IOException"
+            };
+            e.throw_new(
+                JNIString::new(exception_class),
+                JNIString::new(io_err.to_string()),
+            )?;
+        }
+
         Ok(())
     })
         .resolve::<ThrowRuntimeExAndDefault>()
