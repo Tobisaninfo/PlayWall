@@ -49,14 +49,14 @@ public class Toast extends VBox
 		VBox.setVgrow(messageLabel, Priority.ALWAYS);
 
 		final HBox content = new HBox(ViewConstants.DEFAULT_SPACING, iconCircle, textBox);
-		content.setAlignment(Pos.TOP_LEFT);
-		content.setPadding(new Insets(0, 0, 0, ViewConstants.DEFAULT_SPACING));
+		content.setAlignment(Pos.CENTER_LEFT);
+		content.setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 0, ViewConstants.DEFAULT_SPACING, ViewConstants.DEFAULT_SPACING));
 		HBox.setHgrow(textBox, Priority.ALWAYS);
 
 		final HBox row = new HBox(content, closeIcon);
 		row.setAlignment(Pos.TOP_RIGHT);
-		row.setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 8, ViewConstants.DEFAULT_SPACING, 0));
 		HBox.setHgrow(content, Priority.ALWAYS);
+		HBox.setMargin(closeIcon, new Insets(8, 8, 0, 0));
 
 		final HBox outer = new HBox(accent, row);
 		outer.setAlignment(Pos.TOP_LEFT);
