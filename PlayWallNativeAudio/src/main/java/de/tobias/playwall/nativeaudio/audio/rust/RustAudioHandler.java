@@ -146,6 +146,14 @@ public class RustAudioHandler extends AudioHandler
 	}
 
 	@SuppressWarnings("unused")
+	void onError(Throwable exception)
+	{
+		log.error("Playback error during loop", exception);
+		eofCallback.run();
+		position = Duration.ZERO;
+	}
+
+	@SuppressWarnings("unused")
 	void onProgress(double seconds)
 	{
 		position = Duration.ofMillis((long) (seconds * 1000));

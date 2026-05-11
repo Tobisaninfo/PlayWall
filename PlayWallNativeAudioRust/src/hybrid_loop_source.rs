@@ -86,6 +86,22 @@ impl HybridLoopSource {
             let _ = env.call_method(&self.java_callback_obj, JNIString::new("onEof"), sig, &[]);
         });
     }
+
+    fn report_error_as_exception(&self, exception_class: &'static str, message: &str) {
+        self.with_env(|env| {
+            let Ok(class) = env.find_class(JNIString::new(exception_class)) else { return; };
+            let Ok(java_msg) = env.new_string(message) else { return; };
+            let constructor_param = &RuntimeMethodSignature::from_str("(Ljava/lang/String;)V").unwrap();
+            let Ok(exception_obj) = env.new_object(&class, MethodSignature::from(constructor_param), &[JValue::Object(&java_msg)]) else { return; };
+            let method_param = &RuntimeMethodSignature::from_str("(Ljava/lang/Throwable;)V").unwrap();
+            let _ = env.call_method(
+                &self.java_callback_obj,
+                JNIString::new("onError"),
+                MethodSignature::from(method_param),
+                &[JValue::Object(&exception_obj)],
+            );
+        });
+    }
 }
 
 impl Iterator for HybridLoopSource {
@@ -104,12 +120,26 @@ impl Iterator for HybridLoopSource {
         }
 
         if self.is_looping_enabled() {
-            let file = File::open(&self.path).ok()?;
-            let reader = BufReader::new(file);
-            if let Ok(source) = Decoder::new(reader) {
-                self.current_source = Box::new(source);
-                self.samples_played = 0;
-                return self.next();
+            let source = File::open(&self.path)
+                .map_err(|e| (e.to_string(), "java/io/FileNotFoundException"))
+                .and_then(|file| {
+                    Decoder::new(BufReader::new(file))
+                        .map_err(|e| (e.to_string(), "java/io/IOException"))
+                });
+
+            return match source {
+                Ok(source) => {
+                    self.current_source = Box::new(source);
+                    self.samples_played = 0;
+                    self.next()
+                }
+                Err((err_msg, exception_class)) => {
+                    if !self.has_finished {
+                        self.report_error_as_exception(exception_class, &err_msg);
+                        self.has_finished = true;
+                    }
+                    None
+                }
             }
         }
 
