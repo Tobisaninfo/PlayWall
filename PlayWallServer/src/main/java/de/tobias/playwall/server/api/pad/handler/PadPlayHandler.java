@@ -6,6 +6,9 @@ import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.MessageSource;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
 @RequestHandlerTyped(PadPlayRequest.class)
 class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 {
@@ -17,6 +20,13 @@ class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 	@Override
 	void handlePlayback(PadController controller)
 	{
-		controller.play(true);
+		try
+		{
+			controller.play(true);
+		}
+		catch(IOException e)
+		{
+			throw new UncheckedIOException(e);
+		}
 	}
 }

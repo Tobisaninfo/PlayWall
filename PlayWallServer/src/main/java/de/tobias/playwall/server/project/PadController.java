@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
+import java.io.IOException;
 import java.time.Duration;
 
 @Slf4j
@@ -37,14 +38,21 @@ public abstract class PadController
 
 	public void load()
 	{
-		context.publishEvent(new PadLoadedUpdate(pad.getId(), false));
-		log.debug("Loading Pad {}", pad.getId());
-		loadInternal();
-		setStatus(PadControllerStatus.READY);
-		context.publishEvent(new PadLoadedUpdate(pad.getId(), true, getDuration().toMillis()));
+		try
+		{
+			context.publishEvent(new PadLoadedUpdate(pad.getId(), false));
+			log.debug("Loading Pad {}", pad.getId());
+			loadInternal();
+			setStatus(PadControllerStatus.READY);
+			context.publishEvent(new PadLoadedUpdate(pad.getId(), true, getDuration().toMillis()));
+		}
+		catch(IOException e)
+		{
+			log.error("Cannot load pad", e);
+		}
 	}
 
-	protected abstract void loadInternal();
+	protected abstract void loadInternal() throws IOException;
 
 	public void unload()
 	{
@@ -56,7 +64,7 @@ public abstract class PadController
 
 	protected abstract void unloadInternal();
 
-	public abstract void play(boolean withFadeIn);
+	public abstract void play(boolean withFadeIn) throws IOException;
 
 	public abstract void pause();
 

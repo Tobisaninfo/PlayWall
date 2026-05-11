@@ -9,7 +9,6 @@ import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -88,7 +87,6 @@ public class ProjectController
 		}
 	}
 
-	@SneakyThrows
 	private void loadPads()
 	{
 		getLoadedProject()

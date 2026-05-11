@@ -4,6 +4,7 @@ import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.VolumeHelper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.time.Duration;
@@ -33,12 +34,12 @@ public class RustAudioHandler extends AudioHandler
 	private native long createNativeInstance();
 
 	@Override
-	public void play()
+	public void play() throws IOException
 	{
 		playNative();
 	}
 
-	private native void playNative();
+	private native void playNative() throws IOException;
 
 	@Override
 	public void pause()
@@ -109,12 +110,12 @@ public class RustAudioHandler extends AudioHandler
 	private native boolean isMediaLoadedNative();
 
 	@Override
-	public void loadMedia(Path paths)
+	public void loadMedia(Path paths) throws IOException
 	{
 		loadMediaNative(paths.toString());
 	}
 
-	private native void loadMediaNative(String path);
+	private native void loadMediaNative(String path) throws IOException;
 
 	@Override
 	public void unloadMedia()

@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.common.audio;
 
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
 
@@ -12,8 +13,10 @@ public abstract class AudioHandler
 
 	/**
 	 * Start the audio stream
+	 *
+	 * @throws IOException error on file loading, file is missing, format error
 	 */
-	public abstract void play();
+	public abstract void play() throws IOException;
 
 	/**
 	 * Pause the audio stream.
@@ -71,8 +74,9 @@ public abstract class AudioHandler
 	 * prepare a set of media to be played.
 	 *
 	 * @param paths path to the audio files
+	 * @throws IOException error on file loading, file is missing, format error
 	 */
-	public abstract void loadMedia(Path paths);
+	public abstract void loadMedia(Path paths) throws IOException;
 
 	/**
 	 * Unload Media to cleanup resources.

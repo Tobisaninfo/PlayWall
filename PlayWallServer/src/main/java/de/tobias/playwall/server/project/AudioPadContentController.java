@@ -7,6 +7,7 @@ import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import org.springframework.context.ApplicationContext;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.Duration;
 
@@ -24,7 +25,7 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
-	protected void loadInternal()
+	protected void loadInternal() throws IOException
 	{
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
 		audioHandler.setVolume(padContent.getVolume());
@@ -38,7 +39,7 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
-	public void play(boolean withFadeIn)
+	public void play(boolean withFadeIn) throws IOException
 	{
 		audioHandler.setLooping(padContent.isLoop());
 		audioHandler.play();
