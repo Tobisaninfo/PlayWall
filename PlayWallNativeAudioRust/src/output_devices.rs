@@ -20,8 +20,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         let audio_device_class = env
             .find_class(JNIString::new(
                 "de/tobias/playwall/nativeaudio/audio/rust/AudioDevice",
-            ))
-            .expect("AudioDevice class not found");
+            ))?;
         let devices: Vec<_> = host.output_devices().unwrap().collect();
         let default_device = host.default_output_device().unwrap();
 
@@ -52,7 +51,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 )
                 .unwrap();
 
-            result.set_element(env, index, java_audio_device).expect("Failed to set element");
+            result.set_element(env, index, java_audio_device)?;
         }
         Ok(result.into_raw() as jobjectArray)
     })
@@ -65,7 +64,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     object: JObject,
     device_name: JString,
 ) {
-    let _ = env.with_env(|mut env| {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
         let device_name_str: String = device_name.to_string();
         let host = rodio::cpal::default_host();
         let device: Option<_> = host
@@ -80,9 +79,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                     "No output device found with name \"{}\"",
                     device_name_str
                 )),
-            )
-                .unwrap();
-            return Ok::<(), jni::errors::Error>(());
+            )?;
+            return Ok(());
         }
 
         with_audio_handler(&mut env, object, |_, audio_handler| {
@@ -98,6 +96,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             audio_handler.device_name = Some(device_name_str.clone());
             trace!("Init output stream and sink for device {}", device_name_str);
         });
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }

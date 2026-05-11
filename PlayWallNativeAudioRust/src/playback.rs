@@ -14,8 +14,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut e: EnvUnowned,
     obj: JObject,
 ) {
-    let _ = e.with_env(|mut e| {
-        let global_obj = e.new_global_ref(&obj).expect("Failed to create global ref");
+    e.with_env(|mut e| -> jni::errors::Result<()> {
+        let global_obj = e.new_global_ref(&obj)?;
 
         with_audio_handler(&mut e, obj, |env, audio_handler| {
             if audio_handler.media_path.is_none() {
@@ -23,7 +23,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                     JNIString::new("java/lang/IllegalStateException"),
                     JNIString::new("No media loaded"),
                 )
-                .unwrap();
+                    .ok();
                 return;
             }
 
@@ -77,8 +77,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 trace!("Play (from existing audio handler, already playing)");
             }
         });
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -86,7 +87,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: EnvUnowned,
     obj: JObject,
 ) {
-    let _ = env.with_env(|mut env| {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             if audio_handler.audio_stream_handler.as_ref().is_some() {
                 audio_handler
@@ -100,8 +101,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 trace!("No audio handler to pause, skipping");
             }
         });
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -109,7 +111,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: EnvUnowned,
     obj: JObject,
 ) {
-    let _ = env.with_env(|mut env| {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             if let Some(handler) = audio_handler.audio_stream_handler.take() {
                 handler.sink.stop();
@@ -117,8 +119,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             }
             trace!("Stop");
         });
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -159,12 +162,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
     looping: jboolean,
 ) {
-    let _ = env.with_env(|mut env| {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             audio_handler.looping = looping;
         });
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -180,7 +184,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                         JNIString::new("java/lang/IllegalStateException"),
                         JNIString::new("No media loaded"),
                     )
-                        .unwrap();
+                        .ok();
                     return 0.0;
                 }
                 audio_handler.duration.unwrap() as jdouble
@@ -197,7 +201,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
     volume: jdouble,
 ) {
-    let _ = env.with_env(|mut env| {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             audio_handler.volume = volume as f32;
             if audio_handler.audio_stream_handler.as_ref().is_some() {
@@ -212,6 +216,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 trace!("No audio handler to set volume, skipping");
             }
         });
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }

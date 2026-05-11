@@ -88,7 +88,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     _class: JClass,
     logLevel: JString,
 ) {
-    let _ = env.with_env(|_| {
+    env.with_env(|_| -> jni::errors::Result<()> {
         let log_level_str: String = logLevel.to_string();
         let filter = EnvFilter::new(log_level_str).add_directive("jni=warn".parse().unwrap());
 
@@ -100,8 +100,9 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         let _ = subscriber.try_init();
 
         debug!("Initialized rust audio component");
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 const NATIVE_POINTER_FIELD_NAME: &'static str = "nativePointer";
@@ -113,23 +114,21 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     this: JObject,
 ) {
     debug!("Creating native instance");
-    let _ = env.with_env(|env| {
-        if (env
+    env.with_env(|env| -> jni::errors::Result<()> {
+        if env
             .get_field(
                 &this,
                 JNIString::new(NATIVE_POINTER_FIELD_NAME),
                 FieldSignature::from(&RuntimeFieldSignature::from_str(NATIVE_POINTER_FIELD_TYPE)?),
-            )
-            .unwrap()
-            .j()
-            .unwrap())
+            )?
+            .j()?
             != 0
         {
             env.throw_new(
                 JNIString::new("java/lang/IllegalStateException"),
                 JNIString::new("Native instance already created"),
             )?;
-            return Ok::<(), jni::errors::Error>(());
+            return Ok(());
         }
 
         let audio_handler = Box::new(AudioHandler::new());
@@ -140,11 +139,11 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             JNIString::new(NATIVE_POINTER_FIELD_NAME),
             FieldSignature::from(&RuntimeFieldSignature::from_str(NATIVE_POINTER_FIELD_TYPE)?),
             JValue::Long(ptr),
-        )
-            .unwrap();
+        )?;
         trace!("Created audio_handler with ptr: {}", ptr);
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -152,16 +151,14 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: EnvUnowned,
     this: JObject,
 ) {
-    let _ = env.with_env(|env| {
+    env.with_env(|env| -> jni::errors::Result<()> {
         let ptr = env
             .get_field(
                 &this,
                 JNIString::new(NATIVE_POINTER_FIELD_NAME),
                 FieldSignature::from(&RuntimeFieldSignature::from_str(NATIVE_POINTER_FIELD_TYPE)?),
-            )
-            .unwrap()
-            .j()
-            .unwrap();
+            )?
+            .j()?;
 
         if ptr != 0 {
             unsafe {
@@ -172,12 +169,12 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 JNIString::new(NATIVE_POINTER_FIELD_NAME),
                 FieldSignature::from(&RuntimeFieldSignature::from_str(NATIVE_POINTER_FIELD_TYPE)?),
                 JValue::Long(0),
-            )
-                .unwrap();
+            )?;
             trace!("Destroyed audio_handler with ptr: {}", ptr);
         }
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -186,46 +183,65 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     obj: JObject,
     path: JString,
 ) {
-    let _ = env.with_env(|mut env| {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
         let path_str: String = path.to_string();
         debug!("Load path: {}", &path_str);
 
-        if let Ok(file) = File::open(&path_str) {
-            let media_source_stream = MediaSourceStream::new(Box::new(file), Default::default());
-            let hint = Hint::new();
-            let probed = get_probe()
-                .format(
+        match File::open(&path_str) {
+            Ok(file) => {
+                let media_source_stream = MediaSourceStream::new(Box::new(file), Default::default());
+                let hint = Hint::new();
+                let probed = match get_probe().format(
                     &hint,
                     media_source_stream,
                     &Default::default(),
                     &Default::default(),
-                )
-                .unwrap();
-            let format = probed.format;
+                ) {
+                    Ok(p) => p,
+                    Err(e) => {
+                        env.throw_new(
+                            JNIString::new("java/io/IOException"),
+                            JNIString::new(format!("Failed to probe media format: {}", e)),
+                        )?;
+                        return Ok(());
+                    }
+                };
+                let format = probed.format;
 
-            let track = format.default_track().unwrap();
-            let params = &track.codec_params;
+                let track = match format.default_track() {
+                    Some(t) => t,
+                    None => {
+                        env.throw_new(
+                            JNIString::new("java/io/IOException"),
+                            JNIString::new("No audio track found in media file"),
+                        )?;
+                        return Ok(());
+                    }
+                };
+                let params = &track.codec_params;
 
-            let duration_seconds;
-            if let (Some(sample_rate), Some(n_frames)) = (params.sample_rate, params.n_frames) {
-                duration_seconds = n_frames as f64 / sample_rate as f64;
-            } else {
-                duration_seconds = 0.0;
+                let duration_seconds = if let (Some(sample_rate), Some(n_frames)) = (params.sample_rate, params.n_frames) {
+                    n_frames as f64 / sample_rate as f64
+                } else {
+                    0.0
+                };
+
+                with_audio_handler(&mut env, obj, |_env, audio_handler| {
+                    audio_handler.setMedia(path_str, duration_seconds);
+                    trace!("Loaded media");
+                });
             }
-            with_audio_handler(&mut env, obj, |_env, audio_handler| {
-                audio_handler.setMedia(path_str, duration_seconds);
-                trace!("Loaded media");
-            });
-        } else {
-            env.throw_new(
-                JNIString::new("java/io/FileNotFoundException"),
-                JNIString::new(format!("File not found: {}", &path_str)),
-            )
-                .unwrap();
+            Err(_) => {
+                env.throw_new(
+                    JNIString::new("java/io/FileNotFoundException"),
+                    JNIString::new(format!("File not found: {}", &path_str)),
+                )?;
+            }
         }
 
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -233,14 +249,15 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: EnvUnowned,
     obj: JObject,
 ) {
-    let _ = env.with_env(|mut env| {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             audio_handler.clearMedia();
             trace!("Unload media");
         });
 
-        Ok::<(), jni::errors::Error>(())
-    });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
 }
 
 #[unsafe(no_mangle)]
@@ -281,7 +298,7 @@ fn with_audio_handler<T>(
             JNIString::new("java/lang/IllegalStateException"),
             JNIString::new("audio_handler not initialized"),
         )
-            .unwrap();
+            .ok();
         None
     } else {
         let audio_handler: &mut AudioHandler = unsafe { &mut *(ptr as *mut AudioHandler) };
