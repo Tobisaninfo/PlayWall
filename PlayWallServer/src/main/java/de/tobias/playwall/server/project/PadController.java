@@ -48,6 +48,8 @@ public abstract class PadController
 		}
 		catch(IOException e)
 		{
+			setStatus(PadControllerStatus.ERROR);
+			context.publishEvent(new PadLoadedUpdate(pad.getId(), true, null));
 			log.error("Cannot load pad", e);
 		}
 	}

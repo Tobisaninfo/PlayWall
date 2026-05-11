@@ -5,6 +5,7 @@ import de.tobias.playwall.common.api.pad.PadControllerStatus;
 public enum PadStatus
 {
 	EMPTY,
+	ERROR,
 	READY,
 	PLAY,
 	PAUSE;
@@ -14,6 +15,7 @@ public enum PadStatus
 		return switch(status)
 		{
 			case EMPTY -> PadStatus.EMPTY;
+			case ERROR -> PadStatus.ERROR;
 			case READY, STOP, EOF -> PadStatus.READY;
 			case PLAY -> PadStatus.PLAY;
 			case PAUSE -> PadStatus.PAUSE;

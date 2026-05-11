@@ -318,7 +318,7 @@ public class DesktopPadView implements PadView
 	public void showLoading(boolean isLoading)
 	{
 		busyView.showProgress(isLoading);
-		updateStatus(isLoading ? PadStatus.EMPTY : PadStatus.READY);
+		updateStatus(isLoading ? PadStatus.EMPTY : padController.getStatus());
 	}
 
 	@Override
@@ -332,6 +332,8 @@ public class DesktopPadView implements PadView
 			Platform.runLater(() -> {
 				this.updateButtonStates();
 				this.updateTimeNodes();
+
+				errorLabel.setVisible(status == PadStatus.ERROR);
 
 				pseudoClassStateChanged(PLAY_CLASS, status == PadStatus.PLAY);
 			});
@@ -502,6 +504,7 @@ public class DesktopPadView implements PadView
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 				stopButton.setDisable(true);
 			}
+			case ERROR -> buttonBox.getChildren().setAll(settingsButton);
 			case READY ->
 			{
 				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
