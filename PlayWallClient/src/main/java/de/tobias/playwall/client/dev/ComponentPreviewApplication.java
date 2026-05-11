@@ -6,6 +6,8 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
 import de.tobias.playwall.client.view.style.Styleable;
+import de.tobias.playwall.client.view.toast.Toast;
+import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableMap;
@@ -17,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
@@ -93,13 +96,15 @@ public class ComponentPreviewApplication extends Application
 				new Separator(),
 				section("TableView", tableView()),
 				new Separator(),
-				section("TreeView", treeView())
+				section("TreeView", treeView()),
+				new Separator(),
+				section("MaterialToastManager", toasts())
 		);
 
 		ScrollPane scrollPane = new ScrollPane(root);
 		scrollPane.setFitToWidth(true);
 
-		Scene scene = new Scene(scrollPane, 860, 750);
+		Scene scene = new Scene(new StackPane(scrollPane), 860, 750);
 
 		stage.setScene(scene);
 		stage.setTitle("Component Preview");
@@ -456,5 +461,16 @@ public class ComponentPreviewApplication extends Application
 		treeView.setMaxWidth(280);
 		treeView.setMaxHeight(180);
 		return treeView;
+	}
+
+	private Node toasts()
+	{
+		return new VBox(
+				ITEM_SPACING,
+				new Toast("Erfolg", "Die Aktion wurde erfolgreich abgeschlossen.", ToastType.SUCCESS, _ -> {}),
+				new Toast("Warnung", "Bitte überprüfe deine Einstellungen.", ToastType.WARNING, _ -> {}),
+				new Toast("Fehler", "Ein unerwarteter Fehler ist aufgetreten.", ToastType.ERROR, _ -> {}),
+				new Toast("Info", "Eine neue Version ist verfügbar.", ToastType.INFO, _ -> {})
+		);
 	}
 }

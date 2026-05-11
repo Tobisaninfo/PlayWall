@@ -1,17 +1,12 @@
 package de.tobias.playwall.client.view.toast;
 
-import de.thecodelabs.utils.ui.icon.FontAwesomeType;
-import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.animation.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -25,7 +20,7 @@ public class MaterialToastManager
 	private final Set<Node> dismissingToasts = new HashSet<>();
 	private final Pane overlay;
 
-	private static final double TOAST_WIDTH = 320;
+	static final double TOAST_WIDTH = 320;
 	private static final double GAP = 8;
 	private static final double MARGIN = 16;
 
@@ -47,7 +42,21 @@ public class MaterialToastManager
 
 	public void show(String title, String message, ToastType type)
 	{
-		final Node toast = buildToast(title, message, type);
+		final Node toast = buildAndScheduleToast(title, message, type);
+
+		final PauseTransition wait = new PauseTransition(DURATION_PAUSE);
+		wait.setOnFinished(_ -> dismiss(toast));
+		wait.play();
+	}
+
+	public void showPermanent(String title, String message, ToastType type)
+	{
+		buildAndScheduleToast(title, message, type);
+	}
+
+	private Node buildAndScheduleToast(String title, String message, ToastType type)
+	{
+		final Node toast = new Toast(title, message, type, this::dismiss);
 
 		toast.setOpacity(0);
 		overlay.getChildren().add(toast);
@@ -77,66 +86,6 @@ public class MaterialToastManager
 				}
 			}
 		});
-
-		final PauseTransition wait = new PauseTransition(DURATION_PAUSE);
-		wait.setOnFinished(_ -> dismiss(toast));
-		wait.play();
-	}
-
-	private Node buildToast(String title, String message, ToastType type)
-	{
-		final Region accent = new Region();
-		accent.setPrefWidth(7);
-		accent.setMinWidth(7);
-		accent.getStyleClass().addAll("accent", type.name().toLowerCase());
-
-		final FontIcon iconLabel = new FontIcon(type.getIcon());
-
-		final StackPane iconCircle = new StackPane(iconLabel);
-		iconCircle.setMaxSize(28, 28);
-		iconCircle.setPrefSize(28, 28);
-		iconCircle.setMinSize(28, 28);
-		iconCircle.getStyleClass().addAll("icon-circle", type.name().toLowerCase());
-		StackPane.setAlignment(iconLabel, Pos.CENTER);
-
-		final Label titleLabel = new Label(title);
-		titleLabel.getStyleClass().add("title");
-
-		final Label messageLabel = new Label(message);
-		messageLabel.getStyleClass().add("message");
-		messageLabel.setWrapText(true);
-		messageLabel.setMaxWidth(210);
-		messageLabel.setMinHeight(Region.USE_PREF_SIZE);
-
-		final FontIcon closeIcon = new FontIcon(FontAwesomeType.XMARK_SOLID);
-		closeIcon.getStyleClass().add("close-button");
-
-		final VBox textBox = new VBox(3, titleLabel, messageLabel);
-		textBox.setAlignment(Pos.TOP_LEFT);
-		VBox.setVgrow(messageLabel, Priority.ALWAYS);
-
-		final HBox content = new HBox(ViewConstants.DEFAULT_SPACING, iconCircle, textBox);
-		content.setAlignment(Pos.TOP_LEFT);
-		content.setPadding(new Insets(0, 0, 0, ViewConstants.DEFAULT_SPACING));
-		HBox.setHgrow(textBox, Priority.ALWAYS);
-
-		final HBox row = new HBox(content, closeIcon);
-		row.setAlignment(Pos.TOP_RIGHT);
-		row.setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 8, ViewConstants.DEFAULT_SPACING, 0));
-		HBox.setHgrow(content, Priority.ALWAYS);
-
-		final HBox outer = new HBox(accent, row);
-		outer.setAlignment(Pos.TOP_LEFT);
-		HBox.setHgrow(row, Priority.ALWAYS);
-		HBox.setHgrow(accent, Priority.NEVER);
-
-		final VBox toast = new VBox(outer);
-		toast.getStyleClass().add("toast");
-		toast.setPrefWidth(TOAST_WIDTH);
-		toast.setMaxWidth(TOAST_WIDTH);
-		toast.setMaxHeight(Region.USE_COMPUTED_SIZE);
-
-		closeIcon.setOnMouseClicked(_ -> dismiss(toast));
 
 		return toast;
 	}
