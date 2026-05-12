@@ -127,9 +127,13 @@ public class DesktopPadView implements PadView
 		timeLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 
 		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID));
+		loopLabel.setManaged(false);
 		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.LINK_SOLID));
+		triggerLabel.setManaged(false);
 		playlistLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
+		playlistLabel.setManaged(false);
 		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID));
+		errorLabel.setManaged(false);
 
 		infoBox = new PadHBox(5);
 		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
@@ -256,6 +260,7 @@ public class DesktopPadView implements PadView
 		if(padContent instanceof Loopable loopable)
 		{
 			loopLabel.setVisible(loopable.isLoop());
+			loopLabel.setManaged(loopable.isLoop());
 		}
 
 		if(controller.getStatus() != null)
