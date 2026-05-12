@@ -2,6 +2,7 @@
 
 <?import de.tobias.playwall.client.view.components.settings.SettingsPageWithButtons?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
+<?import de.tobias.playwall.client.view.components.ValidatedTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
@@ -15,7 +16,7 @@
                   saveText="%ui.settings.button.save"
                   cancelText="%ui.settings.button.cancel">
         <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="Name">
-            <TextField fx:id="textFieldName" prefWidth="300"/>
+            <ValidatedTextField fx:id="textFieldName" prefWidth="300"/>
         </SettingsRow>
 
         <Separator/>

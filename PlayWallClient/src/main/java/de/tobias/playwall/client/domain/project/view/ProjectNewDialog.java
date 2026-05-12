@@ -10,16 +10,19 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ModalDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
+import de.tobias.playwall.client.view.components.ValidatedTextField;
 import de.tobias.playwall.client.view.components.settings.SettingsPageWithButtons;
+import de.tobias.playwall.client.view.validation.Validators;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @ViewController(path = "de/tobias/playwall/client/view/dialog", view = "ProjectNewDialog")
 @Getter(AccessLevel.PACKAGE)
@@ -29,7 +32,7 @@ public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 	@FXML
 	private SettingsPageWithButtons settingsPage;
 	@FXML
-	private TextField textFieldName;
+	private ValidatedTextField textFieldName;
 	@FXML
 	private Spinner<Integer> spinnerNumberOfHorizontalPads;
 	@FXML
@@ -53,7 +56,11 @@ public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 	@Override
 	protected void init()
 	{
-		settingsPage.getSaveButton().disableProperty().bind(textFieldName.textProperty().isEmpty());
+		final List<String> existingProjectNames = fetchExistingProjectNames();
+		textFieldName.setValidator(Validators.notEmpty(Localization.getString(Strings.UI_DIALOG_PROJECT_CREATE_NAME_EMPTY)).
+				and(input -> existingProjectNames.contains(input) ? Localization.getString(Strings.UI_DIALOG_PROJECT_CREATE_NAME_ALREADY_EXISTS) : null)
+		);
+		settingsPage.getSaveButton().disableProperty().bind(textFieldName.validProperty().not());
 	}
 
 	@Override
@@ -101,5 +108,19 @@ public class ProjectNewDialog extends ModalDialogBase<ProjectMetadata>
 	private void cancelButtonHandler(ActionEvent event)
 	{
 		getStageContainer().ifPresent(NVCStage::close);
+	}
+
+	private List<String> fetchExistingProjectNames()
+	{
+		try
+		{
+			final List<ProjectMetadata> projectsMetadata = client.projects().list().getAllProjectsMetadata();
+			return projectsMetadata.stream().map(ProjectMetadata::getName).toList();
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot fetch projects", e);
+		}
+		return List.of();
 	}
 }

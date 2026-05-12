@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.view.components;
 
+import de.tobias.playwall.client.view.validation.Validator;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -7,17 +8,6 @@ import javafx.scene.layout.GridPane;
 
 public class TextInputErrorLabelDialog extends TextInputDialog
 {
-	public interface Validator
-	{
-		/**
-		 * Validate the user input and return error label text, if user input is invalid.
-		 *
-		 * @param input current user input
-		 * @return human-readable error message, if input is invalid, otherwise null
-		 */
-		String validate(String input);
-	}
-
 	private final Validator validator;
 
 	public TextInputErrorLabelDialog(String initial, Validator validator)

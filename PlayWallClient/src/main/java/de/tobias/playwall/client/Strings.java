@@ -138,6 +138,9 @@ public class Strings
 	public static final String UI_ERRORS_SAVE  = "ui.errors.save";
 	public static final String UI_ERRORS_UNDO  = "ui.errors.undo";
 	public static final String UI_ERRORS_REDO  = "ui.errors.redo";
+	public static final String UI_DIALOG_PROJECT_CREATE_NAME_EMPTY = "ui.dialog.project.create.name.empty";
+	public static final String UI_DIALOG_PROJECT_CREATE_NAME_ALREADY_EXISTS = "ui.dialog.project.create.name.already.exists";
+
 	public static final String UI_ERRORS_PROJECT_ADD = "ui.errors.project.add";
 	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
 	public static final String UI_ERRORS_PROJECT_PAD_ERRORS_TITLE = "ui.errors.project.pad.errors.title";

@@ -1,4 +1,5 @@
 @use "sass:meta";
+@use "components/variables";
 
 @font-face {
     font-family: "Lato";
@@ -60,4 +61,8 @@
 
 .circle {
     -fx-background-radius: 50%;
+}
+
+*.error-label {
+    -fx-text-fill: variables.$danger-text-color;
 }

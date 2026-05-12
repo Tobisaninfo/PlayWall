@@ -27,10 +27,6 @@
         }
     }
 
-    *.error-label {
-        -fx-text-fill: variables.$danger-text-color;
-    }
-
     .details-button {
         .text {
             -fx-fill: variables.$component-text-color;
