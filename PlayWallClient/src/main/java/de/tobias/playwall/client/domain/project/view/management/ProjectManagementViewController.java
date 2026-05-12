@@ -111,8 +111,8 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		}
 		catch(PlayWallApiException e)
 		{
-			log.error("Cannot fetch project", e);
-			showErrorMessage(e.getMessage());
+			log.error("Cannot fetch projects", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_LIST), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
