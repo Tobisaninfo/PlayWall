@@ -7,10 +7,7 @@ import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
 import lombok.Getter;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Getter
@@ -148,5 +145,12 @@ public class ClientProjectController
 	{
 		return padControllers.values().stream()
 				.anyMatch(padController -> padController.getStatus() == PadStatus.PLAY);
+	}
+
+	public List<ClientPadController> getPadControllersWithState(PadStatus status)
+	{
+		return padControllers.values().stream()
+				.filter(padController -> padController.getStatus() == status)
+				.toList();
 	}
 }

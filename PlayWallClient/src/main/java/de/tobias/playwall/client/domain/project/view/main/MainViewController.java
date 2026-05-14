@@ -192,7 +192,7 @@ public class MainViewController extends ViewControllerBase
 			onConnectionStateChanged(client.connectionStateProperty().get());
 		}
 
-		projectLoadedListener = new ProjectLoadedListener(this);
+		projectLoadedListener = new ProjectLoadedListener(this, projectController);
 		eventHandler.registerListener(projectLoadedListener);
 		projectListener = new ProjectListener(projectMapper, this);
 		eventHandler.registerListener(projectListener);
