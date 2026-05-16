@@ -130,6 +130,7 @@ public class Strings
 	public static final String UI_ERRORS_PROJECT_LOAD  = "ui.errors.project.load";
 	public static final String UI_ERRORS_PROJECT_PAD_ERRORS_TITLE = "ui.errors.project.pad.errors.title";
 	public static final String UI_ERRORS_PROJECT_PAD_ERRORS_MESSAGE = "ui.errors.project.pad.errors.message";
+	public static final String UI_ERRORS_PROJECT_PAD_ERRORS_LINK = "ui.errors.project.pad.errors.link";
 	public static final String UI_ERRORS_PROJECT_SAVE_STATUS  = "ui.errors.project.save.status";
 	public static final String UI_ERRORS_PROJECT_RENAME_EMPTY = "ui.errors.project.rename.empty";
 	public static final String UI_ERRORS_PROJECT_RENAME_DUPLICATE = "ui.errors.project.rename.duplicate";

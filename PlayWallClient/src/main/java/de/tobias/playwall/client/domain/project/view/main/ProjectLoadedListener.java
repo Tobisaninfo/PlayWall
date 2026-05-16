@@ -6,6 +6,7 @@ import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
+import de.tobias.playwall.client.view.toast.ToastAction;
 import de.tobias.playwall.client.view.toast.ToastType;
 import de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate;
 import javafx.application.Platform;
@@ -31,7 +32,8 @@ public class ProjectLoadedListener implements UpdateMessageEventListener<Project
 					mainViewController.getMaterialToastManager().showPermanent(
 							Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_TITLE),
 							Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_MESSAGE, padControllersWithErrors.size()),
-							ToastType.ERROR));
+							ToastType.ERROR,
+							new ToastAction(Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_LINK), () -> System.out.println("Clicked"))));
 		}
 	}
 
