@@ -54,6 +54,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -77,6 +78,7 @@ import java.util.stream.Collectors;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
+import static de.tobias.playwall.client.view.components.ViewConstants.DEFAULT_CONTEXT_MANU_GAP;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
 @RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
@@ -107,6 +109,7 @@ public class MainViewController extends ViewControllerBase
 	private HBox toolbar;
 	@FXML
 	private Button pageAddButton;
+	private ContextMenu pageAddButtonContextMenu;
 	@FXML
 	private GlobalColorPicker globalColorPicker;
 	@FXML
@@ -242,6 +245,12 @@ public class MainViewController extends ViewControllerBase
 		pageAddButton.setPrefSize(30, 30);
 		pageAddButton.setMinSize(30, 30);
 		pageAddButton.setMaxSize(30, 30);
+
+		pageAddButtonContextMenu = new ContextMenu();
+		final MenuItem newPageMenuItem = new MenuItem(getString(Strings.UI_PAGE_ADD_NEW), new FontIcon(FontAwesomeType.PLUS_SOLID));
+		newPageMenuItem.setOnAction(this::onPageAddNew);
+		final MenuItem importPageMenuItem = new MenuItem(getString(Strings.UI_PAGE_ADD_IMPORT), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
+		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
 		eventDispatcher.addPadInputListener(new FileDragListener());
 	}
@@ -748,6 +757,11 @@ public class MainViewController extends ViewControllerBase
 
 	@FXML
 	private void onPageAdd(ActionEvent event)
+	{
+		pageAddButtonContextMenu.show(pageAddButton, Side.BOTTOM, 0, DEFAULT_CONTEXT_MANU_GAP);
+	}
+
+	private void onPageAddNew(ActionEvent event)
 	{
 		try
 		{
