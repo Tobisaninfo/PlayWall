@@ -563,7 +563,8 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			final ExportFile export = client.currentProject().page(page.getId()).export();
-			final String initialFileName = Localization.getString(Strings.UI_PAGE_EXPORT_NAME, projectController.getProject().getMetadata().getName(), page.getName());
+			final String initialFileName = Localization.getString(Strings.UI_PAGE_EXPORT_NAME, projectController.getProject().getMetadata().getName(), page.getName())
+					.replaceAll("[^a-zA-Z0-9\\s\\-_]", "_");
 
 			final MimeType mimeType = MimeType.getByMimeType(export.mimetype());
 			fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
