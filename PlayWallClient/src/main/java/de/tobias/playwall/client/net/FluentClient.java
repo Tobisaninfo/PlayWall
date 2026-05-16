@@ -68,6 +68,8 @@ public interface FluentClient
 
 		void addPage() throws PlayWallApiException;
 
+		void importPage(ExportFile pageFile) throws PlayWallApiException;
+
 		void reorderPages(Map<UUID, Integer> positions) throws PlayWallApiException;
 
 		PageBuilder page(UUID pageId);

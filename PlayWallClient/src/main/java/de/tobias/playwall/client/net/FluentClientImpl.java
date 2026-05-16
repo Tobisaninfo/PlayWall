@@ -177,6 +177,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public void importPage(ExportFile pageFile) throws PlayWallApiException
+		{
+			delegate.importPage(pageFile);
+		}
+
+		@Override
 		public void reorderPages(Map<UUID, Integer> positions) throws PlayWallApiException
 		{
 			delegate.reorderPage(positions);

@@ -250,6 +250,7 @@ public class MainViewController extends ViewControllerBase
 		final MenuItem newPageMenuItem = new MenuItem(getString(Strings.UI_PAGE_ADD_NEW), new FontIcon(FontAwesomeType.PLUS_SOLID));
 		newPageMenuItem.setOnAction(this::onPageAddNew);
 		final MenuItem importPageMenuItem = new MenuItem(getString(Strings.UI_PAGE_ADD_IMPORT), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
+		importPageMenuItem.setOnAction(this::onPageImport);
 		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
 		eventDispatcher.addPadInputListener(new FileDragListener());
@@ -771,6 +772,32 @@ public class MainViewController extends ViewControllerBase
 		{
 			log.error("Cannot add page", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_ADD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+	}
+
+	private void onPageImport(ActionEvent event)
+	{
+		final MimeType mimeType = MimeType.APPLICATION_JSON;
+		fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
+		final Optional<Path> pathOptional = fileChooserWrapper.showOpenFile(getContainingWindow());
+		if(pathOptional.isEmpty())
+		{
+			return;
+		}
+		try
+		{
+			final byte[] bytes = Files.readAllBytes(pathOptional.get());
+			client.currentProject().importPage(new ExportFile(mimeType.getMimeTypeValue(), bytes));
+		}
+		catch(IOException e)
+		{
+			log.error("Cannot read file", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_IMPORT), e.getMessage(), getContainingWindow()).showAndWait();
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot import page", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_IMPORT), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 

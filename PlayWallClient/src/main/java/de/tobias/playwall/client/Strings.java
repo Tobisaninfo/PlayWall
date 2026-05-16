@@ -147,5 +147,6 @@ public class Strings
 	public static final String UI_ERRORS_PROJECT_SETTINGS_SAVE = "ui.errors.project.settings.save";
 	public static final String UI_ERRORS_PROGRAM_SETTINGS_SAVE = "ui.errors.program.settings.save";
 	public static final String UI_ERRORS_PAGE_EXPORT = "ui.errors.page.export";
+	public static final String UI_ERRORS_PAGE_IMPORT = "ui.errors.page.import";
 	public static final String UI_ERRORS_REPLACE_MEDIA = "ui.errors.replace.media";
 }

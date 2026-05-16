@@ -234,6 +234,12 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public void importPage(ExportFile pageFile) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PageImportRequest(pageFile.mimetype(), Base64.getEncoder().encodeToString(pageFile.data())));
+	}
+
+	@Override
 	public void play(UUID padId) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new PadPlayRequest(padId));

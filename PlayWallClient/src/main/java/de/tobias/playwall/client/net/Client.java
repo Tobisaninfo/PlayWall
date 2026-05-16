@@ -69,6 +69,8 @@ public interface Client
 
 	ExportFile exportPage(UUID pageId) throws PlayWallApiException;
 
+	void importPage(ExportFile pageFile) throws PlayWallApiException;
+
 	void play(UUID padId) throws PlayWallApiException;
 
 	void pause(UUID padId) throws PlayWallApiException;
