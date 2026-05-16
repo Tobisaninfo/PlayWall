@@ -11,7 +11,6 @@ import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -19,15 +18,20 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.io.IOException;
 import java.util.Optional;
 
-@AllArgsConstructor
 @RequestHandlerTyped(PageDuplicateRequest.class)
-class PageDuplicateHandler implements UndoableRequestHandler<PageDuplicateRequest>
+class PageDuplicateHandler extends UndoableRequestHandler<PageDuplicateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
 	private final PageMapper mapper;
-	private final MessageSource messageSource;
-	private final ApplicationContext context;
+
+	PageDuplicateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService, PageMapper mapper)
+	{
+		super(messageSource, context);
+		this.projectController = projectController;
+		this.projectService = projectService;
+		this.mapper = mapper;
+	}
 
 	@Override
 	public Optional<UndoItem> handleRequest(PageDuplicateRequest requestMessage) throws IOException

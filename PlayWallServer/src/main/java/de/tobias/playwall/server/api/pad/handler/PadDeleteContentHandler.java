@@ -21,21 +21,16 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.util.Optional;
 
 @RequestHandlerTyped(PadDeleteContentRequest.class)
-class PadDeleteContentHandler implements UndoableRequestHandler<PadDeleteContentRequest>
+class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentRequest>
 {
 	private final ProjectController projectController;
-
-	private final ApplicationContext context;
 	private final PadMapper padMapper;
 
-	private final MessageSource messageSource;
-
-	public PadDeleteContentHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, MessageSource messageSource)
+	PadDeleteContentHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, PadMapper padMapper)
 	{
+		super(messageSource, context);
 		this.projectController = projectController;
-		this.context = context;
 		this.padMapper = padMapper;
-		this.messageSource = messageSource;
 	}
 
 	@Override

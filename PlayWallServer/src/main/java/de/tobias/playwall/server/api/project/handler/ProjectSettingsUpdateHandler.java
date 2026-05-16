@@ -17,7 +17,6 @@ import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -29,19 +28,25 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RequestHandlerTyped(ProjectSettingsUpdateRequest.class)
-@RequiredArgsConstructor
-class ProjectSettingsUpdateHandler implements UndoableRequestHandler<ProjectSettingsUpdateRequest>
+class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
-	private final MessageSource messageSource;
-	private final ApplicationContext context;
 
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
 
 	private String shortDescription;
 	private String longDescription;
+
+	public ProjectSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService, ProjectMetadataMapper projectMetadataMapper, ProjectMapper projectMapper)
+	{
+		super(messageSource, context);
+		this.projectController = projectController;
+		this.projectService = projectService;
+		this.projectMetadataMapper = projectMetadataMapper;
+		this.projectMapper = projectMapper;
+	}
 
 	@PostConstruct
 	void init()

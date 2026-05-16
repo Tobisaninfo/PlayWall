@@ -21,21 +21,16 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.util.Optional;
 
 @RequestHandlerTyped(PadSettingsUpdateRequest.class)
-class PadSettingsUpdateHandler implements UndoableRequestHandler<PadSettingsUpdateRequest>
+class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
-
-	private final ApplicationContext context;
 	private final PadMapper padMapper;
 
-	private final MessageSource messageSource;
-
-	public PadSettingsUpdateHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, MessageSource messageSource)
+	PadSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, PadMapper padMapper)
 	{
+		super(messageSource, context);
 		this.projectController = projectController;
-		this.context = context;
 		this.padMapper = padMapper;
-		this.messageSource = messageSource;
 	}
 
 	@Override

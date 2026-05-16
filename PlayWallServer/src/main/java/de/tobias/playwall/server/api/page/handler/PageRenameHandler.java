@@ -9,7 +9,6 @@ import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,14 +17,18 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-@AllArgsConstructor
 @RequestHandlerTyped(PageRenameRequest.class)
-class PageRenameHandler implements UndoableRequestHandler<PageRenameRequest>
+class PageRenameHandler extends UndoableRequestHandler<PageRenameRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
-	private final MessageSource messageSource;
-	private final ApplicationContext context;
+
+	PageRenameHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService)
+	{
+		super(messageSource, context);
+		this.projectController = projectController;
+		this.projectService = projectService;
+	}
 
 	@Override
 	public Optional<UndoItem> handleRequest(PageRenameRequest requestMessage) throws IOException

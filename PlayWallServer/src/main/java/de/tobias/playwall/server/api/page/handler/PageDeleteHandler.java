@@ -14,22 +14,26 @@ import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Optional;
 
-@AllArgsConstructor
 @RequestHandlerTyped(PageDeleteRequest.class)
-class PageDeleteHandler implements UndoableRequestHandler<PageDeleteRequest>
+class PageDeleteHandler extends UndoableRequestHandler<PageDeleteRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
 	private final PageMapper pageMapper;
-	private final ApplicationContext context;
-	private final MessageSource messageSource;
+
+	PageDeleteHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService, PageMapper pageMapper)
+	{
+		super(messageSource, context);
+		this.projectController = projectController;
+		this.projectService = projectService;
+		this.pageMapper = pageMapper;
+	}
 
 	@Override
 	public Optional<UndoItem> handleRequest(PageDeleteRequest requestMessage)

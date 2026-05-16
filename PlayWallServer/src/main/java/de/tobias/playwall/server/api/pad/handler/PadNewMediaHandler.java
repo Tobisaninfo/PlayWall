@@ -31,23 +31,19 @@ import java.util.Optional;
 import java.util.concurrent.Executor;
 
 @RequestHandlerTyped(PadNewMediaRequest.class)
-class PadNewMediaHandler implements UndoableRequestHandler<PadNewMediaRequest>
+class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 {
 	private final ProjectController projectController;
-
-	private final ApplicationContext context;
 	private final PadMapper padMapper;
 
 	private final Executor asyncExecutor;
-	private final MessageSource messageSource;
 
-	public PadNewMediaHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, @Qualifier(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME) Executor asyncExecutor, MessageSource messageSource)
+	PadNewMediaHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, PadMapper padMapper, @Qualifier(TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME) Executor asyncExecutor)
 	{
+		super(messageSource, context);
 		this.projectController = projectController;
-		this.context = context;
 		this.padMapper = padMapper;
 		this.asyncExecutor = asyncExecutor;
-		this.messageSource = messageSource;
 	}
 
 	@Override

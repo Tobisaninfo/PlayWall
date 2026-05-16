@@ -19,21 +19,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RequestHandlerTyped(BatchColorPadsRequest.class)
-class BatchColorPadsHandler implements UndoableRequestHandler<BatchColorPadsRequest>
+class BatchColorPadsHandler extends UndoableRequestHandler<BatchColorPadsRequest>
 {
 	private final ProjectController projectController;
-
-	private final ApplicationContext context;
 	private final PadMapper padMapper;
 
-	private final MessageSource messageSource;
-
-	public BatchColorPadsHandler(ProjectController projectController, ApplicationContext context, PadMapper padMapper, MessageSource messageSource)
+	BatchColorPadsHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, PadMapper padMapper)
 	{
+		super(messageSource, context);
 		this.projectController = projectController;
-		this.context = context;
 		this.padMapper = padMapper;
-		this.messageSource = messageSource;
 	}
 
 	@Override

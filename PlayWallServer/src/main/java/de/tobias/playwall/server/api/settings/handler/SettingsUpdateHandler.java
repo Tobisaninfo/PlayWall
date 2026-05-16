@@ -8,7 +8,6 @@ import de.tobias.playwall.server.api.settings.SettingsRepository;
 import de.tobias.playwall.server.common.model.settings.Settings;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,14 +16,17 @@ import java.io.IOException;
 import java.util.Optional;
 
 @RequestHandlerTyped(SettingsUpdateRequest.class)
-@RequiredArgsConstructor
-class SettingsUpdateHandler implements UndoableRequestHandler<SettingsUpdateRequest>
+class SettingsUpdateHandler extends UndoableRequestHandler<SettingsUpdateRequest>
 {
 	private final SettingsRepository settingsRepository;
-	private final MessageSource messageSource;
-	private final ApplicationContext context;
-
 	private final SettingsMapper settingsMapper;
+
+	public SettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, SettingsRepository settingsRepository, SettingsMapper settingsMapper)
+	{
+		super(messageSource, context);
+		this.settingsRepository = settingsRepository;
+		this.settingsMapper = settingsMapper;
+	}
 
 	@Override
 	public Optional<UndoItem> handleRequest(SettingsUpdateRequest requestMessage) throws IOException

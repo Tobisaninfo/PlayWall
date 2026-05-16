@@ -10,7 +10,6 @@ import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,15 +17,20 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.io.IOException;
 import java.util.Optional;
 
-@AllArgsConstructor
 @RequestHandlerTyped(PageAddRequest.class)
-class PageAddHandler implements UndoableRequestHandler<PageAddRequest>
+class PageAddHandler extends UndoableRequestHandler<PageAddRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
 	private final PageMapper mapper;
-	private final ApplicationContext context;
-	private final MessageSource messageSource;
+
+	PageAddHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService, PageMapper mapper)
+	{
+		super(messageSource, context);
+		this.projectController = projectController;
+		this.projectService = projectService;
+		this.mapper = mapper;
+	}
 
 	@Override
 	public Optional<UndoItem> handleRequest(PageAddRequest requestMessage) throws IOException

@@ -7,7 +7,6 @@ import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
 import de.tobias.playwall.server.project.ProjectController;
-import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,14 +16,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@AllArgsConstructor
 @RequestHandlerTyped(PageReorderRequest.class)
-public class PageReorderHandler implements UndoableRequestHandler<PageReorderRequest>
+public class PageReorderHandler extends UndoableRequestHandler<PageReorderRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
-	private final ApplicationContext context;
-	private final MessageSource messageSource;
+
+	PageReorderHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService)
+	{
+		super(messageSource, context);
+		this.projectController = projectController;
+		this.projectService = projectService;
+	}
 
 	@Override
 	public Optional<UndoItem> handleRequest(PageReorderRequest requestMessage) throws IOException
