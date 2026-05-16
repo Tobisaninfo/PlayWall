@@ -41,6 +41,15 @@ public class Project
 				.orElse(null);
 	}
 
+	public Page getPageByPadId(UUID padId)
+	{
+		return pages.stream()
+				.filter(page -> page.getPads().stream()
+						.map(Pad::getId).toList().contains(padId))
+				.findFirst()
+				.orElse(null);
+	}
+
 	public Pad getPad(PadIndex index)
 	{
 		final Page page = getPage(index.getPagePosition());

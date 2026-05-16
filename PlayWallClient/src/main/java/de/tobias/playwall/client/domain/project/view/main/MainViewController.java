@@ -1001,12 +1001,13 @@ public class MainViewController extends ViewControllerBase
 	{
 		final List<ClientPadController> padControllersWithErrors = projectController.getPadControllersWithState(PadStatus.ERROR);
 		final List<MissingMediaEntry> entries = padControllersWithErrors.stream()
-				.map(c -> MissingMediaEntry.builder()
-						.pageName(null)
-						.padId(c.getPad().getId())
-						.padPosition(c.getPad().getReadablePosition())
-						.padName(c.getPad().getName())
-						.oldMediaPath(c.getPad().getContent() instanceof AudioPadContent audioPadContent ? audioPadContent.getMediaPath() : null)
+				.map(ClientPadController::getPad)
+				.map(pad -> MissingMediaEntry.builder()
+						.pageName(projectController.getProject().getPageByPadId(pad.getId()).getName())
+						.padId(pad.getId())
+						.padPosition(pad.getReadablePosition())
+						.padName(pad.getName())
+						.oldMediaPath(pad.getContent() instanceof AudioPadContent audioPadContent ? audioPadContent.getMediaPath() : null)
 						.build())
 				.toList();
 
