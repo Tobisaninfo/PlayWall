@@ -7,7 +7,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.domain.project.ProjectFile;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
@@ -179,7 +179,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	{
 		try
 		{
-			final ProjectFile export = client.project(project.getId()).export();
+			final ExportFile export = client.project(project.getId()).export();
 
 			final MimeType mimeType = MimeType.getByMimeType(export.mimetype());
 			fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
@@ -272,7 +272,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 		try
 		{
 			final byte[] bytes = Files.readAllBytes(pathOptional.get());
-			final UUID importedProjectId = client.projects().importProject(new ProjectFile(mimeType.getMimeTypeValue(), bytes));
+			final UUID importedProjectId = client.projects().importProject(new ExportFile(mimeType.getMimeTypeValue(), bytes));
 			fetchProjects();
 			selectProjectById(importedProjectId);
 		}

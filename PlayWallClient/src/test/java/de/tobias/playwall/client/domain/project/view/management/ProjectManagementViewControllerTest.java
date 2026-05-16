@@ -9,6 +9,7 @@ import de.tobias.playwall.client.domain.project.view.list.ProjectListViewControl
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.utils.MimeType;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -224,7 +225,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 
 		final Path targetPath = tempDir.resolve("test.json");
 		when(fileChooserWrapper.showSaveFile(any())).thenReturn(Optional.of(targetPath));
-		when(client.exportProject(any())).thenReturn(new ProjectFile(MimeType.APPLICATION_JSON.getMimeTypeValue(), new byte[]{1, 2, 3}));
+		when(client.exportProject(any())).thenReturn(new ExportFile(MimeType.APPLICATION_JSON.getMimeTypeValue(), new byte[]{1, 2, 3}));
 
 		final ProjectManagementCell cell = (ProjectManagementCell) viewController.getProjectListView().lookupAll(".cell").toArray(Node[]::new)[0];
 		Platform.runLater(() -> cell.getButtonContextMenu().getItems().get(2).fire());
@@ -252,7 +253,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 
 		viewController.onImportButton();
 
-		final ArgumentCaptor<ProjectFile> captor = ArgumentCaptor.forClass(ProjectFile.class);
+		final ArgumentCaptor<ExportFile> captor = ArgumentCaptor.forClass(ExportFile.class);
 		verify(client).importProject(captor.capture());
 		assertThat(captor.getValue())
 				.satisfies(value -> {

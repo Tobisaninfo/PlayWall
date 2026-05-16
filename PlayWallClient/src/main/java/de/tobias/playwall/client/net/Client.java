@@ -3,7 +3,7 @@ package de.tobias.playwall.client.net;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectFile;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -49,9 +49,9 @@ public interface Client
 
 	UUID duplicateProject(UUID projectId) throws PlayWallApiException;
 
-	ProjectFile exportProject(UUID projectId) throws PlayWallApiException;
+	ExportFile exportProject(UUID projectId) throws PlayWallApiException;
 
-	UUID importProject(ProjectFile projectFile) throws PlayWallApiException;
+	UUID importProject(ExportFile projectFile) throws PlayWallApiException;
 
 	void undo() throws PlayWallApiException;
 
@@ -66,6 +66,8 @@ public interface Client
 	void duplicatePage(UUID pageId) throws PlayWallApiException;
 
 	void reorderPage(Map<UUID, Integer> positions) throws PlayWallApiException;
+
+	ExportFile exportPage(UUID pageId) throws PlayWallApiException;
 
 	void play(UUID padId) throws PlayWallApiException;
 

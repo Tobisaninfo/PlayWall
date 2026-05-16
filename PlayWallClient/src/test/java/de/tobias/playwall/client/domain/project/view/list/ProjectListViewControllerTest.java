@@ -6,7 +6,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectFile;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
@@ -206,7 +206,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 		});
 		WaitForAsyncUtils.waitForFxEvents();
 
-		final ArgumentCaptor<ProjectFile> captor = ArgumentCaptor.forClass(ProjectFile.class);
+		final ArgumentCaptor<ExportFile> captor = ArgumentCaptor.forClass(ExportFile.class);
 		verify(client).importProject(captor.capture());
 		Assertions.assertThat(captor.getValue())
 				.satisfies(value -> {

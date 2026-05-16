@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.pad.PadMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.history.RedoRequest;
@@ -170,14 +171,14 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public ProjectFile exportProject(UUID projectId) throws PlayWallApiException
+	public ExportFile exportProject(UUID projectId) throws PlayWallApiException
 	{
 		final ProjectExportResponse responseMessage = clientWebSocketHandler.send(new ProjectExportRequest(projectId));
-		return new ProjectFile(responseMessage.getMimetype(), Base64.getDecoder().decode(responseMessage.getBase64()));
+		return new ExportFile(responseMessage.getMimetype(), Base64.getDecoder().decode(responseMessage.getBase64()));
 	}
 
 	@Override
-	public UUID importProject(ProjectFile projectFile) throws PlayWallApiException
+	public UUID importProject(ExportFile projectFile) throws PlayWallApiException
 	{
 		final ProjectImportResponse responseMessage = clientWebSocketHandler.send(new ProjectImportRequest(projectFile.mimetype(), Base64.getEncoder().encodeToString(projectFile.data())));
 		return responseMessage.getProjectId();
@@ -223,6 +224,13 @@ class ClientImpl implements Client
 	public void reorderPage(Map<UUID, Integer> positions) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new PageReorderRequest(positions));
+	}
+
+	@Override
+	public ExportFile exportPage(UUID pageId) throws PlayWallApiException
+	{
+		final PageExportResponse responseMessage = clientWebSocketHandler.send(new PageExportRequest(pageId));
+		return new ExportFile(responseMessage.getMimetype(), Base64.getDecoder().decode(responseMessage.getBase64()));
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsVi
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.utils.MimeType;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ViewControllerBase;
@@ -192,7 +193,7 @@ public class ProjectListViewController extends ViewControllerBase
 		try
 		{
 			final byte[] bytes = Files.readAllBytes(pathOptional.get());
-			final UUID uuid = client.projects().importProject(new ProjectFile(mimeType.getMimeTypeValue(), bytes));
+			final UUID uuid = client.projects().importProject(new ExportFile(mimeType.getMimeTypeValue(), bytes));
 			openProject(uuid);
 		}
 		catch(IOException e)

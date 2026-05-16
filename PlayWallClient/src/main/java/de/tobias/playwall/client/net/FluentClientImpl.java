@@ -5,7 +5,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectFile;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -84,7 +84,7 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public UUID importProject(ProjectFile projectFile) throws PlayWallApiException
+		public UUID importProject(ExportFile projectFile) throws PlayWallApiException
 		{
 			return delegate.importProject(projectFile);
 		}
@@ -126,7 +126,7 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public ProjectFile export() throws PlayWallApiException
+		public ExportFile export() throws PlayWallApiException
 		{
 			return delegate.exportProject(projectId);
 		}
@@ -234,6 +234,12 @@ class FluentClientImpl implements FluentClient
 		public void duplicate() throws PlayWallApiException
 		{
 			delegate.duplicatePage(pageId);
+		}
+
+		@Override
+		public ExportFile export() throws PlayWallApiException
+		{
+			return delegate.exportPage(pageId);
 		}
 	}
 

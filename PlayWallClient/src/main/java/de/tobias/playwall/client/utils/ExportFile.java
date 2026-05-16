@@ -1,15 +1,15 @@
-package de.tobias.playwall.client.domain.project;
+package de.tobias.playwall.client.utils;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public record ProjectFile(String mimetype, byte[] data)
+public record ExportFile(String mimetype, byte[] data)
 {
 	@Override
 	public boolean equals(Object object)
 	{
 		if(object == null || getClass() != object.getClass()) return false;
-		ProjectFile that = (ProjectFile) object;
+		ExportFile that = (ExportFile) object;
 		return Objects.deepEquals(data, that.data) && Objects.equals(mimetype, that.mimetype);
 	}
 
@@ -22,7 +22,7 @@ public record ProjectFile(String mimetype, byte[] data)
 	@Override
 	public String toString()
 	{
-		return "ProjectExport{" +
+		return "ExportFile{" +
 			   "mimetype='" + mimetype + '\'' +
 			   ", data=" + Arrays.toString(data) +
 			   '}';

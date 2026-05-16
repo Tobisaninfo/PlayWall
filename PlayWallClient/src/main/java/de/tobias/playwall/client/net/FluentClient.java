@@ -3,7 +3,7 @@ package de.tobias.playwall.client.net;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.domain.project.ProjectFile;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
@@ -32,7 +32,7 @@ public interface FluentClient
 
 		ProjectMetadata add(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws PlayWallApiException;
 
-		UUID importProject(ProjectFile projectFile) throws PlayWallApiException;
+		UUID importProject(ExportFile projectFile) throws PlayWallApiException;
 	}
 
 	ProjectBuilder project(UUID projectId);
@@ -49,7 +49,7 @@ public interface FluentClient
 
 		UUID duplicate() throws PlayWallApiException;
 
-		ProjectFile export() throws PlayWallApiException;
+		ExportFile export() throws PlayWallApiException;
 	}
 
 	ProjectCurrentBuilder currentProject();
@@ -90,6 +90,8 @@ public interface FluentClient
 		void delete() throws PlayWallApiException;
 
 		void duplicate() throws PlayWallApiException;
+
+		ExportFile export() throws PlayWallApiException;
 	}
 
 	interface PadBuilder
