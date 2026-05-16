@@ -63,6 +63,7 @@
     -fx-border-color: transparent;
     -fx-text-fill: variables.$component-text-color;
     -fx-padding: 6 10;
+    -fx-alignment: center-left;
 
     &:selected {
         -fx-background-color: transparent;

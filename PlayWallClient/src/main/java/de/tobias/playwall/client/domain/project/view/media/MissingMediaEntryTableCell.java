@@ -7,6 +7,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import javafx.geometry.Pos;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.HBox;
 
@@ -40,6 +41,9 @@ class MissingMediaEntryTableCell extends TableCell<MissingMediaEntry, MissingMed
 
 		box.setSpacing(ViewConstants.DEFAULT_SPACING / 2);
 		box.getChildren().addAll(buttonChooseFile, buttonDelete);
+		box.setAlignment(Pos.CENTER_LEFT);
+
+		setAlignment(Pos.CENTER_LEFT);
 	}
 
 	@Override
