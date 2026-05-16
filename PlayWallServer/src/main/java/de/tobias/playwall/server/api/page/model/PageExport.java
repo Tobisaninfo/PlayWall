@@ -14,7 +14,7 @@ public record PageExport(PageExportHeader header, Page page)
 	@Setter
 	@ToString
 	@NoArgsConstructor(access = AccessLevel.PACKAGE)
-	@AllArgsConstructor
+	@SuppressWarnings({"java:S116", "java:S1170"})
 	static class PageExportHeader
 	{
 		private final int VERSION = 1;

@@ -37,7 +37,10 @@ import de.tobias.playwall.client.log.LogViewer;
 import de.tobias.playwall.client.net.ConnectionState;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.utils.ExportFile;
+import de.tobias.playwall.client.utils.MimeType;
 import de.tobias.playwall.client.utils.Size;
+import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.about.AboutDialog;
 import de.tobias.playwall.client.view.components.*;
@@ -65,6 +68,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -121,6 +127,7 @@ public class MainViewController extends ViewControllerBase
 	private final ErrorAlertBuilder errorAlertBuilder;
 
 	private final FluentClient client;
+	private final FileChooserWrapper fileChooserWrapper;
 	private final PadViewProvider padViewProvider;
 	private final PageMapper pageMapper;
 	private final PadMapper padMapper;
@@ -493,6 +500,7 @@ public class MainViewController extends ViewControllerBase
 			button.setContextMenu(new ContextMenu(
 					createMenuItem(Strings.UI_PAGE_RENAME, FontAwesomeType.PEN_SOLID, Optional.of(_ -> onPageRenameMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
+					createMenuItem(Strings.UI_PAGE_EXPORT, FontAwesomeType.FILE_IMPORT_SOLID, Optional.of(_ -> onPageExportMenuItem(page))),
 					new SeparatorMenuItem(),
 					deleteMenuItem
 			));
@@ -542,6 +550,46 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			client.currentProject().page(page.getId()).duplicate();
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot duplicate page", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DUPLICATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+	}
+
+	private void onPageExportMenuItem(Page page)
+	{
+		try
+		{
+			final ExportFile export = client.currentProject().page(page.getId()).export();
+			final String initialFileName = Localization.getString(Strings.UI_PAGE_EXPORT_NAME, projectController.getProject().getMetadata().getName(), page.getName());
+
+			final MimeType mimeType = MimeType.getByMimeType(export.mimetype());
+			fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
+			fileChooserWrapper.setInitialFilename(initialFileName + "." + mimeType.getExtension());
+			final Optional<Path> pathOptional = fileChooserWrapper.showSaveFile(getContainingWindow());
+			if(pathOptional.isEmpty())
+			{
+				return;
+			}
+			final Path path = pathOptional.get();
+			Files.write(path, export.data());
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot export page", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_EXPORT), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+		catch(IOException e)
+		{
+			log.error("Cannot write file", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_EXPORT), e.getMessage(), getContainingWindow()).showAndWait();
+		}
+
+		try
+		{
+			client.currentProject().page(page.getId()).export();
 		}
 		catch(PlayWallApiException e)
 		{

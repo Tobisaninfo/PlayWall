@@ -35,6 +35,8 @@ public class Strings
 	public static final String UI_PAGE_RENAME_ERROR_EMPTY = "ui.page.rename.error.empty";
 	public static final String UI_PAGE_RENAME_ERROR_DUPLICATE = "ui.page.rename.error.duplicate";
 	public static final String UI_PAGE_DUPLICATE = "ui.page.duplicate";
+	public static final String UI_PAGE_EXPORT = "ui.page.export";
+	public static final String UI_PAGE_EXPORT_NAME = "ui.page.export.name";
 	public static final String UI_PAGE_DELETE = "ui.page.delete";
 
 	public static final String UI_MENU_FILE = "ui.menu.file";
@@ -141,5 +143,6 @@ public class Strings
 	public static final String UI_ERRORS_PROJECT_IMPORT = "ui.errors.project.import";
 	public static final String UI_ERRORS_PROJECT_SETTINGS_SAVE = "ui.errors.project.settings.save";
 	public static final String UI_ERRORS_PROGRAM_SETTINGS_SAVE = "ui.errors.program.settings.save";
+	public static final String UI_ERRORS_PAGE_EXPORT = "ui.errors.page.export";
 	public static final String UI_ERRORS_REPLACE_MEDIA = "ui.errors.replace.media";
 }

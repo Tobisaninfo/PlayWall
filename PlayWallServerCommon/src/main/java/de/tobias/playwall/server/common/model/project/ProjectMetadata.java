@@ -19,6 +19,7 @@ public class ProjectMetadata
 {
 	private static final double DEFAULT_VOLUME = 1.0;
 
+	@SuppressWarnings({"java:S116", "java:S1170"})
 	private final int VERSION = 1;
 
 	@JsonView(Views.AllProjectsInfo.class)
