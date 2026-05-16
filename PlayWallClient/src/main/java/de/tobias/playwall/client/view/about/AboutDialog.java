@@ -77,7 +77,6 @@ public class AboutDialog extends ModalDialogBase<Void>
 				System.getProperty("javafx.runtime.version")));
 
 		final Hyperlink websiteLink = new Hyperlink(Localization.getString(Strings.UI_DIALOG_ABOUT_WEBSITE));
-		websiteLink.setPadding(Insets.EMPTY);
 		websiteLink.setFocusTraversable(false);
 		websiteLink.setOnAction(e -> {
 			String url = app.getUserInfo(AppUserInfoStrings.class).website();
