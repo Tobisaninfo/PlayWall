@@ -5,14 +5,13 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.view.ViewControllerBase;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
@@ -33,7 +32,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 	@FXML
 	private TableColumn<MissingMediaEntry, String> columnOldPath;
 	@FXML
-	private TableColumn<MissingMediaEntry, String> columnSolution;
+	private TableColumn<MissingMediaEntry, MissingMediaEntry> columnSolution;
 	@FXML
 	private TableColumn<MissingMediaEntry, MissingMediaEntry> columnActions;
 
@@ -46,8 +45,12 @@ public class ReplaceMediaViewController extends ViewControllerBase
 		columnPadPosition.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPadPosition()));
 		columnPadName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPadName()));
 		columnOldPath.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOldMediaPath()));
-		columnSolution.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMissingMediaSolutionType().name()));
-		columnActions.setCellFactory(_ -> new MissingMediaEntryTableCell());
+
+		columnSolution.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
+		columnSolution.setCellFactory(_ -> new MissingMediaEntrySolutionCell());
+
+		columnActions.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
+		columnActions.setCellFactory(_ -> new MissingMediaEntryActionCell());
 
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 		table.setItems(entries);
