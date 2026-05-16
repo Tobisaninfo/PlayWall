@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <TableView fx:id="table" focusTraversable="false">
+            <columns>
+                <TableColumn fx:id="columnPageName" text="%ui.replace.media.column.page_name" prefWidth="150" minWidth="150"/>
+                <TableColumn fx:id="columnPadPosition" text="%ui.replace.media.column.pad_index" prefWidth="60" maxWidth="60"/>
+                <TableColumn fx:id="columnPadName" text="%ui.replace.media.column.pad_name" prefWidth="150" minWidth="150"/>
+                <TableColumn fx:id="columnOldPath" text="%ui.replace.media.column.old_path" prefWidth="300" minWidth="300"/>
+                <TableColumn fx:id="columnSolution" text="%ui.replace.media.column.solution" prefWidth="100" minWidth="100"/>
+                <TableColumn fx:id="columnActions" text="%ui.replace.media.column.actions" prefWidth="200" maxWidth="200"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

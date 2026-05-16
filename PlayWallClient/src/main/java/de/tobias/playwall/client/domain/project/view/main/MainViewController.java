@@ -12,8 +12,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
-import de.tobias.playwall.client.domain.pad.Pad;
-import de.tobias.playwall.client.domain.pad.PadMapper;
+import de.tobias.playwall.client.domain.pad.*;
 import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.pad.view.desktop.PadEventDispatcher;
@@ -24,6 +23,8 @@ import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.management.ProjectManagementViewController;
+import de.tobias.playwall.client.domain.project.view.media.MissingMediaEntry;
+import de.tobias.playwall.client.domain.project.view.media.ReplaceMediaViewController;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
@@ -795,7 +796,7 @@ public class MainViewController extends ViewControllerBase
 		redoMenuItem = createMenuItem(Strings.UI_MENU_EDIT_REDO, FontAwesomeType.ROTATE_RIGHT_SOLID, Optional.of(this::onMenuItemRedo), new KeyCharacterCombination("Z", KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN));
 		redoMenuItem.setDisable(true);
 		final MenuItem menuItemSearch = createMenuItem(Strings.UI_MENU_EDIT_SEARCH, FontAwesomeType.MAGNIFYING_GLASS_SOLID, Optional.empty());
-		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID, Optional.empty());
+		final MenuItem menuItemReplaceMedia = createMenuItem(Strings.UI_MENU_EDIT_REPLACE_MEDIA, FontAwesomeType.FILE_AUDIO_SOLID, Optional.of(this::onMenuItemReplaceMedia));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_EDIT));
 		menu.getItems().addAll(
@@ -994,5 +995,23 @@ public class MainViewController extends ViewControllerBase
 			log.error("Cannot color pads", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_COLOR_UPDATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
+	}
+
+	private void onMenuItemReplaceMedia(ActionEvent event)
+	{
+		final List<ClientPadController> padControllersWithErrors = projectController.getPadControllersWithState(PadStatus.ERROR);
+		final List<MissingMediaEntry> entries = padControllersWithErrors.stream()
+				.map(c -> MissingMediaEntry.builder()
+						.pageName(null)
+						.padId(c.getPad().getId())
+						.padPosition(c.getPad().getPosition())
+						.padName(c.getPad().getName())
+						.oldMediaPath(c.getPad().getContent() instanceof AudioPadContent audioPadContent ? audioPadContent.getMediaPath() : null)
+						.build())
+				.toList();
+
+		final ReplaceMediaViewController controller = AppContextHolder.getInstance().get(ReplaceMediaViewController.class);
+		controller.setEntries(entries);
+		controller.showStage();
 	}
 }
