@@ -20,6 +20,8 @@ import lombok.Getter;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+import static de.tobias.playwall.client.view.components.ViewConstants.DEFAULT_CONTEXT_MANU_GAP;
+
 public class ProjectManagementCell extends ListCell<ProjectMetadata>
 {
 	public enum ProjectManagementCellAction
@@ -116,7 +118,7 @@ public class ProjectManagementCell extends ListCell<ProjectMetadata>
 		projectNameLabel.getStyleClass().add("project-management--project-name");
 
 		final Button menuButton = new Button("", new FontIcon(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID));
-		menuButton.setOnAction(_ -> buttonContextMenu.show(menuButton, Side.LEFT, 0, 0));
+		menuButton.setOnAction(_ -> buttonContextMenu.show(menuButton, Side.LEFT, -DEFAULT_CONTEXT_MANU_GAP, 0));
 
 		row.getChildren().addAll(circle, projectNameLabel, menuButton);
 		HBox.setHgrow(projectNameLabel, Priority.ALWAYS);
