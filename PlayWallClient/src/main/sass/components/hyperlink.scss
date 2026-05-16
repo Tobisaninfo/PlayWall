@@ -1,0 +1,26 @@
+@use 'variables';
+
+@mixin remove-border() {
+    -fx-border-color: null;
+    -fx-border-width: 0;
+}
+
+.hyperlink {
+    @include remove-border();
+    -fx-padding: 0;
+    -fx-text-fill: variables.$primary-color;
+
+    &:pressed {
+        @include remove-border();
+    }
+
+    &:visited {
+        @include remove-border();
+        -fx-text-fill: variables.$primary-color;
+        -fx-underline: false;
+    }
+
+    &:hover {
+        -fx-underline: true;
+    }
+}

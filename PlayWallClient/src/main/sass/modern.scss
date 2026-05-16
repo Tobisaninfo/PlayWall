@@ -37,6 +37,7 @@
 @include meta.load-css("components/scroll-pane");
 @include meta.load-css("components/spinner");
 @include meta.load-css("components/toast");
+@include meta.load-css("components/hyperlink");
 
 @include meta.load-css("views/about-view");
 @include meta.load-css("views/application-loading-view");
