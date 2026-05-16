@@ -33,7 +33,7 @@ public class ProjectLoadedListener implements UpdateMessageEventListener<Project
 							Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_TITLE),
 							Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_MESSAGE, padControllersWithErrors.size()),
 							ToastType.ERROR,
-							new ToastAction(Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_LINK), () -> System.out.println("Clicked"))));
+							new ToastAction(Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_LINK), () -> mainViewController.onMenuItemReplaceMedia(null))));
 		}
 	}
 

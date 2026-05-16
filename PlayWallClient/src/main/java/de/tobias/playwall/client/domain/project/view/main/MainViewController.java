@@ -997,7 +997,7 @@ public class MainViewController extends ViewControllerBase
 		}
 	}
 
-	private void onMenuItemReplaceMedia(ActionEvent event)
+	public void onMenuItemReplaceMedia(ActionEvent event)
 	{
 		final List<ClientPadController> padControllersWithErrors = projectController.getPadControllersWithState(PadStatus.ERROR);
 		final List<MissingMediaEntry> entries = padControllersWithErrors.stream()
