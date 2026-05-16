@@ -9,6 +9,7 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -23,10 +24,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -72,6 +70,12 @@ public class ReplaceMediaViewController extends ViewControllerBase
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 		table.setItems(entries);
 		table.setPlaceholder(new Label(Localization.getString(Strings.UI_REPLACE_MEDIA_PLACEHOLDER)));
+
+		table.getSortOrder().add(columnPageName);
+		table.getSortOrder().add(columnPadPosition);
+		columnPadPosition.setComparator(Comparator.comparingInt(Integer::parseInt));
+
+		Platform.runLater(() -> table.sort());
 	}
 
 	@Override
@@ -82,7 +86,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 		stage.setWidth(1200);
 		stage.setMinWidth(1200);
 		stage.setHeight(700);
-		stage.setMinHeight(700);
+		stage.setMinHeight(200);
 	}
 
 	public void setEntries(List<MissingMediaEntry> entries)
