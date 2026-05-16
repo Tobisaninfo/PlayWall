@@ -8,9 +8,8 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.ViewControllerBase;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,7 +39,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 	@FXML
 	private TableColumn<MissingMediaEntry, String> columnPageName;
 	@FXML
-	private TableColumn<MissingMediaEntry, Number> columnPadPosition;
+	private TableColumn<MissingMediaEntry, String> columnPadPosition;
 	@FXML
 	private TableColumn<MissingMediaEntry, String> columnPadName;
 	@FXML
@@ -60,7 +59,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 	public void init()
 	{
 		columnPageName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPageName()));
-		columnPadPosition.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getPadPosition()));
+		columnPadPosition.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPadPosition()));
 		columnPadName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPadName()));
 		columnOldPath.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getOldMediaPath()));
 
@@ -103,7 +102,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 				.map(MissingMediaEntry::getPadId)
 				.collect(Collectors.toSet());
 
-		if(newMediaPathsByPadId.isEmpty()  && padIdsToDelete.isEmpty())
+		if(newMediaPathsByPadId.isEmpty() && padIdsToDelete.isEmpty())
 		{
 			return;
 		}

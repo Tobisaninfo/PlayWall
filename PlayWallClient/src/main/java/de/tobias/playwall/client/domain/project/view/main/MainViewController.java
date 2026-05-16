@@ -1004,7 +1004,7 @@ public class MainViewController extends ViewControllerBase
 				.map(c -> MissingMediaEntry.builder()
 						.pageName(null)
 						.padId(c.getPad().getId())
-						.padPosition(c.getPad().getPosition())
+						.padPosition(c.getPad().getReadablePosition())
 						.padName(c.getPad().getName())
 						.oldMediaPath(c.getPad().getContent() instanceof AudioPadContent audioPadContent ? audioPadContent.getMediaPath() : null)
 						.build())

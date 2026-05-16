@@ -16,7 +16,7 @@ public final class MissingMediaEntry
 
 	private final UUID padId;
 
-	private final int padPosition;
+	private final String padPosition;
 
 	private final String padName;
 
