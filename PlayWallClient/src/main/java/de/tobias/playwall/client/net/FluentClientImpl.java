@@ -205,6 +205,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.batchColorPads(padIds, color);
 		}
+
+		@Override
+		public void batchReplaceMedia(Map<UUID, String> newMediaPathsByPadId, Set<UUID> padIdsToDelete) throws PlayWallApiException
+		{
+			delegate.batchReplaceMedia(newMediaPathsByPadId, padIdsToDelete);
+		}
 	}
 
 	@AllArgsConstructor

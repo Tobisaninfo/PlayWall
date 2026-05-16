@@ -298,6 +298,12 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public void batchReplaceMedia(Map<UUID, String> newMediaPathsByPadId, Set<UUID> padIdsToDelete) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new BatchReplaceMediaRequest(newMediaPathsByPadId, padIdsToDelete));
+	}
+
+	@Override
 	public Settings getProgramSettings() throws PlayWallApiException
 	{
 		final SettingsGetResponse response = clientWebSocketHandler.send(new SettingsGetRequest());
