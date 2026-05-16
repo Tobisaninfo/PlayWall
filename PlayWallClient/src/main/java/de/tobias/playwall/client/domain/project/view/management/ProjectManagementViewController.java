@@ -20,6 +20,9 @@ import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ParamDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.TextInputErrorLabelDialog;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -68,13 +71,20 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 
 	private MainViewController mainViewController;
 
+	private final ObservableList<ProjectMetadata> masterProjects = FXCollections.observableArrayList();
+	private final FilteredList<ProjectMetadata> filteredProjects = new FilteredList<>(masterProjects, _ -> true);
+
 	@Override
 	protected void init()
 	{
 		super.init();
 
 		this.searchTextField.setPromptText(Localization.getString("ui.project.management.search.prompt"));
+		this.projectListView.setItems(filteredProjects);
 		this.projectListView.setCellFactory(_ -> new ProjectManagementCell(projectController, this::onProjectCellAction));
+
+		searchTextField.textProperty().addListener((_, _, newValue) ->
+				filteredProjects.setPredicate(project -> newValue == null || newValue.isBlank() || project.getName().toLowerCase().contains(newValue.toLowerCase())));
 
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
@@ -97,7 +107,7 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 			final List<ProjectMetadata> projectMetadataSorted = projectsMetadata.stream()
 					.sorted(Comparator.comparing(ProjectMetadata::getName))
 					.toList();
-			projectListView.getItems().setAll(projectMetadataSorted);
+			masterProjects.setAll(projectMetadataSorted);
 		}
 		catch(PlayWallApiException e)
 		{
