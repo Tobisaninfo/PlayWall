@@ -11,7 +11,7 @@
                 <TableColumn fx:id="columnPadName" text="%ui.replace.media.column.pad_name" prefWidth="150" minWidth="150"/>
                 <TableColumn fx:id="columnOldPath" text="%ui.replace.media.column.old_path" prefWidth="300" minWidth="300"/>
                 <TableColumn fx:id="columnSolution" text="%ui.replace.media.column.solution" prefWidth="100" minWidth="100"/>
-                <TableColumn fx:id="columnActions" text="%ui.replace.media.column.actions" prefWidth="200" maxWidth="200"/>
+                <TableColumn fx:id="columnActions" text="%ui.replace.media.column.actions" prefWidth="280" maxWidth="280"/>
             </columns>
         </TableView>
     </center>
