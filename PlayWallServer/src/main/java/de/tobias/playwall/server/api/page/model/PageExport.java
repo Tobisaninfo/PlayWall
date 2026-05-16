@@ -1,10 +1,17 @@
 package de.tobias.playwall.server.api.page.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.tobias.playwall.server.common.model.page.Page;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 public record PageExport(PageExportHeader header, Page page)
 {
+	public static final String PLAYWALL_PAGE = "playwall/page";
+
 	public PageExport(Page page)
 	{
 		this(new PageExportHeader(), page);
@@ -13,12 +20,19 @@ public record PageExport(PageExportHeader header, Page page)
 	@Getter
 	@Setter
 	@ToString
-	@NoArgsConstructor(access = AccessLevel.PACKAGE)
-	@SuppressWarnings({"java:S116", "java:S1170"})
-	static class PageExportHeader
+	@AllArgsConstructor
+	public static class PageExportHeader
 	{
-		private final int VERSION = 1;
-		private final String MIMETYPE = "playwall/page";
+		@JsonProperty("VERSION")
+		private final int version;
+		@JsonProperty("MIMETYPE")
+		private final String mimetype;
+
+		PageExportHeader()
+		{
+			version = 1;
+			mimetype = PLAYWALL_PAGE;
+		}
 	}
 
 }
