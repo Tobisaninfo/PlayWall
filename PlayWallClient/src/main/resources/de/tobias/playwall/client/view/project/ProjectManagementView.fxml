@@ -11,12 +11,16 @@
 <?import javafx.scene.control.Label?>
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <TextField fx:id="searchTextField"/>
-    <Label text="Projekte">
+    <Label text="%ui.project.management.list.title">
         <padding>
             <Insets top="7"/>
         </padding>
     </Label>
-    <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" VBox.vgrow="ALWAYS"/>
+    <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" VBox.vgrow="ALWAYS">
+        <placeholder>
+            <Label text="%ui.project.management.list.placeholder"/>
+        </placeholder>
+    </ListView>
     <HBox fx:id="projectButtonBox" spacing="14.0">
         <PlayWallButton fx:id="importButton" icon="FILE_IMPORT_SOLID" maxWidth="Infinity"
                         minHeight="35.0" onAction="#onImportButton" text="%project.button.import" HBox.hgrow="ALWAYS"/>
