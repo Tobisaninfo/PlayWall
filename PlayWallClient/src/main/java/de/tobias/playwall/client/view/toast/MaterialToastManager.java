@@ -40,23 +40,23 @@ public class MaterialToastManager
 		overlay.prefHeightProperty().bind(parent.heightProperty());
 	}
 
-	public void show(String title, String message, ToastType type)
+	public void show(String title, String message, ToastType type, ToastAction... actions)
 	{
-		final Node toast = buildAndScheduleToast(title, message, type);
+		final Node toast = buildAndScheduleToast(title, message, type, List.of(actions));
 
 		final PauseTransition wait = new PauseTransition(DURATION_PAUSE);
 		wait.setOnFinished(_ -> dismiss(toast));
 		wait.play();
 	}
 
-	public void showPermanent(String title, String message, ToastType type)
+	public void showPermanent(String title, String message, ToastType type, ToastAction... actions)
 	{
-		buildAndScheduleToast(title, message, type);
+		buildAndScheduleToast(title, message, type, List.of(actions));
 	}
 
-	private Node buildAndScheduleToast(String title, String message, ToastType type)
+	private Node buildAndScheduleToast(String title, String message, ToastType type, List<ToastAction> actions)
 	{
-		final Node toast = new Toast(title, message, type, this::dismiss);
+		final Node toast = new Toast(title, message, type, actions, this::dismiss);
 
 		toast.setOpacity(0);
 		overlay.getChildren().add(toast);

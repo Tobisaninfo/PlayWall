@@ -6,18 +6,19 @@ import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static de.tobias.playwall.client.view.toast.MaterialToastManager.TOAST_WIDTH;
 
 public class Toast extends VBox
 {
-	public Toast(String title, String message, ToastType type, Consumer<Node> onClose)
+	public Toast(String title, String message, ToastType type, List<ToastAction> actions, Consumer<Node> onClose)
 	{
-
 		final Region accent = new Region();
 		accent.setPrefWidth(7);
 		accent.setMinWidth(7);
@@ -44,7 +45,14 @@ public class Toast extends VBox
 		final FontIcon closeIcon = new FontIcon(FontAwesomeType.XMARK_SOLID);
 		closeIcon.getStyleClass().add("close-button");
 
-		final VBox textBox = new VBox(3, titleLabel, messageLabel);
+		final FlowPane actionPage = new FlowPane(ViewConstants.DEFAULT_SPACING, 0);
+		actions.forEach(action -> {
+			final Hyperlink hyperlink = new Hyperlink(action.text());
+			hyperlink.setOnAction(e -> action.action().run());
+			actionPage.getChildren().add(hyperlink);
+		});
+
+		final VBox textBox = new VBox(3, titleLabel, messageLabel, actionPage);
 		textBox.setAlignment(Pos.TOP_LEFT);
 		VBox.setVgrow(messageLabel, Priority.ALWAYS);
 

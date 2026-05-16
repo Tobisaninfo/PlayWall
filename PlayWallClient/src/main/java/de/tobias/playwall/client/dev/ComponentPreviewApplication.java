@@ -7,6 +7,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
 import de.tobias.playwall.client.view.style.Styleable;
 import de.tobias.playwall.client.view.toast.Toast;
+import de.tobias.playwall.client.view.toast.ToastAction;
 import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,6 +24,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.scenicview.ScenicView;
+
+import java.util.List;
 
 public class ComponentPreviewApplication extends Application
 {
@@ -467,10 +470,10 @@ public class ComponentPreviewApplication extends Application
 	{
 		return new VBox(
 				ITEM_SPACING,
-				new Toast("Erfolg", "Die Aktion wurde erfolgreich abgeschlossen.", ToastType.SUCCESS, _ -> {}),
-				new Toast("Warnung", "Bitte überprüfe deine Einstellungen.", ToastType.WARNING, _ -> {}),
-				new Toast("Fehler", "Ein unerwarteter Fehler ist aufgetreten.", ToastType.ERROR, _ -> {}),
-				new Toast("Info", "Eine neue Version ist verfügbar.", ToastType.INFO, _ -> {})
+				new Toast("Erfolg", "Die Aktion wurde erfolgreich abgeschlossen.", ToastType.SUCCESS, List.of(new ToastAction("Link 1", () -> {}), new ToastAction("Link 2", () -> {})), _ -> {}),
+				new Toast("Warnung", "Bitte überprüfe deine Einstellungen.", ToastType.WARNING, List.of(new ToastAction("Lorem ipsum dolor sit amet", () -> {}), new ToastAction("Lorem ipsum dolor sit amet", () -> {})), _ -> {}),
+				new Toast("Fehler", "Ein unerwarteter Fehler ist aufgetreten.", ToastType.ERROR, List.of(), _ -> {}),
+				new Toast("Info", "Eine neue Version ist verfügbar.", ToastType.INFO, List.of(), _ -> {})
 		);
 	}
 }
