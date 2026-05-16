@@ -49,6 +49,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 		table.setItems(entries);
+		table.setPlaceholder(new Label(Localization.getString(Strings.UI_REPLACE_MEDIA_PLACEHOLDER)));
 	}
 
 	@Override
