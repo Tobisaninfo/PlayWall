@@ -5,6 +5,7 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
+import de.tobias.playwall.client.view.components.PlayWallBadge;
 import de.tobias.playwall.client.view.style.Styleable;
 import de.tobias.playwall.client.view.toast.Toast;
 import de.tobias.playwall.client.view.toast.ToastAction;
@@ -101,7 +102,9 @@ public class ComponentPreviewApplication extends Application
 				new Separator(),
 				section("TreeView", treeView()),
 				new Separator(),
-				section("MaterialToastManager", toasts())
+				section("MaterialToastManager", toasts()),
+				new Separator(),
+				section("Badges", badges())
 		);
 
 		ScrollPane scrollPane = new ScrollPane(root);
@@ -475,5 +478,18 @@ public class ComponentPreviewApplication extends Application
 				new Toast("Fehler", "Ein unerwarteter Fehler ist aufgetreten.", ToastType.ERROR, List.of(), _ -> {}),
 				new Toast("Info", "Eine neue Version ist verfügbar.", ToastType.INFO, List.of(), _ -> {})
 		);
+	}
+
+	private HBox badges()
+	{
+		final PlayWallBadge badgeNormal = new PlayWallBadge("Normal");
+
+		final PlayWallBadge badgePrimary = new PlayWallBadge("Primary");
+		badgePrimary.getStyleClass().add("primary");
+
+		final PlayWallBadge badgeDanger = new PlayWallBadge("Danger");
+		badgeDanger.getStyleClass().add("danger");
+
+		return new HBox(ITEM_SPACING, badgeNormal, badgePrimary, badgeDanger);
 	}
 }

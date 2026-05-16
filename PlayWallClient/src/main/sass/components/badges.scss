@@ -1,0 +1,21 @@
+@use "variables";
+
+.badge {
+    -fx-background-color: variables.$component-background-color;
+    -fx-background-radius: 400px;
+    -fx-font-size: variables.$component-text-size-sm;
+    -fx-border-width: 0;
+    -fx-padding: 4 10 4 10;
+
+    .label {
+        -fx-text-fill: variables.$component-text-color;
+    }
+
+    &.danger {
+        -fx-background-color: variables.$danger-color;
+    }
+
+    &.primary {
+        -fx-background-color: variables.$primary-color;
+    }
+}
