@@ -45,7 +45,7 @@
     -fx-background-radius: variables.$component-border-radius;
     -fx-text-fill: variables.$component-text-color;
 
-    &:hover {
+    &:hover:filled {
         -fx-background-color: variables.$component-border-color-dark-hover;
     }
 
