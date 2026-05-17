@@ -1,0 +1,49 @@
+{
+    "metadata": {
+        "id": "aa4b0d63-131a-4ea5-b96a-5047ecc10e69",
+        "name": "Project 1",
+        "numberOfHorizontalPads": 6,
+        "numberOfVerticalPads": 4,
+        "volume": 1.0,
+        "timeMode": "ELAPSED",
+        "defaultColor": "GRAY1",
+        "playColor": "RED3",
+        "introColor": "BLUE1",
+        "eofWarningTime": 5.0,
+        "VERSION": 1
+    },
+    "pages": [
+        {
+            "id": "c51ca03e-0983-47ea-839d-dcf31ea41c69",
+            "name": "Page 1",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "4f05c367-d77b-4b0d-acee-1fd6bb6e6de9",
+                    "name": "Test Pad 1",
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "introColor": null,
+                    "content": null
+                },
+                {
+                    "id": "ed012839-da8e-4654-a635-1e6daa36f469",
+                    "name": "Test Pad 2",
+                    "position": 1,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "introColor": null,
+                    "content": {
+                        "@name": "AudioPadContent",
+                        "mediaPath": "abc.mp3",
+                        "loop": false,
+                        "volume": 1.0
+                    }
+                }
+            ]
+        }
+    ]
+}

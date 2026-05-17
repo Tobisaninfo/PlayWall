@@ -57,10 +57,10 @@ class BatchReplaceMediaHandlerTest extends AbstractUndoableRequestHandlerTest<Ba
 	@Test
 	void testBatchReplaceMediaAllNew() throws Exception
 	{
-		final UUID padId1 = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		final UUID padId2 = UUID.fromString("efb30a6f-593b-4a15-94db-faa2d4117e4f");
+		final UUID padId1 = UUID.fromString("4f05c367-d77b-4b0d-acee-1fd6bb6e6de9");
+		final UUID padId2 = UUID.fromString("ed012839-da8e-4654-a635-1e6daa36f469");
 
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_3.json");
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_7.json");
 		projectController.loadProject(project).get();
 		applicationEvents.clear();
 
@@ -87,10 +87,10 @@ class BatchReplaceMediaHandlerTest extends AbstractUndoableRequestHandlerTest<Ba
 	@Test
 	void testBatchReplaceMediaMixed() throws Exception
 	{
-		final UUID padId1 = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		final UUID padId2 = UUID.fromString("efb30a6f-593b-4a15-94db-faa2d4117e4f");
+		final UUID padId1 = UUID.fromString("4f05c367-d77b-4b0d-acee-1fd6bb6e6de9");
+		final UUID padId2 = UUID.fromString("ed012839-da8e-4654-a635-1e6daa36f469");
 
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_3.json");
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_7.json");
 		final Path existingMedia = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI());
 		project.getPad(padId2).setContent(AudioPadContent.builder().mediaPath(existingMedia.toAbsolutePath().toString()).loop(false).build());
 		project.getPad(padId2).setName("example_2");
@@ -116,13 +116,13 @@ class BatchReplaceMediaHandlerTest extends AbstractUndoableRequestHandlerTest<Ba
 	@Test
 	void testUndoOperation() throws Exception
 	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_3.json");
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_7.json");
 
 		final Path mediaPath1 = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
 
 		final BatchReplaceMediaRequest request = new BatchReplaceMediaRequest(Map.of(
-				UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"), mediaPath1.toAbsolutePath().toString()),
-				Set.of(UUID.fromString("efb30a6f-593b-4a15-94db-faa2d4117e4f"))
+				UUID.fromString("4f05c367-d77b-4b0d-acee-1fd6bb6e6de9"), mediaPath1.toAbsolutePath().toString()),
+				Set.of(UUID.fromString("ed012839-da8e-4654-a635-1e6daa36f469"))
 		);
 
 		testInverseOperation(project, request);
