@@ -1,0 +1,25 @@
+{
+    "header": {
+        "VERSION": 0,
+        "MIMETYPE": "playwall/page"
+    },
+    "page": {
+        "id": "1e76b8b3-2d58-4533-aa57-e2b66360e9ea",
+        "position": 0,
+        "name": "Page 1",
+        "pads": [
+            {
+                "content": null,
+                "defaultColor": null,
+                "eofWarningTime": null,
+                "id": "fc427184-2e55-4734-8148-5fb657963616",
+                "introColor": null,
+                "introDuration": null,
+                "name": "Test Pad",
+                "playColor": null,
+                "position": 0,
+                "timeMode": null
+            }
+        ]
+    }
+}
