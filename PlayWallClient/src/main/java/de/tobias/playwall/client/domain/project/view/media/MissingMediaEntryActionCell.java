@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 
 class MissingMediaEntryActionCell extends TableCell<MissingMediaEntry, MissingMediaEntry>
 {
-	final HBox box = new HBox();
+	private final HBox box = new HBox();
 	private final PlayWallButton buttonChooseFile;
 	private final PlayWallButton buttonDelete;
 
