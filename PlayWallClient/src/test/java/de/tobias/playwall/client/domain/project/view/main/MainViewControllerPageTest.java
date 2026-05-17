@@ -7,6 +7,9 @@ import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.utils.ExportFile;
+import de.tobias.playwall.client.utils.MimeType;
+import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
@@ -16,13 +19,19 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.stage.Stage;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -40,6 +49,10 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	private Project project;
 
 	private final Client client = mock(Client.class);
+	private final FileChooserWrapper fileChooserWrapper = mock(FileChooserWrapper.class);
+
+	@TempDir
+	private Path tempDir;
 
 	@Start
 	private void start(Stage stage)
@@ -49,6 +62,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> stage);
 
 		context.registerLazySingleton(Client.class, _ -> client);
+		context.registerLazySingleton(FileChooserWrapper.class, _ -> fileChooserWrapper);
 
 		project = loadProject("projects/project_1.json");
 	}
@@ -97,12 +111,25 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	}
 
 	@Test
+	void testPageAdd(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		robot.clickOn(mainViewController.getPageAddButton());
+		final MenuItem menuItem = mainViewController.getPageAddButtonContextMenu().getItems().getFirst();
+		robot.interact(menuItem::fire);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).addPage();
+	}
+
+	@Test
 	void testPageDelete(FxRobot robot) throws PlayWallApiException
 	{
 		showMainView();
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem menuItem = contextMenu.getItems().get(3);
+		final MenuItem menuItem = contextMenu.getItems().get(4);
 		robot.interact(menuItem::fire);
 
 		final ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
@@ -218,5 +245,46 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Es existiert bereits eine Seite mit diesem Namen.");
 
 		verify(client, never()).renamePage(any(), any());
+	}
+
+	@Test
+	void testPageExport(FxRobot robot) throws PlayWallApiException, IOException
+	{
+		showMainView();
+
+		final Path targetPath = tempDir.resolve("test.json");
+		when(fileChooserWrapper.showSaveFile(any())).thenReturn(Optional.of(targetPath));
+		when(client.exportPage(any())).thenReturn(new ExportFile(MimeType.APPLICATION_JSON.getMimeTypeValue(), new byte[]{1, 2, 3}));
+
+		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
+		final MenuItem menuItem = contextMenu.getItems().get(2);
+		Platform.runLater(() -> robot.interact(menuItem::fire));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		Assertions.assertThat(Files.exists(targetPath)).isTrue();
+		Assertions.assertThat(Files.readAllBytes(targetPath)).isEqualTo(new byte[]{1, 2, 3});
+	}
+
+	@Test
+	void testPageImport(FxRobot robot) throws PlayWallApiException, IOException
+	{
+		showMainView();
+
+		final Path targetPath = tempDir.resolve("test.json");
+		Files.write(targetPath, new byte[]{1, 2, 3});
+		when(fileChooserWrapper.showOpenFile(any())).thenReturn(Optional.of(targetPath));
+
+		robot.clickOn(mainViewController.getPageAddButton());
+		final MenuItem menuItem = mainViewController.getPageAddButtonContextMenu().getItems().get(1);
+		robot.interact(menuItem::fire);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final ArgumentCaptor<ExportFile> captor = ArgumentCaptor.forClass(ExportFile.class);
+		verify(client).importPage(captor.capture());
+		assertThat(captor.getValue())
+				.satisfies(value -> {
+					assertThat(value.mimetype()).isEqualTo("application/json");
+					assertThat(value.data()).isEqualTo(new byte[]{1, 2, 3});
+				});
 	}
 }
