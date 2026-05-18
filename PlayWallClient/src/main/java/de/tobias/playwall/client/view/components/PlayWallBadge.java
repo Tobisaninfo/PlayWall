@@ -20,12 +20,11 @@ public class PlayWallBadge extends Button
 		final FontIcon fontIcon = new FontIcon(FontAwesomeType.XMARK_SOLID);
 		fontIcon.setSize(12);
 		fontIcon.setMouseTransparent(true);
-		setGraphic(fontIcon);
 
 		final HBox box = new HBox(label, fontIcon);
 		box.setSpacing(ViewConstants.DEFAULT_SPACING / 2);
 		box.setAlignment(Pos.CENTER);
-		this.setGraphic(box);
+		setGraphic(box);
 	}
 
 	public void updateText(String labelText)
