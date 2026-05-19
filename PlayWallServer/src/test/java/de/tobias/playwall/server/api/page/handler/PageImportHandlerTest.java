@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.request.PageDuplicateRequest;
 import de.tobias.playwall.common.api.page.request.PageImportRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.server.TestUtils;
@@ -24,7 +23,6 @@ import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Base64;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
