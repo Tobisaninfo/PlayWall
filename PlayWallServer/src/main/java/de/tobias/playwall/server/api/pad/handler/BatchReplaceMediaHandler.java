@@ -17,15 +17,14 @@ import java.util.*;
 
 @RequestHandlerTyped(BatchReplaceMediaRequest.class)
 @Slf4j
-class BatchReplaceMediaHandler implements UndoableRequestHandler<BatchReplaceMediaRequest>
+class BatchReplaceMediaHandler extends UndoableRequestHandler<BatchReplaceMediaRequest>
 {
 	private final PadNewMediaHandler padNewMediaHandler;
 	private final PadDeleteContentHandler padDeleteContentHandler;
-	private final MessageSource messageSource;
 
 	public BatchReplaceMediaHandler(ApplicationContext context, MessageSource messageSource)
 	{
-		this.messageSource = messageSource;
+		super(messageSource, context);
 		this.padNewMediaHandler = context.getBean(PadNewMediaHandler.class);
 		this.padDeleteContentHandler = context.getBean(PadDeleteContentHandler.class);
 	}
