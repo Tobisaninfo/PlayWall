@@ -597,16 +597,6 @@ public class MainViewController extends ViewControllerBase
 			log.error("Cannot write file", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_EXPORT), e.getMessage(), getContainingWindow()).showAndWait();
 		}
-
-		try
-		{
-			client.currentProject().page(page.getId()).export();
-		}
-		catch(PlayWallApiException e)
-		{
-			log.error("Cannot duplicate page", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DUPLICATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-		}
 	}
 
 	private void onPageDeleteMenuItem(Page page)
