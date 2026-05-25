@@ -251,7 +251,8 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 
 		stage.setTitle(Localization.getString("ui.project.management.title"));
 		stage.setMinHeight(500);
-		stage.setMinWidth(400);
+		stage.setMinWidth(500);
+		stage.setWidth(600);
 	}
 
 	private ProjectMetadata getSelectedProject()
