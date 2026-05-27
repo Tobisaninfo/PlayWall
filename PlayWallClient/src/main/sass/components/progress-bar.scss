@@ -1,6 +1,9 @@
 @use "variables";
 
 .progress-bar {
+    -fx-min-height: 10px;
+    -fx-pref-height: 10px;
+
     .track {
         -fx-background-radius: 2px;
         -fx-base: variables.$component-background-color;
@@ -9,7 +12,7 @@
 
     .bar {
         -fx-background-insets: 0 0 0 0;
-        -fx-padding: 0.35em !important;
+        -fx-padding: 5px !important;
 
         -fx-background-color: variables.$on-primary-color;
     }

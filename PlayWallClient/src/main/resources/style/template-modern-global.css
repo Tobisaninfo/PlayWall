@@ -4,10 +4,6 @@
 	-fx-fill: ${#buttonColor};
 }
 
-.pad-playbar {
-    -fx-min-height: 9px;
-}
-
 .pad-playbar${#class} .track {
 	-fx-background-radius: 2px;
 	-fx-base: ${#playbarTrackColor};
