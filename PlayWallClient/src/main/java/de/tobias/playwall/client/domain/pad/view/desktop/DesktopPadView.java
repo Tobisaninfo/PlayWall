@@ -498,12 +498,11 @@ public class DesktopPadView implements PadView
 	{
 		switch(status)
 		{
-			case EMPTY ->
+			case EMPTY, ERROR ->
 			{
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 				stopButton.setDisable(true);
 			}
-			case ERROR -> buttonBox.getChildren().setAll(settingsButton);
 			case READY ->
 			{
 				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
