@@ -49,7 +49,6 @@ public class WarningFlashAnimation
 			toggleTimeline.stop();
 			toggleTimeline = null;
 		}
-		padView.pseudoClassStateChanged(pseudoClass, false);
 	}
 
 	public boolean isRunning()
