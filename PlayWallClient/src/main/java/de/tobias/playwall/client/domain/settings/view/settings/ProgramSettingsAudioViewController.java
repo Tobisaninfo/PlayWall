@@ -26,12 +26,19 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	{
 		comboBoxOutputDevices.getItems().setAll(param.getOutputDeviceNames());
 
+		final String selectedAudioDevice = param.getSettings().getSelectedAudioDevice();
+		if(selectedAudioDevice != null && param.outputDeviceNames.contains(selectedAudioDevice))
+		{
+			comboBoxOutputDevices.getSelectionModel().select(selectedAudioDevice);
+		}
+
 		this.isValidProperty.set(true);
 	}
 
 	@Override
 	public void applySettings(Param param)
 	{
+		param.getSettings().setSelectedAudioDevice(comboBoxOutputDevices.getSelectionModel().getSelectedItem());
 	}
 
 	@Override
