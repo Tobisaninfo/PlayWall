@@ -109,6 +109,7 @@ public class Strings
 	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_TITLE = "ui.dialog.program.exit.unsaved-changes.title";
 	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_CONTENT = "ui.dialog.program.exit.unsaved-changes.content";
 	public static final String UI_EXIT_WARNING_PLAYING = "ui.program.exit.warning.playing";
+	public static final String UI_SETTINGS_PROGRAM_AUDIO_TITLE  = "ui.settings.program.audio.title";
 
 	// ui - connection
 	public static final String UI_CONNECTION_STATE_CONNECTED = "ui.connection.state.connected";

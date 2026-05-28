@@ -7,6 +7,8 @@ import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 /**
  * Base class for a page in the program settings dialog.
  */
@@ -17,6 +19,7 @@ public abstract class BaseProgramSettingsViewController extends BaseSettingsView
 	public static class Param
 	{
 		protected Settings settings;
+		protected List<String> outputDeviceNames;
 	}
 
 	@InjectConstructor

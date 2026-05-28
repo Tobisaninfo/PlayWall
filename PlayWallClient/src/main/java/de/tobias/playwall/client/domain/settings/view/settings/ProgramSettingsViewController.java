@@ -19,6 +19,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 /**
  * Viewcontroller for the program settings dialog.
  * Holds the sidebar consisting of {@link SettingsCategory} instances
@@ -33,6 +35,9 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 	@Getter(AccessLevel.NONE)
 	private Settings settings;
 
+	@Getter(AccessLevel.NONE)
+	private List<String> outputDeviceNames;
+
 	@InjectConstructor
 	public ProgramSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
 	{
@@ -45,6 +50,7 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 		boxCategories.getStyleClass().add("settings-category-box");
 
 		final SettingsCategory categoryGeneral = createSettingsCategory(ProgramSettingsGeneralViewController.class, Strings.UI_SETTINGS_PROGRAM_GENERAL_TITLE, FontAwesomeType.GEAR_SOLID);
+		createSettingsCategory(ProgramSettingsAudioViewController.class, Strings.UI_SETTINGS_PROGRAM_AUDIO_TITLE, FontAwesomeType.VOLUME_HIGH_SOLID);
 
 		initButtons();
 
@@ -64,8 +70,9 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 	public void initParameter(BaseProgramSettingsViewController.Param parameter)
 	{
 		this.settings = parameter.settings;
+		this.outputDeviceNames = parameter.outputDeviceNames;
 
-		settingViewController.forEach(controller -> controller.initParameter(new BaseProgramSettingsViewController.Param(settings)));
+		settingViewController.forEach(controller -> controller.initParameter(new BaseProgramSettingsViewController.Param(settings, outputDeviceNames)));
 
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PROGRAM_TITLE));
 	}
@@ -73,7 +80,7 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 	@FXML
 	protected void saveButtonHandler(ActionEvent event)
 	{
-		settingViewController.forEach(controller -> controller.applySettings(new BaseProgramSettingsViewController.Param(settings)));
+		settingViewController.forEach(controller -> controller.applySettings(new BaseProgramSettingsViewController.Param(settings, outputDeviceNames)));
 
 		try
 		{

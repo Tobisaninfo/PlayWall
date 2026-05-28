@@ -1055,7 +1055,7 @@ public class MainViewController extends ViewControllerBase
 			programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
 		}
 
-		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
+		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings(), settingsController.getOutputDeviceNames()), getContainingWindow());
 	}
 
 	private void onColorChange(Pad pad, ModernColor color)

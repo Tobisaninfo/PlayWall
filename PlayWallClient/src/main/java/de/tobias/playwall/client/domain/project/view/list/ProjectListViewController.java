@@ -238,7 +238,7 @@ public class ProjectListViewController extends ViewControllerBase
 	public void onOpenSettingsButton()
 	{
 		final ProgramSettingsViewController programSettingsViewController = AppContextHolder.getInstance().get(ProgramSettingsViewController.class);
-		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings()), getContainingWindow());
+		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings(), settingsController.getOutputDeviceNames()), getContainingWindow());
 	}
 
 	void fetchProjects()
