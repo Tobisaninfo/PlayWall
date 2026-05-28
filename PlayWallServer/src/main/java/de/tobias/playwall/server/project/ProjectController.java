@@ -155,7 +155,10 @@ public class ProjectController
 
 	public void setOutputDeviceForAll(String outputDeviceName)
 	{
-		this.padControllers.values().forEach(p -> p.seOutputDevice(outputDeviceName));
+		this.padControllers.values().forEach(p -> {
+			p.stop();
+			p.seOutputDevice(outputDeviceName);
+		});
 	}
 
 	public PadController createNewPadController(Pad pad)
