@@ -8,6 +8,7 @@ import de.tobias.playwall.server.api.settings.SettingsRepository;
 import de.tobias.playwall.server.common.model.settings.Settings;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
+import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -20,12 +21,14 @@ class SettingsUpdateHandler extends UndoableRequestHandler<SettingsUpdateRequest
 {
 	private final SettingsRepository settingsRepository;
 	private final SettingsMapper settingsMapper;
+	private final ProjectController projectController;
 
-	public SettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, SettingsRepository settingsRepository, SettingsMapper settingsMapper)
+	public SettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, SettingsRepository settingsRepository, SettingsMapper settingsMapper, ProjectController projectController)
 	{
 		super(messageSource, context);
 		this.settingsRepository = settingsRepository;
 		this.settingsMapper = settingsMapper;
+		this.projectController = projectController;
 	}
 
 	@Override
@@ -33,8 +36,15 @@ class SettingsUpdateHandler extends UndoableRequestHandler<SettingsUpdateRequest
 	{
 		final UndoItem inverseOperation = getInverseOperation(requestMessage, settingsRepository.loadSettings());
 
+		final String previousSelectedAudioDevice = settingsRepository.loadSettings().getSelectedAudioDevice();
 		final Settings settings = settingsMapper.settingsDtoToSettings(requestMessage.getSettings());
 		settingsRepository.saveSettings(settings);
+
+		final String selectedDevice = settings.getSelectedAudioDevice();
+		if(selectedDevice != null && !selectedDevice.equals(previousSelectedAudioDevice))
+		{
+			projectController.setOutputDeviceForAll(selectedDevice);
+		}
 
 		context.publishEvent(new SettingsUpdate(settingsMapper.settingsToSettingsDto(settings)));
 

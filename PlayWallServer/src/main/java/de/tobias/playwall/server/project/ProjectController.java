@@ -153,6 +153,11 @@ public class ProjectController
 		getPlayingPadControllers().forEach(PadController::stopImmediately);
 	}
 
+	public void setOutputDeviceForAll(String outputDeviceName)
+	{
+		this.padControllers.values().forEach(p -> p.seOutputDevice(outputDeviceName));
+	}
+
 	public PadController createNewPadController(Pad pad)
 	{
 		final PadController controller = padControllerFactory.createPadContentController(context, loadedProject, pad);

@@ -110,4 +110,6 @@ public abstract class PadController
 	{
 		playbackListeners.forEach(l -> l.onPositionUpdate(position, duration));
 	}
+
+	public abstract void seOutputDevice(String audioDeviceName);
 }

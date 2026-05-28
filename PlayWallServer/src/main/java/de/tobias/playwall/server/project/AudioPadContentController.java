@@ -191,4 +191,9 @@ public class AudioPadContentController extends PadController
 			fadeThread.interrupt();
 		}
 	}
+
+	public void seOutputDevice(String audioDeviceName)
+	{
+		audioHandler.setOutputDevice(audioDeviceName);
+	}
 }
