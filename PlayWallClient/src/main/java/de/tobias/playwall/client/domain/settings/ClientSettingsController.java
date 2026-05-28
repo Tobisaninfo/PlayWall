@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Service
 @Getter
 @Setter
@@ -12,4 +14,6 @@ import lombok.Setter;
 public class ClientSettingsController
 {
 	private Settings settings;
+
+	private List<String> outputDeviceNames;
 }

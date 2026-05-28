@@ -23,6 +23,7 @@ public class FetchProgramSettingsLaunchTask extends LaunchTask
 		try
 		{
 			settingsController.setSettings(client.settings().get());
+			settingsController.setOutputDeviceNames(client.getOutputDevices());
 			return new SuccessResult();
 		}
 		catch(PlayWallApiException e)

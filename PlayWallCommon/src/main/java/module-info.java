@@ -18,6 +18,7 @@ open module de.tobias.playwall.common {
 	exports de.tobias.playwall.common.api.settings.model;
 	exports de.tobias.playwall.common.api.settings;
 	exports de.tobias.playwall.common.api.settings.update;
+	exports de.tobias.playwall.common.api.settings.audiodevices;
 
 	requires com.fasterxml.jackson.annotation;
 	requires de.thecodelabs.libUtils;

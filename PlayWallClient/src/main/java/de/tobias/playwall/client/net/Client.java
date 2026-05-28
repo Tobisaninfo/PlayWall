@@ -10,6 +10,7 @@ import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -98,4 +99,6 @@ public interface Client
 	Settings getProgramSettings() throws PlayWallApiException;
 
 	void updateProgramSettings(Settings settings) throws PlayWallApiException;
+
+	List<String> getOutputDevices() throws PlayWallApiException;
 }

@@ -18,6 +18,8 @@ import de.tobias.playwall.common.api.project.request.*;
 import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.api.settings.SettingsGetResponse;
 import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetRequest;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetResponse;
 import de.tobias.playwall.common.utils.MapUtils;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
@@ -25,10 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
-import java.util.Base64;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static de.tobias.playwall.common.utils.MapUtils.entry;
@@ -328,5 +327,12 @@ class ClientImpl implements Client
 	public void updateProgramSettings(Settings settings) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new SettingsUpdateRequest(settingsMapper.settingToSettingsDto(settings)));
+	}
+
+	@Override
+	public List<String> getOutputDevices() throws PlayWallApiException
+	{
+		final AudioDevicesGetResponse response = clientWebSocketHandler.send(new AudioDevicesGetRequest());
+		return response.getAudioDeviceNames();
 	}
 }

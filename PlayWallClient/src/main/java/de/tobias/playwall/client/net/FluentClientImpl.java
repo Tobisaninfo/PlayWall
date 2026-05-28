@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -324,5 +325,9 @@ class FluentClientImpl implements FluentClient
 		return new SettingsBuilderImpl();
 	}
 
-
+	@Override
+	public List<String> getOutputDevices() throws PlayWallApiException
+	{
+		return delegate.getOutputDevices();
+	}
 }
