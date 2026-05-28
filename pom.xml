@@ -26,8 +26,8 @@
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 
         <revision>${revision-version}${revision-type}</revision>
-        <revision-version>8.1.1</revision-version>
-        <revision-type></revision-type>
+        <revision-version>8.2.0</revision-version>
+        <revision-type>-SNAPSHOT</revision-type>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
