@@ -2,6 +2,10 @@ package de.tobias.playwall.client.view.components.settings;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+
+import java.util.List;
+
+import de.tobias.playwall.client.utils.ChildExpandable;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.beans.DefaultProperty;
 import javafx.beans.InvalidationListener;
@@ -48,7 +52,7 @@ public class SettingsRow extends GridPane
 
 		setVgap(ViewConstants.DEFAULT_SPACING);
 		setHgap(ViewConstants.DEFAULT_SPACING);
-		GridPane.setValignment(leftBox, VPos.TOP);
+		GridPane.setValignment(leftBox, VPos.CENTER);
 
 		add(leftBox, 0, 0);
 
@@ -61,9 +65,20 @@ public class SettingsRow extends GridPane
 				Integer columnIndex = GridPane.getColumnIndex(node);
 				return columnIndex != null && columnIndex == 1;
 			});
-			for(int i = 0; i < content.size(); i++)
+			int row = 0;
+			for(final Node item : content)
 			{
-				add(content.get(i), 1, i);
+				if(item instanceof ChildExpandable expandable)
+				{
+					for(Node child : List.copyOf(expandable.getChildren()))
+					{
+						add(child, 1, row++);
+					}
+				}
+				else
+				{
+					add(item, 1, row++);
+				}
 			}
 		});
 	}

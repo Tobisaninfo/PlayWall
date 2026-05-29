@@ -1,10 +1,10 @@
 package de.tobias.playwall.client.view.components;
 
+import de.tobias.playwall.client.utils.ChildExpandable;
 import de.tobias.playwall.client.view.validation.Validator;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.StringProperty;
-import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -12,7 +12,7 @@ import lombok.Getter;
 
 import static de.tobias.playwall.client.view.components.PseudoClasses.ERROR_CLASS;
 
-public class ValidatedTextField extends VBox
+public class ValidatedTextField extends VBox implements ChildExpandable
 {
 	@Getter
 	private final TextField textField = new TextField();
@@ -27,8 +27,6 @@ public class ValidatedTextField extends VBox
 		textField.setMaxWidth(Double.MAX_VALUE);
 
 		errorLabel.getStyleClass().add("error-label");
-		errorLabel.setVisible(false);
-		errorLabel.setManaged(false);
 
 		getChildren().addAll(textField, errorLabel);
 
@@ -59,8 +57,6 @@ public class ValidatedTextField extends VBox
 		final boolean hasError = errorMessage != null;
 		textField.pseudoClassStateChanged(ERROR_CLASS, hasError);
 		errorLabel.setText(hasError ? errorMessage : "");
-		errorLabel.setVisible(hasError);
-		errorLabel.setManaged(hasError);
 	}
 
 	public void showError(String message)
