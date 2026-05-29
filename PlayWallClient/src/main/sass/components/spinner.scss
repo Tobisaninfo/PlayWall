@@ -41,4 +41,12 @@
     .text-field:focused, .text-field:hover {
         -fx-background-color: variables.$component-background-color-hover;
     }
+
+    &:focused {
+        -fx-background-color: variables.$component-background-color;
+        -fx-background-insets: 0;
+        -fx-background-radius: variables.$component-border-radius;
+        -fx-effect: null;
+        -fx-border-color: variables.$component-border-color-light;
+    }
 }
