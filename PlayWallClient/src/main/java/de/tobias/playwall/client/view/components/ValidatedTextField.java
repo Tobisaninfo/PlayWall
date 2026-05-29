@@ -25,8 +25,10 @@ public class ValidatedTextField extends VBox implements ChildExpandable
 	public ValidatedTextField()
 	{
 		textField.setMaxWidth(Double.MAX_VALUE);
+		textField.prefWidthProperty().bind(prefWidthProperty());
 
 		errorLabel.getStyleClass().add("error-label");
+		errorLabel.prefWidthProperty().bind(prefWidthProperty());
 
 		getChildren().addAll(textField, errorLabel);
 
