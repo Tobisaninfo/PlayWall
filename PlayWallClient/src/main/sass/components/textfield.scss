@@ -1,12 +1,15 @@
 @use "variables";
 
+$textfield-padding-v: 4px;
+$textfield-padding-h: 8px;
+
 .text-field {
     -fx-background-color: variables.$component-background-color;
     -fx-border-color: variables.$component-border-color-light;
     -fx-border-width: variables.$component-border-width;
     -fx-background-radius: variables.$component-border-radius;
     -fx-border-radius: variables.$component-border-radius;
-
+    -fx-padding: #{$textfield-padding-v} #{$textfield-padding-h};
 
     -fx-text-fill: variables.$component-text-color;
     -fx-prompt-text-fill: variables.$textfield-prompt-color;
@@ -22,5 +25,8 @@
 
     &:error {
         -fx-border-color: variables.$danger-color;
+        -fx-border-width: 2px;
+        // Compensate 1px border increase to keep total size identical
+        -fx-padding: #{$textfield-padding-v - 1px} #{$textfield-padding-h - 1px};
     }
 }
