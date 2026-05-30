@@ -38,6 +38,9 @@ public class MaterialToastManager
 
 		overlay.prefWidthProperty().bind(parent.widthProperty());
 		overlay.prefHeightProperty().bind(parent.heightProperty());
+
+		overlay.widthProperty().addListener((_, _, _) -> repositionToasts(false));
+		overlay.heightProperty().addListener((_, _, _) -> repositionToasts(false));
 	}
 
 	public void show(String title, String message, ToastType type, ToastAction... actions)
@@ -128,6 +131,7 @@ public class MaterialToastManager
 				final double currentAbsY = t.getLayoutY() + t.getTranslateY();
 				final double delta = y - currentAbsY;
 
+				t.setLayoutX(x);
 				t.setLayoutY(y);
 				t.setTranslateY(-delta);
 
