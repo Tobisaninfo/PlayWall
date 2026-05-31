@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Separator?>
+
+<SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
+              xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <SettingsRow icon="VOLUME_LOW_SOLID" title="%ui.settings.pad.fade.in">
+        <Spinner fx:id="fadeInDurationSpinner" prefWidth="200" editable="true" initialValue="0" min="0" max="20"
+                 amountToStepBy="0.1"/>
+        <CheckBox fx:id="fadeInPlayCheckBox" text="%ui.settings.pad.fade.in.play"/>
+        <CheckBox fx:id="fadeInResumeCheckBox" text="%ui.settings.pad.fade.in.resume"/>
+    </SettingsRow>
+
+    <Separator/>
+
+    <SettingsRow icon="VOLUME_HIGH_SOLID" title="%ui.settings.pad.fade.out">
+        <Spinner fx:id="fadeOutDurationSpinner" prefWidth="200" editable="true" initialValue="0" min="0" max="20"
+                 amountToStepBy="0.1"/>
+        <CheckBox fx:id="fadeOutPauseCheckBox" text="%ui.settings.pad.fade.out.pause"/>
+        <CheckBox fx:id="fadeOutStopCheckBox" text="%ui.settings.pad.fade.out.stop"/>
+        <CheckBox fx:id="fadeOutEndOfFileCheckBox" text="%ui.settings.pad.fade.out.endOfFile"/>
+    </SettingsRow>
+</SettingsPage>
+

@@ -41,6 +41,7 @@ public class SettingsRow extends GridPane
 		fontIcon = icon.get() != null ? new FontIcon(icon.get()) : new FontIcon();
 		fontIcon.setMouseTransparent(true);
 		fontIcon.setSize(16);
+		fontIcon.setPrefWidth(20);
 
 		final HBox leftBox = new HBox(ViewConstants.DEFAULT_SPACING, fontIcon, labelName);
 		leftBox.setAlignment(Pos.CENTER_LEFT);

@@ -69,6 +69,9 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.CLOCK_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Zeitanzeige"))));
 		data.add(new IconEntry(FontAwesomeType.PALETTE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Farbe"))));
 		data.add(new IconEntry(FontAwesomeType.CIRCLE_ARROW_DOWN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Farbe - Colorpicker"))));
+		data.add(new IconEntry(FontAwesomeType.SLIDERS_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Fade-In/Out"))));
+		data.add(new IconEntry(FontAwesomeType.VOLUME_LOW_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Fade-In"))));
+		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Fade-Out"))));
 		data.add(new IconEntry(FontAwesomeType.PEN_SOLID, List.of(new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt löschen"))));
 		data.add(new IconEntry(FontAwesomeType.CLONE_SOLID, List.of(new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt klonen"))));
 		data.add(new IconEntry(FontAwesomeType.ELLIPSIS_VERTICAL_SOLID, List.of(new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Mehr"))));
