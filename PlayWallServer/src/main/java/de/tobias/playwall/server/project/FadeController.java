@@ -2,11 +2,13 @@ package de.tobias.playwall.server.project;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class FadeController implements Runnable
 {
 	public interface FadeControllerListener
@@ -33,6 +35,7 @@ public class FadeController implements Runnable
 	@Override
 	public void run()
 	{
+		log.debug("Fade from {} to {} for {}ms", from, to, duration.toMillis());
 		long startTime = System.currentTimeMillis();
 		controller.setVolume(from);
 

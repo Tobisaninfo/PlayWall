@@ -20,6 +20,7 @@ public class AudioPadContentController extends PadController
 	private final Project project;
 	private final AudioPadContent padContent;
 
+	private double currentPadVolume;
 	private Thread fadeThread;
 	private boolean eofFadeTriggered = false;
 
@@ -96,9 +97,10 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void setVolume(double volume)
 	{
+		currentPadVolume = volume;
+
 		//Apply global volume
 		final double masterVolume = VolumeHelper.calculateVolume(project, volume);
-
 		audioHandler.setVolume(masterVolume);
 	}
 
@@ -117,7 +119,7 @@ public class AudioPadContentController extends PadController
 	private void fadeOut(Runnable onFadeFinished)
 	{
 		interruptCurrentFade();
-		fadeThread = Thread.ofVirtual().start(new FadeController(this, audioHandler.getVolume(), 0, Duration.ofSeconds(5), new FadeController.FadeControllerListener()
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, Duration.ofSeconds(5), new FadeController.FadeControllerListener()
 		{
 			@Override
 			public void onFadeFinished()
@@ -156,7 +158,7 @@ public class AudioPadContentController extends PadController
 			eofFadeTriggered = true;
 
 			interruptCurrentFade();
-			fadeThread = Thread.ofVirtual().start(new FadeController(this, audioHandler.getVolume(), 0, Duration.ofSeconds(5)));
+			fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, Duration.ofSeconds(5)));
 		}
 	}
 }
