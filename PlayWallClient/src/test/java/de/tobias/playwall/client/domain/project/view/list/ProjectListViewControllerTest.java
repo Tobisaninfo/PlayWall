@@ -5,6 +5,7 @@ import de.tobias.playwall.client.CommandLineOptions;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
+import de.tobias.playwall.client.domain.project.FadeSettings;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
@@ -43,7 +44,7 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 class ProjectListViewControllerTest extends AbstractViewControllerTest
 {
 	private static final UUID PROJECT_ID = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null);
+	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
 
 	@TempDir
 	private Path tempDir;
@@ -87,7 +88,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	void testProjectListDisplayAllProjects() throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
-				.allProjectsMetadata(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null)))
+				.allProjectsMetadata(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings())))
 				.recentProjectIds(List.of(PROJECT_ID))
 				.build());
 
@@ -122,7 +123,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testNewProjectDialogOkay(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null);
+		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_1.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
@@ -380,7 +381,7 @@ class ProjectListViewControllerTest extends AbstractViewControllerTest
 	void testOpenSettingsView(FxRobot robot) throws PlayWallApiException
 	{
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()
-				.allProjectsMetadata(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null)))
+				.allProjectsMetadata(List.of(new ProjectMetadata(PROJECT_ID, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings())))
 				.recentProjectIds(List.of(PROJECT_ID))
 				.build());
 

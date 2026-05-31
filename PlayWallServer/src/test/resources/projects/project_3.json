@@ -10,6 +10,15 @@
         "playColor": "RED3",
         "introColor": "BLUE1",
         "eofWarningTime": 5.0,
+        "fadeSettings": {
+            "fadeInDuration": 0.0,
+            "fadeInOnPlay": false,
+            "fadeInOnResume": false,
+            "fadeOutDuration": 0.0,
+            "fadeOutOnPause": false,
+            "fadeOutOnStop": false,
+            "fadeOutOnEndOfFile": false
+        },
         "VERSION": 1
     },
     "pages": [

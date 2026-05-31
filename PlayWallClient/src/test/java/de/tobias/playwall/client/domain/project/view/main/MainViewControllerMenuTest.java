@@ -4,6 +4,7 @@ import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
+import de.tobias.playwall.client.domain.project.FadeSettings;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
@@ -133,7 +134,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 	@Test
 	void testMenuNewProject(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(projectEmpty.getMetadata().getId(), projectEmpty.getMetadata().getName(), 2, 2, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null);
+		ProjectMetadata metadata = new ProjectMetadata(projectEmpty.getMetadata().getId(), projectEmpty.getMetadata().getName(), 2, 2, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 		when(client.getProject(projectEmpty.getMetadata().getId())).thenReturn(projectEmpty);
 

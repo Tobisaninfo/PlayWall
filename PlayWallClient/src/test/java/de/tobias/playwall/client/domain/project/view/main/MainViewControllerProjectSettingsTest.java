@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project.view.main;
 import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.domain.project.FadeSettings;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.Client;
@@ -96,6 +97,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.playColor(ModernColor.RED3)
 				.introColor(ModernColor.BLUE1)
 				.eofWarningTime(5.0)
+				.fadeSettings(new FadeSettings())
 				.build());
 	}
 
@@ -129,6 +131,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.defaultColor(ModernColor.GRAY1)
 				.playColor(ModernColor.RED3)
 				.introColor(null)
+				.fadeSettings(new FadeSettings())
 				.build());
 	}
 
@@ -164,6 +167,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.playColor(ModernColor.RED3)
 				.introColor(ModernColor.BLUE1)
 				.eofWarningTime(5.0)
+				.fadeSettings(new FadeSettings())
 				.build());
 	}
 
@@ -234,6 +238,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.playColor(ModernColor.RED3)
 				.introColor(ModernColor.BLUE1)
 				.eofWarningTime(5.0)
+				.fadeSettings(new FadeSettings())
 				.build());
 	}
 
@@ -271,6 +276,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.playColor(ModernColor.RED3)
 				.introColor(ModernColor.BLUE1)
 				.eofWarningTime(5.0)
+				.fadeSettings(new FadeSettings())
 				.build());
 	}
 }
