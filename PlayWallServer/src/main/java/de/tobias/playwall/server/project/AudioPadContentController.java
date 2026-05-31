@@ -17,6 +17,8 @@ public class AudioPadContentController extends PadController
 
 	private final AudioPadContent padContent;
 
+	private Thread fadeThread;
+
 	protected AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory)
 	{
 		super(context, pad);
@@ -42,6 +44,7 @@ public class AudioPadContentController extends PadController
 	public void play(boolean withFadeIn) throws IOException
 	{
 		audioHandler.setLooping(padContent.isLoop());
+		fadeIn();
 		audioHandler.play();
 		setStatus(PadControllerStatus.PLAY);
 	}
@@ -56,9 +59,11 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void stop()
 	{
-		audioHandler.stop();
-		setStatus(PadControllerStatus.STOP);
-		setStatus(PadControllerStatus.READY);
+		fadeOut(() -> {
+			audioHandler.stop();
+			setStatus(PadControllerStatus.STOP);
+			setStatus(PadControllerStatus.READY);
+		});
 	}
 
 	@Override
@@ -90,5 +95,32 @@ public class AudioPadContentController extends PadController
 	public void setLooping(boolean looping)
 	{
 		audioHandler.setLooping(looping);
+	}
+
+	private void fadeIn()
+	{
+		interruptCurrentFade();
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, 1, Duration.ofSeconds(5)));
+	}
+
+	private void fadeOut(Runnable onFadeFinished)
+	{
+		interruptCurrentFade();
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, 1, 0, Duration.ofSeconds(5), new FadeController.FadeControllerListener()
+		{
+			@Override
+			public void onFadeFinished()
+			{
+				onFadeFinished.run();
+			}
+		}));
+	}
+
+	private void interruptCurrentFade()
+	{
+		if(fadeThread != null)
+		{
+			fadeThread.interrupt();
+		}
 	}
 }

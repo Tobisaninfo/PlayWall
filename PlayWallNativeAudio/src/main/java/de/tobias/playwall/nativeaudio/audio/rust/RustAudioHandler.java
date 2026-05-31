@@ -93,7 +93,7 @@ public class RustAudioHandler extends AudioHandler
 	{
 		if(volume < VolumeHelper.MIN_VOLUME || volume > VolumeHelper.MAX_VOLUME)
 		{
-			throw new IllegalArgumentException(MessageFormat.format("Volume must be between {0} and {1}", VolumeHelper.MIN_VOLUME, VolumeHelper.MAX_VOLUME));
+			throw new IllegalArgumentException(MessageFormat.format("Volume must be between {0} and {1}. Value of {2} is not allowed", VolumeHelper.MIN_VOLUME, VolumeHelper.MAX_VOLUME, volume));
 		}
 
 		setVolumeNative(VolumeHelper.convertVolumeToLogarithmic(volume));
