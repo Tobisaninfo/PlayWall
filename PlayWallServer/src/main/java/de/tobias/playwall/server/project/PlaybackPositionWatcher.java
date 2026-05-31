@@ -25,6 +25,10 @@ class PlaybackPositionWatcher
 		}
 
 		final List<PadPlayPositionUpdate.PadPlayPosition> positions = controllers.stream()
+				.map(controller -> {
+					controller.notifyPlaybackPositionListeners(controller.getPlayPosition(), controller.getDuration());
+					return controller;
+				})
 				.map(controller -> new PadPlayPositionUpdate.PadPlayPosition(controller.getPad().getId(), controller.getPlayPosition().toMillis()))
 				.toList();
 		context.publishEvent(new PadPlayPositionUpdate(positions));

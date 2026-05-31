@@ -12,6 +12,8 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Getter
@@ -22,6 +24,8 @@ public abstract class PadController
 	protected final ApplicationContext context;
 	protected final Pad pad;
 	private PadControllerStatus status;
+
+	private final List<PlaybackPositionListener> playbackListeners = new CopyOnWriteArrayList<>();
 
 	protected PadController(ApplicationContext context, Pad pad)
 	{
@@ -83,4 +87,19 @@ public abstract class PadController
 
 	// TODO: Cannot be in generic PadController
 	public abstract void setLooping(boolean looping);
+
+	public void addPlaybackPositionListener(PlaybackPositionListener listener)
+	{
+		playbackListeners.add(listener);
+	}
+
+	public void removePlaybackPositionListener(PlaybackPositionListener listener)
+	{
+		playbackListeners.remove(listener);
+	}
+
+	void notifyPlaybackPositionListeners(Duration position, Duration duration)
+	{
+		playbackListeners.forEach(l -> l.onPositionUpdate(position, duration));
+	}
 }

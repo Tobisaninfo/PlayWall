@@ -18,12 +18,14 @@ public class AudioPadContentController extends PadController
 	private final AudioPadContent padContent;
 
 	private Thread fadeThread;
+	private boolean eofFadeTriggered = false;
 
 	protected AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory)
 	{
 		super(context, pad);
 		this.padContent = padContent;
 		this.audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
+		addPlaybackPositionListener(this::onPositionUpdate);
 	}
 
 	@Override
@@ -43,6 +45,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void play(boolean withFadeIn) throws IOException
 	{
+		eofFadeTriggered = false;
 		audioHandler.setLooping(padContent.isLoop());
 		fadeIn();
 		audioHandler.play();
@@ -69,6 +72,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void onEof()
 	{
+		eofFadeTriggered = false;
 		setStatus(PadControllerStatus.EOF);
 		setStatus(PadControllerStatus.READY);
 	}
@@ -121,6 +125,31 @@ public class AudioPadContentController extends PadController
 		if(fadeThread != null)
 		{
 			fadeThread.interrupt();
+		}
+	}
+
+	private void onPositionUpdate(Duration position, Duration duration)
+	{
+		if(padContent.isLoop())
+		{
+			return;
+		}
+		if(eofFadeTriggered)
+		{
+			return;
+		}
+		if(duration == null || duration.isZero())
+		{
+			return;
+		}
+
+		final Duration remaining = duration.minus(position);
+		if(remaining.compareTo(Duration.ofSeconds(5)) <= 0)
+		{
+			eofFadeTriggered = true;
+
+			interruptCurrentFade();
+			fadeThread = Thread.ofVirtual().start(new FadeController(this, audioHandler.getVolume(), 0, Duration.ofSeconds(5)));
 		}
 	}
 }
