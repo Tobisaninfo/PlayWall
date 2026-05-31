@@ -3,8 +3,10 @@ package de.tobias.playwall.server.project;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
+import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
+import de.tobias.playwall.server.common.model.project.Project;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
@@ -15,16 +17,18 @@ public class AudioPadContentController extends PadController
 {
 	private final AudioHandler audioHandler;
 
+	private final Project project;
 	private final AudioPadContent padContent;
 
 	private Thread fadeThread;
 	private boolean eofFadeTriggered = false;
 
-	protected AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory)
+	protected AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory, Project project)
 	{
 		super(context, pad);
 		this.padContent = padContent;
 		this.audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
+		this.project = project;
 		addPlaybackPositionListener(this::onPositionUpdate);
 	}
 
@@ -32,7 +36,7 @@ public class AudioPadContentController extends PadController
 	protected void loadInternal() throws IOException
 	{
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
-		audioHandler.setVolume(padContent.getVolume());
+		setVolume(padContent.getVolume());
 	}
 
 	@Override
@@ -92,7 +96,10 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void setVolume(double volume)
 	{
-		audioHandler.setVolume(volume);
+		//Apply global volume
+		final double masterVolume = VolumeHelper.calculateVolume(project, volume);
+
+		audioHandler.setVolume(masterVolume);
 	}
 
 	@Override

@@ -30,8 +30,7 @@ class PadChangeVolumeHandler implements OneTimeActionRequestHandler<PadChangeVol
 		final PadController padController = projectController.getPadController(pad.getId());
 		if(padController != null)
 		{
-			final double effectiveVolume = VolumeHelper.calculateVolume(projectController.getLoadedProject(), requestMessage.getVolume());
-			padController.setVolume(effectiveVolume);
+			padController.setVolume(requestMessage.getVolume());
 		}
 	}
 }

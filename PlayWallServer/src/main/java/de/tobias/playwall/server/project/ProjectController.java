@@ -148,7 +148,7 @@ public class ProjectController
 
 	public PadController createNewPadController(Pad pad)
 	{
-		final PadController controller = padControllerFactory.createPadContentController(context, pad);
+		final PadController controller = padControllerFactory.createPadContentController(context, loadedProject, pad);
 		padControllers.put(pad.getId(), controller);
 		return controller;
 	}

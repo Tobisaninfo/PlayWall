@@ -78,8 +78,7 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 				{
 					padController.setLooping(requestAudioPadContent.isLoop());
 
-					final double effectiveVolume = VolumeHelper.calculateVolume(projectController.getLoadedProject(), requestAudioPadContent.getVolume());
-					padController.setVolume(effectiveVolume);
+					padController.setVolume(requestAudioPadContent.getVolume());
 				}
 			}
 		}

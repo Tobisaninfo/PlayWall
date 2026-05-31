@@ -87,11 +87,7 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 			switch(content)
 			{
 				//noinspection DataFlowIssue
-				case AudioPadContent audioPadContent ->
-				{
-					final double effectiveVolume = VolumeHelper.calculateVolume(projectController.getLoadedProject(), audioPadContent.getVolume());
-					newPadController.setVolume(effectiveVolume);
-				}
+				case AudioPadContent audioPadContent -> newPadController.setVolume(audioPadContent.getVolume());
 			}
 		});
 
