@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class ProjectMetadataMapper
 {
 	private final ColorMapper colorMapper;
+	private final FadeSettingsMapper fadeSettingsMapper;
 
 	public ProjectMetadata projectMetadataDtoToProjectMetadata(ProjectMetadataDto metadataDto)
 	{
@@ -24,7 +25,8 @@ public class ProjectMetadataMapper
 				colorMapper.colorToModernColor(metadataDto.defaultColor()),
 				colorMapper.colorToModernColor(metadataDto.playColor()),
 				colorMapper.colorToModernColor(metadataDto.introColor()),
-				metadataDto.eofWarningTime()
+				metadataDto.eofWarningTime(),
+				metadataDto.fadeSettings() != null ? fadeSettingsMapper.fadeSettingsDtoToFadeSettings(metadataDto.fadeSettings()) : null
 		);
 	}
 
@@ -40,7 +42,8 @@ public class ProjectMetadataMapper
 				colorMapper.modernColorToColor(metadata.getDefaultColor()),
 				colorMapper.modernColorToColor(metadata.getPlayColor()),
 				colorMapper.modernColorToColor(metadata.getIntroColor()),
-				metadata.getEofWarningTime()
+				metadata.getEofWarningTime(),
+				metadata.getFadeSettings() != null ? fadeSettingsMapper.fadeSettingsToFadeSettingsDto(metadata.getFadeSettings()) : null
 		);
 	}
 }

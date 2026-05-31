@@ -49,6 +49,9 @@ public class ProjectMetadata
 	@Builder.Default
 	private Double eofWarningTime = 5.0;
 
+	@Builder.Default
+	private FadeSettings fadeSettings = new FadeSettings();
+
 	@JsonIgnore
 	public int getNumberOfPadsPerPage()
 	{
@@ -68,6 +71,7 @@ public class ProjectMetadata
 				.playColor(playColor)
 				.introColor(introColor)
 				.eofWarningTime(eofWarningTime)
+				.fadeSettings(fadeSettings)
 				.build();
 	}
 }

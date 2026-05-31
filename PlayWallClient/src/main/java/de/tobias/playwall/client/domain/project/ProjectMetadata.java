@@ -24,6 +24,7 @@ public final class ProjectMetadata
 	private ModernColor playColor;
 	private ModernColor introColor;
 	private Double eofWarningTime;
+	private FadeSettings fadeSettings;
 
 	public int getNumberOfPadsPerPage()
 	{
