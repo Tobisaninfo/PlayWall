@@ -7,10 +7,7 @@ import de.tobias.playwall.common.api.project.request.ProjectUpdateRequest;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.api.history.UndoItem;
-import de.tobias.playwall.server.api.project.ProjectMapper;
-import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
-import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
-import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.api.project.*;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
@@ -35,17 +32,19 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
+	private final FadeSettingsMapper fadeSettingsMapper;
 
 	private String shortDescription;
 	private String longDescription;
 
-	public ProjectSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService, ProjectMetadataMapper projectMetadataMapper, ProjectMapper projectMapper)
+	public ProjectSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService, ProjectMetadataMapper projectMetadataMapper, ProjectMapper projectMapper, FadeSettingsMapper fadeSettingsMapper)
 	{
 		super(messageSource, context);
 		this.projectController = projectController;
 		this.projectService = projectService;
 		this.projectMetadataMapper = projectMetadataMapper;
 		this.projectMapper = projectMapper;
+		this.fadeSettingsMapper = fadeSettingsMapper;
 	}
 
 	@PostConstruct
@@ -75,6 +74,7 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 			metadata.setPlayColor(requestMessage.getProjectMetadata().playColor());
 			metadata.setIntroColor(requestMessage.getProjectMetadata().introColor());
 			metadata.setEofWarningTime(requestMessage.getProjectMetadata().eofWarningTime());
+			metadata.setFadeSettings(fadeSettingsMapper.fadeSettingsDtoToFadeSettings(requestMessage.getProjectMetadata().fadeSettings()));
 
 			metadata.setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
 			metadata.setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
