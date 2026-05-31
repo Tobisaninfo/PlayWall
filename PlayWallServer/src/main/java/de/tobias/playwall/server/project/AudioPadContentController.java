@@ -100,13 +100,13 @@ public class AudioPadContentController extends PadController
 	private void fadeIn()
 	{
 		interruptCurrentFade();
-		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, 1, Duration.ofSeconds(5)));
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, padContent.getVolume(), Duration.ofSeconds(5)));
 	}
 
 	private void fadeOut(Runnable onFadeFinished)
 	{
 		interruptCurrentFade();
-		fadeThread = Thread.ofVirtual().start(new FadeController(this, 1, 0, Duration.ofSeconds(5), new FadeController.FadeControllerListener()
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, audioHandler.getVolume(), 0, Duration.ofSeconds(5), new FadeController.FadeControllerListener()
 		{
 			@Override
 			public void onFadeFinished()

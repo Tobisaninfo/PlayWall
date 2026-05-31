@@ -89,6 +89,14 @@ public class RustAudioHandler extends AudioHandler
 	private native double getDurationNative();
 
 	@Override
+	public double getVolume()
+	{
+		return getVolumeNative();
+	}
+
+	private native double getVolumeNative();
+
+	@Override
 	public void setVolume(double volume)
 	{
 		if(volume < VolumeHelper.MIN_VOLUME || volume > VolumeHelper.MAX_VOLUME)

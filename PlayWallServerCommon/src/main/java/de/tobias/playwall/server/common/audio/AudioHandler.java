@@ -64,6 +64,13 @@ public abstract class AudioHandler
 	public abstract void setVolume(double volume);
 
 	/**
+	 * Get the current volume between 0 and 1.25.
+	 *
+	 * @return current volume
+	 */
+	public abstract double getVolume();
+
+	/**
 	 * Check if media is loaded.
 	 *
 	 * @return <code>true</code> Loaded

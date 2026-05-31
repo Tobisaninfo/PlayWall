@@ -211,6 +211,22 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 }
 
 #[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getVolumeNative(
+    mut unowned_env: EnvUnowned,
+    obj: JObject,
+) -> jdouble {
+    unowned_env
+        .with_env(|mut env| -> jni::errors::Result<jdouble> {
+            let duration = with_audio_handler(&mut env, obj, |_, audio_handler| {
+                audio_handler.volume as jdouble
+            })
+                .unwrap();
+            return Ok(duration as jdouble);
+        })
+        .resolve::<ThrowRuntimeExAndDefault>()
+}
+
+#[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_setVolumeNative(
     mut env: EnvUnowned,
     obj: JObject,
