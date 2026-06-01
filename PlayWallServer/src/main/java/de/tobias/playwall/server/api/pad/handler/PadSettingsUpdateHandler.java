@@ -6,7 +6,7 @@ import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
-import de.tobias.playwall.server.common.audio.VolumeHelper;
+import de.tobias.playwall.server.api.project.FadeSettingsMapper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.pad.PadContent;
@@ -25,12 +25,14 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 {
 	private final ProjectController projectController;
 	private final PadMapper padMapper;
+	private final FadeSettingsMapper fadeSettingsMapper;
 
-	PadSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, PadMapper padMapper)
+	PadSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, PadMapper padMapper, FadeSettingsMapper fadeSettingsMapper)
 	{
 		super(messageSource, context);
 		this.projectController = projectController;
 		this.padMapper = padMapper;
+		this.fadeSettingsMapper = fadeSettingsMapper;
 	}
 
 	@Override
@@ -47,6 +49,7 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 		pad.setIntroColor(requestMessage.getPad().getIntroColor());
 		pad.setEofWarningTime(requestMessage.getPad().getEofWarningTime());
 		pad.setIntroDuration(requestMessage.getPad().getIntroDuration());
+		pad.setFadeSettings(fadeSettingsMapper.fadeSettingsDtoToFadeSettings(requestMessage.getPad().getFadeSettings()));
 
 		updatePadContent(requestMessage.getPad().getContent(), pad);
 
