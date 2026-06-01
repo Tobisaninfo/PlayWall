@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class FadeSettings
 {
 	private Double fadeInDuration = 0.0;
@@ -17,4 +18,17 @@ public class FadeSettings
 	private Boolean fadeOutOnPause = false;
 	private Boolean fadeOutOnStop = false;
 	private Boolean fadeOutOnEndOfFile = false;
+
+	public FadeSettings copy()
+	{
+		return FadeSettings.builder()
+				.fadeInDuration(this.fadeInDuration)
+				.fadeInOnPlay(this.fadeInOnPlay)
+				.fadeInOnResume(this.fadeInOnResume)
+				.fadeOutDuration(this.fadeOutDuration)
+				.fadeOutOnPause(this.fadeOutOnPause)
+				.fadeOutOnStop(this.fadeOutOnStop)
+				.fadeOutOnEndOfFile(this.fadeOutOnEndOfFile)
+				.build();
+	}
 }

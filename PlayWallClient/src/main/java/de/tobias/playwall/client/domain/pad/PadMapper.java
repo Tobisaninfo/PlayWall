@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.pad;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.project.ColorMapper;
+import de.tobias.playwall.client.domain.project.FadeSettingsMapper;
 import de.tobias.playwall.common.api.pad.PadDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ public class PadMapper
 {
 	private final PadContentMapper padContentMapper;
 	private final ColorMapper colorMapper;
+	private final FadeSettingsMapper fadeSettingsMapper;
 
 	public Pad padDtoToPad(PadDto pad)
 	{
@@ -26,6 +28,7 @@ public class PadMapper
 				.introColor(colorMapper.colorToModernColor(pad.getIntroColor()))
 				.eofWarningTime(pad.getEofWarningTime())
 				.introDuration(pad.getIntroDuration())
+				.fadeSettings(pad.getFadeSettings() != null ? fadeSettingsMapper.fadeSettingsDtoToFadeSettings(pad.getFadeSettings()) : null)
 				.content(padContentMapper.padContentDtoToPadContent(pad.getContent()))
 				.build();
 	}
@@ -42,6 +45,7 @@ public class PadMapper
 				.introColor(colorMapper.modernColorToColor(pad.getIntroColor()))
 				.eofWarningTime(pad.getEofWarningTime())
 				.introDuration(pad.getIntroDuration())
+				.fadeSettings(pad.getFadeSettings() != null ? fadeSettingsMapper.fadeSettingsToFadeSettingsDto(pad.getFadeSettings()) : null)
 				.content(padContentMapper.padContentToPadContentDto(pad.getContent()))
 				.build();
 	}

@@ -2,6 +2,7 @@ package de.tobias.playwall.common.api.pad;
 
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
+import de.tobias.playwall.common.api.project.model.FadeSettingsDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -26,5 +27,6 @@ public class PadDto
 	private Color introColor;
 	private Double eofWarningTime;
 	private Double introDuration;
+	private FadeSettingsDto fadeSettings;
 }
 

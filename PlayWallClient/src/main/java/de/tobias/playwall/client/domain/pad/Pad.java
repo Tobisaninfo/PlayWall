@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.pad;
 
+import de.tobias.playwall.client.domain.project.FadeSettings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
@@ -25,6 +26,7 @@ public class Pad
 	private ModernColor introColor;
 	private Double eofWarningTime;
 	private Double introDuration;
+	private FadeSettings fadeSettings;
 
 	public String getReadablePosition()
 	{
@@ -43,6 +45,7 @@ public class Pad
 				.introColor(introColor)
 				.eofWarningTime(eofWarningTime)
 				.introDuration(introDuration)
+				.fadeSettings(fadeSettings == null ? null : fadeSettings.copy())
 				.content(content == null ? null : content.copy())
 				.build();
 	}

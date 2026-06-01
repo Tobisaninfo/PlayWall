@@ -2,6 +2,7 @@ package de.tobias.playwall.server.common.model.pad;
 
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
+import de.tobias.playwall.server.common.model.project.FadeSettings;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -25,6 +26,7 @@ public class Pad
 	private Color introColor;
 	private Double eofWarningTime;
 	private Double introDuration;
+	private FadeSettings fadeSettings;
 
 	public Pad copy(boolean generateNewId)
 	{
@@ -38,6 +40,7 @@ public class Pad
 				.introColor(introColor)
 				.eofWarningTime(eofWarningTime)
 				.introDuration(introDuration)
+				.fadeSettings(fadeSettings == null ? null : fadeSettings.copy())
 				.content(content == null ? null : content.copy())
 				.build();
 	}
