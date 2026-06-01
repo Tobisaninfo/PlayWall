@@ -4,6 +4,8 @@ import de.tobias.playwall.client.domain.project.FadeSettings;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
+import javafx.scene.layout.VBox;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.text.NumberFormat;
@@ -18,6 +20,10 @@ public class FadeSettingsController
 		NUMBER_FORMAT.setMinimumFractionDigits(1);
 		NUMBER_FORMAT.setMaximumFractionDigits(1);
 	}
+
+	@FXML
+	@Getter
+	private VBox root;
 
 	@FXML
 	private Spinner<Double> fadeInDurationSpinner;
