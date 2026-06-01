@@ -6,12 +6,15 @@ import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
+import de.tobias.playwall.server.common.model.project.FadeSettings;
 import de.tobias.playwall.server.common.model.project.Project;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Optional;
 
 public class AudioPadContentController extends PadController
 {
@@ -52,7 +55,20 @@ public class AudioPadContentController extends PadController
 	{
 		eofFadeTriggered = false;
 		audioHandler.setLooping(padContent.isLoop());
-		fadeIn();
+
+		if(withFadeIn)
+		{
+			final FadeSettings fadeSettings = getEffectiveFadeSettings();
+			final boolean isPaused = getStatus() == PadControllerStatus.PAUSE;
+			final boolean fadeEnabled = isPaused
+					? BooleanUtils.isTrue(fadeSettings.getFadeInOnResume())
+					: BooleanUtils.isTrue(fadeSettings.getFadeInOnPlay());
+			if(fadeEnabled)
+			{
+				fadeIn(fadeSettings.getFadeInDuration());
+			}
+		}
+
 		audioHandler.play();
 		setStatus(PadControllerStatus.PLAY);
 	}
@@ -60,18 +76,39 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void pause()
 	{
-		audioHandler.pause();
-		setStatus(PadControllerStatus.PAUSE);
+		final FadeSettings fadeSettings = getEffectiveFadeSettings();
+		if(BooleanUtils.isTrue(fadeSettings.getFadeOutOnPause()))
+		{
+			fadeOut(fadeSettings.getFadeOutDuration(), () -> {
+				audioHandler.pause();
+				setStatus(PadControllerStatus.PAUSE);
+			});
+		}
+		else
+		{
+			audioHandler.pause();
+			setStatus(PadControllerStatus.PAUSE);
+		}
 	}
 
 	@Override
 	public void stop()
 	{
-		fadeOut(() -> {
+		final FadeSettings fadeSettings = getEffectiveFadeSettings();
+		if(BooleanUtils.isTrue(fadeSettings.getFadeOutOnStop()))
+		{
+			fadeOut(fadeSettings.getFadeOutDuration(), () -> {
+				audioHandler.stop();
+				setStatus(PadControllerStatus.STOP);
+				setStatus(PadControllerStatus.READY);
+			});
+		}
+		else
+		{
 			audioHandler.stop();
 			setStatus(PadControllerStatus.STOP);
 			setStatus(PadControllerStatus.READY);
-		});
+		}
 	}
 
 	@Override
@@ -110,16 +147,21 @@ public class AudioPadContentController extends PadController
 		audioHandler.setLooping(looping);
 	}
 
-	private void fadeIn()
+	private FadeSettings getEffectiveFadeSettings()
 	{
-		interruptCurrentFade();
-		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, padContent.getVolume(), Duration.ofSeconds(5)));
+		return Optional.ofNullable(pad.getFadeSettings()).orElse(project.getMetadata().getFadeSettings());
 	}
 
-	private void fadeOut(Runnable onFadeFinished)
+	private void fadeIn(double durationInSeconds)
 	{
 		interruptCurrentFade();
-		fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, Duration.ofSeconds(5), new FadeController.FadeControllerListener()
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, padContent.getVolume(), secondsToDuration(durationInSeconds)));
+	}
+
+	private void fadeOut(double durationInSeconds, Runnable onFadeFinished)
+	{
+		interruptCurrentFade();
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, secondsToDuration(durationInSeconds), new FadeController.FadeControllerListener()
 		{
 			@Override
 			public void onFadeFinished()
@@ -139,26 +181,30 @@ public class AudioPadContentController extends PadController
 
 	private void onPositionUpdate(Duration position, Duration duration)
 	{
-		if(padContent.isLoop())
-		{
-			return;
-		}
-		if(eofFadeTriggered)
-		{
-			return;
-		}
-		if(duration == null || duration.isZero())
+		if(padContent.isLoop() || eofFadeTriggered || duration == null || duration.isZero())
 		{
 			return;
 		}
 
+		final FadeSettings fadeSettings = getEffectiveFadeSettings();
+		if(BooleanUtils.isNotTrue(fadeSettings.getFadeOutOnEndOfFile()))
+		{
+			return;
+		}
+
+		final Duration fadeOutDuration = secondsToDuration(fadeSettings.getFadeOutDuration());
 		final Duration remaining = duration.minus(position);
-		if(remaining.compareTo(Duration.ofSeconds(5)) <= 0)
+		if(remaining.compareTo(fadeOutDuration) <= 0)
 		{
 			eofFadeTriggered = true;
 
 			interruptCurrentFade();
-			fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, Duration.ofSeconds(5)));
+			fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, fadeOutDuration));
 		}
+	}
+
+	private static Duration secondsToDuration(double durationInSeconds)
+	{
+		return Duration.ofMillis((long) (durationInSeconds * 1000));
 	}
 }
