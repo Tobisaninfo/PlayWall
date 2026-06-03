@@ -23,6 +23,7 @@ import tools.jackson.databind.json.JsonMapper;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -63,11 +64,12 @@ class AudioPadContentControllerTest
 		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
 
 		final Project project = TestUtils.loadProject(jsonMapper, "projects/project_1.json");
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString();
 
 		pad = project.getPad(PAD_ID);
 		pad.setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 		controller = Mockito.spy(new AudioPadContentController(context, pad, (AudioPadContent) pad.getContent(), audioHandlerFactory, project));
+		controller.addPlaybackListener(new EndOfFileFadeListener(controller));
 
 		projectFadeSettings = project.getMetadata().getFadeSettings();
 		projectFadeSettings.setFadeInDuration(1.0);
@@ -211,5 +213,36 @@ class AudioPadContentControllerTest
 
 		verify(controller).fadeOut(anyDouble(), any());
 		AWAIT.untilAsserted(() -> verify(audioHandler).stop());
+	}
+
+	@Test
+	void testEndOfFileWithoutFadeOut()
+	{
+		controller.notifyPlaybackPositionListeners(Duration.ofSeconds(1), Duration.ofSeconds(2));
+
+		verify(controller, never()).fadeOut(anyDouble(), any());
+	}
+
+	@Test
+	void testEndOfFileWithProjectFadeOut()
+	{
+		projectFadeSettings.setFadeOutOnEndOfFile(true);
+
+		controller.notifyPlaybackPositionListeners(Duration.ofSeconds(1), Duration.ofSeconds(2));
+
+		verify(controller).fadeOut(anyDouble(), any());
+	}
+
+	@Test
+	void testEndOfFileWithPadFadeOut()
+	{
+		pad.setFadeSettings(FadeSettings.builder()
+				.fadeOutDuration(1.0)
+				.fadeOutOnEndOfFile(true)
+				.build());
+
+		controller.notifyPlaybackPositionListeners(Duration.ofSeconds(1), Duration.ofSeconds(2));
+
+		verify(controller).fadeOut(anyDouble(), any());
 	}
 }
