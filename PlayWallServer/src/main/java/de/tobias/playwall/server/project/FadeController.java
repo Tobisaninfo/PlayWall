@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.Duration;
-
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Slf4j
@@ -29,26 +27,25 @@ public class FadeController implements Runnable
 	private final AudioPadContentController controller;
 	private final double from;
 	private final double to;
-	private final Duration duration;
+	private final double seconds;
 	private FadeControllerListener listener;
 
 	@Override
 	public void run()
 	{
-		log.debug("Fade from {} to {} for {}ms", from, to, duration.toMillis());
+		final long totalMillis = (long) (seconds * 1000);
+		final double delta = to - from;
+		log.debug("Fade from {} to {} for {}ms", from, to, totalMillis);
+
 		long startTime = System.currentTimeMillis();
 		controller.setVolume(from);
-
-		boolean running = true;
-
-		final long totalMillis = duration.toMillis();
-		final double delta = to - from;
 
 		if(listener != null)
 		{
 			listener.onFadeStart();
 		}
 
+		boolean running = true;
 		while(running)
 		{
 			try

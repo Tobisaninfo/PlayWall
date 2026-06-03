@@ -69,7 +69,7 @@ class AudioPadContentControllerTest
 		pad = project.getPad(PAD_ID);
 		pad.setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 		controller = Mockito.spy(new AudioPadContentController(context, pad, (AudioPadContent) pad.getContent(), audioHandlerFactory, project));
-		controller.addPlaybackListener(new EndOfFileFadeListener(controller));
+		controller.addPlaybackListener(new AudioPadEndOfFileFadeListener(controller));
 
 		projectFadeSettings = project.getMetadata().getFadeSettings();
 		projectFadeSettings.setFadeInDuration(1.0);

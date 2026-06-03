@@ -6,10 +6,8 @@ import org.apache.commons.lang3.BooleanUtils;
 
 import java.time.Duration;
 
-import static de.tobias.playwall.server.project.AudioPadContentController.secondsToDuration;
-
 @RequiredArgsConstructor
-class EndOfFileFadeListener implements PlaybackListener
+class AudioPadEndOfFileFadeListener implements PlaybackListener
 {
 	private final AudioPadContentController controller;
 	private boolean eofFadeTriggered = false;
@@ -28,9 +26,9 @@ class EndOfFileFadeListener implements PlaybackListener
 			return;
 		}
 
-		final Duration fadeOutDuration = secondsToDuration(fadeSettings.getFadeOutDuration());
-		final Duration remaining = duration.minus(position);
-		if(remaining.compareTo(fadeOutDuration) <= 0)
+		final long fadeOutDuration = (long) (fadeSettings.getFadeOutDuration() * 1000);
+		final long remaining = duration.minus(position).toMillis();
+		if(remaining <= fadeOutDuration)
 		{
 			eofFadeTriggered = true;
 

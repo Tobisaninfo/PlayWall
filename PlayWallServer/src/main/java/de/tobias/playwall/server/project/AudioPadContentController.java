@@ -35,7 +35,7 @@ public class AudioPadContentController extends PadController
 		this.padContent = padContent;
 		this.audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
 		this.project = project;
-		addPlaybackListener(new EndOfFileFadeListener(this));
+		addPlaybackListener(new AudioPadEndOfFileFadeListener(this));
 	}
 
 	@Override
@@ -157,13 +157,13 @@ public class AudioPadContentController extends PadController
 	void fadeIn(double durationInSeconds)
 	{
 		interruptCurrentFade();
-		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, padContent.getVolume(), secondsToDuration(durationInSeconds)));
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, padContent.getVolume(), durationInSeconds));
 	}
 
 	void fadeOut(double durationInSeconds, Runnable onFadeFinished)
 	{
 		interruptCurrentFade();
-		fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, secondsToDuration(durationInSeconds), new FadeController.FadeControllerListener()
+		fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, durationInSeconds, new FadeController.FadeControllerListener()
 		{
 			@Override
 			public void onFadeFinished()
@@ -179,10 +179,5 @@ public class AudioPadContentController extends PadController
 		{
 			fadeThread.interrupt();
 		}
-	}
-
-	static Duration secondsToDuration(double durationInSeconds)
-	{
-		return Duration.ofMillis((long) (durationInSeconds * 1000));
 	}
 }
