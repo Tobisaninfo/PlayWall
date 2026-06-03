@@ -8,6 +8,8 @@ import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.project.FadeSettings;
 import de.tobias.playwall.server.common.model.project.Project;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.context.ApplicationContext;
 
@@ -21,11 +23,11 @@ public class AudioPadContentController extends PadController
 	private final AudioHandler audioHandler;
 
 	private final Project project;
+	@Getter(AccessLevel.PACKAGE)
 	private final AudioPadContent padContent;
 
 	private double currentPadVolume;
 	private Thread fadeThread;
-	private boolean eofFadeTriggered = false;
 
 	public AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory, Project project)
 	{
@@ -33,7 +35,7 @@ public class AudioPadContentController extends PadController
 		this.padContent = padContent;
 		this.audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
 		this.project = project;
-		addPlaybackPositionListener(this::onPositionUpdate);
+		addPlaybackListener(new EndOfFileFadeListener(this));
 	}
 
 	@Override
@@ -53,7 +55,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void play(boolean withFadeIn) throws IOException
 	{
-		eofFadeTriggered = false;
+		fireListeners(PlaybackListener::onPlay);
 		audioHandler.setLooping(padContent.isLoop());
 
 		if(withFadeIn)
@@ -114,7 +116,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void onEof()
 	{
-		eofFadeTriggered = false;
+		fireListeners(PlaybackListener::onEof);
 		setStatus(PadControllerStatus.EOF);
 		setStatus(PadControllerStatus.READY);
 	}
@@ -147,7 +149,7 @@ public class AudioPadContentController extends PadController
 		audioHandler.setLooping(looping);
 	}
 
-	private FadeSettings getEffectiveFadeSettings()
+	FadeSettings getEffectiveFadeSettings()
 	{
 		return Optional.ofNullable(pad.getFadeSettings()).orElse(project.getMetadata().getFadeSettings());
 	}
@@ -179,31 +181,7 @@ public class AudioPadContentController extends PadController
 		}
 	}
 
-	private void onPositionUpdate(Duration position, Duration duration)
-	{
-		if(padContent.isLoop() || eofFadeTriggered || duration == null || duration.isZero())
-		{
-			return;
-		}
-
-		final FadeSettings fadeSettings = getEffectiveFadeSettings();
-		if(BooleanUtils.isNotTrue(fadeSettings.getFadeOutOnEndOfFile()))
-		{
-			return;
-		}
-
-		final Duration fadeOutDuration = secondsToDuration(fadeSettings.getFadeOutDuration());
-		final Duration remaining = duration.minus(position);
-		if(remaining.compareTo(fadeOutDuration) <= 0)
-		{
-			eofFadeTriggered = true;
-
-			interruptCurrentFade();
-			fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, fadeOutDuration));
-		}
-	}
-
-	private static Duration secondsToDuration(double durationInSeconds)
+	static Duration secondsToDuration(double durationInSeconds)
 	{
 		return Duration.ofMillis((long) (durationInSeconds * 1000));
 	}

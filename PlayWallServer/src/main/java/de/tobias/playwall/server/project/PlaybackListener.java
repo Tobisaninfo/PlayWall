@@ -2,8 +2,11 @@ package de.tobias.playwall.server.project;
 
 import java.time.Duration;
 
-@FunctionalInterface
-public interface PlaybackPositionListener
+public interface PlaybackListener
 {
 	void onPositionUpdate(Duration position, Duration duration);
+
+	void onPlay();
+
+	void onEof();
 }

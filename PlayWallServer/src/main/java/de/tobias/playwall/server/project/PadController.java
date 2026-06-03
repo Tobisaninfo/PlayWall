@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 @Slf4j
 @Getter
@@ -25,7 +26,7 @@ public abstract class PadController
 	protected final Pad pad;
 	private PadControllerStatus status;
 
-	private final List<PlaybackPositionListener> playbackListeners = new CopyOnWriteArrayList<>();
+	private final List<PlaybackListener> playbackListeners = new CopyOnWriteArrayList<>();
 
 	protected PadController(ApplicationContext context, Pad pad)
 	{
@@ -88,14 +89,19 @@ public abstract class PadController
 	// TODO: Cannot be in generic PadController
 	public abstract void setLooping(boolean looping);
 
-	public void addPlaybackPositionListener(PlaybackPositionListener listener)
+	public void addPlaybackListener(PlaybackListener listener)
 	{
 		playbackListeners.add(listener);
 	}
 
-	public void removePlaybackPositionListener(PlaybackPositionListener listener)
+	public void removePlaybackListener(PlaybackListener listener)
 	{
 		playbackListeners.remove(listener);
+	}
+
+	public void fireListeners(Consumer<PlaybackListener> listenerConsumer)
+	{
+		playbackListeners.forEach(listenerConsumer);
 	}
 
 	void notifyPlaybackPositionListeners(Duration position, Duration duration)
