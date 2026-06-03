@@ -53,22 +53,23 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
-	public void play(boolean withFadeIn) throws IOException
+	public void play() throws IOException
 	{
 		fireListeners(PlaybackListener::onPlay);
 		audioHandler.setLooping(padContent.isLoop());
 
-		if(withFadeIn)
+		final FadeSettings fadeSettings = getEffectiveFadeSettings();
+		final boolean isPaused = getStatus() == PadControllerStatus.PAUSE;
+		final boolean fadeEnabled = isPaused
+				? BooleanUtils.isTrue(fadeSettings.getFadeInOnResume())
+				: BooleanUtils.isTrue(fadeSettings.getFadeInOnPlay());
+		if(fadeEnabled)
 		{
-			final FadeSettings fadeSettings = getEffectiveFadeSettings();
-			final boolean isPaused = getStatus() == PadControllerStatus.PAUSE;
-			final boolean fadeEnabled = isPaused
-					? BooleanUtils.isTrue(fadeSettings.getFadeInOnResume())
-					: BooleanUtils.isTrue(fadeSettings.getFadeInOnPlay());
-			if(fadeEnabled)
-			{
-				fadeIn(fadeSettings.getFadeInDuration());
-			}
+			fadeIn(fadeSettings.getFadeInDuration());
+		}
+		else
+		{
+			setVolume(padContent.getVolume());
 		}
 
 		audioHandler.play();

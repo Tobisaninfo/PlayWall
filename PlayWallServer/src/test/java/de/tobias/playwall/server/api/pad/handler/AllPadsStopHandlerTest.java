@@ -63,7 +63,7 @@ class AllPadsStopHandlerTest extends AbstractUndoableRequestHandlerTest<PadSetti
 		projectController.loadProject(project).get();
 		applicationEvents.clear();
 
-		projectController.getPadController(padId).play(false);
+		projectController.getPadController(padId).play();
 		assertThat(projectController.getPadController(padId).getStatus()).isNotEqualTo(PadControllerStatus.READY);
 
 		handler.handleRequest(new AllPadsStopRequest());

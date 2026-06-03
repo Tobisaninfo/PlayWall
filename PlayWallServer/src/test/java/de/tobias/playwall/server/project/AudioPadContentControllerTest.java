@@ -79,7 +79,7 @@ class AudioPadContentControllerTest
 	@Test
 	void testPlayWithoutFadeIn() throws IOException
 	{
-		controller.play(true);
+		controller.play();
 
 		verify(controller, never()).fadeIn(anyDouble());
 		verify(audioHandler).play();
@@ -90,7 +90,7 @@ class AudioPadContentControllerTest
 	{
 		projectFadeSettings.setFadeInOnPlay(true);
 
-		controller.play(true);
+		controller.play();
 
 		verify(controller).fadeIn(anyDouble());
 		verify(audioHandler).play();
@@ -104,7 +104,7 @@ class AudioPadContentControllerTest
 				.fadeInOnPlay(true)
 				.build());
 
-		controller.play(true);
+		controller.play();
 
 		verify(controller).fadeIn(anyDouble());
 		verify(audioHandler).play();
@@ -148,7 +148,7 @@ class AudioPadContentControllerTest
 	void testResumeWithoutFadeIn() throws IOException
 	{
 		controller.pause();
-		controller.play(true);
+		controller.play();
 
 		verify(controller, never()).fadeIn(anyDouble());
 		verify(audioHandler).play();
@@ -160,7 +160,7 @@ class AudioPadContentControllerTest
 		projectFadeSettings.setFadeInOnResume(true);
 
 		controller.pause();
-		controller.play(true);
+		controller.play();
 
 		verify(controller).fadeIn(anyDouble());
 		verify(audioHandler).play();
@@ -175,7 +175,7 @@ class AudioPadContentControllerTest
 				.build());
 
 		controller.pause();
-		controller.play(true);
+		controller.play();
 
 		verify(controller).fadeIn(anyDouble());
 		verify(audioHandler).play();

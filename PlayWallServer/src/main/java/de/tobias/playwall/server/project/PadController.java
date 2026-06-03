@@ -71,7 +71,7 @@ public abstract class PadController
 
 	protected abstract void unloadInternal();
 
-	public abstract void play(boolean withFadeIn) throws IOException;
+	public abstract void play() throws IOException;
 
 	public abstract void pause();
 

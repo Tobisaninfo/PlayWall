@@ -22,7 +22,7 @@ class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 	{
 		try
 		{
-			controller.play(true);
+			controller.play();
 		}
 		catch(IOException e)
 		{
