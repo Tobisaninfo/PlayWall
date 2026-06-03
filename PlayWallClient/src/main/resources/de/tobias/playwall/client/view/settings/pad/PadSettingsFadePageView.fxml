@@ -3,10 +3,15 @@
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.CheckBox?>
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
+<?import javafx.scene.control.Separator?>
 <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
-    <CheckBox fx:id="enableCheckbox" text="%ui.settings.pad.fade.pad" onAction="#onEnableCheckbox"/>
+    <SettingsRow icon="SLIDERS_SOLID" title="Fade-In/Out">
+        <CheckBox fx:id="enableCheckbox" text="%ui.settings.pad.settings.override" onAction="#onEnableCheckbox"/>
+    </SettingsRow>
+    <Separator/>
     <fx:include fx:id="fadeSettings" source="../common/FadeSettingsView.fxml"/>
 
 </SettingsPage>
