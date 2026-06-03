@@ -27,7 +27,7 @@ public class AudioPadContentController extends PadController
 	private Thread fadeThread;
 	private boolean eofFadeTriggered = false;
 
-	protected AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory, Project project)
+	public AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory, Project project)
 	{
 		super(context, pad);
 		this.padContent = padContent;
@@ -152,13 +152,13 @@ public class AudioPadContentController extends PadController
 		return Optional.ofNullable(pad.getFadeSettings()).orElse(project.getMetadata().getFadeSettings());
 	}
 
-	private void fadeIn(double durationInSeconds)
+	void fadeIn(double durationInSeconds)
 	{
 		interruptCurrentFade();
 		fadeThread = Thread.ofVirtual().start(new FadeController(this, 0, padContent.getVolume(), secondsToDuration(durationInSeconds)));
 	}
 
-	private void fadeOut(double durationInSeconds, Runnable onFadeFinished)
+	void fadeOut(double durationInSeconds, Runnable onFadeFinished)
 	{
 		interruptCurrentFade();
 		fadeThread = Thread.ofVirtual().start(new FadeController(this, currentPadVolume, 0, secondsToDuration(durationInSeconds), new FadeController.FadeControllerListener()
