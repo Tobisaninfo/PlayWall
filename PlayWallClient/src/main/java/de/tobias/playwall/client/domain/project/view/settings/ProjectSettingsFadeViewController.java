@@ -6,6 +6,7 @@ import de.tobias.playwall.client.domain.common.FadeSettingsController;
 import de.tobias.playwall.client.domain.project.FadeSettings;
 import de.tobias.playwall.client.net.FluentClient;
 import javafx.fxml.FXML;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 /**
@@ -16,6 +17,7 @@ import lombok.SneakyThrows;
 public class ProjectSettingsFadeViewController extends BaseProjectSettingsViewController
 {
 	@FXML
+	@Getter
 	private FadeSettingsController fadeSettingsController;
 
 	@InjectConstructor

@@ -90,7 +90,8 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 		selectCategory((SettingsCategory) event.getSource());
 	}
 
-	protected void selectCategory(SettingsCategory category)
+	@SuppressWarnings("unchecked")
+	protected BaseSettingsViewController<P> selectCategory(SettingsCategory category)
 	{
 		boxCategories.getChildren().forEach(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, false));
 		boxCategories.getChildren().stream()
@@ -99,6 +100,7 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, true));
 
 		settingsPageContainer.getChildren().setAll(category.getSettingsPageController().getSettingsPage());
+		return (BaseSettingsViewController<P>) category.getSettingsPageController();
 	}
 
 	protected void initButtons()
@@ -123,5 +125,10 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 		settingViewController.forEach(BaseSettingsViewController::cleanup);
 
 		getStageContainer().ifPresent(NVCStage::close);
+	}
+
+	public BaseSettingsViewController<P> selectCategory(int index)
+	{
+		return selectCategory((SettingsCategory) boxCategories.getChildren().get(index));
 	}
 }

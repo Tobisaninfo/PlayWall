@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+@Getter
 public class FadeSettingsController
 {
 	private static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(Locale.GERMAN);
@@ -22,7 +23,6 @@ public class FadeSettingsController
 	}
 
 	@FXML
-	@Getter
 	private VBox root;
 
 	@FXML

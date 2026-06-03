@@ -8,6 +8,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @Builder
+@ToString
 public class FadeSettings
 {
 	private Double fadeInDuration = 0.0;
