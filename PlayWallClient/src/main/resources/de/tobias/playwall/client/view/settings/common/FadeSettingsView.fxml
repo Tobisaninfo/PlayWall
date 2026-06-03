@@ -9,7 +9,7 @@
       fx:id="root"
       fx:controller="de.tobias.playwall.client.domain.common.FadeSettingsController">
 
-    <SettingsRow icon="VOLUME_LOW_SOLID" title="%ui.settings.pad.fade.in">
+    <SettingsRow icon="ARROW_TREND_UP_SOLID" title="%ui.settings.pad.fade.in">
         <Spinner fx:id="fadeInDurationSpinner" prefWidth="200" editable="true" initialValue="0" min="0" max="20"
                  amountToStepBy="0.1"/>
         <CheckBox fx:id="fadeInPlayCheckBox" text="%ui.settings.pad.fade.in.play"/>
@@ -18,7 +18,7 @@
 
     <Separator/>
 
-    <SettingsRow icon="VOLUME_HIGH_SOLID" title="%ui.settings.pad.fade.out">
+    <SettingsRow icon="ARROW_TREND_DOWN_SOLID" title="%ui.settings.pad.fade.out">
         <Spinner fx:id="fadeOutDurationSpinner" prefWidth="200" editable="true" initialValue="0" min="0" max="20"
                  amountToStepBy="0.1"/>
         <CheckBox fx:id="fadeOutPauseCheckBox" text="%ui.settings.pad.fade.out.pause"/>
