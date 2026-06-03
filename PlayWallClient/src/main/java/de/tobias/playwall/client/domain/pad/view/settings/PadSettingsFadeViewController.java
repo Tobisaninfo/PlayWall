@@ -9,12 +9,15 @@ import de.tobias.playwall.client.domain.project.FadeSettings;
 import de.tobias.playwall.client.net.FluentClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
  * Viewcontroller for the view page in the pad settings dialog.
  */
 @SuppressWarnings("java:S110")
 @ViewController(path = "de/tobias/playwall/client/view/settings/pad", view = "PadSettingsFadePageView", applyToStage = false)
+@Getter
 public class PadSettingsFadeViewController extends BasePadSettingsViewController
 {
 	@FXML
@@ -22,6 +25,7 @@ public class PadSettingsFadeViewController extends BasePadSettingsViewController
 	@FXML
 	private FadeSettingsController fadeSettingsController;
 
+	@Getter(AccessLevel.NONE)
 	private final ClientProjectController projectController;
 
 	@InjectConstructor
