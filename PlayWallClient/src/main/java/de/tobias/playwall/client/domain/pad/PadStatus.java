@@ -8,7 +8,8 @@ public enum PadStatus
 	ERROR,
 	READY,
 	PLAY,
-	PAUSE;
+	PAUSE,
+	STOP;
 
 	public static PadStatus fromPadControllerStatus(PadControllerStatus status)
 	{
@@ -16,8 +17,9 @@ public enum PadStatus
 		{
 			case EMPTY -> PadStatus.EMPTY;
 			case ERROR -> PadStatus.ERROR;
-			case READY, STOP, EOF -> PadStatus.READY;
+			case READY, EOF -> PadStatus.READY;
 			case PLAY -> PadStatus.PLAY;
+			case STOP -> PadStatus.STOP;
 			case PAUSE -> PadStatus.PAUSE;
 		};
 	}

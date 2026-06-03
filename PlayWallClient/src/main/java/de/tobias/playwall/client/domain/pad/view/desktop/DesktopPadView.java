@@ -89,7 +89,6 @@ public class DesktopPadView implements PadView
 
 	private final PadTimeUtils padTimeUtils;
 
-	private PadStatus previousStatus;
 	private PadStatus status;
 	private PadSettingsViewController padSettingsViewController;
 
@@ -323,20 +322,16 @@ public class DesktopPadView implements PadView
 	@Override
 	public void updateStatus(PadStatus status)
 	{
-		this.previousStatus = this.status;
 		this.status = status;
 
-		if(this.previousStatus != status)
-		{
-			Platform.runLater(() -> {
-				this.updateButtonStates();
-				this.updateTimeNodes();
+		Platform.runLater(() -> {
+			this.updateButtonStates();
+			this.updateTimeNodes();
 
-				errorLabel.setVisible(status == PadStatus.ERROR);
+			errorLabel.setVisible(status == PadStatus.ERROR);
 
-				pseudoClassStateChanged(PLAY_CLASS, status == PadStatus.PLAY);
-			});
-		}
+			pseudoClassStateChanged(PLAY_CLASS, status == PadStatus.PLAY || status == PadStatus.STOP);
+		});
 	}
 
 	@Override
@@ -363,7 +358,7 @@ public class DesktopPadView implements PadView
 			return;
 		}
 
-		if((status == PadStatus.PLAY || status == PadStatus.PAUSE) && position != null)
+		if((status == PadStatus.PLAY || status == PadStatus.PAUSE || status == PadStatus.STOP) && position != null)
 		{
 			updateTimeLabelByTimeMode(duration, position);
 			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
@@ -433,11 +428,9 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.play();
-			updateStatus(PadStatus.PLAY);
 		}
 		catch(PlayWallApiException ex)
 		{
-			updateStatus(this.previousStatus);
 			log.error("Cannot perform play action", ex);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
@@ -448,11 +441,9 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.pause();
-			updateStatus(PadStatus.PAUSE);
 		}
 		catch(PlayWallApiException ex)
 		{
-			updateStatus(this.previousStatus);
 			log.error("Cannot perform pause action", ex);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
@@ -463,11 +454,9 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.stop();
-			updateStatus(PadStatus.READY);
 		}
 		catch(PlayWallApiException ex)
 		{
-			updateStatus(this.previousStatus);
 			log.error("Cannot perform stop action", ex);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
@@ -484,11 +473,9 @@ public class DesktopPadView implements PadView
 		try
 		{
 			padBuilder.newMedia(path);
-			updateStatus(PadStatus.READY);
 		}
 		catch(PlayWallApiException ex)
 		{
-			updateStatus(this.previousStatus);
 			log.error("Cannot load new media", ex);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_LOAD), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
@@ -503,7 +490,7 @@ public class DesktopPadView implements PadView
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 				stopButton.setDisable(true);
 			}
-			case READY ->
+			case READY, STOP ->
 			{
 				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				stopButton.setDisable(true);

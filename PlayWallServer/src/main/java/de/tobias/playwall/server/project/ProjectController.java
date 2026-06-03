@@ -137,7 +137,7 @@ public class ProjectController
 	public List<PadController> getPlayingPadControllers()
 	{
 		return this.padControllers.values().stream()
-				.filter(controller -> controller.getStatus() == PadControllerStatus.PLAY)
+				.filter(controller -> controller.getStatus() == PadControllerStatus.PLAY || controller.getStatus() == PadControllerStatus.STOP)
 				.toList();
 	}
 

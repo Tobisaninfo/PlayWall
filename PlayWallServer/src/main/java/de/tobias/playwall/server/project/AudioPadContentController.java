@@ -97,9 +97,9 @@ public class AudioPadContentController extends PadController
 		final FadeSettings fadeSettings = getEffectiveFadeSettings();
 		if(BooleanUtils.isTrue(fadeSettings.getFadeOutOnStop()))
 		{
+			setStatus(PadControllerStatus.STOP);
 			fadeOut(fadeSettings.getFadeOutDuration(), () -> {
 				audioHandler.stop();
-				setStatus(PadControllerStatus.STOP);
 				setStatus(PadControllerStatus.READY);
 			});
 		}
