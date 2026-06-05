@@ -134,6 +134,11 @@ public class ProjectController
 		return getLoadedProject().getPageByPad(padId);
 	}
 
+	/**
+	 * Get all Pads that are in an playing state, STOP state is also playing with fade out.
+	 *
+	 * @return
+	 */
 	public List<PadController> getPlayingPadControllers()
 	{
 		return this.padControllers.values().stream()
@@ -141,9 +146,16 @@ public class ProjectController
 				.toList();
 	}
 
+	public List<PadController> getPlayStatePadControllers()
+	{
+		return this.padControllers.values().stream()
+				.filter(controller -> controller.getStatus() == PadControllerStatus.PLAY)
+				.toList();
+	}
+
 	public void stopAll()
 	{
-		getPlayingPadControllers().forEach(PadController::stop);
+		getPlayStatePadControllers().forEach(PadController::stop);
 	}
 
 	public PadController createNewPadController(Pad pad)
