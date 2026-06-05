@@ -39,6 +39,12 @@ public class ServerLauncher
 	{
 		try
 		{
+			if(serverProcess != null && serverProcess.isAlive())
+			{
+				log.warn("Server is already running, skipping launch");
+				return;
+			}
+
 			log.info("Server starting, checking files");
 			Path resourceFolder = serverPathLookup.getServerInstallationFolder();
 			log.info("Server folder: {}", resourceFolder.toAbsolutePath());
@@ -63,7 +69,10 @@ public class ServerLauncher
 				throw new ServerLaunchException.NotFoundException(serverJar);
 			}
 
-			javaExecutable.toFile().setExecutable(true);
+			if(!javaExecutable.toFile().setExecutable(true))
+			{
+				throw new ServerLaunchException.PermissionException();
+			}
 			log.debug("Set execute permission for: {}", javaExecutable.toAbsolutePath());
 
 			final Path loggingPath = app.getPath(PathType.LOG);
@@ -188,7 +197,7 @@ public class ServerLauncher
 				log.info("Server shutdown interrupted, forcing termination...");
 				serverProcess.destroyForcibly();
 			}
-			log.info("Server stopped");
+			log.info("Server stopped with exit code {}", serverProcess.exitValue());
 		}
 	}
 }

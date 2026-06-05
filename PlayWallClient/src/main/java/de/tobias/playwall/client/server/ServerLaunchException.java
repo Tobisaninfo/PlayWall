@@ -44,6 +44,14 @@ public abstract class ServerLaunchException extends RuntimeException
 		}
 	}
 
+	public static class PermissionException extends ServerLaunchException
+	{
+		public PermissionException()
+		{
+			super("Execute permission cannot be set for server binary");
+		}
+	}
+
 	public static class GenericStartupException extends ServerLaunchException
 	{
 		public GenericStartupException()
