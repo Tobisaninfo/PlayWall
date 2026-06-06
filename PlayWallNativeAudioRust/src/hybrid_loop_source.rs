@@ -25,6 +25,10 @@ pub struct HybridLoopSource {
 // GlobalRef ist Send, JavaVM ist Send/Sync, daher ist die Source sicher für Rodio
 unsafe impl Send for HybridLoopSource {}
 
+fn duration_to_samples(d: Duration, sample_rate: f64, channels: f64) -> u64 {
+    (d.as_secs_f64() * sample_rate * channels) as u64
+}
+
 impl HybridLoopSource {
     pub fn new(
         path: String,
@@ -43,12 +47,12 @@ impl HybridLoopSource {
         let sample_rate = source.sample_rate().get() as f64;
         let channels = source.channels().get() as f64;
 
-        let end_position_samples = end_position.map(|pos| (pos.as_secs_f64() * sample_rate * channels) as u64);
+        let end_position_samples = end_position.map(|pos| duration_to_samples(pos, sample_rate, channels));
 
         let initial_samples = if !start_position.is_zero() {
             source.try_seek(start_position)
                 .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
-            (start_position.as_secs_f64() * sample_rate * channels) as u64
+            duration_to_samples(start_position, sample_rate, channels)
         } else {
             0
         };
@@ -68,6 +72,11 @@ impl HybridLoopSource {
 
     fn is_looping_enabled(&self) -> bool {
         self.looping.load(Ordering::Acquire)
+    }
+
+    fn is_end_reached(&self) -> bool {
+        self.end_position_samples
+            .map_or(false, |end| self.samples_played >= end)
     }
 
     fn elapsed_seconds(&self) -> f32 {
@@ -131,8 +140,7 @@ impl Iterator for HybridLoopSource {
     type Item = f32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let end_reached = self.end_position_samples
-            .map_or(false, |end| self.samples_played >= end);
+        let end_reached = self.is_end_reached();
 
         if !end_reached {
             if let Some(sample) = self.current_source.next() {
@@ -173,9 +181,7 @@ impl Iterator for HybridLoopSource {
                         }
                     }
                     // Guard: if end <= start, avoid infinite recursion
-                    let end_reached_after_restart = self.end_position_samples
-                        .map_or(false, |end| self.samples_played >= end);
-                    if end_reached_after_restart {
+                    if self.is_end_reached() {
                         if !self.has_finished {
                             self.report_eof();
                             self.has_finished = true;
@@ -223,7 +229,7 @@ impl Source for HybridLoopSource {
     fn try_seek(&mut self, pos: Duration) -> Result<(), SeekError> {
         let sample_rate = self.current_source.sample_rate().get() as f64;
         let channels = self.current_source.channels().get() as f64;
-        let pos_samples_after_seek = (pos.as_secs_f64() * sample_rate * channels) as u64;
+        let pos_samples_after_seek = duration_to_samples(pos, sample_rate, channels);
 
         if let Some(end_samples) = self.end_position_samples {
             if pos_samples_after_seek >= end_samples {
