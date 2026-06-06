@@ -262,6 +262,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     seconds: jdouble,
 ) {
     env.with_env(|mut env| -> jni::errors::Result<()> {
+        if !seconds.is_finite() || seconds < 0.0 {
+            env.throw_new(
+                JNIString::new("java/lang/IllegalArgumentException"),
+                JNIString::new(format!("Seek position must be finite and non-negative, got: {}", seconds)),
+            )?;
+            return Ok(());
+        }
         with_audio_handler(&mut env, obj, |env, audio_handler| {
             if let Some(ref handler) = audio_handler.audio_stream_handler {
                 let pos = Duration::from_secs_f64(seconds);
@@ -289,6 +296,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     seconds: jdouble,
 ) {
     env.with_env(|mut env| -> jni::errors::Result<()> {
+        if !seconds.is_finite() || seconds < 0.0 {
+            env.throw_new(
+                JNIString::new("java/lang/IllegalArgumentException"),
+                JNIString::new(format!("Start position must be finite and non-negative, got: {}", seconds)),
+            )?;
+            return Ok(());
+        }
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             audio_handler.start_position_secs = seconds;
             trace!("Set start position to {}s", seconds);
@@ -305,6 +319,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     seconds: jdouble,
 ) {
     env.with_env(|mut env| -> jni::errors::Result<()> {
+        if !seconds.is_finite() || seconds < 0.0 {
+            env.throw_new(
+                JNIString::new("java/lang/IllegalArgumentException"),
+                JNIString::new(format!("End position must be finite and non-negative, got: {}", seconds)),
+            )?;
+            return Ok(());
+        }
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             audio_handler.end_position_secs = Some(seconds);
             trace!("Set end position to {}s", seconds);

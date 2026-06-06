@@ -149,6 +149,10 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public void seekTo(Duration position)
 	{
+		if(position.isNegative())
+		{
+			throw new IllegalArgumentException("Seek position must not be negative");
+		}
 		seekToPositionNative(position.toMillis() / 1000.0);
 		this.position = position;
 	}
@@ -158,6 +162,10 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public void setStartPosition(Duration position)
 	{
+		if(position.isNegative())
+		{
+			throw new IllegalArgumentException("Start position must not be negative");
+		}
 		setStartPositionNative(position.toMillis() / 1000.0);
 	}
 
@@ -166,6 +174,10 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public void setEndPosition(Duration position)
 	{
+		if(position.isNegative())
+		{
+			throw new IllegalArgumentException("End position must not be negative");
+		}
 		setEndPositionNative(position.toMillis() / 1000.0);
 	}
 
