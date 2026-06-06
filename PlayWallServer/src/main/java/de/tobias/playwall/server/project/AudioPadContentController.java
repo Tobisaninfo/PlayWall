@@ -26,14 +26,17 @@ public class AudioPadContentController extends PadController
 	@Getter(AccessLevel.PACKAGE)
 	private final AudioPadContent padContent;
 
+	private final String initialOutputDeviceName;
+
 	private double currentPadVolume;
 	private Thread fadeThread;
 
-	public AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory, Project project)
+	public AudioPadContentController(ApplicationContext context, Pad pad, AudioPadContent padContent, AudioHandlerFactory audioHandlerFactory, Project project, String initialOutputDeviceName)
 	{
 		super(context, pad);
 		this.padContent = padContent;
 		this.audioHandler = audioHandlerFactory.createAudioHandler(this::onEof);
+		this.initialOutputDeviceName = initialOutputDeviceName;
 		this.project = project;
 		addPlaybackListener(new AudioPadEndOfFileFadeListener(this));
 	}
@@ -41,6 +44,10 @@ public class AudioPadContentController extends PadController
 	@Override
 	protected void loadInternal() throws IOException
 	{
+		if(initialOutputDeviceName != null)
+		{
+			audioHandler.setOutputDevice(initialOutputDeviceName);
+		}
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
 		setVolume(padContent.getVolume());
 	}
