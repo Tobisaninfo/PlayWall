@@ -212,10 +212,24 @@ impl Source for HybridLoopSource {
     }
 
     fn try_seek(&mut self, pos: Duration) -> Result<(), SeekError> {
-        self.current_source.try_seek(pos)?;
         let sample_rate = self.current_source.sample_rate().get() as f64;
         let channels = self.current_source.channels().get() as f64;
-        self.samples_played = (pos.as_secs_f64() * sample_rate * channels) as u64;
+        let pos_samples_after_seek = (pos.as_secs_f64() * sample_rate * channels) as u64;
+
+        if let Some(end_samples) = self.end_position_samples {
+            if pos_samples_after_seek >= end_samples {
+                return Err(SeekError::Other(Arc::new(io::Error::new(
+                    io::ErrorKind::InvalidInput,
+                    format!(
+                        "Seek position {:.3}s is at or beyond the configured end position",
+                        pos.as_secs_f64()
+                    ),
+                ))));
+            }
+        }
+
+        self.current_source.try_seek(pos)?;
+        self.samples_played = pos_samples_after_seek;
         self.has_finished = false;
         Ok(())
     }
