@@ -4,6 +4,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.settings.BaseSettingsViewController;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,7 +20,7 @@ public abstract class BaseProgramSettingsViewController extends BaseSettingsView
 	public static class Param
 	{
 		protected Settings settings;
-		protected List<String> outputDeviceNames;
+		protected List<AudioDeviceInstance> outputDevices;
 	}
 
 	@InjectConstructor

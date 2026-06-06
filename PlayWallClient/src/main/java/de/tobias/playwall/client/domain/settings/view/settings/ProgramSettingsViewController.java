@@ -12,6 +12,7 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.settings.SettingsCategory;
 import de.tobias.playwall.client.view.settings.BaseSettingsDialogController;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
@@ -36,7 +37,7 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 	private Settings settings;
 
 	@Getter(AccessLevel.NONE)
-	private List<String> outputDeviceNames;
+	private List<AudioDeviceInstance> outputDevices;
 
 	@InjectConstructor
 	public ProgramSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
@@ -70,9 +71,9 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 	public void initParameter(BaseProgramSettingsViewController.Param parameter)
 	{
 		this.settings = parameter.settings;
-		this.outputDeviceNames = parameter.outputDeviceNames;
+		this.outputDevices = parameter.outputDevices;
 
-		settingViewController.forEach(controller -> controller.initParameter(new BaseProgramSettingsViewController.Param(settings, outputDeviceNames)));
+		settingViewController.forEach(controller -> controller.initParameter(new BaseProgramSettingsViewController.Param(settings, outputDevices)));
 
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PROGRAM_TITLE));
 	}
@@ -80,7 +81,7 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 	@FXML
 	protected void saveButtonHandler(ActionEvent event)
 	{
-		settingViewController.forEach(controller -> controller.applySettings(new BaseProgramSettingsViewController.Param(settings, outputDeviceNames)));
+		settingViewController.forEach(controller -> controller.applySettings(new BaseProgramSettingsViewController.Param(settings, outputDevices)));
 
 		try
 		{

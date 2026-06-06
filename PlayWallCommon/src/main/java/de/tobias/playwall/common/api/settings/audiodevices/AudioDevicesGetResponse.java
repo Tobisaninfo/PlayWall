@@ -12,11 +12,11 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class AudioDevicesGetResponse extends ResponseMessage
 {
-	private List<String> audioDeviceNames;
+	private List<AudioDeviceInstance> audioDevices;
 
-	public AudioDevicesGetResponse(UUID messageId, List<String> audioDeviceNames)
+	public AudioDevicesGetResponse(UUID messageId, List<AudioDeviceInstance> audioDevices)
 	{
 		super(messageId);
-		this.audioDeviceNames = audioDeviceNames;
+		this.audioDevices = audioDevices;
 	}
 }

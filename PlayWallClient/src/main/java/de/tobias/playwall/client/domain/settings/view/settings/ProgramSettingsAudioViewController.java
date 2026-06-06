@@ -3,8 +3,11 @@ package de.tobias.playwall.client.domain.settings.view.settings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+
+import java.util.Optional;
 
 /**
  * Viewcontroller for the general page in the program settings dialog.
@@ -13,7 +16,7 @@ import javafx.scene.control.ComboBox;
 public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewController
 {
 	@FXML
-	private ComboBox<String> comboBoxOutputDevices;
+	private ComboBox<AudioDeviceInstance> comboBoxOutputDevices;
 
 	@InjectConstructor
 	public ProgramSettingsAudioViewController(FluentClient client)
@@ -24,12 +27,18 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	@Override
 	public void initParameter(Param param)
 	{
-		comboBoxOutputDevices.getItems().setAll(param.getOutputDeviceNames());
+		comboBoxOutputDevices.getItems().setAll(param.getOutputDevices());
+		comboBoxOutputDevices.setButtonCell(new AudioDeviceCell());
+		comboBoxOutputDevices.setCellFactory(_ -> new AudioDeviceCell());
 
 		final String selectedAudioDevice = param.getSettings().getSelectedAudioDevice();
-		if(selectedAudioDevice != null && param.outputDeviceNames.contains(selectedAudioDevice))
+		if(selectedAudioDevice != null)
 		{
-			comboBoxOutputDevices.getSelectionModel().select(selectedAudioDevice);
+			final Optional<AudioDeviceInstance> selectedInstanceOptional = param.outputDevices.stream()
+					.filter(d -> d.name().equals(selectedAudioDevice))
+					.findFirst();
+
+			selectedInstanceOptional.ifPresent(audioDeviceInstance -> comboBoxOutputDevices.getSelectionModel().select(audioDeviceInstance));
 		}
 
 		this.isValidProperty.set(true);
@@ -38,7 +47,7 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	@Override
 	public void applySettings(Param param)
 	{
-		param.getSettings().setSelectedAudioDevice(comboBoxOutputDevices.getSelectionModel().getSelectedItem());
+		param.getSettings().setSelectedAudioDevice(comboBoxOutputDevices.getSelectionModel().getSelectedItem().name());
 	}
 
 	@Override

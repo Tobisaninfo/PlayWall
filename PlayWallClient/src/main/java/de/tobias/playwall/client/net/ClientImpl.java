@@ -18,6 +18,7 @@ import de.tobias.playwall.common.api.project.request.*;
 import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.api.settings.SettingsGetResponse;
 import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetRequest;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetResponse;
 import de.tobias.playwall.common.utils.MapUtils;
@@ -330,9 +331,9 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public List<String> getOutputDevices() throws PlayWallApiException
+	public List<AudioDeviceInstance> getOutputDevices() throws PlayWallApiException
 	{
 		final AudioDevicesGetResponse response = clientWebSocketHandler.send(new AudioDevicesGetRequest());
-		return response.getAudioDeviceNames();
+		return response.getAudioDevices();
 	}
 }

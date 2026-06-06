@@ -7,6 +7,7 @@ import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
 import java.nio.file.Path;
@@ -126,5 +127,5 @@ public interface FluentClient
 
 	}
 
-	List<String> getOutputDevices() throws PlayWallApiException;
+	List<AudioDeviceInstance> getOutputDevices() throws PlayWallApiException;
 }

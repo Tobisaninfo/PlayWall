@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.settings.audiodevices;
 
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetRequest;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +23,11 @@ class AudioDevicesGetHandler implements GetRequestHandler<AudioDevicesGetRequest
 	@Override
 	public Optional<ResponseMessage> handleRequest(AudioDevicesGetRequest requestMessage) throws IOException
 	{
-		final List<String> deviceNames = Arrays.stream(RustAudioHandler.getOutputDevices())
-				.map(AudioDevice::name)
-				.sorted()
+		final List<AudioDeviceInstance> deviceNames = Arrays.stream(RustAudioHandler.getOutputDevices())
+				.sorted(Comparator.comparing(AudioDevice::defaultDevice)
+						.reversed()
+						.thenComparing(AudioDevice::name))
+				.map(d -> new AudioDeviceInstance(d.name(), d.defaultDevice()))
 				.toList();
 		return Optional.of(new AudioDevicesGetResponse(requestMessage.getMessageId(), deviceNames));
 	}
