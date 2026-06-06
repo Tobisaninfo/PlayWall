@@ -63,7 +63,9 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Datei"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
 		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Launch Dialog - Projekt entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"), new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt löschen"))));
-		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Lautstärke"))));
+		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Lautstärke"),
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Audio - Audiogerät"))));
 		data.add(new IconEntry(FontAwesomeType.STOPWATCH_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Intro Dauer"))));
 		data.add(new IconEntry(FontAwesomeType.IMAGE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige"))));
 		data.add(new IconEntry(FontAwesomeType.CLOCK_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Zeitanzeige"))));
