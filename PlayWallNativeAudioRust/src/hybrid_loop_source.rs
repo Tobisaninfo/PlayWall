@@ -14,6 +14,7 @@ pub struct HybridLoopSource {
     jvm: &'static JavaVM,
     java_callback_obj: Global<JObject<'static>>,
     looping_flag_ptr: *const bool,
+    start_position: Duration,
     samples_played: u64,
     has_finished: bool,
 }
@@ -25,6 +26,7 @@ impl HybridLoopSource {
     pub fn new(
         path: String,
         looping_flag_ptr: *const bool,
+        start_position: Duration,
         jvm: &'static JavaVM,
         java_callback_obj: Global<JObject<'static>>,
     ) -> io::Result<Self> {
@@ -33,13 +35,25 @@ impl HybridLoopSource {
         let source = Decoder::new(reader)
             .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 
+        let mut source: Box<dyn Source<Item=f32> + Send> = Box::new(source);
+        let initial_samples = if !start_position.is_zero() {
+            source.try_seek(start_position)
+                .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+            let sr = source.sample_rate().get() as f64;
+            let ch = source.channels().get() as f64;
+            (start_position.as_secs_f64() * sr * ch) as u64
+        } else {
+            0
+        };
+
         Ok(Self {
             path,
-            current_source: Box::new(source),
+            current_source: source,
             jvm,
             java_callback_obj,
             looping_flag_ptr,
-            samples_played: 0,
+            start_position,
+            samples_played: initial_samples,
             has_finished: false,
         })
     }
@@ -132,6 +146,10 @@ impl Iterator for HybridLoopSource {
                 Ok(source) => {
                     self.current_source = Box::new(source);
                     self.samples_played = 0;
+                    if !self.start_position.is_zero() {
+                        let start = self.start_position;
+                        let _ = self.try_seek(start);
+                    }
                     self.next()
                 }
                 Err((err_msg, exception_class)) => {

@@ -73,6 +73,8 @@ public abstract class PadController
 
 	public abstract void play() throws IOException;
 
+	public abstract void setStartPosition(Duration startPosition);
+
 	public abstract void seekToStart();
 
 	public abstract void seekTo(Duration position);

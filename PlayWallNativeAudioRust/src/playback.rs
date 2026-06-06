@@ -67,7 +67,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                     &*(jvm_ref as *const jni::JavaVM)
                 };
 
-                let source = HybridLoopSource::new(path.clone(), looping_ptr, jvm_static, global_obj)
+                let start_position = Duration::from_secs_f64(audio_handler.start_position_secs);
+                let source = HybridLoopSource::new(path.clone(), looping_ptr, start_position, jvm_static, global_obj)
                     .map_err(|e| io::Error::new(e.kind(), format!("{}: {}", path, e)))?;
 
                 sink.set_volume(audio_handler.volume);
@@ -280,3 +281,18 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         .resolve::<ThrowRuntimeExAndDefault>()
 }
 
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_setStartPositionNative(
+    mut env: EnvUnowned,
+    obj: JObject,
+    seconds: jdouble,
+) {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
+        with_audio_handler(&mut env, obj, |_env, audio_handler| {
+            audio_handler.start_position_secs = seconds;
+            trace!("Set start position to {}s", seconds);
+        });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
+}

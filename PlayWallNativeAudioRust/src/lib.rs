@@ -32,6 +32,7 @@ struct AudioHandler {
     device_name: Option<String>,
     volume: f32,
     looping: bool,
+    start_position_secs: f64,
 }
 
 impl AudioHandler {
@@ -43,6 +44,7 @@ impl AudioHandler {
             device_name: None,
             volume: 1.0,
             looping: false,
+            start_position_secs: 0.0,
         }
     }
 

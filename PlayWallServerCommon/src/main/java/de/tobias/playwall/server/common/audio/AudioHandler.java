@@ -113,4 +113,12 @@ public abstract class AudioHandler
 	 * @param position target position
 	 */
 	public abstract void seekTo(Duration position);
+
+	/**
+	 * Set the position at which playback starts (and restarts on loop).
+	 * Must be called before {@link #play()}; has no effect on an already running stream.
+	 *
+	 * @param position start position
+	 */
+	public abstract void setStartPosition(Duration position);
 }
