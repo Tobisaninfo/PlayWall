@@ -199,7 +199,7 @@ public class AudioPadContentController extends PadController
 		}
 	}
 
-	public void seOutputDevice(String audioDeviceName)
+	public void setOutputDevice(String audioDeviceName)
 	{
 		audioHandler.setOutputDevice(audioDeviceName);
 	}

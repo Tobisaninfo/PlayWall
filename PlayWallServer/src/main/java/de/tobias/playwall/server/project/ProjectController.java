@@ -157,7 +157,7 @@ public class ProjectController
 	{
 		this.padControllers.values().forEach(p -> {
 			p.stop();
-			p.seOutputDevice(outputDeviceName);
+			p.setOutputDevice(outputDeviceName);
 		});
 	}
 
