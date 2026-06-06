@@ -20,7 +20,13 @@ pub struct HybridLoopSource {
     speed: Arc<AtomicU32>,
     start_position: Duration,
     end_position_samples: Option<u64>,
+    // Real-time output sample counter — used only for the progress-report interval.
     samples_played: u64,
+    // Audio-time sample accumulator: incremented by `speed` per output sample so that
+    // elapsed_seconds() always returns the position in the audio file, not wall-clock time.
+    // Consistent with end_position_samples (both in audio-sample units) and with seekTo()
+    // (which operates in audio time), so speed changes never affect correctness.
+    audio_position_samples: f64,
     has_finished: bool,
 }
 
@@ -72,6 +78,7 @@ impl HybridLoopSource {
             start_position,
             end_position_samples,
             samples_played: initial_samples,
+            audio_position_samples: initial_samples as f64,
             has_finished: false,
         })
     }
@@ -82,11 +89,11 @@ impl HybridLoopSource {
 
     fn is_end_reached(&self) -> bool {
         self.end_position_samples
-            .map_or(false, |end| self.samples_played >= end)
+            .map_or(false, |end| self.audio_position_samples >= end as f64)
     }
 
     fn elapsed_seconds(&self) -> f32 {
-        self.samples_played as f32
+        self.audio_position_samples as f32
             / (self.current_source.sample_rate().get() as f32 * self.current_source.channels().get() as f32)
     }
 
@@ -151,6 +158,8 @@ impl Iterator for HybridLoopSource {
         if !end_reached {
             if let Some(sample) = self.current_source.next() {
                 self.samples_played += 1;
+                let speed = f32::from_bits(self.speed.load(Ordering::Relaxed));
+                self.audio_position_samples += speed as f64;
 
                 // Report progress every 1.000 samples (~20ms at 48kHz Stereo)
                 if self.samples_played % 1000 == 0 {
@@ -173,6 +182,7 @@ impl Iterator for HybridLoopSource {
                 Ok(source) => {
                     self.current_source = Box::new(WsolaSource::new(source, Arc::clone(&self.speed)));
                     self.samples_played = 0;
+                    self.audio_position_samples = 0.0;
                     if !self.start_position.is_zero() {
                         let start = self.start_position;
                         if let Err(e) = self.try_seek(start) {
@@ -251,6 +261,7 @@ impl Source for HybridLoopSource {
 
         self.current_source.try_seek(pos)?;
         self.samples_played = pos_samples_after_seek;
+        self.audio_position_samples = pos_samples_after_seek as f64;
         self.has_finished = false;
         Ok(())
     }
