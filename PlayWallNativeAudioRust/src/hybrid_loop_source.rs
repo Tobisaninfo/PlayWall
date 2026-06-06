@@ -161,7 +161,16 @@ impl Iterator for HybridLoopSource {
                     self.samples_played = 0;
                     if !self.start_position.is_zero() {
                         let start = self.start_position;
-                        let _ = self.try_seek(start);
+                        if let Err(e) = self.try_seek(start) {
+                            if !self.has_finished {
+                                self.report_error_as_exception(
+                                    "java/io/IOException",
+                                    &format!("Failed to seek to start position on loop restart: {}", e),
+                                );
+                                self.has_finished = true;
+                            }
+                            return None;
+                        }
                     }
                     // Guard: if end <= start, avoid infinite recursion
                     let end_reached_after_restart = self.end_position_samples
