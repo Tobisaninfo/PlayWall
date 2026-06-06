@@ -6,6 +6,8 @@ use rodio::source::SeekError;
 use rodio::{ChannelCount, Decoder, SampleRate, Source};
 use std::fs::File;
 use std::io::{self, BufReader};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::time::Duration;
 
 pub struct HybridLoopSource {
@@ -13,7 +15,7 @@ pub struct HybridLoopSource {
     current_source: Box<dyn Source<Item=f32> + Send>,
     jvm: &'static JavaVM,
     java_callback_obj: Global<JObject<'static>>,
-    looping_flag_ptr: *const bool,
+    looping: Arc<AtomicBool>,
     start_position: Duration,
     end_position_samples: Option<u64>,
     samples_played: u64,
@@ -26,7 +28,7 @@ unsafe impl Send for HybridLoopSource {}
 impl HybridLoopSource {
     pub fn new(
         path: String,
-        looping_flag_ptr: *const bool,
+        looping: Arc<AtomicBool>,
         start_position: Duration,
         end_position: Option<Duration>,
         jvm: &'static JavaVM,
@@ -56,7 +58,7 @@ impl HybridLoopSource {
             current_source: source,
             jvm,
             java_callback_obj,
-            looping_flag_ptr,
+            looping,
             start_position,
             end_position_samples,
             samples_played: initial_samples,
@@ -65,7 +67,7 @@ impl HybridLoopSource {
     }
 
     fn is_looping_enabled(&self) -> bool {
-        unsafe { *self.looping_flag_ptr }
+        self.looping.load(Ordering::Acquire)
     }
 
     fn elapsed_seconds(&self) -> f32 {

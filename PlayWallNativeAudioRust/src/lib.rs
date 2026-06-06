@@ -15,7 +15,8 @@ use jni::{Env, EnvUnowned, JavaVM};
 use lazy_static::lazy_static;
 use rodio::{MixerDeviceSink, Player};
 use std::fs::File;
-use std::sync::RwLock;
+use std::sync::atomic::AtomicBool;
+use std::sync::{Arc, RwLock};
 use symphonia::core::io::MediaSourceStream;
 use symphonia::core::probe::Hint;
 use symphonia::default::get_probe;
@@ -31,7 +32,7 @@ struct AudioHandler {
     audio_stream_handler: Option<AudioStreamHandler>,
     device_name: Option<String>,
     volume: f32,
-    looping: bool,
+    looping: Arc<AtomicBool>,
     start_position_secs: f64,
     end_position_secs: Option<f64>,
 }
@@ -44,7 +45,7 @@ impl AudioHandler {
             audio_stream_handler: None,
             device_name: None,
             volume: 1.0,
-            looping: false,
+            looping: Arc::new(AtomicBool::new(false)),
             start_position_secs: 0.0,
             end_position_secs: None,
         }

@@ -8,6 +8,8 @@ use jni::EnvUnowned;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceSinkBuilder, DeviceTrait, Player};
 use std::io;
+use std::sync::atomic::Ordering;
+use std::sync::Arc;
 use std::time::Duration;
 use tracing::trace;
 
@@ -59,7 +61,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             if sink.empty() {
                 let path = audio_handler.media_path.as_ref().unwrap();
 
-                let looping_ptr = &audio_handler.looping as *const bool;
+                let looping = Arc::clone(&audio_handler.looping);
 
                 let jvm_static: &'static jni::JavaVM = unsafe {
                     let jvm_lock = crate::JVM.read().unwrap();
@@ -69,7 +71,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
                 let start_position = Duration::from_secs_f64(audio_handler.start_position_secs);
                 let end_position = audio_handler.end_position_secs.map(Duration::from_secs_f64);
-                let source = HybridLoopSource::new(path.clone(), looping_ptr, start_position, end_position, jvm_static, global_obj)
+                let source = HybridLoopSource::new(path.clone(), looping, start_position, end_position, jvm_static, global_obj)
                     .map_err(|e| io::Error::new(e.kind(), format!("{}: {}", path, e)))?;
 
                 sink.set_volume(audio_handler.volume);
@@ -182,7 +184,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 ) {
     env.with_env(|mut env| -> jni::errors::Result<()> {
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
-            audio_handler.looping = looping;
+            audio_handler.looping.store(looping, Ordering::Release);
         });
         Ok(())
     })
