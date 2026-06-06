@@ -11,7 +11,6 @@ import de.tobias.playwall.common.net.RequestMessage;
 import de.tobias.playwall.common.utils.FileFormats;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.pad.PadMapper;
-import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.pad.PadContent;

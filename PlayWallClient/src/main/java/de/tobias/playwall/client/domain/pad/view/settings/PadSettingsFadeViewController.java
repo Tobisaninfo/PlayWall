@@ -41,13 +41,13 @@ public class PadSettingsFadeViewController extends BasePadSettingsViewController
 		fadeSettingsController.getRoot().setDisable(param.getPad().getFadeSettings() == null);
 		enableCheckbox.setSelected(param.getPad().getFadeSettings() != null);
 
-		if(param.getPad().getFadeSettings() != null)
+		if(param.getPad().getFadeSettings() == null)
 		{
-			fadeSettingsController.initParameter(param.getPad().getFadeSettings());
+			fadeSettingsController.initParameter(projectController.getProject().getMetadata().getFadeSettings());
 		}
 		else
 		{
-			fadeSettingsController.initParameter(projectController.getProject().getMetadata().getFadeSettings());
+			fadeSettingsController.initParameter(param.getPad().getFadeSettings());
 		}
 
 		this.isValidProperty.set(true);

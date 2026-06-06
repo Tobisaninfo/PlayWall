@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 /**
- * Viewcontroller for the general page in the project settings dialog.
+ * Viewcontroller for the fade page in the project settings dialog.
  */
 @SuppressWarnings("java:S110")
 @ViewController(path = "de/tobias/playwall/client/view/settings/project", view = "ProjectSettingsFadePageView", applyToStage = false)
