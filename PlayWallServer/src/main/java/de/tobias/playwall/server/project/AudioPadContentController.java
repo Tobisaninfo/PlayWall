@@ -69,6 +69,7 @@ public class AudioPadContentController extends PadController
 		}
 		else
 		{
+			interruptCurrentFade();
 			setVolume(padContent.getVolume());
 		}
 
@@ -87,6 +88,7 @@ public class AudioPadContentController extends PadController
 		}
 		else
 		{
+			interruptCurrentFade();
 			audioHandler.pause();
 			setStatus(PadControllerStatus.PAUSE);
 		}
@@ -106,6 +108,7 @@ public class AudioPadContentController extends PadController
 		}
 		else
 		{
+			interruptCurrentFade();
 			audioHandler.stop();
 			setStatus(PadControllerStatus.STOP);
 			setStatus(PadControllerStatus.READY);
@@ -115,6 +118,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	public void stopImmediately()
 	{
+		interruptCurrentFade();
 		audioHandler.stop();
 		setStatus(PadControllerStatus.STOP);
 		setStatus(PadControllerStatus.READY);

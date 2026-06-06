@@ -73,7 +73,6 @@ public class FadeController implements Runnable
 				{
 					listener.onFadeInterrupted();
 				}
-				controller.setVolume(to);
 				Thread.currentThread().interrupt();
 			}
 		}
