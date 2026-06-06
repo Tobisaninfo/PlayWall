@@ -3,11 +3,9 @@
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.VBox?>
 <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <Separator/>
     <SettingsRow icon="VOLUME_HIGH_SOLID" title="%ui.settings.program.audio.devices.title">
         <ComboBox fx:id="comboBoxOutputDevices" prefWidth="300"/>
     </SettingsRow>
