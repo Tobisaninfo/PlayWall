@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.project.request.ProjectDuplicateRequest;
 import de.tobias.playwall.common.api.project.request.ProjectDuplicateResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -28,7 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class ProjectDuplicateHandlerTest
+class ProjectDuplicateHandlerTest extends AbstractRequestHandlerTest
 {
 	private final UUID projectId = UUID.randomUUID();
 

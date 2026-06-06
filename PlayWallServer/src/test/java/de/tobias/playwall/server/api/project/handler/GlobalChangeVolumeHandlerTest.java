@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.request.GlobaleChangeVolumeRequest;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.when;
 @RecordApplicationEvents
 @Import(SyncAsyncConfig.class)
 @ExtendWith(MockitoExtension.class)
-class GlobalChangeVolumeHandlerTest
+class GlobalChangeVolumeHandlerTest extends AbstractRequestHandlerTest
 {
 	@Autowired
 	private ApplicationEvents applicationEvents;

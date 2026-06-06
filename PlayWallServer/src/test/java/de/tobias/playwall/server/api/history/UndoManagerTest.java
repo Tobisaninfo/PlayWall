@@ -5,14 +5,18 @@ import de.tobias.playwall.common.api.pad.request.PadDeleteContentRequest;
 import de.tobias.playwall.common.api.pad.request.PadNewMediaRequest;
 import de.tobias.playwall.common.api.pad.request.PadSettingsUpdateRequest;
 import de.tobias.playwall.common.net.RequestMessage;
+import de.tobias.playwall.server.api.settings.SettingsService;
+import de.tobias.playwall.server.common.model.settings.Settings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
@@ -24,10 +28,14 @@ class UndoManagerTest
 	@Autowired
 	private UndoManager manager;
 
+	@MockitoBean
+	private SettingsService settingsService;
+
 	@BeforeEach
 	void clear()
 	{
 		manager.clear();
+		when(settingsService.getSettings()).thenReturn(Settings.DEFAULT);
 	}
 
 	/*

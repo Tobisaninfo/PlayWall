@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.project.request.ProjectExportRequest;
 import de.tobias.playwall.common.api.project.request.ProjectExportResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class ProjectExportHandlerTest
+class ProjectExportHandlerTest extends AbstractRequestHandlerTest
 {
 	private final UUID projectId = UUID.randomUUID();
 

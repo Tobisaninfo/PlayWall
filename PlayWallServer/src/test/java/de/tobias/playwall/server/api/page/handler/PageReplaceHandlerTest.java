@@ -7,6 +7,7 @@ import de.tobias.playwall.common.api.page.PageDto;
 import de.tobias.playwall.common.api.page.request.PageReplaceRequest;
 import de.tobias.playwall.common.api.page.update.PageReplaceUpdate;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -37,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
-class PageReplaceHandlerTest
+class PageReplaceHandlerTest extends AbstractRequestHandlerTest
 {
 	@Autowired
 	private ApplicationEvents applicationEvents;

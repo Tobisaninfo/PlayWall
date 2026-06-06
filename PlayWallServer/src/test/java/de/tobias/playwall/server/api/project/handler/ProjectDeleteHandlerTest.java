@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.request.ProjectDeleteRequest;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class ProjectDeleteHandlerTest
+class ProjectDeleteHandlerTest extends AbstractRequestHandlerTest
 {
 	@MockitoBean
 	private AllProjectsInfoRepository allProjectsInfoRepository;

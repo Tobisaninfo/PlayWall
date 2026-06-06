@@ -3,6 +3,7 @@ package de.tobias.playwall.server.project;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.update.PadPlayPositionUpdate;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @RecordApplicationEvents
-class PlaybackPositionWatcherTest
+class PlaybackPositionWatcherTest extends AbstractRequestHandlerTest
 {
 	@Autowired
 	private ApplicationEvents applicationEvents;
@@ -45,14 +46,15 @@ class PlaybackPositionWatcherTest
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
 
+	private AudioHandler audioHandler;
+
 	final UUID padId1 = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 	final UUID padId2 = UUID.fromString("efb30a6f-593b-4a15-94db-faa2d4117e4f");
 
 	@BeforeEach
 	void init() throws Exception
 	{
-		final AudioHandler audioHandler = mock(AudioHandler.class);
-		when(audioHandler.getPosition()).thenReturn(Duration.ofMillis(5000L));
+		audioHandler = mock(AudioHandler.class);
 		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
 
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_3.json");
@@ -74,6 +76,8 @@ class PlaybackPositionWatcherTest
 	@Test
 	void testRunOnePadPlay()
 	{
+		when(audioHandler.getPosition()).thenReturn(Duration.ofMillis(5000L));
+
 		projectController.getPadController(padId1).setStatus(PadControllerStatus.PLAY);
 
 		watcher.run();

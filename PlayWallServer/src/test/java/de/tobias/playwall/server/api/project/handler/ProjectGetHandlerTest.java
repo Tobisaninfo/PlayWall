@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.project.request.ProjectGetRequest;
 import de.tobias.playwall.common.api.project.request.ProjectGetResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class ProjectGetHandlerTest
+class ProjectGetHandlerTest extends AbstractRequestHandlerTest
 {
 	@Autowired
 	private JsonMapper objectMapper;

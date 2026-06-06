@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.pad.handler;
 
 import de.tobias.playwall.common.api.pad.request.PadStopRequest;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -24,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class PadStopHandlerTest
+class PadStopHandlerTest extends AbstractRequestHandlerTest
 {
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;

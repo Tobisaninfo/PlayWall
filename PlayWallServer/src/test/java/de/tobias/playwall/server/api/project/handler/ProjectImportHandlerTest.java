@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.project.request.ProjectImportRequest;
 import de.tobias.playwall.common.api.project.request.ProjectImportResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
@@ -30,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class ProjectImportHandlerTest
+class ProjectImportHandlerTest extends AbstractRequestHandlerTest
 {
 	private final UUID projectId = UUID.randomUUID();
 

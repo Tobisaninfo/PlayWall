@@ -7,6 +7,7 @@ import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectLoadRequest;
 import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
@@ -45,7 +46,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
 @Import(SyncAsyncConfig.class)
-class ProjectLoadHandlerTest
+class ProjectLoadHandlerTest extends AbstractRequestHandlerTest
 {
 	@TempDir
 	private Path tempDir;

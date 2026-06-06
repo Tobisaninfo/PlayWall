@@ -7,6 +7,7 @@ import de.tobias.playwall.common.api.page.PageDto;
 import de.tobias.playwall.common.api.page.request.PageInsertRequest;
 import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.DuplicatedIdException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -43,7 +44,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
-class PageInsertHandlerTest
+class PageInsertHandlerTest extends AbstractRequestHandlerTest
 {
 	@Autowired
 	private ApplicationEvents applicationEvents;

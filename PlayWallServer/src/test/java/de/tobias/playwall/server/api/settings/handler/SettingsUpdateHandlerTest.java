@@ -5,6 +5,7 @@ import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
 import de.tobias.playwall.common.api.settings.model.SettingsDto;
 import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import de.tobias.playwall.common.api.settings.update.SettingsUpdate;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import de.tobias.playwall.server.net.OneTimeActionRequestHandler;
 import de.tobias.playwall.server.net.RequestExecutor;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
-class SettingsUpdateHandlerTest
+class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 {
 	@TempDir
 	private Path tempDir;

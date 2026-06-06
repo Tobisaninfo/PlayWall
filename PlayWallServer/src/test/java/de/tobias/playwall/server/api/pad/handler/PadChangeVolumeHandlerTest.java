@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.pad.handler;
 import de.tobias.playwall.common.api.pad.request.PadChangeVolumeRequest;
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
@@ -36,7 +37,7 @@ import static org.mockito.Mockito.*;
 @RecordApplicationEvents
 @Import(SyncAsyncConfig.class)
 @ExtendWith(MockitoExtension.class)
-class PadChangeVolumeHandlerTest
+class PadChangeVolumeHandlerTest extends AbstractRequestHandlerTest
 {
 	@Autowired
 	private ApplicationEvents applicationEvents;

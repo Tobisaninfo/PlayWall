@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.project.request.ProjectGetSaveStatusRequest
 import de.tobias.playwall.common.api.project.request.ProjectGetSaveStatusResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class ProjectGetSaveStatusHandlerTest
+class ProjectGetSaveStatusHandlerTest extends AbstractRequestHandlerTest
 {
 	@TempDir
 	private Path tempDir;

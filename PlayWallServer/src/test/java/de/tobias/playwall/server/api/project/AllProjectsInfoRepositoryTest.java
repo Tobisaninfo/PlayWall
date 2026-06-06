@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class AllProjectsInfoRepositoryTest
+class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 {
 	@TempDir
 	private Path tempDir;

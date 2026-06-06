@@ -16,7 +16,7 @@ import tools.jackson.databind.json.JsonMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessage>
+public abstract class AbstractUndoableRequestHandlerTest<T extends RequestMessage> extends AbstractRequestHandlerTest
 {
 	@Autowired
 	protected JsonMapper objectMapper;

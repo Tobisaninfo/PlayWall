@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.request.ProjectSaveRequest;
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class ProjectSaveHandlerTest
+class ProjectSaveHandlerTest extends AbstractRequestHandlerTest
 {
 	@TempDir
 	private Path tempDir;

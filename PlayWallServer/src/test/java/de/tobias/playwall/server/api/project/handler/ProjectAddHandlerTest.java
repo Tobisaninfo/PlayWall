@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import de.tobias.playwall.common.api.project.request.ProjectAddRequest;
 import de.tobias.playwall.common.api.project.request.ProjectAddResponse;
 import de.tobias.playwall.common.net.ResponseMessage;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class ProjectAddHandlerTest
+class ProjectAddHandlerTest extends AbstractRequestHandlerTest
 {
 	@TempDir
 	private Path tempDir;

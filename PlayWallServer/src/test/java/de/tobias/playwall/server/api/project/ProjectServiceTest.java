@@ -3,10 +3,12 @@ package de.tobias.playwall.server.api.project;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.api.settings.SettingsService;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
+import de.tobias.playwall.server.common.model.settings.Settings;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,11 +46,16 @@ class ProjectServiceTest
 {
 	@TempDir
 	private Path tempDir;
+
 	@MockitoBean
 	private PathProvider pathProvider;
 
+	@MockitoBean
+	private SettingsService settingsService;
+
 	@MockitoSpyBean
 	private ProjectRepository projectRepository;
+
 	@MockitoSpyBean
 	private AllProjectsInfoRepository allProjectsInfoRepository;
 
@@ -68,6 +75,7 @@ class ProjectServiceTest
 		when(pathProvider.getPathForProject(any())).thenReturn(tempDir.resolve("project.json"));
 		allProjectsInfoRepository.loadAllProjectsInfo();
 		allProjectsInfoRepository.clearProjects();
+		when(settingsService.getSettings()).thenReturn(Settings.DEFAULT);
 	}
 
 	@Test
