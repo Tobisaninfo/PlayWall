@@ -77,6 +77,8 @@ public abstract class PadController
 
 	public abstract void stop();
 
+	public abstract void stopImmediately();
+
 	public abstract void onEof();
 
 	public abstract Duration getDuration();

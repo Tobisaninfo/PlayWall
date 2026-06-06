@@ -115,6 +115,14 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
+	public void stopImmediately()
+	{
+		audioHandler.stop();
+		setStatus(PadControllerStatus.STOP);
+		setStatus(PadControllerStatus.READY);
+	}
+
+	@Override
 	public void onEof()
 	{
 		fireListeners(PlaybackListener::onEof);

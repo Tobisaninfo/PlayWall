@@ -155,7 +155,7 @@ public class ProjectController
 
 	public void stopAll()
 	{
-		getPlayStatePadControllers().forEach(PadController::stop);
+		getPlayStatePadControllers().forEach(PadController::stopImmediately);
 	}
 
 	public PadController createNewPadController(Pad pad)
