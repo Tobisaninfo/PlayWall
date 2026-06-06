@@ -121,4 +121,18 @@ public abstract class AudioHandler
 	 * @param position start position
 	 */
 	public abstract void setStartPosition(Duration position);
+
+	/**
+	 * Set the position at which playback stops (and loops back on loop).
+	 * Must be called before {@link #play()}; has no effect on an already running stream.
+	 *
+	 * @param position end position
+	 */
+	public abstract void setEndPosition(Duration position);
+
+	/**
+	 * Remove the configured end position so playback continues to the end of the file.
+	 * Must be called before {@link #play()}; has no effect on an already running stream.
+	 */
+	public abstract void clearEndPosition();
 }

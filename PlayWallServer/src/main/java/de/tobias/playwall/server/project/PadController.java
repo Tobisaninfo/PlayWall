@@ -75,6 +75,10 @@ public abstract class PadController
 
 	public abstract void setStartPosition(Duration startPosition);
 
+	public abstract void setEndPosition(Duration endPosition);
+
+	public abstract void clearEndPosition();
+
 	public abstract void seekToStart();
 
 	public abstract void seekTo(Duration position);

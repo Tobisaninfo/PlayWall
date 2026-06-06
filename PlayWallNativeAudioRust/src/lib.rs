@@ -33,6 +33,7 @@ struct AudioHandler {
     volume: f32,
     looping: bool,
     start_position_secs: f64,
+    end_position_secs: Option<f64>,
 }
 
 impl AudioHandler {
@@ -45,6 +46,7 @@ impl AudioHandler {
             volume: 1.0,
             looping: false,
             start_position_secs: 0.0,
+            end_position_secs: None,
         }
     }
 

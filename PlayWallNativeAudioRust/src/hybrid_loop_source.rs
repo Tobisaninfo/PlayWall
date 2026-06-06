@@ -15,6 +15,7 @@ pub struct HybridLoopSource {
     java_callback_obj: Global<JObject<'static>>,
     looping_flag_ptr: *const bool,
     start_position: Duration,
+    end_position_samples: Option<u64>,
     samples_played: u64,
     has_finished: bool,
 }
@@ -27,6 +28,7 @@ impl HybridLoopSource {
         path: String,
         looping_flag_ptr: *const bool,
         start_position: Duration,
+        end_position: Option<Duration>,
         jvm: &'static JavaVM,
         java_callback_obj: Global<JObject<'static>>,
     ) -> io::Result<Self> {
@@ -36,12 +38,15 @@ impl HybridLoopSource {
             .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 
         let mut source: Box<dyn Source<Item=f32> + Send> = Box::new(source);
+        let sample_rate = source.sample_rate().get() as f64;
+        let channels = source.channels().get() as f64;
+
+        let end_position_samples = end_position.map(|pos| (pos.as_secs_f64() * sample_rate * channels) as u64);
+
         let initial_samples = if !start_position.is_zero() {
             source.try_seek(start_position)
                 .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
-            let sr = source.sample_rate().get() as f64;
-            let ch = source.channels().get() as f64;
-            (start_position.as_secs_f64() * sr * ch) as u64
+            (start_position.as_secs_f64() * sample_rate * channels) as u64
         } else {
             0
         };
@@ -53,6 +58,7 @@ impl HybridLoopSource {
             java_callback_obj,
             looping_flag_ptr,
             start_position,
+            end_position_samples,
             samples_played: initial_samples,
             has_finished: false,
         })
@@ -123,15 +129,20 @@ impl Iterator for HybridLoopSource {
     type Item = f32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if let Some(sample) = self.current_source.next() {
-            self.samples_played += 1;
+        let end_reached = self.end_position_samples
+            .map_or(false, |end| self.samples_played >= end);
 
-            // Report progress every 1.000 samples (~20ms at 48kHz Stereo)
-            if self.samples_played % 1000 == 0 {
-                self.report_progress();
+        if !end_reached {
+            if let Some(sample) = self.current_source.next() {
+                self.samples_played += 1;
+
+                // Report progress every 1.000 samples (~20ms at 48kHz Stereo)
+                if self.samples_played % 1000 == 0 {
+                    self.report_progress();
+                }
+
+                return Some(sample);
             }
-
-            return Some(sample);
         }
 
         if self.is_looping_enabled() {
@@ -149,6 +160,16 @@ impl Iterator for HybridLoopSource {
                     if !self.start_position.is_zero() {
                         let start = self.start_position;
                         let _ = self.try_seek(start);
+                    }
+                    // Guard: if end <= start, avoid infinite recursion
+                    let end_reached_after_restart = self.end_position_samples
+                        .map_or(false, |end| self.samples_played >= end);
+                    if end_reached_after_restart {
+                        if !self.has_finished {
+                            self.report_eof();
+                            self.has_finished = true;
+                        }
+                        return None;
                     }
                     self.next()
                 }

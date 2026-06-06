@@ -163,6 +163,22 @@ public class RustAudioHandler extends AudioHandler
 
 	private native void setStartPositionNative(double seconds);
 
+	@Override
+	public void setEndPosition(Duration position)
+	{
+		setEndPositionNative(position.toMillis() / 1000.0);
+	}
+
+	private native void setEndPositionNative(double seconds);
+
+	@Override
+	public void clearEndPosition()
+	{
+		clearEndPositionNative();
+	}
+
+	private native void clearEndPositionNative();
+
 	// Callback from rust code
 	@SuppressWarnings("unused")
 	void onEof()

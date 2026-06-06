@@ -91,6 +91,18 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
+	public void setEndPosition(Duration endPosition)
+	{
+		audioHandler.setEndPosition(endPosition);
+	}
+
+	@Override
+	public void clearEndPosition()
+	{
+		audioHandler.clearEndPosition();
+	}
+
+	@Override
 	public void seekToStart()
 	{
 		audioHandler.seekToStart();
