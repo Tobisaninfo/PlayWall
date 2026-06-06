@@ -75,6 +75,8 @@ public abstract class PadController
 
 	public abstract void seekToStart();
 
+	public abstract void seekTo(Duration position);
+
 	public abstract void pause();
 
 	public abstract void stop();

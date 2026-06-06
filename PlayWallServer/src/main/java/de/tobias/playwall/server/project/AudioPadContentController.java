@@ -91,6 +91,12 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
+	public void seekTo(Duration position)
+	{
+		audioHandler.seekTo(position);
+	}
+
+	@Override
 	public void pause()
 	{
 		final FadeSettings fadeSettings = getEffectiveFadeSettings();

@@ -102,4 +102,12 @@ public abstract class AudioHandler
 	 * Has no effect if no stream is active.
 	 */
 	public abstract void seekToStart();
+
+	/**
+	 * Seek to an arbitrary position within the current media without stopping playback.
+	 * Has no effect if no stream is active.
+	 *
+	 * @param position target position
+	 */
+	public abstract void seekTo(Duration position);
 }

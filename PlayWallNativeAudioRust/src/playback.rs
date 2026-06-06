@@ -10,6 +10,7 @@ use rodio::{DeviceSinkBuilder, DeviceTrait, Player};
 use std::io;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::time::Duration;
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -249,6 +250,33 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 trace!("Set volume to {}", volume);
             } else {
                 trace!("No audio handler to set volume, skipping");
+            }
+        });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_seekToPositionNative(
+    mut env: EnvUnowned,
+    obj: JObject,
+    seconds: jdouble,
+) {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
+        with_audio_handler(&mut env, obj, |env, audio_handler| {
+            if let Some(ref handler) = audio_handler.audio_stream_handler {
+                let pos = Duration::from_secs_f64(seconds);
+                if let Err(e) = handler.sink.try_seek(pos) {
+                    env.throw_new(
+                        JNIString::new("java/lang/IllegalStateException"),
+                        JNIString::new(format!("Seek failed: {}", e)),
+                    ).ok();
+                } else {
+                    trace!("Seek to {}s", seconds);
+                }
+            } else {
+                trace!("No audio handler to seek, skipping");
             }
         });
         Ok(())

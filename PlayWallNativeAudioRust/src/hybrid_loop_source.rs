@@ -2,6 +2,7 @@ use jni::objects::{Global, JObject, JValue};
 use jni::signature::{MethodSignature, RuntimeMethodSignature};
 use jni::strings::JNIString;
 use jni::{Env, JavaVM, ScopeToken};
+use rodio::source::SeekError;
 use rodio::{ChannelCount, Decoder, SampleRate, Source};
 use std::fs::File;
 use std::io::{self, BufReader};
@@ -185,5 +186,14 @@ impl Source for HybridLoopSource {
 
     fn total_duration(&self) -> Option<Duration> {
         None
+    }
+
+    fn try_seek(&mut self, pos: Duration) -> Result<(), SeekError> {
+        self.current_source.try_seek(pos)?;
+        let sample_rate = self.current_source.sample_rate().get() as f64;
+        let channels = self.current_source.channels().get() as f64;
+        self.samples_played = (pos.as_secs_f64() * sample_rate * channels) as u64;
+        self.has_finished = false;
+        Ok(())
     }
 }
