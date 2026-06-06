@@ -62,6 +62,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 let path = audio_handler.media_path.as_ref().unwrap();
 
                 let looping = Arc::clone(&audio_handler.looping);
+                let speed = Arc::clone(&audio_handler.playback_speed);
 
                 let jvm_static: &'static jni::JavaVM = unsafe {
                     let jvm_lock = crate::JVM.read().unwrap();
@@ -71,7 +72,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
                 let start_position = Duration::from_secs_f64(audio_handler.start_position_secs);
                 let end_position = audio_handler.end_position_secs.map(Duration::from_secs_f64);
-                let source = HybridLoopSource::new(path.clone(), looping, start_position, end_position, jvm_static, global_obj)
+                let source = HybridLoopSource::new(path.clone(), looping, speed, start_position, end_position, jvm_static, global_obj)
                     .map_err(|e| io::Error::new(e.kind(), format!("{}: {}", path, e)))?;
 
                 sink.set_volume(audio_handler.volume);
@@ -349,6 +350,29 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         with_audio_handler(&mut env, obj, |_env, audio_handler| {
             audio_handler.end_position_secs = None;
             trace!("End position cleared");
+        });
+        Ok(())
+    })
+        .resolve::<ThrowRuntimeExAndDefault>()
+}
+
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_setPlaybackSpeedNative(
+    mut env: EnvUnowned,
+    obj: JObject,
+    speed: jdouble,
+) {
+    env.with_env(|mut env| -> jni::errors::Result<()> {
+        if !speed.is_finite() || speed < 0.25 || speed > 4.0 {
+            env.throw_new(
+                JNIString::new("java/lang/IllegalArgumentException"),
+                JNIString::new(format!("Playback speed must be between 0.25 and 4.0, got: {}", speed)),
+            )?;
+            return Ok(());
+        }
+        with_audio_handler(&mut env, obj, |_env, audio_handler| {
+            audio_handler.playback_speed.store((speed as f32).to_bits(), Ordering::Release);
+            trace!("Set playback speed to {}x", speed);
         });
         Ok(())
     })

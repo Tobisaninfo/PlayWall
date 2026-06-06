@@ -6,7 +6,8 @@ use rodio::source::SeekError;
 use rodio::{ChannelCount, Decoder, SampleRate, Source};
 use std::fs::File;
 use std::io::{self, BufReader};
-use std::sync::atomic::{AtomicBool, Ordering};
+use crate::time_stretch::WsolaSource;
+use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -16,6 +17,7 @@ pub struct HybridLoopSource {
     jvm: &'static JavaVM,
     java_callback_obj: Global<JObject<'static>>,
     looping: Arc<AtomicBool>,
+    speed: Arc<AtomicU32>,
     start_position: Duration,
     end_position_samples: Option<u64>,
     samples_played: u64,
@@ -33,6 +35,7 @@ impl HybridLoopSource {
     pub fn new(
         path: String,
         looping: Arc<AtomicBool>,
+        speed: Arc<AtomicU32>,
         start_position: Duration,
         end_position: Option<Duration>,
         jvm: &'static JavaVM,
@@ -40,29 +43,32 @@ impl HybridLoopSource {
     ) -> io::Result<Self> {
         let file = File::open(&path)?;
         let reader = BufReader::new(file);
-        let source = Decoder::new(reader)
+        let mut decoder = Decoder::new(reader)
             .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 
-        let mut source: Box<dyn Source<Item=f32> + Send> = Box::new(source);
-        let sample_rate = source.sample_rate().get() as f64;
-        let channels = source.channels().get() as f64;
+        let sample_rate = decoder.sample_rate().get() as f64;
+        let channels = decoder.channels().get() as f64;
 
         let end_position_samples = end_position.map(|pos| duration_to_samples(pos, sample_rate, channels));
 
         let initial_samples = if !start_position.is_zero() {
-            source.try_seek(start_position)
+            decoder.try_seek(start_position)
                 .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
             duration_to_samples(start_position, sample_rate, channels)
         } else {
             0
         };
 
+        let current_source: Box<dyn Source<Item=f32> + Send> =
+            Box::new(WsolaSource::new(decoder, Arc::clone(&speed)));
+
         Ok(Self {
             path,
-            current_source: source,
+            current_source,
             jvm,
             java_callback_obj,
             looping,
+            speed,
             start_position,
             end_position_samples,
             samples_played: initial_samples,
@@ -165,7 +171,7 @@ impl Iterator for HybridLoopSource {
 
             return match source {
                 Ok(source) => {
-                    self.current_source = Box::new(source);
+                    self.current_source = Box::new(WsolaSource::new(source, Arc::clone(&self.speed)));
                     self.samples_played = 0;
                     if !self.start_position.is_zero() {
                         let start = self.start_position;

@@ -115,6 +115,12 @@ public class AudioPadContentController extends PadController
 	}
 
 	@Override
+	public void setPlaybackSpeed(double speed)
+	{
+		audioHandler.setPlaybackSpeed(speed);
+	}
+
+	@Override
 	public void pause()
 	{
 		final FadeSettings fadeSettings = getEffectiveFadeSettings();

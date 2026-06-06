@@ -193,6 +193,18 @@ public class RustAudioHandler extends AudioHandler
 
 	private native void clearEndPositionNative();
 
+	@Override
+	public void setPlaybackSpeed(double speed)
+	{
+		if(speed < 0.25 || speed > 4.0)
+		{
+			throw new IllegalArgumentException("Playback speed must be between 0.25 and 4.0");
+		}
+		setPlaybackSpeedNative(speed);
+	}
+
+	private native void setPlaybackSpeedNative(double speed);
+
 	// Callback from rust code
 	@SuppressWarnings("unused")
 	void onEof()

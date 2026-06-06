@@ -83,6 +83,8 @@ public abstract class PadController
 
 	public abstract void seekTo(Duration position);
 
+	public abstract void setPlaybackSpeed(double speed);
+
 	public abstract void pause();
 
 	public abstract void stop();

@@ -135,4 +135,12 @@ public abstract class AudioHandler
 	 * Must be called before {@link #play()}; has no effect on an already running stream.
 	 */
 	public abstract void clearEndPosition();
+
+	/**
+	 * Set the playback speed without changing the pitch (time-stretching).
+	 * Takes effect immediately on a running stream.
+	 *
+	 * @param speed multiplier in the range [0.25, 4.0]; 1.0 = normal speed
+	 */
+	public abstract void setPlaybackSpeed(double speed);
 }

@@ -4,6 +4,7 @@ mod hybrid_loop_source;
 mod logger;
 mod output_devices;
 mod playback;
+mod time_stretch;
 
 use crate::logger::JavaLayer;
 use jni::errors::ThrowRuntimeExAndDefault;
@@ -15,7 +16,7 @@ use jni::{Env, EnvUnowned, JavaVM};
 use lazy_static::lazy_static;
 use rodio::{MixerDeviceSink, Player};
 use std::fs::File;
-use std::sync::atomic::AtomicBool;
+use std::sync::atomic::{AtomicBool, AtomicU32};
 use std::sync::{Arc, RwLock};
 use symphonia::core::io::MediaSourceStream;
 use symphonia::core::probe::Hint;
@@ -33,6 +34,7 @@ struct AudioHandler {
     device_name: Option<String>,
     volume: f32,
     looping: Arc<AtomicBool>,
+    playback_speed: Arc<AtomicU32>,
     start_position_secs: f64,
     end_position_secs: Option<f64>,
 }
@@ -46,6 +48,7 @@ impl AudioHandler {
             device_name: None,
             volume: 1.0,
             looping: Arc::new(AtomicBool::new(false)),
+            playback_speed: Arc::new(AtomicU32::new(1.0f32.to_bits())),
             start_position_secs: 0.0,
             end_position_secs: None,
         }
