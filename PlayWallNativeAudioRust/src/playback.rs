@@ -262,16 +262,16 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: EnvUnowned,
     obj: JObject,
     seconds: jdouble,
-) {
-    env.with_env(|mut env| -> jni::errors::Result<()> {
+) -> jboolean {
+    env.with_env(|mut env| -> jni::errors::Result<jboolean> {
         if !seconds.is_finite() || seconds < 0.0 {
             env.throw_new(
                 JNIString::new("java/lang/IllegalArgumentException"),
                 JNIString::new(format!("Seek position must be finite and non-negative, got: {}", seconds)),
             )?;
-            return Ok(());
+            return Ok(false);
         }
-        with_audio_handler(&mut env, obj, |env, audio_handler| {
+        let seeked = with_audio_handler(&mut env, obj, |env, audio_handler| {
             if let Some(ref handler) = audio_handler.audio_stream_handler {
                 let pos = Duration::from_secs_f64(seconds);
                 if let Err(e) = handler.sink.try_seek(pos) {
@@ -279,14 +279,17 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                         JNIString::new("java/lang/IllegalStateException"),
                         JNIString::new(format!("Seek failed: {}", e)),
                     ).ok();
+                    false
                 } else {
                     trace!("Seek to {}s", seconds);
+                    true
                 }
             } else {
                 trace!("No audio handler to seek, skipping");
+                false
             }
         });
-        Ok(())
+        Ok(seeked.unwrap_or(false))
     })
         .resolve::<ThrowRuntimeExAndDefault>()
 }

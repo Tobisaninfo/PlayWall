@@ -153,11 +153,13 @@ public class RustAudioHandler extends AudioHandler
 		{
 			throw new IllegalArgumentException("Seek position must not be negative");
 		}
-		seekToPositionNative(position.toMillis() / 1000.0);
-		this.position = position;
+		if(seekToPositionNative(position.toMillis() / 1000.0))
+		{
+			this.position = position;
+		}
 	}
 
-	private native void seekToPositionNative(double seconds);
+	private native boolean seekToPositionNative(double seconds);
 
 	@Override
 	public void setStartPosition(Duration position)
