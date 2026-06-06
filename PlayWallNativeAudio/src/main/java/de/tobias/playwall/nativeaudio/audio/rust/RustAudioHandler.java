@@ -147,15 +147,6 @@ public class RustAudioHandler extends AudioHandler
 	public static native AudioDevice[] getOutputDevices();
 
 	@Override
-	public void seekToStart()
-	{
-		seekToStartNative();
-		position = Duration.ZERO;
-	}
-
-	private native void seekToStartNative();
-
-	@Override
 	public void seekTo(Duration position)
 	{
 		seekToPositionNative(position.toMillis() / 1000.0);

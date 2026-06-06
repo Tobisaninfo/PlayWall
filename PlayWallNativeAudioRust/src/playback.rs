@@ -8,8 +8,6 @@ use jni::EnvUnowned;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceSinkBuilder, DeviceTrait, Player};
 use std::io;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
 use std::time::Duration;
 use tracing::trace;
 
@@ -53,7 +51,6 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 audio_handler.setAudioHandlerStream(AudioStreamHandler {
                     stream_handler,
                     sink,
-                    seek_to_start_flag: Arc::new(AtomicBool::new(false)),
                 });
                 trace!("Init output stream and sink (recreated)");
             }
@@ -63,7 +60,6 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                 let path = audio_handler.media_path.as_ref().unwrap();
 
                 let looping_ptr = &audio_handler.looping as *const bool;
-                let seek_flag = Arc::clone(&audio_handler.audio_stream_handler.as_ref().unwrap().seek_to_start_flag);
 
                 let jvm_static: &'static jni::JavaVM = unsafe {
                     let jvm_lock = crate::JVM.read().unwrap();
@@ -71,7 +67,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                     &*(jvm_ref as *const jni::JavaVM)
                 };
 
-                let source = HybridLoopSource::new(path.clone(), looping_ptr, seek_flag, jvm_static, global_obj)
+                let source = HybridLoopSource::new(path.clone(), looping_ptr, jvm_static, global_obj)
                     .map_err(|e| io::Error::new(e.kind(), format!("{}: {}", path, e)))?;
 
                 sink.set_volume(audio_handler.volume);
@@ -284,21 +280,3 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         .resolve::<ThrowRuntimeExAndDefault>()
 }
 
-#[unsafe(no_mangle)]
-pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_seekToStartNative(
-    mut env: EnvUnowned,
-    obj: JObject,
-) {
-    env.with_env(|mut env| -> jni::errors::Result<()> {
-        with_audio_handler(&mut env, obj, |_env, audio_handler| {
-            if let Some(ref handler) = audio_handler.audio_stream_handler {
-                handler.seek_to_start_flag.store(true, Ordering::Release);
-                trace!("Seek to start requested");
-            } else {
-                trace!("No audio handler to seek, skipping");
-            }
-        });
-        Ok(())
-    })
-        .resolve::<ThrowRuntimeExAndDefault>()
-}

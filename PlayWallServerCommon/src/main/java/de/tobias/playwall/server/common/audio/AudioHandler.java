@@ -101,7 +101,10 @@ public abstract class AudioHandler
 	 * Seek to the beginning of the current media without stopping playback.
 	 * Has no effect if no stream is active.
 	 */
-	public abstract void seekToStart();
+	public void seekToStart()
+	{
+		seekTo(Duration.ZERO);
+	}
 
 	/**
 	 * Seek to an arbitrary position within the current media without stopping playback.

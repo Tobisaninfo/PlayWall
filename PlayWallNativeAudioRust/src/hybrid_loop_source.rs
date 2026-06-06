@@ -6,8 +6,6 @@ use rodio::source::SeekError;
 use rodio::{ChannelCount, Decoder, SampleRate, Source};
 use std::fs::File;
 use std::io::{self, BufReader};
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
 use std::time::Duration;
 
 pub struct HybridLoopSource {
@@ -16,7 +14,6 @@ pub struct HybridLoopSource {
     jvm: &'static JavaVM,
     java_callback_obj: Global<JObject<'static>>,
     looping_flag_ptr: *const bool,
-    seek_to_start_flag: Arc<AtomicBool>,
     samples_played: u64,
     has_finished: bool,
 }
@@ -28,11 +25,13 @@ impl HybridLoopSource {
     pub fn new(
         path: String,
         looping_flag_ptr: *const bool,
-        seek_to_start_flag: Arc<AtomicBool>,
         jvm: &'static JavaVM,
         java_callback_obj: Global<JObject<'static>>,
     ) -> io::Result<Self> {
-        let source = Self::open_decoder(&path)?;
+        let file = File::open(&path)?;
+        let reader = BufReader::new(file);
+        let source = Decoder::new(reader)
+            .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 
         Ok(Self {
             path,
@@ -40,16 +39,9 @@ impl HybridLoopSource {
             jvm,
             java_callback_obj,
             looping_flag_ptr,
-            seek_to_start_flag,
             samples_played: 0,
             has_finished: false,
         })
-    }
-
-    fn open_decoder(path: &str) -> io::Result<Decoder<BufReader<File>>> {
-        let file = File::open(path)?;
-        let reader = BufReader::new(file);
-        Decoder::new(reader).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))
     }
 
     fn is_looping_enabled(&self) -> bool {
@@ -117,23 +109,6 @@ impl Iterator for HybridLoopSource {
     type Item = f32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.seek_to_start_flag.swap(false, Ordering::AcqRel) {
-            match Self::open_decoder(&self.path) {
-                Ok(source) => {
-                    self.current_source = Box::new(source);
-                    self.samples_played = 0;
-                    self.has_finished = false;
-                }
-                Err(e) => {
-                    if !self.has_finished {
-                        self.report_error_as_exception("java/io/IOException", &format!("{}: {}", self.path, e));
-                        self.has_finished = true;
-                    }
-                    return None;
-                }
-            }
-        }
-
         if let Some(sample) = self.current_source.next() {
             self.samples_played += 1;
 
@@ -146,20 +121,27 @@ impl Iterator for HybridLoopSource {
         }
 
         if self.is_looping_enabled() {
-            return match Self::open_decoder(&self.path) {
+            let source = File::open(&self.path)
+                .map_err(|e| (format!("{}: {}", self.path, e), "java/io/FileNotFoundException"))
+                .and_then(|file| {
+                    Decoder::new(BufReader::new(file))
+                        .map_err(|e| (format!("{}: {}", self.path, e), "java/io/IOException"))
+                });
+
+            return match source {
                 Ok(source) => {
                     self.current_source = Box::new(source);
                     self.samples_played = 0;
                     self.next()
                 }
-                Err(e) => {
+                Err((err_msg, exception_class)) => {
                     if !self.has_finished {
-                        self.report_error_as_exception("java/io/IOException", &format!("{}: {}", self.path, e));
+                        self.report_error_as_exception(exception_class, &err_msg);
                         self.has_finished = true;
                     }
                     None
                 }
-            };
+            }
         }
 
         if !self.has_finished {
