@@ -3,7 +3,7 @@ package de.tobias.playwall.server.api.settings.handler;
 import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
-import de.tobias.playwall.server.api.settings.SettingsRepository;
+import de.tobias.playwall.server.api.settings.SettingsService;
 import de.tobias.playwall.server.common.model.settings.Settings;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class SettingsGetHandlerTest
 	private JsonMapper objectMapper;
 
 	@MockitoBean
-	private SettingsRepository settingsRepository;
+	private SettingsService settingsService;
 
 	@Autowired
 	private SettingsGetHandler handler;
@@ -32,7 +32,7 @@ class SettingsGetHandlerTest
 	void testSettingsGetRequest() throws Exception
 	{
 		final Settings settings = TestUtils.loadSettings(objectMapper, "settings.json");
-		when(settingsRepository.loadSettings()).thenReturn(settings);
+		when(settingsService.getSettings()).thenReturn(settings);
 
 		final Optional<ResponseMessage> response = handler.handleRequest(new SettingsGetRequest());
 

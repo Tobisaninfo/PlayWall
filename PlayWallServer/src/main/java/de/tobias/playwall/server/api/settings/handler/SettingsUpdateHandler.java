@@ -4,7 +4,7 @@ import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
 import de.tobias.playwall.common.api.settings.update.SettingsUpdate;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.settings.SettingsMapper;
-import de.tobias.playwall.server.api.settings.SettingsRepository;
+import de.tobias.playwall.server.api.settings.SettingsService;
 import de.tobias.playwall.server.common.model.settings.Settings;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
@@ -19,14 +19,14 @@ import java.util.Optional;
 @RequestHandlerTyped(SettingsUpdateRequest.class)
 class SettingsUpdateHandler extends UndoableRequestHandler<SettingsUpdateRequest>
 {
-	private final SettingsRepository settingsRepository;
+	private final SettingsService settingsService;
 	private final SettingsMapper settingsMapper;
 	private final ProjectController projectController;
 
-	public SettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, SettingsRepository settingsRepository, SettingsMapper settingsMapper, ProjectController projectController)
+	public SettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, SettingsService settingsService, SettingsMapper settingsMapper, ProjectController projectController)
 	{
 		super(messageSource, context);
-		this.settingsRepository = settingsRepository;
+		this.settingsService = settingsService;
 		this.settingsMapper = settingsMapper;
 		this.projectController = projectController;
 	}
@@ -34,11 +34,11 @@ class SettingsUpdateHandler extends UndoableRequestHandler<SettingsUpdateRequest
 	@Override
 	public Optional<UndoItem> handleRequest(SettingsUpdateRequest requestMessage) throws IOException
 	{
-		final UndoItem inverseOperation = getInverseOperation(requestMessage, settingsRepository.loadSettings());
+		final UndoItem inverseOperation = getInverseOperation(requestMessage, settingsService.getSettings());
 
-		final String previousSelectedAudioDevice = settingsRepository.loadSettings().getSelectedAudioDevice();
+		final String previousSelectedAudioDevice = settingsService.getSettings().getSelectedAudioDevice();
 		final Settings settings = settingsMapper.settingsDtoToSettings(requestMessage.getSettings());
-		settingsRepository.saveSettings(settings);
+		settingsService.updateSettings(settings);
 
 		final String selectedDevice = settings.getSelectedAudioDevice();
 		if(selectedDevice != null && !selectedDevice.equals(previousSelectedAudioDevice))
