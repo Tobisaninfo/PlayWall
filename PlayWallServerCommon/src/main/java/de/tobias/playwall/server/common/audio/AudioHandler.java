@@ -96,4 +96,10 @@ public abstract class AudioHandler
 	 * @param name audio device name
 	 */
 	public abstract void setOutputDevice(String name);
+
+	/**
+	 * Seek to the beginning of the current media without stopping playback.
+	 * Has no effect if no stream is active.
+	 */
+	public abstract void seekToStart();
 }

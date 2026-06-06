@@ -146,6 +146,15 @@ public class RustAudioHandler extends AudioHandler
 
 	public static native AudioDevice[] getOutputDevices();
 
+	@Override
+	public void seekToStart()
+	{
+		seekToStartNative();
+		position = Duration.ZERO;
+	}
+
+	private native void seekToStartNative();
+
 	// Callback from rust code
 	@SuppressWarnings("unused")
 	void onEof()
