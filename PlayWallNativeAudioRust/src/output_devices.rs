@@ -7,7 +7,14 @@ use jni::sys::{jboolean, jint, jobjectArray, jsize};
 use jni::EnvUnowned;
 use rodio::cpal::traits::HostTrait;
 use rodio::{DeviceTrait};
+use std::sync::{Mutex, OnceLock};
 use tracing::trace;
+
+static DEVICE_CACHE: OnceLock<Mutex<Vec<String>>> = OnceLock::new();
+
+fn device_cache() -> &'static Mutex<Vec<String>> {
+    DEVICE_CACHE.get_or_init(|| Mutex::new(Vec::new()))
+}
 
 #[unsafe(no_mangle)]
 pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioHandler_getOutputDevices(
@@ -23,6 +30,11 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             ))?;
         let devices: Vec<_> = host.output_devices().unwrap().collect();
         let default_device = host.default_output_device().unwrap();
+
+        *device_cache().lock().unwrap() = devices
+            .iter()
+            .map(|d| d.description().unwrap().name().to_string())
+            .collect();
 
         let result = env
             .new_object_array(devices.len() as jsize, &audio_device_class, JObject::null())
@@ -66,13 +78,18 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 ) {
     env.with_env(|mut env| -> jni::errors::Result<()> {
         let device_name_str: String = device_name.to_string();
-        let host = rodio::cpal::default_host();
-        let device: Option<_> = host
-            .output_devices()
-            .unwrap()
-            .find(|device| device.description().unwrap().name() == device_name_str);
+        let cache = device_cache().lock().unwrap();
+        let device_exists = if cache.is_empty() {
+            let host = rodio::cpal::default_host();
+            host.output_devices()
+                .unwrap()
+                .any(|d| d.description().unwrap().name() == device_name_str)
+        } else {
+            cache.contains(&device_name_str)
+        };
+        drop(cache);
 
-        if device.is_none() {
+        if !device_exists {
             env.throw_new(
                 JNIString::new("java/lang/IllegalArgumentException"),
                 JNIString::new(format!(
