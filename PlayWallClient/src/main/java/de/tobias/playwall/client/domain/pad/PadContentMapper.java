@@ -23,6 +23,7 @@ public class PadContentMapper
 					.mediaPath(audioPadDto.getMediaPath())
 					.isLoop(audioPadDto.isLoop())
 					.volume(audioPadDto.getVolume())
+					.speed(audioPadDto.getSpeed())
 					.build();
 		};
 	}
@@ -40,6 +41,7 @@ public class PadContentMapper
 					.mediaPath(audioPad.getMediaPath())
 					.loop(audioPad.isLoop())
 					.volume(audioPad.getVolume())
+					.speed(audioPad.getSpeed())
 					.build();
 			default -> throw new IllegalStateException("Unexpected value: " + padContent);
 		};

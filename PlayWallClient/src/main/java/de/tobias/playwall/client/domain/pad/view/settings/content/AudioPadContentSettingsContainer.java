@@ -14,7 +14,9 @@ import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -32,6 +34,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 {
 	private CheckBox checkboxPlaybackLoop;
 	private VolumeSlider volumeSlider;
+	private Slider speedSlider;
 
 	private final FluentClient fluentClient;
 
@@ -91,6 +94,21 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		checkboxPlaybackLoop.setSelected(padContent.isLoop());
 		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
 
+		final Label labelSpeed = new Label(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_SPEED));
+		labelSpeed.setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 0, 0, 0));
+		settingsRowPlayback.add(labelSpeed, 1, 1);
+		speedSlider = new Slider(0.5, 2.0, padContent.getSpeed());
+		speedSlider.setShowTickLabels(true);
+		speedSlider.setShowTickMarks(true);
+		speedSlider.setMajorTickUnit(0.5);
+		speedSlider.setSnapToTicks(true);
+		speedSlider.setMinWidth(300);
+		settingsRowPlayback.add(speedSlider, 1, 2);
+
+		final Label labelSpeedValue = new Label();
+		labelSpeedValue.textProperty().bind(Bindings.format("%.1fx", speedSlider.valueProperty()));
+		settingsRowPlayback.add(labelSpeedValue, 2, 2);
+
 		return settingsRowPlayback;
 	}
 
@@ -130,6 +148,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		{
 			audioPadContent.setLoop(checkboxPlaybackLoop.isSelected());
 			audioPadContent.setVolume(volumeSlider.getValue() / 100.0);
+			audioPadContent.setSpeed(speedSlider.getValue());
 		}
 	}
 

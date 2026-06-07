@@ -17,6 +17,8 @@ public final class AudioPadContent extends PadContent
 
 	@Builder.Default
 	private double volume = 1.0;
+	@Builder.Default
+	private double speed = 1.0;
 
 	@Override
 	public PadContent copy()
@@ -25,6 +27,7 @@ public final class AudioPadContent extends PadContent
 				.mediaPath(this.getMediaPath())
 				.loop(this.isLoop())
 				.volume(this.getVolume())
+				.speed(this.getSpeed())
 				.build();
 	}
 }

@@ -64,6 +64,7 @@ public class AudioPadContentController extends PadController
 	{
 		fireListeners(PlaybackListener::onPlay);
 		audioHandler.setLooping(padContent.isLoop());
+		audioHandler.setPlaybackSpeed(padContent.getSpeed());
 
 		final FadeSettings fadeSettings = getEffectiveFadeSettings();
 		final boolean isPaused = getStatus() == PadControllerStatus.PAUSE;

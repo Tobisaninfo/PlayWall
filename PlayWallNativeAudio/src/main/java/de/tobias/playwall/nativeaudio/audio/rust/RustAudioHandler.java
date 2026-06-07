@@ -198,7 +198,7 @@ public class RustAudioHandler extends AudioHandler
 	{
 		if(speed < 0.25 || speed > 4.0)
 		{
-			throw new IllegalArgumentException("Playback speed must be between 0.25 and 4.0");
+			throw new IllegalArgumentException("Playback speed must be between 0.25 and 4.0. Current value is " + speed);
 		}
 		setPlaybackSpeedNative(speed);
 	}
