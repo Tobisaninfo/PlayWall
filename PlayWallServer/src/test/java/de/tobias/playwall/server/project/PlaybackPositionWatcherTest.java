@@ -95,7 +95,12 @@ class PlaybackPositionWatcherTest extends AbstractRequestHandlerTest
 		projectController.getPadController(padId1).setStatus(PadControllerStatus.PAUSE);
 
 		watcher.run();
-		assertThat(applicationEvents.stream(PadPlayPositionUpdate.class)).isEmpty();
+		assertThat(applicationEvents.stream(PadPlayPositionUpdate.class)).hasSize(1)
+				.first()
+				.satisfies(event -> assertThat(event.getPositions()).hasSize(1).first()
+						.satisfies(position -> assertThat(position.padId()).isEqualTo(padId1))
+						.satisfies(position -> assertThat(position.millis()).isEqualTo(0L))
+				);
 	}
 
 	@Test
