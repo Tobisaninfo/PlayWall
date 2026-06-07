@@ -1,4 +1,4 @@
-use crate::{with_audio_handler, AudioStreamHandler};
+use crate::{with_audio_handler};
 use jni::errors::ThrowRuntimeExAndDefault;
 use jni::objects::{JClass, JObject, JString, JValue};
 use jni::signature::{MethodSignature, RuntimeMethodSignature};
@@ -6,7 +6,7 @@ use jni::strings::JNIString;
 use jni::sys::{jboolean, jint, jobjectArray, jsize};
 use jni::EnvUnowned;
 use rodio::cpal::traits::HostTrait;
-use rodio::{DeviceSinkBuilder, DeviceTrait, Player};
+use rodio::{DeviceTrait};
 use tracing::trace;
 
 #[unsafe(no_mangle)]
@@ -84,15 +84,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         }
 
         with_audio_handler(&mut env, object, |_, audio_handler| {
-            let stream_handler = DeviceSinkBuilder::from_device(device.unwrap())
-                .unwrap()
-                .open_stream()
-                .unwrap();
-            let sink = Player::connect_new(stream_handler.mixer());
-            audio_handler.setAudioHandlerStream(AudioStreamHandler {
-                stream_handler,
-                sink,
-            });
+            audio_handler.clearAudioHandlerStream();
             audio_handler.device_name = Some(device_name_str.clone());
             trace!("Init output stream and sink for device {}", device_name_str);
         });

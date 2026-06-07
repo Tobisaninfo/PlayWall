@@ -59,6 +59,10 @@ impl AudioHandler {
     fn setAudioHandlerStream(&mut self, audio_stream_handler: AudioStreamHandler) {
         self.audio_stream_handler = Some(audio_stream_handler);
     }
+
+    fn clearAudioHandlerStream(&mut self) {
+        self.audio_stream_handler = None;
+    }
 }
 
 #[allow(dead_code)]
