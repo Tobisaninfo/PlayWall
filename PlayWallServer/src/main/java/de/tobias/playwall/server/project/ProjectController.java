@@ -148,16 +148,9 @@ public class ProjectController
 				.toList();
 	}
 
-	public List<PadController> getPlayStatePadControllers()
-	{
-		return this.padControllers.values().stream()
-				.filter(controller -> controller.getStatus() == PadControllerStatus.PLAY)
-				.toList();
-	}
-
 	public void stopAll()
 	{
-		getPlayStatePadControllers().forEach(PadController::stopImmediately);
+		getPlayingPadControllers().forEach(PadController::stopImmediately);
 	}
 
 	public PadController createNewPadController(Pad pad)
