@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.project;
 
 import de.tobias.playwall.server.TestUtils;
+import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-class AudioPadContentControllerTest
+class AudioPadContentControllerTest extends AbstractRequestHandlerTest
 {
 	private static final UUID PAD_ID = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
@@ -68,7 +69,7 @@ class AudioPadContentControllerTest
 
 		pad = project.getPad(PAD_ID);
 		pad.setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
-		controller = Mockito.spy(new AudioPadContentController(context, pad, (AudioPadContent) pad.getContent(), audioHandlerFactory, project));
+		controller = Mockito.spy(new AudioPadContentController(context, pad, (AudioPadContent) pad.getContent(), audioHandlerFactory, project, null));
 		controller.addPlaybackListener(new AudioPadEndOfFileFadeListener(controller));
 
 		projectFadeSettings = project.getMetadata().getFadeSettings();
