@@ -53,6 +53,7 @@ public class DesktopPadView implements PadView
 
 	private Label indexLabel;
 	private Label loopLabel;
+	private Label speedLabel;
 	private Label triggerLabel;
 	private Label playlistLabel;
 	private Label errorLabel;
@@ -126,6 +127,8 @@ public class DesktopPadView implements PadView
 
 		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.REPEAT_SOLID));
 		loopLabel.managedProperty().bind(loopLabel.visibleProperty());
+		speedLabel = new PadLabel(new FontIcon(FontAwesomeType.GAUGE_HIGH_SOLID));
+		speedLabel.managedProperty().bind(speedLabel.visibleProperty());
 		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.LINK_SOLID));
 		triggerLabel.managedProperty().bind(triggerLabel.visibleProperty());
 		playlistLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
@@ -134,7 +137,7 @@ public class DesktopPadView implements PadView
 		errorLabel.managedProperty().bind(errorLabel.visibleProperty());
 
 		infoBox = new PadHBox(5);
-		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, speedLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
 
 		previewBox = PadHBox.deepStyled(STYLE_CLASS_PAD_TITLE, STYLE_CLASS_PAD_TITLE_INDEX);
 		HBox.setHgrow(previewBox, Priority.ALWAYS);
@@ -250,6 +253,7 @@ public class DesktopPadView implements PadView
 		indexLabel.setText(pad.getReadablePosition());
 
 		loopLabel.setVisible(false);
+		speedLabel.setVisible(false);
 		triggerLabel.setVisible(false);
 		playlistLabel.setVisible(false);
 		notFoundLabel.setVisible(false);
@@ -259,6 +263,10 @@ public class DesktopPadView implements PadView
 		if(padContent instanceof Loopable loopable)
 		{
 			loopLabel.setVisible(loopable.isLoop());
+		}
+		if(padContent instanceof AudioPadContent content)
+		{
+			speedLabel.setVisible(content.getSpeed() != 1.0);
 		}
 
 		if(controller.getStatus() != null)

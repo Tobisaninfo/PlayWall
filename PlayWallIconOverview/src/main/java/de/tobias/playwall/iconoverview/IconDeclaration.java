@@ -49,6 +49,7 @@ public class IconDeclaration
 
 		// pad
 		data.add(new IconEntry(FontAwesomeType.REPEAT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));
+		data.add(new IconEntry(FontAwesomeType.GAUGE_HIGH_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Wiedergabegeschwindigkeit"))));
 		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, List.of(
 				new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"),
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Wiedergabe - Loop")
