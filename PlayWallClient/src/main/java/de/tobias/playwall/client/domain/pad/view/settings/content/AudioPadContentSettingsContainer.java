@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
@@ -103,6 +104,12 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		speedSlider.setMajorTickUnit(0.5);
 		speedSlider.setSnapToTicks(true);
 		speedSlider.setMinWidth(300);
+		speedSlider.setOnMouseClicked(event -> {
+			if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2)
+			{
+				speedSlider.setValue(1.0);
+			}
+		});
 		settingsRowPlayback.add(speedSlider, 1, 2);
 
 		final Label labelSpeedValue = new Label();
