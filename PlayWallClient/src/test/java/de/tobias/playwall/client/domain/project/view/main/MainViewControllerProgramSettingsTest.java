@@ -79,7 +79,7 @@ class MainViewControllerProgramSettingsTest extends AbstractViewControllerTest
 		final List<Window> windows = new ArrayList<>(robot.listWindows());
 		final Stage stageSettings = (Stage) windows.getLast();
 
-		assertThat(stageSettings.getTitle()).isEqualTo("Programmeinstellungen");
+		assertThat(stageSettings.getTitle()).isEqualTo("Einstellungen");
 
 		robot.lookup("#checkboxStartAutoLoadLatestProject").queryAs(CheckBox.class).setSelected(true);
 		final ComboBox<?> comboBoxUnsavedChanges = robot.lookup("#comboBoxUnsavedChanges").queryAs(ComboBox.class);
