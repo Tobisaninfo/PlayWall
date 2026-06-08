@@ -77,6 +77,15 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     device_name: JString,
 ) {
     env.with_env(|mut env| -> jni::errors::Result<()> {
+        if device_name.is_null() {
+            with_audio_handler(&mut env, object, |_, audio_handler| {
+                audio_handler.clearAudioHandlerStream();
+                audio_handler.device_name = None;
+                trace!("Cleared output device, will use default");
+            });
+            return Ok(());
+        }
+
         let device_name_str: String = device_name.to_string();
         let cache = device_cache().lock().unwrap();
         let device_exists = if cache.is_empty() {

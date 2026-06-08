@@ -14,6 +14,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequestHandlerTyped(SettingsUpdateRequest.class)
@@ -41,7 +42,7 @@ class SettingsUpdateHandler extends UndoableRequestHandler<SettingsUpdateRequest
 		settingsService.updateSettings(settings);
 
 		final String selectedDevice = settings.getSelectedAudioDevice();
-		if(selectedDevice != null && !selectedDevice.equals(previousSelectedAudioDevice))
+		if(!Objects.equals(selectedDevice, previousSelectedAudioDevice))
 		{
 			projectController.setOutputDeviceForAll(selectedDevice);
 		}
