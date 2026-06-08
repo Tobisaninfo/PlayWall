@@ -41,7 +41,7 @@
     <SettingsRow icon="STOPWATCH_SOLID" title="%ui.settings.pad.intro.title">
         <HBox spacing="14" alignment="CENTER_LEFT">
             <Spinner fx:id="spinnerIntroDuration" editable="true" prefWidth="100"/>
-            <Label text="%ui.settings.pad.intro.label"/>
+            <Label text="%ui.settings.pad.duration.seconds"/>
         </HBox>
     </SettingsRow>
 
