@@ -19,4 +19,15 @@
         -fx-scale-x: 2;
         -fx-scale-y: 2;
     }
+
+    .axis {
+        .axis-tick-mark {
+            -fx-stroke: variables.$component-text-color;
+            -fx-stroke-width: 1px;
+        }
+
+        .axis-minor-tick-mark {
+            -fx-stroke: variables.$component-text-color-hint;
+        }
+    }
 }
