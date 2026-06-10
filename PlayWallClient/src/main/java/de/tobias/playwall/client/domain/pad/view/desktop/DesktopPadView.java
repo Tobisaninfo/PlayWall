@@ -124,7 +124,7 @@ public class DesktopPadView implements PadView
 		indexLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 		timeLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 
-		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID));
+		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.REPEAT_SOLID));
 		loopLabel.managedProperty().bind(loopLabel.visibleProperty());
 		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.LINK_SOLID));
 		triggerLabel.managedProperty().bind(triggerLabel.visibleProperty());

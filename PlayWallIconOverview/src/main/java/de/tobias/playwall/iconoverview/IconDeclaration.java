@@ -48,7 +48,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt öffnen"))));
 
 		// pad
-		data.add(new IconEntry(FontAwesomeType.ARROW_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));
+		data.add(new IconEntry(FontAwesomeType.REPEAT_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel wiederholen (Loop)"))));
 		data.add(new IconEntry(FontAwesomeType.PLAY_SOLID, List.of(
 				new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"),
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Wiedergabe - Loop")

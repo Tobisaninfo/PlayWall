@@ -2,6 +2,7 @@ package de.tobias.playwall.client.domain.pad.view.settings.content;
 
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.pad.AudioPadContent;
@@ -86,6 +87,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		settingsRowPlayback.setIcon(FontAwesomeType.PLAY_SOLID);
 
 		checkboxPlaybackLoop = new CheckBox(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_LOOP));
+		checkboxPlaybackLoop.setGraphic(new FontIcon(FontAwesomeType.REPEAT_SOLID));
 		checkboxPlaybackLoop.setSelected(padContent.isLoop());
 		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
 
