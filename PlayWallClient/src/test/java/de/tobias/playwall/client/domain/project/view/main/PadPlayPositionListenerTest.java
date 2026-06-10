@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project.view.main;
 import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.domain.pad.AudioPadContent;
 import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
@@ -72,6 +73,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 
@@ -104,6 +106,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 		assertThat(padView).isNull();
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 
@@ -132,6 +135,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 
@@ -159,6 +163,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -168,6 +173,34 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		verify(warningFlashAnimation).start();
+	}
+
+	@Test
+	void testEofWarningWithProjectSettingsNotInvokedWhileLooping()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
+			stage.show();
+			mainViewController.showPage(0);
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+		((AudioPadContent) project.getPad(padId).getContent()).setLoop(true);
+
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
+		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L)));
+		eventHandler.fireEvent(update);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(warningFlashAnimation, never()).start();
 	}
 
 	@Test
@@ -184,6 +217,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -211,6 +245,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -237,6 +272,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		project.getPad(padId).setEofWarningTime(3.0);
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -263,6 +299,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 		project.getPad(padId).setEofWarningTime(3.0);
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
 		WaitForAsyncUtils.waitForFxEvents();
