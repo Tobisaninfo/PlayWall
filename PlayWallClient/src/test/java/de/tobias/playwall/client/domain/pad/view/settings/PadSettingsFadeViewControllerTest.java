@@ -57,6 +57,7 @@ class PadSettingsFadeViewControllerTest extends AbstractViewControllerTest
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build();
@@ -144,6 +145,7 @@ class PadSettingsFadeViewControllerTest extends AbstractViewControllerTest
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build());
@@ -175,6 +177,7 @@ class PadSettingsFadeViewControllerTest extends AbstractViewControllerTest
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build());
@@ -222,6 +225,7 @@ class PadSettingsFadeViewControllerTest extends AbstractViewControllerTest
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build());

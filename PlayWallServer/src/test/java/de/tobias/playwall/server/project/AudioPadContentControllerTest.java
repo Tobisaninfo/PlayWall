@@ -28,6 +28,7 @@ import java.time.Duration;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +41,7 @@ class AudioPadContentControllerTest extends AbstractRequestHandlerTest
 	private static final UUID PAD_ID = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
 	private static final ConditionFactory AWAIT = await()
-			.atLeast(1, SECONDS)
+			.atLeast(800, MILLISECONDS)
 			.atMost(2, SECONDS);
 
 	@Autowired

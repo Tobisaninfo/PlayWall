@@ -12,6 +12,9 @@ public class ScreenshotOnFailure implements TestWatcher
 	{
 		final String testName = context.getDisplayName();
 		final Stage stage = FxToolkit.toolkitContext().getRegisteredStage();
-		ScreenshotUtil.takeScreenshot(stage.getScene().getRoot(), "screenshots/" + testName + ".png");
+		if(stage.getScene() != null)
+		{
+			ScreenshotUtil.takeScreenshot(stage.getScene().getRoot(), "screenshots/" + testName + ".png");
+		}
 	}
 }

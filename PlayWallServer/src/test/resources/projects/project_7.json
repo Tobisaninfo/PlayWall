@@ -49,6 +49,7 @@
                         "@name": "AudioPadContent",
                         "mediaPath": "abc.mp3",
                         "loop": false,
+                        "speed": 1.0,
                         "volume": 1.0
                     }
                 }

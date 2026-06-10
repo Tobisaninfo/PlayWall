@@ -91,6 +91,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.content(AudioPadContent.builder()
 						.mediaPath("abc.mp3")
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build());
@@ -132,6 +133,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.introColor(null)
 				.content(AudioPadContent.builder()
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build());
@@ -217,6 +219,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.introColor(null)
 				.content(AudioPadContent.builder()
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build());
@@ -268,6 +271,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 				.introColor(null)
 				.content(AudioPadContent.builder()
 						.isLoop(false)
+						.speed(1.0)
 						.volume(1.0)
 						.build())
 				.build());
