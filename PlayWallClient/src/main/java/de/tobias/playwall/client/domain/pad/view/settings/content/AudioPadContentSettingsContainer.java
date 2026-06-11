@@ -102,6 +102,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		speedSlider.setShowTickLabels(true);
 		speedSlider.setShowTickMarks(true);
 		speedSlider.setMajorTickUnit(0.5);
+		speedSlider.setMinorTickCount(4);
 		speedSlider.setSnapToTicks(true);
 		speedSlider.setMinWidth(300);
 		speedSlider.setOnMouseClicked(event -> {
