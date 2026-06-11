@@ -12,6 +12,9 @@ import java.time.Duration;
 @Slf4j
 public class RustAudioHandler extends AudioHandler
 {
+	private static final double MIN_SPEED = 0.25;
+	private static final double MAX_SPEED = 4.0;
+	private static final double NANOSECONDS_FACTOR = 1_000_000_000.0;
 	@SuppressWarnings("unused")
 	private long nativePointer;
 	private final Runnable eofCallback;
@@ -153,7 +156,7 @@ public class RustAudioHandler extends AudioHandler
 		{
 			throw new IllegalArgumentException("Seek position must not be negative");
 		}
-		if(seekToPositionNative(position.toNanos() / 1_000_000_000.0))
+		if(seekToPositionNative(position.toNanos() / NANOSECONDS_FACTOR))
 		{
 			this.position = position;
 		}
@@ -168,7 +171,7 @@ public class RustAudioHandler extends AudioHandler
 		{
 			throw new IllegalArgumentException("Start position must not be negative");
 		}
-		setStartPositionNative(position.toNanos() / 1_000_000_000.0);
+		setStartPositionNative(position.toNanos() / NANOSECONDS_FACTOR);
 	}
 
 	private native void setStartPositionNative(double seconds);
@@ -180,7 +183,7 @@ public class RustAudioHandler extends AudioHandler
 		{
 			throw new IllegalArgumentException("End position must not be negative");
 		}
-		setEndPositionNative(position.toNanos() / 1_000_000_000.0);
+		setEndPositionNative(position.toNanos() / NANOSECONDS_FACTOR);
 	}
 
 	private native void setEndPositionNative(double seconds);
@@ -196,9 +199,9 @@ public class RustAudioHandler extends AudioHandler
 	@Override
 	public void setPlaybackSpeed(double speed)
 	{
-		if(speed < 0.25 || speed > 4.0)
+		if(speed < MIN_SPEED || speed > MAX_SPEED)
 		{
-			throw new IllegalArgumentException("Playback speed must be between 0.25 and 4.0. Current value is " + speed);
+			throw new IllegalArgumentException("Playback speed must be between " + MIN_SPEED + " and " + MAX_SPEED + ". Current value is " + speed);
 		}
 		setPlaybackSpeedNative(speed);
 	}
