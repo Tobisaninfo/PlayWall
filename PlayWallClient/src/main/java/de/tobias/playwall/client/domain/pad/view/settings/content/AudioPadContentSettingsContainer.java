@@ -50,6 +50,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 		getChildren().addAll(createFileSettings(), new Separator());
 		getChildren().addAll(createPlaybackSettings(), new Separator());
+		getChildren().addAll(createSpeedSettings(), new Separator());
 		getChildren().addAll(createVolumeSettings(), new Separator());
 
 		isValidProperty.set(true);
@@ -95,9 +96,15 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		checkboxPlaybackLoop.setSelected(padContent.isLoop());
 		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
 
-		final Label labelSpeed = new Label(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_SPEED));
-		labelSpeed.setPadding(new Insets(ViewConstants.DEFAULT_SPACING, 0, 0, 0));
-		settingsRowPlayback.add(labelSpeed, 1, 1);
+		return settingsRowPlayback;
+	}
+
+	private SettingsRow createSpeedSettings()
+	{
+		final SettingsRow settingsRowSpeed = new SettingsRow();
+		settingsRowSpeed.setTitle(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_SPEED));
+		settingsRowSpeed.setIcon(FontAwesomeType.GAUGE_HIGH_SOLID);
+
 		speedSlider = new Slider(0.5, 2.0, padContent.getSpeed());
 		speedSlider.setShowTickLabels(true);
 		speedSlider.setShowTickMarks(true);
@@ -111,13 +118,13 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 				speedSlider.setValue(1.0);
 			}
 		});
-		settingsRowPlayback.add(speedSlider, 1, 2);
+		settingsRowSpeed.add(speedSlider, 1, 0);
 
 		final Label labelSpeedValue = new Label();
 		labelSpeedValue.textProperty().bind(Bindings.format("%.1fx", speedSlider.valueProperty()));
-		settingsRowPlayback.add(labelSpeedValue, 2, 2);
+		settingsRowSpeed.add(labelSpeedValue, 2, 0);
 
-		return settingsRowPlayback;
+		return settingsRowSpeed;
 	}
 
 	private SettingsRow createVolumeSettings()
