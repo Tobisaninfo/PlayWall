@@ -147,6 +147,23 @@ impl HybridLoopSource {
             );
         });
     }
+
+    fn rebuild_source(&mut self) -> Result<(), SeekError> {
+        let file = File::open(&self.path)
+            .map_err(|e| SeekError::Other(Arc::new(io::Error::new(
+                io::ErrorKind::NotFound,
+                format!("{}: {}", self.path, e),
+            ))))?;
+
+        let decoder = Decoder::new(BufReader::new(file))
+            .map_err(|e| SeekError::Other(Arc::new(io::Error::new(
+                io::ErrorKind::InvalidData,
+                e.to_string(),
+            ))))?;
+
+        self.current_source = Box::new(WsolaSource::new(decoder, Arc::clone(&self.speed)));
+        Ok(())
+    }
 }
 
 impl Iterator for HybridLoopSource {
@@ -257,6 +274,11 @@ impl Source for HybridLoopSource {
                     ),
                 ))));
             }
+        }
+
+        #[cfg(target_os = "windows")]
+        if pos_samples_after_seek < self.audio_position_samples as u64 {
+            self.rebuild_source()?;
         }
 
         self.current_source.try_seek(pos)?;
