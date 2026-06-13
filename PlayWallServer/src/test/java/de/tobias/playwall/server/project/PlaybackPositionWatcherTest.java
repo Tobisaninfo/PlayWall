@@ -99,7 +99,7 @@ class PlaybackPositionWatcherTest extends AbstractRequestHandlerTest
 				.first()
 				.satisfies(event -> assertThat(event.getPositions()).hasSize(1).first()
 						.satisfies(position -> assertThat(position.padId()).isEqualTo(padId1))
-						.satisfies(position -> assertThat(position.millis()).isEqualTo(0L))
+						.satisfies(position -> assertThat(position.millis()).isZero())
 				);
 	}
 

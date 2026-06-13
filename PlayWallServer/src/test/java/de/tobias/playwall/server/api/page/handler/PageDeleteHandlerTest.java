@@ -135,7 +135,8 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("1e76b8b3-ad58-4533-aa57-e2b66360e9ea");
-		assertThatThrownBy(() -> handler.handleRequest(new PageDeleteRequest(pageId)))
+		final PageDeleteRequest request = new PageDeleteRequest(pageId);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PageNotExistsException.class);
 	}
 
@@ -143,7 +144,8 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 	void testAddPageProjectNotLoaded()
 	{
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		assertThatThrownBy(() -> handler.handleRequest(new PageDeleteRequest(pageId)))
+		final PageDeleteRequest request = new PageDeleteRequest(pageId);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).deletePage(any(), any());

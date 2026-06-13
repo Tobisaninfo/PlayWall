@@ -94,7 +94,8 @@ class ProjectAddHandlerTest extends AbstractRequestHandlerTest
 		allProjectsInfoRepository.addProject("Name1", 3, 3);
 		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).hasSize(1);
 
-		assertThatThrownBy(() -> handler.handleRequest(new ProjectAddRequest("Name1", 5, 4)))
+		final ProjectAddRequest request = new ProjectAddRequest("Name1", 5, 4);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNameAlreadyExistsException.class);
 
 		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).hasSize(1);

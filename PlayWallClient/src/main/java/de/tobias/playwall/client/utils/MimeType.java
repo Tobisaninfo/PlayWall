@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
+@SuppressWarnings("java:S6548")
 public enum MimeType
 {
 	APPLICATION_JSON("application/json", "json");

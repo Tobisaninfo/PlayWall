@@ -17,6 +17,7 @@ public class Settings
 			.selectedAudioDevice(null)
 			.build();
 
+	@SuppressWarnings({"java:S116", "java:S1170"})
 	private final int VERSION = 2;
 
 	private boolean autoLoadLatestProjectOnStart;

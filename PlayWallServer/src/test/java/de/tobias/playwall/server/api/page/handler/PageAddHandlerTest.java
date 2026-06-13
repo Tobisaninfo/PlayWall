@@ -103,7 +103,8 @@ class PageAddHandlerTest extends AbstractUndoableRequestHandlerTest<PageAddReque
 	@Test
 	void testAddPageProjectNotLoaded() throws Exception
 	{
-		assertThatThrownBy(() -> handler.handleRequest(new PageAddRequest()))
+		final PageAddRequest request = new PageAddRequest();
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).addProject(any(), anyInt(), anyInt());

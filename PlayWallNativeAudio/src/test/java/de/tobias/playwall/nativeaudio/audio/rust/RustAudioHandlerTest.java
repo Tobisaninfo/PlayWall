@@ -4,8 +4,6 @@ import de.tobias.playwall.nativeaudio.extensions.RustAudioLoaderExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
@@ -20,7 +18,6 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("java:S2925")
@@ -32,9 +29,6 @@ class RustAudioHandlerTest
 
 	@TempDir
 	private Path tempDir;
-
-	@Captor
-	private ArgumentCaptor<Exception> exceptionCaptor;
 
 	@Test
 	void testLoadMediaNormal() throws Exception

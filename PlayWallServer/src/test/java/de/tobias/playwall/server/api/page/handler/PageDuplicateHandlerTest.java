@@ -93,7 +93,8 @@ class PageDuplicateHandlerTest extends AbstractUndoableRequestHandlerTest<PageDu
 		projectController.loadProject(project).get();
 
 		final UUID originalPage = UUID.fromString("1e76b8b3-2da8-4533-aa57-e2b66360e9ea");
-		assertThatThrownBy(() -> handler.handleRequest(new PageDuplicateRequest(originalPage)))
+		final PageDuplicateRequest request = new PageDuplicateRequest(originalPage);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PageNotExistsException.class);
 	}
 
@@ -101,7 +102,8 @@ class PageDuplicateHandlerTest extends AbstractUndoableRequestHandlerTest<PageDu
 	void testDuplicatePageProjectNotLoaded()
 	{
 		final UUID originalPage = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		assertThatThrownBy(() -> handler.handleRequest(new PageDuplicateRequest(originalPage)))
+		final PageDuplicateRequest request = new PageDuplicateRequest(originalPage);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).duplicatePage(any(), any());

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -19,7 +20,7 @@ public class RequestExecutor
 	private final UndoManager undoManager;
 	private final RequestHandlerFactory requestHandlerFactory;
 
-	public Optional<ResponseMessage> execute(RequestMessage requestMessage) throws Exception
+	public Optional<ResponseMessage> execute(RequestMessage requestMessage) throws IOException
 	{
 		final Optional<RequestHandler> requestHandlerOptional = requestHandlerFactory.getRequestHandler(requestMessage.getClass());
 		if(requestHandlerOptional.isEmpty())

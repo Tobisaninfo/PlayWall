@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.page.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.tobias.playwall.server.common.model.page.Page;
 import lombok.AllArgsConstructor;

@@ -69,7 +69,8 @@ class ProjectSaveHandlerTest extends AbstractRequestHandlerTest
 	@Test
 	void testProjectSaveRequestNoLoaded() throws Exception
 	{
-		assertThatThrownBy(() -> handler.handleRequest(new ProjectSaveRequest()))
+		final ProjectSaveRequest request = new ProjectSaveRequest();
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectRepository, never()).saveProject(any());

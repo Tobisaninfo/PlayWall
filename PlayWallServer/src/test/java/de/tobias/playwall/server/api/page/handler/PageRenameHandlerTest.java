@@ -79,7 +79,8 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677");
-		assertThatThrownBy(() -> handler.handleRequest(new PageRenameRequest(pageId, "Seite 3")))
+		final PageRenameRequest request = new PageRenameRequest(pageId, "Seite 3");
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PageNameAlreadyExistsException.class);
 	}
 
@@ -90,7 +91,8 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("1e76b8b3-2da8-4533-aa57-e2b66360e9ea");
-		assertThatThrownBy(() -> handler.handleRequest(new PageRenameRequest(pageId, "Renamed Page")))
+		final PageRenameRequest request = new PageRenameRequest(pageId, "Renamed Page");
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PageNotExistsException.class);
 	}
 
@@ -98,7 +100,8 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 	void testRenamePageProjectNotLoaded()
 	{
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		assertThatThrownBy(() -> handler.handleRequest(new PageRenameRequest(pageId, "Renamed Page")))
+		final PageRenameRequest request = new PageRenameRequest(pageId, "Renamed Page");
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 
 		verify(projectService, never()).renamePage(any(), any(), any());

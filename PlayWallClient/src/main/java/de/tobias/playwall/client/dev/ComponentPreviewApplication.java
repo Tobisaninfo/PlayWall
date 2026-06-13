@@ -28,6 +28,7 @@ import org.scenicview.ScenicView;
 
 import java.util.List;
 
+@SuppressWarnings({"java:S1192", "java:S106"})
 public class ComponentPreviewApplication extends Application
 {
 	private static final double ITEM_SPACING = 8;

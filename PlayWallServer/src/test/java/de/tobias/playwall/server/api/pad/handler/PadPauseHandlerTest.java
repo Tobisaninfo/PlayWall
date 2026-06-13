@@ -70,7 +70,8 @@ class PadPauseHandlerTest extends AbstractRequestHandlerTest
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		projectController.loadProject(project).get();
 
-		assertThatThrownBy(() -> handler.handleRequest(new PadPauseRequest(padId)))
+		final PadPauseRequest request = new PadPauseRequest(padId);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PadNotExistsException.class);
 
 		verify(audioHandler, never()).pause();

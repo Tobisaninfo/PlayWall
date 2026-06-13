@@ -52,6 +52,7 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 	}
 
 	@Test
+	@SuppressWarnings("java:S5961")
 	void testPadUpdateListener()
 	{
 		Platform.runLater(() -> {

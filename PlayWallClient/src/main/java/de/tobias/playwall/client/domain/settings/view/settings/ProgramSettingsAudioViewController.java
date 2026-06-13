@@ -17,6 +17,7 @@ import java.util.Optional;
  * Viewcontroller for the general page in the program settings dialog.
  */
 @ViewController(path = "de/tobias/playwall/client/view/settings/program", view = "ProgramSettingsAudioPageView", applyToStage = false)
+@SuppressWarnings("java:S110")
 public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewController
 {
 	private static final AudioDeviceInstance AUDIO_DEVICE_USE_DEFAULT_FROM_OS = new AudioDeviceInstance(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT_ALWAYS), false);

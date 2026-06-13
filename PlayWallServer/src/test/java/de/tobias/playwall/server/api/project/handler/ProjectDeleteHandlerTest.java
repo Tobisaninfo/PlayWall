@@ -47,7 +47,8 @@ class ProjectDeleteHandlerTest extends AbstractRequestHandlerTest
 		when(allProjectsInfoRepository.deleteProject(id)).thenReturn(false);
 		when(projectRepository.deleteProject(id)).thenReturn(true);
 
-		assertThatThrownBy(() -> handler.handleRequest(new ProjectDeleteRequest(id)))
+		final ProjectDeleteRequest request = new ProjectDeleteRequest(id);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotExistsException.class);
 
 		verify(allProjectsInfoRepository).deleteProject(id);
@@ -61,7 +62,8 @@ class ProjectDeleteHandlerTest extends AbstractRequestHandlerTest
 		when(allProjectsInfoRepository.deleteProject(id)).thenReturn(true);
 		when(projectRepository.deleteProject(id)).thenReturn(false);
 
-		assertThatThrownBy(() -> handler.handleRequest(new ProjectDeleteRequest(id)))
+		final ProjectDeleteRequest request = new ProjectDeleteRequest(id);
+		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotExistsException.class);
 
 		verify(allProjectsInfoRepository).deleteProject(id);
