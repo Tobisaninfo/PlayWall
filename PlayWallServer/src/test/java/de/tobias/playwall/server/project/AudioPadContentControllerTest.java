@@ -207,7 +207,7 @@ class AudioPadContentControllerTest extends AbstractRequestHandlerTest
 	@Test
 	void testStopWithProjectFadeOutFromPause()
 	{
-		controller.setStatus(PadControllerStatus.PAUSE);
+		controller.setStatus(PadControllerStatus.PAUSED);
 		projectFadeSettings.setFadeOutOnStop(true);
 
 		controller.stop();

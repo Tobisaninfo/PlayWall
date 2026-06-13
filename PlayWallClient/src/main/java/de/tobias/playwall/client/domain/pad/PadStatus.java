@@ -7,9 +7,16 @@ public enum PadStatus
 	EMPTY,
 	ERROR,
 	READY,
-	PLAY,
-	PAUSE,
-	STOP;
+	PLAYING,
+	PAUSING,
+	PAUSED,
+	STOPPING,
+	STOPPED;
+
+	public boolean isAnyPlayingState()
+	{
+		return this == PLAYING || this == PAUSING || this == STOPPING;
+	}
 
 	public static PadStatus fromPadControllerStatus(PadControllerStatus status)
 	{
@@ -18,9 +25,11 @@ public enum PadStatus
 			case EMPTY -> PadStatus.EMPTY;
 			case ERROR -> PadStatus.ERROR;
 			case READY, EOF -> PadStatus.READY;
-			case PLAY -> PadStatus.PLAY;
-			case STOP -> PadStatus.STOP;
-			case PAUSE -> PadStatus.PAUSE;
+			case PLAYING -> PadStatus.PLAYING;
+			case STOPPING -> PadStatus.STOPPING;
+			case STOPPED -> PadStatus.STOPPED;
+			case PAUSING -> PadStatus.PAUSING;
+			case PAUSED -> PadStatus.PAUSED;
 		};
 	}
 }

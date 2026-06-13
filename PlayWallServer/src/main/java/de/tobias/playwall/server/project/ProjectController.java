@@ -135,16 +135,16 @@ public class ProjectController
 	}
 
 	/**
-	 * Get all Pads that are in an playing state, STOP state is also playing with fade out.
+	 * Get all Pads that are in an playing state, STOPPED state is also playing with fade out.
 	 *
 	 * @return
 	 */
 	public List<PadController> getPlayingPadControllers()
 	{
 		return this.padControllers.values().stream()
-				.filter(controller -> controller.getStatus() == PadControllerStatus.PLAY
-				                      || controller.getStatus() == PadControllerStatus.PAUSE
-				                      || controller.getStatus() == PadControllerStatus.STOP)
+				.filter(controller -> controller.getStatus() == PadControllerStatus.PLAYING
+				                      || controller.getStatus() == PadControllerStatus.PAUSED
+				                      || controller.getStatus() == PadControllerStatus.STOPPED)
 				.toList();
 	}
 

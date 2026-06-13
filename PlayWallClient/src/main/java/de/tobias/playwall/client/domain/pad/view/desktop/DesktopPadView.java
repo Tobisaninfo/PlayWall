@@ -338,7 +338,7 @@ public class DesktopPadView implements PadView
 
 			errorLabel.setVisible(status == PadStatus.ERROR);
 
-			pseudoClassStateChanged(PLAY_CLASS, status == PadStatus.PLAY || status == PadStatus.STOP);
+			pseudoClassStateChanged(PLAY_CLASS, status.isAnyPlayingState());
 		});
 	}
 
@@ -366,7 +366,7 @@ public class DesktopPadView implements PadView
 			return;
 		}
 
-		if((status == PadStatus.PLAY || status == PadStatus.PAUSE || status == PadStatus.STOP) && position != null)
+		if(status.isAnyPlayingState() && position != null)
 		{
 			updateTimeLabelByTimeMode(duration, position);
 			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
@@ -392,7 +392,7 @@ public class DesktopPadView implements PadView
 
 		final Duration position = padController.getPosition();
 		// Start warning animation if the threshold is reached
-		if(status == PadStatus.PLAY && position != null && padController.isWarningThresholdReached())
+		if(status == PadStatus.PLAYING && position != null && padController.isWarningThresholdReached())
 		{
 			// ⚠️do not join conditions, elsewhere the animation is instantly stopped on the "else if" case
 			if(!warningAnimation.isRunning())
@@ -510,17 +510,17 @@ public class DesktopPadView implements PadView
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 				stopButton.setDisable(true);
 			}
-			case READY, STOP ->
+			case READY, STOPPED ->
 			{
 				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				stopButton.setDisable(true);
 			}
-			case PLAY ->
+			case PLAYING ->
 			{
 				buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
 				stopButton.setDisable(false);
 			}
-			case PAUSE ->
+			case PAUSED ->
 			{
 				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				stopButton.setDisable(false);

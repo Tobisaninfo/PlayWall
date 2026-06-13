@@ -144,7 +144,7 @@ public class ClientProjectController
 	public boolean isAtLeastOnePadPlaying()
 	{
 		return padControllers.values().stream()
-				.anyMatch(padController -> padController.getStatus() == PadStatus.PLAY);
+				.anyMatch(padController -> padController.getStatus() == PadStatus.PLAYING);
 	}
 
 	public List<ClientPadController> getPadControllersWithState(PadStatus status)

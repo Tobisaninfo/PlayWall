@@ -79,25 +79,25 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		assertThat(padView.getErrorLabel().isVisible()).isTrue();
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.ERROR);
 
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPauseButton(), padView.getStopButton(), padView.getSettingsButton());
 		assertThat(padView.getTimeLabel()).hasText("0:10");
-		assertThat(padController.getStatus()).isEqualTo(PadStatus.PLAY);
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.PLAYING);
 
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PAUSE));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PAUSED));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
 		assertThat(padView.getTimeLabel()).hasText("0:10");
-		assertThat(padController.getStatus()).isEqualTo(PadStatus.PAUSE);
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.PAUSED);
 
 		padController.setPosition(Duration.millis(5000L));
 
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOP));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOPPED));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
 		assertThat(padView.getTimeLabel()).hasText("0:05");
-		assertThat(padController.getStatus()).isEqualTo(PadStatus.STOP);
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.STOPPED);
 
 		padController.setPosition(Duration.millis(5000L));
 

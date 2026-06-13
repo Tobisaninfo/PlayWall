@@ -68,7 +68,7 @@ class TimeModeTest extends AbstractViewControllerTest
 		padView.getPadController().getPad().setTimeMode(TimeMode.ELAPSED);
 
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 5000L)));
 		eventHandler.fireEvent(update);
@@ -93,7 +93,7 @@ class TimeModeTest extends AbstractViewControllerTest
 		padView.getPadController().getPad().setTimeMode(TimeMode.REMAINING);
 
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 3000L)));
 		eventHandler.fireEvent(update);
@@ -118,7 +118,7 @@ class TimeModeTest extends AbstractViewControllerTest
 		padView.getPadController().getPad().setTimeMode(TimeMode.ELAPSED_AND_TOTAL);
 
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 3000L)));
 		eventHandler.fireEvent(update);
@@ -145,7 +145,7 @@ class TimeModeTest extends AbstractViewControllerTest
 		padView.getPadController().getPad().setTimeMode(null);
 
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 3000L)));
 		eventHandler.fireEvent(update);

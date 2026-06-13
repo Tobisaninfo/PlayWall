@@ -5,8 +5,10 @@ public enum PadControllerStatus
 	EMPTY,
 	ERROR,
 	READY,
-	PLAY,
-	PAUSE,
-	STOP,
+	PLAYING,
+	PAUSING,
+	PAUSED,
+	STOPPING,
+	STOPPED,
 	EOF
 }

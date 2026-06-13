@@ -106,7 +106,7 @@ class ClientProjectControllerTest extends AbstractTest
 	{
 		final UUID padId = UUID.fromString("46ea0972-f5b4-433a-8841-19ccf7aa6f31");
 		final ClientPadController padController = controller.getPadController(padId);
-		padController.setStatus(PadStatus.PLAY);
+		padController.setStatus(PadStatus.PLAYING);
 
 		assertThat(controller.isAtLeastOnePadPlaying()).isTrue();
 	}

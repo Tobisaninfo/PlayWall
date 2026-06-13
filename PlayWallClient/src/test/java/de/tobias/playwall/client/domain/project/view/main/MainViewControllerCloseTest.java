@@ -76,7 +76,7 @@ class MainViewControllerCloseTest extends AbstractViewControllerTest
 				.unsavedChangesMode(UnsavedChangesMode.ASK)
 				.build());
 
-		eventHandler.fireEvent(new PadStatusUpdate(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"), PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"), PadControllerStatus.PLAYING));
 
 		robot.interact(() -> stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST)));
 

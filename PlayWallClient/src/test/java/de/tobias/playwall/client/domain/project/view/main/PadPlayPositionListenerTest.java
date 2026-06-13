@@ -75,7 +75,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 5000L)));
 		eventHandler.fireEvent(update);
@@ -108,7 +108,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 5000L)));
 		eventHandler.fireEvent(update);
@@ -165,7 +165,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L)));
@@ -193,7 +193,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L)));
@@ -219,7 +219,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		eventHandler.fireEvent(new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L))));
@@ -247,7 +247,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 4000L)));
@@ -274,7 +274,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 8000L)));
@@ -301,7 +301,7 @@ class PadPlayPositionListenerTest extends AbstractViewControllerTest
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAY));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final PadPlayPositionUpdate update = new PadPlayPositionUpdate(List.of(new PadPlayPositionUpdate.PadPlayPosition(padId, 6000L)));

@@ -55,7 +55,7 @@ public class AudioPadContentController extends PadController
 	@Override
 	protected void unloadInternal()
 	{
-		setStatus(PadControllerStatus.STOP);
+		setStatus(PadControllerStatus.STOPPED);
 		audioHandler.unloadMedia();
 	}
 
@@ -67,7 +67,7 @@ public class AudioPadContentController extends PadController
 		audioHandler.setPlaybackSpeed(padContent.getSpeed());
 
 		final FadeSettings fadeSettings = getEffectiveFadeSettings();
-		final boolean isPaused = getStatus() == PadControllerStatus.PAUSE;
+		final boolean isPaused = getStatus() == PadControllerStatus.PAUSED;
 		final boolean fadeEnabled = isPaused
 				? BooleanUtils.isTrue(fadeSettings.getFadeInOnResume())
 				: BooleanUtils.isTrue(fadeSettings.getFadeInOnPlay());
@@ -82,7 +82,7 @@ public class AudioPadContentController extends PadController
 		}
 
 		audioHandler.play();
-		setStatus(PadControllerStatus.PLAY);
+		setStatus(PadControllerStatus.PLAYING);
 	}
 
 	@Override
@@ -127,14 +127,17 @@ public class AudioPadContentController extends PadController
 		final FadeSettings fadeSettings = getEffectiveFadeSettings();
 		if(BooleanUtils.isTrue(fadeSettings.getFadeOutOnPause()))
 		{
-			setStatus(PadControllerStatus.PAUSE);
-			fadeOut(fadeSettings.getFadeOutDuration(), audioHandler::pause);
+			setStatus(PadControllerStatus.PAUSING);
+			fadeOut(fadeSettings.getFadeOutDuration(), () -> {
+				audioHandler.pause();
+				setStatus(PadControllerStatus.PAUSED);
+			});
 		}
 		else
 		{
 			interruptCurrentFade();
 			audioHandler.pause();
-			setStatus(PadControllerStatus.PAUSE);
+			setStatus(PadControllerStatus.PAUSED);
 		}
 	}
 
@@ -142,11 +145,12 @@ public class AudioPadContentController extends PadController
 	public void stop()
 	{
 		final FadeSettings fadeSettings = getEffectiveFadeSettings();
-		if(BooleanUtils.isTrue(fadeSettings.getFadeOutOnStop()) && getStatus() != PadControllerStatus.PAUSE)
+		if(BooleanUtils.isTrue(fadeSettings.getFadeOutOnStop()) && getStatus() != PadControllerStatus.PAUSED)
 		{
-			setStatus(PadControllerStatus.STOP);
+			setStatus(PadControllerStatus.STOPPING);
 			fadeOut(fadeSettings.getFadeOutDuration(), () -> {
 				audioHandler.stop();
+				setStatus(PadControllerStatus.STOPPED);
 				setStatus(PadControllerStatus.READY);
 			});
 		}
@@ -154,7 +158,7 @@ public class AudioPadContentController extends PadController
 		{
 			interruptCurrentFade();
 			audioHandler.stop();
-			setStatus(PadControllerStatus.STOP);
+			setStatus(PadControllerStatus.STOPPED);
 			setStatus(PadControllerStatus.READY);
 		}
 	}
@@ -164,7 +168,7 @@ public class AudioPadContentController extends PadController
 	{
 		interruptCurrentFade();
 		audioHandler.stop();
-		setStatus(PadControllerStatus.STOP);
+		setStatus(PadControllerStatus.STOPPED);
 		setStatus(PadControllerStatus.READY);
 	}
 

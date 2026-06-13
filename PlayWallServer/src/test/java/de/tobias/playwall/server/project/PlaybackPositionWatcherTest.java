@@ -78,7 +78,7 @@ class PlaybackPositionWatcherTest extends AbstractRequestHandlerTest
 	{
 		when(audioHandler.getPosition()).thenReturn(Duration.ofMillis(5000L));
 
-		projectController.getPadController(padId1).setStatus(PadControllerStatus.PLAY);
+		projectController.getPadController(padId1).setStatus(PadControllerStatus.PLAYING);
 
 		watcher.run();
 		assertThat(applicationEvents.stream(PadPlayPositionUpdate.class)).hasSize(1)
@@ -92,7 +92,7 @@ class PlaybackPositionWatcherTest extends AbstractRequestHandlerTest
 	@Test
 	void testRunOnePadPaused()
 	{
-		projectController.getPadController(padId1).setStatus(PadControllerStatus.PAUSE);
+		projectController.getPadController(padId1).setStatus(PadControllerStatus.PAUSED);
 
 		watcher.run();
 		assertThat(applicationEvents.stream(PadPlayPositionUpdate.class)).hasSize(1)
@@ -106,8 +106,8 @@ class PlaybackPositionWatcherTest extends AbstractRequestHandlerTest
 	@Test
 	void testRunTwoPadsPlay()
 	{
-		projectController.getPadController(padId1).setStatus(PadControllerStatus.PLAY);
-		projectController.getPadController(padId2).setStatus(PadControllerStatus.PLAY);
+		projectController.getPadController(padId1).setStatus(PadControllerStatus.PLAYING);
+		projectController.getPadController(padId2).setStatus(PadControllerStatus.PLAYING);
 
 		watcher.run();
 		assertThat(applicationEvents.stream(PadPlayPositionUpdate.class)).hasSize(1)
