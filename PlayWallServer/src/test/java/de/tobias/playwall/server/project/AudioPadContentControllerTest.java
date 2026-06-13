@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.project;
 
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -201,6 +202,18 @@ class AudioPadContentControllerTest extends AbstractRequestHandlerTest
 
 		verify(controller).fadeOut(anyDouble(), any());
 		AWAIT.untilAsserted(() -> verify(audioHandler).stop());
+	}
+
+	@Test
+	void testStopWithProjectFadeOutFromPause()
+	{
+		controller.setStatus(PadControllerStatus.PAUSE);
+		projectFadeSettings.setFadeOutOnStop(true);
+
+		controller.stop();
+
+		verify(controller, never()).fadeOut(anyDouble(), any());
+		verify(audioHandler).stop();
 	}
 
 	@Test
