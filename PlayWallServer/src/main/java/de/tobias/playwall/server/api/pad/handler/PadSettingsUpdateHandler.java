@@ -81,7 +81,7 @@ class PadSettingsUpdateHandler extends UndoableRequestHandler<PadSettingsUpdateR
 				if(padController != null)
 				{
 					padController.setLooping(requestAudioPadContent.isLoop());
-
+					padController.setPlaybackSpeed(requestAudioPadContent.getSpeed());
 					padController.setVolume(requestAudioPadContent.getVolume());
 				}
 			}
