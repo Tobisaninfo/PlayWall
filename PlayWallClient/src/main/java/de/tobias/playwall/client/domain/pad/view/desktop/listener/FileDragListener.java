@@ -19,9 +19,14 @@ public class FileDragListener extends PadInputListener
 	{
 		if(event.getDragboard().hasFiles())
 		{
-			List<DropOption> fileDragOptions = new ArrayList<>();
+			final List<DropOption> fileDragOptions = new ArrayList<>();
 			final Optional<NewFileDragOption> newMediaDragOption = NewFileDragOption.create(event.getDragboard().getFiles().getFirst().toPath());
 			newMediaDragOption.ifPresent(fileDragOptions::add);
+
+			if(fileDragOptions.isEmpty())
+			{
+				return;
+			}
 
 			padView.getDropOptionSelect().showOptions(fileDragOptions);
 			event.acceptTransferModes(TransferMode.LINK);
