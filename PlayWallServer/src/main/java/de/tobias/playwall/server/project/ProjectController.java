@@ -66,7 +66,7 @@ public class ProjectController
 				});
 	}
 
-	public void unloadAndRemovePage(Page page)
+	public void unloadAndRemovePadControllersForPage(Page page)
 	{
 		page.getPads()
 				.stream().filter(pad -> padControllers.containsKey(pad.getId()))
@@ -77,7 +77,7 @@ public class ProjectController
 				});
 	}
 
-	public void unloadAndRemovePad(UUID padId)
+	public void unloadAndRemovePadController(UUID padId)
 	{
 		final PadController controller = padControllers.get(padId);
 		if(controller != null)
@@ -164,10 +164,5 @@ public class ProjectController
 		final PadController controller = padControllerFactory.createPadContentController(context, loadedProject, pad);
 		padControllers.put(pad.getId(), controller);
 		return controller;
-	}
-
-	public void deletePadControllersForPage(Page page)
-	{
-		page.getPads().forEach(pad -> padControllers.remove(pad.getId()));
 	}
 }

@@ -74,7 +74,7 @@ class ProjectUpdateHandler implements OneTimeActionRequestHandler<ProjectUpdateR
 				final Pad oldPad = padIterator.next();
 				if(newPage.getPad(oldPad.getId()).isEmpty())
 				{
-					projectController.unloadAndRemovePad(oldPad.getId());
+					projectController.unloadAndRemovePadController(oldPad.getId());
 					padIterator.remove();
 				}
 			}

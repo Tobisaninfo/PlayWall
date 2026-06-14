@@ -86,7 +86,7 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 			if(hasProjectSizeChanged)
 			{
 				final List<UUID> removedPads = projectService.updateNumberOfPadsPerRowAndColumn(project, oldMetadata);
-				removedPads.forEach(projectController::unloadAndRemovePad);
+				removedPads.forEach(projectController::unloadAndRemovePadController);
 
 				context.publishEvent(new ProjectUpdate(projectMapper.projectToProjectDto(project)));
 				return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new CompoundRequest(List.of(

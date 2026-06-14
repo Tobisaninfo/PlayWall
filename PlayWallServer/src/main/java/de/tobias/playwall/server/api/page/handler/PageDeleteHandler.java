@@ -51,11 +51,8 @@ class PageDeleteHandler extends UndoableRequestHandler<PageDeleteRequest>
 		final String shortDescription = messageSource.getMessage("undo.description.short.page.delete", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longDescription = messageSource.getMessage("undo.description.long.page.delete", new Object[]{pageName}, LocaleContextHolder.getLocale());
 
-		// Stop playing pads on the page
-		projectController.unloadAndRemovePage(page);
-
-		// Delete pad controllers
-		projectController.deletePadControllersForPage(page);
+		// Stop playing pads on the page and remove pad controllers
+		projectController.unloadAndRemovePadControllersForPage(page);
 
 		// Remove the page from the project
 		final boolean success = projectService.deletePage(project, requestMessage.getPageId());

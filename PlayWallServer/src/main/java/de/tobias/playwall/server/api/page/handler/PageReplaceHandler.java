@@ -25,7 +25,7 @@ class PageReplaceHandler implements OneTimeActionRequestHandler<PageReplaceReque
 	public void handleRequest(PageReplaceRequest requestMessage)
 	{
 			final Project project = projectController.getLoadedProject();
-			projectController.unloadAndRemovePage(project.getPages().get(requestMessage.getIndex()));
+		projectController.unloadAndRemovePadControllersForPage(project.getPages().get(requestMessage.getIndex()));
 
 			final Page page = mapper.pageDtoToPage(requestMessage.getPage());
 			projectService.replacePage(project, page, requestMessage.getIndex());

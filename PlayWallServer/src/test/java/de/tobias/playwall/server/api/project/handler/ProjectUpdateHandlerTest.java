@@ -69,12 +69,12 @@ class ProjectUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 				.satisfies(pad -> assertThat(pad.getId()).isEqualTo(UUID.fromString("0a589aed-3ead-4fe0-9c0a-4c7b1b83b8a6")))
 				.satisfies(pad -> assertThat(pad.getPosition()).isZero());
 
-		verify(projectController).unloadAndRemovePad(UUID.fromString("895082d5-3655-4aca-96db-818fef99e9ef"));
-		verify(projectController).unloadAndRemovePad(UUID.fromString("f55f7691-2842-4d3f-9b64-08ddb0161398"));
-		verify(projectController).unloadAndRemovePad(UUID.fromString("c37d6bb6-49a7-4b72-964d-dc9a8571507a"));
-		verify(projectController).unloadAndRemovePad(UUID.fromString("14daf9a8-76ae-42c1-bef4-b9a273eac85d"));
-		verify(projectController).unloadAndRemovePad(UUID.fromString("d7f7fec5-3a92-434b-90cb-4ceae54eed1c"));
-		verify(projectController).unloadAndRemovePad(UUID.fromString("ed56c9c7-33dd-4d24-8cab-f115d26e6827"));
+		verify(projectController).unloadAndRemovePadController(UUID.fromString("895082d5-3655-4aca-96db-818fef99e9ef"));
+		verify(projectController).unloadAndRemovePadController(UUID.fromString("f55f7691-2842-4d3f-9b64-08ddb0161398"));
+		verify(projectController).unloadAndRemovePadController(UUID.fromString("c37d6bb6-49a7-4b72-964d-dc9a8571507a"));
+		verify(projectController).unloadAndRemovePadController(UUID.fromString("14daf9a8-76ae-42c1-bef4-b9a273eac85d"));
+		verify(projectController).unloadAndRemovePadController(UUID.fromString("d7f7fec5-3a92-434b-90cb-4ceae54eed1c"));
+		verify(projectController).unloadAndRemovePadController(UUID.fromString("ed56c9c7-33dd-4d24-8cab-f115d26e6827"));
 
 		assertThat(applicationEvents.stream(ProjectUpdate.class))
 				.hasSize(1)
@@ -119,7 +119,7 @@ class ProjectUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 				.satisfies(pads -> assertThat(pads.get(3).getId()).isEqualTo(UUID.fromString("ed56c9c7-33dd-4d24-8cab-f115d26e6827")))
 				.satisfies(pads -> assertThat(pads.get(3).getPosition()).isEqualTo(3));
 
-		verify(projectController, never()).unloadAndRemovePad(any());
+		verify(projectController, never()).unloadAndRemovePadController(any());
 
 		assertThat(applicationEvents.stream(ProjectUpdate.class))
 				.hasSize(1)
