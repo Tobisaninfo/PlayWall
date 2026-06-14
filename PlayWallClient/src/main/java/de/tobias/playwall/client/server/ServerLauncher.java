@@ -77,7 +77,11 @@ public class ServerLauncher
 
 			final Path loggingPath = app.getPath(PathType.LOG);
 
-			final List<String> jvmOptions = List.of("--enable-native-access=ALL-UNNAMED", "-Dapp.logdir=" + loggingPath.toString());
+			final List<String> jvmOptions = List.of(
+					"--enable-native-access=ALL-UNNAMED",
+					"-Dapp.logdir=" + loggingPath.toString(),
+					"-Dapp.debug=" + false
+			);
 			final List<String> programArguments = new ArrayList<>();
 			if(properties.getStoragePath() != null)
 			{

@@ -48,7 +48,7 @@
         </Async>
 
         <Routing name="Routing">
-            <Routes pattern="${sys:app.debug:-false}">
+            <Routes pattern="${sys:app.console:-false}">
                 <Route key="true" ref="ConsoleAndRemote"/>
                 <Route key="false" ref="ConsoleAndFileAndRemote"/>
             </Routes>

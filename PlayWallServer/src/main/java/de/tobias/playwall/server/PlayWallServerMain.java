@@ -14,10 +14,23 @@ public class PlayWallServerMain
 {
 	public static void main(String[] args)
 	{
+		boolean debugLogLevel = false;
+		if(System.getProperty("app.debug") != null)
+		{
+			debugLogLevel = Boolean.parseBoolean(System.getProperty("app.debug"));
+		}
+
 		if(System.getProperty("app.logdir") == null)
 		{
-			System.setProperty("app.debug", String.valueOf(true));
+			debugLogLevel = true;
+			System.setProperty("app.console", String.valueOf(true));
 			System.setProperty("app.logdir", "logs");
+		}
+
+		if(debugLogLevel)
+		{
+			System.setProperty("playwall.native-audio.log-level", "DEBUG");
+			System.setProperty("logging.level.de.tobias.playwall", "DEBUG");
 		}
 
 		final Logger log = LoggerFactory.getLogger(PlayWallServerMain.class);
