@@ -24,6 +24,9 @@ import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.page.PageSettingsMapper;
 import de.tobias.playwall.client.domain.page.view.settings.BasePageSettingsViewController;
 import de.tobias.playwall.client.domain.page.view.settings.PageSettingsViewController;
+import de.tobias.playwall.client.domain.page.view.PageButtons;
+import de.tobias.playwall.client.domain.page.view.PageButtonsEventDispatcher;
+import de.tobias.playwall.client.domain.page.view.PageButtonInputListener;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.management.ProjectManagementViewController;
@@ -142,8 +145,10 @@ public class MainViewController extends ViewControllerBase
 	private final ProjectMapper projectMapper;
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final SettingsMapper settingsMapper;
+
 	private final UpdateMessageEventHandler eventHandler;
-	private final PadEventDispatcher eventDispatcher;
+	private final PageButtonsEventDispatcher pageEventDispatcher;
+	private final PadEventDispatcher padEventDispatcher;
 
 	private ProjectLoadedListener projectLoadedListener;
 	private ProjectListener projectListener;
@@ -232,7 +237,7 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
-		globalColorPicker.init(eventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, this::onColorChange, this::onColorSubmit));
+		globalColorPicker.init(padEventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, this::onColorChange, this::onColorSubmit));
 
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
 			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
@@ -261,8 +266,17 @@ public class MainViewController extends ViewControllerBase
 		importPageMenuItem.setOnAction(this::onPageImport);
 		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
-		eventDispatcher.addPadInputListener(new FileDragListener());
-		eventDispatcher.addPadInputListener(new PadDragListener(client, projectController));
+		padEventDispatcher.addPadInputListener(new FileDragListener());
+		padEventDispatcher.addPadInputListener(new PadDragListener(client, projectController));
+
+		pageEventDispatcher.addPageInputListener(new PageButtonInputListener()
+		{
+			@Override
+			public void onAction(Page page, ActionEvent event)
+			{
+				showPage(page);
+			}
+		});
 	}
 
 	@Override
@@ -512,17 +526,16 @@ public class MainViewController extends ViewControllerBase
 
 	void buildPageButtons()
 	{
-		pageButtons.buildPageButtons(projectController.getProject().getPages(), (button, page) -> {
-			button.setOnAction(_ -> showPage(page));
+		pageButtons.buildPageButtons(projectController.getProject().getPages(), page -> {
 			final MenuItem deleteMenuItem = createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_CAN_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)));
 			deleteMenuItem.getStyleClass().add("danger");
-			button.setContextMenu(new ContextMenu(
+			return new ContextMenu(
 					createMenuItem(Strings.UI_PAGE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.of(_ -> onPageSettingsMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_EXPORT, FontAwesomeType.FILE_IMPORT_SOLID, Optional.of(_ -> onPageExportMenuItem(page))),
 					new SeparatorMenuItem(),
 					deleteMenuItem
-			));
+			);
 		});
 
 		pageButtons.highlightPageButton(currentPage);

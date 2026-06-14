@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.tobias.playwall.client.domain.project.view.main.PageButtons?>
+<?import de.tobias.playwall.client.domain.page.view.PageButtons?>
 <?import de.tobias.playwall.client.view.components.GlobalColorPicker?>
 <?import de.tobias.playwall.client.view.components.VolumeSlider?>
 <?import javafx.scene.control.Button?>

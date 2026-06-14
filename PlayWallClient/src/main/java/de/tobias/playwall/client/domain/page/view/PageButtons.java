@@ -1,5 +1,6 @@
-package de.tobias.playwall.client.domain.project.view.main;
+package de.tobias.playwall.client.domain.page.view;
 
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.view.components.PseudoClasses;
@@ -14,6 +15,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
@@ -25,7 +27,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class PageButtons extends FlowPane
 {
@@ -59,10 +61,14 @@ public class PageButtons extends FlowPane
 	@Setter
 	private boolean isLoading = false;
 
+	private PageButtonsEventDispatcher pageEventDispatcher;
+
 	public PageButtons()
 	{
 		dropPlaceholder.getStyleClass().add("page-button-drop-placeholder");
 		dropPlaceholder.setManaged(true);
+
+		pageEventDispatcher = AppContextHolder.getInstance().get(PageButtonsEventDispatcher.class);
 
 		installPageButtonsFlowPaneDropBehavior();
 	}
@@ -135,7 +141,7 @@ public class PageButtons extends FlowPane
 		return getChildren().stream().filter(this::isPageButton).map(node -> (Page) node.getUserData()).toList();
 	}
 
-	void buildPageButtons(List<Page> pages, BiConsumer<Button, Page> onButtonCreate)
+	public void buildPageButtons(List<Page> pages, Function<Page, ContextMenu> createContextMenu)
 	{
 		getChildren().removeIf(node -> node.getUserData() != null);
 		for(Page page : pages)
@@ -151,7 +157,11 @@ public class PageButtons extends FlowPane
 			}
 			button.setFocusTraversable(false);
 			button.setUserData(page);
-			onButtonCreate.accept(button, page);
+
+			button.setOnAction(event -> pageEventDispatcher.dispatchEvent(event, listener -> listener.onAction(page, event)));
+			button.setOnDragOver(event -> pageEventDispatcher.dispatchEvent(event, listener -> listener.onDragOver(page, event)));
+
+			button.setContextMenu(createContextMenu.apply(page));
 
 			button.setOnDragDetected(e -> startPageButtonDrag(e, button));
 			button.setOnDragDone(this::onDragDone);
@@ -362,7 +372,7 @@ public class PageButtons extends FlowPane
 		getChildren().remove(dropPlaceholder);
 	}
 
-	void highlightPageButton(Page page)
+	public void highlightPageButton(Page page)
 	{
 		getChildren().forEach(node -> node.pseudoClassStateChanged(PseudoClasses.SELECTED, false));
 		getChildren().stream()
