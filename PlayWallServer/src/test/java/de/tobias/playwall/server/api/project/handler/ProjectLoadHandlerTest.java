@@ -1,11 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
-import de.tobias.playwall.common.api.common.Color;
-import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
-import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
+import de.tobias.playwall.common.api.page.request.PageAddRequest;
 import de.tobias.playwall.common.api.project.request.ProjectLoadRequest;
-import de.tobias.playwall.common.api.project.request.ProjectSettingsUpdateRequest;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.history.UndoManager;
@@ -89,16 +86,10 @@ class ProjectLoadHandlerTest extends AbstractRequestHandlerTest
 		Files.writeString(projectsFile, """
 				{
 					"recentProjects": [],
-					"allProjectsMetadata":
+					"allProjects":
 					[
-						 {
-							 "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
-							 "name": "Project 1"
-						 },
-						  {
-							 "id": "14bd0090-6322-4133-966d-b78296565a7f",
-							 "name": "Project 2"
-						 }
+						 "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
+						 "14bd0090-6322-4133-966d-b78296565a7f"
 					 ]
 				 }
 				""");
@@ -152,16 +143,7 @@ class ProjectLoadHandlerTest extends AbstractRequestHandlerTest
 		handler.handleRequest(new ProjectLoadRequest(projectId1));
 
 		// create an undoable action
-		final ProjectSettingsUpdateRequest request = new ProjectSettingsUpdateRequest(ProjectMetadataDto.builder()
-				.name("Fancy project name")
-				.numberOfHorizontalPads(3)
-				.numberOfVerticalPads(5)
-				.volume(1.0)
-				.timeMode(TimeMode.ELAPSED_AND_TOTAL)
-				.defaultColor(Color.DARK_RED1)
-				.playColor(Color.BLUE1)
-				.introColor(Color.LIGHT_GREEN2)
-				.build());
+		final PageAddRequest request = new PageAddRequest();
 
 		requestExecutor.execute(request);
 

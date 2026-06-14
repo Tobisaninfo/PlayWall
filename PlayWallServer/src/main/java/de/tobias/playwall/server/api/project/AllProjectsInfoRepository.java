@@ -4,8 +4,6 @@ import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
-import jakarta.annotation.PostConstruct;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,13 +29,22 @@ public class AllProjectsInfoRepository
 	private final JsonMapper mapper;
 	private final ProjectRepository projectRepository;
 
-	@Getter
 	private AllProjectsInfo allProjectsInfo;
 
-	@PostConstruct
-	void init() throws IOException
+	public AllProjectsInfo getAllProjectsInfo()
 	{
-		loadAllProjectsInfo();
+		if(allProjectsInfo == null)
+		{
+			try
+			{
+				loadAllProjectsInfo();
+			}
+			catch(IOException e)
+			{
+				throw new UncheckedIOException(e);
+			}
+		}
+		return allProjectsInfo;
 	}
 
 	public void loadAllProjectsInfo() throws IOException
@@ -57,27 +64,28 @@ public class AllProjectsInfoRepository
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
-		mapper.writeValue(Files.newBufferedWriter(path), allProjectsInfo);
+		mapper.writeValue(Files.newBufferedWriter(path), getAllProjectsInfo());
 	}
 
 	void clearProjects() throws IOException
 	{
-		this.allProjectsInfo.setAllProjects(new ArrayList<>());
-		this.allProjectsInfo.getRecentProjects().clear();
+		final AllProjectsInfo copy = getAllProjectsInfo();
+		copy.setAllProjects(new ArrayList<>());
+		copy.getRecentProjects().clear();
 		saveAllProjectsInfo();
 	}
 
 	public List<UUID> getAllProjects()
 	{
-		return this.allProjectsInfo.getAllProjects();
+		return getAllProjectsInfo().getAllProjects();
 	}
 
 	public boolean deleteProject(UUID id) throws IOException
 	{
-		final boolean isSuccess = allProjectsInfo.getAllProjects().remove(id);
+		final boolean isSuccess = getAllProjectsInfo().getAllProjects().remove(id);
 		if(isSuccess)
 		{
-			allProjectsInfo.getRecentProjects().removeIf(i -> i.equals(id));
+			getAllProjectsInfo().getRecentProjects().removeIf(i -> i.equals(id));
 			saveAllProjectsInfo();
 		}
 		return isSuccess;
@@ -97,7 +105,7 @@ public class AllProjectsInfoRepository
 				.numberOfHorizontalPads(numberOfHorizontalPads)
 				.numberOfVerticalPads(numberOfVerticalPads)
 				.build();
-		allProjectsInfo.getAllProjects().add(newProjectMetadata.getId());
+		getAllProjectsInfo().getAllProjects().add(newProjectMetadata.getId());
 		saveAllProjectsInfo();
 
 		return newProjectMetadata;
@@ -120,23 +128,23 @@ public class AllProjectsInfoRepository
 			project.getMetadata().setName(name);
 		}
 
-		allProjectsInfo.getAllProjects().add(project.getMetadata().getId());
+		getAllProjectsInfo().getAllProjects().add(project.getMetadata().getId());
 		saveAllProjectsInfo();
 	}
 
 	public void onProjectOpened(UUID id)
 	{
-		allProjectsInfo.getRecentProjects().push(id);
+		getAllProjectsInfo().getRecentProjects().push(id);
 	}
 
 	public List<UUID> getRecentProjectIds()
 	{
-		return allProjectsInfo.getRecentProjects().stream().toList();
+		return getAllProjectsInfo().getRecentProjects().stream().toList();
 	}
 
 	public List<ProjectMetadata> getAllProjectMetadata()
 	{
-		return allProjectsInfo.getAllProjects().stream().map(id -> {
+		return getAllProjectsInfo().getAllProjects().stream().map(id -> {
 			try
 			{
 				return projectRepository.loadProjectMetadata(id);

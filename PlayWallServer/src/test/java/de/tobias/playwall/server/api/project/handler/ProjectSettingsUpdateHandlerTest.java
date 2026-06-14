@@ -8,9 +8,10 @@ import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
+import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
-import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -18,7 +19,6 @@ import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -26,8 +26,8 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,17 +39,17 @@ import static org.mockito.Mockito.when;
 @RecordApplicationEvents
 class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<ProjectSettingsUpdateRequest>
 {
-	@TempDir
-	private Path tempDir;
-
 	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
 
 	@Autowired
 	private ApplicationEvents applicationEvents;
 
-	@Autowired
-	private ProjectService projectService;
+	@MockitoBean
+	private AllProjectsInfoRepository allProjectsInfoRepository;
+
+	@MockitoBean
+	private ProjectRepository projectRepository;
 
 	@Autowired
 	private ProjectSettingsUpdateHandler handler;
@@ -63,26 +63,14 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 		final AudioHandler audioHandler = mock(AudioHandler.class);
 		when(audioHandlerFactory.createAudioHandler(any())).thenReturn(audioHandler);
 
-		final Path projectsFile = tempDir.resolve("projects.json");
+		when(allProjectsInfoRepository.getAllProjectMetadata())
+				.thenReturn(List.of(
+						new ProjectMetadata(UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c"), "Project 1"),
+						new ProjectMetadata(UUID.fromString("14bd0090-6322-4133-966d-b78296565a7f"), "Project 2")
+				));
+		when(allProjectsInfoRepository.getProjectMetadataByName(any())).thenCallRealMethod();
+		when(projectRepository.loadProject(any())).thenReturn(TestUtils.loadProject(objectMapper, "projects/project_1.json"));
 
-		Files.writeString(projectsFile, """
-				{
-					"recentProjects": [],
-					"allProjectsMetadata":
-					[
-						 {
-							 "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
-							 "name": "Project 1"
-						 },
-						  {
-							 "id": "14bd0090-6322-4133-966d-b78296565a7f",
-							 "name": "Project 2"
-						 }
-					 ]
-				 }
-				""");
-
-		when(pathProvider.getPathForConfig(any())).thenReturn(projectsFile);
 		projectController.unloadProject();
 	}
 

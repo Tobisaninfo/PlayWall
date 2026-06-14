@@ -7,26 +7,26 @@ import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
-import de.tobias.playwall.server.api.project.ProjectService;
+import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
-import de.tobias.playwall.server.common.storage.PathProvider;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -35,48 +35,31 @@ class ProjectRenameHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 {
 	private static final UUID project1 = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
 
-	@TempDir
-	private Path tempDir;
-
 	@Autowired
 	private ApplicationEvents applicationEvents;
 
-	@Autowired
-	private ProjectService projectService;
+	@MockitoBean
+	private ProjectRepository projectRepository;
 
 	@Autowired
 	private ProjectRenameHandler handler;
 
-	@Autowired
+	@MockitoBean
 	private AllProjectsInfoRepository allProjectsInfoRepository;
 
-	@MockitoBean
-	private PathProvider pathProvider;
+	@Captor
+	private ArgumentCaptor<Project> projectCaptor;
 
 	@BeforeEach
-	void beforeEach() throws IOException
+	void beforeEach()
 	{
-		final Path projectsFile = tempDir.resolve("projects.json");
+		when(allProjectsInfoRepository.getAllProjectMetadata())
+				.thenReturn(List.of(
+						new ProjectMetadata(UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c"), "Project 1"),
+						new ProjectMetadata(UUID.fromString("14bd0090-6322-4133-966d-b78296565a7f"), "Project 2")
+				));
+		when(allProjectsInfoRepository.getProjectMetadataByName(any())).thenCallRealMethod();
 
-		Files.writeString(projectsFile, """
-				{
-					"recentProjects": [],
-					"allProjectsMetadata":
-					[
-						 {
-							 "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
-							 "name": "Project 1"
-						 },
-						  {
-							 "id": "14bd0090-6322-4133-966d-b78296565a7f",
-							 "name": "Project 2"
-						 }
-					 ]
-				 }
-				""");
-
-		when(pathProvider.getPathForConfig(any())).thenReturn(projectsFile);
-		projectService.getAllProjectsInfo();
 		projectController.unloadProject();
 	}
 
@@ -84,6 +67,8 @@ class ProjectRenameHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 	void testProjectRenameHandlerSameProjectNameForCurrentProjectOK() throws Exception
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		when(projectRepository.loadProject(any())).thenReturn(project);
+
 		projectController.loadProject(project).get();
 		applicationEvents.clear();
 
@@ -95,27 +80,33 @@ class ProjectRenameHandlerTest extends AbstractUndoableRequestHandlerTest<Projec
 				.first()
 				.satisfies(projectSettingsUpdate -> assertThat(projectSettingsUpdate.getProjectMetadata().name()).isEqualTo("Project 3"));
 		assertThat(project.getMetadata().getName()).isEqualTo("Project 3");
+
+		verify(projectRepository).saveProject(projectCaptor.capture());
+		assertThat(projectCaptor.getValue().getMetadata().getName()).isEqualTo("Project 3");
 	}
 
-	// TODO
-//	@Test
-//	void testProjectRenameHandlerClosedProject() throws Exception
-//	{
-//		final ProjectRenameRequest request = new ProjectRenameRequest(project1, "Project 3");
-//
-//		handler.handleRequest(request);
-//
-//		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class)).isEmpty();
-//
-//		assertThat(allProjectsInfoRepository.getAllProjects())
-//				.filteredOn(projectMetadata -> projectMetadata.getId().equals(project1)).first()
-//				.satisfies(projectMetadata -> assertThat(projectMetadata.getName()).isEqualTo("Project 3"));
-//	}
+	@Test
+	void testProjectRenameHandlerClosedProject() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		when(projectRepository.loadProject(any())).thenReturn(project);
+
+		final ProjectRenameRequest request = new ProjectRenameRequest(project1, "Project 3");
+
+		handler.handleRequest(request);
+
+		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class)).isEmpty();
+
+		verify(projectRepository).saveProject(projectCaptor.capture());
+		assertThat(projectCaptor.getValue().getMetadata().getName()).isEqualTo("Project 3");
+	}
 
 	@Test
 	void testProjectRenameHandlerProjectNameAlreadyExists() throws Exception
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		when(projectRepository.loadProject(any())).thenReturn(project);
+
 		projectController.loadProject(project).get();
 		applicationEvents.clear();
 

@@ -52,6 +52,12 @@ public class ProjectMetadata
 	@Builder.Default
 	private FadeSettings fadeSettings = new FadeSettings();
 
+	public ProjectMetadata(UUID id, String name)
+	{
+		this.id = id;
+		this.name = name;
+	}
+
 	@JsonIgnore
 	public int getNumberOfPadsPerPage()
 	{
