@@ -18,7 +18,7 @@ import lombok.Getter;
 
 import java.util.Collection;
 
-public class FileDragOptionView
+public class DropOptionSelect
 {
 	private final HBox optionPane;
 	private final Pane parent;
@@ -26,7 +26,7 @@ public class FileDragOptionView
 	private final Transition inTransition;
 	private final Transition outTransition;
 
-	public FileDragOptionView(Pane pane)
+	public DropOptionSelect(Pane pane)
 	{
 		parent = pane;
 
@@ -83,9 +83,9 @@ public class FileDragOptionView
 	}
 
 	@Getter
-	private FileDragOption selectedOption;
+	private DropOption selectedOption;
 
-	public void showOptions(Collection<? extends FileDragOption> options)
+	public void showOptions(Collection<? extends DropOption> options)
 	{
 		if(parent.getChildren().contains(optionPane))
 		{

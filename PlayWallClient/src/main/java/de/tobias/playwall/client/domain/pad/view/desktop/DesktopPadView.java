@@ -21,7 +21,7 @@ import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
-import de.tobias.playwall.client.view.components.drag.FileDragOptionView;
+import de.tobias.playwall.client.view.components.drag.DropOptionSelect;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -81,7 +81,7 @@ public class DesktopPadView implements PadView
 	private StackPane superRoot;
 	private VBox root;
 	private BusyView busyView;
-	private FileDragOptionView fileDragOptionView;
+	private DropOptionSelect dropOptionSelect;
 
 	private Label introLayer;
 
@@ -124,7 +124,7 @@ public class DesktopPadView implements PadView
 		superRoot = new PadStackPane(STYLE_CLASS_PAD, STYLE_CLASS_PAD_INDEX);
 		root = new PadVBox(STYLE_CLASS_PAD_BUTTON_ROOT);
 		busyView = new BusyView(superRoot);
-		fileDragOptionView = new FileDragOptionView(superRoot);
+		dropOptionSelect = new DropOptionSelect(superRoot);
 
 		introLayer = PadLabel.empty(STYLE_CLASS_PAD_INTRO, STYLE_CLASS_PAD_INTRO_INDEX);
 		introLayer.prefHeightProperty().bind(root.heightProperty());

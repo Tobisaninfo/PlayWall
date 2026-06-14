@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
-import de.tobias.playwall.client.view.components.drag.FileDragOption;
+import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -19,11 +19,11 @@ public class FileDragListener extends PadInputListener
 	{
 		if(event.getDragboard().hasFiles())
 		{
-			List<FileDragOption> fileDragOptions = new ArrayList<>();
+			List<DropOption> fileDragOptions = new ArrayList<>();
 			final Optional<NewFileDragOption> newMediaDragOption = NewFileDragOption.create(event.getDragboard().getFiles().getFirst().toPath());
 			newMediaDragOption.ifPresent(fileDragOptions::add);
 
-			padView.getFileDragOptionView().showOptions(fileDragOptions);
+			padView.getDropOptionSelect().showOptions(fileDragOptions);
 			event.acceptTransferModes(TransferMode.LINK);
 			event.consume();
 		}
@@ -34,7 +34,7 @@ public class FileDragListener extends PadInputListener
 	{
 		if(event.getDragboard().hasFiles())
 		{
-			padView.getFileDragOptionView().hide();
+			padView.getDropOptionSelect().hide();
 			event.consume();
 		}
 	}
@@ -45,7 +45,7 @@ public class FileDragListener extends PadInputListener
 		final Dragboard dragboard = event.getDragboard();
 		if(dragboard.hasFiles())
 		{
-			final FileDragOption fileDragOption = padView.getFileDragOptionView().getSelectedOption();
+			final DropOption fileDragOption = padView.getDropOptionSelect().getSelectedOption();
 			if(fileDragOption == null)
 			{
 				return;

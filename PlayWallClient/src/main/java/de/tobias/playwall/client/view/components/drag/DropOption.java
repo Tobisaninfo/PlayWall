@@ -4,7 +4,7 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import javafx.scene.input.DragEvent;
 
-public interface FileDragOption extends Comparable<FileDragOption>
+public interface DropOption extends Comparable<DropOption>
 {
 	void handleDrag(DesktopPadView padView, DragEvent event);
 
@@ -12,7 +12,7 @@ public interface FileDragOption extends Comparable<FileDragOption>
 
 	FontAwesomeType getIcon();
 
-	default int compareTo(FileDragOption other)
+	default int compareTo(DropOption other)
 	{
 		return getLabel().compareTo(other.getLabel());
 	}

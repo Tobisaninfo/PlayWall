@@ -3,7 +3,7 @@ package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
-import de.tobias.playwall.client.view.components.drag.FileDragOption;
+import de.tobias.playwall.client.view.components.drag.DropOption;
 import de.tobias.playwall.common.utils.FileFormats;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class NewFileDragOption implements FileDragOption
+public class NewFileDragOption implements DropOption
 {
 	public static Optional<NewFileDragOption> create(Path path)
 	{
