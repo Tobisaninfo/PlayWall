@@ -7,6 +7,7 @@ import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.utils.ExceptionUtils;
 import de.tobias.playwall.common.api.ServerError;
 import de.tobias.playwall.common.api.StackTraceError;
 import javafx.event.ActionEvent;
@@ -28,6 +29,11 @@ public class ErrorAlertBuilder
 			stackStrace = stackTraceError.getStackTrace();
 		}
 		return createErrorAlert(title, headerText, contentText, stackStrace, owner);
+	}
+
+	public Alert createErrorAlert(String title, String headerText, String contentText, Throwable exception, Window owner)
+	{
+		return createErrorAlert(title, headerText, contentText, ExceptionUtils.stackTraceToString(exception), owner);
 	}
 
 	public Alert createErrorAlert(String title, String headerText, String contentText, Window owner)

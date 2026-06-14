@@ -31,6 +31,9 @@ import java.util.Locale;
 
 public class PlayWallMain extends Application
 {
+
+	public static final String DEBUG_FLAG_FILE_NAME = "debug";
+
 	static
 	{
 		Locale.setDefault(Locale.GERMAN);
@@ -58,7 +61,7 @@ public class PlayWallMain extends Application
 		Level level = app.isDebug() ? Level.DEBUG : Level.INFO;
 		try
 		{
-			final Path debugFlagFile = app.getPath(PathType.CONFIGURATION, "debug");
+			final Path debugFlagFile = app.getPath(PathType.CONFIGURATION, DEBUG_FLAG_FILE_NAME);
 			if(Files.exists(debugFlagFile))
 			{
 				level = Level.DEBUG;
