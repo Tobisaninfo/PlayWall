@@ -1,8 +1,8 @@
 package de.tobias.playwall.nativeaudio.loader;
 
 import de.thecodelabs.utils.util.OS;
+import de.tobias.playwall.nativeaudio.NativeAudioProperties;
 import de.tobias.playwall.nativeaudio.audio.rust.RustAudioHandler;
-import de.tobias.playwall.nativeaudio.audio.rust.RustLogLevel;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ public class RustAudioLoader
 	private boolean isLoaded = false;
 
 	private final PathProvider pathProvider;
+	private final NativeAudioProperties nativeAudioProperties;
 
 	@PostConstruct
 	void preInit()
@@ -48,7 +49,7 @@ public class RustAudioLoader
 			{
 				copyResource("rust/" + nativeLibraryFilename, destinationPath);
 				System.load(destinationPath.toString());
-				RustAudioHandler.initSystem(RustLogLevel.DEBUG); // TODO: make configurable
+				RustAudioHandler.initSystem(nativeAudioProperties.getLogLevel());
 				isLoaded = true;
 			}
 		}
