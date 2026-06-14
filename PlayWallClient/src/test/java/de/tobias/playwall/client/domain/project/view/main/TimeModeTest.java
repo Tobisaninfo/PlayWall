@@ -92,6 +92,7 @@ class TimeModeTest extends AbstractViewControllerTest
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 		padView.getPadController().getPad().setTimeMode(TimeMode.REMAINING);
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
@@ -117,6 +118,7 @@ class TimeModeTest extends AbstractViewControllerTest
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 		padView.getPadController().getPad().setTimeMode(TimeMode.ELAPSED_AND_TOTAL);
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 
@@ -144,6 +146,7 @@ class TimeModeTest extends AbstractViewControllerTest
 		final DesktopPadView padView = (DesktopPadView) mainViewController.getPadViewForPadId(padId);
 		padView.getPadController().getPad().setTimeMode(null);
 
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
 		eventHandler.fireEvent(new PadLoadedUpdate(padId, true, 10000L));
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 

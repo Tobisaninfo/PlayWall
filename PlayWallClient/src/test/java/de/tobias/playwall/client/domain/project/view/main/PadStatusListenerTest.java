@@ -93,10 +93,16 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 
 		padController.setPosition(Duration.millis(5000L));
 
-		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOPPED));
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOPPING));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
 		assertThat(padView.getTimeLabel()).hasText("0:05");
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.STOPPING);
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOPPED));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:10");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.STOPPED);
 
 		padController.setPosition(Duration.millis(5000L));
