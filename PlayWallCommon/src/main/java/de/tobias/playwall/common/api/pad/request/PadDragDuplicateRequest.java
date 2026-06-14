@@ -1,5 +1,6 @@
 package de.tobias.playwall.common.api.pad.request;
 
+import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.net.RequestMessage;
 import lombok.*;
 
@@ -15,9 +16,9 @@ public class PadDragDuplicateRequest extends RequestMessage
 	/**
 	 * Source pad that gets duplicated onto the target pad location
 	 */
-	private UUID sourcePad;
+	private PadDto sourcePad;
 	/**
 	 * Pad get's replaced by a copy of the source pad
 	 */
-	private UUID targetPad;
+	private UUID targetPadId;
 }

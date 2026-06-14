@@ -11,6 +11,7 @@ import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -31,17 +32,23 @@ class PadDragDuplicateHandler extends UndoableRequestHandler<PadDragDuplicateReq
 	@Override
 	public Optional<UndoItem> handleRequest(PadDragDuplicateRequest requestMessage) throws IOException
 	{
-		final Pad sourcePad = projectController.getPad(requestMessage.getSourcePad());
-		final Pad targetPad = projectController.getPad(requestMessage.getTargetPad());
+		final Pad sourcePad = padMapper.padDtoToPad(requestMessage.getSourcePad());
+		final Pad targetPad = projectController.getPad(requestMessage.getTargetPadId());
 
 		final Pad copied = sourcePad.copy(true);
 		projectController.replacePad(copied, targetPad);
 
 		context.publishEvent(new PadReplaceUpdate(padMapper.padToPadDto(copied), targetPad.getId()));
 
-		final PadController copiedPadController = projectController.getPadController(copied.getId());
-		copiedPadController.load();
+		if(copied.getContent() != null)
+		{
+			final PadController copiedPadController = projectController.getPadController(copied.getId());
+			copiedPadController.load();
+		}
 
-		return Optional.empty();
+		final String shortMessage = messageSource.getMessage("undo.description.short.pad.drag.duplicate.replace", new Object[]{}, LocaleContextHolder.getLocale());
+		final String longMessage = messageSource.getMessage("undo.description.long.pad.drag.duplicate.replace", new Object[]{}, LocaleContextHolder.getLocale());
+		return Optional.of(new UndoItem(shortMessage, longMessage, requestMessage,
+				new PadDragDuplicateRequest(padMapper.padToPadDto(targetPad), copied.getId())));
 	}
 }

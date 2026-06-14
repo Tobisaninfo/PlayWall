@@ -173,6 +173,9 @@ public class ProjectController
 		final Page targetPage = getPageByPad(target.getId());
 		targetPage.replacePad(source, target);
 
-		createNewPadController(source);
+		if(source.getContent() != null)
+		{
+			createNewPadController(source);
+		}
 	}
 }
