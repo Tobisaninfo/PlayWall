@@ -259,7 +259,7 @@ public class MainViewController extends ViewControllerBase
 		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
 		eventDispatcher.addPadInputListener(new FileDragListener());
-		eventDispatcher.addPadInputListener(new PadDragListener());
+		eventDispatcher.addPadInputListener(new PadDragListener(client));
 	}
 
 	@Override

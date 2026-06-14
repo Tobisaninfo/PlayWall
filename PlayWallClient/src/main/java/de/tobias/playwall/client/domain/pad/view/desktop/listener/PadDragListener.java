@@ -2,19 +2,24 @@ package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.DuplicatePadDropOption;
+import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class PadDragListener extends PadInputListener
 {
 	private static final String PAD_INDEX_DATATYPE = "de.tobias.playwall.pad_index";
 	private static final DataFormat DATA_FORMAT = new DataFormat(PAD_INDEX_DATATYPE);
+
+	private final FluentClient client;
 
 	@Override
 	public void onDragDetected(DesktopPadView padView, MouseEvent event)
@@ -65,12 +70,29 @@ public class PadDragListener extends PadInputListener
 			}
 
 			final List<DropOption> fileDragOptions = List.of(
-					new DuplicatePadDropOption()
+					new DuplicatePadDropOption(client)
 			);
 
 			padView.getDropOptionSelect().showOptions(fileDragOptions);
 
 			event.acceptTransferModes(TransferMode.MOVE);
+			event.consume();
+		}
+	}
+
+	@Override
+	public void onDragDropped(DesktopPadView padView, DragEvent event)
+	{
+		final Dragboard dragboard = event.getDragboard();
+		if(dragboard.hasContent(DATA_FORMAT))
+		{
+			final DropOption dropOption = padView.getDropOptionSelect().getSelectedOption();
+			if(dropOption == null)
+			{
+				return;
+			}
+			dropOption.handleDrag(padView, event);
+			event.setDropCompleted(true);
 			event.consume();
 		}
 	}
