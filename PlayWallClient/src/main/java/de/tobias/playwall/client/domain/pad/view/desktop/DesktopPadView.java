@@ -98,6 +98,7 @@ public class DesktopPadView implements PadView
 	private PadSettingsViewController padSettingsViewController;
 
 	private ClientPadController padController;
+	private PadIndex currentPadIndex;
 
 	private final WarningFlashAnimation warningAnimation;
 	private final BooleanProperty shouldWarningAnimationPlayEndOfFile = new SimpleBooleanProperty(false);
@@ -299,7 +300,8 @@ public class DesktopPadView implements PadView
 		{
 			updateStatus(PadStatus.EMPTY);
 		}
-		addStyleClasses(new PadIndex(pad.getPosition(), currentPage));
+		currentPadIndex = new PadIndex(pad.getPosition(), currentPage);
+		addStyleClasses(currentPadIndex);
 
 		updateTimeNodes();
 		busyView.showProgress(false);
@@ -307,6 +309,8 @@ public class DesktopPadView implements PadView
 
 	private void reset()
 	{
+		currentPadIndex = null;
+
 		namePreviewLabel.setText(null);
 		timeLabel.setText(null);
 		introLayer.setPrefWidth(0);

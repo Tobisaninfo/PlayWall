@@ -18,6 +18,7 @@ import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.pad.view.desktop.PadEventDispatcher;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.FileDragListener;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalPickerColorListener;
+import de.tobias.playwall.client.domain.pad.view.desktop.listener.PadDragListener;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.page.PageSettingsMapper;
@@ -258,6 +259,7 @@ public class MainViewController extends ViewControllerBase
 		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
 		eventDispatcher.addPadInputListener(new FileDragListener());
+		eventDispatcher.addPadInputListener(new PadDragListener());
 	}
 
 	@Override
