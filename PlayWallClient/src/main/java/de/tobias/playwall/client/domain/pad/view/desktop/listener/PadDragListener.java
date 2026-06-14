@@ -70,7 +70,7 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 	{
 		if(event.getDragboard().hasContent(DATA_FORMAT))
 		{
-			if(event.getGestureSource() == padView.getRootNode())
+			if(padView.getCurrentPadIndex().equals(event.getDragboard().getContent(DATA_FORMAT)))
 			{
 				return;
 			}
