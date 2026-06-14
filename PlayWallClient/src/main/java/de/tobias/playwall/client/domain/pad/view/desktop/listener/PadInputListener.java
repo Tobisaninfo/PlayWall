@@ -26,7 +26,7 @@ public abstract class PadInputListener
 	{
 	}
 
-	public void onMouseDragExited(DesktopPadView padView, DragEvent event)
+	public void onDragExited(DesktopPadView padView, DragEvent event)
 	{
 	}
 

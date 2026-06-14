@@ -30,7 +30,7 @@ public class FileDragListener extends PadInputListener
 	}
 
 	@Override
-	public void onMouseDragExited(DesktopPadView padView, DragEvent event)
+	public void onDragExited(DesktopPadView padView, DragEvent event)
 	{
 		if(event.getDragboard().hasFiles())
 		{
