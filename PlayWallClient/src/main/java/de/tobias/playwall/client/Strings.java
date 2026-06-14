@@ -41,6 +41,8 @@ public class Strings
 	public static final String UI_PAGE_EXPORT_NAME = "ui.page.export.name";
 	public static final String UI_PAGE_DELETE = "ui.page.delete";
 
+	public static final String UI_PAD_DRAG_DUPLICATE = "ui.pad.drag.duplicate";
+
 	public static final String UI_MENU_FILE = "ui.menu.file";
 	public static final String UI_MENU_FILE_NEW_PROJECT = "ui.menu.file.new.project";
 	public static final String UI_MENU_FILE_RECENT_PROJECT = "ui.menu.file.recent.projects";

@@ -1,11 +1,15 @@
 package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
+import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.DuplicatePadDropOption;
+import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
+
+import java.util.List;
 
 public class PadDragListener extends PadInputListener
 {
@@ -38,5 +42,36 @@ public class PadDragListener extends PadInputListener
 		dragboard.setContent(content);
 
 		event.consume();
+	}
+
+	@Override
+	public void onDragExited(DesktopPadView padView, DragEvent event)
+	{
+		if(event.getDragboard().hasContent(DATA_FORMAT))
+		{
+			padView.getDropOptionSelect().hide();
+			event.consume();
+		}
+	}
+
+	@Override
+	public void onDragOver(DesktopPadView padView, DragEvent event)
+	{
+		if(event.getDragboard().hasContent(DATA_FORMAT))
+		{
+			if(event.getGestureSource() == padView.getRootNode())
+			{
+				return;
+			}
+
+			final List<DropOption> fileDragOptions = List.of(
+					new DuplicatePadDropOption()
+			);
+
+			padView.getDropOptionSelect().showOptions(fileDragOptions);
+
+			event.acceptTransferModes(TransferMode.MOVE);
+			event.consume();
+		}
 	}
 }
