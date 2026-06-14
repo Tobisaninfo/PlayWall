@@ -19,5 +19,5 @@ public class AllProjectsInfo
 	private RecentProjectsStack recentProjects = new RecentProjectsStack();
 
 	@Builder.Default
-	private List<UUID> allProjectsMetadata = new ArrayList<>();
+	private List<UUID> allProjects = new ArrayList<>();
 }

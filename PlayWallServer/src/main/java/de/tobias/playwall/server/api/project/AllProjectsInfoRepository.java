@@ -62,19 +62,19 @@ public class AllProjectsInfoRepository
 
 	void clearProjects() throws IOException
 	{
-		this.allProjectsInfo.setAllProjectsMetadata(new ArrayList<>());
+		this.allProjectsInfo.setAllProjects(new ArrayList<>());
 		this.allProjectsInfo.getRecentProjects().clear();
 		saveAllProjectsInfo();
 	}
 
 	public List<UUID> getAllProjects()
 	{
-		return this.allProjectsInfo.getAllProjectsMetadata();
+		return this.allProjectsInfo.getAllProjects();
 	}
 
 	public boolean deleteProject(UUID id) throws IOException
 	{
-		final boolean isSuccess = allProjectsInfo.getAllProjectsMetadata().remove(id);
+		final boolean isSuccess = allProjectsInfo.getAllProjects().remove(id);
 		if(isSuccess)
 		{
 			allProjectsInfo.getRecentProjects().removeIf(i -> i.equals(id));
@@ -98,7 +98,7 @@ public class AllProjectsInfoRepository
 				.numberOfVerticalPads(numberOfVerticalPads)
 				.volume(1.0)
 				.build();
-		allProjectsInfo.getAllProjectsMetadata().add(newProjectMetadata.getId());
+		allProjectsInfo.getAllProjects().add(newProjectMetadata.getId());
 		saveAllProjectsInfo();
 
 		return newProjectMetadata;
@@ -121,7 +121,7 @@ public class AllProjectsInfoRepository
 			project.getMetadata().setName(name);
 		}
 
-		allProjectsInfo.getAllProjectsMetadata().add(project.getMetadata().getId());
+		allProjectsInfo.getAllProjects().add(project.getMetadata().getId());
 		saveAllProjectsInfo();
 	}
 
@@ -137,7 +137,7 @@ public class AllProjectsInfoRepository
 
 	public List<ProjectMetadata> getAllProjectMetadata()
 	{
-		return allProjectsInfo.getAllProjectsMetadata().stream().map(id -> {
+		return allProjectsInfo.getAllProjects().stream().map(id -> {
 			try
 			{
 				return projectRepository.loadProjectMetadata(id);
