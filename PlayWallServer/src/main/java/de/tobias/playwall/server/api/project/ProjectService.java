@@ -4,7 +4,6 @@ import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
-import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +31,6 @@ public class ProjectService
 	private final ProjectRepository projectRepository;
 	private final MessageSource messageSource;
 	private final JsonMapper jsonMapper;
-
-	@Deprecated
-	public AllProjectsInfo getAllProjectsInfo() throws IOException
-	{
-		allProjectsInfoRepository.loadAllProjectsInfo();
-		return allProjectsInfoRepository.getAllProjectsInfo();
-	}
 
 	public boolean deleteProjectById(UUID id) throws IOException
 	{

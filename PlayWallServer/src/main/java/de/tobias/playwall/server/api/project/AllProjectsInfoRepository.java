@@ -96,7 +96,6 @@ public class AllProjectsInfoRepository
 				.name(name)
 				.numberOfHorizontalPads(numberOfHorizontalPads)
 				.numberOfVerticalPads(numberOfVerticalPads)
-				.volume(1.0)
 				.build();
 		allProjectsInfo.getAllProjects().add(newProjectMetadata.getId());
 		saveAllProjectsInfo();
