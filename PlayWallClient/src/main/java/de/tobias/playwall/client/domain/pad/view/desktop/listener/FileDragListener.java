@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class FileDragListener extends PadInputListener
+public class FileDragListener implements PadInputListener
 {
 	@Override
 	public void onDragOver(DesktopPadView padView, DragEvent event)

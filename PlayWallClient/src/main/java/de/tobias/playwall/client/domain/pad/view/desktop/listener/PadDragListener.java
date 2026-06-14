@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class PadDragListener extends PadInputListener
+public class PadDragListener implements PadInputListener
 {
 	private static final String PAD_INDEX_DATATYPE = "de.tobias.playwall.pad_index";
 	public static final DataFormat DATA_FORMAT = new DataFormat(PAD_INDEX_DATATYPE);

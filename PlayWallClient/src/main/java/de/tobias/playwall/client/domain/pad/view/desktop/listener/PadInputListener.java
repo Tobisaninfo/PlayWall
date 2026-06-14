@@ -4,33 +4,33 @@ import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 
-public abstract class PadInputListener
+public interface PadInputListener
 {
-	public void onMouseClicked(DesktopPadView padView, MouseEvent event)
+	default void onMouseClicked(DesktopPadView padView, MouseEvent event)
 	{
 	}
 
-	public void onDragDetected(DesktopPadView padView, MouseEvent event)
+	default void onDragDetected(DesktopPadView padView, MouseEvent event)
 	{
 	}
 
-	public void onMouseDragEntered(DesktopPadView padView, MouseEvent event)
+	default void onMouseDragEntered(DesktopPadView padView, MouseEvent event)
 	{
 	}
 
-	public void onDragOver(DesktopPadView padView, DragEvent event)
+	default void onDragOver(DesktopPadView padView, DragEvent event)
 	{
 	}
 
-	public void onDragDropped(DesktopPadView padView, DragEvent event)
+	default void onDragDropped(DesktopPadView padView, DragEvent event)
 	{
 	}
 
-	public void onDragExited(DesktopPadView padView, DragEvent event)
+	default void onDragExited(DesktopPadView padView, DragEvent event)
 	{
 	}
 
-	public void onMouseReleased(DesktopPadView padView, MouseEvent event)
+	default void onMouseReleased(DesktopPadView padView, MouseEvent event)
 	{
 	}
 }

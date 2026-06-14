@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 
 @AllArgsConstructor
-public class GlobalPickerColorListener extends PadInputListener
+public class GlobalPickerColorListener implements PadInputListener
 {
 	private final GlobalColorPicker colorPicker;
 	private final BiConsumer<Pad, ModernColor> onColorChange;
