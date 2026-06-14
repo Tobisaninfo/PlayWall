@@ -16,7 +16,7 @@ import javafx.scene.input.Dragboard;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class DuplicatePadDropOption implements DropOption
+public class PadDropDuplicateOption implements DropOption
 {
 	private final ClientProjectController projectController;
 	private final FluentClient client;

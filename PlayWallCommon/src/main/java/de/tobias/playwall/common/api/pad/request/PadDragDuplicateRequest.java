@@ -12,6 +12,12 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class PadDragDuplicateRequest extends RequestMessage
 {
+	/**
+	 * Source pad that gets duplicated onto the target pad location
+	 */
 	private UUID sourcePad;
-	private UUID destinationPad;
+	/**
+	 * Pad get's replaced by a copy of the source pad
+	 */
+	private UUID targetPad;
 }

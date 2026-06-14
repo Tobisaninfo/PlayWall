@@ -20,12 +20,12 @@ class PadReplaceListener
 	@EventListener(PadReplaceUpdate.class)
 	void onPadReplace(PadReplaceUpdate message)
 	{
-		final PadDto newPad = message.getNewPad();
+		final PadDto newPad = message.getSourcePad();
 
-		projectController.replacePad(padMapper.padDtoToPad(newPad), message.getOldPadId());
+		projectController.replacePad(padMapper.padDtoToPad(newPad), message.getTargetPadId());
 
 		final ClientPadController padController = projectController.getPadController(newPad.getId());
-		final PadView padView = mainViewController.getPadViewForPadId(message.getOldPadId());
+		final PadView padView = mainViewController.getPadViewForPadId(message.getTargetPadId());
 		if(padView != null)
 		{
 			Platform.runLater(() -> padView.updateFromPad(mainViewController.getCurrentPage().getPosition(), padController));

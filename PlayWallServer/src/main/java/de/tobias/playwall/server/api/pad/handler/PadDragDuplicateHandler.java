@@ -32,12 +32,12 @@ class PadDragDuplicateHandler extends UndoableRequestHandler<PadDragDuplicateReq
 	public Optional<UndoItem> handleRequest(PadDragDuplicateRequest requestMessage) throws IOException
 	{
 		final Pad sourcePad = projectController.getPad(requestMessage.getSourcePad());
-		final Pad targetPad = projectController.getPad(requestMessage.getDestinationPad());
+		final Pad targetPad = projectController.getPad(requestMessage.getTargetPad());
 
 		final Pad copied = sourcePad.copy(true);
 		projectController.replacePad(copied, targetPad);
 
-		context.publishEvent(new PadReplaceUpdate(targetPad.getId(), padMapper.padToPadDto(copied)));
+		context.publishEvent(new PadReplaceUpdate(padMapper.padToPadDto(copied), targetPad.getId()));
 
 		final PadController copiedPadController = projectController.getPadController(copied.getId());
 		copiedPadController.load();

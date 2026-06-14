@@ -13,6 +13,12 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class PadReplaceUpdate extends UpdateMessage
 {
-	private UUID oldPadId;
-	private PadDto newPad;
+	/**
+	 * New pad to replace the old one (target)
+	 */
+	private PadDto sourcePad;
+	/**
+	 * The target there the new pad (source) should be placed
+	 */
+	private UUID targetPadId;
 }

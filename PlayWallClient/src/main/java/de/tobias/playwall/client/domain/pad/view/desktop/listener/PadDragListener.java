@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
-import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.DuplicatePadDropOption;
+import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.PadDropDuplicateOption;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.drag.DropOption;
@@ -72,7 +72,7 @@ public class PadDragListener extends PadInputListener
 			}
 
 			final List<DropOption> fileDragOptions = List.of(
-					new DuplicatePadDropOption(projectController, client)
+					new PadDropDuplicateOption(projectController, client)
 			);
 
 			padView.getDropOptionSelect().showOptions(fileDragOptions);
