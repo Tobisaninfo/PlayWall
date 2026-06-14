@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.model.project;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import lombok.*;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class Project
 {
+	@JsonView(Views.MetadataOnly.class)
 	private ProjectMetadata metadata;
 	private List<Page> pages;
 

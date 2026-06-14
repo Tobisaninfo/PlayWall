@@ -22,10 +22,10 @@ public class ProjectMetadata
 	@SuppressWarnings({"java:S116", "java:S1170"})
 	private final int VERSION = 1;
 
-	@JsonView(Views.AllProjectsInfo.class)
+	@JsonView(Views.MetadataOnly.class)
 	private UUID id;
 
-	@JsonView(Views.AllProjectsInfo.class)
+	@JsonView(Views.MetadataOnly.class)
 	private String name;
 
 	private Integer numberOfHorizontalPads;

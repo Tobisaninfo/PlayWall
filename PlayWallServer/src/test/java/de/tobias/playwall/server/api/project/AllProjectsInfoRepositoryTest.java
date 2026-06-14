@@ -48,7 +48,7 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 	@Test
 	void test_noProjects()
 	{
-		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).isEmpty();
+		assertThat(allProjectsInfoRepository.getAllProjects()).isEmpty();
 	}
 
 	@Test
@@ -60,15 +60,7 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 				.extracting(ProjectMetadata::getName, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads, ProjectMetadata::getVolume)
 				.containsExactly("New ProjectMetadata", 6, 5, 1.0);
 
-		final ProjectMetadata expected = ProjectMetadata.builder()
-				.id(projectMetadata.getId())
-				.name("New ProjectMetadata")
-				.numberOfHorizontalPads(6)
-				.numberOfVerticalPads(5)
-				.volume(1.0)
-				.build();
-
-		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).containsExactly(expected);
+		assertThat(allProjectsInfoRepository.getAllProjects()).containsExactly(projectMetadata.getId());
 	}
 
 	@Test
@@ -97,7 +89,8 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 	@Test
 	void test_getProjectMetadataById_noMatch()
 	{
-		assertThatThrownBy(() -> allProjectsInfoRepository.getProjectMetadataById(UUID.randomUUID())).isInstanceOf(ProjectNotExistsException.class);
+		final UUID uuid = UUID.randomUUID();
+		assertThatThrownBy(() -> allProjectsInfoRepository.getProjectMetadataById(uuid)).isInstanceOf(ProjectNotExistsException.class);
 	}
 
 	@Test
@@ -105,7 +98,7 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 	{
 		final ProjectMetadata projectMetadata = allProjectsInfoRepository.addProject("New ProjectMetadata", 6, 5);
 		assertThat(allProjectsInfoRepository.deleteProject(projectMetadata.getId())).isTrue();
-		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).isEmpty();
+		assertThat(allProjectsInfoRepository.getAllProjects()).isEmpty();
 		assertThat(allProjectsInfoRepository.getRecentProjectIds()).isEmpty();
 	}
 

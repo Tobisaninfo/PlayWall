@@ -3,8 +3,8 @@ package de.tobias.playwall.server.api.project;
 import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
-import de.tobias.playwall.server.common.model.project.Views;
 import de.tobias.playwall.server.common.storage.PathProvider;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -28,9 +29,16 @@ public class AllProjectsInfoRepository
 
 	private final PathProvider pathProvider;
 	private final JsonMapper mapper;
+	private final ProjectRepository projectRepository;
 
 	@Getter
 	private AllProjectsInfo allProjectsInfo;
+
+	@PostConstruct
+	void init() throws IOException
+	{
+		loadAllProjectsInfo();
+	}
 
 	public void loadAllProjectsInfo() throws IOException
 	{
@@ -42,16 +50,14 @@ public class AllProjectsInfoRepository
 			saveAllProjectsInfo();
 		}
 
-		allProjectsInfo = mapper.readerWithView(Views.AllProjectsInfo.class)
-				.forType(AllProjectsInfo.class)
-				.readValue(Files.newBufferedReader(path));
+		allProjectsInfo = mapper.readValue(Files.newBufferedReader(path), AllProjectsInfo.class);
 	}
 
 	public void saveAllProjectsInfo() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
-		mapper.writerWithView(Views.AllProjectsInfo.class).writeValue(Files.newBufferedWriter(path), allProjectsInfo);
+		mapper.writeValue(Files.newBufferedWriter(path), allProjectsInfo);
 	}
 
 	void clearProjects() throws IOException
@@ -61,14 +67,14 @@ public class AllProjectsInfoRepository
 		saveAllProjectsInfo();
 	}
 
-	public List<ProjectMetadata> getAllProjectMetadata()
+	public List<UUID> getAllProjects()
 	{
 		return this.allProjectsInfo.getAllProjectsMetadata();
 	}
 
 	public boolean deleteProject(UUID id) throws IOException
 	{
-		final boolean isSuccess = allProjectsInfo.getAllProjectsMetadata().removeIf(project -> project.getId().equals(id));
+		final boolean isSuccess = allProjectsInfo.getAllProjectsMetadata().remove(id);
 		if(isSuccess)
 		{
 			allProjectsInfo.getRecentProjects().removeIf(i -> i.equals(id));
@@ -79,8 +85,8 @@ public class AllProjectsInfoRepository
 
 	public ProjectMetadata addProject(String name, int numberOfHorizontalPads, int numberOfVerticalPads) throws IOException, ProjectNameAlreadyExistsException
 	{
-		final Optional<ProjectMetadata> existingProjectOptional = getProjectMetadataByName(name);
-		if(existingProjectOptional.isPresent())
+		boolean projectNameUsed = isProjectNameUsed(name);
+		if(projectNameUsed)
 		{
 			throw new ProjectNameAlreadyExistsException(name);
 		}
@@ -92,7 +98,7 @@ public class AllProjectsInfoRepository
 				.numberOfVerticalPads(numberOfVerticalPads)
 				.volume(1.0)
 				.build();
-		allProjectsInfo.getAllProjectsMetadata().add(newProjectMetadata);
+		allProjectsInfo.getAllProjectsMetadata().add(newProjectMetadata.getId());
 		saveAllProjectsInfo();
 
 		return newProjectMetadata;
@@ -115,19 +121,7 @@ public class AllProjectsInfoRepository
 			project.getMetadata().setName(name);
 		}
 
-		allProjectsInfo.getAllProjectsMetadata().add(project.getMetadata());
-		saveAllProjectsInfo();
-	}
-
-	public void renameProject(UUID id, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException, IOException
-	{
-		final Optional<ProjectMetadata> existingProjectOptional = getProjectMetadataByName(name);
-		if(existingProjectOptional.isPresent() && !existingProjectOptional.get().getId().equals(id))
-		{
-			throw new ProjectNameAlreadyExistsException(name);
-		}
-
-		getProjectMetadataById(id).setName(name);
+		allProjectsInfo.getAllProjectsMetadata().add(project.getMetadata().getId());
 		saveAllProjectsInfo();
 	}
 
@@ -141,18 +135,32 @@ public class AllProjectsInfoRepository
 		return allProjectsInfo.getRecentProjects().stream().toList();
 	}
 
+	public List<ProjectMetadata> getAllProjectMetadata()
+	{
+		return allProjectsInfo.getAllProjectsMetadata().stream().map(id -> {
+			try
+			{
+				return projectRepository.loadProjectMetadata(id);
+			}
+			catch(IOException e)
+			{
+				throw new UncheckedIOException(e);
+			}
+		}).toList();
+	}
+
 	ProjectMetadata getProjectMetadataById(UUID id) throws ProjectNotExistsException
 	{
-		return allProjectsInfo.getAllProjectsMetadata().stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
+		return getAllProjectMetadata().stream().filter(project -> project.getId().equals(id)).findFirst().orElseThrow(() -> new ProjectNotExistsException(id));
 	}
 
 	private Optional<ProjectMetadata> getProjectMetadataByName(String name)
 	{
-		return allProjectsInfo.getAllProjectsMetadata().stream().filter(project -> project.getName().equals(name)).findFirst();
+		return getAllProjectMetadata().stream().filter(project -> project.getName().equals(name)).findFirst();
 	}
 
 	public boolean isProjectNameUsed(String name)
 	{
-		return allProjectsInfo.getAllProjectsMetadata().stream().anyMatch(project -> project.getName().equals(name));
+		return getAllProjectMetadata().stream().anyMatch(project -> project.getName().equals(name));
 	}
 }

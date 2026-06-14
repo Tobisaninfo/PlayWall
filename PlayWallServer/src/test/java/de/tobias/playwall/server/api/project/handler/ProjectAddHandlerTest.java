@@ -63,7 +63,7 @@ class ProjectAddHandlerTest extends AbstractRequestHandlerTest
 		when(pathProvider.getPathForProject(any())).thenReturn(tempDir.resolve("project.json"));
 		Files.deleteIfExists(tempDir.resolve("projects.json"));
 		allProjectsInfoRepository.loadAllProjectsInfo();
-		allProjectsInfoRepository.getAllProjectMetadata().clear();
+		allProjectsInfoRepository.getAllProjects().clear();
 	}
 
 	@Test
@@ -92,12 +92,12 @@ class ProjectAddHandlerTest extends AbstractRequestHandlerTest
 	void testAddProjectNameAlreadyExists() throws Exception
 	{
 		allProjectsInfoRepository.addProject("Name1", 3, 3);
-		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).hasSize(1);
+		assertThat(allProjectsInfoRepository.getAllProjects()).hasSize(1);
 
 		final ProjectAddRequest request = new ProjectAddRequest("Name1", 5, 4);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNameAlreadyExistsException.class);
 
-		assertThat(allProjectsInfoRepository.getAllProjectMetadata()).hasSize(1);
+		assertThat(allProjectsInfoRepository.getAllProjects()).hasSize(1);
 	}
 }

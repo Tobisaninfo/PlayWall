@@ -1,6 +1,8 @@
 package de.tobias.playwall.server.api.project;
 
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
+import de.tobias.playwall.server.common.model.project.Views;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,20 @@ public class ProjectRepository
 		}
 
 		return mapper.readValue(Files.newBufferedReader(path), Project.class);
+	}
+
+	public ProjectMetadata loadProjectMetadata(UUID id) throws IOException, ProjectNotExistsException
+	{
+		final Path path = getProjectPath(id);
+		if(!Files.exists(path))
+		{
+			throw new ProjectNotExistsException(id);
+		}
+
+		final Project project = mapper.readerWithView(Views.MetadataOnly.class)
+				.forType(Project.class)
+				.readValue(Files.newBufferedReader(path));
+		return project.getMetadata();
 	}
 
 	public void saveProject(Project project) throws IOException

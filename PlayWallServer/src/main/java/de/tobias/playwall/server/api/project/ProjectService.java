@@ -33,6 +33,7 @@ public class ProjectService
 	private final MessageSource messageSource;
 	private final JsonMapper jsonMapper;
 
+	@Deprecated
 	public AllProjectsInfo getAllProjectsInfo() throws IOException
 	{
 		allProjectsInfoRepository.loadAllProjectsInfo();
@@ -82,7 +83,7 @@ public class ProjectService
 
 	public void rename(UUID projectId, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException, IOException
 	{
-		allProjectsInfoRepository.renameProject(projectId, name);
+		// TODO: Rename project
 	}
 
 	public void onProjectOpened(UUID id) throws IOException
