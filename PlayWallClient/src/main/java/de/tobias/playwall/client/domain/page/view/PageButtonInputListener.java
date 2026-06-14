@@ -4,13 +4,13 @@ import de.tobias.playwall.client.domain.page.Page;
 import javafx.event.ActionEvent;
 import javafx.scene.input.DragEvent;
 
-public abstract class PageButtonInputListener
+public interface PageButtonInputListener
 {
-	public void onAction(Page page, ActionEvent event)
+	default void onAction(Page page, ActionEvent event)
 	{
 	}
 
-	public void onDragOver(Page page, DragEvent event)
+	default void onDragOver(Page page, DragEvent event)
 	{
 	}
 }

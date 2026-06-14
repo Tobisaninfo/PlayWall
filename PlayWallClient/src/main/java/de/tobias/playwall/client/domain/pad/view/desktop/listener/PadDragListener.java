@@ -2,7 +2,10 @@ package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.PadDropDuplicateOption;
+import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.page.view.PageButtonInputListener;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.Node;
@@ -15,13 +18,14 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class PadDragListener implements PadInputListener
+public class PadDragListener implements PadInputListener, PageButtonInputListener
 {
 	private static final String PAD_INDEX_DATATYPE = "de.tobias.playwall.pad_index";
 	public static final DataFormat DATA_FORMAT = new DataFormat(PAD_INDEX_DATATYPE);
 
 	private final FluentClient client;
 	private final ClientProjectController projectController;
+	private final MainViewController mainViewController;
 
 	@Override
 	public void onDragDetected(DesktopPadView padView, MouseEvent event)
@@ -96,6 +100,16 @@ public class PadDragListener implements PadInputListener
 			dropOption.handleDrag(padView, event);
 			event.setDropCompleted(true);
 			event.consume();
+		}
+	}
+
+	@Override
+	public void onDragOver(Page page, DragEvent event)
+	{
+		final Dragboard dragboard = event.getDragboard();
+		if(dragboard.hasContent(DATA_FORMAT))
+		{
+			mainViewController.showPage(page);
 		}
 	}
 }
