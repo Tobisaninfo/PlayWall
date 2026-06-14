@@ -24,6 +24,9 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
 
 public class PlayWallMain extends Application
@@ -52,7 +55,20 @@ public class PlayWallMain extends Application
 		System.setProperty("app.logdir", app.getPath(PathType.LOG).toAbsolutePath().toString());
 		System.setProperty("app.debug", String.valueOf(app.isDebug()));
 
-		final Level level = app.isDebug() ? Level.DEBUG : Level.INFO;
+		Level level = app.isDebug() ? Level.DEBUG : Level.INFO;
+		try
+		{
+			final Path debugFlagFile = app.getPath(PathType.CONFIGURATION, "debug");
+			if(Files.exists(debugFlagFile))
+			{
+				level = Level.DEBUG;
+			}
+		}
+		catch(UncheckedIOException _)
+		{
+			// Nothing to handle
+		}
+
 		Configurator.setRootLevel(level);
 
 		LoggerBridge.setImplementation(new Slf4JBridge());
