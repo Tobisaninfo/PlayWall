@@ -26,4 +26,10 @@ public class Page
 	{
 		return pads.stream().filter(p -> p.getPosition() == position).findFirst().orElse(null);
 	}
+
+	public void replacePad(Pad source, Pad target)
+	{
+		final int index = pads.indexOf(target);
+		pads.set(index, source);
+	}
 }

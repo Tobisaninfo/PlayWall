@@ -2,6 +2,7 @@ package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.DuplicatePadDropOption;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.Node;
@@ -17,9 +18,10 @@ import java.util.List;
 public class PadDragListener extends PadInputListener
 {
 	private static final String PAD_INDEX_DATATYPE = "de.tobias.playwall.pad_index";
-	private static final DataFormat DATA_FORMAT = new DataFormat(PAD_INDEX_DATATYPE);
+	public static final DataFormat DATA_FORMAT = new DataFormat(PAD_INDEX_DATATYPE);
 
 	private final FluentClient client;
+	private final ClientProjectController projectController;
 
 	@Override
 	public void onDragDetected(DesktopPadView padView, MouseEvent event)
@@ -70,7 +72,7 @@ public class PadDragListener extends PadInputListener
 			}
 
 			final List<DropOption> fileDragOptions = List.of(
-					new DuplicatePadDropOption(client)
+					new DuplicatePadDropOption(projectController, client)
 			);
 
 			padView.getDropOptionSelect().showOptions(fileDragOptions);

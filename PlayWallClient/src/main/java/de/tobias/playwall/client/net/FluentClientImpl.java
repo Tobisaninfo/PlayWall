@@ -220,6 +220,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.batchReplaceMedia(newMediaPathsByPadId, padIdsToDelete);
 		}
+
+		@Override
+		public void duplicatePad(UUID sourcePad, UUID targetPad) throws PlayWallApiException
+		{
+			delegate.duplicatePad(sourcePad, targetPad);
+		}
 	}
 
 	@AllArgsConstructor

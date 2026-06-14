@@ -34,6 +34,13 @@ public class Page
 		return pads.stream().filter(p -> p.getId().equals(padId)).findFirst();
 	}
 
+	public void replacePad(Pad source, Pad target)
+	{
+		final int index = pads.indexOf(target);
+		source.setPosition(target.getPosition());
+		pads.set(index, source);
+	}
+
 	@SuppressWarnings("java:S6204")
 	public Page copy(boolean generateNewId)
 	{

@@ -151,6 +151,7 @@ public class MainViewController extends ViewControllerBase
 	private PadUpdateListener padUpdateListener;
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
+	private PadReplaceListener padReplaceListener;
 	private PadPlayPositionListener padPlayPositionListener;
 	private ProjectSettingsUpdateListener projectSettingsUpdateListener;
 	private UndoHistoryUpdateListener undoHistoryUpdateListener;
@@ -220,6 +221,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padLoadedListener);
 		padStatusListener = new PadStatusListener(projectController, this);
 		eventHandler.registerListener(padStatusListener);
+		padReplaceListener = new PadReplaceListener(projectController, padMapper, this);
+		eventHandler.registerListener(padReplaceListener);
 		padPlayPositionListener = new PadPlayPositionListener(projectController, this);
 		eventHandler.registerListener(padPlayPositionListener);
 		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper);
@@ -259,7 +262,7 @@ public class MainViewController extends ViewControllerBase
 		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
 		eventDispatcher.addPadInputListener(new FileDragListener());
-		eventDispatcher.addPadInputListener(new PadDragListener(client));
+		eventDispatcher.addPadInputListener(new PadDragListener(client, projectController));
 	}
 
 	@Override

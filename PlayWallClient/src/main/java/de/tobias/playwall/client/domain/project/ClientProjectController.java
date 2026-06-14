@@ -105,6 +105,7 @@ public class ClientProjectController
 
 	public void replacePage(Page page, int index)
 	{
+		// TODO Remove old pad controllers
 		project.getPages().set(index, page);
 		createPadControllerForPage(page);
 	}
@@ -139,9 +140,30 @@ public class ClientProjectController
 	{
 		for(Pad pad : page.getPads())
 		{
-			final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
-			padControllers.put(pad.getId(), controller);
+			createPadController(pad);
 		}
+	}
+
+	public void createPadController(Pad pad)
+	{
+		final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
+		padControllers.put(pad.getId(), controller);
+	}
+
+	public void removePadController(UUID padId)
+	{
+		padControllers.remove(padId);
+	}
+
+	public void replacePad(Pad source, UUID target)
+	{
+		removePadController(target);
+
+		final Pad targetPad = project.getPad(target);
+		final Page targetPage = project.getPageByPadId(target);
+		targetPage.replacePad(source, targetPad);
+
+		createPadController(source);
 	}
 
 	public boolean isAtLeastOnePadPlaying()

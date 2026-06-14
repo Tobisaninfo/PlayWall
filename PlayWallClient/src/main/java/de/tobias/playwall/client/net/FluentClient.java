@@ -88,6 +88,8 @@ public interface FluentClient
 		void batchColorPads(Set<UUID> padIds, ModernColor color) throws PlayWallApiException;
 
 		void batchReplaceMedia(Map<UUID, String> newMediaPathsByPadId, Set<UUID> padIdsToDelete) throws PlayWallApiException;
+
+		void duplicatePad(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
 	}
 
 	interface PageBuilder

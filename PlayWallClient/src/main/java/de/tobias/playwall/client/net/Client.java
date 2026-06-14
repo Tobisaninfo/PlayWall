@@ -87,6 +87,8 @@ public interface Client
 
 	void deletePad(UUID padId) throws PlayWallApiException;
 
+	void duplicatePad(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
+
 	void changeVolume(UUID padId, double volume) throws PlayWallApiException;
 
 	void changeGlobalVolume(double volume) throws PlayWallApiException;

@@ -165,4 +165,14 @@ public class ProjectController
 		padControllers.put(pad.getId(), controller);
 		return controller;
 	}
+
+	public void replacePad(Pad source, Pad target)
+	{
+		unloadAndRemovePadController(target.getId());
+
+		final Page targetPage = getPageByPad(target.getId());
+		targetPage.replacePad(source, target);
+
+		createNewPadController(source);
+	}
 }
