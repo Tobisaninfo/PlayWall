@@ -83,7 +83,15 @@ public class ProjectService
 
 	public void rename(UUID projectId, String name) throws ProjectNameAlreadyExistsException, ProjectNotExistsException, IOException
 	{
-		// TODO: Rename project
+		final Optional<ProjectMetadata> existingProjectOptional = allProjectsInfoRepository.getProjectMetadataByName(name);
+		if(existingProjectOptional.isPresent() && !existingProjectOptional.get().getId().equals(projectId))
+		{
+			throw new ProjectNameAlreadyExistsException(name);
+		}
+
+		final Project project = projectRepository.loadProject(projectId);
+		project.getMetadata().setName(name);
+		projectRepository.saveProject(project);
 	}
 
 	public void onProjectOpened(UUID id) throws IOException
