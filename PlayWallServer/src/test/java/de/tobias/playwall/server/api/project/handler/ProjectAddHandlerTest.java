@@ -9,6 +9,7 @@ import de.tobias.playwall.server.api.project.AllProjectsInfoRepository;
 import de.tobias.playwall.server.api.project.ProjectNameAlreadyExistsException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +47,7 @@ class ProjectAddHandlerTest extends AbstractRequestHandlerTest
 	@MockitoSpyBean
 	private AllProjectsInfoRepository allProjectsInfoRepository;
 
-	@MockitoSpyBean
+	@MockitoBean
 	private ProjectRepository projectRepository;
 
 	@Autowired
@@ -91,7 +92,9 @@ class ProjectAddHandlerTest extends AbstractRequestHandlerTest
 	@Test
 	void testAddProjectNameAlreadyExists() throws Exception
 	{
-		allProjectsInfoRepository.addProject("Name1", 3, 3);
+		final ProjectMetadata projectMetadata = allProjectsInfoRepository.addProject("Name1", 3, 3);
+		when(projectRepository.loadProjectMetadata(projectMetadata.getId())).thenReturn(projectMetadata);
+
 		assertThat(allProjectsInfoRepository.getAllProjects()).hasSize(1);
 
 		final ProjectAddRequest request = new ProjectAddRequest("Name1", 5, 4);

@@ -27,6 +27,9 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 	private Path tempDir;
 
 	@MockitoBean
+	private ProjectRepository projectRepository;
+
+	@MockitoBean
 	private AudioHandlerFactory audioHandlerFactory;
 
 	@MockitoBean
@@ -66,7 +69,9 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 	@Test
 	void test_addProject_nameAlreadyExists() throws IOException, ProjectNameAlreadyExistsException
 	{
-		allProjectsInfoRepository.addProject("New ProjectMetadata", 6, 5);
+		final ProjectMetadata projectMetadata = allProjectsInfoRepository.addProject("New ProjectMetadata", 6, 5);
+		when(projectRepository.loadProjectMetadata(projectMetadata.getId())).thenReturn(projectMetadata);
+
 		assertThatThrownBy(() -> allProjectsInfoRepository.addProject("New ProjectMetadata", 4, 3)).isInstanceOf(ProjectNameAlreadyExistsException.class);
 	}
 
@@ -74,6 +79,7 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 	void test_getProjectMetadataById() throws IOException, ProjectNotExistsException, ProjectNameAlreadyExistsException
 	{
 		final ProjectMetadata projectMetadata = allProjectsInfoRepository.addProject("New ProjectMetadata", 6, 5);
+		when(projectRepository.loadProjectMetadata(projectMetadata.getId())).thenReturn(projectMetadata);
 
 		final ProjectMetadata expected = ProjectMetadata.builder()
 				.id(projectMetadata.getId())
