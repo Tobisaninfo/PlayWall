@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.domain.page;
 
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,10 @@ import java.util.UUID;
 public class Page
 {
 	private final UUID id;
+
 	private String name;
+	private ModernColor color;
+
 	private Integer position;
 	private final List<Pad> pads;
 

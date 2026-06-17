@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.model.page;
 
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import lombok.*;
 
@@ -18,8 +19,11 @@ import java.util.stream.Collectors;
 public class Page
 {
 	private UUID id;
-	private Integer position;
+
 	private String name;
+	private Color color;
+
+	private Integer position;
 	private List<Pad> pads;
 
 	public Pad getPad(int position)

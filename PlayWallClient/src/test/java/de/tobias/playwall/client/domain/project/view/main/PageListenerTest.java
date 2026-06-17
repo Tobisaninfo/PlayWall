@@ -72,7 +72,7 @@ class PageListenerTest extends AbstractViewControllerTest
 
 		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
 
-		eventHandler.fireEvent(new PageAddUpdate(new PageDto(UUID.randomUUID(), "Page 3", 1,
+		eventHandler.fireEvent(new PageAddUpdate(new PageDto(UUID.randomUUID(), "Page 3", Color.GRAY1, 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3, Color.LIGHT_GREEN2, null, null, null)).toList())));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -129,7 +129,7 @@ class PageListenerTest extends AbstractViewControllerTest
 
 		// Perform action
 		final UUID newPageId = UUID.randomUUID();
-		eventHandler.fireEvent(new PageInsertUpdate(new PageDto(newPageId, "Page 3", 1,
+		eventHandler.fireEvent(new PageInsertUpdate(new PageDto(newPageId, "Page 3", Color.GRAY1, 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3, Color.LIGHT_GREEN2, null, null, null)).toList()),
 				1, Map.of(
@@ -164,7 +164,7 @@ class PageListenerTest extends AbstractViewControllerTest
 
 		// Perform action
 		final UUID newPageId = UUID.randomUUID();
-		eventHandler.fireEvent(new PageReplaceUpdate(new PageDto(newPageId, "Page 3", 1,
+		eventHandler.fireEvent(new PageReplaceUpdate(new PageDto(newPageId, "Page 3", Color.GRAY1, 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3, Color.LIGHT_GREEN2, null, null, null)).toList()),
 				1));
