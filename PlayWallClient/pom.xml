@@ -230,6 +230,56 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.2.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.openjdk.nashorn</groupId>
+                        <artifactId>nashorn-core</artifactId>
+                        <version>15.7</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate-scss-colors</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <script language="javascript">
+                                    var bytes = java.nio.file.Files.readAllBytes(
+                                    java.nio.file.Paths.get("PlayWallClient/src/main/resources/style/colors/ModernColor.json")
+                                    );
+                                    var content = new java.lang.String(bytes, "UTF-8");
+                                    var themes = JSON.parse(content);
+                                    var lines = ["$colors: ("];
+                                    themes.forEach(function(theme) {
+                                    var c = theme.colors;
+                                    lines.push("\t " + theme.name + ": (");
+                                    lines.push("\t\t hi: " + c.hi + ",");
+                                    lines.push("\t\t low: " + c.low + ",");
+                                    lines.push("\t\t font: " + c.font + ",");
+                                    lines.push("\t\t button: " + c.button + ",");
+                                    lines.push("\t\t playbar-bg: " + c.playbar.background + ",");
+                                    lines.push("\t\t playbar-track: " + c.playbar.track + ",");
+                                    lines.push("\t ),");
+                                    });
+                                    lines.push(");");
+                                    java.nio.file.Files.write(
+                                    java.nio.file.Paths.get("PlayWallClient/src/main/sass/components/modern-color.scss"),
+                                    lines.join("\n").getBytes("UTF-8")
+                                    );
+                                    self.log("modern-color.scss generated");
+                                </script>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>io.github.cleydyr</groupId>
                 <artifactId>dart-sass-maven-plugin</artifactId>
                 <version>${dart-sass-maven-plugin.version}</version>

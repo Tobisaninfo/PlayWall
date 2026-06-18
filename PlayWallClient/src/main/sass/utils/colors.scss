@@ -1,0 +1,16 @@
+@use "sass:color";
+@use "sass:math";
+
+@function get-appropriate-text-color($color) {
+    $r: color.channel($color, "red", $space: rgb);
+    $g: color.channel($color, "green", $space: rgb);
+    $b: color.channel($color, "blue", $space: rgb);
+
+    $a: 1 - math.div(0.299 * $r + 0.587 * $g + 0.114 * $b, 255);
+
+    @if $a < 0.5 {
+        @return #000000;
+    } @else {
+        @return #ffffff;
+    }
+}

@@ -10,6 +10,7 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.utils.MimeType;
 import de.tobias.playwall.client.view.FileChooserWrapper;
+import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
@@ -84,14 +85,14 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Assert buttons
-		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(2);
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactlyInAnyOrder("Page 1", "Page 2");
 
 		// Assert highlighting
-		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
-		assertThat(mainViewController.getPageButtons().getChildren().get(1).getStyleClass()).doesNotContain(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
+		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getPseudoClassStates()).contains(PseudoClasses.SELECTED);
+		assertThat(mainViewController.getPageButtons().getChildren().get(1).getPseudoClassStates()).doesNotContain(PseudoClasses.SELECTED);
 
 		// Assert current page
 		final DesktopPadView padView1 = (DesktopPadView) mainViewController.getPadViewForPosition(0);
@@ -102,8 +103,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Assert highlighting
-		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getStyleClass()).doesNotContain(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
-		assertThat(mainViewController.getPageButtons().getChildren().get(1).getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS);
+		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getPseudoClassStates()).doesNotContain(PseudoClasses.SELECTED);
+		assertThat(mainViewController.getPageButtons().getChildren().get(1).getPseudoClassStates()).contains(PseudoClasses.SELECTED);
 
 		// Assert current page
 		final DesktopPadView padView2 = (DesktopPadView) mainViewController.getPadViewForPosition(0);
@@ -159,13 +160,13 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Assert buttons
-		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(2);
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 
-		final Node button1 = robot.lookup(".page-button").nth(0).queryAs(Node.class);
-		final Node button2 = robot.lookup(".page-button").nth(1).queryAs(Node.class);
+		final Node button1 = robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).nth(0).queryAs(Node.class);
+		final Node button2 = robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).nth(1).queryAs(Node.class);
 
 		robot.drag(button1).moveTo(button2, new Point2D(20, 0)).drop();
 		WaitForAsyncUtils.waitForFxEvents();
@@ -178,7 +179,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 0
 		));
 
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2", "Page 1");
 	}

@@ -12,5 +12,5 @@ public class ViewConstants
 	public static final String DANGER_COLOR = "#E24444";
 	public static final String SLIDER_DEFAULT_BACKGROUND_COLOR = "#5C5C5C";
 
-	public static final String PAGE_BUTTON_CURRENT_STYLECLASS = "main-view--current-page-button";
+	public static final String PAGE_BUTTON_STYLECLASS = "main-view--page-button";
 }

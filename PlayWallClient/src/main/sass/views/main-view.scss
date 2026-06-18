@@ -1,8 +1,32 @@
 @use "../components/variables";
+@use "../components/modern-color";
+@use "../utils/colors";
+@use 'sass:map';
 
-.main-view--current-page-button {
-    -fx-background-color: variables.$selected-light-background !important;
-    -fx-text-fill: variables.$background-color !important;
+.main-view--page-button {
+    @each $name, $data in modern-color.$colors {
+        $color: map.get($data, low);
+
+        &.#{$name} {
+            -fx-background-color: $color;
+            -fx-text-fill: colors.get-appropriate-text-color($color);
+
+            &:selected {
+                -fx-border-color: colors.get-appropriate-text-color($color);
+            }
+        }
+    }
+
+    &:selected {
+        -fx-border-radius: variables.$component-border-radius-lg;
+        -fx-border-width: 2.5px;
+        -fx-border-insets: -2px;
+        -fx-background-insets: 0px;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-cursor: hand;
+        -fx-underline: true;
+    }
 }
 
 .page-button-dragging {

@@ -1,7 +1,9 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
 import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -140,7 +142,15 @@ public class PageButtons extends FlowPane
 		{
 			final Button button = new Button(limitText(page.getName()));
 			button.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
-			button.getStyleClass().add("page-button");
+			button.getStyleClass().add(ViewConstants.PAGE_BUTTON_STYLECLASS);
+			if(page.getColor() != null)
+			{
+				button.getStyleClass().add(page.getColor().name());
+			}
+			else
+			{
+				button.getStyleClass().add(ModernColor.YELLOW1.name());
+			}
 			button.setFocusTraversable(false);
 			button.setUserData(page);
 			onButtonCreate.accept(button, page);
@@ -356,11 +366,11 @@ public class PageButtons extends FlowPane
 
 	void highlightPageButton(Page page)
 	{
-		getChildren().forEach(node -> node.getStyleClass().remove(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
+		getChildren().forEach(node -> node.pseudoClassStateChanged(PseudoClasses.SELECTED, false));
 		getChildren().stream()
 				.filter(button -> Objects.equals(button.getUserData(), page))
 				.findFirst()
-				.ifPresent(button -> button.getStyleClass().add(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
+				.ifPresent(button -> button.pseudoClassStateChanged(PseudoClasses.SELECTED, true));
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")

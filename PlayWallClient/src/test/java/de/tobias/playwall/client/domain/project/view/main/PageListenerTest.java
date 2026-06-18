@@ -70,18 +70,18 @@ class PageListenerTest extends AbstractViewControllerTest
 	{
 		showMainView();
 
-		assertThat(robot.lookup(".page-button").queryAll()).hasSize(2);
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(2);
 
 		eventHandler.fireEvent(new PageAddUpdate(new PageDto(UUID.randomUUID(), "Page 3", Color.GRAY1, 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3, Color.LIGHT_GREEN2, null, null, null)).toList())));
 		WaitForAsyncUtils.waitForFxEvents();
 
-		assertThat(robot.lookup(".page-button").queryAll()).hasSize(3);
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(3);
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactlyInAnyOrder("Page 1", "Page 2", "Page 3");
-		assertThat(robot.lookup(".page-button").queryAll()).last().satisfies(button -> assertThat(((Button) button).getStyleClass()).contains(ViewConstants.PAGE_BUTTON_CURRENT_STYLECLASS));
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).last().satisfies(button -> assertThat(((Button) button).getStyleClass()).contains(ViewConstants.PAGE_BUTTON_STYLECLASS));
 	}
 
 	@Test
@@ -90,7 +90,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -105,7 +105,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -119,7 +119,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -138,7 +138,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 3", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -154,7 +154,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -171,7 +171,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 3");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -186,7 +186,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -202,7 +202,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2", "Page 1");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -218,7 +218,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 
@@ -229,7 +229,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup(".page-button").queryAll())
+		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Renamed Page", "Page 2");
 	}

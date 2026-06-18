@@ -8,6 +8,8 @@
 *.log
 
 PlayWallClient/screenshots/
+PlayWallClient/src/main/sass/components/modern-color.scss
+
 /scenicView.properties
 
 .claude/settings.local.json
