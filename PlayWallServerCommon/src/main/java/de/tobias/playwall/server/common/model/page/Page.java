@@ -43,6 +43,7 @@ public class Page
 				.id(generateNewId ? UUID.randomUUID() : id)
 				.position(position)
 				.name(name)
+				.color(color)
 				.pads(pads == null ? null : pads.stream().map(pad -> pad.copy(generateNewId)).collect(Collectors.toList()))
 				.build();
 	}
