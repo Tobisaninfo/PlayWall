@@ -1,5 +1,6 @@
 package de.tobias.playwall.common.api.page.update;
 
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.net.UpdateMessage;
 import lombok.*;
 
@@ -10,8 +11,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class PageRenameUpdate extends UpdateMessage
+public class PageSettingsUpdate extends UpdateMessage
 {
 	private UUID pageId;
-	private String newName;
+	private String name;
+	private Color color;
 }

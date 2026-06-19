@@ -9,6 +9,7 @@ import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
@@ -227,9 +228,9 @@ class FluentClientImpl implements FluentClient
 		private final UUID pageId;
 
 		@Override
-		public void rename(String name) throws PlayWallApiException
+		public void updateSettings(String name, Color color) throws PlayWallApiException
 		{
-			delegate.renamePage(pageId, name);
+			delegate.updatePageSettings(pageId, name, color);
 		}
 
 		@Override

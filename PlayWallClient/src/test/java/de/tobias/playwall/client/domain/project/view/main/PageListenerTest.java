@@ -223,8 +223,8 @@ class PageListenerTest extends AbstractViewControllerTest
 				.containsExactly("Page 1", "Page 2");
 
 		// Perform action
-		eventHandler.fireEvent(new PageRenameUpdate(
-				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), "Renamed Page"
+		eventHandler.fireEvent(new PageSettingsUpdate(
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), "Renamed Page", Color.GRAY1
 		));
 		WaitForAsyncUtils.waitForFxEvents();
 

@@ -1,8 +1,9 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.request.PageRenameRequest;
-import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
+import de.tobias.playwall.common.api.page.request.PageSettingsUpdateRequest;
+import de.tobias.playwall.common.api.page.update.PageSettingsUpdate;
 import de.tobias.playwall.server.api.history.UndoItem;
+import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -17,13 +18,13 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestHandlerTyped(PageRenameRequest.class)
-class PageRenameHandler extends UndoableRequestHandler<PageRenameRequest>
+@RequestHandlerTyped(PageSettingsUpdateRequest.class)
+class PageSettingsUpdateHandler extends UndoableRequestHandler<PageSettingsUpdateRequest>
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
 
-	PageRenameHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService)
+	PageSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService)
 	{
 		super(messageSource, context);
 		this.projectController = projectController;
@@ -31,18 +32,27 @@ class PageRenameHandler extends UndoableRequestHandler<PageRenameRequest>
 	}
 
 	@Override
-	public Optional<UndoItem> handleRequest(PageRenameRequest requestMessage) throws IOException
+	public Optional<UndoItem> handleRequest(PageSettingsUpdateRequest requestMessage) throws IOException
 	{
 		final String shortDescription = messageSource.getMessage("undo.description.short.page.rename", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longDescription = messageSource.getMessage("undo.description.long.page.rename", new Object[]{}, LocaleContextHolder.getLocale());
 
 		final UUID pageId = requestMessage.getPageId();
 		final Project project = projectController.getLoadedProject();
-		final String oldName = project.getPageById(pageId).map(Page::getName).orElse("");
 
-		projectService.renamePage(project, pageId, requestMessage.getNewName());
+		final Optional<Page> pageOptional = project.getPageById(pageId);
+		if(pageOptional.isEmpty())
+		{
+			throw new PageNotExistsException(project.getMetadata().getId(), pageId);
+		}
 
-		context.publishEvent(new PageRenameUpdate(pageId, requestMessage.getNewName()));
-		return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, new PageRenameRequest(pageId, oldName)));
+		final Page page = pageOptional.get();
+		final PageSettingsUpdateRequest undoRequest = new PageSettingsUpdateRequest(pageId, page.getName(), page.getColor());
+
+		page.setColor(requestMessage.getColor());
+		projectService.renamePage(project, pageId, requestMessage.getName());
+
+		context.publishEvent(new PageSettingsUpdate(pageId, requestMessage.getName(), requestMessage.getColor()));
+		return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, undoRequest));
 	}
 }

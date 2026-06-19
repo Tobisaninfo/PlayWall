@@ -7,6 +7,7 @@ import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
@@ -89,7 +90,7 @@ public interface FluentClient
 
 	interface PageBuilder
 	{
-		void rename(String name) throws PlayWallApiException;
+		void updateSettings(String name, Color color) throws PlayWallApiException;
 
 		void delete() throws PlayWallApiException;
 

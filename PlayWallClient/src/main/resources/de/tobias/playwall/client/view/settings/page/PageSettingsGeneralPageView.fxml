@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.tobias.playwall.client.view.components.ColorButton?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.control.Separator?>
@@ -12,4 +13,10 @@
         <TextField fx:id="textFieldName" prefWidth="300"/>
     </SettingsRow>
     <Separator/>
+
+    <SettingsRow icon="PALETTE_SOLID" title="%ui.settings.page.general.color">
+        <ColorButton fx:id="buttonColor" focusTraversable="false" mnemonicParsing="false"
+                     onAction="#onButtonColor" minWidth="150.0" prefWidth="150.0"/>
+    </SettingsRow>
+
 </SettingsPage>

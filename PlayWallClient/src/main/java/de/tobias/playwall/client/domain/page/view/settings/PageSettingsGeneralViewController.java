@@ -4,6 +4,10 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.ColorButton;
+import de.tobias.playwall.client.view.components.ColorPicker;
+import de.tobias.playwall.client.view.style.color.ModernColor;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -17,6 +21,10 @@ class PageSettingsGeneralViewController extends BasePageSettingsViewController
 	@FXML
 	private TextField textFieldName;
 
+	@FXML
+	private ColorButton buttonColor;
+	private ColorPicker colorPicker;
+
 	@InjectConstructor
 	public PageSettingsGeneralViewController(FluentClient client)
 	{
@@ -27,6 +35,10 @@ class PageSettingsGeneralViewController extends BasePageSettingsViewController
 	public void initParameter(Param param)
 	{
 		textFieldName.setText(param.getPage().getName());
+
+		final ModernColor color = param.getPage().getColor();
+		colorPicker = new ColorPicker(color, ModernColor.values(), newColor -> buttonColor.updateColor(newColor));
+		buttonColor.updateColor(color);
 
 		// TODO Validate duplicate page names
 		/*
@@ -49,11 +61,20 @@ class PageSettingsGeneralViewController extends BasePageSettingsViewController
 		final Page page = param.getPage();
 
 		page.setName(textFieldName.getText());
+		page.setColor(colorPicker.getSelectedColor());
 	}
 
 	@Override
 	public void cleanup()
 	{
 		// Nothing to do
+	}
+
+
+	@FXML
+	public void onButtonColor(ActionEvent event)
+	{
+		colorPicker.hide();
+		colorPicker.show(buttonColor);
 	}
 }

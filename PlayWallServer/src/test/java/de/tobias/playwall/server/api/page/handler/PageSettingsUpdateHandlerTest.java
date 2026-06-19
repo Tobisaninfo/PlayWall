@@ -1,7 +1,8 @@
 package de.tobias.playwall.server.api.page.handler;
 
-import de.tobias.playwall.common.api.page.request.PageRenameRequest;
-import de.tobias.playwall.common.api.page.update.PageRenameUpdate;
+import de.tobias.playwall.common.api.common.Color;
+import de.tobias.playwall.common.api.page.request.PageSettingsUpdateRequest;
+import de.tobias.playwall.common.api.page.update.PageSettingsUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RecordApplicationEvents
-class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenameRequest>
+class PageSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<PageSettingsUpdateRequest>
 {
 	@Autowired
 	private ProjectController projectController;
@@ -41,7 +42,7 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 	private JsonMapper objectMapper;
 
 	@Autowired
-	private PageRenameHandler handler;
+	private PageSettingsUpdateHandler handler;
 
 	@Autowired
 	private ApplicationEvents applicationEvents;
@@ -59,14 +60,15 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		handler.handleRequest(new PageRenameRequest(pageId, "Renamed Page"));
+		handler.handleRequest(new PageSettingsUpdateRequest(pageId, "Renamed Page", Color.RED1));
 
-		assertThat(applicationEvents.stream(PageRenameUpdate.class))
+		assertThat(applicationEvents.stream(PageSettingsUpdate.class))
 				.hasSize(1)
 				.first()
 				.satisfies(update -> {
 					assertThat(update.getPageId()).isEqualTo(pageId);
-					assertThat(update.getNewName()).isEqualTo("Renamed Page");
+					assertThat(update.getName()).isEqualTo("Renamed Page");
+					assertThat(update.getColor()).isEqualTo(Color.RED1);
 				});
 
 		assertThat(project.getPageById(pageId).orElseThrow().getName()).isEqualTo("Renamed Page");
@@ -79,7 +81,7 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677");
-		final PageRenameRequest request = new PageRenameRequest(pageId, "Seite 3");
+		final PageSettingsUpdateRequest request = new PageSettingsUpdateRequest(pageId, "Seite 3", Color.GRAY1);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PageNameAlreadyExistsException.class);
 	}
@@ -91,7 +93,7 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 		projectController.loadProject(project).get();
 
 		final UUID pageId = UUID.fromString("1e76b8b3-2da8-4533-aa57-e2b66360e9ea");
-		final PageRenameRequest request = new PageRenameRequest(pageId, "Renamed Page");
+		final PageSettingsUpdateRequest request = new PageSettingsUpdateRequest(pageId, "Renamed Page", Color.GRAY1);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PageNotExistsException.class);
 	}
@@ -100,7 +102,7 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 	void testRenamePageProjectNotLoaded()
 	{
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		final PageRenameRequest request = new PageRenameRequest(pageId, "Renamed Page");
+		final PageSettingsUpdateRequest request = new PageSettingsUpdateRequest(pageId, "Renamed Page", Color.GRAY1);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
 
@@ -113,7 +115,7 @@ class PageRenameHandlerTest extends AbstractUndoableRequestHandlerTest<PageRenam
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 
 		final UUID pageId = UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea");
-		final PageRenameRequest request = new PageRenameRequest(pageId, "Renamed Page");
+		final PageSettingsUpdateRequest request = new PageSettingsUpdateRequest(pageId, "Renamed Page", Color.GRAY1);
 
 		testInverseOperation(project, request);
 	}

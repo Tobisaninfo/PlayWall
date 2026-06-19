@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
@@ -61,7 +62,7 @@ public interface Client
 
 	void addPage() throws PlayWallApiException;
 
-	void renamePage(UUID pageId, String newName) throws PlayWallApiException;
+	void updatePageSettings(UUID pageId, String newName, Color color) throws PlayWallApiException;
 
 	void deletePage(UUID pageId) throws PlayWallApiException;
 

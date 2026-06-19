@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project.view.main;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.project.ColorMapper;
 import de.tobias.playwall.client.event.EventListener;
 import de.tobias.playwall.common.api.page.update.*;
 import javafx.application.Platform;
@@ -14,6 +15,7 @@ class PageListener
 	private final ClientProjectController projectController;
 	private final MainViewController mainViewController;
 	private final PageMapper pageMapper;
+	private final ColorMapper colorMapper;
 
 	@EventListener(PageAddUpdate.class)
 	void onPageAddUpdate(PageAddUpdate message)
@@ -58,10 +60,10 @@ class PageListener
 		Platform.runLater(mainViewController::buildPageButtons);
 	}
 
-	@EventListener(PageRenameUpdate.class)
-	void onPageRenameUpdate(PageRenameUpdate update)
+	@EventListener(PageSettingsUpdate.class)
+	void onPageSettingsUpdate(PageSettingsUpdate update)
 	{
-		projectController.renamePage(update.getPageId(), update.getNewName());
+		projectController.updatePageSettings(update.getPageId(), update.getName(), colorMapper.colorToModernColor(update.getColor()));
 		Platform.runLater(mainViewController::buildPageButtons);
 	}
 

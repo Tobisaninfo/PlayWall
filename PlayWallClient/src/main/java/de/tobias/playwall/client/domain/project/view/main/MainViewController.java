@@ -136,6 +136,7 @@ public class MainViewController extends ViewControllerBase
 	private final PadViewProvider padViewProvider;
 	private final PageMapper pageMapper;
 	private final PadMapper padMapper;
+	private final ColorMapper colorMapper;
 	private final ProjectMapper projectMapper;
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final SettingsMapper settingsMapper;
@@ -209,7 +210,7 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(projectLoadedListener);
 		projectListener = new ProjectListener(projectMapper, this);
 		eventHandler.registerListener(projectListener);
-		pageAddListener = new PageListener(projectController, this, pageMapper);
+		pageAddListener = new PageListener(projectController, this, pageMapper, colorMapper);
 		eventHandler.registerListener(pageAddListener);
 		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
