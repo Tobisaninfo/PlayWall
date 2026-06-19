@@ -59,8 +59,8 @@ public class PadSettingsViewController extends BaseSettingsDialogController<Base
 		boxCategories.getStyleClass().add("settings-category-box");
 
 		final SettingsCategory categoryGeneral = createSettingsCategory(PadSettingsGeneralViewController.class, Strings.UI_SETTINGS_PAD_GENERAL_TITLE, FontAwesomeType.GEAR_SOLID);
-		createSettingsCategory(PadSettingsDisplayViewController.class, Strings.UI_SETTINGS_PROJECT_VIEW_TITLE, FontAwesomeType.IMAGE_SOLID);
-		createSettingsCategory(PadSettingsFadeViewController.class, Strings.UI_SETTINGS_PROJECT_FADE_TITLE, FontAwesomeType.SLIDERS_SOLID);
+		createSettingsCategory(PadSettingsDisplayViewController.class, Strings.UI_SETTINGS_PAD_VIEW_TITLE, FontAwesomeType.IMAGE_SOLID);
+		createSettingsCategory(PadSettingsFadeViewController.class, Strings.UI_SETTINGS_PAD_FADE_TITLE, FontAwesomeType.SLIDERS_SOLID);
 
 		initButtons();
 

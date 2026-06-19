@@ -93,6 +93,8 @@ public class Strings
 	public static final String UI_SETTINGS_PAD_VOLUME = "ui.settings.pad.general.volume";
 	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_TITLE = "ui.dialog.settings.pad.override.title";
 	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT = "ui.dialog.settings.pad.override.content";
+	public static final String UI_SETTINGS_PAD_VIEW_TITLE = "ui.settings.pad.view.title";
+	public static final String UI_SETTINGS_PAD_FADE_TITLE = "ui.settings.pad.fade.title";
 
 	// ui - settings - page
 	public static final String UI_SETTINGS_PAGE_TITLE = "ui.settings.page.title";
@@ -100,9 +102,9 @@ public class Strings
 
 	// ui - settings - project
 	public static final String UI_SETTINGS_PROJECT_TITLE  = "ui.settings.project.title";
-	public static final String UI_SETTINGS_PROJECT_GENERAL_TITLE  = "ui.settings.pad.general.title";
-	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE  = "ui.settings.pad.view.title";
-	public static final String UI_SETTINGS_PROJECT_FADE_TITLE = "ui.settings.pad.fade.title";
+	public static final String UI_SETTINGS_PROJECT_GENERAL_TITLE = "ui.settings.project.general.title";
+	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE = "ui.settings.project.view.title";
+	public static final String UI_SETTINGS_PROJECT_FADE_TITLE = "ui.settings.project.fade.title";
 	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
 	public static final String UI_SETTINGS_PROJECT_WARNING_EOF_SEC = "ui.settings.project.warning.eof.sec";
 
