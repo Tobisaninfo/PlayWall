@@ -20,6 +20,8 @@ import de.tobias.playwall.client.domain.pad.view.desktop.listener.FileDragListen
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalPickerColorListener;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
+import de.tobias.playwall.client.domain.page.view.settings.BasePageSettingsViewController;
+import de.tobias.playwall.client.domain.page.view.settings.PageSettingsViewController;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.management.ProjectManagementViewController;
@@ -508,7 +510,7 @@ public class MainViewController extends ViewControllerBase
 			final MenuItem deleteMenuItem = createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_CAN_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)));
 			deleteMenuItem.getStyleClass().add("danger");
 			button.setContextMenu(new ContextMenu(
-					createMenuItem(Strings.UI_PAGE_RENAME, FontAwesomeType.PEN_SOLID, Optional.of(_ -> onPageRenameMenuItem(page))),
+					createMenuItem(Strings.UI_PAGE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.of(_ -> onPageSettingsMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
 					createMenuItem(Strings.UI_PAGE_EXPORT, FontAwesomeType.FILE_IMPORT_SOLID, Optional.of(_ -> onPageExportMenuItem(page))),
 					new SeparatorMenuItem(),
@@ -519,40 +521,10 @@ public class MainViewController extends ViewControllerBase
 		pageButtons.highlightPageButton(currentPage);
 	}
 
-	private void onPageRenameMenuItem(Page page)
+	private void onPageSettingsMenuItem(Page page)
 	{
-		final TextInputErrorLabelDialog dialog = new TextInputErrorLabelDialog(page.getName(), newValue -> {
-			if(newValue.isEmpty())
-			{
-				return Localization.getString(Strings.UI_PAGE_RENAME_ERROR_EMPTY);
-			}
-			final List<String> usedPageNames = projectController.getProject().getPages().stream()
-					.map(Page::getName)
-					.toList();
-			return usedPageNames.contains(newValue) ? Localization.getString(Strings.UI_PAGE_RENAME_ERROR_DUPLICATE) : null;
-		});
-		dialog.setTitle(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
-		dialog.setHeaderText(Localization.getString(Strings.UI_PAGE_RENAME_TITLE));
-		dialog.setContentText(Localization.getString(Strings.UI_PAGE_RENAME_INPUT));
-		dialog.createErrorLabel();
-		dialog.getDialogPane().setMinWidth(400);
-		dialog.initOwner(getStage());
-
-		final Optional<String> result = dialog.showAndWait();
-		result.ifPresent(newPageName -> {
-			if(!newPageName.trim().isEmpty())
-			{
-				try
-				{
-					client.currentProject().page(page.getId()).rename(newPageName.trim());
-				}
-				catch(PlayWallApiException e)
-				{
-					log.error("Cannot rename page", e);
-					showErrorMessage(e.getMessage());
-				}
-			}
-		});
+		final PageSettingsViewController controller = AppContextHolder.getInstance().get(PageSettingsViewController.class);
+		controller.showAndWait(new BasePageSettingsViewController.Param(page), getContainingWindow());
 	}
 
 	private void onPageDuplicateMenuItem(Page page)

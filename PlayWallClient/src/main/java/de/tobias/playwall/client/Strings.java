@@ -32,8 +32,7 @@ public class Strings
 
 	public static final String UI_PAGE_ADD_NEW = "ui.page.add.new";
 	public static final String UI_PAGE_ADD_IMPORT = "ui.page.add.import";
-	public static final String UI_PAGE_RENAME = "ui.page.rename";
-	public static final String UI_PAGE_RENAME_TITLE = "ui.page.rename.title";
+	public static final String UI_PAGE_SETTINGS = "ui.page.settings";
 	public static final String UI_PAGE_RENAME_INPUT = "ui.page.rename.input";
 	public static final String UI_PAGE_RENAME_ERROR_EMPTY = "ui.page.rename.error.empty";
 	public static final String UI_PAGE_RENAME_ERROR_DUPLICATE = "ui.page.rename.error.duplicate";
@@ -94,6 +93,10 @@ public class Strings
 	public static final String UI_SETTINGS_PAD_VOLUME = "ui.settings.pad.general.volume";
 	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_TITLE = "ui.dialog.settings.pad.override.title";
 	public static final String UI_DIALOG_SETTINGS_PAD_OVERRIDE_CONTENT = "ui.dialog.settings.pad.override.content";
+
+	// ui - settings - page
+	public static final String UI_SETTINGS_PAGE_TITLE = "ui.settings.page.title";
+	public static final String UI_SETTINGS_PAGE_GENERAL_TITLE = "ui.settings.page.general.title";
 
 	// ui - settings - project
 	public static final String UI_SETTINGS_PROJECT_TITLE  = "ui.settings.project.title";
@@ -163,6 +166,7 @@ public class Strings
 	public static final String UI_ERRORS_PROJECT_IMPORT = "ui.errors.project.import";
 	public static final String UI_ERRORS_PROJECT_SETTINGS_SAVE = "ui.errors.project.settings.save";
 	public static final String UI_ERRORS_PROGRAM_SETTINGS_SAVE = "ui.errors.program.settings.save";
+	public static final String UI_ERRORS_PAGE_SETTINGS_SAVE = "ui.errors.page.settings.save";
 	public static final String UI_ERRORS_PAGE_EXPORT = "ui.errors.page.export";
 	public static final String UI_ERRORS_PAGE_IMPORT = "ui.errors.page.import";
 	public static final String UI_ERRORS_REPLACE_MEDIA = "ui.errors.replace.media";
