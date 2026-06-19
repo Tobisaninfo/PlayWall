@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.common.model.pad.Pad;
@@ -183,6 +184,7 @@ public class ProjectService
 		final Page page = Page.builder()
 				.id(UUID.randomUUID())
 				.name(name)
+				.color(Color.GRAY1)
 				.position(nextPagePosition)
 				.pads(new ArrayList<>())
 				.build();
