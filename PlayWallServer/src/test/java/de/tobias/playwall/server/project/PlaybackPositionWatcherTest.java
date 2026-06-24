@@ -92,7 +92,7 @@ class PlaybackPositionWatcherTest extends AbstractRequestHandlerTest
 	@Test
 	void testRunOnePadPaused()
 	{
-		projectController.getPadController(padId1).setStatus(PadControllerStatus.PAUSED);
+		projectController.getPadController(padId1).setStatus(PadControllerStatus.PAUSING);
 
 		watcher.run();
 		assertThat(applicationEvents.stream(PadPlayPositionUpdate.class)).hasSize(1)
