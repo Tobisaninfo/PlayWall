@@ -113,6 +113,8 @@ public class Strings
 	public static final String UI_SETTINGS_PROGRAM_AUDIO_TITLE  = "ui.settings.program.audio.title";
 	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT  = "ui.settings.program.audio.device.default";
 	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT_ALWAYS  = "ui.settings.program.audio.device.default.always";
+	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_PLAY = "ui.settings.program.audio.device.test.sound.play";
+	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_STOP = "ui.settings.program.audio.device.test.sound.stop";
 
 	// ui - connection
 	public static final String UI_CONNECTION_STATE_CONNECTED = "ui.connection.state.connected";

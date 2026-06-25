@@ -4,10 +4,12 @@
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.VBox?>
+<?import de.tobias.playwall.client.view.components.PlayWallButton?>
 <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <SettingsRow icon="VOLUME_HIGH_SOLID" title="%ui.settings.program.audio.devices.title">
         <ComboBox fx:id="comboBoxOutputDevices" prefWidth="350"/>
+        <PlayWallButton fx:id="playTestSoundButton" icon="PLAY_SOLID" onAction="#playTestSoundHandler" text="%ui.settings.program.audio.device.test.sound.play"/>
     </SettingsRow>
 </SettingsPage>
 

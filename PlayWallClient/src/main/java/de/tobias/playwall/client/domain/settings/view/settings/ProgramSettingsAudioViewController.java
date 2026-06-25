@@ -1,13 +1,18 @@
 package de.tobias.playwall.client.domain.settings.view.settings;
 
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +23,18 @@ import java.util.Optional;
  */
 @ViewController(path = "de/tobias/playwall/client/view/settings/program", view = "ProgramSettingsAudioPageView", applyToStage = false)
 @SuppressWarnings("java:S110")
+@Slf4j
 public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewController
 {
 	private static final AudioDeviceInstance AUDIO_DEVICE_USE_DEFAULT_FROM_OS = new AudioDeviceInstance(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT_ALWAYS), false);
 
 	@FXML
 	private ComboBox<AudioDeviceInstance> comboBoxOutputDevices;
+
+	@FXML
+	private PlayWallButton playTestSoundButton;
+
+	private boolean isTestSoundPlaying = false;
 
 	@InjectConstructor
 	public ProgramSettingsAudioViewController(FluentClient client)
@@ -61,14 +72,19 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	@Override
 	public void applySettings(Param param)
 	{
+		param.getSettings().setSelectedAudioDevice(getSelectedAudioDeviceName());
+	}
+
+	private String getSelectedAudioDeviceName()
+	{
 		final AudioDeviceInstance selectedItem = comboBoxOutputDevices.getSelectionModel().getSelectedItem();
 		if(selectedItem == null || selectedItem == AUDIO_DEVICE_USE_DEFAULT_FROM_OS)
 		{
-			param.getSettings().setSelectedAudioDevice(null);
+			return null;
 		}
 		else
 		{
-			param.getSettings().setSelectedAudioDevice(selectedItem.name());
+			return selectedItem.name();
 		}
 	}
 
@@ -76,5 +92,38 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	public void cleanup()
 	{
 		// Nothing to do
+	}
+
+	@FXML
+	public void playTestSoundHandler(ActionEvent event)
+	{
+		if(isTestSoundPlaying)
+		{
+			try
+			{
+				client.stopTestSound();
+			}
+			catch(PlayWallApiException e)
+			{
+				log.error("Cannot stop test sound", e);
+			}
+
+			playTestSoundButton.setText(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_PLAY));
+			playTestSoundButton.setIcon(FontAwesomeType.PLAY_SOLID);
+			isTestSoundPlaying = false;
+			return;
+		}
+
+		try
+		{
+			client.playTestSound(getSelectedAudioDeviceName());
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot play test sound", e);
+		}
+		playTestSoundButton.setText(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_STOP));
+		playTestSoundButton.setIcon(FontAwesomeType.STOP_SOLID);
+		isTestSoundPlaying = true;
 	}
 }
