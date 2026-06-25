@@ -73,6 +73,11 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	public void applySettings(Param param)
 	{
 		param.getSettings().setSelectedAudioDevice(getSelectedAudioDeviceName());
+
+		if(isTestSoundPlaying)
+		{
+			stopTestSound();
+		}
 	}
 
 	private String getSelectedAudioDeviceName()
@@ -91,7 +96,10 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	@Override
 	public void cleanup()
 	{
-		// Nothing to do
+		if(isTestSoundPlaying)
+		{
+			stopTestSound();
+		}
 	}
 
 	@FXML
@@ -99,18 +107,7 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	{
 		if(isTestSoundPlaying)
 		{
-			try
-			{
-				client.stopTestSound();
-			}
-			catch(PlayWallApiException e)
-			{
-				log.error("Cannot stop test sound", e);
-			}
-
-			playTestSoundButton.setText(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_PLAY));
-			playTestSoundButton.setIcon(FontAwesomeType.PLAY_SOLID);
-			isTestSoundPlaying = false;
+			stopTestSound();
 			return;
 		}
 
@@ -125,5 +122,22 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 		playTestSoundButton.setText(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_STOP));
 		playTestSoundButton.setIcon(FontAwesomeType.STOP_SOLID);
 		isTestSoundPlaying = true;
+	}
+
+	private void stopTestSound()
+	{
+		try
+		{
+			client.stopTestSound();
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot stop test sound", e);
+		}
+
+		playTestSoundButton.setText(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_PLAY));
+		playTestSoundButton.setIcon(FontAwesomeType.PLAY_SOLID);
+		isTestSoundPlaying = false;
+		return;
 	}
 }
