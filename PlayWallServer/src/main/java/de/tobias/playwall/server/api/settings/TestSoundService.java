@@ -25,6 +25,8 @@ public class TestSoundService
 
 		audioHandler = audioHandlerFactory.createAudioHandler(() -> {});
 		audioHandler.setOutputDevice(audioDeviceName);
+		audioHandler.setLooping(true);
+
 		try
 		{
 			audioHandler.loadMedia(Paths.get(getClass().getClassLoader().getResource("de/tobias/playwall/server/sound/Test-Sound.wav").toURI()));
@@ -33,6 +35,7 @@ public class TestSoundService
 		{
 			throw new IOException(e);
 		}
+
 		audioHandler.play();
 	}
 
