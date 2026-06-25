@@ -18,9 +18,7 @@ import de.tobias.playwall.common.api.project.request.*;
 import de.tobias.playwall.common.api.settings.SettingsGetRequest;
 import de.tobias.playwall.common.api.settings.SettingsGetResponse;
 import de.tobias.playwall.common.api.settings.SettingsUpdateRequest;
-import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
-import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetRequest;
-import de.tobias.playwall.common.api.settings.audiodevices.AudioDevicesGetResponse;
+import de.tobias.playwall.common.api.settings.audiodevices.*;
 import de.tobias.playwall.common.utils.MapUtils;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
@@ -335,5 +333,17 @@ class ClientImpl implements Client
 	{
 		final AudioDevicesGetResponse response = clientWebSocketHandler.send(new AudioDevicesGetRequest());
 		return response.getAudioDevices();
+	}
+
+	@Override
+	public void playTestSound(String audioDeviceName) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new TestSoundPlayRequest(audioDeviceName));
+	}
+
+	@Override
+	public void stopTestSound() throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new TestSoundStopRequest());
 	}
 }

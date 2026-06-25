@@ -124,8 +124,11 @@ public interface FluentClient
 		Settings get() throws PlayWallApiException;
 
 		void update(Settings settings) throws PlayWallApiException;
-
 	}
 
 	List<AudioDeviceInstance> getOutputDevices() throws PlayWallApiException;
+
+	void playTestSound(String audioDeviceName) throws PlayWallApiException;
+
+	void stopTestSound() throws PlayWallApiException;
 }

@@ -5,9 +5,9 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -330,5 +330,17 @@ class FluentClientImpl implements FluentClient
 	public List<AudioDeviceInstance> getOutputDevices() throws PlayWallApiException
 	{
 		return delegate.getOutputDevices();
+	}
+
+	@Override
+	public void playTestSound(String audioDeviceName) throws PlayWallApiException
+	{
+		delegate.playTestSound(audioDeviceName);
+	}
+
+	@Override
+	public void stopTestSound() throws PlayWallApiException
+	{
+		delegate.stopTestSound();
 	}
 }
