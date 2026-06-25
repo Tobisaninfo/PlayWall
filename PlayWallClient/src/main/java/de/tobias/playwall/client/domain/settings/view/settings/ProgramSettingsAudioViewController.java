@@ -51,6 +51,12 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 		comboBoxOutputDevices.getItems().setAll(audioDevices);
 		comboBoxOutputDevices.setButtonCell(new AudioDeviceCell());
 		comboBoxOutputDevices.setCellFactory(_ -> new AudioDeviceCell());
+		comboBoxOutputDevices.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
+			if(isTestSoundPlaying)
+			{
+				stopTestSound();
+			}
+		});
 
 		final String selectedAudioDevice = param.getSettings().getSelectedAudioDevice();
 		if(selectedAudioDevice == null)
