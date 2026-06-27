@@ -144,6 +144,5 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 		playTestSoundButton.setText(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_PLAY));
 		playTestSoundButton.setIcon(FontAwesomeType.PLAY_SOLID);
 		isTestSoundPlaying = false;
-		return;
 	}
 }
