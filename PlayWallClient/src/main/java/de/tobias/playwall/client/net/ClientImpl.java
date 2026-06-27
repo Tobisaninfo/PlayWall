@@ -346,4 +346,10 @@ class ClientImpl implements Client
 	{
 		clientWebSocketHandler.send(new TestSoundStopRequest());
 	}
+
+	@Override
+	public void easterEgg() throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new EasterEggRequest());
+	}
 }

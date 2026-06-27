@@ -343,4 +343,10 @@ class FluentClientImpl implements FluentClient
 	{
 		delegate.stopTestSound();
 	}
+
+	@Override
+	public void easterEgg() throws PlayWallApiException
+	{
+		delegate.easterEgg();
+	}
 }

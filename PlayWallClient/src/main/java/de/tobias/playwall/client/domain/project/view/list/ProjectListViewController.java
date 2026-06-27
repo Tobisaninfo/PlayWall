@@ -8,7 +8,10 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
-import de.tobias.playwall.client.domain.project.*;
+import de.tobias.playwall.client.domain.project.AllProjectsInfo;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.ProjectDeleteDialog;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
@@ -24,6 +27,10 @@ import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.PlayWallButton;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -35,7 +42,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +67,10 @@ import static de.thecodelabs.utils.util.Localization.getString;
 public class ProjectListViewController extends ViewControllerBase
 {
 	static final String IMAGE = "de/tobias/playwall/client/logo/icon_large.png";
+
+	private static final Scale IMAGE_SCALE = new Scale(1.0, 1.0, 0, 0);
+
+	private static final Timeline TIMELINE_EASTER_EGG = createTimeline();
 
 	@FXML
 	private Label infoLabel;
@@ -108,6 +121,11 @@ public class ProjectListViewController extends ViewControllerBase
 		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		imageView.setImage(new Image(IMAGE));
 
+		imageView.getTransforms().add(IMAGE_SCALE);
+		IMAGE_SCALE.setPivotX(imageView.getBoundsInLocal().getWidth() / 2.0);
+		IMAGE_SCALE.setPivotY(imageView.getBoundsInLocal().getHeight() / 2.0);
+		imageView.setOnMouseClicked(_ -> easterEgg());
+
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
 		projectListView.setCellFactory(_ -> new ProjectCell());
@@ -121,14 +139,47 @@ public class ProjectListViewController extends ViewControllerBase
 		// Mouse Double Click on the list
 		projectListView.setOnMouseClicked(mouseEvent -> {
 			if(mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
-			   mouseEvent.getClickCount() == 2 &&
-			   !projectListView.getSelectionModel().isEmpty())
+					mouseEvent.getClickCount() == 2 &&
+					!projectListView.getSelectionModel().isEmpty())
 			{
 				openProject(getSelectedProject().getId());
 			}
 		});
 
 		Worker.runLater(this::fetchProjects);
+	}
+
+	private void easterEgg()
+	{
+		TIMELINE_EASTER_EGG.stop();
+		TIMELINE_EASTER_EGG.play();
+
+		try
+		{
+			client.easterEgg();
+		}
+		catch(PlayWallApiException ex)
+		{
+			log.error("Error calling easter egg", ex);
+		}
+	}
+
+	private static Timeline createTimeline()
+	{
+		return new Timeline(
+				new KeyFrame(Duration.ZERO,
+						new KeyValue(IMAGE_SCALE.xProperty(), 1.0),
+						new KeyValue(IMAGE_SCALE.yProperty(), 1.0)),
+				new KeyFrame(Duration.millis(60),
+						new KeyValue(IMAGE_SCALE.xProperty(), 0.86, Interpolator.EASE_OUT),
+						new KeyValue(IMAGE_SCALE.yProperty(), 0.86, Interpolator.EASE_OUT)),
+				new KeyFrame(Duration.millis(200),
+						new KeyValue(IMAGE_SCALE.xProperty(), 1.02, Interpolator.EASE_OUT),
+						new KeyValue(IMAGE_SCALE.yProperty(), 1.02, Interpolator.EASE_OUT)),
+				new KeyFrame(Duration.millis(320),
+						new KeyValue(IMAGE_SCALE.xProperty(), 1.0, Interpolator.EASE_BOTH),
+						new KeyValue(IMAGE_SCALE.yProperty(), 1.0, Interpolator.EASE_BOTH))
+		);
 	}
 
 	@Override

@@ -131,4 +131,6 @@ public interface FluentClient
 	void playTestSound(String audioDeviceName) throws PlayWallApiException;
 
 	void stopTestSound() throws PlayWallApiException;
+
+	void easterEgg() throws PlayWallApiException;
 }
