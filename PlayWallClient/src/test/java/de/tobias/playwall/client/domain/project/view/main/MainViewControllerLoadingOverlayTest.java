@@ -4,16 +4,20 @@ import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.common.api.pad.update.PadLoadedUpdate;
 import de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate;
+import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
+import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.util.List;
 import java.util.UUID;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -57,6 +61,13 @@ class MainViewControllerLoadingOverlayTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		mainViewController.getLoadingOverlay().resetAndSetPadCount(4);
+
+		mainViewController.getSettingsController().setSettings(Settings.builder()
+						.autoLoadLatestProjectOnStart(false)
+						.selectedAudioDevice("My Audio Device")
+						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
+				.build());
+		mainViewController.getSettingsController().setOutputDevices(List.of(new AudioDeviceInstance("My Audio Device", false)));
 
 		assertThat(mainViewController.getLoadingOverlay()).isVisible();
 		assertThat(mainViewController.getLoadingOverlay().getProgressBar().getProgress()).isZero();
