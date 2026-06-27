@@ -203,7 +203,7 @@ public class MainViewController extends ViewControllerBase
 			onConnectionStateChanged(client.connectionStateProperty().get());
 		}
 
-		projectLoadedListener = new ProjectLoadedListener(this, projectController);
+		projectLoadedListener = new ProjectLoadedListener(this, projectController, settingsController);
 		eventHandler.registerListener(projectLoadedListener);
 		projectListener = new ProjectListener(projectMapper, this);
 		eventHandler.registerListener(projectListener);
@@ -1048,7 +1048,7 @@ public class MainViewController extends ViewControllerBase
 		projectSettingsViewController.showAndWait(new BaseProjectSettingsViewController.Param(projectController.getProject().getMetadata()), getContainingWindow());
 	}
 
-	private void onMenuItemSettings(ActionEvent event)
+	public void onMenuItemSettings(ActionEvent event)
 	{
 		if(programSettingsViewController == null)
 		{
