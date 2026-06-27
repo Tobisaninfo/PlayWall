@@ -115,6 +115,7 @@ public class Strings
 	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT_ALWAYS  = "ui.settings.program.audio.device.default.always";
 	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_PLAY = "ui.settings.program.audio.device.test.sound.play";
 	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_TEST_SOUND_STOP = "ui.settings.program.audio.device.test.sound.stop";
+	public static final String UI_SETTINGS_PROGRAM_AUDIO_DEVICE_WARNING_PLAYING_PADS = "ui.settings.program.audio.device.warning.playing.pads";
 
 	// ui - connection
 	public static final String UI_CONNECTION_STATE_CONNECTED = "ui.connection.state.connected";
