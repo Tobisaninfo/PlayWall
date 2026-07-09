@@ -27,7 +27,7 @@ class AudioDevicesGetHandler implements GetRequestHandler<AudioDevicesGetRequest
 				.sorted(Comparator.comparing(AudioDevice::defaultDevice)
 						.reversed()
 						.thenComparing(AudioDevice::name))
-				.map(d -> new AudioDeviceInstance(d.name(), d.defaultDevice()))
+				.map(d -> new AudioDeviceInstance(d.name(), d.defaultDevice(), false))
 				.toList();
 		return Optional.of(new AudioDevicesGetResponse(requestMessage.getMessageId(), deviceNames));
 	}

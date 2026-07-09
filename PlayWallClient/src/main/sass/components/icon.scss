@@ -3,3 +3,7 @@
 .icon {
     -fx-fill: variables.$component-text-color;
 }
+
+.warning .icon {
+    -fx-fill: variables.$warning-color;
+}
