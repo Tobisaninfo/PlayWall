@@ -10,11 +10,15 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
+import static java.util.Objects.requireNonNull;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TestSoundService
 {
+	private static final String TEST_SOUND_WAV = "de/tobias/playwall/server/sound/Test-Sound.wav";
+
 	private final AudioHandlerFactory audioHandlerFactory;
 
 	private AudioHandler audioHandler;
@@ -29,7 +33,7 @@ public class TestSoundService
 
 		try
 		{
-			audioHandler.loadMedia(Paths.get(getClass().getClassLoader().getResource("de/tobias/playwall/server/sound/Test-Sound.wav").toURI()));
+			audioHandler.loadMedia(Paths.get(requireNonNull(getClass().getClassLoader().getResource(TEST_SOUND_WAV)).toURI()));
 		}
 		catch(URISyntaxException e)
 		{
