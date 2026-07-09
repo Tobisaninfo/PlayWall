@@ -148,6 +148,7 @@ impl HybridLoopSource {
         });
     }
 
+    #[cfg(target_os = "windows")]
     fn rebuild_source(&mut self) -> Result<(), SeekError> {
         let file = File::open(&self.path)
             .map_err(|e| SeekError::Other(Arc::new(io::Error::new(
