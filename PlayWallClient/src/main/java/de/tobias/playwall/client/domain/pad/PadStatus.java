@@ -18,6 +18,11 @@ public enum PadStatus
 		return this == PLAYING || this == PAUSING || this == STOPPING;
 	}
 
+	public boolean isPaused()
+	{
+		return this == PAUSED;
+	}
+
 	public static PadStatus fromPadControllerStatus(PadControllerStatus status)
 	{
 		return switch(status)

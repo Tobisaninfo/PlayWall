@@ -375,7 +375,7 @@ public class DesktopPadView implements PadView
 			return;
 		}
 
-		if(status.isAnyPlayingState() && position != null)
+		if((status.isAnyPlayingState() || status.isPaused()) && position != null)
 		{
 			updateTimeLabelByTimeMode(duration, position);
 			this.playBar.setProgress(padController.getPosition().toMillis() / duration.toMillis());
@@ -519,7 +519,7 @@ public class DesktopPadView implements PadView
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 				stopButton.setDisable(true);
 			}
-			case READY, STOPPED ->
+			case READY, STOPPING, STOPPED ->
 			{
 				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				stopButton.setDisable(true);
@@ -529,7 +529,7 @@ public class DesktopPadView implements PadView
 				buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
 				stopButton.setDisable(false);
 			}
-			case PAUSED ->
+			case PAUSING, PAUSED ->
 			{
 				buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				stopButton.setDisable(false);

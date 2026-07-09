@@ -70,7 +70,10 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		padController.setDuration(Duration.millis(10000L));
 
 		// Initial state = READY
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
+		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:10");
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.ERROR));
 		WaitForAsyncUtils.waitForFxEvents();
@@ -79,19 +82,25 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		assertThat(padView.getErrorLabel().isVisible()).isTrue();
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.ERROR);
 
+		padController.setPosition(Duration.millis(5000L));
+
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PLAYING));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPauseButton(), padView.getStopButton(), padView.getSettingsButton());
-		assertThat(padView.getTimeLabel()).hasText("0:10");
+		assertThat(padView.getTimeLabel()).hasText("0:05");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.PLAYING);
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PAUSING));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
+		assertThat(padView.getTimeLabel()).hasText("0:05");
+		assertThat(padController.getStatus()).isEqualTo(PadStatus.PAUSING);
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.PAUSED));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(padView.getButtonBox().getChildren()).contains(padView.getPlayButton(), padView.getStopButton(), padView.getSettingsButton());
-		assertThat(padView.getTimeLabel()).hasText("0:10");
+		assertThat(padView.getTimeLabel()).hasText("0:05");
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.PAUSED);
-
-		padController.setPosition(Duration.millis(5000L));
 
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.STOPPING));
 		WaitForAsyncUtils.waitForFxEvents();
