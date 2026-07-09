@@ -1,21 +1,28 @@
 package de.tobias.playwall.client.domain.settings.view.settings;
 
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Modality;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -28,6 +35,8 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 {
 	private static final AudioDeviceInstance AUDIO_DEVICE_USE_DEFAULT_FROM_OS = new AudioDeviceInstance(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT_ALWAYS), false);
 
+	private final ClientProjectController projectController;
+
 	@FXML
 	private ComboBox<AudioDeviceInstance> comboBoxOutputDevices;
 
@@ -37,9 +46,10 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	private boolean isTestSoundPlaying = false;
 
 	@InjectConstructor
-	public ProgramSettingsAudioViewController(FluentClient client)
+	public ProgramSettingsAudioViewController(FluentClient client, ClientProjectController projectController)
 	{
 		super(client);
+		this.projectController = projectController;
 	}
 
 	@Override
@@ -76,6 +86,19 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 	}
 
 	@Override
+	public boolean shouldApplySettingsAbort(Param param)
+	{
+		final String previousSelectedAudioDevice = param.getSettings().getSelectedAudioDevice();
+		final String currentSelectedAudioDevice = getSelectedAudioDeviceName();
+
+		if(!Objects.equals(previousSelectedAudioDevice, currentSelectedAudioDevice) && projectController.isAtLeastOnePadPlaying())
+		{
+			return showPlayingPadsWarningAlert();
+		}
+		return false;
+	}
+
+	@Override
 	public void applySettings(Param param)
 	{
 		param.getSettings().setSelectedAudioDevice(getSelectedAudioDeviceName());
@@ -84,6 +107,33 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 		{
 			stopTestSound();
 		}
+	}
+
+	private boolean showPlayingPadsWarningAlert()
+	{
+		final Alert alert = Alerts.getInstance().createAlert(Alert.AlertType.WARNING, Localization.getString(Strings.UI_NOTIFICATION_WARNING), Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_WARNING_PLAYING_PADS), null, getContainingWindow());
+		alert.getButtonTypes().clear();
+		alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.settings.button.cancel"), ButtonBar.ButtonData.CANCEL_CLOSE));
+		alert.getButtonTypes().add(new ButtonType(Localization.getString("ui.settings.program.audio.device.warning.playing.pads.button.save"), ButtonBar.ButtonData.OK_DONE));
+		getStageContainer().ifPresent(nvcStage -> alert.initOwner(nvcStage.getStage()));
+		alert.initModality(Modality.WINDOW_MODAL);
+
+		final Optional<ButtonType> response = alert.showAndWait();
+		if(response.filter(button -> button.getButtonData() == ButtonBar.ButtonData.OK_DONE).isPresent())
+		{
+			try
+			{
+				client.currentProject().stopAllPads();
+			}
+			catch(PlayWallApiException e)
+			{
+				log.error("Cannot stop all playing pad", e);
+			}
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private String getSelectedAudioDeviceName()
