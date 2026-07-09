@@ -75,6 +75,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
     mut env: EnvUnowned,
     object: JObject,
     device_name: JString,
+    should_use_system_default_as_fallback: jboolean
 ) {
     env.with_env(|mut env| -> jni::errors::Result<()> {
         if device_name.is_null() {
@@ -98,7 +99,7 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         };
         drop(cache);
 
-        if !device_exists {
+        if !device_exists && !should_use_system_default_as_fallback {
             env.throw_new(
                 JNIString::new("java/lang/IllegalArgumentException"),
                 JNIString::new(format!(
@@ -111,7 +112,11 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
 
         with_audio_handler(&mut env, object, |_, audio_handler| {
             audio_handler.clearAudioHandlerStream();
-            audio_handler.device_name = Some(device_name_str.clone());
+            if device_exists {
+                audio_handler.device_name = Some(device_name_str.clone());
+            } else {
+                audio_handler.device_name = None;
+            }
             trace!("Init output stream and sink for device {}", device_name_str);
         });
         Ok(())

@@ -46,7 +46,7 @@ public class AudioPadContentController extends PadController
 	{
 		if(initialOutputDeviceName != null)
 		{
-			audioHandler.setOutputDevice(initialOutputDeviceName);
+			audioHandler.setOutputDevice(initialOutputDeviceName, true);
 		}
 		audioHandler.loadMedia(Paths.get(padContent.getMediaPath()));
 		setVolume(padContent.getVolume());
@@ -242,6 +242,6 @@ public class AudioPadContentController extends PadController
 
 	public void setOutputDevice(String audioDeviceName)
 	{
-		audioHandler.setOutputDevice(audioDeviceName);
+		audioHandler.setOutputDevice(audioDeviceName, false);
 	}
 }

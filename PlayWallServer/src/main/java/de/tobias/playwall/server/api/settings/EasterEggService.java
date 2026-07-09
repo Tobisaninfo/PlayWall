@@ -24,7 +24,7 @@ public class EasterEggService
 		if(audioHandler == null)
 		{
 			audioHandler = audioHandlerFactory.createAudioHandler(() -> {});
-			audioHandler.setOutputDevice(null);
+			audioHandler.setOutputDevice(null, true);
 			audioHandler.setVolume(0.5);
 
 			try

@@ -140,12 +140,12 @@ public class RustAudioHandler extends AudioHandler
 	private native void unloadMediaNative();
 
 	@Override
-	public void setOutputDevice(String name)
+	public void setOutputDevice(String name, boolean shouldUseSystemDefaultAsFallback)
 	{
-		setOutputDeviceNative(name);
+		setOutputDeviceNative(name, shouldUseSystemDefaultAsFallback);
 	}
 
-	private native void setOutputDeviceNative(String name);
+	private native void setOutputDeviceNative(String name, boolean shouldUseSystemDefaultAsFallback);
 
 	public static native AudioDevice[] getOutputDevices();
 

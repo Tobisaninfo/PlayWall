@@ -28,7 +28,7 @@ public class TestSoundService
 		stop();
 
 		audioHandler = audioHandlerFactory.createAudioHandler(() -> {});
-		audioHandler.setOutputDevice(audioDeviceName);
+		audioHandler.setOutputDevice(audioDeviceName, false);
 		audioHandler.setLooping(true);
 
 		try

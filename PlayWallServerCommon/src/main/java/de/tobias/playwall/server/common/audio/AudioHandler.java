@@ -94,8 +94,9 @@ public abstract class AudioHandler
 	 * Sets the audio device.
 	 *
 	 * @param name audio device name
+	 * @param shouldUseSystemDefaultAsFallback should use system default device if the request one is not available
 	 */
-	public abstract void setOutputDevice(String name);
+	public abstract void setOutputDevice(String name, boolean shouldUseSystemDefaultAsFallback);
 
 	/**
 	 * Seek to the beginning of the current media without stopping playback.
