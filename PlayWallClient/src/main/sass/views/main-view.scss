@@ -12,16 +12,16 @@
             -fx-text-fill: colors.get-appropriate-text-color($color);
 
             &:selected {
-                -fx-border-color: colors.get-appropriate-text-color($color);
+                -fx-border-color: white;
             }
         }
     }
 
     &:selected {
         -fx-border-radius: variables.$component-border-radius-lg;
-        -fx-border-width: 2.5px;
+        -fx-border-width: 2px;
         -fx-border-insets: -2px;
-        -fx-background-insets: 0px;
+        -fx-background-insets: 3px;
         -fx-text-fill: white;
         -fx-font-weight: bold;
         -fx-cursor: hand;
