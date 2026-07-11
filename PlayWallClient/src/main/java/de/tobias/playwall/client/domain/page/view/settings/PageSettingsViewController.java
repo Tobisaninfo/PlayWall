@@ -60,7 +60,7 @@ public class PageSettingsViewController extends BaseSettingsDialogController<Bas
 	{
 		super.initStage(stageContainer, stage);
 
-		stage.setWidth(1040);
+		stage.setWidth(600);
 	}
 
 	@Override
