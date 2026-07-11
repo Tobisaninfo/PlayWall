@@ -34,8 +34,8 @@ class PageSettingsUpdateHandler extends UndoableRequestHandler<PageSettingsUpdat
 	@Override
 	public Optional<UndoItem> handleRequest(PageSettingsUpdateRequest requestMessage) throws IOException
 	{
-		final String shortDescription = messageSource.getMessage("undo.description.short.page.rename", new Object[]{}, LocaleContextHolder.getLocale());
-		final String longDescription = messageSource.getMessage("undo.description.long.page.rename", new Object[]{}, LocaleContextHolder.getLocale());
+		final String shortDescription = messageSource.getMessage("undo.description.short.page.settings", new Object[]{}, LocaleContextHolder.getLocale());
+		final String longDescription = messageSource.getMessage("undo.description.long.page.settings", new Object[]{}, LocaleContextHolder.getLocale());
 
 		final UUID pageId = requestMessage.getPageId();
 		final Project project = projectController.getLoadedProject();
