@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class Project
 {
-	@JsonView(Views.MetadataOnly.class)
+	@JsonView(Views.IdAndNameOnly.class)
 	private ProjectMetadata metadata;
 	private List<Page> pages;
 

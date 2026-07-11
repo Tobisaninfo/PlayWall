@@ -43,7 +43,7 @@ public class ProjectRepository
 			throw new ProjectNotExistsException(id);
 		}
 
-		final Project project = mapper.readerWithView(Views.MetadataOnly.class)
+		final Project project = mapper.readerWithView(Views.IdAndNameOnly.class)
 				.forType(Project.class)
 				.readValue(Files.newBufferedReader(path));
 		return project.getMetadata();
