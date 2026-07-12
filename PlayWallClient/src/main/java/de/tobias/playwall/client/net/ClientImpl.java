@@ -277,9 +277,9 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public void duplicatePad(Pad sourcePad, UUID targetPad) throws PlayWallApiException
+	public void duplicatePad(UUID sourcePad, UUID targetPad) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new PadDragDuplicateRequest(padMapper.padToPadDto(sourcePad), targetPad));
+		clientWebSocketHandler.send(new PadDragDuplicateRequest(sourcePad, targetPad));
 	}
 
 	@Override
