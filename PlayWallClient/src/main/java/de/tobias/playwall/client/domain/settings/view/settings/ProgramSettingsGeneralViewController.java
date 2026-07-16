@@ -34,6 +34,9 @@ public class ProgramSettingsGeneralViewController extends BaseProgramSettingsVie
 	private ComboBox<UnsavedChangesMode> comboBoxUnsavedChanges;
 
 	@FXML
+	private CheckBox checkboxAutosave;
+
+	@FXML
 	private CheckBox checkboxDebugLogging;
 
 	private final ErrorAlertBuilder errorAlertBuilder;
@@ -59,6 +62,8 @@ public class ProgramSettingsGeneralViewController extends BaseProgramSettingsVie
 		checkboxStartAutoLoadLatestProject.setSelected(param.getSettings().isAutoLoadLatestProjectOnStart());
 		comboBoxUnsavedChanges.getSelectionModel().select(param.getSettings().getUnsavedChangesMode());
 
+		checkboxAutosave.setSelected(param.getSettings().isAutosave());
+
 		final Path debugFlag = app.getPath(PathType.CONFIGURATION, DEBUG_FLAG_FILE_NAME);
 		checkboxDebugLogging.setSelected(Files.exists(debugFlag));
 
@@ -70,6 +75,7 @@ public class ProgramSettingsGeneralViewController extends BaseProgramSettingsVie
 	{
 		param.getSettings().setAutoLoadLatestProjectOnStart(checkboxStartAutoLoadLatestProject.isSelected());
 		param.getSettings().setUnsavedChangesMode(comboBoxUnsavedChanges.getSelectionModel().getSelectedItem());
+		param.getSettings().setAutosave(checkboxAutosave.isSelected());
 
 		final Path debugFlag = app.getPath(PathType.CONFIGURATION, DEBUG_FLAG_FILE_NAME);
 		try

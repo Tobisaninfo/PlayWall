@@ -32,7 +32,7 @@ public class IconDeclaration
 	{
 		final ObservableList<IconEntry> data = FXCollections.observableArrayList();
 
-		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Speichern Button"))));
+		data.add(new IconEntry(FontAwesomeType.FLOPPY_DISK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Speichern Button"), new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Automatisches Speichern"))));
 		data.add(new IconEntry(FontAwesomeType.XMARK_SOLID, List.of(new IconUsage(IconUsageCategory.GENERAL, "Abbrechen Button"))));
 		data.add(new IconEntry(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID, List.of(
 				new IconUsage(IconUsageCategory.GENERAL, "Benachrichtigung"),

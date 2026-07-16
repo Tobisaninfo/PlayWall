@@ -18,6 +18,11 @@
         <ComboBox fx:id="comboBoxUnsavedChanges" prefWidth="300"/>
     </SettingsRow>
     <Separator/>
+    <SettingsRow icon="FLOPPY_DISK_SOLID" title="%ui.settings.program.autosave.title">
+        <CheckBox fx:id="checkboxAutosave" text="%ui.settings.program.autosave.checkbox"/>
+        <Label text="%ui.settings.program.autosave.info" wrapText="true"/>
+    </SettingsRow>
+    <Separator/>
     <SettingsRow icon="BUG_SOLID" title="%ui.settings.program.debug.title">
         <CheckBox fx:id="checkboxDebugLogging" text="%ui.settings.program.debug.checkbox"/>
         <Label text="%ui.settings.program.debug.restart" wrapText="true"/>
