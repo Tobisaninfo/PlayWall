@@ -76,7 +76,10 @@ public class ProgramSettingsGeneralViewController extends BaseProgramSettingsVie
 		{
 			if(checkboxDebugLogging.isSelected())
 			{
-				Files.createFile(debugFlag);
+				if(!Files.exists(debugFlag))
+				{
+					Files.createFile(debugFlag);
+				}
 			}
 			else
 			{
