@@ -75,6 +75,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder()
 				.autoLoadLatestProjectOnStart(true)
 				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
+				.autosave(true)
 				.build());
 
 		handler.handleRequest(request);
@@ -85,6 +86,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
 						.autoLoadLatestProjectOnStart(true)
 						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
+						.autosave(true)
 						.build()));
 
 	}
@@ -96,6 +98,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 		final SettingsUpdateRequest request = new SettingsUpdateRequest(SettingsDto.builder()
 				.autoLoadLatestProjectOnStart(true)
 				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
+				.autosave(true)
 				.build());
 
 		requestExecutor.execute(request);
@@ -106,6 +109,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
 						.autoLoadLatestProjectOnStart(true)
 						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
+						.autosave(true)
 						.build()));
 
 		applicationEvents.clear();
@@ -119,6 +123,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 				.satisfies(e -> assertThat(e.getSettings()).isEqualTo(SettingsDto.builder()
 						.autoLoadLatestProjectOnStart(false)
 						.unsavedChangesMode(UnsavedChangesMode.ASK)
+						.autosave(false)
 						.build()));
 	}
 }

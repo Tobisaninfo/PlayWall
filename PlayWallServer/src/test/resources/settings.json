@@ -1,4 +1,7 @@
 {
     "VERSION": 1,
-    "autoLoadLatestProjectOnStart": false
+    "autoLoadLatestProjectOnStart": false,
+    "autosave": false,
+    "unsavedChangesMode": "DISCARD",
+    "selectedAudioDevice": null
 }

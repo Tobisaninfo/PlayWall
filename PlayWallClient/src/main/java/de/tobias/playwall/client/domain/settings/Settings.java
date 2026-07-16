@@ -13,5 +13,6 @@ public final class Settings
 {
 	private boolean autoLoadLatestProjectOnStart;
 	private UnsavedChangesMode unsavedChangesMode;
+	private boolean autosave;
 	private String selectedAudioDevice;
 }

@@ -15,6 +15,7 @@ public class SettingsMapper
 		return Settings.builder()
 				.autoLoadLatestProjectOnStart(settingsDto.autoLoadLatestProjectOnStart())
 				.unsavedChangesMode(settingsDto.unsavedChangesMode())
+				.autosave(settingsDto.autosave())
 				.selectedAudioDevice(settingsDto.selectedAudioDevice())
 				.build();
 	}
@@ -24,6 +25,7 @@ public class SettingsMapper
 		return SettingsDto.builder()
 				.autoLoadLatestProjectOnStart(settings.isAutoLoadLatestProjectOnStart())
 				.unsavedChangesMode(settings.getUnsavedChangesMode())
+				.autosave(settings.isAutosave())
 				.selectedAudioDevice(settings.getSelectedAudioDevice())
 				.build();
 	}

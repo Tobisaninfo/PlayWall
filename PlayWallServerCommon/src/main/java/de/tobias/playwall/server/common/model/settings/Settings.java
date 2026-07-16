@@ -14,6 +14,8 @@ public class Settings
 {
 	public static final Settings DEFAULT = Settings.builder()
 			.autoLoadLatestProjectOnStart(false)
+			.autosave(false)
+			.unsavedChangesMode(UnsavedChangesMode.ASK)
 			.selectedAudioDevice(null)
 			.build();
 
@@ -23,7 +25,9 @@ public class Settings
 	private boolean autoLoadLatestProjectOnStart;
 
 	@Builder.Default
-	private UnsavedChangesMode unsavedChangesMode =  UnsavedChangesMode.ASK;
+	private UnsavedChangesMode unsavedChangesMode = UnsavedChangesMode.ASK;
+
+	private boolean autosave;
 
 	private String selectedAudioDevice;
 }
