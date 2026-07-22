@@ -22,7 +22,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.stage.Stage;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
@@ -189,11 +188,10 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	@Disabled
-		// TODO
 	void testPageRename(FxRobot robot) throws PlayWallApiException
 	{
 		showMainView();
+		context.registerLazy(Stage.class, _ -> new Stage());
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
 		final MenuItem menuItem = contextMenu.getItems().getFirst();
@@ -202,7 +200,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
 		textInputControl.setText("New Page Name");
-		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		robot.clickOn(robot.lookup("Speichern").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final ArgumentCaptor<PageSettings> argumentCaptor = ArgumentCaptor.forClass(PageSettings.class);
@@ -211,11 +209,10 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	@Disabled
-		// TODO
 	void testPageRenameEmptyTextField(FxRobot robot) throws PlayWallApiException
 	{
 		showMainView();
+		context.registerLazy(Stage.class, _ -> new Stage());
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
 		final MenuItem menuItem = contextMenu.getItems().getFirst();
@@ -223,24 +220,21 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
-		textInputControl.setText("");
-		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		Platform.runLater(() -> textInputControl.setText(""));
+		WaitForAsyncUtils.waitForFxEvents();
+		robot.clickOn(robot.lookup("Speichern").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
-		assertThat(robot.lookup(".text-input").queryTextInputControl()).isVisible();
 		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Der Name der Seite darf nicht leer sein.");
 
 		verify(client, never()).updatePageSettings(any(), any());
 	}
 
 	@Test
-	@Disabled
-		// TODO
 	void testPageRenameDuplicateName(FxRobot robot) throws PlayWallApiException
 	{
-		doThrow(new PlayWallApiException("Server Rename Error", null)).when(client).updatePageSettings(any(), any());
-
 		showMainView();
+		context.registerLazy(Stage.class, _ -> new Stage());
 
 		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
 		final MenuItem menuItem = contextMenu.getItems().getFirst();
@@ -248,11 +242,11 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
-		textInputControl.setText("Page 1");
-		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
+		Platform.runLater(() -> textInputControl.setText("Page 2"));
+		WaitForAsyncUtils.waitForFxEvents();
+		robot.clickOn(robot.lookup("Speichern").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
-		assertThat(robot.lookup(".text-input").queryTextInputControl()).isVisible();
 		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Es existiert bereits eine Seite mit diesem Namen.");
 
 		verify(client, never()).updatePageSettings(any(), any());
