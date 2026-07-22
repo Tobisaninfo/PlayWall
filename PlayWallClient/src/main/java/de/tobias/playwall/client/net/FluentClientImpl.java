@@ -3,13 +3,13 @@ package de.tobias.playwall.client.net;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.view.style.color.ModernColor;
-import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import lombok.AccessLevel;
@@ -228,9 +228,9 @@ class FluentClientImpl implements FluentClient
 		private final UUID pageId;
 
 		@Override
-		public void updateSettings(String name, Color color) throws PlayWallApiException
+		public void updateSettings(PageSettings pageSettings) throws PlayWallApiException
 		{
-			delegate.updatePageSettings(pageId, name, color);
+			delegate.updatePageSettings(pageId, pageSettings);
 		}
 
 		@Override

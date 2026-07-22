@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.page.handler;
 
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.page.request.PageAddRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.server.TestUtils;
@@ -73,7 +74,8 @@ class PageAddHandlerTest extends AbstractUndoableRequestHandlerTest<PageAddReque
 				.satisfies(update -> {
 					assertThat(update.getPage().id()).isNotNull();
 					assertThat(update.getPage().id()).isNotNull();
-					assertThat(update.getPage().name()).isEqualTo("Seite 2");
+					assertThat(update.getPage().settings().name()).isEqualTo("Seite 2");
+					assertThat(update.getPage().settings().color()).isEqualTo(Color.GRAY1);
 					assertThat(update.getPage().position()).isEqualTo(1);
 					assertThat(update.getPage().pads()).hasSize(6 * 4);
 				});
@@ -84,7 +86,7 @@ class PageAddHandlerTest extends AbstractUndoableRequestHandlerTest<PageAddReque
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final Page page = project.getPageById(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")).orElseThrow();
-		page.setName("Seite 2");
+		page.getSettings().setName("Seite 2");
 
 		projectController.loadProject(project).get();
 
@@ -94,7 +96,7 @@ class PageAddHandlerTest extends AbstractUndoableRequestHandlerTest<PageAddReque
 				.first()
 				.satisfies(update -> {
 					assertThat(update.getPage().id()).isNotNull();
-					assertThat(update.getPage().name()).isEqualTo("Seite 3");
+					assertThat(update.getPage().settings().name()).isEqualTo("Seite 3");
 					assertThat(update.getPage().position()).isEqualTo(1);
 					assertThat(update.getPage().pads()).hasSize(6 * 4);
 				});

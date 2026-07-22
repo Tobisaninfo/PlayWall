@@ -4,8 +4,10 @@ import de.tobias.playwall.common.api.page.request.PageSettingsUpdateRequest;
 import de.tobias.playwall.common.api.page.update.PageSettingsUpdate;
 import de.tobias.playwall.server.api.history.UndoItem;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.api.page.PageSettingsMapper;
 import de.tobias.playwall.server.api.project.ProjectService;
 import de.tobias.playwall.server.common.model.page.Page;
+import de.tobias.playwall.server.common.model.page.PageSettings;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.net.UndoableRequestHandler;
@@ -23,12 +25,14 @@ class PageSettingsUpdateHandler extends UndoableRequestHandler<PageSettingsUpdat
 {
 	private final ProjectController projectController;
 	private final ProjectService projectService;
+	private final PageSettingsMapper pageSettingsMapper;
 
-	PageSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService)
+	PageSettingsUpdateHandler(MessageSource messageSource, ApplicationContext context, ProjectController projectController, ProjectService projectService, PageSettingsMapper pageSettingsMapper)
 	{
 		super(messageSource, context);
 		this.projectController = projectController;
 		this.projectService = projectService;
+		this.pageSettingsMapper = pageSettingsMapper;
 	}
 
 	@Override
@@ -46,13 +50,13 @@ class PageSettingsUpdateHandler extends UndoableRequestHandler<PageSettingsUpdat
 			throw new PageNotExistsException(project.getMetadata().getId(), pageId);
 		}
 
-		final Page page = pageOptional.get();
-		final PageSettingsUpdateRequest undoRequest = new PageSettingsUpdateRequest(pageId, page.getName(), page.getColor());
+		final PageSettings pageSettings = pageOptional.get().getSettings();
+		final PageSettingsUpdateRequest undoRequest = new PageSettingsUpdateRequest(pageId, pageSettingsMapper.pageSettingsToPageSettingsDto(pageSettings));
 
-		page.setColor(requestMessage.getColor());
-		projectService.renamePage(project, pageId, requestMessage.getName());
+		pageSettings.setColor(requestMessage.getPageSettings().color());
+		projectService.renamePage(project, pageId, requestMessage.getPageSettings().name());
 
-		context.publishEvent(new PageSettingsUpdate(pageId, requestMessage.getName(), requestMessage.getColor()));
+		context.publishEvent(new PageSettingsUpdate(pageId, pageSettingsMapper.pageSettingsToPageSettingsDto(pageSettings)));
 		return Optional.of(new UndoItem(shortDescription, longDescription, requestMessage, undoRequest));
 	}
 }

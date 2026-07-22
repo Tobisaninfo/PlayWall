@@ -7,7 +7,6 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.page.Page;
-import de.tobias.playwall.client.domain.project.ColorMapper;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
@@ -34,13 +33,10 @@ public class PageSettingsViewController extends BaseSettingsDialogController<Bas
 	@Getter(AccessLevel.NONE)
 	private Page page;
 
-	private final ColorMapper colorMapper;
-
 	@InjectConstructor
-	public PageSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder, ColorMapper colorMapper)
+	public PageSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
 	{
 		super(client, errorAlertBuilder);
-		this.colorMapper = colorMapper;
 	}
 
 	@Override
@@ -69,7 +65,7 @@ public class PageSettingsViewController extends BaseSettingsDialogController<Bas
 		this.page = parameter.page;
 
 		settingViewController.forEach(controller -> controller.initParameter(new BasePageSettingsViewController.Param(page)));
-		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAGE_TITLE, page.getName()));
+		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PAGE_TITLE, page.getSettings().getName()));
 	}
 
 	@FXML
@@ -79,7 +75,7 @@ public class PageSettingsViewController extends BaseSettingsDialogController<Bas
 
 		try
 		{
-			client.currentProject().page(page.getId()).updateSettings(page.getName(), colorMapper.modernColorToColor(page.getColor()));
+			client.currentProject().page(page.getId()).updateSettings(page.getSettings());
 			getStageContainer().ifPresent(NVCStage::close);
 		}
 		catch(PlayWallApiException e)

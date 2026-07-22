@@ -98,7 +98,7 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 		final Pad pad = projectController.getPad(request.getPadId());
 
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.new.media", new Object[]{}, LocaleContextHolder.getLocale());
-		final String pageName = projectController.getPageByPad(pad.getId()).getName();
+		final String pageName = projectController.getPageByPad(pad.getId()).getSettings().getName();
 		final String longDescription = messageSource.getMessage("undo.description.long.pad.new.media", new Object[]{pad.getPosition() + 1, pageName}, LocaleContextHolder.getLocale());
 
 		if(pad.getContent() == null)

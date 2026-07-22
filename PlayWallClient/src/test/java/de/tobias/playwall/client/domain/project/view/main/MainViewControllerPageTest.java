@@ -4,6 +4,7 @@ import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
+import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
@@ -43,6 +44,8 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 
 class MainViewControllerPageTest extends AbstractViewControllerTest
 {
+	private static final String PAGE_BUTTON_QUERY = "." + ViewConstants.PAGE_BUTTON_STYLECLASS;
+
 	private AppContext context;
 
 	private MainViewController mainViewController;
@@ -86,8 +89,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Assert buttons
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(2);
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll()).hasSize(2);
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactlyInAnyOrder("Page 1", "Page 2");
 
@@ -161,13 +164,13 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Assert buttons
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(2);
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll()).hasSize(2);
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 
-		final Node button1 = robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).nth(0).queryAs(Node.class);
-		final Node button2 = robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).nth(1).queryAs(Node.class);
+		final Node button1 = robot.lookup(PAGE_BUTTON_QUERY).nth(0).queryAs(Node.class);
+		final Node button2 = robot.lookup(PAGE_BUTTON_QUERY).nth(1).queryAs(Node.class);
 
 		robot.drag(button1).moveTo(button2, new Point2D(20, 0)).drop();
 		WaitForAsyncUtils.waitForFxEvents();
@@ -180,7 +183,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 				UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 0
 		));
 
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2", "Page 1");
 	}
@@ -202,9 +205,9 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
-		final ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-		verify(client).updatePageSettings(eq(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")), argumentCaptor.capture(), any());
-		assertThat(argumentCaptor.getValue()).isEqualTo("New Page Name");
+		final ArgumentCaptor<PageSettings> argumentCaptor = ArgumentCaptor.forClass(PageSettings.class);
+		verify(client).updatePageSettings(eq(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")), argumentCaptor.capture());
+		assertThat(argumentCaptor.getValue().getName()).isEqualTo("New Page Name");
 	}
 
 	@Test
@@ -227,7 +230,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		assertThat(robot.lookup(".text-input").queryTextInputControl()).isVisible();
 		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Der Name der Seite darf nicht leer sein.");
 
-		verify(client, never()).updatePageSettings(any(), any(), any());
+		verify(client, never()).updatePageSettings(any(), any());
 	}
 
 	@Test
@@ -235,7 +238,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		// TODO
 	void testPageRenameDuplicateName(FxRobot robot) throws PlayWallApiException
 	{
-		doThrow(new PlayWallApiException("Server Rename Error", null)).when(client).updatePageSettings(any(), any(), any());
+		doThrow(new PlayWallApiException("Server Rename Error", null)).when(client).updatePageSettings(any(), any());
 
 		showMainView();
 
@@ -252,7 +255,7 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		assertThat(robot.lookup(".text-input").queryTextInputControl()).isVisible();
 		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Es existiert bereits eine Seite mit diesem Namen.");
 
-		verify(client, never()).updatePageSettings(any(), any(), any());
+		verify(client, never()).updatePageSettings(any(), any());
 	}
 
 	@Test

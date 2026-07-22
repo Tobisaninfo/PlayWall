@@ -20,6 +20,7 @@ import de.tobias.playwall.client.domain.pad.view.desktop.listener.FileDragListen
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalPickerColorListener;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
+import de.tobias.playwall.client.domain.page.PageSettingsMapper;
 import de.tobias.playwall.client.domain.page.view.settings.BasePageSettingsViewController;
 import de.tobias.playwall.client.domain.page.view.settings.PageSettingsViewController;
 import de.tobias.playwall.client.domain.project.*;
@@ -135,8 +136,8 @@ public class MainViewController extends ViewControllerBase
 	private final FileChooserWrapper fileChooserWrapper;
 	private final PadViewProvider padViewProvider;
 	private final PageMapper pageMapper;
+	private final PageSettingsMapper pageSettingsMapper;
 	private final PadMapper padMapper;
-	private final ColorMapper colorMapper;
 	private final ProjectMapper projectMapper;
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final SettingsMapper settingsMapper;
@@ -210,7 +211,7 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(projectLoadedListener);
 		projectListener = new ProjectListener(projectMapper, this);
 		eventHandler.registerListener(projectListener);
-		pageAddListener = new PageListener(projectController, this, pageMapper, colorMapper);
+		pageAddListener = new PageListener(projectController, this, pageMapper, pageSettingsMapper);
 		eventHandler.registerListener(pageAddListener);
 		padUpdateListener = new PadUpdateListener(projectController, this, padMapper);
 		eventHandler.registerListener(padUpdateListener);
@@ -546,7 +547,9 @@ public class MainViewController extends ViewControllerBase
 		try
 		{
 			final ExportFile export = client.currentProject().page(page.getId()).export();
-			final String initialFileName = Localization.getString(Strings.UI_PAGE_EXPORT_NAME, projectController.getProject().getMetadata().getName(), page.getName())
+			final String initialFileName = Localization.getString(Strings.UI_PAGE_EXPORT_NAME,
+							projectController.getProject().getMetadata().getName(),
+							page.getSettings().getName())
 					.replaceAll("[^a-zA-Z0-9\\s\\-_]", "_");
 
 			final MimeType mimeType = MimeType.getByMimeType(export.mimetype());
@@ -1056,7 +1059,7 @@ public class MainViewController extends ViewControllerBase
 		final List<MissingMediaEntry> entries = padControllersWithErrors.stream()
 				.map(ClientPadController::getPad)
 				.map(pad -> MissingMediaEntry.builder()
-						.pageName(projectController.getProject().getPageByPadId(pad.getId()).getName())
+						.pageName(projectController.getProject().getPageByPadId(pad.getId()).getSettings().getName())
 						.padId(pad.getId())
 						.padPosition(pad.getReadablePosition())
 						.padName(pad.getName())

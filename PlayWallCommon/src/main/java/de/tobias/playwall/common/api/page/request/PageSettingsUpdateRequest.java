@@ -1,6 +1,6 @@
 package de.tobias.playwall.common.api.page.request;
 
-import de.tobias.playwall.common.api.common.Color;
+import de.tobias.playwall.common.api.page.PageSettingsDto;
 import de.tobias.playwall.common.net.RequestMessage;
 import lombok.*;
 
@@ -14,6 +14,5 @@ import java.util.UUID;
 public class PageSettingsUpdateRequest extends RequestMessage
 {
 	private UUID pageId;
-	private String name;
-	private Color color;
+	private PageSettingsDto pageSettings;
 }

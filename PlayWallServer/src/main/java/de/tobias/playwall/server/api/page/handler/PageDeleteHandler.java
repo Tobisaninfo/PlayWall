@@ -46,7 +46,7 @@ class PageDeleteHandler extends UndoableRequestHandler<PageDeleteRequest>
 		}
 
 		final Page page = pageOptional.get();
-		final String pageName = page.getName();
+		final String pageName = page.getSettings().getName();
 
 		final String shortDescription = messageSource.getMessage("undo.description.short.page.delete", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longDescription = messageSource.getMessage("undo.description.long.page.delete", new Object[]{pageName}, LocaleContextHolder.getLocale());

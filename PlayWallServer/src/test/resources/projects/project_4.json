@@ -24,7 +24,10 @@
     "pages": [
         {
             "id": "5eee891b-7e4e-451a-b4be-116770f73677",
-            "name": "Seite 1",
+            "settings": {
+                "name": "Seite 1",
+                "color": "GRAY1"
+            },
             "position": 0,
             "timeMode": null,
             "defaultColor": null,
@@ -41,7 +44,10 @@
         },
         {
             "id": "209e515b-4237-4fc3-968b-79da4356836d",
-            "name": "Seite 3",
+            "settings": {
+                "name": "Seite 3",
+                "color": "GRAY1"
+            },
             "position": 1,
             "timeMode": null,
             "defaultColor": null,

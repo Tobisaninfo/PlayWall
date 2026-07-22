@@ -5,6 +5,7 @@ import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import lombok.Getter;
 
@@ -128,11 +129,10 @@ public class ClientProjectController
 	}
 
 
-	public void updatePageSettings(UUID pageId, String newName, ModernColor color)
+	public void updatePageSettings(UUID pageId, PageSettings pageSettings)
 	{
 		final Page page = project.getPage(pageId);
-		page.setName(newName);
-		page.setColor(color);
+		page.setSettings(pageSettings);
 	}
 
 	private void createPadControllerForPage(Page page)

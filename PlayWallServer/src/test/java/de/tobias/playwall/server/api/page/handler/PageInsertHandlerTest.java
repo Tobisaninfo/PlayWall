@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.pad.AudioPadContentDto;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.page.PageDto;
+import de.tobias.playwall.common.api.page.PageSettingsDto;
 import de.tobias.playwall.common.api.page.request.PageInsertRequest;
 import de.tobias.playwall.common.api.page.update.PageInsertUpdate;
 import de.tobias.playwall.server.TestUtils;
@@ -106,7 +107,9 @@ class PageInsertHandlerTest extends AbstractRequestHandlerTest
 
 		final PageDto pageDto = PageDto.builder()
 				.id(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"))
-				.name("New Page")
+				.settings(PageSettingsDto.builder()
+						.name("New Page")
+						.build())
 				.position(3)
 				.pads(IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> PadDto.builder().id(UUID.randomUUID()).position(i).build())
@@ -148,7 +151,9 @@ class PageInsertHandlerTest extends AbstractRequestHandlerTest
 
 		final PageDto pageDto = PageDto.builder()
 				.id(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"))
-				.name("New Page")
+				.settings(PageSettingsDto.builder()
+						.name("New Page")
+						.build())
 				.position(3)
 				.pads(IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> PadDto.builder().id(UUID.randomUUID()).position(i).build())

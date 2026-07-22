@@ -5,6 +5,7 @@ import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
+import de.tobias.playwall.server.common.model.page.PageSettings;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -183,8 +184,10 @@ public class ProjectService
 
 		final Page page = Page.builder()
 				.id(UUID.randomUUID())
-				.name(name)
-				.color(Color.GRAY1)
+				.settings(PageSettings.builder()
+						.name(name)
+						.color(Color.GRAY1)
+						.build())
 				.position(nextPagePosition)
 				.pads(new ArrayList<>())
 				.build();
@@ -244,12 +247,12 @@ public class ProjectService
 		}
 		final Page page = pageOptional.get();
 
-		if(project.containsPageName(newName) && !page.getName().equals(newName))
+		if(project.containsPageName(newName) && !page.getSettings().getName().equals(newName))
 		{
 			throw new PageNameAlreadyExistsException(pageId, newName);
 		}
 
-		page.setName(newName);
+		page.getSettings().setName(newName);
 	}
 
 	public Page duplicatePage(Project project, UUID pageId) throws PageNotExistsException
@@ -265,7 +268,7 @@ public class ProjectService
 		int copyIndex = 1;
 		do
 		{
-			name = messageSource.getMessage("page.name.duplicate", new Object[]{page.getName(), copyIndex}, LocaleContextHolder.getLocale());
+			name = messageSource.getMessage("page.name.duplicate", new Object[]{page.getSettings().getName(), copyIndex}, LocaleContextHolder.getLocale());
 			copyIndex++;
 		}
 		while(project.containsPageName(name));
@@ -277,7 +280,10 @@ public class ProjectService
 		final int nextPagePosition = page.getPosition() + 1;
 		final Page newPage = Page.builder()
 				.id(UUID.randomUUID())
-				.name(name)
+				.settings(PageSettings.builder()
+						.name(name)
+						.color(Color.GRAY1)
+						.build())
 				.position(nextPagePosition)
 				.pads(newPads)
 				.build();

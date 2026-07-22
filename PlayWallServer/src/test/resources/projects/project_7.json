@@ -24,7 +24,10 @@
     "pages": [
         {
             "id": "c51ca03e-0983-47ea-839d-dcf31ea41c69",
-            "name": "Page 1",
+            "settings": {
+                "name": "Page 1",
+                "color": "GRAY1"
+            },
             "position": 0,
             "pads": [
                 {

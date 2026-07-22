@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.page.handler;
 
+import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.page.request.PageImportRequest;
 import de.tobias.playwall.common.api.page.update.PageAddUpdate;
 import de.tobias.playwall.server.TestUtils;
@@ -64,7 +65,8 @@ class PageImportHandlerTest extends AbstractUndoableRequestHandlerTest<PageImpor
 				.first()
 				.satisfies(update -> {
 					assertThat(update.getPage().id()).isNotEqualTo(pageExport.page().getId());
-					assertThat(update.getPage().name()).isEqualTo(pageExport.page().getName());
+					assertThat(update.getPage().settings().name()).isEqualTo(pageExport.page().getSettings().getName());
+					assertThat(update.getPage().settings().color()).isEqualTo(Color.GRAY1);
 					assertThat(update.getPage().position()).isZero();
 
 					assertThat(update.getPage().pads()).
@@ -97,7 +99,7 @@ class PageImportHandlerTest extends AbstractUndoableRequestHandlerTest<PageImpor
 				.hasSize(1)
 				.first()
 				.satisfies(update -> {
-					assertThat(update.getPage().name()).isEqualTo(pageExport.page().getName() + " - 1");
+					assertThat(update.getPage().settings().name()).isEqualTo(pageExport.page().getSettings().getName() + " - 1");
 					assertThat(update.getPage().position()).isEqualTo(1);
 				});
 	}

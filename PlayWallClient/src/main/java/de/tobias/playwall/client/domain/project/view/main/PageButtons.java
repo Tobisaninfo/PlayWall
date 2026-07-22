@@ -1,9 +1,9 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
 import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.ViewConstants;
-import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -140,16 +140,14 @@ public class PageButtons extends FlowPane
 		getChildren().removeIf(node -> node.getUserData() != null);
 		for(Page page : pages)
 		{
-			final Button button = new Button(limitText(page.getName()));
+			final PageSettings pageSettings = page.getSettings();
+
+			final Button button = new Button(limitText(pageSettings.getName()));
 			button.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
 			button.getStyleClass().add(ViewConstants.PAGE_BUTTON_STYLECLASS);
-			if(page.getColor() != null)
+			if(pageSettings.getColor() != null)
 			{
-				button.getStyleClass().add(page.getColor().name());
-			}
-			else
-			{
-				button.getStyleClass().add(ModernColor.YELLOW1.name());
+				button.getStyleClass().add(pageSettings.getColor().name());
 			}
 			button.setFocusTraversable(false);
 			button.setUserData(page);

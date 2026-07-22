@@ -7,10 +7,12 @@ import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
+import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.pad.PadDto;
 import de.tobias.playwall.common.api.page.PageDto;
+import de.tobias.playwall.common.api.page.PageSettingsDto;
 import de.tobias.playwall.common.api.page.update.*;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -29,6 +31,8 @@ import static org.mockito.Mockito.mock;
 
 class PageListenerTest extends AbstractViewControllerTest
 {
+	private static final String PAGE_BUTTON_QUERY = "." + ViewConstants.PAGE_BUTTON_STYLECLASS;
+
 	private AppContext context;
 
 	private MainViewController mainViewController;
@@ -70,18 +74,18 @@ class PageListenerTest extends AbstractViewControllerTest
 	{
 		showMainView();
 
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(2);
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll()).hasSize(2);
 
-		eventHandler.fireEvent(new PageAddUpdate(new PageDto(UUID.randomUUID(), "Page 3", Color.GRAY1, 1,
+		eventHandler.fireEvent(new PageAddUpdate(new PageDto(UUID.randomUUID(), new PageSettingsDto("Page 3", Color.GRAY1), 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3, Color.LIGHT_GREEN2, null, null, null)).toList())));
 		WaitForAsyncUtils.waitForFxEvents();
 
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).hasSize(3);
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll()).hasSize(3);
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactlyInAnyOrder("Page 1", "Page 2", "Page 3");
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll()).last().satisfies(button -> assertThat(((Button) button).getStyleClass()).contains(ViewConstants.PAGE_BUTTON_STYLECLASS));
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll()).last().satisfies(button -> assertThat(((Button) button).getPseudoClassStates()).contains(PseudoClasses.SELECTED));
 	}
 
 	@Test
@@ -90,7 +94,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -105,7 +109,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -119,7 +123,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -129,7 +133,7 @@ class PageListenerTest extends AbstractViewControllerTest
 
 		// Perform action
 		final UUID newPageId = UUID.randomUUID();
-		eventHandler.fireEvent(new PageInsertUpdate(new PageDto(newPageId, "Page 3", Color.GRAY1, 1,
+		eventHandler.fireEvent(new PageInsertUpdate(new PageDto(newPageId, new PageSettingsDto("Page 3", Color.GRAY1), 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3, Color.LIGHT_GREEN2, null, null, null)).toList()),
 				1, Map.of(
@@ -138,7 +142,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 3", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -154,7 +158,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -164,14 +168,14 @@ class PageListenerTest extends AbstractViewControllerTest
 
 		// Perform action
 		final UUID newPageId = UUID.randomUUID();
-		eventHandler.fireEvent(new PageReplaceUpdate(new PageDto(newPageId, "Page 3", Color.GRAY1, 1,
+		eventHandler.fireEvent(new PageReplaceUpdate(new PageDto(newPageId, new PageSettingsDto("Page 3", Color.GRAY1), 1,
 				IntStream.range(0, project.getMetadata().getNumberOfPadsPerPage())
 						.mapToObj(i -> new PadDto(UUID.randomUUID(), i, null, null, null, Color.GRAY1, Color.RED3, Color.LIGHT_GREEN2, null, null, null)).toList()),
 				1));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 3");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -186,7 +190,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -202,7 +206,7 @@ class PageListenerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 2", "Page 1");
 		assertThat(project.getPages()).extracting(Page::getId).containsExactly(
@@ -218,18 +222,18 @@ class PageListenerTest extends AbstractViewControllerTest
 		showMainView();
 
 		// Check precondition
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Page 1", "Page 2");
 
 		// Perform action
 		eventHandler.fireEvent(new PageSettingsUpdate(
-				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), "Renamed Page", Color.GRAY1
+				UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), new PageSettingsDto("Renamed Page", Color.GRAY1)
 		));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// Verify
-		assertThat(robot.lookup("." + ViewConstants.PAGE_BUTTON_STYLECLASS).queryAll())
+		assertThat(robot.lookup(PAGE_BUTTON_QUERY).queryAll())
 				.extracting(node -> ((Button) node).getText())
 				.containsExactly("Renamed Page", "Page 2");
 	}

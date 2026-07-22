@@ -4,6 +4,8 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadMapper;
+import de.tobias.playwall.client.domain.page.PageSettings;
+import de.tobias.playwall.client.domain.page.PageSettingsMapper;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
@@ -38,6 +40,7 @@ class ClientImpl implements Client
 {
 	private final ProjectMetadataMapper projectMetadataMapper;
 	private final ProjectMapper projectMapper;
+	private final PageSettingsMapper pageSettingsMapper;
 	private final PadMapper padMapper;
 	private final SettingsMapper settingsMapper;
 	private final AllProjectsInfoMapper allProjectsInfoMapper;
@@ -201,9 +204,9 @@ class ClientImpl implements Client
 	}
 
 	@Override
-	public void updatePageSettings(UUID pageId, String newName, Color color) throws PlayWallApiException
+	public void updatePageSettings(UUID pageId, PageSettings pageSettings) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new PageSettingsUpdateRequest(pageId, newName, color));
+		clientWebSocketHandler.send(new PageSettingsUpdateRequest(pageId, pageSettingsMapper.pageSettingsToPageSettingsDto(pageSettings)));
 	}
 
 	@Override

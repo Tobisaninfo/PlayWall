@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.page;
 
 import de.tobias.playwall.server.api.page.model.PageExport;
 import de.tobias.playwall.server.common.model.page.Page;
+import de.tobias.playwall.server.common.model.page.PageSettings;
 import de.tobias.playwall.server.common.model.project.Project;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,18 +66,20 @@ public class PageService
 		final PageExport pageExport = jsonMapper.readValue(data, PageExport.class);
 
 		final Page page = pageExport.page();
+		final PageSettings settings = page.getSettings();
+
 		// Set new UUIDs
 		page.setId(UUID.randomUUID());
 		page.getPads().forEach(pad -> pad.setId(UUID.randomUUID()));
 
-		String name = page.getName();
+		String name = settings.getName();
 		int copyIndex = 1;
 		while(project.containsPageName(name))
 		{
-			name = messageSource.getMessage("page.name.duplicate", new Object[]{page.getName(), copyIndex}, LocaleContextHolder.getLocale());
+			name = messageSource.getMessage("page.name.duplicate", new Object[]{settings.getName(), copyIndex}, LocaleContextHolder.getLocale());
 			copyIndex++;
 		}
-		page.setName(name);
+		settings.setName(name);
 		page.setPosition(project.getPages().size());
 
 		project.getPages().add(page);

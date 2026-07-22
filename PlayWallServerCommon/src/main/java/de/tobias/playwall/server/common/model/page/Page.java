@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.common.model.page;
 
-import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import lombok.*;
 
@@ -20,8 +19,7 @@ public class Page
 {
 	private UUID id;
 
-	private String name;
-	private Color color;
+	private PageSettings settings;
 
 	private Integer position;
 	private List<Pad> pads;
@@ -42,8 +40,7 @@ public class Page
 		return Page.builder()
 				.id(generateNewId ? UUID.randomUUID() : id)
 				.position(position)
-				.name(name)
-				.color(color)
+				.settings(settings.copy())
 				.pads(pads == null ? null : pads.stream().map(pad -> pad.copy(generateNewId)).collect(Collectors.toList()))
 				.build();
 	}

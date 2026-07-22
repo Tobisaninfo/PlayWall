@@ -24,7 +24,10 @@
     "pages": [
         {
             "id": "af2b42e3-a87f-4d56-9995-417dc7c4e41c",
-            "name": "Page 1",
+            "settings": {
+                "name": "Page 1",
+                "color": "GRAY1"
+            },
             "position": 0,
             "pads": [
                 {
@@ -47,7 +50,10 @@
         },
         {
             "id": "e50774bf-1076-4c3c-9298-f83ebc599bf6",
-            "name": "Page 2",
+            "settings": {
+                "name": "Page 2",
+                "color": "GRAY1"
+            },
             "position": 1,
             "pads": [
                 {

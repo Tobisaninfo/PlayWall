@@ -72,7 +72,8 @@ class PageDuplicateHandlerTest extends AbstractUndoableRequestHandlerTest<PageDu
 				.last()
 				.satisfies(event -> {
 					assertThat(event.getPage().id()).isNotEqualTo(originalPageInstance.getId());
-					assertThat(event.getPage().name()).isEqualTo(originalPageInstance.getName() + " - 1");
+					assertThat(event.getPage().settings().name()).isEqualTo(originalPageInstance.getSettings().getName() + " - 1");
+					assertThat(event.getPage().settings().color()).isEqualTo(originalPageInstance.getSettings().getColor());
 					assertThat(event.getPage().position()).isEqualTo(originalPageInstance.getPosition() + 1);
 					assertThat(event.getPage().pads()).extracting(padMapper::padDtoToPad).usingRecursiveComparison()
 							.ignoringFieldsMatchingRegexes(".*id")

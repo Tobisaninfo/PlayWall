@@ -6,6 +6,7 @@ import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.api.settings.SettingsService;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
+import de.tobias.playwall.server.common.model.page.PageSettings;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.model.settings.Settings;
@@ -94,7 +95,7 @@ class ProjectServiceTest
 		final Project project = projectCaptor.getValue();
 		assertThat(project.getMetadata().getId()).isEqualTo(createdProject.getId());
 		assertThat(project.getPages()).hasSize(1);
-		assertThat(project.getPages().getFirst().getName()).isEqualTo("Seite 1");
+		assertThat(project.getPages().getFirst().getSettings().getName()).isEqualTo("Seite 1");
 		assertThat(project.getPages().getFirst().getPads()).hasSize(5 * 4);
 	}
 
@@ -106,7 +107,7 @@ class ProjectServiceTest
 
 		assertThat(page.getId()).isNotNull();
 		assertThat(page)
-				.extracting(Page::getPosition, Page::getName)
+				.extracting(Page::getPosition, e -> e.getSettings().getName())
 				.containsExactly(0, "Seite 1");
 
 		assertThat(project.getPages().getLast().getPads()).hasSize(6 * 4);
@@ -120,7 +121,7 @@ class ProjectServiceTest
 
 		assertThat(page.getId()).isNotNull();
 		assertThat(page)
-				.extracting(Page::getPosition, Page::getName)
+				.extracting(Page::getPosition, e -> e.getSettings().getName())
 				.containsExactly(2, "Seite 4");
 
 		assertThat(project.getPages().getLast().getPads()).hasSize(6 * 4);
@@ -134,7 +135,7 @@ class ProjectServiceTest
 		projectService.renamePage(project, pageId, "Updated Page Name");
 
 		assertThat(project.getPageById(pageId).orElseThrow())
-				.extracting(Page::getPosition, Page::getName)
+				.extracting(Page::getPosition, e -> e.getSettings().getName())
 				.containsExactly(0, "Updated Page Name");
 	}
 
@@ -147,7 +148,7 @@ class ProjectServiceTest
 				.isInstanceOf(PageNameAlreadyExistsException.class);
 
 		assertThat(project.getPageById(pageId).orElseThrow())
-				.extracting(Page::getPosition, Page::getName)
+				.extracting(Page::getPosition, e -> e.getSettings().getName())
 				.containsExactly(0, "Seite 1");
 	}
 
@@ -187,7 +188,7 @@ class ProjectServiceTest
 		final Page newPage = projectService.duplicatePage(project, page.getId());
 
 		assertThat(newPage)
-				.extracting(Page::getPosition, Page::getName, i -> i.getPads().size())
+				.extracting(Page::getPosition, e -> e.getSettings().getName(), i -> i.getPads().size())
 				.containsExactly(1, "Page 1 - 1", page.getPads().size());
 		assertThat(newPage.getId()).isNotEqualTo(page.getId());
 		assertThat(newPage.getPads().getFirst().getId()).isNotEqualTo(page.getPads().getFirst().getId());
@@ -198,12 +199,12 @@ class ProjectServiceTest
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final UUID page2Id = UUID.randomUUID();
-		project.getPages().add(Page.builder().id(page2Id).name("Page 1 - 1").position(1).build());
+		project.getPages().add(Page.builder().id(page2Id).settings(PageSettings.builder().name("Page 1 - 1").build()).position(1).build());
 		final Page page = project.getPageById(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")).orElseThrow();
 		final Page newPage = projectService.duplicatePage(project, page.getId());
 
 		assertThat(newPage)
-				.extracting(Page::getPosition, Page::getName, i -> i.getPads().size())
+				.extracting(Page::getPosition, e -> e.getSettings().getName(), i -> i.getPads().size())
 				.containsExactly(1, "Page 1 - 2", page.getPads().size());
 		assertThat(newPage.getId()).isNotEqualTo(page.getId());
 		assertThat(newPage.getPads().getFirst().getId()).isNotEqualTo(page.getPads().getFirst().getId());
@@ -233,13 +234,17 @@ class ProjectServiceTest
 		projectService.replacePage(project,
 				Page.builder()
 						.id(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"))
-						.name("Seite X")
+						.settings(PageSettings.builder()
+								.name("Seite X")
+								.build())
 						.build(),
 				0);
 
 		assertThat(project.getPages()).containsExactly(Page.builder()
 				.id(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"))
-				.name("Seite X")
+				.settings(PageSettings.builder()
+						.name("Seite X")
+						.build())
 				.position(0)
 				.build());
 	}
@@ -254,7 +259,10 @@ class ProjectServiceTest
 		projectService.insertPage(project,
 				Page.builder()
 						.id(UUID.fromString("4480bbf8-ef96-4592-97e3-cc9a2b6fa786"))
-						.name("Seite X").build(),
+						.settings(PageSettings.builder()
+								.name("Seite X")
+								.build())
+						.build(),
 				1);
 
 

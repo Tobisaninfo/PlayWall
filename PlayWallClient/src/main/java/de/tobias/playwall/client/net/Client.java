@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.net;
 
 import de.tobias.playwall.client.domain.pad.Pad;
+import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
@@ -62,7 +63,7 @@ public interface Client
 
 	void addPage() throws PlayWallApiException;
 
-	void updatePageSettings(UUID pageId, String newName, Color color) throws PlayWallApiException;
+	void updatePageSettings(UUID pageId, PageSettings settings) throws PlayWallApiException;
 
 	void deletePage(UUID pageId) throws PlayWallApiException;
 

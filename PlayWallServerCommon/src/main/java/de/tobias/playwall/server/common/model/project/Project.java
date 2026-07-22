@@ -3,6 +3,7 @@ package de.tobias.playwall.server.common.model.project;
 import com.fasterxml.jackson.annotation.JsonView;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
+import de.tobias.playwall.server.common.model.page.PageSettings;
 import lombok.*;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class Project
 
 	public boolean containsPageName(String name)
 	{
-		return pages.stream().map(Page::getName).anyMatch(name::equals);
+		return pages.stream().map(Page::getSettings).map(PageSettings::getName).anyMatch(name::equals);
 	}
 
 	@SuppressWarnings("java:S6204")

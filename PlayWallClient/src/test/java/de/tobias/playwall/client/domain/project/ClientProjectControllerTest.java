@@ -6,8 +6,8 @@ import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
+import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.view.style.color.ModernColor;
-import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
 import de.tobias.playwall.utils.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +85,7 @@ class ClientProjectControllerTest extends AbstractTest
 	{
 		final Pad pad1 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, null, null);
 		final Pad pad2 = new Pad(UUID.randomUUID(), 0, null, null, null, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, null, null);
-		final Page newPage = new Page(UUID.randomUUID(), "Seite 3", ModernColor.GRAY1, 2, List.of(pad1, pad2));
+		final Page newPage = new Page(UUID.randomUUID(), new PageSettings("Seite 3", ModernColor.GRAY1), 2, List.of(pad1, pad2));
 
 		controller.addPage(newPage);
 

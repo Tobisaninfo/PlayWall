@@ -29,12 +29,12 @@ class ProjectTest extends AbstractTest
 		assertThat(project.getPage(0)).isNotNull()
 				.satisfies(page -> assertThat(page.getId()).isEqualTo(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea")))
 				.satisfies(page -> assertThat(page.getPosition()).isZero())
-				.satisfies(page -> assertThat(page.getName()).isEqualTo("Page 1"));
+				.satisfies(page -> assertThat(page.getSettings().getName()).isEqualTo("Page 1"));
 
 		assertThat(project.getPage(1)).isNotNull()
 				.satisfies(page -> assertThat(page.getId()).isEqualTo(UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e")))
 				.satisfies(page -> assertThat(page.getPosition()).isEqualTo(1))
-				.satisfies(page -> assertThat(page.getName()).isEqualTo("Page 2"));
+				.satisfies(page -> assertThat(page.getSettings().getName()).isEqualTo("Page 2"));
 
 		assertThat(project.getPage(3)).isNull();
 	}
