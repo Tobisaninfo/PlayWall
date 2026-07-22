@@ -62,9 +62,7 @@ public class ProgramSettingsGeneralViewController extends BaseProgramSettingsVie
 		checkboxStartAutoLoadLatestProject.setSelected(param.getSettings().isAutoLoadLatestProjectOnStart());
 		comboBoxUnsavedChanges.getSelectionModel().select(param.getSettings().getUnsavedChangesMode());
 
-		comboBoxUnsavedChanges.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> checkboxAutosave.setDisable(newValue != UnsavedChangesMode.SAVE));
-
-		checkboxAutosave.setDisable(param.getSettings().getUnsavedChangesMode() != UnsavedChangesMode.SAVE);
+		checkboxAutosave.disableProperty().bind(comboBoxUnsavedChanges.getSelectionModel().selectedItemProperty().isNotEqualTo(UnsavedChangesMode.SAVE));
 		checkboxAutosave.setSelected(param.getSettings().isAutosave());
 
 		final Path debugFlag = app.getPath(PathType.CONFIGURATION, DEBUG_FLAG_FILE_NAME);
