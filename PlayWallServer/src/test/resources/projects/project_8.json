@@ -1,0 +1,80 @@
+{
+    "metadata": {
+        "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
+        "name": "Project 1",
+        "numberOfHorizontalPads": 6,
+        "numberOfVerticalPads": 4,
+        "volume": 1.0,
+        "timeMode": "ELAPSED",
+        "defaultColor": "GRAY1",
+        "playColor": "RED3",
+        "introColor": "BLUE1",
+        "eofWarningTime": 5.0,
+        "fadeSettings": {
+            "fadeInDuration": 0.0,
+            "fadeInOnPlay": false,
+            "fadeInOnResume": false,
+            "fadeOutDuration": 0.0,
+            "fadeOutOnPause": false,
+            "fadeOutOnStop": false,
+            "fadeOutOnEndOfFile": false
+        },
+        "VERSION": 1
+    },
+    "pages": [
+        {
+            "id": "1e76b8b3-2d58-4533-aa57-e2b66360e9ea",
+            "name": "Page 1",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "fc427184-2e55-4734-8148-5fb657963616",
+                    "name": "Test Pad 1",
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "introColor": null,
+                    "content": null
+                },
+                {
+                    "id": "efb30a6f-593b-4a15-94db-faa2d4117e4f",
+                    "name": "Test Pad 2",
+                    "position": 1,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "introColor": null,
+                    "content": null
+                }
+            ]
+        },
+        {
+            "id": "15096905-881b-4df6-9af8-26b8a47209aa",
+            "name": "Page 2",
+            "position": 0,
+            "pads": [
+                {
+                    "id": "2b3b75ab-fd9f-4fac-961a-7577baf2b72b",
+                    "name": "Test Pad 3",
+                    "position": 0,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "introColor": null,
+                    "content": null
+                },
+                {
+                    "id": "eff6cf01-20a3-4690-a6dd-395f0daf04de",
+                    "name": "Test Pad 4",
+                    "position": 1,
+                    "timeMode": null,
+                    "defaultColor": null,
+                    "playColor": null,
+                    "introColor": null,
+                    "content": null
+                }
+            ]
+        }
+    ]
+}

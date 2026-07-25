@@ -35,6 +35,7 @@ class PadDragTest extends AbstractViewControllerTest
 	public static final UUID PAD_0_0 = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 	public static final UUID PAD_0_1 = UUID.fromString("57accabc-7d19-473c-a0a1-ea5c61b85e18");
 	public static final UUID PAD_1_1 = UUID.fromString("94ad54b2-995a-4da6-87c8-b86e5b97d03e");
+
 	private AppContext context;
 	private final Client client = mock(Client.class);
 
@@ -70,7 +71,8 @@ class PadDragTest extends AbstractViewControllerTest
 	{
 		return Stream.of(
 				of("Duplizieren", (Verifier) (Client client, UUID pad1, UUID pad2) -> verify(client).duplicatePad(pad1, pad2)),
-				of("Ersetzen", (Verifier) (Client client, UUID pad1, UUID pad2) -> verify(client).movePad(pad1, pad2))
+				of("Ersetzen", (Verifier) (Client client, UUID pad1, UUID pad2) -> verify(client).movePad(pad1, pad2)),
+				of("Tauschen", (Verifier) (Client client, UUID pad1, UUID pad2) -> verify(client).swapPad(pad1, pad2))
 		);
 	}
 
