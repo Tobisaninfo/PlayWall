@@ -24,6 +24,10 @@ import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.drag.FileDragOptionView;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -96,6 +100,9 @@ public class DesktopPadView implements PadView
 	private ClientPadController padController;
 
 	private final WarningFlashAnimation warningAnimation;
+	private final BooleanProperty shouldWarningAnimationPlayEndOfFile = new SimpleBooleanProperty(false);
+	private final BooleanProperty shouldWarningAnimationPlayFading = new SimpleBooleanProperty(false);
+	private final BooleanBinding shouldWarningAnimationPlay = Bindings.or(shouldWarningAnimationPlayEndOfFile, shouldWarningAnimationPlayFading);
 
 	public DesktopPadView()
 	{
@@ -212,6 +219,17 @@ public class DesktopPadView implements PadView
 		superRoot.setOnDragDropped(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onDragDropped(this, event)));
 		superRoot.setOnDragExited(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onMouseDragExited(this, event)));
 		superRoot.setOnMouseReleased(event -> eventDispatcher.dispatchEvent(event, listener -> listener.onMouseReleased(this, event)));
+
+		shouldWarningAnimationPlay.addListener((_, _, newValue) -> {
+			if(Boolean.TRUE.equals(newValue))
+			{
+				warningAnimation.start();
+			}
+			else
+			{
+				warningAnimation.stop();
+			}
+		});
 	}
 
 	@Override
@@ -342,11 +360,11 @@ public class DesktopPadView implements PadView
 
 			if(status == PadStatus.PAUSING || status == PadStatus.STOPPING)
 			{
-				warningAnimation.start();
+				shouldWarningAnimationPlayFading.setValue(true);
 			}
 			else if(status == PadStatus.PAUSED || status == PadStatus.STOPPED)
 			{
-				warningAnimation.stop();
+				shouldWarningAnimationPlayFading.setValue(false);
 			}
 		});
 	}
@@ -406,13 +424,13 @@ public class DesktopPadView implements PadView
 			// ⚠️do not join conditions, elsewhere the animation is instantly stopped on the "else if" case
 			if(!warningAnimation.isRunning())
 			{
-				warningAnimation.start();
+				shouldWarningAnimationPlayEndOfFile.setValue(true);
 			}
 		}
 		// Stop animation if any of the above conditions are not met and a animation is running
 		else if(warningAnimation.isRunning())
 		{
-			warningAnimation.stop();
+			shouldWarningAnimationPlayEndOfFile.setValue(false);
 		}
 	}
 
