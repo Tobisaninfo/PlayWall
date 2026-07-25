@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
+import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.input.DragEvent;
@@ -19,6 +20,13 @@ public class FileDragListener implements PadInputListener
 	{
 		if(event.getDragboard().hasFiles())
 		{
+			final ClientPadController padController = padView.getPadController();
+			if(padController.getStatus() != null && padController.getStatus().isAnyPlayingState())
+			{
+				event.consume();
+				return;
+			}
+
 			final List<DropOption> fileDragOptions = new ArrayList<>();
 			final Optional<NewFileDragOption> newMediaDragOption = NewFileDragOption.create(event.getDragboard().getFiles().getFirst().toPath());
 			newMediaDragOption.ifPresent(fileDragOptions::add);
