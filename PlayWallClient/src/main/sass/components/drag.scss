@@ -1,14 +1,27 @@
 .dnd-hud {
     -fx-background-color: rgba(50, 50, 50, 0.8);
     -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-spacing: 5px;
+    -fx-alignment: CENTER;
 }
 
 .dnd-file-option {
     -fx-text-fill: white;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-content-display: TOP;
+    -fx-max-width: infinity;
+    -fx-max-height: infinity;
+
+    .icon {
+        -fx-fill: white;
+    }
 
     &:drag {
         -fx-text-fill: white;
-        -fx-border-width: 2px;
+        -fx-border-width: 1px;
+        -fx-border-insets: -1px;
         -fx-border-color: white;
         -fx-border-radius: 10px;
     }

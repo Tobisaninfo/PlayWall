@@ -6,7 +6,6 @@ import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -34,9 +33,6 @@ public class DropOptionSelect
 		optionPane.getStyleClass().add("dnd-hud");
 		optionPane.prefWidthProperty().bind(parent.widthProperty());
 		optionPane.prefHeightProperty().bind(parent.heightProperty());
-		optionPane.setAlignment(Pos.CENTER);
-		optionPane.setPadding(new Insets(5));
-		optionPane.setSpacing(5);
 
 		inTransition = createTransition(true);
 		outTransition = createTransition(false);
@@ -103,7 +99,6 @@ public class DropOptionSelect
 			label.setText(option.getLabel());
 
 			final FontIcon graphics = new FontIcon(option.getIcon());
-			graphics.setStyle("-fx-text-fill: white;");
 			label.setGraphic(graphics);
 			label.setWrapText(true);
 
@@ -118,12 +113,6 @@ public class DropOptionSelect
 				selectedOption = null;
 			});
 
-			label.setAlignment(Pos.CENTER);
-			label.setTextAlignment(TextAlignment.CENTER);
-			label.setContentDisplay(ContentDisplay.TOP);
-
-			label.maxWidthProperty().bind(optionPane.widthProperty().divide(options.size()).subtract(12.5));
-			label.setMaxHeight(Double.MAX_VALUE);
 			HBox.setHgrow(label, Priority.ALWAYS);
 
 			optionPane.getChildren().add(label);
