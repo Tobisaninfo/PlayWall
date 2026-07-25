@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static de.tobias.playwall.client.view.components.ViewConstants.PAGE_BUTTON_STYLECLASS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -43,7 +44,7 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 
 class MainViewControllerPageTest extends AbstractViewControllerTest
 {
-	private static final String PAGE_BUTTON_QUERY = "." + ViewConstants.PAGE_BUTTON_STYLECLASS;
+	private static final String PAGE_BUTTON_QUERY = "." + PAGE_BUTTON_STYLECLASS;
 
 	private AppContext context;
 
@@ -96,6 +97,10 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		// Assert highlighting
 		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getPseudoClassStates()).contains(PseudoClasses.SELECTED);
 		assertThat(mainViewController.getPageButtons().getChildren().get(1).getPseudoClassStates()).doesNotContain(PseudoClasses.SELECTED);
+
+		// Assert page button color
+		assertThat(mainViewController.getPageButtons().getChildren().getFirst().getStyleClass()).contains(PAGE_BUTTON_STYLECLASS, "GRAY1");
+		assertThat(mainViewController.getPageButtons().getChildren().get(1).getStyleClass()).contains(PAGE_BUTTON_STYLECLASS, "GRAY2");
 
 		// Assert current page
 		final DesktopPadView padView1 = (DesktopPadView) mainViewController.getPadViewForPosition(0);
