@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.page.view.PageButtonInputListener;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -25,6 +26,7 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 
 	private final FluentClient client;
 	private final ClientProjectController projectController;
+	private final ErrorAlertBuilder errorAlertBuilder;
 	private final MainViewController mainViewController;
 
 	@Override
@@ -76,7 +78,7 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 			}
 
 			final List<DropOption> fileDragOptions = List.of(
-					new PadDropDuplicateOption(projectController, client)
+					new PadDropDuplicateOption(projectController, client, errorAlertBuilder)
 			);
 
 			padView.getDropOptionSelect().showOptions(fileDragOptions);

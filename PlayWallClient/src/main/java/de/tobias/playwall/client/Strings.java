@@ -147,6 +147,7 @@ public class Strings
 	public static final String UI_ERRORS_PAGE_REORDER  = "ui.errors.page.reorder";
 	public static final String UI_ERRORS_PAGE_DELETE  = "ui.errors.page.delete";
 	public static final String UI_ERRORS_PAGE_DUPLICATE  = "ui.errors.page.duplicate";
+	public static final String UI_ERRORS_DRAG_DUPLICATE = "ui.errors.drag.duplicate";
 	public static final String UI_ERRORS_SAVE  = "ui.errors.save";
 	public static final String UI_ERRORS_UNDO  = "ui.errors.undo";
 	public static final String UI_ERRORS_REDO  = "ui.errors.redo";

@@ -267,7 +267,7 @@ public class MainViewController extends ViewControllerBase
 		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
 		padEventDispatcher.addPadInputListener(new FileDragListener());
-		final PadDragListener padDragListener = new PadDragListener(client, projectController, this);
+		final PadDragListener padDragListener = new PadDragListener(client, projectController, errorAlertBuilder, this);
 		padEventDispatcher.addPadInputListener(padDragListener);
 
 		pageEventDispatcher.addPageInputListener(new PageButtonInputListener()

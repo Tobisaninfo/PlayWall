@@ -10,16 +10,20 @@ import de.tobias.playwall.client.domain.pad.view.desktop.listener.PadDragListene
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.drag.DropOption;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 public class PadDropDuplicateOption implements DropOption
 {
 	private final ClientProjectController projectController;
 	private final FluentClient client;
+	private final ErrorAlertBuilder errorAlertBuilder;
 
 	@Override
 	public void handleDrag(DesktopPadView padView, DragEvent event)
@@ -36,7 +40,8 @@ public class PadDropDuplicateOption implements DropOption
 		}
 		catch(PlayWallApiException e)
 		{
-			throw new RuntimeException(e); // TODO
+			log.error("Cannot duplicate pad", e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_DRAG_DUPLICATE), e.getMessage(), e.getError(), padView.getRootNode().getScene().getWindow()).showAndWait();
 		}
 	}
 
