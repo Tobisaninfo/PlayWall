@@ -42,7 +42,8 @@ public class IconDeclaration
 		)));
 		data.add(new IconEntry(FontAwesomeType.PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite hinzufügen"))));
 		data.add(new IconEntry(FontAwesomeType.PEN_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite umbenennen"))));
-		data.add(new IconEntry(FontAwesomeType.COPY_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite duplizieren"))));
+		data.add(new IconEntry(FontAwesomeType.COPY_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite duplizieren"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Kachel duplizieren"))));
+		data.add(new IconEntry(FontAwesomeType.CIRCLE_ARROW_RIGHT_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Kachel ersetzen"))));
 		data.add(new IconEntry(FontAwesomeType.PAINTBRUSH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Farbmodus (globaler Colorpicker"))));
 		data.add(new IconEntry(FontAwesomeType.FILE_IMPORT_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt importieren"))));
 		data.add(new IconEntry(FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt öffnen"))));
