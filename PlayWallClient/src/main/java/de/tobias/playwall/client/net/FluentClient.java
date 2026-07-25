@@ -92,6 +92,8 @@ public interface FluentClient
 		void duplicate(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
 
 		void move(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
+
+		void swap(UUID padId1, UUID padId2) throws PlayWallApiException;
 	}
 
 	interface PageBuilder

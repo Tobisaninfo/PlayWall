@@ -232,6 +232,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.movePad(sourcePad, targetPad);
 		}
+
+		@Override
+		public void swap(UUID padId1, UUID padId2) throws PlayWallApiException
+		{
+			delegate.swapPad(padId1, padId2);
+		}
 	}
 
 	@AllArgsConstructor

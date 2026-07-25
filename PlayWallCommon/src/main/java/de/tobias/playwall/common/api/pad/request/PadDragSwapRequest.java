@@ -10,14 +10,8 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class PadDragMoveRequest extends RequestMessage
+public class PadDragSwapRequest extends RequestMessage
 {
-	/**
-	 * Source pad that move onto the target pad location
-	 */
-	private UUID sourcePadId;
-	/**
-	 * Pad get's replaced by a copy of the source pad
-	 */
-	private UUID targetPadId;
+	private UUID padId1;
+	private UUID padId2;
 }

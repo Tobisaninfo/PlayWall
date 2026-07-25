@@ -91,6 +91,8 @@ public interface Client
 
 	void movePad(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
 
+	void swapPad(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
+
 	void changeVolume(UUID padId, double volume) throws PlayWallApiException;
 
 	void changeGlobalVolume(double volume) throws PlayWallApiException;

@@ -289,6 +289,12 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public void swapPad(UUID padId1, UUID padId2) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadDragSwapRequest(padId1, padId2));
+	}
+
+	@Override
 	public void changeVolume(UUID padId, double volume) throws PlayWallApiException
 	{
 		clientWebSocketHandler.send(new PadChangeVolumeRequest(padId, volume));
