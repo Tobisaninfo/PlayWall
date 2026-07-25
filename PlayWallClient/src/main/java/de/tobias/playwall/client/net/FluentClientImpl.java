@@ -222,7 +222,7 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
-		public void duplicatePad(UUID sourcePad, UUID targetPad) throws PlayWallApiException
+		public void duplicate(UUID sourcePad, UUID targetPad) throws PlayWallApiException
 		{
 			delegate.duplicatePad(sourcePad, targetPad);
 		}

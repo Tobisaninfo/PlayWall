@@ -89,7 +89,7 @@ public interface FluentClient
 
 		void batchReplaceMedia(Map<UUID, String> newMediaPathsByPadId, Set<UUID> padIdsToDelete) throws PlayWallApiException;
 
-		void duplicatePad(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
+		void duplicate(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
 
 		void move(UUID sourcePad, UUID targetPad) throws PlayWallApiException;
 	}

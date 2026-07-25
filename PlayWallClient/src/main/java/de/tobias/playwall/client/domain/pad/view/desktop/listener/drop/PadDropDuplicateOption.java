@@ -36,7 +36,7 @@ public class PadDropDuplicateOption implements DropOption
 
 		try
 		{
-			client.currentProject().duplicatePad(sourcePad.getId(), targetPad.getId());
+			client.currentProject().duplicate(sourcePad.getId(), targetPad.getId());
 		}
 		catch(PlayWallApiException e)
 		{
