@@ -226,6 +226,12 @@ class FluentClientImpl implements FluentClient
 		{
 			delegate.duplicatePad(sourcePad, targetPad);
 		}
+
+		@Override
+		public void move(UUID sourcePad, UUID targetPad) throws PlayWallApiException
+		{
+			delegate.movePad(sourcePad, targetPad);
+		}
 	}
 
 	@AllArgsConstructor
