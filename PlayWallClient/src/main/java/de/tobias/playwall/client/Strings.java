@@ -42,6 +42,7 @@ public class Strings
 	public static final String UI_PAGE_DELETE = "ui.page.delete";
 
 	public static final String UI_PAD_DRAG_DUPLICATE = "ui.pad.drag.duplicate";
+	public static final String UI_PAD_DRAG_SWAP = "ui.pad.drag.swap";
 	public static final String UI_PAD_DRAG_MOVE = "ui.pad.drag.move";
 
 	public static final String UI_MENU_FILE = "ui.menu.file";
@@ -150,6 +151,7 @@ public class Strings
 	public static final String UI_ERRORS_PAGE_DUPLICATE  = "ui.errors.page.duplicate";
 	public static final String UI_ERRORS_DRAG_DUPLICATE = "ui.errors.drag.duplicate";
 	public static final String UI_ERRORS_DRAG_MOVE = "ui.errors.drag.move";
+	public static final String UI_ERRORS_DRAG_SWAP = "ui.errors.drag.swap";
 	public static final String UI_ERRORS_SAVE  = "ui.errors.save";
 	public static final String UI_ERRORS_UNDO  = "ui.errors.undo";
 	public static final String UI_ERRORS_REDO  = "ui.errors.redo";
