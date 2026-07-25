@@ -57,6 +57,8 @@ class PadDragTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 	}
 
+	// Duplicate
+
 	@Test
 	void testDragDuplicateSamePage(FxRobot robot) throws PlayWallApiException
 	{
@@ -92,5 +94,44 @@ class PadDragTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		verify(client).duplicatePad(PAD_0_0, PAD_1_1);
+	}
+
+	// Move
+
+	@Test
+	void testDragMoveSamePage(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		Node pad1 = mainViewController.getPadViewForPosition(0).getRootNode();
+		Node pad2 = mainViewController.getPadViewForPosition(1).getRootNode();
+
+		robot.moveTo(pad1);
+		robot.press(MouseButton.PRIMARY);
+		robot.moveTo(pad2);
+		robot.moveTo("Ersetzen");
+		robot.release(MouseButton.PRIMARY);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).movePad(PAD_0_0, PAD_0_1);
+	}
+
+	@Test
+	void testDragMoveDifferentPage(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+
+		Node pad1 = mainViewController.getPadViewForPosition(0).getRootNode();
+		Node pad2 = mainViewController.getPadViewForPosition(1).getRootNode();
+
+		robot.moveTo(pad1);
+		robot.press(MouseButton.PRIMARY);
+		robot.moveTo("Page 2");
+		robot.moveTo(pad2);
+		robot.moveTo("Ersetzen");
+		robot.release(MouseButton.PRIMARY);
+		WaitForAsyncUtils.waitForFxEvents();
+
+		verify(client).movePad(PAD_0_0, PAD_1_1);
 	}
 }
