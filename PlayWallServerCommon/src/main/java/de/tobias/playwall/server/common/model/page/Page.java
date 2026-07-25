@@ -51,4 +51,14 @@ public class Page
 				.pads(pads == null ? null : pads.stream().map(pad -> pad.copy(generateNewId)).collect(Collectors.toList()))
 				.build();
 	}
+
+	public void removePad(Pad pad)
+	{
+		pads.remove(pad);
+	}
+
+	public void insertPad(Pad pad)
+	{
+		pads.add(pad.getPosition(), pad);
+	}
 }

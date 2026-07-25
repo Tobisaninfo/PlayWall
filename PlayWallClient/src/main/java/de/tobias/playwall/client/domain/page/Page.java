@@ -32,4 +32,14 @@ public class Page
 		final int index = pads.indexOf(target);
 		pads.set(index, source);
 	}
+
+	public void removePad(Pad pad)
+	{
+		pads.remove(pad);
+	}
+
+	public void insertPad(Pad pad)
+	{
+		pads.add(pad.getPosition(), pad);
+	}
 }

@@ -178,4 +178,20 @@ public class ProjectController
 			createNewPadController(source);
 		}
 	}
+
+	public void swapPad(Pad pad1, Pad pad2)
+	{
+		final Page pad1Page = getPageByPad(pad1.getId());
+		final Page pad2Page = getPageByPad(pad2.getId());
+
+		pad1Page.removePad(pad1);
+		pad2Page.removePad(pad2);
+
+		int position = pad1Page.getPosition();
+		pad1.setPosition(pad2.getPosition());
+		pad2.setPosition(position);
+
+		pad1Page.insertPad(pad2);
+		pad2Page.insertPad(pad1);
+	}
 }

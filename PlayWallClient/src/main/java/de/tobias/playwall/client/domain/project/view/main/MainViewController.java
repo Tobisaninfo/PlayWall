@@ -157,6 +157,7 @@ public class MainViewController extends ViewControllerBase
 	private PadLoadedListener padLoadedListener;
 	private PadStatusListener padStatusListener;
 	private PadReplaceListener padReplaceListener;
+	private PadSwapListener padSwapListener;
 	private PadPlayPositionListener padPlayPositionListener;
 	private ProjectSettingsUpdateListener projectSettingsUpdateListener;
 	private UndoHistoryUpdateListener undoHistoryUpdateListener;
@@ -228,6 +229,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padStatusListener);
 		padReplaceListener = new PadReplaceListener(projectController, padMapper, this);
 		eventHandler.registerListener(padReplaceListener);
+		padSwapListener = new PadSwapListener(projectController, this);
+		eventHandler.registerListener(padSwapListener);
 		padPlayPositionListener = new PadPlayPositionListener(projectController, this);
 		eventHandler.registerListener(padPlayPositionListener);
 		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper);

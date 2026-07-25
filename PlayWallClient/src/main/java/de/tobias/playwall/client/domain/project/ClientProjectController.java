@@ -166,6 +166,25 @@ public class ClientProjectController
 		createPadController(source);
 	}
 
+	public void swapPads(UUID padId1, UUID padId2)
+	{
+		final Pad pad1 = project.getPad(padId1);
+		final Pad pad2 = project.getPad(padId2);
+
+		final Page pad1Page = project.getPageByPadId(padId1);
+		final Page pad2Page = project.getPageByPadId(padId2);
+
+		pad1Page.removePad(pad1);
+		pad2Page.removePad(pad2);
+
+		int position = pad1Page.getPosition();
+		pad1.setPosition(pad2.getPosition());
+		pad2.setPosition(position);
+
+		pad1Page.insertPad(pad2);
+		pad2Page.insertPad(pad1);
+	}
+
 	public boolean isAtLeastOnePadPlaying()
 	{
 		return padControllers.values().stream()
