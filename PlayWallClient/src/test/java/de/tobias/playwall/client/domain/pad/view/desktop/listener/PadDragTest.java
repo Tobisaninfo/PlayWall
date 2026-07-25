@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.domain.pad.view.settings;
+package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
