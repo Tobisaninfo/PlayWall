@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.model.project;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
@@ -52,6 +53,7 @@ public class Project
 				.findFirst().orElse(null);
 	}
 
+	@JsonIgnore
 	public Map<UUID, Integer> getPagePositions()
 	{
 		return getPages().stream().collect(Collectors.toMap(
