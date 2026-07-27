@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,10 +40,10 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 {
 	private static final UUID PROJECT_ID_1 = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID_1, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID_1, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 
 	private static final UUID PROJECT_ID_2 = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_2 = new ProjectMetadata(PROJECT_ID_2, "Test 2", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+	private static final ProjectMetadata PROJECT_METADATA_2 = new ProjectMetadata(PROJECT_ID_2, "Test 2", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 
 	@TempDir
 	private Path tempDir;
@@ -122,7 +123,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 	@Test
 	void testNewProject(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_2.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+		ProjectMetadata metadata = new ProjectMetadata(PROJECT_METADATA_2.getId(), "Test 1", 4, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 
 		when(client.getProjects()).thenReturn(AllProjectsInfo.builder()

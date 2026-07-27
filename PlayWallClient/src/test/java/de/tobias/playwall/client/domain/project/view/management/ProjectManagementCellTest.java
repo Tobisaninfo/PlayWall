@@ -21,6 +21,7 @@ import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
@@ -33,9 +34,9 @@ import static org.testfx.assertions.api.Assertions.assertThat;
 class ProjectManagementCellTest extends ApplicationTest
 {
 	private static final UUID PROJECT_ID_1 = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID_1, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID_1, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 	private static final UUID PROJECT_ID_2 = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_2 = new ProjectMetadata(PROJECT_ID_2, "Test 2", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+	private static final ProjectMetadata PROJECT_METADATA_2 = new ProjectMetadata(PROJECT_ID_2, "Test 2", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 
 	private final ClientProjectController projectController = mock(ClientProjectController.class);
 	@SuppressWarnings("unchecked")

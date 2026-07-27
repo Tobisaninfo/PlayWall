@@ -2,6 +2,7 @@ open module de.tobias.playwall.client {
 	requires de.thecodelabs.libJfx;
 	requires de.thecodelabs.libUtils;
 	requires de.thecodelabs.libStorage;
+	requires de.thecodelabs.libMidi;
 	requires javafx.base;
 	requires javafx.fxml;
 	requires javafx.controls;

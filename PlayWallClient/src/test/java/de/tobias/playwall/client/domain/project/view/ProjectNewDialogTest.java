@@ -20,6 +20,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.*;
 class ProjectNewDialogTest extends AbstractViewControllerTest
 {
 	private static final UUID PROJECT_ID_1 = UUID.randomUUID();
-	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID_1, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+	private static final ProjectMetadata PROJECT_METADATA_1 = new ProjectMetadata(PROJECT_ID_1, "Test 1", 6, 4, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 
 	private AppContext context;
 	private final Client client = mock(Client.class);
@@ -58,7 +59,7 @@ class ProjectNewDialogTest extends AbstractViewControllerTest
 	@Test
 	void testCreateProjectOkay(FxRobot robot) throws PlayWallApiException
 	{
-		final ProjectMetadata metadata = new ProjectMetadata(UUID.randomUUID(), "Test", 5, 3, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+		final ProjectMetadata metadata = new ProjectMetadata(UUID.randomUUID(), "Test", 5, 3, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 		when(client.addProject(any(), anyInt(), anyInt())).thenReturn(metadata);
 
 		Platform.runLater(() -> {

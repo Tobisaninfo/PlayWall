@@ -4,11 +4,13 @@ import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.Builder;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Builder
 public record ProjectMetadataDto(UUID id, String name, Integer numberOfHorizontalPads, Integer numberOfVerticalPads,
-								 Double volume, TimeMode timeMode, Color defaultColor, Color playColor,
-								 Color introColor, Double eofWarningTime, FadeSettingsDto fadeSettings)
+                                 Double volume, TimeMode timeMode, Color defaultColor, Color playColor,
+                                 Color introColor, Double eofWarningTime, FadeSettingsDto fadeSettings,
+                                 Map<UUID, String> mappings, UUID selectedMapping)
 {
 }

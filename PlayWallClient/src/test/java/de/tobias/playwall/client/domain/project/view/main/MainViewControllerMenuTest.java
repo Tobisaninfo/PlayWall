@@ -26,6 +26,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -134,7 +135,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 	@Test
 	void testMenuNewProject(FxRobot robot) throws PlayWallApiException
 	{
-		ProjectMetadata metadata = new ProjectMetadata(projectEmpty.getMetadata().getId(), projectEmpty.getMetadata().getName(), 2, 2, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings());
+		ProjectMetadata metadata = new ProjectMetadata(projectEmpty.getMetadata().getId(), projectEmpty.getMetadata().getName(), 2, 2, 1.0, TimeMode.ELAPSED, ModernColor.GRAY1, ModernColor.RED3, ModernColor.LIGHT_GREEN2, null, new FadeSettings(), Map.of(), null);
 		when(projectNewDialog.showAndWait(any())).thenReturn(Optional.of(metadata));
 		when(client.getProject(projectEmpty.getMetadata().getId())).thenReturn(projectEmpty);
 

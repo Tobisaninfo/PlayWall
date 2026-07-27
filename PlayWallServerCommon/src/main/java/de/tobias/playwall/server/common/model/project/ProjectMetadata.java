@@ -6,6 +6,8 @@ import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -52,6 +54,11 @@ public class ProjectMetadata
 	@Builder.Default
 	private FadeSettings fadeSettings = new FadeSettings();
 
+	@Builder.Default
+	private Map<UUID, String> mappings = new HashMap<>();
+
+	private UUID selectedMapping;
+
 	public ProjectMetadata(UUID id, String name)
 	{
 		this.id = id;
@@ -78,6 +85,8 @@ public class ProjectMetadata
 				.introColor(introColor)
 				.eofWarningTime(eofWarningTime)
 				.fadeSettings(fadeSettings)
+				.mappings(mappings)
+				.selectedMapping(selectedMapping)
 				.build();
 	}
 }
