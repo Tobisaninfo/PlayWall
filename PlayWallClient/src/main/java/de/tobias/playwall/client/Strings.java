@@ -109,6 +109,7 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_GENERAL_TITLE = "ui.settings.project.general.title";
 	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE = "ui.settings.project.view.title";
 	public static final String UI_SETTINGS_PROJECT_FADE_TITLE = "ui.settings.project.fade.title";
+	public static final String UI_SETTINGS_PROJECT_MAPPING_TITLE = "ui.settings.project.mapping.title";
 	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
 	public static final String UI_SETTINGS_PROJECT_WARNING_EOF_SEC = "ui.settings.project.warning.eof.sec";
 
