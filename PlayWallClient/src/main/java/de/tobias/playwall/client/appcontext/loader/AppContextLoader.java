@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -22,13 +25,10 @@ public final class AppContextLoader
 		setupDependencies(new AppContextLoaderRequest().withAppContext(appContext).withBasePackages(PlayWallMain.class.getPackage().getName()));
 	}
 
-	@SuppressWarnings({"java:S3011", "unchecked", "rawtypes"})
 	public static void setupDependencies(AppContextLoaderRequest request)
 	{
 		final long start = System.currentTimeMillis();
 		final AppContext appContext = request.getAppContext();
-
-		final List<Class<? extends Annotation>> annotations = List.of(Service.class, ViewController.class);
 
 		try(ScanResult scanResult = new ClassGraph()
 				.enableAnnotationInfo()
@@ -37,38 +37,88 @@ public final class AppContextLoader
 				.rejectPackages(request.getRejectPackages())
 				.scan())
 		{
-			for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
-			{
-				final Class loadedClass = classInfo.loadClass();
-
-				final AnnotationInfo annotationInfo = annotations.stream().filter(classInfo::hasAnnotation).map(classInfo::getAnnotationInfo).findFirst().orElseThrow();
-				final AnnotationParameterValueList annotationValues = annotationInfo.getParameterValues();
-
-				Class superclass = ((AnnotationClassRef) annotationValues.get("superclass").getValue()).loadClass();
-				if(superclass.equals(Object.class))
-				{
-					superclass = loadedClass;
-				}
-
-				final Constructor injectConstructor = getInjectConstructor(loadedClass);
-				injectConstructor.setAccessible(true);
-
-				boolean isSingleton = (boolean) annotationValues.get("singleton").getValue();
-
-				final Function<AppContext, ?> loadFunction = request.getComponentInitializer().create(loadedClass, injectConstructor);
-				if(isSingleton)
-				{
-					appContext.registerLazySingleton(superclass, loadFunction);
-					log.debug("Registering singleton component {}", superclass);
-				}
-				else
-				{
-					appContext.registerLazy(superclass, loadFunction);
-					log.debug("Registering component {}", superclass);
-				}
-			}
+			loadBeans(request, scanResult, appContext);
+			loadServicesAndViewControllers(request, scanResult, appContext);
 		}
 		log.info("Dependency injection setup took {}ms", System.currentTimeMillis() - start);
+	}
+
+	@SuppressWarnings({"java:S3011", "unchecked", "rawtypes"})
+	private static void loadBeans(AppContextLoaderRequest request, ScanResult scanResult, AppContext appContext)
+	{
+		final List<Class<? extends Annotation>> annotations = List.of(Configuration.class);
+
+		for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
+		{
+			final Class configurationClass = classInfo.loadClass();
+
+			final Constructor injectConstructor = getInjectConstructor(configurationClass);
+			injectConstructor.setAccessible(true);
+
+			final Function<AppContext, ?> configurationInitializer = request.getComponentInitializer().create(configurationClass, injectConstructor);
+			appContext.registerLazySingleton(configurationClass, configurationInitializer);
+
+			for(Method method : configurationClass.getDeclaredMethods())
+			{
+				if(!method.isAnnotationPresent(Bean.class))
+				{
+					continue;
+				}
+
+				final Class beanType = method.getReturnType();
+				method.setAccessible(true);
+
+				appContext.registerLazySingleton(beanType, context -> {
+					final Object configurationInstance = context.get(configurationClass);
+					try
+					{
+						return method.invoke(configurationInstance);
+					}
+					catch(IllegalAccessException | InvocationTargetException e)
+					{
+						throw new ComponentInitializationException(MessageFormat.format("Cannot invoke bean method {0} on {1}", method, configurationClass), e);
+					}
+				});
+				log.debug("Registering bean {} from configuration {}", beanType, configurationClass);
+			}
+		}
+	}
+
+	@SuppressWarnings({"java:S3011", "unchecked", "rawtypes"})
+	private static void loadServicesAndViewControllers(AppContextLoaderRequest request, ScanResult scanResult, AppContext appContext)
+	{
+		final List<Class<? extends Annotation>> annotations = List.of(Service.class, ViewController.class);
+
+		for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
+		{
+			final Class loadedClass = classInfo.loadClass();
+
+			final AnnotationInfo annotationInfo = annotations.stream().filter(classInfo::hasAnnotation).map(classInfo::getAnnotationInfo).findFirst().orElseThrow();
+			final AnnotationParameterValueList annotationValues = annotationInfo.getParameterValues();
+
+			Class superclass = ((AnnotationClassRef) annotationValues.get("superclass").getValue()).loadClass();
+			if(superclass.equals(Object.class))
+			{
+				superclass = loadedClass;
+			}
+
+			final Constructor injectConstructor = getInjectConstructor(loadedClass);
+			injectConstructor.setAccessible(true);
+
+			boolean isSingleton = (boolean) annotationValues.get("singleton").getValue();
+
+			final Function<AppContext, ?> loadFunction = request.getComponentInitializer().create(loadedClass, injectConstructor);
+			if(isSingleton)
+			{
+				appContext.registerLazySingleton(superclass, loadFunction);
+				log.debug("Registering singleton component {}", superclass);
+			}
+			else
+			{
+				appContext.registerLazy(superclass, loadFunction);
+				log.debug("Registering component {}", superclass);
+			}
+		}
 	}
 
 	private static Constructor<?> getInjectConstructor(Class<?> loadedClass)

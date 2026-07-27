@@ -2,10 +2,7 @@ package de.tobias.playwall.client.appcontext.loader;
 
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.ComponentInitializationException;
-import de.tobias.playwall.client.appcontext.loader.test.good.TestInheritance;
-import de.tobias.playwall.client.appcontext.loader.test.good.TestInterface;
-import de.tobias.playwall.client.appcontext.loader.test.good.TestSingleton;
-import de.tobias.playwall.client.appcontext.loader.test.good.TestViewController;
+import de.tobias.playwall.client.appcontext.loader.test.good.*;
 import de.tobias.playwall.client.appcontext.loader.test.inject.constructor.dependencyMissing.TestConstructorDependencyNotRegistered;
 import de.tobias.playwall.client.appcontext.loader.test.inject.constructor.wrong.TestConstructorWrong;
 import de.tobias.playwall.client.appcontext.loader.test.inject.field.dependencyMissing.TestFieldDependencyNotRegistered;
@@ -24,6 +21,10 @@ class AppContextLoaderTest
 	{
 		final AppContext context = new AppContext(AppContext.Environment.TESTING);
 		AppContextLoader.setupDependencies(new AppContextLoaderRequest().withAppContext(context).withBasePackages("de.tobias.playwall.client.appcontext.loader.test.good"));
+
+		// Check bean
+		assertThat(context.get(TestConfiguration.BeanInstance.class)).isNotNull()
+				.isSameAs(context.get(TestConfiguration.BeanInstance.class));
 
 		// Check singleton
 		assertThat(context.get(TestSingleton.class)).isNotNull()
