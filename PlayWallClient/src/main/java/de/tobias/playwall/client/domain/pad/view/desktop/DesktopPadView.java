@@ -362,7 +362,7 @@ public class DesktopPadView implements PadView
 			{
 				shouldWarningAnimationPlayFading.setValue(true);
 			}
-			else if(status == PadStatus.PAUSED || status == PadStatus.STOPPED)
+			else if(status == PadStatus.PLAYING || status == PadStatus.PAUSED || status == PadStatus.STOPPED)
 			{
 				shouldWarningAnimationPlayFading.setValue(false);
 			}
