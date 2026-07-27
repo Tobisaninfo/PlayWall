@@ -17,7 +17,7 @@ public class PadDragMoveRequest extends RequestMessage
 	 */
 	private UUID sourcePadId;
 	/**
-	 * Pad get's replaced by a copy of the source pad
+	 * Pad gets replaced by a copy of the source pad
 	 */
 	private UUID targetPadId;
 }
