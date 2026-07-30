@@ -18,6 +18,11 @@ public class PadEventDispatcher
 		this.padInputListeners.add(listener);
 	}
 
+	public void addFirstPadInputListener(PadInputListener listener)
+	{
+		this.padInputListeners.addFirst(listener);
+	}
+
 	public void removePadInputListener(PadInputListener listener)
 	{
 		this.padInputListeners.remove(listener);

@@ -89,7 +89,7 @@ public class GlobalColorPicker extends ToggleButton
 		if(newValue)
 		{
 			nodeThatShouldUseImageCursor.setCursor(imageCursor);
-			eventDispatcher.addPadInputListener(listener);
+			eventDispatcher.addFirstPadInputListener(listener);
 		}
 		else
 		{
