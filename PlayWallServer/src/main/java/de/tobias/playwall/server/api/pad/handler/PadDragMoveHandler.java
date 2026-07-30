@@ -43,14 +43,15 @@ class PadDragMoveHandler extends UndoableRequestHandler<PadDragMoveRequest>
 		projectController.replacePad(newPadForSource, sourcePad);
 		projectController.replacePad(sourcePad, targetPad);
 
+		context.publishEvent(new PadReplaceUpdate(padMapper.padToPadDto(newPadForSource), sourcePad.getId()));
+		context.publishEvent(new PadReplaceUpdate(padMapper.padToPadDto(sourcePad), targetPad.getId()));
+
 		if(sourcePad.getContent() != null)
 		{
 			final PadController sourcePadController = projectController.getPadController(sourcePad.getId());
 			sourcePadController.load();
 		}
 
-		context.publishEvent(new PadReplaceUpdate(padMapper.padToPadDto(newPadForSource), sourcePad.getId()));
-		context.publishEvent(new PadReplaceUpdate(padMapper.padToPadDto(sourcePad), targetPad.getId()));
 
 		final String shortMessage = messageSource.getMessage("undo.description.short.pad.drag.move.replace", new Object[]{}, LocaleContextHolder.getLocale());
 		final String longMessage = messageSource.getMessage("undo.description.long.pad.drag.move.replace", new Object[]{}, LocaleContextHolder.getLocale());

@@ -17,25 +17,29 @@ class PadLoadedListener implements UpdateMessageEventListener<PadLoadedUpdate>
 	@Override
 	public void onUpdateMessage(PadLoadedUpdate message)
 	{
-		final PadView padView = mainViewController.getPadViewForPadId(message.getPadId());
-
 		// Update duration
 		if(message.getDurationMillis() != null)
 		{
 			final Duration duration = Duration.millis(message.getDurationMillis());
 			controller.getPadController(message.getPadId()).setDuration(duration);
 
-			if(padView != null)
-			{
-				Platform.runLater(padView::updateTimeNodes);
-			}
+			Platform.runLater(() -> {
+				final PadView padView = mainViewController.getPadViewForPadId(message.getPadId());
+				if(padView != null)
+				{
+					padView.updateTimeNodes();
+				}
+			});
 		}
 
 		// Show loading state
-		if(padView != null)
-		{
-			padView.showLoading(!message.isLoaded());
-		}
+		Platform.runLater(() -> {
+			final PadView padView = mainViewController.getPadViewForPadId(message.getPadId());
+			if(padView != null)
+			{
+				padView.showLoading(!message.isLoaded());
+			}
+		});
 
 		if(message.isLoaded())
 		{
