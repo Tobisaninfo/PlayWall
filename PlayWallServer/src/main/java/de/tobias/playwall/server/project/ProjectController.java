@@ -187,7 +187,7 @@ public class ProjectController
 		pad1Page.removePad(pad1);
 		pad2Page.removePad(pad2);
 
-		int position = pad1Page.getPosition();
+		int position = pad1.getPosition();
 		pad1.setPosition(pad2.getPosition());
 		pad2.setPosition(position);
 

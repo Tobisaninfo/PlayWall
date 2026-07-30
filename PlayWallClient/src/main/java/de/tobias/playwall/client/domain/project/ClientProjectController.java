@@ -6,7 +6,6 @@ import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageSettings;
-import de.tobias.playwall.client.view.style.color.ModernColor;
 import lombok.Getter;
 
 import java.util.*;
@@ -177,7 +176,7 @@ public class ClientProjectController
 		pad1Page.removePad(pad1);
 		pad2Page.removePad(pad2);
 
-		int position = pad1Page.getPosition();
+		int position = pad1.getPosition();
 		pad1.setPosition(pad2.getPosition());
 		pad2.setPosition(position);
 
