@@ -56,6 +56,7 @@ import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Platform;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -65,8 +66,7 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCharacterCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -75,6 +75,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -307,6 +308,16 @@ public class MainViewController extends ViewControllerBase
 		pageButtons.prefWrapLengthProperty().bind(stage.getScene().widthProperty());
 
 		stageContainer.addCloseKeyShortcut(() -> globalColorPicker.setSelected(false));
+
+		// Debug
+		final ObservableMap<KeyCombination, Runnable> accelerators = stage.getScene().getAccelerators();
+		accelerators.put(new KeyCodeCombination(KeyCode.F11, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN),
+				() -> {
+					final JsonMapper jsonMapper = JsonMapper.builder().findAndAddModules().build();
+					final String json = jsonMapper.writeValueAsString(projectController.getProject());
+					Clipboard.getSystemClipboard().setContent(Map.of(DataFormat.PLAIN_TEXT, json));
+				}
+		);
 	}
 
 	public void updateTitle()
