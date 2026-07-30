@@ -15,7 +15,7 @@
             <VBox spacing="7">
                 <children>
                     <ListView fx:id="mappingListView" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
-                              prefWidth="250.0"/>
+                              prefWidth="150.0"/>
 
                     <HBox spacing="7">
                         <children>

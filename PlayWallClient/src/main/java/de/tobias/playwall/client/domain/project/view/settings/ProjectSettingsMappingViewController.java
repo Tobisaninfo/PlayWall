@@ -5,6 +5,7 @@ import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.project.view.settings.cell.MappingKeyCell;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import javafx.fxml.FXML;
@@ -36,6 +37,13 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	public ProjectSettingsMappingViewController(FluentClient client)
 	{
 		super(client);
+	}
+
+	@Override
+	protected void init()
+	{
+		super.init();
+		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping()));
 	}
 
 	@Override
