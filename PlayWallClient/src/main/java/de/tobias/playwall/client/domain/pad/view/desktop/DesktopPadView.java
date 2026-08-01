@@ -483,6 +483,7 @@ public class DesktopPadView implements PadView
 		catch(PlayWallApiException ex)
 		{
 			log.error("Cannot perform play action", ex);
+			updateStatus(PadStatus.ERROR);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PLAY), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
@@ -496,6 +497,7 @@ public class DesktopPadView implements PadView
 		catch(PlayWallApiException ex)
 		{
 			log.error("Cannot perform pause action", ex);
+			updateStatus(PadStatus.ERROR);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_PAUSE), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
@@ -509,6 +511,7 @@ public class DesktopPadView implements PadView
 		catch(PlayWallApiException ex)
 		{
 			log.error("Cannot perform stop action", ex);
+			updateStatus(PadStatus.ERROR);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_STOP), ex.getMessage(), ex.getError(), superRoot.getScene().getWindow()).showAndWait();
 		}
 	}
