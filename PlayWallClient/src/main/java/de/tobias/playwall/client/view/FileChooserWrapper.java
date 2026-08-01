@@ -9,6 +9,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.common.utils.FileFormats;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
@@ -75,15 +76,34 @@ public class FileChooserWrapper
 
 	private void selectLastUsedFolder()
 	{
+		getLastUsedFolder().ifPresent(fileChooser::setInitialDirectory);
+	}
+
+	private Optional<File> getLastUsedFolder()
+	{
 		final JsonElement openFolder = app.getUserDefaults().getData(OPEN_FOLDER);
 		if(openFolder != null)
 		{
 			final File folder = new File(openFolder.getAsString());
 			if(folder.exists())
 			{
-				fileChooser.setInitialDirectory(folder);
+				return Optional.of(folder);
 			}
 		}
+		return Optional.empty();
+	}
+
+	public Optional<Path> showOpenFolder(Window owner)
+	{
+		final DirectoryChooser directoryChooser = new DirectoryChooser();
+		getLastUsedFolder().ifPresent(directoryChooser::setInitialDirectory);
+
+		final File selectedFolder = directoryChooser.showDialog(owner);
+		if(selectedFolder != null)
+		{
+			app.getUserDefaults().setData(OPEN_FOLDER, selectedFolder.getPath());
+		}
+		return Optional.ofNullable(selectedFolder).map(File::toPath);
 	}
 
 	public Optional<Path> showByActionEvent(ActionEvent event)

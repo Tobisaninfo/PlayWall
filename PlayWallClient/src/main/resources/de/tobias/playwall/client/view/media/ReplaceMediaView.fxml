@@ -7,8 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+        <PlayWallButton icon="MAGNIFYING_GLASS_SOLID" onAction="#autoSearchButtonHandler" text="%ui.replace.media.button.auto_search">
+         <VBox.margin>
+            <Insets top="14.0" />
+         </VBox.margin></PlayWallButton>
+
         <TableView fx:id="table" focusTraversable="false" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="columnPageName" minWidth="150" prefWidth="150" text="%ui.replace.media.column.page_name" />
@@ -24,7 +29,7 @@
             <PlayWallButton fx:id="cancelButton" icon="XMARK_SOLID" onAction="#cancelButtonHandler" text="%ui.settings.button.cancel" />
             <PlayWallButton fx:id="saveButton" defaultButton="true" icon="FLOPPY_DISK_SOLID" onAction="#saveButtonHandler" text="%ui.settings.button.save" />
            <padding>
-              <Insets bottom="14.0" right="14.0"/>
+              <Insets bottom="14.0" right="14.0" />
            </padding>
         </HBox>
    </children>

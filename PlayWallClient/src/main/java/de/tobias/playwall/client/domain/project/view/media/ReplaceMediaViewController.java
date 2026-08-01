@@ -7,6 +7,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ViewControllerBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import javafx.application.Platform;
@@ -24,8 +25,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @ViewController(path = "de/tobias/playwall/client/view/media", view = "ReplaceMediaView")
@@ -52,6 +58,8 @@ public class ReplaceMediaViewController extends ViewControllerBase
 	private final FluentClient client;
 
 	private final ErrorAlertBuilder errorAlertBuilder;
+
+	private final FileChooserWrapper fileChooserWrapper;
 
 	@Override
 	public void init()
@@ -128,5 +136,49 @@ public class ReplaceMediaViewController extends ViewControllerBase
 	protected void cancelButtonHandler(ActionEvent event)
 	{
 		getStageContainer().ifPresent(NVCStage::close);
+	}
+
+	@FXML
+	protected void autoSearchButtonHandler(ActionEvent event)
+	{
+		fileChooserWrapper.showOpenFolder(getContainingWindow()).ifPresent(this::applyAutoSearch);
+	}
+
+	void applyAutoSearch(Path folder)
+	{
+		matchMediaFiles(folder, entries);
+		table.refresh();
+	}
+
+	void matchMediaFiles(Path folder, List<MissingMediaEntry> entries)
+	{
+		Map<String, Path> filesByFileName = new HashMap<>();
+		try(Stream<Path> stream = Files.walk(folder))
+		{
+			filesByFileName = stream.filter(Files::isRegularFile)
+					.collect(Collectors.toMap(path -> path.getFileName().toString().toLowerCase(),
+							Function.identity(),
+							(first, _) -> first));
+		}
+		catch(IOException e)
+		{
+			log.error("Cannot scan folder for media files", e);
+		}
+
+		for(MissingMediaEntry entry : entries)
+		{
+			final String oldMediaPath = entry.getOldMediaPath();
+			if(oldMediaPath == null)
+			{
+				continue;
+			}
+
+			final Path foundFile = filesByFileName.get(Path.of(oldMediaPath).getFileName().toString().toLowerCase());
+			if(foundFile != null)
+			{
+				entry.setMissingMediaSolutionType(MissingMediaSolutionType.REPLACE);
+				entry.setNewMediaPath(foundFile.toString());
+			}
+		}
 	}
 }

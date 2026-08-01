@@ -73,6 +73,7 @@ public class Strings
 	public static final String UI_MENU_INFO_UPDATES = "ui.menu.info.updates";
 
 	public static final String UI_REPLACE_MEDIA_PLACEHOLDER = "ui.replace.media.placeholder";
+	public static final String UI_REPLACE_MEDIA_BUTTON_AUTO_SEARCH = "ui.replace.media.button.auto_search";
 
 	// ui - dialog - about
 	public static final String UI_DIALOG_ABOUT_GRAPHICS = "ui.dialog.about.graphics";
