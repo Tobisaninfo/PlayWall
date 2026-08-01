@@ -38,5 +38,8 @@
 
     .separator {
         -fx-background-color: #444444;
+        -fx-pref-height: 1px;
+        -fx-max-height: 1px;
+        -fx-padding: 0;
     }
 }
