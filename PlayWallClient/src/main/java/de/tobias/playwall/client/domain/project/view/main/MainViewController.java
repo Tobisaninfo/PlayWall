@@ -54,6 +54,8 @@ import de.tobias.playwall.client.view.components.*;
 import de.tobias.playwall.client.view.style.ModernStyleSizeHelper;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.client.view.toast.MaterialToastManager;
+import de.tobias.playwall.client.view.toast.Toast;
+import de.tobias.playwall.client.view.toast.ToastAction;
 import de.tobias.playwall.client.view.toast.ToastType;
 import javafx.application.Platform;
 import javafx.collections.ObservableMap;
@@ -165,6 +167,7 @@ public class MainViewController extends ViewControllerBase
 	private SettingsListener settingsListener;
 
 	private MaterialToastManager materialToastManager;
+	private Toast padErrorsToast;
 
 	private Page currentPage;
 	private final List<PadView> padViews = new ArrayList<>();
@@ -216,7 +219,7 @@ public class MainViewController extends ViewControllerBase
 			onConnectionStateChanged(client.connectionStateProperty().get());
 		}
 
-		projectLoadedListener = new ProjectLoadedListener(this, projectController, settingsController);
+		projectLoadedListener = new ProjectLoadedListener(this, settingsController);
 		eventHandler.registerListener(projectLoadedListener);
 		projectListener = new ProjectListener(projectMapper, this);
 		eventHandler.registerListener(projectListener);
@@ -699,6 +702,40 @@ public class MainViewController extends ViewControllerBase
 			case ERROR -> Localization.getString(Strings.UI_NOTIFICATION_ERROR);
 		};
 		materialToastManager.show(title, message, toastType);
+	}
+
+	public void refreshPadErrorsToast()
+	{
+		if(!Platform.isFxApplicationThread())
+		{
+			Platform.runLater(this::refreshPadErrorsToast);
+			return;
+		}
+
+		final List<ClientPadController> padControllersWithErrors = projectController.getPadControllersWithState(PadStatus.ERROR);
+		if(padControllersWithErrors.isEmpty())
+		{
+			if(padErrorsToast != null)
+			{
+				padErrorsToast.close();
+				padErrorsToast = null;
+			}
+			return;
+		}
+
+		final String message = Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_MESSAGE, padControllersWithErrors.size());
+		if(padErrorsToast == null)
+		{
+			padErrorsToast = getMaterialToastManager().showPermanent(
+					Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_TITLE),
+					message,
+					ToastType.ERROR,
+					new ToastAction(Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_LINK), () -> onMenuItemReplaceMedia(null)));
+		}
+		else
+		{
+			padErrorsToast.setMessage(message);
+		}
 	}
 
 	private void onConnectionStateChanged(ConnectionState state)

@@ -8,10 +8,13 @@ import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.Project;
+import de.tobias.playwall.client.domain.settings.ClientSettingsController;
+import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.pad.update.PadStatusUpdate;
+import de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -19,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
@@ -136,5 +140,34 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		assertThat(padController.getStatus()).isEqualTo(PadStatus.EMPTY);
 		assertThat(padController.getPosition()).isNull();
 		assertThat(padController.getDuration()).isNull();
+	}
+
+	@Test
+	void testPadErrorsToastClosesWhenNoErrorsRemain()
+	{
+		Platform.runLater(() -> {
+			mainViewController = context.get(MainViewController.class);
+			mainViewController.showProject(project);
+			mainViewController.showLoadingOverlay(false);
+			stage.show();
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final ClientSettingsController settingsController = context.get(ClientSettingsController.class);
+		settingsController.setSettings(Settings.builder().build());
+		settingsController.setOutputDevices(List.of());
+
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.ERROR));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		eventHandler.fireEvent(new ProjectLoadedUpdate());
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(mainViewController.getPadErrorsToast()).isNotNull();
+
+		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.READY));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(mainViewController.getPadErrorsToast()).isNull();
 	}
 }

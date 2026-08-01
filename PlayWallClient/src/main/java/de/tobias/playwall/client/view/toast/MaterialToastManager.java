@@ -52,14 +52,14 @@ public class MaterialToastManager
 		wait.play();
 	}
 
-	public void showPermanent(String title, String message, ToastType type, ToastAction... actions)
+	public Toast showPermanent(String title, String message, ToastType type, ToastAction... actions)
 	{
-		buildAndScheduleToast(title, message, type, List.of(actions));
+		return buildAndScheduleToast(title, message, type, List.of(actions));
 	}
 
-	private Node buildAndScheduleToast(String title, String message, ToastType type, List<ToastAction> actions)
+	private Toast buildAndScheduleToast(String title, String message, ToastType type, List<ToastAction> actions)
 	{
-		final Node toast = new Toast(title, message, type, actions, this::dismiss);
+		final Toast toast = new Toast(title, message, type, actions, this::dismiss);
 
 		toast.setOpacity(0);
 		overlay.getChildren().add(toast);

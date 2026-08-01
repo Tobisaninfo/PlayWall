@@ -38,6 +38,8 @@ class PadStatusListener implements UpdateMessageEventListener<PadStatusUpdate>
 		{
 			padView.updateStatus(clientStatus);
 		}
+
+		mainViewController.refreshPadErrorsToast();
 	}
 
 	@Override

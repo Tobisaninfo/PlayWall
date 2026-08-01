@@ -2,9 +2,6 @@ package de.tobias.playwall.client.domain.project.view.main;
 
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.domain.pad.ClientPadController;
-import de.tobias.playwall.client.domain.pad.PadStatus;
-import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.client.view.toast.ToastAction;
@@ -21,7 +18,6 @@ import java.util.Optional;
 public class ProjectLoadedListener implements UpdateMessageEventListener<ProjectLoadedUpdate>
 {
 	private final MainViewController mainViewController;
-	private final ClientProjectController projectController;
 	private final ClientSettingsController settingsController;
 
 	@Override
@@ -29,16 +25,7 @@ public class ProjectLoadedListener implements UpdateMessageEventListener<Project
 	{
 		mainViewController.getLoadingOverlay().hide();
 
-		final List<ClientPadController> padControllersWithErrors = projectController.getPadControllersWithState(PadStatus.ERROR);
-		if(!padControllersWithErrors.isEmpty())
-		{
-			Platform.runLater(() ->
-					mainViewController.getMaterialToastManager().showPermanent(
-							Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_TITLE),
-							Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_MESSAGE, padControllersWithErrors.size()),
-							ToastType.ERROR,
-							new ToastAction(Localization.getString(Strings.UI_ERRORS_PROJECT_PAD_ERRORS_LINK), () -> mainViewController.onMenuItemReplaceMedia(null))));
-		}
+		Platform.runLater(mainViewController::refreshPadErrorsToast);
 
 		final String selectedAudioDevice = settingsController.getSettings().getSelectedAudioDevice();
 		final List<AudioDeviceInstance> outputDevices = settingsController.getOutputDevices();

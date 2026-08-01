@@ -17,8 +17,12 @@ import static de.tobias.playwall.client.view.toast.MaterialToastManager.TOAST_WI
 
 public class Toast extends VBox
 {
+	private final Consumer<Node> onClose;
+	private final Label messageLabel;
+
 	public Toast(String title, String message, ToastType type, List<ToastAction> actions, Consumer<Node> onClose)
 	{
+		this.onClose = onClose;
 		final Region accent = new Region();
 		accent.setPrefWidth(7);
 		accent.setMinWidth(7);
@@ -36,7 +40,7 @@ public class Toast extends VBox
 		final Label titleLabel = new Label(title);
 		titleLabel.getStyleClass().add("title");
 
-		final Label messageLabel = new Label(message);
+		this.messageLabel = new Label(message);
 		messageLabel.getStyleClass().add("message");
 		messageLabel.setWrapText(true);
 		messageLabel.setMaxWidth(210);
@@ -48,7 +52,7 @@ public class Toast extends VBox
 		final FlowPane actionPage = new FlowPane(ViewConstants.DEFAULT_SPACING, 0);
 		actions.forEach(action -> {
 			final Hyperlink hyperlink = new Hyperlink(action.text());
-			hyperlink.setOnAction(e -> action.action().run());
+			hyperlink.setOnAction(_ -> action.action().run());
 			actionPage.getChildren().add(hyperlink);
 		});
 
@@ -77,6 +81,16 @@ public class Toast extends VBox
 		setMaxWidth(TOAST_WIDTH);
 		setMaxHeight(Region.USE_COMPUTED_SIZE);
 
-		closeIcon.setOnMouseClicked(_ -> onClose.accept(this));
+		closeIcon.setOnMouseClicked(_ -> close());
+	}
+
+	public void close()
+	{
+		onClose.accept(this);
+	}
+
+	public void setMessage(String message)
+	{
+		messageLabel.setText(message);
 	}
 }
