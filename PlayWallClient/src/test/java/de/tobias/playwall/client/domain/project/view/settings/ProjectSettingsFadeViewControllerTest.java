@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.project.view.settings;
 
+import de.thecodelabs.midi.mapping.Mapping;
 import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -18,6 +19,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,6 +61,8 @@ class ProjectSettingsFadeViewControllerTest extends AbstractViewControllerTest
 				.introColor(null)
 				.eofWarningTime(5.0)
 				.fadeSettings(fadeSettings)
+				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
+				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
 				.build();
 	}
 
@@ -118,6 +122,8 @@ class ProjectSettingsFadeViewControllerTest extends AbstractViewControllerTest
 				.introColor(null)
 				.eofWarningTime(5.0)
 				.fadeSettings(new FadeSettings())
+				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
+				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
 				.build());
 	}
 
@@ -155,6 +161,8 @@ class ProjectSettingsFadeViewControllerTest extends AbstractViewControllerTest
 						.fadeOutOnStop(true)
 						.fadeOutOnEndOfFile(false)
 						.build())
+				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
+				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
 				.build());
 	}
 
