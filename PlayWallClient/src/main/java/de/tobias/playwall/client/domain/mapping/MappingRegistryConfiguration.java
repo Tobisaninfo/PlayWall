@@ -6,19 +6,37 @@ import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.tobias.playwall.client.appcontext.Bean;
 import de.tobias.playwall.client.appcontext.Configuration;
+import de.tobias.playwall.client.appcontext.PostConstruct;
+import de.tobias.playwall.client.domain.mapping.action.PageAction;
+import de.tobias.playwall.client.domain.mapping.action.PageActionHandler;
 
 @Configuration
 public class MappingRegistryConfiguration
 {
-	@Bean
-	public MappingSerializer mappingRegistry()
+	private MappingRegistry registry;
+
+	@PostConstruct
+	private void init()
 	{
-		final MappingRegistry registry = new MappingRegistry();
+		registry = new MappingRegistry();
 
 		registry
 				.registerInputKey(MidiInputKey.class)
 				.registerInputKey(KeyboardInputKey.class);
 
+		registry
+				.registerAction(PageAction.class, new PageActionHandler());
+	}
+
+	@Bean
+	public MappingSerializer mappingSerializer()
+	{
 		return registry.build();
+	}
+
+	@Bean
+	public MappingRegistry mappingRegistry()
+	{
+		return registry;
 	}
 }

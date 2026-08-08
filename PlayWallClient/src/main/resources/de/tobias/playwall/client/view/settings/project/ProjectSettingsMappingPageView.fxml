@@ -2,7 +2,6 @@
 
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import de.tobias.playwall.client.view.components.PlayWallButton?>
@@ -28,19 +27,9 @@
                 </children>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0"/>
-            <TabPane prefHeight="200.0" maxWidth="Infinity" HBox.hgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
-                <tabs>
-                    <Tab text="Untitled Tab 1">
-                        <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                        </content>
-                    </Tab>
-                    <Tab text="Untitled Tab 2">
-                        <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-                        </content>
-                    </Tab>
-                </tabs>
+            <TabPane fx:id="actionTabs"
+                     maxHeight="1.7976931348623157E308" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                     tabClosingPolicy="UNAVAILABLE">
             </TabPane>
         </children>
     </HBox>

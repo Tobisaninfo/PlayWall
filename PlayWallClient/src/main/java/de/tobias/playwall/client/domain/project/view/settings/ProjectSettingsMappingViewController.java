@@ -1,16 +1,23 @@
 package de.tobias.playwall.client.domain.project.view.settings;
 
 import de.thecodelabs.midi.mapping.Mapping;
+import de.thecodelabs.midi.mapping.MappingRegistry;
+import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.project.view.settings.cell.MappingKeyCell;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 
 import java.util.Map;
 import java.util.UUID;
@@ -24,19 +31,24 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 {
 	@FXML
 	private ListView<InputKey> mappingListView;
+	@FXML
+	private TabPane actionTabs;
 
 	@FXML
 	private PlayWallButton keyboardAddButton;
 	@FXML
 	private PlayWallButton midiAddButton;
 
+	private final MappingRegistry mappingRegistry;
+
 	private Map<UUID, Mapping> mappings;
 	private UUID selectedMapping;
 
 	@InjectConstructor
-	public ProjectSettingsMappingViewController(FluentClient client)
+	public ProjectSettingsMappingViewController(FluentClient client, MappingRegistry mappingRegistry)
 	{
 		super(client);
+		this.mappingRegistry = mappingRegistry;
 	}
 
 	@Override
@@ -44,6 +56,16 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		super.init();
 		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping()));
+		mappingListView.getSelectionModel().selectedItemProperty()
+				.addListener((_, _, newValue) -> onInputKeySelected(newValue));
+
+		for(Class<? extends Action> action : mappingRegistry.getRegisteredActions())
+		{
+			final ActionDescription actionDescription = action.getAnnotation(ActionDescription.class);
+			final Tab tab = new Tab(Localization.getString(actionDescription.nameKey()), new VBox());
+			tab.setUserData(action);
+			actionTabs.getTabs().add(tab);
+		}
 	}
 
 	@Override
@@ -91,6 +113,17 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private void onMidiAdd()
 	{
 
+	}
+
+	private void onInputKeySelected(InputKey key)
+	{
+		final Mapping mapping = getActiveMapping();
+		final Action action = mapping.getAction(key);
+		if(action != null)
+		{
+			actionTabs.getSelectionModel().select(actionTabs.getTabs().stream()
+					.filter(tab -> tab.getUserData().equals(action.getClass())).findFirst().orElse(null));
+		}
 	}
 
 	private Mapping getActiveMapping()
