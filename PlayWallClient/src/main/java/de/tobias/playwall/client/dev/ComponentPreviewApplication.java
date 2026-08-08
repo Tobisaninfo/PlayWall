@@ -474,10 +474,10 @@ public class ComponentPreviewApplication extends Application
 	{
 		return new VBox(
 				ITEM_SPACING,
-				new Toast("Erfolg", "Die Aktion wurde erfolgreich abgeschlossen.", ToastType.SUCCESS, List.of(new ToastAction("Link 1", () -> {}), new ToastAction("Link 2", () -> {})), _ -> {}),
-				new Toast("Warnung", "Bitte überprüfe deine Einstellungen.", ToastType.WARNING, List.of(new ToastAction("Lorem ipsum dolor sit amet", () -> {}), new ToastAction("Lorem ipsum dolor sit amet", () -> {})), _ -> {}),
-				new Toast("Fehler", "Ein unerwarteter Fehler ist aufgetreten.", ToastType.ERROR, List.of(), _ -> {}),
-				new Toast("Info", "Eine neue Version ist verfügbar.", ToastType.INFO, List.of(), _ -> {})
+				new Toast("Erfolg", "Die Aktion wurde erfolgreich abgeschlossen.", ToastType.SUCCESS, List.of(new ToastAction("Link 1", () -> {}), new ToastAction("Link 2", () -> {})), _ -> {}, null),
+				new Toast("Warnung", "Bitte überprüfe deine Einstellungen.", ToastType.WARNING, List.of(new ToastAction("Lorem ipsum dolor sit amet", () -> {}), new ToastAction("Lorem ipsum dolor sit amet", () -> {})), _ -> {}, null),
+				new Toast("Fehler", "Ein unerwarteter Fehler ist aufgetreten.", ToastType.ERROR, List.of(), _ -> {}, null),
+				new Toast("Info", "Eine neue Version ist verfügbar.", ToastType.INFO, List.of(), _ -> {}, null)
 		);
 	}
 

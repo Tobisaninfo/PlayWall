@@ -3,6 +3,7 @@ package de.tobias.playwall.client.view.toast;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -20,9 +21,13 @@ public class Toast extends VBox
 	private final Consumer<Node> onClose;
 	private final Label messageLabel;
 
-	public Toast(String title, String message, ToastType type, List<ToastAction> actions, Consumer<Node> onClose)
+	private final MaterialToastManager toastManager;
+
+	public Toast(String title, String message, ToastType type, List<ToastAction> actions, Consumer<Node> onClose, MaterialToastManager toastManager)
 	{
 		this.onClose = onClose;
+		this.toastManager = toastManager;
+
 		final Region accent = new Region();
 		accent.setPrefWidth(7);
 		accent.setMinWidth(7);
@@ -92,5 +97,9 @@ public class Toast extends VBox
 	public void setMessage(String message)
 	{
 		messageLabel.setText(message);
+		if(toastManager.isToastVisible(this))
+		{
+			Platform.runLater(() -> toastManager.repositionToasts(true));
+		}
 	}
 }

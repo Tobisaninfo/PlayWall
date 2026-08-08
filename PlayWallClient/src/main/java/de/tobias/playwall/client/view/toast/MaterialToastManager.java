@@ -59,7 +59,7 @@ public class MaterialToastManager
 
 	private Toast buildAndScheduleToast(String title, String message, ToastType type, List<ToastAction> actions)
 	{
-		final Toast toast = new Toast(title, message, type, actions, this::dismiss);
+		final Toast toast = new Toast(title, message, type, actions, this::dismiss, this);
 
 		toast.setOpacity(0);
 		overlay.getChildren().add(toast);
@@ -115,7 +115,7 @@ public class MaterialToastManager
 		out.play();
 	}
 
-	private void repositionToasts(boolean animate)
+	void repositionToasts(boolean animate)
 	{
 		double y = overlay.getHeight() - MARGIN;
 
@@ -150,5 +150,10 @@ public class MaterialToastManager
 
 			y -= GAP;
 		}
+	}
+
+	public boolean isToastVisible(Toast toast)
+	{
+		return activeToasts.contains(toast);
 	}
 }
