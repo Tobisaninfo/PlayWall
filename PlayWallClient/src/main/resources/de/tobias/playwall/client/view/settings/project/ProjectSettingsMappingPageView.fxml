@@ -31,8 +31,8 @@
                     <HBox spacing="7">
                         <children>
                             <PlayWallButton fx:id="keyboardAddButton" onAction="#onKeyboardAdd" icon="PLUS_SOLID"
-                                            text="Tastatur" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
-                            <PlayWallButton fx:id="midiAddButton" onAction="#onMidiAdd" icon="PLUS_SOLID" text="MIDI"
+                                            text="%ui.settings.project.mapping.type.keyboard" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                            <PlayWallButton fx:id="midiAddButton" onAction="#onMidiAdd" icon="PLUS_SOLID" text="%ui.settings.project.mapping.type.midi"
                                             HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
                         </children>
                     </HBox>

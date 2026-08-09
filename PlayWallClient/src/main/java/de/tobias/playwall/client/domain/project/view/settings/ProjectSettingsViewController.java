@@ -59,7 +59,7 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 	{
 		super.initStage(stageContainer, stage);
 
-		stage.setHeight(625);
+		stage.setHeight(660);
 		stage.setWidth(1040);
 	}
 
