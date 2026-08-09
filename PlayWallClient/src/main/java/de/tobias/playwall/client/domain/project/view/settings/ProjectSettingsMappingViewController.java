@@ -56,7 +56,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	protected void init()
 	{
 		super.init();
-		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping()));
+		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping(), this::onInputKeyDeleted));
 		mappingListView.getSelectionModel().selectedItemProperty()
 				.addListener((_, _, newValue) -> onInputKeySelected(newValue));
 
@@ -131,6 +131,13 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 					.findFirst()
 					.orElse(null));
 		}
+	}
+
+	private void onInputKeyDeleted(InputKey key)
+	{
+		final Mapping mapping = getActiveMapping();
+		mapping.removeInputKey(key);
+		updateInputListView();
 	}
 
 	private Mapping getActiveMapping()

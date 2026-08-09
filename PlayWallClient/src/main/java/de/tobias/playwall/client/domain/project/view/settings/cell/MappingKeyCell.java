@@ -5,41 +5,61 @@ import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import java.util.function.Consumer;
 
 public class MappingKeyCell extends ListCell<InputKey>
 {
 	private final Mapping mapping;
 
-	final VBox box;
+	final HBox hbox;
+	final VBox vbox;
 	final Label keyLabel;
 	final Label actionLabel;
+	final PlayWallButton buttonDelete;
+	final Consumer<InputKey> deleteActionHandler;
 
-	public MappingKeyCell(Mapping mapping)
+	public MappingKeyCell(Mapping mapping, Consumer<InputKey> deleteActionHandler)
 	{
 		this.mapping = mapping;
+		this.deleteActionHandler = deleteActionHandler;
 
-		box = new VBox(ViewConstants.DEFAULT_SPACING / 2);
+		hbox = new HBox(ViewConstants.DEFAULT_SPACING);
+		vbox = new VBox(ViewConstants.DEFAULT_SPACING / 2);
 		keyLabel = new Label();
 		actionLabel = new Label();
-		box.getChildren().addAll(keyLabel, actionLabel);
+
+		vbox.getChildren().addAll(keyLabel, actionLabel);
+
+		buttonDelete = new PlayWallButton(FontAwesomeType.TRASH_CAN_SOLID);
+
+		hbox.getChildren().addAll(vbox, buttonDelete);
+		hbox.setAlignment(Pos.CENTER_LEFT);
+		HBox.setHgrow(vbox, Priority.ALWAYS);
 	}
 
 	@Override
 	protected void updateItem(InputKey item, boolean empty)
 	{
 		super.updateItem(item, empty);
-		setGraphic(box);
+		setGraphic(hbox);
 
 		if(empty || item == null)
 		{
 			keyLabel.setText("");
 			actionLabel.setText("");
+			buttonDelete.setVisible(false);
 			return;
 		}
 
@@ -61,5 +81,8 @@ public class MappingKeyCell extends ListCell<InputKey>
 		{
 			actionLabel.setText(action.toString());
 		}
+
+		buttonDelete.setVisible(true);
+		buttonDelete.setOnAction(_ -> deleteActionHandler.accept(item));
 	}
 }
