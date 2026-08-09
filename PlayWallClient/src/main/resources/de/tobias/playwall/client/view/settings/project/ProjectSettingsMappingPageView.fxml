@@ -14,8 +14,19 @@
             <VBox spacing="7">
                 <children>
                     <TextField fx:id="searchTextField"/>
+                    <HBox spacing="7" alignment="CENTER_LEFT">
+                        <children>
+                            <PlayWallButton fx:id="searchByKeyButton" onAction="#onSearchByKey"
+                                            icon="MAGNIFYING_GLASS_SOLID" text="%ui.settings.project.mapping.search.key.prompt"
+                                            maxWidth="1.7976931348623157E308"/>
+                            <Label fx:id="searchByKeyLabel" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                            <PlayWallButton fx:id="searchByKeyClearButton" onAction="#onSearchByKeyClear"
+                                            icon="TRASH_CAN_SOLID" maxWidth="1.7976931348623157E308" visible="false"/>
+                        </children>
+                    </HBox>
+
                     <ListView fx:id="mappingListView" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
-                              prefWidth="200.0"/>
+                              prefWidth="260.0"/>
 
                     <HBox spacing="7">
                         <children>

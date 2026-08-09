@@ -49,6 +49,7 @@
 @include meta.load-css("views/project-loading");
 @include meta.load-css("views/connection-lost-overlay");
 @include meta.load-css("views/project-management");
+@include meta.load-css("views/project-settings");
 
 .root {
     -fx-base: rgb(20, 20, 20);

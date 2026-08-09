@@ -5,6 +5,7 @@ import de.thecodelabs.midi.mapping.MappingRegistry;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
+import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -16,10 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
@@ -43,6 +41,15 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private TextField searchTextField;
 
 	@FXML
+	private PlayWallButton searchByKeyButton;
+
+	@FXML
+	private PlayWallButton searchByKeyClearButton;
+
+	@FXML
+	private Label searchByKeyLabel;
+
+	@FXML
 	private PlayWallButton keyboardAddButton;
 	@FXML
 	private PlayWallButton midiAddButton;
@@ -51,6 +58,8 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 	private final ObservableList<InputKey> masterInputKeys = FXCollections.observableArrayList();
 	private final FilteredList<InputKey> filteredInputKeys = new FilteredList<>(masterInputKeys, _ -> true);
+
+	private KeyCode searchKeyCode;
 
 	private Map<UUID, Mapping> mappings;
 	private UUID selectedMapping;
@@ -74,8 +83,16 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 				.addListener((_, _, newValue) -> onInputKeySelected(newValue));
 
 		mappingListView.setItems(filteredInputKeys);
-		searchTextField.textProperty().addListener((_, _, newValue) -> filteredInputKeys.setPredicate(key -> matchesSearch(key, newValue)));
+		searchTextField.textProperty().addListener((_, _, newValue) ->
+		{
+			if(newValue != null && !newValue.isBlank())
+			{
+				onSearchByKeyClear();
+			}
+			updateSearchPredicate();
+		});
 
+		searchByKeyButton.getStyleClass().add("project-settings--search-by-key-button");
 
 		for(Class<? extends Action> action : mappingRegistry.getRegisteredActions())
 		{
@@ -137,6 +154,29 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 	}
 
+	@FXML
+	private void onSearchByKey()
+	{
+		// TODO: debug only
+		final KeyCode keyCode = KeyCode.W;
+
+		searchTextField.clear();
+
+		searchKeyCode = keyCode;
+		searchByKeyLabel.setText(keyCode.getName());
+		searchByKeyClearButton.setVisible(true);
+		updateSearchPredicate();
+	}
+
+	@FXML
+	private void onSearchByKeyClear()
+	{
+		searchKeyCode = null;
+		searchByKeyLabel.setText(null);
+		searchByKeyClearButton.setVisible(false);
+		updateSearchPredicate();
+	}
+
 	private void onInputKeySelected(InputKey key)
 	{
 		final Mapping mapping = getActiveMapping();
@@ -175,5 +215,27 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 		final Action action = getActiveMapping().getAction(key);
 		return action != null && action.toString().toLowerCase().contains(query.toLowerCase());
+	}
+
+	private void updateSearchPredicate()
+	{
+		filteredInputKeys.setPredicate(key ->
+		{
+			if(searchKeyCode != null)
+			{
+				return matchesKey(key, searchKeyCode);
+			}
+			return matchesSearch(key, searchTextField.getText());
+		});
+	}
+
+	private boolean matchesKey(InputKey key, KeyCode keyCode)
+	{
+		return switch(key)
+		{
+			case KeyboardInputKey k -> k.key() != null && k.key().equalsIgnoreCase(keyCode.getName());
+			case MidiInputKey m -> false;
+			default -> throw new IllegalStateException("Unexpected value: " + key);
+		};
 	}
 }
