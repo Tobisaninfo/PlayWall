@@ -20,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -107,7 +108,9 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	@FXML
 	private void onKeyboardAdd()
 	{
-		getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.E, "E"), null);
+		final String randomChar = String.valueOf("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(new Random().nextInt(26)));
+
+		getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.valueOf(randomChar), randomChar), null);
 		updateInputListView();
 	}
 
@@ -124,7 +127,9 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		if(action != null)
 		{
 			actionTabs.getSelectionModel().select(actionTabs.getTabs().stream()
-					.filter(tab -> tab.getUserData().equals(action.getClass())).findFirst().orElse(null));
+					.filter(tab -> tab.getUserData().equals(action.getClass()))
+					.findFirst()
+					.orElse(null));
 		}
 	}
 

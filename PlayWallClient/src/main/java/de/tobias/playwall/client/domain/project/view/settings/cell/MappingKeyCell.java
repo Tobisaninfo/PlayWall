@@ -7,6 +7,7 @@ import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
@@ -23,7 +24,7 @@ public class MappingKeyCell extends ListCell<InputKey>
 	{
 		this.mapping = mapping;
 
-		box = new VBox(7);
+		box = new VBox(ViewConstants.DEFAULT_SPACING / 2);
 		keyLabel = new Label();
 		actionLabel = new Label();
 		box.getChildren().addAll(keyLabel, actionLabel);
@@ -52,13 +53,13 @@ public class MappingKeyCell extends ListCell<InputKey>
 		}
 
 		final Action action = mapping.getAction(item);
-		if(action != null)
+		if(action == null)
 		{
-			actionLabel.setText(action.toString());
+			actionLabel.setText("<Leer>");
 		}
 		else
 		{
-			actionLabel.setText("<Leer>");
+			actionLabel.setText(action.toString());
 		}
 	}
 }
