@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import de.tobias.playwall.client.view.components.LoadingSpinner?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0"
             prefWidth="700.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -18,8 +18,8 @@
         <HBox alignment="CENTER_LEFT" layoutX="14.22901439666748" layoutY="325.69268798828125" spacing="14.0"
               AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0">
             <children>
-                <ProgressIndicator/>
-                <Label fx:id="loadingLabel"/>
+                <LoadingSpinner fx:id="spinner" size="32"/>
+                <Label fx:id="loadingLabel" styleClass="application-loading-view--loading-label"/>
             </children>
         </HBox>
         <Label fx:id="titleLabel" layoutX="25.0" layoutY="29.0" styleClass="application-loading-view--title"

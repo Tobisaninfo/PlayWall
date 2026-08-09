@@ -10,16 +10,19 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.*;
 import de.tobias.playwall.client.domain.project.view.list.ProjectListViewController;
 import de.tobias.playwall.client.view.ViewControllerBase;
+import de.tobias.playwall.client.view.components.LoadingSpinner;
 import de.tobias.playwall.client.view.launch.tasks.ClientConnectLaunchTask;
 import de.tobias.playwall.client.view.launch.tasks.FetchProgramSettingsLaunchTask;
 import de.tobias.playwall.client.view.launch.tasks.LaunchTask;
 import de.tobias.playwall.client.view.launch.tasks.ServerLaunchTask;
+import de.tobias.playwall.client.view.style.color.ModernColorDefinition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -31,6 +34,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static de.tobias.playwall.client.view.components.ViewConstants.*;
+
 @Getter(AccessLevel.PACKAGE)
 @ViewController(path = "de/tobias/playwall/client/view", view = "ApplicationLoadingView", applyToStage = false)
 @Slf4j
@@ -40,6 +45,8 @@ public class ApplicationLoadingViewController extends ViewControllerBase
 	private Label titleLabel;
 	@FXML
 	private Label versionLabel;
+	@FXML
+	private LoadingSpinner spinner;
 	@FXML
 	private Label loadingLabel;
 
@@ -61,6 +68,8 @@ public class ApplicationLoadingViewController extends ViewControllerBase
 	{
 		titleLabel.setText(app.getInfo().getName());
 		versionLabel.setText(app.getInfo().getVersion());
+
+		spinner.setColors(PLAYWALL_ICON_BLUE, PLAYWALL_ICON_YELLOW, PLAYWALL_ICON_RED);
 	}
 
 	@Override
