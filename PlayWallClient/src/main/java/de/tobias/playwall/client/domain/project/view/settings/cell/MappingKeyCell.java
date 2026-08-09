@@ -8,6 +8,7 @@ import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.geometry.Pos;
@@ -66,7 +67,7 @@ public class MappingKeyCell extends ListCell<InputKey>
 		switch(item)
 		{
 			case KeyboardInputKey key ->
-					keyLabel.setText(Localization.getString(Strings.UI_SETTINGS_PROJECT_MAPPING_KEY_KEYBOARD, key.key()));
+					keyLabel.setText(Localization.getString(Strings.UI_SETTINGS_PROJECT_MAPPING_KEY_KEYBOARD, KeyNameLocalizer.getKeyName(key.code())));
 			case MidiInputKey midi ->
 					keyLabel.setText(Localization.getString(Strings.UI_SETTINGS_PROJECT_MAPPING_KEY_MIDI, midi.value()));
 			default -> throw new IllegalStateException("Unexpected value: " + item);

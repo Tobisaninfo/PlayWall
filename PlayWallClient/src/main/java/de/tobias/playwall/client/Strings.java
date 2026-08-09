@@ -116,6 +116,9 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_MAPPING_KEY_KEYBOARD = "ui.settings.project.mapping.key.keyboard";
 	public static final String UI_SETTINGS_PROJECT_MAPPING_KEY_MIDI = "ui.settings.project.mapping.key.midi";
 
+	public static final String UI_DIALOG_KEYBOARD_INPUT_TITLE = "ui.dialog.keyboard.input.title";
+	public static final String UI_DIALOG_KEYBOARD_INPUT_PLACEHOLDER = "ui.dialog.keyboard.input.placeholder";
+
 	public static final String UI_ACTION_PAGE_NAME = "action.page.name";
 
 	// ui - settings - program

@@ -7,9 +7,11 @@ import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
+import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
 import de.tobias.playwall.client.domain.project.view.settings.cell.MappingKeyCell;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
@@ -19,10 +21,13 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 import java.util.Map;
-import java.util.Random;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -142,10 +147,12 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	@FXML
 	private void onKeyboardAdd()
 	{
-		final String randomChar = String.valueOf("ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(new Random().nextInt(26)));
-
-		getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.valueOf(randomChar), randomChar), null);
-		updateInputListView();
+		final KeyboardInputDialog dialog = AppContextHolder.getInstance().get(KeyboardInputDialog.class);
+		final Optional<KeyboardInputKey> result = dialog.showAndWait(new KeyboardInputDialog.Param(getActiveMapping()), getContainingWindow());
+		result.ifPresent(key -> {
+			getActiveMapping().addInputKeyWithAction(key, null);
+			updateInputListView();
+		});
 	}
 
 	@FXML
