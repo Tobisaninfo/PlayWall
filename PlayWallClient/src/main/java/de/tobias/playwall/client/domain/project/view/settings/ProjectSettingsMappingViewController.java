@@ -12,10 +12,14 @@ import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.project.view.settings.cell.MappingKeyCell;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
@@ -36,11 +40,17 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private TabPane actionTabs;
 
 	@FXML
+	private TextField searchTextField;
+
+	@FXML
 	private PlayWallButton keyboardAddButton;
 	@FXML
 	private PlayWallButton midiAddButton;
 
 	private final MappingRegistry mappingRegistry;
+
+	private final ObservableList<InputKey> masterInputKeys = FXCollections.observableArrayList();
+	private final FilteredList<InputKey> filteredInputKeys = new FilteredList<>(masterInputKeys, _ -> true);
 
 	private Map<UUID, Mapping> mappings;
 	private UUID selectedMapping;
@@ -56,9 +66,16 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	protected void init()
 	{
 		super.init();
+
+		this.searchTextField.setPromptText(Localization.getString("ui.settings.project.mapping.search.prompt"));
+
 		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping(), this::onInputKeyDeleted));
 		mappingListView.getSelectionModel().selectedItemProperty()
 				.addListener((_, _, newValue) -> onInputKeySelected(newValue));
+
+		mappingListView.setItems(filteredInputKeys);
+		searchTextField.textProperty().addListener((_, _, newValue) -> filteredInputKeys.setPredicate(key -> matchesSearch(key, newValue)));
+
 
 		for(Class<? extends Action> action : mappingRegistry.getRegisteredActions())
 		{
@@ -147,6 +164,16 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 	private void updateInputListView()
 	{
-		mappingListView.getItems().setAll(getActiveMapping().getAllInputKeys());
+		masterInputKeys.setAll(getActiveMapping().getAllInputKeys());
+	}
+
+	private boolean matchesSearch(InputKey key, String query)
+	{
+		if(query == null || query.isBlank())
+		{
+			return true;
+		}
+		final Action action = getActiveMapping().getAction(key);
+		return action != null && action.toString().toLowerCase().contains(query.toLowerCase());
 	}
 }

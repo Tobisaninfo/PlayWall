@@ -13,8 +13,9 @@
         <children>
             <VBox spacing="7">
                 <children>
+                    <TextField fx:id="searchTextField"/>
                     <ListView fx:id="mappingListView" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
-                              prefWidth="150.0"/>
+                              prefWidth="200.0"/>
 
                     <HBox spacing="7">
                         <children>
