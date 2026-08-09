@@ -10,6 +10,7 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
 import de.tobias.playwall.client.domain.project.view.settings.cell.MappingKeyCell;
@@ -98,6 +99,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		});
 
 		searchByKeyButton.getStyleClass().add("project-settings--search-by-key-button");
+		searchByKeyLabel.getStyleClass().addAll("key-input-label", "project-settings--search-by-key-label");
 
 		for(Class<? extends Action> action : mappingRegistry.getRegisteredActions())
 		{
@@ -148,7 +150,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private void onKeyboardAdd()
 	{
 		final KeyboardInputDialog dialog = AppContextHolder.getInstance().get(KeyboardInputDialog.class);
-		final Optional<KeyboardInputKey> result = dialog.showAndWait(new KeyboardInputDialog.Param(getActiveMapping()), getContainingWindow());
+		final Optional<KeyboardInputKey> result = dialog.showAndWait(new KeyboardInputDialog.Param(getActiveMapping(), false), getContainingWindow());
 		result.ifPresent(key -> {
 			getActiveMapping().addInputKeyWithAction(key, null);
 			updateInputListView();
@@ -164,15 +166,18 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	@FXML
 	private void onSearchByKey()
 	{
-		// TODO: debug only
-		final KeyCode keyCode = KeyCode.W;
+		final KeyboardInputDialog dialog = AppContextHolder.getInstance().get(KeyboardInputDialog.class);
+		final Optional<KeyboardInputKey> result = dialog.showAndWait(new KeyboardInputDialog.Param(getActiveMapping(), true), getContainingWindow());
+		result.ifPresent(key ->
+		{
+			searchTextField.clear();
 
-		searchTextField.clear();
-
-		searchKeyCode = keyCode;
-		searchByKeyLabel.setText(keyCode.getName());
-		searchByKeyClearButton.setVisible(true);
-		updateSearchPredicate();
+			searchKeyCode = key.code();
+			searchByKeyLabel.setText(KeyNameLocalizer.getKeyName(key.code()));
+			searchByKeyLabel.setVisible(true);
+			searchByKeyClearButton.setVisible(true);
+			updateSearchPredicate();
+		});
 	}
 
 	@FXML
@@ -180,6 +185,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		searchKeyCode = null;
 		searchByKeyLabel.setText(null);
+		searchByKeyLabel.setVisible(false);
 		searchByKeyClearButton.setVisible(false);
 		updateSearchPredicate();
 	}

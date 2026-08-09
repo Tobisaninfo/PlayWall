@@ -30,6 +30,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	public static class Param
 	{
 		private final Mapping mapping;
+		private final boolean autoSubmit;
 	}
 
 	private static final Set<KeyCode> RESERVED_KEYS = Set.of(KeyCode.ENTER, KeyCode.SPACE, KeyCode.ESCAPE, KeyCode.NUM_LOCK);
@@ -47,6 +48,9 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	private Mapping mapping;
 
 	@Getter(AccessLevel.NONE)
+	private boolean autoSubmit;
+
+	@Getter(AccessLevel.NONE)
 	private KeyboardInputKey selectedKey;
 
 	@Override
@@ -60,6 +64,9 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	public void initParameter(Param parameter)
 	{
 		this.mapping = parameter.getMapping();
+		this.autoSubmit = parameter.isAutoSubmit();
+		saveButton.setVisible(!autoSubmit);
+		saveButton.setManaged(!autoSubmit);
 	}
 
 	@Override
@@ -117,20 +124,24 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 		{
 			selectedKey = key;
 			updateInputState(key);
+			if(autoSubmit)
+			{
+				getStageContainer().ifPresent(NVCStage::close);
+			}
 		}
 	}
 
 	private void updateInputState(KeyboardInputKey key)
 	{
-		final boolean used = key != null && mapping != null && mapping.getAllInputKeys().contains(key);
-		final boolean valid = key != null && !used;
+		final boolean isAlreadyUsed = !autoSubmit && key != null && mapping != null && mapping.getAllInputKeys().contains(key);
+		final boolean valid = key != null && !isAlreadyUsed;
 
 		keyLabel.setText(key != null ? KeyNameLocalizer.getKeyName(key.code()) : Localization.getString(Strings.UI_DIALOG_KEYBOARD_INPUT_PLACEHOLDER));
 		keyLabel.getStyleClass().removeAll("key-input-placeholder", "key-input-label", "error-label");
 		if(key != null)
 		{
 			keyLabel.getStyleClass().add("key-input-label");
-			if(used)
+			if(isAlreadyUsed)
 			{
 				keyLabel.getStyleClass().add("error-label");
 			}
@@ -140,7 +151,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 			keyLabel.getStyleClass().add("key-input-placeholder");
 		}
 
-		errorLabel.setVisible(used);
+		errorLabel.setVisible(isAlreadyUsed);
 		saveButton.setDisable(!valid);
 	}
 }

@@ -19,7 +19,11 @@
                             <PlayWallButton fx:id="searchByKeyButton" onAction="#onSearchByKey"
                                             icon="MAGNIFYING_GLASS_SOLID" text="%ui.settings.project.mapping.search.key.prompt"
                                             maxWidth="1.7976931348623157E308"/>
-                            <Label fx:id="searchByKeyLabel" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                            <HBox fx:id="searchByKeyLabelContainer" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                                <children>
+                                    <Label fx:id="searchByKeyLabel" alignment="CENTER" visible="false"/>
+                                </children>
+                            </HBox>
                             <PlayWallButton fx:id="searchByKeyClearButton" onAction="#onSearchByKeyClear"
                                             icon="TRASH_CAN_SOLID" maxWidth="1.7976931348623157E308" visible="false"/>
                         </children>

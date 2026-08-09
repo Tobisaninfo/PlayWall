@@ -3,3 +3,11 @@
 .project-settings--search-by-key-button {
     -fx-font-size: 12px;
 }
+
+.project-settings--search-by-key-label.key-input-label {
+    -fx-font-size: 12px;
+    -fx-padding: 2px 8px;
+    -fx-min-width: 14px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
