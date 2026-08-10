@@ -103,6 +103,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	@FXML
 	private void cancelHandler(ActionEvent event)
 	{
+		selectedKey = null;
 		getStageContainer().ifPresent(NVCStage::close);
 	}
 
