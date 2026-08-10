@@ -129,6 +129,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 			{
 				getStageContainer().ifPresent(NVCStage::close);
 			}
+			event.consume();
 		}
 	}
 
