@@ -79,7 +79,6 @@ public class ProjectManagementViewController extends ParamDialogBase<ProjectMana
 	{
 		super.init();
 
-		this.searchTextField.setPromptText(Localization.getString("ui.project.management.search.prompt"));
 		this.projectListView.setItems(filteredProjects);
 		this.projectListView.setCellFactory(_ -> new ProjectManagementCell(projectController, this::onProjectCellAction));
 

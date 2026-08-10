@@ -133,25 +133,25 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 
 	private void updateInputState(KeyboardInputKey key)
 	{
-		final boolean isAlreadyUsed = !autoSubmit && key != null && mapping != null && mapping.getAllInputKeys().contains(key);
-		final boolean valid = key != null && !isAlreadyUsed;
-
-		keyLabel.setText(key != null ? KeyNameLocalizer.getKeyName(key.code()) : Localization.getString(Strings.UI_DIALOG_KEYBOARD_INPUT_PLACEHOLDER));
 		keyLabel.getStyleClass().removeAll("key-input-placeholder", "key-input-label", "error-label");
-		if(key != null)
+
+		if(key == null || mapping == null)
 		{
-			keyLabel.getStyleClass().add("key-input-label");
-			if(isAlreadyUsed)
-			{
-				keyLabel.getStyleClass().add("error-label");
-			}
-		}
-		else
-		{
+			keyLabel.setText(Localization.getString(Strings.UI_DIALOG_KEYBOARD_INPUT_PLACEHOLDER));
 			keyLabel.getStyleClass().add("key-input-placeholder");
+			return;
+		}
+
+		final boolean isAlreadyUsed = !autoSubmit && mapping.getAllInputKeys().contains(key);
+
+		keyLabel.setText(KeyNameLocalizer.getKeyName(key.code()));
+		keyLabel.getStyleClass().add("key-input-label");
+		if(isAlreadyUsed)
+		{
+			keyLabel.getStyleClass().add("error-label");
 		}
 
 		errorLabel.setVisible(isAlreadyUsed);
-		saveButton.setDisable(!valid);
+		saveButton.setDisable(isAlreadyUsed);
 	}
 }

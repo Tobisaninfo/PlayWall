@@ -82,8 +82,6 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		super.init();
 
-		this.searchTextField.setPromptText(Localization.getString("ui.settings.project.mapping.search.prompt"));
-
 		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping(), this::onInputKeyDeleted));
 		mappingListView.getSelectionModel().selectedItemProperty()
 				.addListener((_, _, newValue) -> onInputKeySelected(newValue));
@@ -97,9 +95,6 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			}
 			updateSearchPredicate();
 		});
-
-		searchByKeyButton.getStyleClass().add("project-settings--search-by-key-button");
-		searchByKeyLabel.getStyleClass().addAll("key-input-label", "project-settings--search-by-key-label");
 
 		for(Class<? extends Action> action : mappingRegistry.getRegisteredActions())
 		{
@@ -227,7 +222,14 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			return true;
 		}
 		final Action action = getActiveMapping().getAction(key);
-		return action != null && action.toString().toLowerCase().contains(query.toLowerCase());
+		if(action == null)
+		{
+			return false;
+		}
+
+		final ActionDescription actionDescription = action.getClass().getAnnotation(ActionDescription.class);
+		final String localizedName = Localization.getString(actionDescription.nameKey());
+		return localizedName.toLowerCase().contains(query.toLowerCase());
 	}
 
 	private void updateSearchPredicate()

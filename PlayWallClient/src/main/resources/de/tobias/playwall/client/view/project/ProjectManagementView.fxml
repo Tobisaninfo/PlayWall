@@ -10,7 +10,7 @@
 
 <?import javafx.scene.control.Label?>
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <TextField fx:id="searchTextField"/>
+    <TextField fx:id="searchTextField" promptText="%ui.project.management.search.prompt"/>
     <Label text="%ui.project.management.list.title">
         <padding>
             <Insets top="7"/>

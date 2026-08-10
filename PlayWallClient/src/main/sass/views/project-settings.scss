@@ -11,3 +11,28 @@
     -fx-background-radius: 6px;
     -fx-border-radius: 6px;
 }
+
+.key-input-placeholder {
+    -fx-font-size: 20px;
+    -fx-text-fill: variables.$component-text-color-deactivated;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.key-input-label {
+    -fx-background-color: variables.$keycap-background-color;
+    -fx-text-fill: variables.$keycap-text-color;
+    -fx-background-radius: 12px;
+    -fx-border-color: variables.$keycap-border-color;
+    -fx-border-radius: 12px;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 60px;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.key-input-label.error-label {
+    -fx-text-fill: variables.$danger-color;
+}

@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import de.tobias.playwall.client.view.components.PlayWallButton?>
+<?import java.lang.String?>
 <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
@@ -13,15 +14,21 @@
         <children>
             <VBox spacing="7">
                 <children>
-                    <TextField fx:id="searchTextField"/>
+                    <TextField fx:id="searchTextField" promptText="%ui.settings.project.mapping.search.prompt"/>
                     <HBox spacing="7" alignment="CENTER_LEFT">
                         <children>
                             <PlayWallButton fx:id="searchByKeyButton" onAction="#onSearchByKey"
                                             icon="MAGNIFYING_GLASS_SOLID" text="%ui.settings.project.mapping.search.key.prompt"
-                                            maxWidth="1.7976931348623157E308"/>
+                                            maxWidth="1.7976931348623157E308"
+                                            styleClass="project-settings--search-by-key-button"/>
                             <HBox fx:id="searchByKeyLabelContainer" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                                 <children>
-                                    <Label fx:id="searchByKeyLabel" alignment="CENTER" visible="false"/>
+                                    <Label fx:id="searchByKeyLabel" alignment="CENTER" visible="false">
+                                        <styleClass>
+                                            <String fx:value="key-input-label"/>
+                                            <String fx:value="project-settings--search-by-key-label"/>
+                                        </styleClass>
+                                    </Label>
                                 </children>
                             </HBox>
                             <PlayWallButton fx:id="searchByKeyClearButton" onAction="#onSearchByKeyClear"
