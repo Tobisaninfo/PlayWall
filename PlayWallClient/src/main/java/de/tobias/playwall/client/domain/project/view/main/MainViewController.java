@@ -1,5 +1,8 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.thecodelabs.midi.mapping.Mapping;
+import de.thecodelabs.midi.mapping.action.ActionHandlerResolver;
+import de.thecodelabs.midi.mapping.listener.KeyboardMappingListener;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -165,6 +168,9 @@ public class MainViewController extends ViewControllerBase
 	private ProjectSettingsUpdateListener projectSettingsUpdateListener;
 	private UndoHistoryUpdateListener undoHistoryUpdateListener;
 	private SettingsListener settingsListener;
+
+	private final ActionHandlerResolver actionHandlerResolver;
+	private KeyboardMappingListener keyboardMappingListener;
 
 	private MaterialToastManager materialToastManager;
 	private Toast padErrorsToast;
@@ -442,6 +448,25 @@ public class MainViewController extends ViewControllerBase
 		stage.setTitle(getWindowTitle(project.getMetadata().getName()));
 	}
 
+	void registerMappingListener()
+	{
+		// Remove old listener
+		if(keyboardMappingListener != null)
+		{
+			getStage().removeEventHandler(KeyEvent.ANY, keyboardMappingListener);
+		}
+
+		final ProjectMetadata projectMetadata = projectController.getProject().getMetadata();
+		if(projectMetadata.getSelectedMapping() == null)
+		{
+			return;
+		}
+
+		final Mapping activeMapping = projectMetadata.getMappings().get(projectMetadata.getSelectedMapping());
+		keyboardMappingListener = new KeyboardMappingListener(activeMapping, actionHandlerResolver);
+		getStage().addEventHandler(KeyEvent.ANY, keyboardMappingListener);
+	}
+
 	private Stage getStage()
 	{
 		return getStageContainer().map(NVCStage::getStage).orElseThrow();
@@ -474,6 +499,8 @@ public class MainViewController extends ViewControllerBase
 			client.project(project.getMetadata().getId()).load();
 
 			volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
+
+			registerMappingListener();
 			log.info("Loading project {}", project.getMetadata().getName());
 		}
 		catch(PlayWallApiException e)

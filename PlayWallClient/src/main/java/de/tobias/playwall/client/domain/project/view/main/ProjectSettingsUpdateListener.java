@@ -30,6 +30,7 @@ class ProjectSettingsUpdateListener implements UpdateMessageEventListener<Projec
 
 			mainViewController.updateTitle();
 			mainViewController.updateStyle();
+			mainViewController.registerMappingListener();
 		});
 	}
 

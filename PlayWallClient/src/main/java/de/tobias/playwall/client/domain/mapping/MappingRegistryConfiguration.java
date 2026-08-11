@@ -2,6 +2,7 @@ package de.tobias.playwall.client.domain.mapping;
 
 import de.thecodelabs.midi.mapping.MappingRegistry;
 import de.thecodelabs.midi.mapping.MappingSerializer;
+import de.thecodelabs.midi.mapping.action.ActionHandlerResolver;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.tobias.playwall.client.appcontext.Bean;
@@ -32,6 +33,12 @@ public class MappingRegistryConfiguration
 	public MappingSerializer mappingSerializer()
 	{
 		return registry.build();
+	}
+
+	@Bean
+	public ActionHandlerResolver actionHandlerResolver()
+	{
+		return registry;
 	}
 
 	@Bean
