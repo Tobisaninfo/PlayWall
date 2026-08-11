@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 public @interface ActionDescription
 {
 	String nameKey();
+
+	Class<? extends ActionSettingsViewController> settingsViewController();
 }

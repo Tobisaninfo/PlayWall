@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.thecodelabs.midi.mapping.action.Action;
 
 @JsonTypeName("page")
-@ActionDescription(nameKey = "action.page.name")
+@ActionDescription(nameKey = "action.page.name", settingsViewController = PageActionSettingsViewController.class)
 public class PageAction implements Action
 {
 	@Override

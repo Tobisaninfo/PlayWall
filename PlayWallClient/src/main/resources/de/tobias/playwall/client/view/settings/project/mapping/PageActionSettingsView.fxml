@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<VBox>
+    <SettingsRow icon="PEN_TO_SQUARE_SOLID" title="Name">
+        <Label text="Einstellung"/>
+    </SettingsRow>
+</VBox>
