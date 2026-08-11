@@ -5,7 +5,9 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.loader.AppContextLoader;
+import de.tobias.playwall.client.view.components.LoadingSpinner;
 import de.tobias.playwall.client.view.components.PlayWallBadge;
+import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.style.Styleable;
 import de.tobias.playwall.client.view.toast.Toast;
 import de.tobias.playwall.client.view.toast.ToastAction;
@@ -86,6 +88,8 @@ public class ComponentPreviewApplication extends Application
 				section("ProgressBar", progressBars()),
 				new Separator(),
 				section("ProgressIndicator", progressIndicators()),
+				new Separator(),
+				section("LoadingSpinner", loadingSpinner()),
 				new Separator(),
 				section("TabPane", tabPane()),
 				new Separator(),
@@ -305,6 +309,13 @@ public class ComponentPreviewApplication extends Application
 		disabled.setDisable(true);
 
 		return new HBox(ITEM_SPACING * 4, determinate, indeterminate, disabled);
+	}
+
+	private HBox loadingSpinner()
+	{
+		final LoadingSpinner loadingSpinner = new LoadingSpinner(30, ViewConstants.PLAYWALL_ICON_BLUE, ViewConstants.PLAYWALL_ICON_YELLOW, ViewConstants.PLAYWALL_ICON_RED);
+
+		return new HBox(ITEM_SPACING * 4, loadingSpinner);
 	}
 
 	private TabPane tabPane()
