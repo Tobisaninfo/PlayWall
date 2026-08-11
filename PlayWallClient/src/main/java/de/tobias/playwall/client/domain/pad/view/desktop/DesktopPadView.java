@@ -21,6 +21,7 @@ import de.tobias.playwall.client.utils.NodeWalker;
 import de.tobias.playwall.client.utils.PadTimeUtils;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
+import de.tobias.playwall.client.view.components.LoadingSpinner;
 import de.tobias.playwall.client.view.components.drag.DropOptionSelect;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
@@ -37,6 +38,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import lombok.Getter;
@@ -124,6 +126,7 @@ public class DesktopPadView implements PadView
 		superRoot = new PadStackPane(STYLE_CLASS_PAD, STYLE_CLASS_PAD_INDEX);
 		root = new PadVBox(STYLE_CLASS_PAD_BUTTON_ROOT);
 		busyView = new BusyView(superRoot);
+		busyView.setIndicatorNode(new LoadingSpinner(60, Color.WHITE));
 		dropOptionSelect = new DropOptionSelect(superRoot);
 
 		introLayer = PadLabel.empty(STYLE_CLASS_PAD_INTRO, STYLE_CLASS_PAD_INTRO_INDEX);
