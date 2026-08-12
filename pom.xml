@@ -47,7 +47,7 @@
         <mockito.version>5.23.0</mockito.version>
         <javafx.version>25.0.4</javafx.version>
         <controlsfx.version>11.2.4</controlsfx.version>
-        <classgraph.version>4.8.189</classgraph.version>
+        <classgraph.version>4.8.190</classgraph.version>
         <commons-cli.version>1.11.0</commons-cli.version>
 
         <!-- Testing -->
