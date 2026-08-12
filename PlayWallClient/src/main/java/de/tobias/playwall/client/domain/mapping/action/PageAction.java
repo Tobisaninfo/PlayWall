@@ -7,4 +7,9 @@ import de.thecodelabs.midi.mapping.action.Action;
 @ActionDescription(nameKey = "action.page.name")
 public class PageAction implements Action
 {
+	@Override
+	public Action copy()
+	{
+		return new PageAction();
+	}
 }

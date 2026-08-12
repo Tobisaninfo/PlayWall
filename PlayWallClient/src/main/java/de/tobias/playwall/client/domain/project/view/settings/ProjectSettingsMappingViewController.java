@@ -27,6 +27,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -110,7 +111,12 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		this.isValidProperty.set(true);
 
-		mappings = parameter.getProjectMetadata().getMappings();
+		mappings = new HashMap<>();
+		for(Map.Entry<UUID, Mapping> entry : parameter.getProjectMetadata().getMappings().entrySet())
+		{
+			mappings.put(entry.getKey(), entry.getValue().copy());
+		}
+
 		selectedMapping = parameter.getProjectMetadata().getSelectedMapping();
 
 		if(mappings.isEmpty())
