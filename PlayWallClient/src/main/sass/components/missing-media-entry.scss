@@ -1,0 +1,5 @@
+@use "variables";
+
+.label {
+    -fx-text-fill: variables.$component-text-color;
+}

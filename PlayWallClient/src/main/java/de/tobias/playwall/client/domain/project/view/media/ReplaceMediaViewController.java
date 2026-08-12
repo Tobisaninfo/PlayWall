@@ -81,6 +81,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 
 		table.getSortOrder().add(columnPageName);
 		table.getSortOrder().add(columnPadPosition);
+		table.setSelectionModel(null);
 		columnPadPosition.setComparator(Comparator.comparingInt(Integer::parseInt));
 
 		Platform.runLater(() -> table.sort());
@@ -91,8 +92,8 @@ public class ReplaceMediaViewController extends ViewControllerBase
 	{
 		super.initStage(stageContainer, stage);
 		stage.setTitle(Localization.getString(Strings.UI_MENU_EDIT_REPLACE_MEDIA));
-		stage.setWidth(1200);
-		stage.setMinWidth(1200);
+		stage.setWidth(1400);
+		stage.setMinWidth(1400);
 		stage.setHeight(700);
 		stage.setMinHeight(200);
 	}

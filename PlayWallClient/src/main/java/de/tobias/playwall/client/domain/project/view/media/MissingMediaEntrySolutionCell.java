@@ -1,7 +1,12 @@
 package de.tobias.playwall.client.domain.project.view.media;
 
 import de.tobias.playwall.client.view.components.PlayWallBadge;
+import de.tobias.playwall.client.view.components.ViewConstants;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.VBox;
 
 class MissingMediaEntrySolutionCell extends TableCell<MissingMediaEntry, MissingMediaEntry>
 {
@@ -28,13 +33,22 @@ class MissingMediaEntrySolutionCell extends TableCell<MissingMediaEntry, Missing
 		badge.updateText(solutionType.getLocalizedName());
 		badge.setVisible(true);
 
+		final VBox box = new VBox(badge);
+		box.setAlignment(Pos.CENTER_LEFT);
+		box.setSpacing(ViewConstants.DEFAULT_SPACING);
+
 		switch(solutionType)
 		{
 			case NONE -> badge.setVisible(false);
-			case REPLACE -> badge.getStyleClass().setAll("badge", "primary");
+			case REPLACE ->
+			{
+				badge.getStyleClass().setAll("badge", "primary");
+				final Label label = new Label(item.getNewMediaPath());
+				box.getChildren().add(label);
+			}
 			case DELETE -> badge.getStyleClass().setAll("badge", "danger");
 		}
 
-		setGraphic(badge);
+		setGraphic(box);
 	}
 }

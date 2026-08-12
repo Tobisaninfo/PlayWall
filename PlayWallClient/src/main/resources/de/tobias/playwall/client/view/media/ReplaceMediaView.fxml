@@ -16,11 +16,11 @@
 
         <TableView fx:id="table" focusTraversable="false" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="columnPageName" minWidth="150" prefWidth="150" text="%ui.replace.media.column.page_name" />
+                <TableColumn fx:id="columnPageName" minWidth="75" prefWidth="75" maxWidth="75" text="%ui.replace.media.column.page_name" />
                 <TableColumn fx:id="columnPadPosition" maxWidth="70" prefWidth="70" text="%ui.replace.media.column.pad_index" />
                 <TableColumn fx:id="columnPadName" minWidth="150" prefWidth="150" text="%ui.replace.media.column.pad_name" />
                 <TableColumn fx:id="columnOldPath" minWidth="300" prefWidth="300" text="%ui.replace.media.column.old_path" />
-                <TableColumn fx:id="columnSolution" minWidth="100" prefWidth="100" text="%ui.replace.media.column.solution" />
+                <TableColumn fx:id="columnSolution" minWidth="250" prefWidth="250" text="%ui.replace.media.column.solution" />
                 <TableColumn fx:id="columnActions" maxWidth="280" prefWidth="280" text="%ui.replace.media.column.actions" />
             </columns>
         </TableView>
