@@ -6,10 +6,7 @@ import de.tobias.playwall.client.appcontext.Bean;
 import de.tobias.playwall.client.appcontext.Configuration;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.PostConstruct;
-import de.tobias.playwall.client.domain.mapping.action.PageAction;
-import de.tobias.playwall.client.domain.mapping.action.PageActionHandler;
-import de.tobias.playwall.client.domain.mapping.action.StopAllAction;
-import de.tobias.playwall.client.domain.mapping.action.StopAllActionHandler;
+import de.tobias.playwall.client.domain.mapping.action.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -21,13 +18,15 @@ class ActionHandlerResolverConfiguration
 
 	private final PageActionHandler pageActionHandler;
 	private final StopAllActionHandler stopAllActionHandler;
+	private final GlobalVolumeActionHandler globalVolumeActionHandler;
 
 	@PostConstruct
 	private void init()
 	{
 		actionHandlerResolver = new DefaultActionHandlerResolver()
 				.registerAction(PageAction.class, pageActionHandler)
-				.registerAction(StopAllAction.class, stopAllActionHandler);
+				.registerAction(StopAllAction.class, stopAllActionHandler)
+				.registerAction(GlobalVolumeAction.class, globalVolumeActionHandler);
 	}
 
 	@Bean
