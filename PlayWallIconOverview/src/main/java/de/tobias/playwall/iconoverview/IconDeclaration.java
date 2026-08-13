@@ -112,6 +112,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.POWER_OFF_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Programmstart"))));
 		data.add(new IconEntry(FontAwesomeType.ARROW_RIGHT_FROM_BRACKET_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Beenden des Programms"))));
 		data.add(new IconEntry(FontAwesomeType.BUG_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Erweitertes Logging"))));
+		data.add(new IconEntry(FontAwesomeType.PERCENT_SOLID, List.of(new IconUsage(IconUsageCategory.MAPPING, "Mapping - Global Volume Action - Delta"))));
 
 		// File drag and drop
 		data.add(new IconEntry(FontAwesomeType.MUSIC_SOLID, List.of(new IconUsage(IconUsageCategory.DRAG_AND_DROP, "Audio"))));
