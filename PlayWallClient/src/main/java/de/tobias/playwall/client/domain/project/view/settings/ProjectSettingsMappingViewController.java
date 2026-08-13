@@ -14,7 +14,7 @@ import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
-import de.tobias.playwall.client.domain.project.view.settings.cell.MappingKeyCell;
+import de.tobias.playwall.client.domain.project.view.settings.cell.InputKeyCell;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import javafx.collections.FXCollections;
@@ -82,7 +82,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		super.init();
 
-		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping(), this::onInputKeyDeleted));
+		mappingListView.setCellFactory(_ -> new InputKeyCell(getActiveMapping(), this::onInputKeyDeleted));
 		mappingListView.getSelectionModel().selectedItemProperty()
 				.addListener((_, oldValue, newValue) -> onInputKeySelected(oldValue, newValue));
 

@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.function.Consumer;
 
-public class MappingKeyCell extends ListCell<InputKey>
+public class InputKeyCell extends ListCell<InputKey>
 {
 	private final Mapping mapping;
 
@@ -31,13 +31,13 @@ public class MappingKeyCell extends ListCell<InputKey>
 	final PlayWallButton buttonDelete;
 	final Consumer<InputKey> deleteActionHandler;
 
-	public MappingKeyCell(Mapping mapping, Consumer<InputKey> deleteActionHandler)
+	public InputKeyCell(Mapping mapping, Consumer<InputKey> deleteActionHandler)
 	{
 		this.mapping = mapping;
 		this.deleteActionHandler = deleteActionHandler;
 
 		hbox = new HBox(ViewConstants.DEFAULT_SPACING);
-		vbox = new VBox(ViewConstants.DEFAULT_SPACING / 2);
+		vbox = new VBox(4);
 		keyLabel = new Label();
 		actionLabel = new Label();
 
