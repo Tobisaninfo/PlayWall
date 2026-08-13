@@ -678,7 +678,7 @@ public class MainViewController extends ViewControllerBase
 
 	public void showPage(Page page)
 	{
-		projectController.setCurrentPage(page);
+		projectController.setCurrentPageIndex(page.getPosition());
 		final ProjectMetadata projectMetadata = projectController.getProject().getMetadata();
 		final int padNumberPerPage = projectMetadata.getNumberOfPadsPerPage();
 

@@ -19,7 +19,12 @@ public class ClientProjectController
 	private Project project;
 
 	@Setter
-	private Page currentPage;
+	private int currentPageIndex;
+
+	public Page getCurrentPage()
+	{
+		return project.getPage(currentPageIndex);
+	}
 
 	public void loadProject(Project project)
 	{
