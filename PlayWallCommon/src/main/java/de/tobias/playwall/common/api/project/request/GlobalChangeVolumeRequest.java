@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class GlobaleChangeVolumeRequest extends RequestMessage
+public class GlobalChangeVolumeRequest extends RequestMessage
 {
 	private double volume;
 }

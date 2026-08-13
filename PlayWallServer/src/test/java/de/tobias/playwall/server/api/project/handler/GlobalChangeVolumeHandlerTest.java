@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
-import de.tobias.playwall.common.api.project.request.GlobaleChangeVolumeRequest;
+import de.tobias.playwall.common.api.project.request.GlobalChangeVolumeRequest;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -73,7 +73,7 @@ class GlobalChangeVolumeHandlerTest extends AbstractRequestHandlerTest
 		projectController.loadProject(project).get();
 		applicationEvents.clear();
 
-		final GlobaleChangeVolumeRequest request = new GlobaleChangeVolumeRequest(0.5);
+		final GlobalChangeVolumeRequest request = new GlobalChangeVolumeRequest(0.5);
 		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getContent()).isInstanceOf(AudioPadContent.class)

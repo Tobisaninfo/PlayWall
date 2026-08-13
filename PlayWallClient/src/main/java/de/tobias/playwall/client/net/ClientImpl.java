@@ -303,7 +303,7 @@ class ClientImpl implements Client
 	@Override
 	public void changeGlobalVolume(double volume) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new GlobaleChangeVolumeRequest(volume));
+		clientWebSocketHandler.send(new GlobalChangeVolumeRequest(volume));
 	}
 
 	@Override
