@@ -1,6 +1,8 @@
 package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.project.request.GlobalChangeVolumeRequest;
+import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
+import de.tobias.playwall.server.api.project.ProjectMetadataMapper;
 import de.tobias.playwall.server.common.audio.VolumeHelper;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.common.model.pad.Pad;
@@ -12,6 +14,7 @@ import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
@@ -20,6 +23,8 @@ import java.io.IOException;
 class GlobalChangeVolumeHandler implements OneTimeActionRequestHandler<GlobalChangeVolumeRequest>
 {
 	private final ProjectController projectController;
+	private final ApplicationContext context;
+	private final ProjectMetadataMapper projectMetadataMapper;
 
 	@Override
 	public void handleRequest(GlobalChangeVolumeRequest requestMessage) throws IOException
@@ -46,5 +51,7 @@ class GlobalChangeVolumeHandler implements OneTimeActionRequestHandler<GlobalCha
 				}
 			}
 		}
+
+		context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(loadedProject.getMetadata())));
 	}
 }

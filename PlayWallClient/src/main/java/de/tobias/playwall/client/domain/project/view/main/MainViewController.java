@@ -25,11 +25,11 @@ import de.tobias.playwall.client.domain.pad.view.desktop.listener.PadDragListene
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.page.PageSettingsMapper;
-import de.tobias.playwall.client.domain.page.view.settings.BasePageSettingsViewController;
-import de.tobias.playwall.client.domain.page.view.settings.PageSettingsViewController;
+import de.tobias.playwall.client.domain.page.view.PageButtonInputListener;
 import de.tobias.playwall.client.domain.page.view.PageButtons;
 import de.tobias.playwall.client.domain.page.view.PageButtonsEventDispatcher;
-import de.tobias.playwall.client.domain.page.view.PageButtonInputListener;
+import de.tobias.playwall.client.domain.page.view.settings.BasePageSettingsViewController;
+import de.tobias.playwall.client.domain.page.view.settings.PageSettingsViewController;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.management.ProjectManagementViewController;
@@ -127,6 +127,7 @@ public class MainViewController extends ViewControllerBase
 	private GlobalColorPicker globalColorPicker;
 	@FXML
 	private VolumeSlider volumeSlider;
+	private boolean isSuppressVolumeUpdate = false;
 
 	private LoadingView loadingOverlay;
 	private ConnectionLostOverlay connectionLostOverlay;
@@ -252,6 +253,11 @@ public class MainViewController extends ViewControllerBase
 		globalColorPicker.init(padEventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, this::onColorChange, this::onColorSubmit));
 
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
+			if(isSuppressVolumeUpdate)
+			{
+				return;
+			}
+
 			if(Math.abs(oldValue.doubleValue() - newValue.doubleValue()) < VolumeSlider.UPDATE_THRESHOLD)
 			{
 				return;
@@ -699,6 +705,19 @@ public class MainViewController extends ViewControllerBase
 	public void updateStyle()
 	{
 		styleable.renderStylesheets(getStage(), projectController.getCurrentPage(), projectController.getProject().getMetadata());
+	}
+
+	public void updateGlobalVolume(Double volume)
+	{
+		isSuppressVolumeUpdate = true;
+		try
+		{
+			volumeSlider.setValue(volume * 100);
+		}
+		finally
+		{
+			isSuppressVolumeUpdate = false;
+		}
 	}
 
 	public PadView getPadViewForPosition(int position)

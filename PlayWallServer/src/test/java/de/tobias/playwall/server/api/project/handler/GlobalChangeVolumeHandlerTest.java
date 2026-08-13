@@ -2,6 +2,7 @@ package de.tobias.playwall.server.api.project.handler;
 
 import de.tobias.playwall.common.api.pad.update.PadUpdate;
 import de.tobias.playwall.common.api.project.request.GlobalChangeVolumeRequest;
+import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandler;
@@ -80,5 +81,9 @@ class GlobalChangeVolumeHandlerTest extends AbstractRequestHandlerTest
 				.satisfies(padContent -> assertThat(((AudioPadContent) padContent).getVolume()).isEqualTo(0.25));
 		verify(audioHandler).setVolume(0.125);
 		assertThat(applicationEvents.stream(PadUpdate.class)).isEmpty();
+		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class))
+				.hasSize(1)
+				.last()
+				.satisfies(item -> assertThat(item.getProjectMetadata().volume()).isEqualTo(0.5));
 	}
 }
