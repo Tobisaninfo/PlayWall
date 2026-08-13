@@ -452,7 +452,7 @@ public class MainViewController extends ViewControllerBase
 		// Remove old listener
 		if(keyboardMappingListener != null)
 		{
-			getStage().removeEventHandler(KeyEvent.ANY, keyboardMappingListener);
+			getStage().removeEventFilter(KeyEvent.ANY, keyboardMappingListener);
 		}
 
 		final ProjectMetadata projectMetadata = projectController.getProject().getMetadata();
@@ -463,7 +463,7 @@ public class MainViewController extends ViewControllerBase
 
 		final Mapping activeMapping = projectMetadata.getMappings().get(projectMetadata.getSelectedMapping());
 		keyboardMappingListener = new KeyboardMappingListener(activeMapping, actionHandlerResolver);
-		getStage().addEventHandler(KeyEvent.ANY, keyboardMappingListener);
+		getStage().addEventFilter(KeyEvent.ANY, keyboardMappingListener);
 	}
 
 	private Stage getStage()
