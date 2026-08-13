@@ -4,7 +4,9 @@ import de.thecodelabs.midi.event.KeyInputEvent;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.action.ActionHandler;
 import de.thecodelabs.midi.mapping.feedback.FeedbackState;
+import de.tobias.playwall.client.appcontext.Service;
 
+@Service
 public class PageActionHandler implements ActionHandler
 {
 	@Override
