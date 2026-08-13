@@ -24,10 +24,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Viewcontroller for the mapping page in the project settings dialog.
@@ -307,9 +304,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			return false;
 		}
 
-		final ActionDescription actionDescription = action.getClass().getAnnotation(ActionDescription.class);
-		final String localizedName = Localization.getString(actionDescription.nameKey());
-		return localizedName.toLowerCase().contains(query.toLowerCase());
+		return action.toString().toLowerCase().contains(query.toLowerCase());
 	}
 
 	private void updateSearchPredicate()
