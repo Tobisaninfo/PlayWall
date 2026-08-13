@@ -18,8 +18,9 @@ use rodio::{MixerDeviceSink, Player};
 use std::fs::File;
 use std::sync::atomic::{AtomicBool, AtomicU32};
 use std::sync::{Arc, RwLock};
+use symphonia::core::formats::probe::Hint;
+use symphonia::core::formats::TrackType;
 use symphonia::core::io::MediaSourceStream;
-use symphonia::core::probe::Hint;
 use symphonia::default::get_probe;
 use tracing::{debug, trace};
 use tracing_subscriber;
@@ -203,11 +204,11 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             Ok(file) => {
                 let media_source_stream = MediaSourceStream::new(Box::new(file), Default::default());
                 let hint = Hint::new();
-                let probed = match get_probe().format(
+                let format = match get_probe().probe(
                     &hint,
                     media_source_stream,
-                    &Default::default(),
-                    &Default::default(),
+                    Default::default(),
+                    Default::default(),
                 ) {
                     Ok(p) => p,
                     Err(e) => {
@@ -218,9 +219,8 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                         return Ok(());
                     }
                 };
-                let format = probed.format;
 
-                let track = match format.default_track() {
+                let track = match format.default_track(TrackType::Audio) {
                     Some(t) => t,
                     None => {
                         env.throw_new(
@@ -230,9 +230,13 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
                         return Ok(());
                     }
                 };
-                let params = &track.codec_params;
+                let sample_rate = track
+                    .codec_params
+                    .as_ref()
+                    .and_then(|params| params.audio())
+                    .and_then(|audio_params| audio_params.sample_rate);
 
-                let duration_seconds = if let (Some(sample_rate), Some(n_frames)) = (params.sample_rate, params.n_frames) {
+                let duration_seconds = if let (Some(sample_rate), Some(n_frames)) = (sample_rate, track.num_frames) {
                     n_frames as f64 / sample_rate as f64
                 } else {
                     0.0
