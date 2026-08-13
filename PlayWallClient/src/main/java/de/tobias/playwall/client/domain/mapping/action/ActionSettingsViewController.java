@@ -7,5 +7,7 @@ public abstract class ActionSettingsViewController extends NVC
 {
 	public abstract Action createNewAction();
 
-	public abstract void setAction(Action action);
+	public abstract void initAction(Action action);
+
+	public abstract void saveAction(Action action);
 }

@@ -144,6 +144,14 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	@Override
 	public void applySettings(Param param)
 	{
+		final Mapping activeMapping = getActiveMapping();
+		if(activeMapping == null)
+		{
+			return;
+		}
+		final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
+		actionTab.actionSettingsViewController.saveAction(activeMapping.getAction(getSelectedKey()));
+
 		param.getProjectMetadata().setMappings(mappings);
 		param.getProjectMetadata().setSelectedMapping(selectedMapping);
 	}
@@ -238,7 +246,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		{
 			final ActionTab actionTab = actionTabMap.get(action.getClass());
 			actionTabs.getSelectionModel().select(actionTab.tab);
-			actionTab.actionSettingsViewController.setAction(action);
+			actionTab.actionSettingsViewController.initAction(action);
 		}
 		else
 		{

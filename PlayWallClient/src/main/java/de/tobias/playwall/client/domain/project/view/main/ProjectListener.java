@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project.view.main;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMapper;
 import de.tobias.playwall.client.event.EventListener;
+import de.tobias.playwall.common.api.project.update.ProjectShowPageCommand;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import lombok.AllArgsConstructor;
 
@@ -18,5 +19,11 @@ public class ProjectListener
 		final Project project = projectMapper.projectDtoToProject(message.getProject());
 
 		mainViewController.updateProject(project);
+	}
+
+	@EventListener(ProjectShowPageCommand.class)
+	void showPage(ProjectShowPageCommand command)
+	{
+		mainViewController.showPage(command.getIndex());
 	}
 }
