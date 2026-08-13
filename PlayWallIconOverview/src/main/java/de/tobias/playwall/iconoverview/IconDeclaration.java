@@ -63,7 +63,10 @@ public class IconDeclaration
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei")
 		)));
 		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"))));
-		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Datei"))));
+		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Datei"),
+				new IconUsage(IconUsageCategory.MAPPING, "Mapping - PageAction")
+		)));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Im Ordner anzeigen"))));
 		data.add(new IconEntry(FontAwesomeType.TRASH_CAN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Launch Dialog - Projekt entfernen"), new IconUsage(IconUsageCategory.MAIN_WINDOW, "Seite löschen"), new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt löschen"))));
 		data.add(new IconEntry(FontAwesomeType.VOLUME_HIGH_SOLID, List.of(
@@ -98,6 +101,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.MAGNIFYING_GLASS_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Kacheln suchen"))));
 		data.add(new IconEntry(FontAwesomeType.GEAR_SOLID, List.of(
 				new IconUsage(IconUsageCategory.MENU, "Einstellungen"),
+				new IconUsage(IconUsageCategory.MAPPING, "Mapping - PageAction"),
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen"),
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein"))));
 		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "im Vordergrund behalten"))));

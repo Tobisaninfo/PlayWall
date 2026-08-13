@@ -10,6 +10,7 @@ public enum IconUsageCategory
 	UNDEFINED("?", "#CCCCCCFF", "#000000FF"),
 	GENERAL("Allgemein", "#CA6702FF", "#000000FF"),
 	PAD("Pad", "#134074FF", "#FFFFFFFF"),
+	MAPPING("Mapping", "#134D74FF", "#FFFFFFFF"),
 	MENU("Menü", "#94D2BDFF", "#000000FF"),
 	MAIN_WINDOW("Hauptfenster", "#E0BAD7FF", "#000000FF"),
 	PROJECT_MANAGEMENT("Projektverwaltung", "#E0BAD7FF", "#000000FF"),
