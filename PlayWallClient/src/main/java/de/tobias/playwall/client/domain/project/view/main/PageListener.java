@@ -4,7 +4,6 @@ import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageMapper;
 import de.tobias.playwall.client.domain.page.PageSettingsMapper;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
-import de.tobias.playwall.client.domain.project.ColorMapper;
 import de.tobias.playwall.client.event.EventListener;
 import de.tobias.playwall.common.api.page.update.*;
 import javafx.application.Platform;
@@ -76,7 +75,7 @@ class PageListener
 		Platform.runLater(() -> {
 			mainViewController.buildPageButtons();
 
-			if(mainViewController.getCurrentPage().getId().equals(message.getPageId()))
+			if(projectController.getCurrentPage().getId().equals(message.getPageId()))
 			{
 				mainViewController.showPage(0);
 			}

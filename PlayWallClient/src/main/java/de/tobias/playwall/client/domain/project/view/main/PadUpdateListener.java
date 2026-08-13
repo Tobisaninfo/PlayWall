@@ -26,7 +26,7 @@ class PadUpdateListener implements UpdateMessageEventListener<PadUpdate>
 		final PadView padView = mainViewController.getPadViewForPadId(message.getPad().getId());
 		if(padView != null)
 		{
-			Platform.runLater(() -> padView.updateFromPad(mainViewController.getCurrentPage().getPosition(), updatedPadController));
+			Platform.runLater(() -> padView.updateFromPad(projectController.getCurrentPage().getPosition(), updatedPadController));
 		}
 
 		Platform.runLater(mainViewController::updateStyle);

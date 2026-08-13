@@ -33,7 +33,7 @@ class PadSwapListener
 		if(padView != null)
 		{
 			final ClientPadController padController = projectController.getPadController(pad2);
-			Platform.runLater(() -> padView.updateFromPad(mainViewController.getCurrentPage().getPosition(), padController));
+			Platform.runLater(() -> padView.updateFromPad(projectController.getCurrentPage().getPosition(), padController));
 		}
 	}
 }

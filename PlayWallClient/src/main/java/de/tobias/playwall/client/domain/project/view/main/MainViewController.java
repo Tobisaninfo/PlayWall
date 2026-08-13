@@ -175,7 +175,6 @@ public class MainViewController extends ViewControllerBase
 	private MaterialToastManager materialToastManager;
 	private Toast padErrorsToast;
 
-	private Page currentPage;
 	private final List<PadView> padViews = new ArrayList<>();
 
 	private final ClientProjectController projectController;
@@ -521,7 +520,7 @@ public class MainViewController extends ViewControllerBase
 			initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
 
 			buildPageButtons();
-			showPage(currentPage.getPosition());
+			showPage(projectController.getCurrentPage());
 
 			log.info("Update project {}", project.getMetadata().getName());
 		});
@@ -584,7 +583,7 @@ public class MainViewController extends ViewControllerBase
 			);
 		});
 
-		pageButtons.highlightPageButton(currentPage);
+		pageButtons.highlightPageButton(projectController.getCurrentPage());
 	}
 
 	private void onPageSettingsMenuItem(Page page)
@@ -679,7 +678,7 @@ public class MainViewController extends ViewControllerBase
 
 	public void showPage(Page page)
 	{
-		this.currentPage = page;
+		projectController.setCurrentPage(page);
 		final ProjectMetadata projectMetadata = projectController.getProject().getMetadata();
 		final int padNumberPerPage = projectMetadata.getNumberOfPadsPerPage();
 
@@ -699,7 +698,7 @@ public class MainViewController extends ViewControllerBase
 
 	public void updateStyle()
 	{
-		styleable.renderStylesheets(getStage(), getCurrentPage(), projectController.getProject().getMetadata());
+		styleable.renderStylesheets(getStage(), projectController.getCurrentPage(), projectController.getProject().getMetadata());
 	}
 
 	public PadView getPadViewForPosition(int position)

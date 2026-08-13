@@ -7,6 +7,7 @@ import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageSettings;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
@@ -16,6 +17,9 @@ public class ClientProjectController
 {
 	private final Map<UUID, ClientPadController> padControllers = new HashMap<>();
 	private Project project;
+
+	@Setter
+	private Page currentPage;
 
 	public void loadProject(Project project)
 	{

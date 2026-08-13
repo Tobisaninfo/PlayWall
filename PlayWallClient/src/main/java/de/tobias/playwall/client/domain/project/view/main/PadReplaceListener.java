@@ -28,7 +28,7 @@ class PadReplaceListener
 		final PadView padView = mainViewController.getPadViewForPadId(message.getTargetPadId());
 		if(padView != null)
 		{
-			Platform.runLater(() -> padView.updateFromPad(mainViewController.getCurrentPage().getPosition(), padController));
+			Platform.runLater(() -> padView.updateFromPad(projectController.getCurrentPage().getPosition(), padController));
 		}
 
 		Platform.runLater(mainViewController::updateStyle);
