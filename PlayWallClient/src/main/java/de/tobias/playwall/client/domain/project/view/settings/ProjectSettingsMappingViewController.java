@@ -87,7 +87,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 		mappingListView.setCellFactory(_ -> new MappingKeyCell(getActiveMapping(), this::onInputKeyDeleted));
 		mappingListView.getSelectionModel().selectedItemProperty()
-				.addListener((_, _, newValue) -> onInputKeySelected(newValue));
+				.addListener((_, oldValue, newValue) -> onInputKeySelected(oldValue, newValue));
 
 		actionTabs.disableProperty().bind(mappingListView.getSelectionModel().selectedItemProperty().isNull());
 		actionTabs.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> onTabChanged(newValue));
@@ -233,7 +233,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		mapping.addInputKeyWithAction(selectedKey, actionTab.actionSettingsViewController.createNewAction());
 	}
 
-	private void onInputKeySelected(InputKey key)
+	private void onInputKeySelected(InputKey oldValue, InputKey newValue)
 	{
 		final Mapping mapping = getActiveMapping();
 		if(mapping == null)
@@ -241,18 +241,23 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			return;
 		}
 
-		final Action action = mapping.getAction(key);
+		// Save old action
+		final ActionTab oldActionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
+		oldActionTab.actionSettingsViewController.saveAction(mapping.getAction(oldValue));
+
+		// Show new action
+		final Action action = mapping.getAction(newValue);
 		if(action != null)
 		{
-			final ActionTab actionTab = actionTabMap.get(action.getClass());
-			actionTabs.getSelectionModel().select(actionTab.tab);
-			actionTab.actionSettingsViewController.initAction(action);
+			final ActionTab newActionTab = actionTabMap.get(action.getClass());
+			actionTabs.getSelectionModel().select(newActionTab.tab);
+			newActionTab.actionSettingsViewController.initAction(action);
 		}
 		else
 		{
 			// Create a new action if none exists by using the current selected tab
 			final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
-			mapping.addInputKeyWithAction(key, actionTab.actionSettingsViewController.createNewAction());
+			mapping.addInputKeyWithAction(newValue, actionTab.actionSettingsViewController.createNewAction());
 		}
 	}
 
