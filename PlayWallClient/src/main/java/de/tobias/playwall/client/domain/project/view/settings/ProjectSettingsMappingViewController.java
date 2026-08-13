@@ -227,7 +227,10 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		final InputKey selectedKey = getSelectedKey();
 
 		final ActionTab actionTab = (ActionTab) newTab.getUserData();
-		mapping.addInputKeyWithAction(selectedKey, actionTab.actionSettingsViewController.createNewAction());
+		final Action newAction = actionTab.actionSettingsViewController.createNewAction();
+		mapping.addInputKeyWithAction(selectedKey, newAction);
+		actionTab.actionSettingsViewController.initAction(newAction);
+		updateInputListView();
 	}
 
 	private void onInputKeySelected(InputKey oldValue, InputKey newValue)
