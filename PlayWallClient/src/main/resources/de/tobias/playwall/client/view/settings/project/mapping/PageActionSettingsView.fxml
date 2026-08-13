@@ -7,7 +7,7 @@
 
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <SettingsRow icon="GEAR_SOLID" title="%ui.action.page.settings.modus">
-        <ComboBox fx:id="typeComboBox"/>
+        <ComboBox fx:id="modeComboBox"/>
     </SettingsRow>
     <SettingsRow fx:id="pageNumberRow" icon="FILE_SOLID" title="%ui.action.page.settings.pageNumber">
         <NumberTextField fx:id="pageNumber"/>

@@ -36,7 +36,7 @@ public class PageActionHandler implements ActionHandler
 		final int currentPage = clientProjectController.getCurrentPage().getPosition();
 		final int maxPage = clientProjectController.getProject().getPages().size() - 1;
 
-		switch(pageAction.getPageActionType())
+		switch(pageAction.getPageActionMode())
 		{
 			case PREVIOUS ->
 			{

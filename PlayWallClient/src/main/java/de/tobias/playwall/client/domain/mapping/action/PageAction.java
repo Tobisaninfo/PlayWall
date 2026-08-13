@@ -16,25 +16,25 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PageAction implements Action
 {
-	public enum PageActionType
+	public enum PageActionMode
 	{
 		PREVIOUS, NEXT, JUMP
 	}
 
-	private PageActionType pageActionType;
+	private PageActionMode pageActionMode;
 	private Integer pageNumber;
 
 	@Override
 	public Action copy()
 	{
-		return new PageAction(pageActionType, pageNumber);
+		return new PageAction(pageActionMode, pageNumber);
 	}
 
 	@Override
 	public String toString()
 	{
-		String string = Localization.getString("PageActionType." + pageActionType);
-		if(pageActionType == PageActionType.JUMP)
+		String string = Localization.getString("PageActionMode." + pageActionMode);
+		if(pageActionMode == PageActionMode.JUMP)
 		{
 			string += " " + pageNumber;
 		}

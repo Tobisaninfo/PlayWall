@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 class PageActionSettingsViewController extends ActionSettingsViewController
 {
 	@FXML
-	private ComboBox<PageAction.PageActionType> typeComboBox;
+	private ComboBox<PageAction.PageActionMode> modeComboBox;
 
 	@FXML
 	private SettingsRow pageNumberRow;
@@ -24,18 +24,18 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	@Override
 	protected void init()
 	{
-		typeComboBox.getItems().addAll(PageAction.PageActionType.values());
-		typeComboBox.setCellFactory(_ -> new EnumCell<>("PageActionType."));
-		typeComboBox.setButtonCell(new EnumCell<>("PageActionType."));
+		modeComboBox.getItems().addAll(PageAction.PageActionMode.values());
+		modeComboBox.setCellFactory(_ -> new EnumCell<>("PageActionMode."));
+		modeComboBox.setButtonCell(new EnumCell<>("PageActionMode."));
 
-		pageNumberRow.visibleProperty().bind(typeComboBox.getSelectionModel().selectedItemProperty()
-				.isEqualTo(PageAction.PageActionType.JUMP));
+		pageNumberRow.visibleProperty().bind(modeComboBox.getSelectionModel().selectedItemProperty()
+				.isEqualTo(PageAction.PageActionMode.JUMP));
 	}
 
 	@Override
 	public Action createNewAction()
 	{
-		return new PageAction(PageAction.PageActionType.PREVIOUS, null);
+		return new PageAction(PageAction.PageActionMode.PREVIOUS, null);
 	}
 
 	@Override
@@ -43,8 +43,8 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	{
 		if(action instanceof PageAction pageAction)
 		{
-			typeComboBox.getSelectionModel().select(pageAction.getPageActionType());
-			if(pageAction.getPageActionType() == PageAction.PageActionType.JUMP)
+			modeComboBox.getSelectionModel().select(pageAction.getPageActionMode());
+			if(pageAction.getPageActionMode() == PageAction.PageActionMode.JUMP)
 			{
 				pageNumber.setText(String.valueOf(pageAction.getPageNumber()));
 			}
@@ -56,8 +56,8 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	{
 		if(action instanceof PageAction pageAction)
 		{
-			pageAction.setPageActionType(typeComboBox.getSelectionModel().getSelectedItem());
-			if(pageAction.getPageActionType() == PageAction.PageActionType.JUMP)
+			pageAction.setPageActionMode(modeComboBox.getSelectionModel().getSelectedItem());
+			if(pageAction.getPageActionMode() == PageAction.PageActionMode.JUMP)
 			{
 				pageAction.setPageNumber(Integer.parseInt(pageNumber.getText()));
 			}
