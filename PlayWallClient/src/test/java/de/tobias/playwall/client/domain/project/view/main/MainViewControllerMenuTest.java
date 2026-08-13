@@ -148,7 +148,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		showMainView();
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Neues Projekt").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Neues Projekt...").queryLabeled());
 		WaitForAsyncUtils.waitForFxEvents();
 
 		// open project
@@ -170,7 +170,7 @@ class MainViewControllerMenuTest extends AbstractViewControllerTest
 		showMainView();
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Projekte verwalten").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekte verwalten...").queryLabeled());
 		WaitForAsyncUtils.waitForFxEvents();
 
 		verify(dialog).showAndWait(any(), eq(stage));

@@ -62,7 +62,7 @@ class ProjectManagementCellTest extends ApplicationTest
 		assertThat(menuButton).isVisible();
 
 		assertThat(cell.getButtonContextMenu().getItems()).extracting(MenuItem::getText)
-				.containsExactly("Umbenennen", "Duplizieren", "Exportieren", null, "Löschen");
+				.containsExactly("Umbenennen...", "Duplizieren", "Exportieren...", null, "Löschen...");
 	}
 
 	@Test

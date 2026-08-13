@@ -74,7 +74,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> new Stage());
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen...").queryLabeled());
 
 		WaitForAsyncUtils.waitForFxEvents();
 
@@ -112,7 +112,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> new Stage());
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen...").queryLabeled());
 
 		WaitForAsyncUtils.waitForFxEvents();
 
@@ -148,7 +148,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> new Stage());
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen...").queryLabeled());
 
 		WaitForAsyncUtils.waitForFxEvents();
 
@@ -186,7 +186,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> new Stage());
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen...").queryLabeled());
 
 		WaitForAsyncUtils.waitForFxEvents();
 
@@ -213,7 +213,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> new Stage());
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen...").queryLabeled());
 
 		WaitForAsyncUtils.waitForFxEvents();
 
@@ -260,7 +260,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> new Stage());
 
 		robot.clickOn(robot.lookup(".menu").lookup("Datei").queryLabeled());
-		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen").queryLabeled());
+		robot.clickOn(robot.lookup(".menu-item").lookup("Projekteinstellungen...").queryLabeled());
 
 		WaitForAsyncUtils.waitForFxEvents();
 
