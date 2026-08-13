@@ -63,6 +63,7 @@ class ProjectSettingsUpdateListenerTest extends AbstractViewControllerTest
 				.defaultColor(Color.GRAY4)
 				.playColor(Color.RED3)
 				.introColor(Color.LIGHT_GREEN1)
+				.volume(1.0)
 				.build()));
 		WaitForAsyncUtils.waitForFxEvents();
 
