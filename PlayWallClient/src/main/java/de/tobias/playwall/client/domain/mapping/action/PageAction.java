@@ -22,7 +22,7 @@ public class PageAction implements Action
 	}
 
 	private PageActionType pageActionType;
-	private int pageNumber;
+	private Integer pageNumber;
 
 	@Override
 	public Action copy()

@@ -35,7 +35,7 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	@Override
 	public Action createNewAction()
 	{
-		return new PageAction();
+		return new PageAction(PageAction.PageActionType.PREVIOUS, null);
 	}
 
 	@Override
