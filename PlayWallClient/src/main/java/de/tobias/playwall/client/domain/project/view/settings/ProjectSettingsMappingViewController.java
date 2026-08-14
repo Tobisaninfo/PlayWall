@@ -242,22 +242,28 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 
 		// Save old action
-		final ActionTab oldActionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
-		oldActionTab.actionSettingsViewController.saveAction(mapping.getAction(oldValue));
+		if(oldValue != null)
+		{
+			final ActionTab oldActionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
+			oldActionTab.actionSettingsViewController.saveAction(mapping.getAction(oldValue));
+		}
 
 		// Show new action
-		final Action action = mapping.getAction(newValue);
-		if(action != null)
+		if(newValue != null)
 		{
-			final ActionTab newActionTab = actionTabMap.get(action.getClass());
-			actionTabs.getSelectionModel().select(newActionTab.tab);
-			newActionTab.actionSettingsViewController.initAction(action);
-		}
-		else
-		{
-			// Create a new action if none exists by using the current selected tab
-			final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
-			mapping.addInputKeyWithAction(newValue, actionTab.actionSettingsViewController.createNewAction());
+			final Action action = mapping.getAction(newValue);
+			if(action != null)
+			{
+				final ActionTab newActionTab = actionTabMap.get(action.getClass());
+				actionTabs.getSelectionModel().select(newActionTab.tab);
+				newActionTab.actionSettingsViewController.initAction(action);
+			}
+			else
+			{
+				// Create a new action if none exists by using the current selected tab
+				final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
+				mapping.addInputKeyWithAction(newValue, actionTab.actionSettingsViewController.createNewAction());
+			}
 		}
 	}
 
