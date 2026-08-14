@@ -53,7 +53,7 @@ public class VolumeSlider extends HBox
 			}
 			else
 			{
-				label.setText(newVal.intValue() + "%");
+				label.setText(Math.round(newVal.doubleValue()) + "%");
 			}
 		});
 
@@ -95,7 +95,7 @@ public class VolumeSlider extends HBox
 	public void setValue(double value)
 	{
 		slider.setValue(value);
-		label.setText((int) value + "%");
+		label.setText(Math.round(value) + "%");
 	}
 
 	public double getMaxValue()
