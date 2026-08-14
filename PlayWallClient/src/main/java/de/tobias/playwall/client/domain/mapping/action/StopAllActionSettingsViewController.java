@@ -13,13 +13,13 @@ class StopAllActionSettingsViewController extends ActionSettingsViewController
 	}
 
 	@Override
-	public void initAction(Action action)
+	public void initSettings(Action action)
 	{
 		// Nothing to do
 	}
 
 	@Override
-	public void saveAction(Action action)
+	public void applySettings(Action action)
 	{
 		// Nothing to do
 	}

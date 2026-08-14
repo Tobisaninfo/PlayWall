@@ -36,7 +36,7 @@ class GlobalVolumeActionSettingsViewController extends ActionSettingsViewControl
 	}
 
 	@Override
-	public void initAction(Action action)
+	public void initSettings(Action action)
 	{
 		if(action instanceof GlobalVolumeAction globalVolumeAction)
 		{
@@ -46,7 +46,7 @@ class GlobalVolumeActionSettingsViewController extends ActionSettingsViewControl
 	}
 
 	@Override
-	public void saveAction(Action action)
+	public void applySettings(Action action)
 	{
 		if(action instanceof GlobalVolumeAction globalVolumeAction)
 		{

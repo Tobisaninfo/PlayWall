@@ -147,7 +147,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			return;
 		}
 		final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
-		actionTab.actionSettingsViewController.saveAction(activeMapping.getAction(getSelectedKey()));
+		actionTab.actionSettingsViewController.applySettings(activeMapping.getAction(getSelectedKey()));
 
 		param.getProjectMetadata().setMappings(mappings);
 		param.getProjectMetadata().setSelectedMapping(selectedMapping);
@@ -229,7 +229,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		final ActionTab actionTab = (ActionTab) newTab.getUserData();
 		final Action newAction = actionTab.actionSettingsViewController.createNewAction();
 		mapping.addInputKeyWithAction(selectedKey, newAction);
-		actionTab.actionSettingsViewController.initAction(newAction);
+		actionTab.actionSettingsViewController.initSettings(newAction);
 		updateInputListView();
 	}
 
@@ -245,7 +245,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		if(oldValue != null)
 		{
 			final ActionTab oldActionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
-			oldActionTab.actionSettingsViewController.saveAction(mapping.getAction(oldValue));
+			oldActionTab.actionSettingsViewController.applySettings(mapping.getAction(oldValue));
 		}
 
 		// Show new action
@@ -256,7 +256,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			{
 				final ActionTab newActionTab = actionTabMap.get(action.getClass());
 				actionTabs.getSelectionModel().select(newActionTab.tab);
-				newActionTab.actionSettingsViewController.initAction(action);
+				newActionTab.actionSettingsViewController.initSettings(action);
 			}
 			else
 			{
