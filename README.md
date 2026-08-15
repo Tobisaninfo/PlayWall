@@ -1,5 +1,38 @@
 # PlayWall
 
+## System Requirements
+
+### Linux
+
+The Linux build ships a jlinked JavaFX runtime. JavaFX's prebuilt native libraries (`libglassgtk3.so` etc.) have a
+minimum glibc version, which differs by CPU architecture:
+
+| Architecture | Minimum glibc        | Supported distros (examples)                                                   |
+|--------------|----------------------|--------------------------------------------------------------------------------|
+| x86_64       | 2.17                 | virtually anything (Debian 8+, Ubuntu 14.04+)                                  |
+| aarch64      | 2.38 (JavaFX 25.0.4) | Debian 13+, Ubuntu 23.10+ / 24.04+, Arch-based rolling releases (e.g. CachyOS) |
+
+**Not supported on aarch64:** Debian 12 (glibc 2.36) and Ubuntu 22.04 (glibc 2.35) — the app fails to start with
+`UnsatisfiedLinkError: ... libglassgtk3.so: ... version 'GLIBC_2.38' not found`.
+
+This requirement comes from Gluon's aarch64 build infrastructure, not from our build config, and can change with future
+JavaFX patch releases (unrelated to the JavaFX major version). If this becomes a blocker, re-check the required glibc
+version for the pinned `javafx.version` before assuming it's fixed.
+
+### Windows
+
+- Minimum: **Windows 10 64-bit (version 1903+) or Windows 11** — matches Temurin JDK 25's supported baseline. No 32-bit
+  builds.
+- JavaFX bundles its own MSVC/UCRT runtime DLLs (`vcruntime140.dll`, `msvcp140*.dll`, `ucrtbase.dll` + the
+  `api-ms-win-*` forwarder stubs) directly in the app image, so no separate "Visual C++ Redistributable" install is
+  required on the target machine.
+
+### macOS
+
+- Minimum: **macOS 11 (Big Sur) or later**, on both Intel (x86_64) and Apple Silicon (arm64) — verified via the
+  `LC_BUILD_VERSION` load command embedded in JavaFX 25.0.4's native libraries (`libglass.dylib` etc.). Unlike Linux,
+  this has been stable across recent JavaFX versions and both architectures.
+
 ## Development
 
 ## How to use custom components in SceneBuilder
