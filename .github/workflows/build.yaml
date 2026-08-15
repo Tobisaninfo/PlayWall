@@ -1,4 +1,4 @@
-name: Maven Build (Windows & macOS, Java 25)
+name: Maven Build (Windows, macOS & Linux, Java 25)
 
 on:
   workflow_dispatch:  # Manuelles Triggern über GitHub UI
@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [ windows-latest, macos-latest, ubuntu-latest, ubuntu-24.04-arm ]
         java: [25]
 
     steps:
@@ -56,4 +56,14 @@ jobs:
 
       - name: Build with Maven (Windows)
         if: matrix.os == 'windows-latest'
+        run: mvn -e --no-transfer-progress -P build-rust,custom-jdk,build-aot-cache,package-executables -DskipTests deploy
+
+      - name: Install native build dependencies (Linux/rodio/alsa)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libasound2-dev
+
+      - name: Build with Maven (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
         run: mvn -e --no-transfer-progress -P build-rust,custom-jdk,build-aot-cache,package-executables -DskipTests deploy

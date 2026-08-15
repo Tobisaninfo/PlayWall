@@ -390,8 +390,52 @@
             </activation>
             <properties>
                 <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.ico</app.icon>
+                <installer.type>EXE</installer.type>
                 <installer.extension>exe</installer.extension>
             </properties>
+        </profile>
+
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                </os>
+            </activation>
+            <properties>
+                <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon_small.png</app.icon>
+                <installer.type>APP_IMAGE</installer.type>
+                <installer.extension>${os.arch}.tar.gz</installer.extension>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>archive-app-image</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="bash" dir="${project.build.directory}"
+                                              failonerror="true">
+                                            <arg value="-c"/>
+                                            <arg value="if [ -d installer/PlayWall ]; then cd installer &amp;&amp; tar -czf 'PlayWall-${revision-version}.${os.arch}.tar.gz' PlayWall; else echo 'Skipping app-image archive: target/installer/PlayWall not found (package-executables not active)'; fi"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- macOS Build -->
@@ -404,6 +448,7 @@
             </activation>
             <properties>
                 <app.icon>src/main/resources/de/tobias/playwall/client/logo/icon.icns</app.icon>
+                <installer.type>DMG</installer.type>
                 <installer.extension>dmg</installer.extension>
             </properties>
         </profile>
@@ -448,6 +493,7 @@
                                     <goal>jpackage</goal>
                                 </goals>
                                 <configuration>
+                                    <type>${installer.type}</type>
                                     <input>${project.build.directory}/build</input>
                                     <destination>${project.build.directory}/installer</destination>
                                     <mainJar>${project.artifactId}-${project.version}.jar</mainJar>
@@ -486,7 +532,7 @@
                         <executions>
                             <execution>
                                 <id>attach-artifact</id>
-                                <phase>package</phase>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>attach-artifact</goal>
                                 </goals>
