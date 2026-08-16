@@ -25,7 +25,7 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	protected void init()
 	{
 		modeComboBox.getItems().addAll(PageAction.PageActionMode.values());
-		final String modePrefix = GlobalVolumeAction.VolumeChangeMode.class.getSimpleName() + ".";
+		final String modePrefix = PageAction.PageActionMode.class.getSimpleName() + ".";
 		modeComboBox.setCellFactory(_ -> new EnumCell<>(modePrefix));
 		modeComboBox.setButtonCell(new EnumCell<>(modePrefix));
 
