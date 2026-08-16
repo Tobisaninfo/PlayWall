@@ -263,6 +263,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 				// Create a new action if none exists by using the current selected tab
 				final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
 				mapping.addInputKeyWithAction(newValue, actionTab.actionSettingsViewController.createNewAction());
+				actionTab.actionSettingsViewController.initSettings(mapping.getAction(newValue));
 			}
 		}
 	}
