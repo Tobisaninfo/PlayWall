@@ -58,7 +58,6 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	@Override
 	protected void init()
 	{
-		root.addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
 		updateInputState(null);
 	}
 
@@ -68,6 +67,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 		this.mapping = parameter.getMapping();
 		this.autoSubmit = parameter.isAutoSubmit();
 		cancelButton.setFocusTraversable(false);
+		saveButton.setFocusTraversable(false);
 		saveButton.setVisible(!autoSubmit);
 		saveButton.setManaged(!autoSubmit);
 	}
@@ -81,6 +81,8 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 
 		stage.setHeight(210);
 		stage.setWidth(350);
+
+		stage.getScene().addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
 	}
 
 	@Override
@@ -127,12 +129,12 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 		if(mapping != null)
 		{
 			selectedKey = key;
+			event.consume();
 			updateInputState(key);
 			if(autoSubmit)
 			{
 				getStageContainer().ifPresent(NVCStage::close);
 			}
-			event.consume();
 		}
 	}
 
