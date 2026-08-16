@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.domain.pad;
 
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,5 +43,17 @@ public class ClientPadController
 	{
 		return Optional.ofNullable(pad.getEofWarningTime())
 				.orElse(projectMetadata.getEofWarningTime());
+	}
+
+	public ModernColor getEffectiveDefaultColor()
+	{
+		return Optional.ofNullable(pad.getDefaultColor())
+				.orElse(projectMetadata.getDefaultColor());
+	}
+
+	public ModernColor getEffectivePlayColor()
+	{
+		return Optional.ofNullable(pad.getPlayColor())
+				.orElse(projectMetadata.getPlayColor());
 	}
 }

@@ -115,7 +115,7 @@ public class DesktopPadView implements PadView
 		padTimeUtils = context.get(PadTimeUtils.class);
 		errorAlertBuilder = context.get(ErrorAlertBuilder.class);
 		warningAnimation = context.get(WarningFlashAnimation.class);
-		warningAnimation.init(this, PLAY_CLASS);
+		warningAnimation.init(this);
 		eventDispatcher = context.get(PadEventDispatcher.class);
 
 		setupView();
