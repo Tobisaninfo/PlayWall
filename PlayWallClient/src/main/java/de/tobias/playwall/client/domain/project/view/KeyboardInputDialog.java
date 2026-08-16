@@ -43,6 +43,8 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	private Label errorLabel;
 	@FXML
 	private Button saveButton;
+	@FXML
+	private Button cancelButton;
 
 	@Getter(AccessLevel.NONE)
 	private Mapping mapping;
@@ -65,6 +67,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	{
 		this.mapping = parameter.getMapping();
 		this.autoSubmit = parameter.isAutoSubmit();
+		cancelButton.setFocusTraversable(false);
 		saveButton.setVisible(!autoSubmit);
 		saveButton.setManaged(!autoSubmit);
 	}
