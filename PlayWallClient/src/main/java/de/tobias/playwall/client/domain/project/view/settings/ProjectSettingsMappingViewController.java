@@ -175,6 +175,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		result.ifPresent(key -> {
 			mapping.addInputKeyWithAction(key, null);
 			updateInputListView();
+			mappingListView.getSelectionModel().select(key);
 		});
 	}
 
