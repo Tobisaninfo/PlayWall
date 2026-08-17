@@ -28,40 +28,66 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
             .find_class(JNIString::new(
                 "de/tobias/playwall/nativeaudio/audio/rust/AudioDevice",
             ))?;
-        let devices: Vec<_> = host.output_devices().unwrap().collect();
-        let default_device = host.default_output_device().unwrap();
 
-        *device_cache().lock().unwrap() = devices
-            .iter()
-            .map(|d| d.description().unwrap().name().to_string())
+        let raw_devices: Vec<_> = match host.output_devices() {
+            Ok(devices) => devices.collect(),
+            Err(err) => {
+                tracing::warn!("Failed to enumerate output devices: {}", err);
+                Vec::new()
+            }
+        };
+
+        // Some ALSA/PipeWire device nodes fail to report a name or default config
+        // (e.g. stale/disconnected cards). Skip those instead of aborting the whole
+        // enumeration, since a single bad device previously caused a Rust panic here.
+        let devices: Vec<(String, rodio::cpal::SupportedStreamConfig)> = raw_devices
+            .into_iter()
+            .filter_map(|device| {
+                let name = match device.description() {
+                    Ok(desc) => desc.name().to_string(),
+                    Err(err) => {
+                        tracing::warn!("Skipping output device with unreadable name: {}", err);
+                        return None;
+                    }
+                };
+                match device.default_output_config() {
+                    Ok(config) => Some((name, config)),
+                    Err(err) => {
+                        tracing::warn!("Skipping output device \"{}\" without a usable default config: {}", name, err);
+                        None
+                    }
+                }
+            })
             .collect();
 
-        let result = env
-            .new_object_array(devices.len() as jsize, &audio_device_class, JObject::null())
-            .unwrap();
-        for (index, device) in devices.into_iter().enumerate() {
+        let default_device_name: Option<String> = host
+            .default_output_device()
+            .and_then(|d| d.description().ok())
+            .map(|desc| desc.name().to_string());
+
+        *device_cache().lock().unwrap() = devices.iter().map(|(name, _)| name.clone()).collect();
+
+        let result = env.new_object_array(devices.len() as jsize, &audio_device_class, JObject::null())?;
+        for (index, (name, config)) in devices.into_iter().enumerate() {
             let param = &RuntimeMethodSignature::from_str("(Ljava/lang/String;IIZ)V").unwrap();
             let sig = MethodSignature::from(param);
 
-            let deviceName: JString = env.new_string(device.description().unwrap().name()).unwrap();
-            let stream_config = device.default_output_config().unwrap().config();
+            let device_name: JString = env.new_string(&name)?;
+            let stream_config = config.config();
             let channels = stream_config.channels as jint;
             let sample_rate = stream_config.sample_rate as jint;
-            let default_device =
-                (device.description().unwrap().name() == default_device.description().unwrap().name()) as jboolean;
+            let is_default = (default_device_name.as_deref() == Some(name.as_str())) as jboolean;
 
-            let java_audio_device = env
-                .new_object(
-                    &audio_device_class,
-                    sig,
-                    &[
-                        JValue::Object(&deviceName),
-                        JValue::Int(channels),
-                        JValue::Int(sample_rate),
-                        JValue::Bool(default_device),
-                    ],
-                )
-                .unwrap();
+            let java_audio_device = env.new_object(
+                &audio_device_class,
+                sig,
+                &[
+                    JValue::Object(&device_name),
+                    JValue::Int(channels),
+                    JValue::Int(sample_rate),
+                    JValue::Bool(is_default),
+                ],
+            )?;
 
             result.set_element(env, index, java_audio_device)?;
         }
@@ -91,9 +117,17 @@ pub extern "system" fn Java_de_tobias_playwall_nativeaudio_audio_rust_RustAudioH
         let cache = device_cache().lock().unwrap();
         let device_exists = if cache.is_empty() {
             let host = rodio::cpal::default_host();
-            host.output_devices()
-                .unwrap()
-                .any(|d| d.description().unwrap().name() == device_name_str)
+            match host.output_devices() {
+                Ok(mut devices) => devices.any(|d| {
+                    d.description()
+                        .map(|desc| desc.name() == device_name_str)
+                        .unwrap_or(false)
+                }),
+                Err(err) => {
+                    tracing::warn!("Failed to enumerate output devices: {}", err);
+                    false
+                }
+            }
         } else {
             cache.contains(&device_name_str)
         };
