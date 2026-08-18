@@ -13,6 +13,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
@@ -21,6 +22,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 public class LoadingSpinner extends StackPane
@@ -35,6 +37,19 @@ public class LoadingSpinner extends StackPane
 	private final Timeline rotator;
 	private final Timeline stretcher;
 	private final Timeline colorFade = new Timeline();
+
+	private Window window;
+	private final ChangeListener<Boolean> showingListener = (_, _, showing) -> {
+		if(showing)
+		{
+			play();
+		}
+		else
+		{
+			stop();
+		}
+	};
+	private final ChangeListener<Window> windowChangeListener = (_, _, newWindow) -> attachWindow(newWindow);
 
 	private final DoubleProperty size = new SimpleDoubleProperty(this, "size", 48);
 	private final DoubleProperty strokeWidth = new SimpleDoubleProperty(this, "strokeWidth", 4);
@@ -105,8 +120,48 @@ public class LoadingSpinner extends StackPane
 		);
 		stretcher.setCycleCount(Animation.INDEFINITE);
 
-		sceneProperty().addListener((_, _, newScene) -> {
+		sceneProperty().addListener((_, oldScene, newScene) -> {
+			if(oldScene != null)
+			{
+				oldScene.windowProperty().removeListener(windowChangeListener);
+			}
 			if(newScene != null)
+			{
+				newScene.windowProperty().addListener(windowChangeListener);
+				attachWindow(newScene.getWindow());
+			}
+			else
+			{
+				attachWindow(null);
+			}
+		});
+	}
+
+	/**
+	 * Ties the running state of the animation to the showing state of the window instead of
+	 * just the scene attachment. A node can stay attached to a {@link javafx.scene.Scene} that
+	 * is no longer shown by any window (e.g. a stage that was hidden/closed but not disposed),
+	 * in which case relying on {@code sceneProperty()} alone would leave the timelines running
+	 * forever and racing the JavaFX pulse of whatever is rendered afterwards.
+	 */
+	private void attachWindow(Window newWindow)
+	{
+		if(window == newWindow)
+		{
+			return;
+		}
+
+		if(window != null)
+		{
+			window.showingProperty().removeListener(showingListener);
+		}
+
+		window = newWindow;
+
+		if(window != null)
+		{
+			window.showingProperty().addListener(showingListener);
+			if(window.isShowing())
 			{
 				play();
 			}
@@ -114,7 +169,11 @@ public class LoadingSpinner extends StackPane
 			{
 				stop();
 			}
-		});
+		}
+		else
+		{
+			stop();
+		}
 	}
 
 	private void advanceToNextColor()
