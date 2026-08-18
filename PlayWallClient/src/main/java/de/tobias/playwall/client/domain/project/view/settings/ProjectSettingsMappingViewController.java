@@ -33,7 +33,7 @@ import java.util.*;
 @ViewController(path = "de/tobias/playwall/client/view/settings/project", view = "ProjectSettingsMappingPageView", applyToStage = false)
 public class ProjectSettingsMappingViewController extends BaseProjectSettingsViewController
 {
-	private record ActionTab(Tab tab, ActionSettingsViewController actionSettingsViewController)
+	private record ActionTab(Tab tab, int order, ActionSettingsViewController actionSettingsViewController)
 	{
 	}
 
@@ -105,11 +105,13 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			final ActionSettingsViewController controller = AppContextHolder.getInstance().get(actionDescription.settingsViewController());
 			final Tab tab = new Tab(Localization.getString(actionDescription.nameKey()), controller.getParent());
 
-			final ActionTab actionTab = new ActionTab(tab, controller);
+			final ActionTab actionTab = new ActionTab(tab, actionDescription.order(), controller);
 			tab.setUserData(actionTab);
 			actionTabMap.put(action, actionTab);
-			actionTabs.getTabs().add(tab);
 		}
+
+		actionTabMap.values().stream().sorted(Comparator.comparingInt(tab -> tab.order))
+				.forEach(tab -> actionTabs.getTabs().add(tab.tab));
 	}
 
 	@Override

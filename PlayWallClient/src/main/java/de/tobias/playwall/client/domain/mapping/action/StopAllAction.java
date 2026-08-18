@@ -5,7 +5,7 @@ import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.utils.util.Localization;
 
 @JsonTypeName("stopAll")
-@ActionDescription(nameKey = "action.stop.all.name", settingsViewController = StopAllActionSettingsViewController.class)
+@ActionDescription(nameKey = "action.stop.all.name", order = 3, settingsViewController = StopAllActionSettingsViewController.class)
 public class StopAllAction implements Action
 {
 	@Override

@@ -11,5 +11,7 @@ public @interface ActionDescription
 {
 	String nameKey();
 
+	int order();
+
 	Class<? extends ActionSettingsViewController> settingsViewController();
 }

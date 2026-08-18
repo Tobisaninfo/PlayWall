@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @JsonTypeName("globalVolume")
-@ActionDescription(nameKey = "action.global.volume.name", settingsViewController = GlobalVolumeActionSettingsViewController.class)
+@ActionDescription(nameKey = "action.global.volume.name", order = 4, settingsViewController = GlobalVolumeActionSettingsViewController.class)
 @Getter
 @Setter
 @AllArgsConstructor

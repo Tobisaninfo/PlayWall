@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @JsonTypeName("page")
-@ActionDescription(nameKey = "action.page.name", settingsViewController = PageActionSettingsViewController.class)
+@ActionDescription(nameKey = "action.page.name", order = 2, settingsViewController = PageActionSettingsViewController.class)
 @Getter
 @Setter
 @NoArgsConstructor
