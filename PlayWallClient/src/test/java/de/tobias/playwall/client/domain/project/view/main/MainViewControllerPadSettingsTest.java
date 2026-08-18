@@ -75,7 +75,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
-		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
+		robot.interact(() -> robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem"));
 		robot.clickOn("#saveButton");
 
 		verify(client).updateSettings(padId, Pad.builder()
@@ -120,7 +120,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
-		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
+		robot.interact(() -> robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem"));
 		robot.clickOn("#cancelButton");
 
 		verify(client, never()).updateSettings(padId, Pad.builder()
@@ -162,7 +162,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 
 		assertThat(settingsStage.getTitle()).isEqualTo("Kacheleinstellungen - 1 | Test Pad");
 
-		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem");
+		robot.interact(() -> robot.lookup("#textFieldName").queryAs(TextField.class).setText("Lorem"));
 		robot.clickOn("#buttonChooseFile");
 
 		WaitForAsyncUtils.waitForFxEvents();

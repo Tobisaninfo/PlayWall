@@ -192,8 +192,12 @@ class PadSettingsFadeViewControllerTest extends AbstractViewControllerTest
 		robot.clickOn(padSettingsFadeViewController.getEnableCheckbox());
 		WaitForAsyncUtils.waitForFxEvents();
 
-		padSettingsFadeViewController.getFadeSettingsController().getFadeInDurationSpinner().getEditor().setText("2,0");
-		padSettingsFadeViewController.getFadeSettingsController().getFadeOutDurationSpinner().getEditor().setText("3,0");
+		robot.interact(() -> {
+			padSettingsFadeViewController.getFadeSettingsController().getFadeInDurationSpinner().getEditor().setText("2,0");
+			padSettingsFadeViewController.getFadeSettingsController().getFadeOutDurationSpinner().getEditor().setText("3,0");
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
 		final CheckBox fadeInPlayCheckBox = padSettingsFadeViewController.getFadeSettingsController().getFadeInPlayCheckBox();
 		final CheckBox fadeOutStopCheckBox = padSettingsFadeViewController.getFadeSettingsController().getFadeOutStopCheckBox();
 		robot.clickOn(fadeInPlayCheckBox);

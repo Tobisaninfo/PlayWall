@@ -132,8 +132,12 @@ class ProjectSettingsFadeViewControllerTest extends AbstractViewControllerTest
 	{
 		openFadeSettingsTab(createProjectMetadata(new FadeSettings()));
 
-		fadeViewController.getFadeInDurationSpinner().getEditor().setText("2,0");
-		fadeViewController.getFadeOutDurationSpinner().getEditor().setText("3,0");
+		robot.interact(() -> {
+			fadeViewController.getFadeInDurationSpinner().getEditor().setText("2,0");
+			fadeViewController.getFadeOutDurationSpinner().getEditor().setText("3,0");
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
 		robot.clickOn(fadeViewController.getFadeInPlayCheckBox());
 		robot.clickOn(fadeViewController.getFadeOutStopCheckBox());
 		WaitForAsyncUtils.waitForFxEvents();

@@ -81,7 +81,7 @@ class MainViewControllerProgramSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Einstellungen");
 
-		robot.lookup("#checkboxStartAutoLoadLatestProject").queryAs(CheckBox.class).setSelected(true);
+		robot.interact(() -> robot.lookup("#checkboxStartAutoLoadLatestProject").queryAs(CheckBox.class).setSelected(true));
 		final ComboBox<?> comboBoxUnsavedChanges = robot.lookup("#comboBoxUnsavedChanges").queryAs(ComboBox.class);
 		robot.interact(() -> comboBoxUnsavedChanges.getSelectionModel().select(2));
 		robot.clickOn("#saveButton");

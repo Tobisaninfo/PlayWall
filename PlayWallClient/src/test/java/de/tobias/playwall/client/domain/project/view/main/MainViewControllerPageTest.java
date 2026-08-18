@@ -204,7 +204,8 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
-		textInputControl.setText("New Page Name");
+		Platform.runLater(() -> textInputControl.setText("New Page Name"));
+		WaitForAsyncUtils.waitForFxEvents();
 		robot.clickOn(robot.lookup("Speichern").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 

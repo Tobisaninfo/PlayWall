@@ -83,7 +83,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
 
-		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Fancy project name");
+		robot.interact(() -> robot.lookup("#textFieldName").queryAs(TextField.class).setText("Fancy project name"));
 		robot.clickOn("#saveButton");
 
 		WaitForAsyncUtils.waitForFxEvents();
@@ -121,7 +121,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
 
-		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Fancy project name");
+		robot.interact(() -> robot.lookup("#textFieldName").queryAs(TextField.class).setText("Fancy project name"));
 		robot.clickOn("#cancelButton");
 
 		WaitForAsyncUtils.waitForFxEvents();
@@ -157,7 +157,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
 
-		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Project 1");
+		robot.interact(() -> robot.lookup("#textFieldName").queryAs(TextField.class).setText("Project 1"));
 		robot.clickOn("#saveButton");
 
 		WaitForAsyncUtils.waitForFxEvents();
@@ -198,7 +198,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
 
-		robot.lookup("#textFieldName").queryAs(TextField.class).setText("Project 2");
+		robot.interact(() -> robot.lookup("#textFieldName").queryAs(TextField.class).setText("Project 2"));
 		robot.clickOn("#saveButton");
 
 		WaitForAsyncUtils.waitForFxEvents();
@@ -269,8 +269,10 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 
 		assertThat(stageSettings.getTitle()).isEqualTo("Projekteinstellungen - Project 1");
 
-		robot.lookup("#spinnerNumberOfHorizontalPads").queryAs(Spinner.class).getValueFactory().setValue(7);
-		robot.lookup("#spinnerNumberOfVerticalPads").queryAs(Spinner.class).getValueFactory().setValue(5);
+		robot.interact(() -> {
+			robot.lookup("#spinnerNumberOfHorizontalPads").queryAs(Spinner.class).getValueFactory().setValue(7);
+			robot.lookup("#spinnerNumberOfVerticalPads").queryAs(Spinner.class).getValueFactory().setValue(5);
+		});
 		robot.clickOn("#saveButton");
 
 		WaitForAsyncUtils.waitForFxEvents();

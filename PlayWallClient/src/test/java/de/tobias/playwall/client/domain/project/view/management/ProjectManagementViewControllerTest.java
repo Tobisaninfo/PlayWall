@@ -158,7 +158,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input-dialog .text-field").queryTextInputControl();
-		textInputControl.setText("New Name");
+		robot.interact(() -> textInputControl.setText("New Name"));
 		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
@@ -183,7 +183,7 @@ class ProjectManagementViewControllerTest extends AbstractViewControllerTest
 		WaitForAsyncUtils.waitForFxEvents();
 
 		final TextInputControl textInputControl = robot.lookup(".text-input-dialog").lookup(".text-input").queryTextInputControl();
-		textInputControl.setText("Test 2");
+		robot.interact(() -> textInputControl.setText("Test 2"));
 		robot.clickOn(robot.lookup("OK").lookup(".button").queryButton());
 		WaitForAsyncUtils.waitForFxEvents();
 
