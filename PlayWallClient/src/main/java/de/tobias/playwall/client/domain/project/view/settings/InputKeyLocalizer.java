@@ -8,10 +8,20 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class InputKeyLocalizer
 {
+	private static final Map<InputKey, String> CACHE = new ConcurrentHashMap<>();
+
 	public static String localize(InputKey inputKey)
+	{
+		return CACHE.computeIfAbsent(inputKey, InputKeyLocalizer::doLocalize);
+	}
+
+	private static String doLocalize(InputKey inputKey)
 	{
 		return switch(inputKey)
 		{
