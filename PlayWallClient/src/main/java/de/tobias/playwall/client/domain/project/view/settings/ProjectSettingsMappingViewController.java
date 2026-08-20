@@ -33,6 +33,15 @@ import java.util.*;
 @ViewController(path = "de/tobias/playwall/client/view/settings/project", view = "ProjectSettingsMappingPageView", applyToStage = false)
 public class ProjectSettingsMappingViewController extends BaseProjectSettingsViewController
 {
+	private static class InputKeyComparator implements Comparator<InputKey>
+	{
+		@Override
+		public int compare(InputKey o1, InputKey o2)
+		{
+			return InputKeyLocalizer.localize(o1).compareTo(InputKeyLocalizer.localize(o2));
+		}
+	}
+
 	private record ActionTab(Tab tab, int order, ActionSettingsViewController actionSettingsViewController)
 	{
 	}
@@ -295,7 +304,9 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		final Mapping mapping = getActiveMapping();
 		if(mapping != null)
 		{
-			masterInputKeys.setAll(mapping.getAllInputKeys());
+			final List<InputKey> sortedInputKeys = new ArrayList<>(mapping.getAllInputKeys());
+			sortedInputKeys.sort(new InputKeyComparator());
+			masterInputKeys.setAll(sortedInputKeys);
 		}
 	}
 
