@@ -22,6 +22,12 @@
         <CheckBox fx:id="checkboxAutosave" text="%ui.settings.program.autosave.checkbox"/>
         <Label text="%ui.settings.program.autosave.info" wrapText="true"/>
     </SettingsRow>
+    <Separator fx:id="separatorUiScale"/>
+    <SettingsRow fx:id="settingsRowUiScale" icon="DISPLAY_SOLID" title="%ui.settings.program.display.title">
+        <Label text="%ui.settings.program.display.scale.label"/>
+        <ComboBox fx:id="comboBoxUiScale" prefWidth="300"/>
+        <Label text="%ui.settings.program.display.restart" wrapText="true"/>
+    </SettingsRow>
     <Separator/>
     <SettingsRow icon="BUG_SOLID" title="%ui.settings.program.debug.title">
         <CheckBox fx:id="checkboxDebugLogging" text="%ui.settings.program.debug.checkbox"/>

@@ -128,6 +128,9 @@ public class Strings
 	public static final String UI_SETTINGS_UNSAVED_CHANGES_MODE_BASE  = "ui.settings.program.exit.unsaved-changes.mode.";
 	public static final String UI_SETTINGS_PROGRAM_DEBUG_TITLE = "ui.settings.program.debug.title";
 	public static final String UI_SETTINGS_PROGRAM_DEBUG_ERROR = "ui.settings.program.debug.error";
+	public static final String UI_SETTINGS_PROGRAM_DISPLAY_TITLE = "ui.settings.program.display.title";
+	public static final String UI_SETTINGS_PROGRAM_DISPLAY_SCALE_AUTO = "ui.settings.program.display.scale.auto";
+	public static final String UI_SETTINGS_PROGRAM_DISPLAY_ERROR = "ui.settings.program.display.error";
 	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_TITLE = "ui.dialog.program.exit.unsaved-changes.title";
 	public static final String UI_DIALOG_EXIT_UNSAVED_CHANGES_CONTENT = "ui.dialog.program.exit.unsaved-changes.content";
 	public static final String UI_EXIT_WARNING_PLAYING = "ui.program.exit.warning.playing";
