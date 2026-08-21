@@ -89,6 +89,7 @@ public class ProjectMetadata
 				.introColor(introColor)
 				.eofWarningTime(eofWarningTime)
 				.fadeSettings(fadeSettings)
+				.midiDevice(midiDevice)
 				.mappings(mappings)
 				.selectedMapping(selectedMapping)
 				.build();
