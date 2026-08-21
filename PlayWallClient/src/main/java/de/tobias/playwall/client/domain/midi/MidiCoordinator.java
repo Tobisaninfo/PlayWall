@@ -2,6 +2,7 @@ package de.tobias.playwall.client.domain.midi;
 
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.midi.midi.device.MidiDevice;
+import de.thecodelabs.midi.midi.device.MidiDeviceInfo;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sound.midi.MidiUnavailableException;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
@@ -28,11 +30,17 @@ public class MidiCoordinator
 			oldDevice.closeDevice();
 		}
 
-		if(event.getMidiDeviceInfo() != null)
+		if(event.getDeviceName() != null)
 		{
 			try
 			{
-				final MidiDevice device = midi.openDevice(event.getMidiDeviceInfo(), Midi.Mode.INPUT);
+				final Optional<MidiDeviceInfo> midiDeviceInfoOptional = midi.getMidiDeviceInfo(event.getDeviceName());
+				if(midiDeviceInfoOptional.isEmpty())
+				{
+					log.error("Could not find MIDI device with name: {}", event.getDeviceName());
+					return;
+				}
+				final MidiDevice device = midi.openDevice(midiDeviceInfoOptional.get(), Midi.Mode.INPUT);
 				device.getPublisher().addMidiListener(e -> log.debug("Received MIDI event: {}", e));
 			}
 			catch(MidiUnavailableException e)
