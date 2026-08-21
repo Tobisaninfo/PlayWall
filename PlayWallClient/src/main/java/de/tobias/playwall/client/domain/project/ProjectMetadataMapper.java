@@ -33,6 +33,7 @@ public class ProjectMetadataMapper
 				colorMapper.colorToModernColor(metadataDto.introColor()),
 				metadataDto.eofWarningTime(),
 				metadataDto.fadeSettings() != null ? fadeSettingsMapper.fadeSettingsDtoToFadeSettings(metadataDto.fadeSettings()) : null,
+				metadataDto.midiDevice(),
 				metadataDto.mappings() != null ? metadataDto.mappings().entrySet().stream().collect(Collectors.toMap(
 						Map.Entry::getKey,
 						entry -> mappingSerializer.fromNode(entry.getValue())
@@ -55,6 +56,7 @@ public class ProjectMetadataMapper
 				colorMapper.modernColorToColor(metadata.getIntroColor()),
 				metadata.getEofWarningTime(),
 				metadata.getFadeSettings() != null ? fadeSettingsMapper.fadeSettingsToFadeSettingsDto(metadata.getFadeSettings()) : null,
+				metadata.getMidiDevice(),
 				metadata.getMappings() != null ? metadata.getMappings().entrySet().stream().collect(Collectors.toMap(
 						Map.Entry::getKey,
 						entry -> mappingSerializer.toNode(entry.getValue())

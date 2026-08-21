@@ -27,6 +27,7 @@ public final class ProjectMetadata
 	private ModernColor introColor;
 	private Double eofWarningTime;
 	private FadeSettings fadeSettings;
+	private String midiDevice;
 	private Map<UUID, Mapping> mappings;
 	private UUID selectedMapping;
 

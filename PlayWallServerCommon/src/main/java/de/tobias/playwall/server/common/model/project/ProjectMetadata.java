@@ -56,6 +56,9 @@ public class ProjectMetadata
 	private FadeSettings fadeSettings = new FadeSettings();
 
 	@Builder.Default
+	private String midiDevice = null;
+
+	@Builder.Default
 	private Map<UUID, JsonNode> mappings = new HashMap<>();
 
 	private UUID selectedMapping;
