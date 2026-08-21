@@ -239,7 +239,7 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(padSwapListener);
 		padPlayPositionListener = new PadPlayPositionListener(projectController, this);
 		eventHandler.registerListener(padPlayPositionListener);
-		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper);
+		projectSettingsUpdateListener = new ProjectSettingsUpdateListener(projectController, this, projectMetadataMapper, eventHandler);
 		eventHandler.registerListener(projectSettingsUpdateListener);
 		undoHistoryUpdateListener = new UndoHistoryUpdateListener(this);
 		eventHandler.registerListener(undoHistoryUpdateListener);

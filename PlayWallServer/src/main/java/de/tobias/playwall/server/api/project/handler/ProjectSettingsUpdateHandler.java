@@ -79,6 +79,7 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 			metadata.setNumberOfHorizontalPads(requestMessage.getProjectMetadata().numberOfHorizontalPads());
 			metadata.setNumberOfVerticalPads(requestMessage.getProjectMetadata().numberOfVerticalPads());
 
+			metadata.setMidiDevice(requestMessage.getProjectMetadata().midiDevice());
 			metadata.setMappings(requestMessage.getProjectMetadata().mappings());
 			metadata.setSelectedMapping(requestMessage.getProjectMetadata().selectedMapping());
 

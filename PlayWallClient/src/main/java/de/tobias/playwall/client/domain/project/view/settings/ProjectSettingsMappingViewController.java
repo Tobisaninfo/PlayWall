@@ -120,7 +120,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((__, _, newValue) -> {
 			try
 			{
-				eventHandler.fireEvent(new MidiDeviceSelected(newValue));
+				eventHandler.fireEvent(new MidiDeviceSelected(newValue.name()));
 			}
 			catch(RuntimeException e)
 			{
@@ -191,6 +191,9 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
 		actionTab.actionSettingsViewController.applySettings(activeMapping.getAction(getSelectedKey()));
 
+		param.getProjectMetadata().setMidiDevice(Optional.ofNullable(midiDeviceComboBox.getSelectionModel().getSelectedItem())
+				.map(MidiDeviceInfo::name)
+				.orElse(null));
 		param.getProjectMetadata().setMappings(mappings);
 		param.getProjectMetadata().setSelectedMapping(selectedMapping);
 	}
