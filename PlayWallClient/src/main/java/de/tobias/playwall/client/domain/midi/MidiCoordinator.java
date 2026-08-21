@@ -27,6 +27,7 @@ public class MidiCoordinator
 		final MidiDevice oldDevice = midi.getDevice();
 		if(oldDevice != null)
 		{
+			log.info("Close MIDI device: {}", oldDevice.getMidiDeviceInfo());
 			oldDevice.closeDevice();
 		}
 
@@ -41,6 +42,7 @@ public class MidiCoordinator
 					return;
 				}
 				final MidiDevice device = midi.openDevice(midiDeviceInfoOptional.get(), Midi.Mode.INPUT);
+				log.info("Open MIDI device: {}", device.getMidiDeviceInfo());
 				device.getPublisher().addMidiListener(e -> log.debug("Received MIDI event: {}", e));
 			}
 			catch(MidiUnavailableException e)
