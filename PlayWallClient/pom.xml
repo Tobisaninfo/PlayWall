@@ -22,6 +22,7 @@
             --add-exports=javafx.graphics/com.sun.glass.ui.delegate=ALL-UNNAMED
             --enable-native-access=javafx.graphics
             --enable-native-access=de.thecodelabs.libJfx
+            --enable-native-access=de.thecodelabs.libMidi
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
             -Duser.language=de -Duser.country=DE
             -Djavafx.enablePreview=true -Djavafx.suppressPreviewWarning=true

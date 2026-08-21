@@ -114,6 +114,7 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
 	public static final String UI_SETTINGS_PROJECT_WARNING_EOF_SEC = "ui.settings.project.warning.eof.sec";
 
+	public static final String UI_SETTINGS_PROJECT_MAPPING_MIDI_DEVICE_DISABLED = "ui.settings.project.mapping.midi.device.disabled";
 	public static final String UI_SETTINGS_PROJECT_MAPPING_KEY_KEYBOARD = "ui.settings.project.mapping.key.keyboard";
 	public static final String UI_SETTINGS_PROJECT_MAPPING_KEY_MIDI = "ui.settings.project.mapping.key.midi";
 

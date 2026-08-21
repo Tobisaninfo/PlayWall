@@ -6,8 +6,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import de.tobias.playwall.client.view.components.PlayWallButton?>
 <?import java.lang.String?>
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+    <SettingsRow icon="KEYBOARD_SOLID" title="%ui.settings.project.mapping.midi.device">
+        <ComboBox fx:id="midiDeviceComboBox"/>
+    </SettingsRow>
 
     <Separator/>
     <HBox spacing="7" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" prefWidth="200.0">
