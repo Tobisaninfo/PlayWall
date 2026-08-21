@@ -7,7 +7,6 @@ import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.midi.midi.Midi;
-import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.device.MidiDeviceInfo;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -17,9 +16,11 @@ import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewController;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
 import de.tobias.playwall.client.domain.project.view.settings.cell.InputKeyCell;
 import de.tobias.playwall.client.domain.project.view.settings.cell.MidiDeviceInfoCell;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import javafx.collections.FXCollections;
@@ -28,9 +29,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import lombok.extern.slf4j.Slf4j;
 
-import javax.sound.midi.MidiUnavailableException;
 import java.util.*;
 
 /**
@@ -38,7 +37,6 @@ import java.util.*;
  */
 @SuppressWarnings("java:S110")
 @ViewController(path = "de/tobias/playwall/client/view/settings/project", view = "ProjectSettingsMappingPageView", applyToStage = false)
-@Slf4j
 public class ProjectSettingsMappingViewController extends BaseProjectSettingsViewController
 {
 	private static class InputKeyComparator implements Comparator<InputKey>
@@ -80,6 +78,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private PlayWallButton midiAddButton;
 
 	private final ClientProjectController projectController;
+	private final UpdateMessageEventHandler eventHandler;
 	private final Midi midi;
 	private final MappingRegistry mappingRegistry;
 	private final Map<Class<? extends Action>, ActionTab> actionTabMap = FXCollections.observableHashMap();
@@ -93,10 +92,11 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private UUID selectedMapping;
 
 	@InjectConstructor
-	public ProjectSettingsMappingViewController(FluentClient client, ClientProjectController projectController, Midi midi, MappingRegistry mappingRegistry)
+	public ProjectSettingsMappingViewController(FluentClient client, UpdateMessageEventHandler eventHandler, ClientProjectController projectController, Midi midi, MappingRegistry mappingRegistry)
 	{
 		super(client);
 		this.projectController = projectController;
+		this.eventHandler = eventHandler;
 		this.midi = midi;
 		this.mappingRegistry = mappingRegistry;
 	}
@@ -120,14 +120,9 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((__, _, newValue) -> {
 			try
 			{
-				// TODO Close old device
-				final MidiDevice midiDevice = midi.openDevice(newValue, Midi.Mode.INPUT);
-				// TODO
-				midiDevice.getPublisher().addMidiListener(event -> {
-					log.debug("Received MIDI event: {}", event);
-				});
+				eventHandler.fireEvent(new MidiDeviceSelected(newValue));
 			}
-			catch(MidiUnavailableException e)
+			catch(RuntimeException e)
 			{
 				// TODO Show error
 				throw new RuntimeException(e);
