@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.common.api.project.model.ProjectMetadataDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class ProjectMetadataMapper
 				metadataDto.fadeSettings() != null ? fadeSettingsMapper.fadeSettingsDtoToFadeSettings(metadataDto.fadeSettings()) : null,
 				metadataDto.mappings() != null ? metadataDto.mappings().entrySet().stream().collect(Collectors.toMap(
 						Map.Entry::getKey,
-						entry -> mappingSerializer.deserialize(entry.getValue())
+						entry -> mappingSerializer.fromNode(entry.getValue())
 				)) : null,
 				metadataDto.selectedMapping()
 		);
@@ -56,7 +57,7 @@ public class ProjectMetadataMapper
 				metadata.getFadeSettings() != null ? fadeSettingsMapper.fadeSettingsToFadeSettingsDto(metadata.getFadeSettings()) : null,
 				metadata.getMappings() != null ? metadata.getMappings().entrySet().stream().collect(Collectors.toMap(
 						Map.Entry::getKey,
-						entry -> mappingSerializer.serialize(entry.getValue())
+						entry -> mappingSerializer.toNode(entry.getValue())
 				)) : null,
 				metadata.getSelectedMapping()
 		);

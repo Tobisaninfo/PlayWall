@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.common.api.common.TimeMode;
 import lombok.*;
+import tools.jackson.databind.JsonNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class ProjectMetadata
 	private FadeSettings fadeSettings = new FadeSettings();
 
 	@Builder.Default
-	private Map<UUID, String> mappings = new HashMap<>();
+	private Map<UUID, JsonNode> mappings = new HashMap<>();
 
 	private UUID selectedMapping;
 

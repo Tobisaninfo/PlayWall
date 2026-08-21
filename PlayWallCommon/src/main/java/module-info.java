@@ -23,5 +23,6 @@ open module de.tobias.playwall.common {
 	requires com.fasterxml.jackson.annotation;
 	requires de.thecodelabs.libUtils;
 	requires org.apache.logging.log4j.core;
+	requires tools.jackson.databind;
 	requires static lombok;
 }
