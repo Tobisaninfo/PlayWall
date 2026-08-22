@@ -19,6 +19,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
+import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.pad.*;
 import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
@@ -515,6 +516,11 @@ public class MainViewController extends ViewControllerBase
 			client.project(project.getMetadata().getId()).load();
 
 			volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
+
+			if(project.getMetadata().getMidiDevice() != null)
+			{
+				eventHandler.fireEvent(new MidiDeviceSelected(project.getMetadata().getMidiDevice()));
+			}
 
 			registerMappingListener();
 			log.info("Loading project {}", project.getMetadata().getName());
