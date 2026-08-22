@@ -1,5 +1,8 @@
 package de.tobias.playwall.client.domain.midi;
 
+import de.thecodelabs.midi.mapping.Mapping;
+import de.thecodelabs.midi.mapping.action.ActionHandlerResolver;
+import de.thecodelabs.midi.mapping.feedback.FeedbackValueWriterResolver;
 import de.thecodelabs.midi.mapping.listener.MidiMappingListener;
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.midi.midi.device.MidiDevice;
@@ -17,6 +20,9 @@ import java.util.Optional;
 public class MidiCoordinator
 {
 	private final Midi midi;
+	private final ActionHandlerResolver actionHandlerResolver;
+	private final FeedbackValueWriterResolver feedbackValueWriterResolver;
+
 	private MidiMappingListener midiMappingListener;
 
 	@EventListener(MidiDeviceSelected.class)
@@ -46,6 +52,14 @@ public class MidiCoordinator
 			{
 				throw new RuntimeException(e);
 			}
+		}
+	}
+
+	public void showCurrentFeedback(Mapping mapping)
+	{
+		if(midi.isOpen())
+		{
+			midi.showCurrentFeedbackState(mapping, actionHandlerResolver, feedbackValueWriterResolver);
 		}
 	}
 

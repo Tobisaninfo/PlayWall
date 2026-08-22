@@ -253,7 +253,7 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
-		midiCoordinator = new MidiCoordinator(midi);
+		midiCoordinator = new MidiCoordinator(midi, actionHandlerResolver, feedbackValueWriterResolver);
 		eventHandler.registerListener(midiCoordinator);
 
 		pageViewActions = new PageViewActions(projectController, client, errorAlertBuilder, fileChooserWrapper, this);
@@ -479,6 +479,7 @@ public class MainViewController extends ViewControllerBase
 
 		midiMappingListener = new MidiMappingListener(activeMapping, actionHandlerResolver, feedbackValueWriterResolver);
 		midiCoordinator.setListener(midiMappingListener);
+		midiCoordinator.showCurrentFeedback(activeMapping);
 
 		keyboardMappingListener = new KeyboardMappingListener(activeMapping, actionHandlerResolver);
 		getStage().addEventFilter(KeyEvent.ANY, keyboardMappingListener);
