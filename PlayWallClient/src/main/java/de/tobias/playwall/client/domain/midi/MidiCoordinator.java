@@ -39,7 +39,7 @@ public class MidiCoordinator
 					log.error("Could not find MIDI device with name: {}", event.getDeviceName());
 					return;
 				}
-				final MidiDevice device = midi.openDevice(midiDeviceInfoOptional.get(), Midi.Mode.INPUT);
+				final MidiDevice device = midi.openDevice(midiDeviceInfoOptional.get(), Midi.Mode.INPUT, Midi.Mode.OUTPUT);
 				log.info("Open MIDI device: {}", device.getMidiDeviceInfo());
 			}
 			catch(MidiUnavailableException e)
