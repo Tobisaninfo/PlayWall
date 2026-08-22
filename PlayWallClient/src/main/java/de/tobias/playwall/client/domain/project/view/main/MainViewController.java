@@ -2,7 +2,10 @@ package de.tobias.playwall.client.domain.project.view.main;
 
 import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.action.ActionHandlerResolver;
+import de.thecodelabs.midi.mapping.feedback.FeedbackValueWriterResolver;
 import de.thecodelabs.midi.mapping.listener.KeyboardMappingListener;
+import de.thecodelabs.midi.mapping.listener.MidiMappingListener;
+import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -164,8 +167,11 @@ public class MainViewController extends ViewControllerBase
 	private SettingsListener settingsListener;
 
 	private final ActionHandlerResolver actionHandlerResolver;
+	private final FeedbackValueWriterResolver feedbackValueWriterResolver;
+	private final Midi midi;
 	private KeyboardMappingListener keyboardMappingListener;
-	private final MidiCoordinator midiCoordinator;
+	private MidiMappingListener midiMappingListener;
+	private MidiCoordinator midiCoordinator;
 
 	private MaterialToastManager materialToastManager;
 	private Toast padErrorsToast;
@@ -246,6 +252,7 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
+		midiCoordinator = new MidiCoordinator(midi);
 		eventHandler.registerListener(midiCoordinator);
 
 		pageViewActions = new PageViewActions(projectController, client, errorAlertBuilder, fileChooserWrapper, this);
@@ -468,6 +475,10 @@ public class MainViewController extends ViewControllerBase
 		}
 
 		final Mapping activeMapping = projectMetadata.getMappings().get(projectMetadata.getSelectedMapping());
+
+		midiMappingListener = new MidiMappingListener(activeMapping, actionHandlerResolver, feedbackValueWriterResolver);
+		midiCoordinator.setListener(midiMappingListener);
+
 		keyboardMappingListener = new KeyboardMappingListener(activeMapping, actionHandlerResolver);
 		getStage().addEventFilter(KeyEvent.ANY, keyboardMappingListener);
 	}

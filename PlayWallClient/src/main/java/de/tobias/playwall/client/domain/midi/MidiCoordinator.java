@@ -1,25 +1,23 @@
 package de.tobias.playwall.client.domain.midi;
 
+import de.thecodelabs.midi.mapping.listener.MidiMappingListener;
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.device.MidiDeviceInfo;
-import de.tobias.playwall.client.appcontext.InjectConstructor;
-import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.event.EventListener;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sound.midi.MidiUnavailableException;
 import java.util.Optional;
 
-@Service
-@AllArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
 @Slf4j
+@RequiredArgsConstructor
 public class MidiCoordinator
 {
 	private final Midi midi;
+	private MidiMappingListener midiMappingListener;
 
 	@EventListener(MidiDeviceSelected.class)
 	void onDeviceSelected(MidiDeviceSelected event)
@@ -43,12 +41,29 @@ public class MidiCoordinator
 				}
 				final MidiDevice device = midi.openDevice(midiDeviceInfoOptional.get(), Midi.Mode.INPUT);
 				log.info("Open MIDI device: {}", device.getMidiDeviceInfo());
-				device.getPublisher().addMidiListener(e -> log.debug("Received MIDI event: {}", e));
 			}
 			catch(MidiUnavailableException e)
 			{
 				throw new RuntimeException(e);
 			}
+		}
+	}
+
+	public void setListener(MidiMappingListener midiMappingListener)
+	{
+		final MidiDevice device = midi.getDevice();
+		// Remove old listener
+		if(device != null)
+		{
+			device.getPublisher().removeMidiListener(this.midiMappingListener);
+		}
+
+		this.midiMappingListener = midiMappingListener;
+
+		// Register new listener
+		if(device != null)
+		{
+			device.getPublisher().addMidiListener(midiMappingListener);
 		}
 	}
 }

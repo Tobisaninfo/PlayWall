@@ -227,7 +227,16 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	@FXML
 	private void onMidiAdd()
 	{
+		final Mapping mapping = getActiveMapping();
+		if(mapping == null)
+		{
+			return;
+		}
 
+		MidiInputKey key = new MidiInputKey((byte) 36);
+		mapping.addInputKeyWithAction(key, null);
+		updateInputListView();
+		mappingListView.getSelectionModel().select(key);
 	}
 
 	@FXML
