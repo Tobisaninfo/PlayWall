@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.domain.midi.feedback;
+package de.tobias.playwall.client.domain.midi.device;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
 
 @JsonTypeName("default-feedback-value")
-public record DefaultFeedbackValue(int value) implements FeedbackValue
+public record LPFeedbackValue(int value) implements FeedbackValue
 {
 	@JsonCreator
-	public DefaultFeedbackValue(@JsonProperty("value") int value)
+	public LPFeedbackValue(@JsonProperty("value") int value)
 	{
 		this.value = value;
 	}
@@ -17,6 +17,6 @@ public record DefaultFeedbackValue(int value) implements FeedbackValue
 	@Override
 	public FeedbackValue copy()
 	{
-		return new DefaultFeedbackValue(value);
+		return new LPFeedbackValue(value);
 	}
 }

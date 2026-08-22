@@ -1,14 +1,20 @@
 package de.tobias.playwall.client.domain.midi.device;
 
+import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
 import de.thecodelabs.midi.midi.device.MidiDevice;
-import de.thecodelabs.midi.midi.device.MidiListener;
 import de.thecodelabs.midi.midi.message.MidiMessage;
 import de.thecodelabs.midi.midi.message.MidiMessageType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class LPMiniMK3 implements MidiListener
+class LPMiniMK3 extends CustomMidiDevice
 {
+	@Override
+	public Class<? extends FeedbackValue> supportedFeedbackValue()
+	{
+		return LPFeedbackValue.class;
+	}
+
 	@Override
 	public void onDeviceOpen(MidiDevice midiDevice)
 	{

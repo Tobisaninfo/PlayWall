@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class MidiDeviceRegistry
 {
-	private final Map<String, MidiListener> midiListeners = new HashMap<>();
+	private final Map<String, CustomMidiDevice> midiListeners = new HashMap<>();
 
 	@PostConstruct
 	private void init()

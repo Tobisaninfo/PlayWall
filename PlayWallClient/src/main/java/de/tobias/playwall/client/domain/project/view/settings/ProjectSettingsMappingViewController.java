@@ -18,7 +18,7 @@ import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewControl
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
-import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackValue;
+import de.tobias.playwall.client.domain.midi.device.LPFeedbackValue;
 import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
 import de.tobias.playwall.client.domain.project.view.settings.cell.InputKeyCell;
 import de.tobias.playwall.client.domain.project.view.settings.cell.MidiDeviceInfoCell;
@@ -245,7 +245,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			return;
 		}
 
-		MidiInputKey key = new MidiInputKey((byte) 11, Map.of(DefaultFeedbackState.NORMAL, new DefaultFeedbackValue(4)));
+		MidiInputKey key = new MidiInputKey((byte) 11, Map.of(DefaultFeedbackState.NORMAL, new LPFeedbackValue(4)));
 		mapping.addInputKeyWithAction(key, null);
 		updateInputListView();
 		mappingListView.getSelectionModel().select(key);
