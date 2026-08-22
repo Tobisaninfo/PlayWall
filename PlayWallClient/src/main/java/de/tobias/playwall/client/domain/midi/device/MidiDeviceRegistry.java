@@ -1,8 +1,8 @@
 package de.tobias.playwall.client.domain.midi.device;
 
-import de.thecodelabs.midi.midi.device.MidiListener;
 import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPMiniMK3;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class MidiDeviceRegistry
 		midiListeners.put("LPMiniMK3 MIDI Out", new LPMiniMK3());
 	}
 
-	public Optional<MidiListener> lookup(String name)
+	public Optional<CustomMidiDevice> lookup(String name)
 	{
 		return Optional.ofNullable(midiListeners.get(name));
 	}

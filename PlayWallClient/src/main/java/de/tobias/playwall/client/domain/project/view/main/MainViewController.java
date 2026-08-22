@@ -19,6 +19,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
+import de.tobias.playwall.client.domain.midi.device.MidiDeviceRegistry;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.pad.*;
 import de.tobias.playwall.client.domain.pad.view.PadView;
@@ -170,9 +171,10 @@ public class MainViewController extends ViewControllerBase
 	private final ActionHandlerResolver actionHandlerResolver;
 	private final FeedbackValueWriterResolver feedbackValueWriterResolver;
 	private final Midi midi;
+	private final MidiDeviceRegistry midiDeviceRegistry;
+	private final MidiCoordinator midiCoordinator;
 	private KeyboardMappingListener keyboardMappingListener;
 	private MidiMappingListener midiMappingListener;
-	private MidiCoordinator midiCoordinator;
 
 	private MaterialToastManager materialToastManager;
 	private Toast padErrorsToast;
@@ -253,7 +255,6 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
-		midiCoordinator = new MidiCoordinator(midi, actionHandlerResolver, feedbackValueWriterResolver);
 		eventHandler.registerListener(midiCoordinator);
 
 		pageViewActions = new PageViewActions(projectController, client, errorAlertBuilder, fileChooserWrapper, this);

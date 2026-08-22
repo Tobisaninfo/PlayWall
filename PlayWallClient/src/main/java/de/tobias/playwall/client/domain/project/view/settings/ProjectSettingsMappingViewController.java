@@ -3,6 +3,7 @@ package de.tobias.playwall.client.domain.project.view.settings;
 import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.MappingRegistry;
 import de.thecodelabs.midi.mapping.action.Action;
+import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
@@ -16,9 +17,10 @@ import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewController;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.midi.MidiCoordinator;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
-import de.tobias.playwall.client.domain.midi.device.LPFeedbackValue;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValue;
 import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
 import de.tobias.playwall.client.domain.project.view.settings.cell.InputKeyCell;
 import de.tobias.playwall.client.domain.project.view.settings.cell.MidiDeviceInfoCell;
@@ -50,7 +52,8 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 	}
 
-	private record ActionTab(Tab tab, int order, ActionSettingsViewController actionSettingsViewController)
+	private record ActionTab(Tab tab, int order, ActionSettingsViewController actionSettingsViewController,
+	                         List<? extends FeedbackState> feedbackStates)
 	{
 	}
 
@@ -82,6 +85,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private final ClientProjectController projectController;
 	private final UpdateMessageEventHandler eventHandler;
 	private final Midi midi;
+	private final MidiCoordinator midiCoordinator;
 	private final MappingRegistry mappingRegistry;
 	private final Map<Class<? extends Action>, ActionTab> actionTabMap = FXCollections.observableHashMap();
 
@@ -94,12 +98,13 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private UUID selectedMapping;
 
 	@InjectConstructor
-	public ProjectSettingsMappingViewController(FluentClient client, UpdateMessageEventHandler eventHandler, ClientProjectController projectController, Midi midi, MappingRegistry mappingRegistry)
+	public ProjectSettingsMappingViewController(FluentClient client, UpdateMessageEventHandler eventHandler, ClientProjectController projectController, Midi midi, MidiCoordinator midiCoordinator, MappingRegistry mappingRegistry)
 	{
 		super(client);
 		this.projectController = projectController;
 		this.eventHandler = eventHandler;
 		this.midi = midi;
+		this.midiCoordinator = midiCoordinator;
 		this.mappingRegistry = mappingRegistry;
 	}
 
@@ -119,7 +124,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		midiDeviceComboBox.getItems().addAll(midi.getMidiDevices());
 		midiDeviceComboBox.setCellFactory(_ -> new MidiDeviceInfoCell());
 		midiDeviceComboBox.setButtonCell(new MidiDeviceInfoCell());
-		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((__, _, newValue) -> {
+		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
 			try
 			{
 				eventHandler.fireEvent(new MidiDeviceSelected(newValue.name()));
@@ -147,7 +152,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			final ActionSettingsViewController controller = AppContextHolder.getInstance().get(actionDescription.settingsViewController());
 			final Tab tab = new Tab(Localization.getString(actionDescription.nameKey()), controller.getParent());
 
-			final ActionTab actionTab = new ActionTab(tab, actionDescription.order(), controller);
+			final ActionTab actionTab = new ActionTab(tab, actionDescription.order(), controller, List.of(actionDescription.feedbackTypes()));
 			tab.setUserData(actionTab);
 			actionTabMap.put(action, actionTab);
 		}
@@ -324,6 +329,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 				final ActionTab newActionTab = actionTabMap.get(action.getClass());
 				actionTabs.getSelectionModel().select(newActionTab.tab);
 				newActionTab.actionSettingsViewController.initSettings(action);
+				newActionTab.actionSettingsViewController.createFeedbackValueViews(newValue, newActionTab.feedbackStates, midiCoordinator);
 			}
 			else
 			{

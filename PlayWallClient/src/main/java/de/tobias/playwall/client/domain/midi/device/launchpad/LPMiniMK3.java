@@ -1,13 +1,14 @@
-package de.tobias.playwall.client.domain.midi.device;
+package de.tobias.playwall.client.domain.midi.device.launchpad;
 
 import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
 import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.message.MidiMessage;
 import de.thecodelabs.midi.midi.message.MidiMessageType;
+import de.tobias.playwall.client.domain.midi.device.CustomMidiDevice;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class LPMiniMK3 extends CustomMidiDevice
+public class LPMiniMK3 extends CustomMidiDevice
 {
 	@Override
 	public Class<? extends FeedbackValue> supportedFeedbackValue()

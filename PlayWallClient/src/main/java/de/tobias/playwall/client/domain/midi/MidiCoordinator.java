@@ -7,8 +7,13 @@ import de.thecodelabs.midi.mapping.listener.MidiMappingListener;
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.device.MidiDeviceInfo;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
+import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.domain.midi.device.CustomMidiDevice;
+import de.tobias.playwall.client.domain.midi.device.MidiDeviceRegistry;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.event.EventListener;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,14 +21,26 @@ import javax.sound.midi.MidiUnavailableException;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor(onConstructor_ = @InjectConstructor, access = AccessLevel.PACKAGE)
 public class MidiCoordinator
 {
 	private final Midi midi;
+	private final MidiDeviceRegistry midiDeviceRegistry;
 	private final ActionHandlerResolver actionHandlerResolver;
 	private final FeedbackValueWriterResolver feedbackValueWriterResolver;
 
 	private MidiMappingListener midiMappingListener;
+
+	public Optional<CustomMidiDevice> lookupCustomDevice()
+	{
+		final MidiDevice device = midi.getDevice();
+		if(device != null)
+		{
+			return midiDeviceRegistry.lookup(device.getMidiDeviceInfo().name());
+		}
+		return Optional.empty();
+	}
 
 	@EventListener(MidiDeviceSelected.class)
 	void onDeviceSelected(MidiDeviceSelected event)

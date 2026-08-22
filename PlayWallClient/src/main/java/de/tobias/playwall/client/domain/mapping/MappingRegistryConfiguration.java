@@ -12,7 +12,7 @@ import de.tobias.playwall.client.domain.mapping.action.PadAction;
 import de.tobias.playwall.client.domain.mapping.action.PageAction;
 import de.tobias.playwall.client.domain.mapping.action.StopAllAction;
 import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
-import de.tobias.playwall.client.domain.midi.device.LPFeedbackValue;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValue;
 
 @Configuration
 class MappingRegistryConfiguration

@@ -7,8 +7,8 @@ import de.thecodelabs.midi.midi.Midi;
 import de.tobias.playwall.client.appcontext.Bean;
 import de.tobias.playwall.client.appcontext.Configuration;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
-import de.tobias.playwall.client.domain.midi.device.LPFeedbackValue;
-import de.tobias.playwall.client.domain.midi.device.LPFeedbackValueWriter;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValue;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValueWriter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

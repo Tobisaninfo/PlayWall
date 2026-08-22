@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.domain.midi.device;
+package de.tobias.playwall.client.domain.midi.device.launchpad;
 
 import de.thecodelabs.midi.mapping.feedback.FeedbackValueWriter;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
