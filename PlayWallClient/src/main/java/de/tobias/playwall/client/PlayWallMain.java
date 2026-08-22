@@ -1,5 +1,6 @@
 package de.tobias.playwall.client;
 
+import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -174,6 +175,14 @@ public class PlayWallMain extends Application
 		{
 			// Server gets stopped via "Runtime.getRuntime().addShutdownHook()"
 			AppContextHolder.getInstance().get(Client.class).disconnect();
+
+			final Midi midi = AppContextHolder.getInstance().get(Midi.class);
+			if(midi.isOpen())
+			{
+				midi.clearFeedback();
+			}
+			midi.close();
+
 			Worker.shutdown();
 		}
 		catch(Exception e)
