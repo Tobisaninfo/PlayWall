@@ -11,6 +11,7 @@ import de.tobias.playwall.client.domain.mapping.action.GlobalVolumeAction;
 import de.tobias.playwall.client.domain.mapping.action.PadAction;
 import de.tobias.playwall.client.domain.mapping.action.PageAction;
 import de.tobias.playwall.client.domain.mapping.action.StopAllAction;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 
 @Configuration
 class MappingRegistryConfiguration
@@ -31,6 +32,8 @@ class MappingRegistryConfiguration
 				.registerAction(PageAction.class)
 				.registerAction(StopAllAction.class)
 				.registerAction(GlobalVolumeAction.class);
+
+		registry.registerFeedbackState(DefaultFeedbackState.class);
 	}
 
 	@Bean
