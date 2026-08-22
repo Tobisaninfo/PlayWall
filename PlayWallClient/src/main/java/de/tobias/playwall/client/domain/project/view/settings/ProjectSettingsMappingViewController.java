@@ -166,14 +166,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		this.isValidProperty.set(true);
 
-		for(MidiDeviceInfo midiDevice : midi.getMidiDevices())
-		{
-			if(midiDevice.name().equals(parameter.getProjectMetadata().getMidiDevice()))
-			{
-				midiDeviceComboBox.getSelectionModel().select(midiDevice);
-				break;
-			}
-		}
+		midi.getMidiDeviceInfo(parameter.getProjectMetadata().getMidiDevice()).ifPresent(midiDeviceComboBox.getSelectionModel()::select);
 
 		// Copy mappings from the project. Do not edit the original object, otherwise changes won't be discarded on settings cancel action
 		mappings = new HashMap<>();

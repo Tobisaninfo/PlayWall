@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class MidiDeviceRegistry
+public class CustomMidiDeviceRegistry
 {
 	private final Map<String, CustomMidiDevice> midiListeners = new HashMap<>();
 

@@ -5,7 +5,6 @@ import de.thecodelabs.midi.mapping.action.ActionHandlerResolver;
 import de.thecodelabs.midi.mapping.feedback.FeedbackValueWriterResolver;
 import de.thecodelabs.midi.mapping.listener.KeyboardMappingListener;
 import de.thecodelabs.midi.mapping.listener.MidiMappingListener;
-import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -19,7 +18,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
-import de.tobias.playwall.client.domain.midi.device.MidiDeviceRegistry;
+import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.pad.*;
 import de.tobias.playwall.client.domain.pad.view.PadView;
@@ -170,8 +169,7 @@ public class MainViewController extends ViewControllerBase
 
 	private final ActionHandlerResolver actionHandlerResolver;
 	private final FeedbackValueWriterResolver feedbackValueWriterResolver;
-	private final Midi midi;
-	private final MidiDeviceRegistry midiDeviceRegistry;
+	private final CustomMidiDeviceRegistry midiDeviceRegistry;
 	private final MidiCoordinator midiCoordinator;
 	private KeyboardMappingListener keyboardMappingListener;
 	private MidiMappingListener midiMappingListener;

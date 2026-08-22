@@ -10,7 +10,7 @@ import de.thecodelabs.midi.midi.device.MidiDeviceInfo;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.midi.device.CustomMidiDevice;
-import de.tobias.playwall.client.domain.midi.device.MidiDeviceRegistry;
+import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.event.EventListener;
 import lombok.AccessLevel;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class MidiCoordinator
 {
 	private final Midi midi;
-	private final MidiDeviceRegistry midiDeviceRegistry;
+	private final CustomMidiDeviceRegistry midiDeviceRegistry;
 	private final ActionHandlerResolver actionHandlerResolver;
 	private final FeedbackValueWriterResolver feedbackValueWriterResolver;
 

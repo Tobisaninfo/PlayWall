@@ -2,15 +2,13 @@ package de.tobias.playwall.client.domain.midi;
 
 import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.device.MidiListener;
-import de.thecodelabs.midi.midi.message.MidiMessage;
-import de.thecodelabs.midi.midi.message.MidiMessageType;
-import de.tobias.playwall.client.domain.midi.device.MidiDeviceRegistry;
+import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class DeviceConfigurationMidiListener implements MidiListener
+public class CustomMidiDeviceListener implements MidiListener
 {
-	private final MidiDeviceRegistry midiDeviceRegistry;
+	private final CustomMidiDeviceRegistry midiDeviceRegistry;
 
 	@Override
 	public void onDeviceOpen(MidiDevice midiDevice)

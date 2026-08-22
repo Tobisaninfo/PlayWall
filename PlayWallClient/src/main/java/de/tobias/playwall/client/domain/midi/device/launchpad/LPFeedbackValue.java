@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
 import de.tobias.playwall.client.domain.midi.feedback.FeedbackValueDescription;
 
-@JsonTypeName("default-feedback-value")
+@JsonTypeName("lp-feedback-value")
 @FeedbackValueDescription(settingsViewController = LPFeedbackValueViewController.class)
 public record LPFeedbackValue(int value) implements FeedbackValue
 {

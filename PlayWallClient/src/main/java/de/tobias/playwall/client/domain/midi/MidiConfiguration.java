@@ -5,7 +5,7 @@ import de.tobias.playwall.client.appcontext.Bean;
 import de.tobias.playwall.client.appcontext.Configuration;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.PostConstruct;
-import de.tobias.playwall.client.domain.midi.device.MidiDeviceRegistry;
+import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
 class MidiConfiguration
 {
-	private final MidiDeviceRegistry midiDeviceRegistry;
+	private final CustomMidiDeviceRegistry midiDeviceRegistry;
 
 	private Midi midi;
 
@@ -21,11 +21,11 @@ class MidiConfiguration
 	private void init()
 	{
 		midi = new Midi();
-		midi.addMidiListener(new DeviceConfigurationMidiListener(midiDeviceRegistry));
+		midi.addMidiListener(new CustomMidiDeviceListener(midiDeviceRegistry));
 	}
 
 	@Bean
-	public Midi midi()
+	Midi midi()
 	{
 		return midi;
 	}
