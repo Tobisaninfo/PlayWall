@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.domain.mapping.action;
 
 import de.thecodelabs.midi.event.KeyInputEvent;
+import de.thecodelabs.midi.event.KeyInputType;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.action.ActionHandler;
 import de.thecodelabs.midi.mapping.feedback.FeedbackState;
@@ -22,6 +23,11 @@ public class StopAllActionHandler implements ActionHandler
 	@Override
 	public FeedbackState handleAction(KeyInputEvent keyInputEvent, Action action)
 	{
+		if(keyInputEvent.keyInputType() != KeyInputType.UP)
+		{
+			return null;
+		}
+
 		try
 		{
 			client.currentProject().stopAllPads();
