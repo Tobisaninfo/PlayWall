@@ -8,6 +8,7 @@ import de.tobias.playwall.client.appcontext.Bean;
 import de.tobias.playwall.client.appcontext.Configuration;
 import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.domain.mapping.action.GlobalVolumeAction;
+import de.tobias.playwall.client.domain.mapping.action.PadAction;
 import de.tobias.playwall.client.domain.mapping.action.PageAction;
 import de.tobias.playwall.client.domain.mapping.action.StopAllAction;
 
@@ -26,6 +27,7 @@ class MappingRegistryConfiguration
 				.registerInputKey(KeyboardInputKey.class);
 
 		registry
+				.registerAction(PadAction.class)
 				.registerAction(PageAction.class)
 				.registerAction(StopAllAction.class)
 				.registerAction(GlobalVolumeAction.class);

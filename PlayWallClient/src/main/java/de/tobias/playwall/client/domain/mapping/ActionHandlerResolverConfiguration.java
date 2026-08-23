@@ -16,6 +16,7 @@ class ActionHandlerResolverConfiguration
 {
 	private ActionHandlerResolver actionHandlerResolver;
 
+	private final PadActionHandler padActionHandler;
 	private final PageActionHandler pageActionHandler;
 	private final StopAllActionHandler stopAllActionHandler;
 	private final GlobalVolumeActionHandler globalVolumeActionHandler;
@@ -24,6 +25,7 @@ class ActionHandlerResolverConfiguration
 	private void init()
 	{
 		actionHandlerResolver = new DefaultActionHandlerResolver()
+				.registerAction(PadAction.class, padActionHandler)
 				.registerAction(PageAction.class, pageActionHandler)
 				.registerAction(StopAllAction.class, stopAllActionHandler)
 				.registerAction(GlobalVolumeAction.class, globalVolumeActionHandler);
