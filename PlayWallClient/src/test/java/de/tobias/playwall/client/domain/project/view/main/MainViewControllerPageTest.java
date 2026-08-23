@@ -12,7 +12,6 @@ import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.utils.MimeType;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.components.PseudoClasses;
-import de.tobias.playwall.client.view.components.ViewConstants;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;

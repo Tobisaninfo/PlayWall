@@ -6,13 +6,10 @@ import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
-import javafx.geometry.Pos;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 
 import java.util.Collection;
