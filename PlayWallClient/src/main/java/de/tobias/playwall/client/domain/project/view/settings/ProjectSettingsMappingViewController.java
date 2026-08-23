@@ -247,7 +247,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			return;
 		}
 
-		MidiInputKey key = new MidiInputKey((byte) 11, Map.of(DefaultFeedbackState.NORMAL, new LPFeedbackValue(4)));
+		MidiInputKey key = new MidiInputKey((byte) 11);
 		mapping.addInputKeyWithAction(key, null);
 		updateInputListView();
 		mappingListView.getSelectionModel().select(key);
@@ -299,6 +299,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		final Action newAction = actionTab.actionSettingsViewController.createNewAction();
 		mapping.addInputKeyWithAction(selectedKey, newAction);
 		actionTab.actionSettingsViewController.initSettings(newAction);
+		actionTab.actionSettingsViewController.createFeedbackValueViews(selectedKey, actionTab.feedbackStates, midiCoordinator);
 		updateInputListView();
 	}
 
@@ -335,6 +336,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 				final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
 				mapping.addInputKeyWithAction(newValue, actionTab.actionSettingsViewController.createNewAction());
 				actionTab.actionSettingsViewController.initSettings(mapping.getAction(newValue));
+				actionTab.actionSettingsViewController.createFeedbackValueViews(newValue, actionTab.feedbackStates, midiCoordinator);
 			}
 		}
 	}

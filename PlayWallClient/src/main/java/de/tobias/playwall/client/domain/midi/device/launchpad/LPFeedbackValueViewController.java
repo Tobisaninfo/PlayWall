@@ -24,7 +24,7 @@ class LPFeedbackValueViewController extends FeedbackValueSettingsViewController
 	@Override
 	public FeedbackValue createNewFeedback()
 	{
-		return new LPFeedbackValue(0);
+		return new LPFeedbackValue(LPColor.WHITE.getMidiValue());
 	}
 
 	@Override

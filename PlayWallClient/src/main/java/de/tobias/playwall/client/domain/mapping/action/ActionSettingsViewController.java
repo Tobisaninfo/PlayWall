@@ -67,7 +67,7 @@ public abstract class ActionSettingsViewController extends NVC
 		for(FeedbackState feedbackState : feedbackStates)
 		{
 			final FeedbackValueSettingsViewController viewController = createFeedbackValueSettingsViewController(customMidiDevice.supportedFeedbackValue());
-			final FeedbackValue feedbackValue = Optional.ofNullable(feedbackProvider.getFeedbackValueForState(feedbackState)).orElse(() -> {
+			final FeedbackValue feedbackValue = Optional.ofNullable(feedbackProvider.getFeedbackValueForState(feedbackState)).orElseGet(() -> {
 				// Create new feedback value if not existing for the state
 				final FeedbackValue newFeedbackValue = viewController.createNewFeedback();
 				feedbackProvider.setFeedbackValueForState(feedbackState, newFeedbackValue);
@@ -92,7 +92,7 @@ public abstract class ActionSettingsViewController extends NVC
 		{
 			return;
 		}
-		for(int i = 0; i < feedbackStates.size(); i++)
+		for(int i = 0; i < Math.min(feedbackStates.size(), feedbackValueSettingsViewControllers.size()); i++)
 		{
 			final FeedbackState feedbackState = feedbackStates.get(i);
 			final FeedbackValueSettingsViewController viewController = feedbackValueSettingsViewControllers.get(i);
