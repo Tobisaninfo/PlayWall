@@ -18,6 +18,6 @@ public class LPFeedbackValueWriter implements FeedbackValueWriter<MidiInputKey, 
 	@Override
 	public void write(MidiInputKey key, LPFeedbackValue value)
 	{
-		midi.getDevice().sendMidiMessage(new MidiMessage(MidiMessageType.NOTE_ON, (byte) 0, key.value(), (byte) value.value()));
+		midi.getDevice().sendMidiMessage(new MidiMessage(MidiMessageType.NOTE_ON, (byte) 0, key.value(), (byte) value.getValue()));
 	}
 }

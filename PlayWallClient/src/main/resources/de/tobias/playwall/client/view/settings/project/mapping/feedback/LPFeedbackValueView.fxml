@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import de.tobias.playwall.client.view.components.ColorButton?>
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="TOP_CENTER">
-    <Label text="%ui.settings.project.mapping.placeholder"/>
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <SettingsRow fx:id="settingsRow" icon="PALETTE_SOLID">
+        <ColorButton fx:id="colorButton" focusTraversable="false" mnemonicParsing="false"
+                     onAction="#onColorButton" minWidth="150.0" prefWidth="200.0"/>
+    </SettingsRow>
 </VBox>

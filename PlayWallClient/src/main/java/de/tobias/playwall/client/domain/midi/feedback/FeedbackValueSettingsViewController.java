@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.midi.feedback;
 
+import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
 import de.thecodelabs.utils.ui.NVC;
 
@@ -16,11 +17,12 @@ public abstract class FeedbackValueSettingsViewController extends NVC
 	public abstract FeedbackValue createNewFeedback();
 
 	/**
-	 * Set the action settings values to the view components
+	 * Set the feedback value settings values to the view components
 	 *
-	 * @param action action to set the settings for
+	 * @param state         feedback state of the feedback value
+	 * @param feedbackValue feedback value to set the settings for
 	 */
-	public abstract void initSettings(FeedbackValue feedbackValue);
+	public abstract void initSettings(FeedbackState state, FeedbackValue feedbackValue);
 
 	/**
 	 * Apply the settings from the view components to the FeedbackValue to persist
