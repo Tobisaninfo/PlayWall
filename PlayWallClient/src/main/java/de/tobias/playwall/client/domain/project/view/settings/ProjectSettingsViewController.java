@@ -7,6 +7,7 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.domain.mapping.PadActionPositionRemapper;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
@@ -32,6 +33,12 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 {
 	@Getter(AccessLevel.NONE)
 	private ProjectMetadata projectMetadata;
+
+	@Getter(AccessLevel.NONE)
+	private int oldNumberOfHorizontalPads;
+
+	@Getter(AccessLevel.NONE)
+	private int oldNumberOfVerticalPads;
 
 	@InjectConstructor
 	public ProjectSettingsViewController(FluentClient client, ErrorAlertBuilder errorAlertBuilder)
@@ -68,6 +75,9 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 	{
 		this.projectMetadata = parameter.projectMetadata;
 
+		oldNumberOfHorizontalPads = projectMetadata.getNumberOfHorizontalPads();
+		oldNumberOfVerticalPads = projectMetadata.getNumberOfVerticalPads();
+
 		settingViewController.forEach(controller -> controller.initParameter(new BaseProjectSettingsViewController.Param(projectMetadata)));
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PROJECT_TITLE, projectMetadata.getName()));
 	}
@@ -76,6 +86,8 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 	protected void saveButtonHandler(ActionEvent event)
 	{
 		settingViewController.forEach(controller -> controller.applySettings(new BaseProjectSettingsViewController.Param(projectMetadata)));
+
+		PadActionPositionRemapper.remapPositions(projectMetadata.getMappings(), oldNumberOfHorizontalPads, projectMetadata.getNumberOfHorizontalPads(), projectMetadata.getNumberOfVerticalPads());
 
 		try
 		{

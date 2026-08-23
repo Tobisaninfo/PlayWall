@@ -36,6 +36,11 @@ public class PadActionHandler implements ActionHandler
 			throw new IllegalArgumentException("Action is not a PadAction");
 		}
 
+		if(padAction.getPosition() == null)
+		{
+			return null;
+		}
+
 		if(keyInputEvent.keyInputType() != KeyInputType.UP && padAction.getPadActionMode() != PadAction.PadActionMode.PLAY_HOLD)
 		{
 			return null;
