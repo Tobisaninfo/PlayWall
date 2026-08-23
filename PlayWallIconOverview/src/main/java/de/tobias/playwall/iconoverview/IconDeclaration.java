@@ -114,6 +114,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.DISPLAY_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Skalierung"))));
 		data.add(new IconEntry(FontAwesomeType.BUG_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Erweitertes Logging"))));
 		data.add(new IconEntry(FontAwesomeType.PERCENT_SOLID, List.of(new IconUsage(IconUsageCategory.MAPPING, "Mapping - Global Volume Action - Delta"))));
+		data.add(new IconEntry(FontAwesomeType.FILE_LINES_SOLID, List.of(new IconUsage(IconUsageCategory.MAPPING, "Mapping - Pad Action - Seite"))));
 
 		// File drag and drop
 		data.add(new IconEntry(FontAwesomeType.MUSIC_SOLID, List.of(new IconUsage(IconUsageCategory.DRAG_AND_DROP, "Audio"))));

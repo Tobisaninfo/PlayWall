@@ -78,6 +78,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 				}
 				else
 				{
+					// page no longer exists, fallback to all pages
 					pageComboBox.getSelectionModel().select(ALL_PAGES);
 				}
 			}
