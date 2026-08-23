@@ -12,6 +12,7 @@ import de.tobias.playwall.client.domain.midi.device.CustomMidiDevice;
 import de.tobias.playwall.client.domain.midi.feedback.FeedbackValueDescription;
 import de.tobias.playwall.client.domain.midi.feedback.FeedbackValueSettingsViewController;
 import javafx.fxml.FXML;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
 
 import java.util.LinkedList;
@@ -77,6 +78,11 @@ public abstract class ActionSettingsViewController extends NVC
 
 			feedbackValueContainer.getChildren().add(viewController.getParent());
 			feedbackValueSettingsViewControllers.add(viewController);
+		}
+
+		if(!feedbackValueContainer.getChildren().isEmpty())
+		{
+			feedbackValueContainer.getChildren().addFirst(new Separator());
 		}
 	}
 
