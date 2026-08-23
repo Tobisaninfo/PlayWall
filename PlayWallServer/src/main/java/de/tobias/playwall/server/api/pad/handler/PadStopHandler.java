@@ -15,8 +15,15 @@ class PadStopHandler extends PadPlaybackHandler<PadStopRequest>
 	}
 
 	@Override
-	void handlePlayback(PadController controller)
+	void handlePlayback(PadController controller, PadStopRequest requestMessage)
 	{
-		controller.stop();
+		if(requestMessage.isImmediately())
+		{
+			controller.stopImmediately();
+		}
+		else
+		{
+			controller.stop();
+		}
 	}
 }

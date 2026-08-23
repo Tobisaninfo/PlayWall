@@ -57,7 +57,7 @@ class PadStopHandlerTest extends AbstractRequestHandlerTest
 		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(true).build());
 		projectController.loadProject(project).get();
 
-		handler.handleRequest(new PadStopRequest(padId));
+		handler.handleRequest(new PadStopRequest(padId, false));
 
 		verify(audioHandler).stop();
 	}
@@ -70,7 +70,7 @@ class PadStopHandlerTest extends AbstractRequestHandlerTest
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		projectController.loadProject(project).get();
 
-		final PadStopRequest request = new PadStopRequest(padId);
+		final PadStopRequest request = new PadStopRequest(padId, false);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PadNotExistsException.class);
 

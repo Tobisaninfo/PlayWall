@@ -13,4 +13,5 @@ import java.util.UUID;
 public class PadStopRequest extends RequestMessage implements PadIdRequest
 {
 	private UUID padId;
+	private boolean isImmediately;
 }

@@ -15,7 +15,7 @@ class PadPauseHandler extends PadPlaybackHandler<PadPauseRequest>
 	}
 
 	@Override
-	void handlePlayback(PadController controller)
+	void handlePlayback(PadController controller, PadPauseRequest requestMessage)
 	{
 		controller.pause();
 	}

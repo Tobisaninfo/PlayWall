@@ -294,6 +294,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public void stopImmediately() throws PlayWallApiException
+		{
+			delegate.stopImmediately(padId);
+		}
+
+		@Override
 		public void newMedia(Path file) throws PlayWallApiException
 		{
 			delegate.newMedia(padId, file);

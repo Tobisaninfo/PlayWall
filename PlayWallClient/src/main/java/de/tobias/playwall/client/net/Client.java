@@ -81,6 +81,8 @@ public interface Client
 
 	void stop(UUID padId) throws PlayWallApiException;
 
+	void stopImmediately(UUID padId) throws PlayWallApiException;
+
 	void newMedia(UUID padId, Path file) throws PlayWallApiException;
 
 	void updateSettings(UUID padId, Pad pad) throws PlayWallApiException;

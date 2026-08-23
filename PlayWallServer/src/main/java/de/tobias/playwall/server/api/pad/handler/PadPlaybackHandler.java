@@ -30,8 +30,8 @@ abstract class PadPlaybackHandler<T extends RequestMessage & PadIdRequest> imple
 			throw new PadNotExistsException(projectController.getLoadedProject().getMetadata().getId(), requestMessage.getPadId());
 		}
 
-		handlePlayback(controller);
+		handlePlayback(controller, requestMessage);
 	}
 
-	abstract void handlePlayback(PadController controller);
+	abstract void handlePlayback(PadController controller, T requestMessage);
 }

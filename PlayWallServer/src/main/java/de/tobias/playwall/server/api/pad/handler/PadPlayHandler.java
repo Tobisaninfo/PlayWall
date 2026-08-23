@@ -18,7 +18,7 @@ class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 	}
 
 	@Override
-	void handlePlayback(PadController controller)
+	void handlePlayback(PadController controller, PadPlayRequest requestMessage)
 	{
 		try
 		{

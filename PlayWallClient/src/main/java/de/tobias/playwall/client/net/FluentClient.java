@@ -4,12 +4,10 @@ import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.domain.project.AllProjectsInfo;
 import de.tobias.playwall.client.domain.project.Project;
-import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.settings.Settings;
+import de.tobias.playwall.client.utils.ExportFile;
 import de.tobias.playwall.client.view.style.color.ModernColor;
-import de.tobias.playwall.common.api.common.Color;
-import de.tobias.playwall.common.api.page.PageSettingsDto;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.beans.property.ReadOnlyObjectProperty;
 
@@ -114,6 +112,8 @@ public interface FluentClient
 		void pause() throws PlayWallApiException;
 
 		void stop() throws PlayWallApiException;
+
+		void stopImmediately() throws PlayWallApiException;
 
 		void newMedia(Path file) throws PlayWallApiException;
 

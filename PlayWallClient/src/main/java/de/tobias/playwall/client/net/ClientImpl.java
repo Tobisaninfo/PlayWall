@@ -255,7 +255,13 @@ class ClientImpl implements Client
 	@Override
 	public void stop(UUID padId) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new PadStopRequest(padId));
+		clientWebSocketHandler.send(new PadStopRequest(padId, false));
+	}
+
+	@Override
+	public void stopImmediately(UUID padId) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new PadStopRequest(padId, true));
 	}
 
 	@Override
