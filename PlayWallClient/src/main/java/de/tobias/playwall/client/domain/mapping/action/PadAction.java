@@ -30,15 +30,22 @@ public class PadAction implements Action
 
 	private UUID pageId;
 
+	private Integer position;
+
 	@Override
 	public Action copy()
 	{
-		return new PadAction(padActionMode, pageId);
+		return new PadAction(padActionMode, pageId, position);
 	}
 
 	@Override
 	public String toString()
 	{
-		return Localization.getString("PadActionMode." + padActionMode);
+		if(position == null)
+		{
+			return Localization.getString("PadActionMode." + padActionMode);
+		}
+
+		return Localization.getString("action.pad.details", position + 1, Localization.getString("PadActionMode." + padActionMode));
 	}
 }
