@@ -8,4 +8,7 @@
     <SettingsRow icon="GEAR_SOLID" title="%ui.action.pad.settings.modus">
         <ComboBox fx:id="modeComboBox"/>
     </SettingsRow>
+    <SettingsRow icon="FILE_SOLID" title="%ui.action.pad.settings.page">
+        <ComboBox fx:id="pageComboBox"/>
+    </SettingsRow>
 </VBox>

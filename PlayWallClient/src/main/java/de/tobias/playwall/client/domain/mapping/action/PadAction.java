@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @JsonTypeName("pad")
 @ActionDescription(nameKey = "action.pad.name", order = 1, settingsViewController = PadActionSettingsViewController.class)
 @Getter
@@ -26,10 +28,12 @@ public class PadAction implements Action
 
 	private PadActionMode padActionMode;
 
+	private UUID pageId;
+
 	@Override
 	public Action copy()
 	{
-		return new PadAction(padActionMode);
+		return new PadAction(padActionMode, pageId);
 	}
 
 	@Override
