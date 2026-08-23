@@ -32,9 +32,9 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	@FXML
 	private ComboBox<TimeMode> comboBoxTime;
 
-	private ColorPicker colorPickerDefault;
-	private ColorPicker colorPickerPlay;
-	private ColorPicker colorPickerIntro;
+	private ColorPicker<ModernColor> colorPickerDefault;
+	private ColorPicker<ModernColor> colorPickerPlay;
+	private ColorPicker<ModernColor> colorPickerIntro;
 
 	@InjectConstructor
 	public ProjectSettingsDisplayViewController(FluentClient client)
@@ -54,15 +54,15 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	public void initParameter(Param param)
 	{
 		final ModernColor defaultColor = param.getProjectMetadata().getDefaultColor();
-		colorPickerDefault = new ColorPicker(defaultColor, ModernColor.values(), newColor -> buttonColorDefault.updateColor(newColor));
+		colorPickerDefault = new ColorPicker<>(defaultColor, ModernColor.values(), newColor -> buttonColorDefault.updateColor(newColor));
 		buttonColorDefault.updateColor(defaultColor);
 
 		final ModernColor playColor = param.getProjectMetadata().getPlayColor();
-		colorPickerPlay = new ColorPicker(playColor, ModernColor.values(), newColor -> buttonColorPlay.updateColor(newColor));
+		colorPickerPlay = new ColorPicker<>(playColor, ModernColor.values(), newColor -> buttonColorPlay.updateColor(newColor));
 		buttonColorPlay.updateColor(playColor);
 
 		final ModernColor introColor = param.getProjectMetadata().getIntroColor();
-		colorPickerIntro = new ColorPicker(introColor, ModernColor.values(), newColor -> buttonColorIntro.updateColor(newColor));
+		colorPickerIntro = new ColorPicker<>(introColor, ModernColor.values(), newColor -> buttonColorIntro.updateColor(newColor));
 		buttonColorIntro.updateColor(introColor);
 
 		comboBoxTime.getSelectionModel().select(param.projectMetadata.getTimeMode());

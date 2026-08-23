@@ -32,7 +32,7 @@ class PageSettingsGeneralViewController extends BasePageSettingsViewController
 
 	@FXML
 	private ColorButton buttonColor;
-	private ColorPicker colorPicker;
+	private ColorPicker<ModernColor> colorPicker;
 
 	@InjectConstructor
 	public PageSettingsGeneralViewController(FluentClient client, ClientProjectController projectController)
@@ -49,7 +49,7 @@ class PageSettingsGeneralViewController extends BasePageSettingsViewController
 		textFieldName.setText(pageSettings.getName());
 
 		final ModernColor color = pageSettings.getColor();
-		colorPicker = new ColorPicker(color, ModernColor.values(), newColor -> buttonColor.updateColor(newColor));
+		colorPicker = new ColorPicker<>(color, ModernColor.values(), newColor -> buttonColor.updateColor(newColor));
 		buttonColor.updateColor(color);
 
 		final List<String> otherPageNames = projectController.getProject().getPages().stream()

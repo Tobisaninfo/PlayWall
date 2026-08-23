@@ -43,9 +43,9 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	@FXML
 	private ComboBox<TimeMode> comboBoxTime;
 
-	private ColorPicker colorPickerDefault;
-	private ColorPicker colorPickerPlay;
-	private ColorPicker colorPickerIntro;
+	private ColorPicker<ModernColor> colorPickerDefault;
+	private ColorPicker<ModernColor> colorPickerPlay;
+	private ColorPicker<ModernColor> colorPickerIntro;
 
 	@InjectConstructor
 	public PadSettingsDisplayViewController(FluentClient client, PadContentSettingsContainerFactory padContentSettingsContainerFactory)
@@ -74,7 +74,7 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 		this.isValidProperty.set(true);
 	}
 
-	private ColorPicker initColorPicker(ModernColor color, ColorButton buttonColor, CheckBox checkboxColor)
+	private ColorPicker<ModernColor> initColorPicker(ModernColor color, ColorButton buttonColor, CheckBox checkboxColor)
 	{
 		ModernColor actualColor = color;
 		if(actualColor == null)
@@ -84,7 +84,7 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 
 		final boolean isOverrideActive = color != null;
 
-		final ColorPicker colorPicker = new ColorPicker(actualColor, ModernColor.values(), buttonColor::updateColor);
+		final ColorPicker<ModernColor> colorPicker = new ColorPicker<>(actualColor, ModernColor.values(), buttonColor::updateColor);
 		buttonColor.updateColor(actualColor);
 		buttonColor.setDisable(!isOverrideActive);
 		checkboxColor.setSelected(isOverrideActive);

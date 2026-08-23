@@ -1,7 +1,9 @@
 package de.tobias.playwall.client.view.components;
 
+import de.thecodelabs.utils.jfx.ColorUtils;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.tobias.playwall.client.utils.Paintable;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -27,13 +29,13 @@ public class ColorButton extends Button
 		this.setAlignment(Pos.CENTER_RIGHT);
 	}
 
-	public void updateColor(ModernColor color)
+	public void updateColor(Paintable color)
 	{
 		if(color == null)
 		{
 			return;
 		}
 
-		this.setStyle(MessageFormat.format(STYLE_TEMPLATE, color.paint()));
+		this.setStyle(MessageFormat.format(STYLE_TEMPLATE, ColorUtils.toRGBHex(color.getColor())));
 	}
 }

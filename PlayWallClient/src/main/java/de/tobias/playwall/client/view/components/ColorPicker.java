@@ -1,6 +1,6 @@
 package de.tobias.playwall.client.view.components;
 
-import de.tobias.playwall.client.view.style.color.ModernColor;
+import de.tobias.playwall.client.utils.Paintable;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
@@ -9,14 +9,14 @@ import org.controlsfx.control.PopOver;
 
 import java.util.function.Consumer;
 
-public class ColorPicker extends PopOver
+public class ColorPicker<T extends Paintable> extends PopOver
 {
 	private Rectangle currentSelected;
 
 	@Getter
-	private ModernColor selectedColor;
+	private T selectedColor;
 
-	public ColorPicker(ModernColor startColor, ModernColor[] colors, Consumer<ModernColor> onSelectedCallback)
+	public ColorPicker(T startColor, T[] colors, Consumer<T> onSelectedCallback)
 	{
 		final GridPane gridPane = initContent(startColor, colors, onSelectedCallback);
 
@@ -26,7 +26,7 @@ public class ColorPicker extends PopOver
 		setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
 	}
 
-	private GridPane initContent(ModernColor startColor, ModernColor[] colors, Consumer<ModernColor> onSelectedCallback)
+	private GridPane initContent(T startColor, T[] colors, Consumer<T> onSelectedCallback)
 	{
 		final GridPane gridPane = new GridPane();
 		gridPane.setVgap(5);
@@ -47,7 +47,7 @@ public class ColorPicker extends PopOver
 			{
 				if(index < colors.length)
 				{
-					final ModernColor color = colors[index++];
+					final T color = colors[index++];
 
 					// Style in CSS
 					final Rectangle rectangle = new Rectangle(40, 40);
@@ -75,7 +75,7 @@ public class ColorPicker extends PopOver
 		return gridPane;
 	}
 
-	private void onSelect(Rectangle rectangle, ModernColor color)
+	private void onSelect(Rectangle rectangle, T color)
 	{
 		if(currentSelected != null)
 		{

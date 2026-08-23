@@ -1,13 +1,14 @@
 package de.tobias.playwall.client.view.style.color;
 
 import de.thecodelabs.utils.application.ApplicationUtils;
+import de.tobias.playwall.client.utils.Paintable;
 import javafx.scene.paint.Color;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.InputStream;
 import java.util.stream.Stream;
 
-public enum ModernColor
+public enum ModernColor implements Paintable
 {
 	RED1,
 	RED2,

@@ -21,7 +21,7 @@ public class GlobalColorPicker extends ToggleButton
 	private static final ModernColor START_COLOR = ModernColor.BLUE1;
 
 	private final ColorButton colorButton;
-	private final ColorPicker colorPicker;
+	private final ColorPicker<ModernColor> colorPicker;
 
 	private PadEventDispatcher eventDispatcher;
 	private GlobalPickerColorListener listener;
@@ -35,7 +35,7 @@ public class GlobalColorPicker extends ToggleButton
 
 		colorButton = initColorButton();
 		colorButton.setFocusTraversable(false);
-		colorPicker = new ColorPicker(START_COLOR, ModernColor.values(), colorButton::updateColor);
+		colorPicker = new ColorPicker<>(START_COLOR, ModernColor.values(), colorButton::updateColor);
 
 		colorButton.setOnAction(_ -> {
 			colorPicker.hide();
