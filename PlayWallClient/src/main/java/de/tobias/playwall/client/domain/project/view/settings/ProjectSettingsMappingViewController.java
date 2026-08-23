@@ -198,8 +198,11 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		{
 			return;
 		}
+		final InputKey selectedKey = getSelectedKey();
+
 		final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
-		actionTab.actionSettingsViewController.applySettings(activeMapping.getAction(getSelectedKey()));
+		actionTab.actionSettingsViewController.applySettings(activeMapping.getAction(selectedKey));
+		actionTab.actionSettingsViewController.applySettingsForFeedbackValues(selectedKey, actionTab.feedbackStates);
 
 		param.getProjectMetadata().setMidiDevice(Optional.ofNullable(midiDeviceComboBox.getSelectionModel().getSelectedItem())
 				.map(MidiDeviceInfo::name)
@@ -311,6 +314,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		{
 			final ActionTab oldActionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
 			oldActionTab.actionSettingsViewController.applySettings(mapping.getAction(oldValue));
+			oldActionTab.actionSettingsViewController.applySettingsForFeedbackValues(oldValue, oldActionTab.feedbackStates);
 		}
 
 		// Show new action
