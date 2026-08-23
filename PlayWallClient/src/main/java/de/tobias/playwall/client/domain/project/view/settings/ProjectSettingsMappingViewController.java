@@ -127,7 +127,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
 			try
 			{
-				eventHandler.fireEvent(new MidiDeviceSelected(newValue.name()));
+				eventHandler.fireEvent(new MidiDeviceSelected(Optional.ofNullable(newValue).map(MidiDeviceInfo::name).orElse(null)));
 			}
 			catch(RuntimeException e)
 			{

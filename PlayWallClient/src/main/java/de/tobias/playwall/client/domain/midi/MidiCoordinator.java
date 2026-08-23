@@ -49,6 +49,7 @@ public class MidiCoordinator
 		if(oldDevice != null)
 		{
 			log.info("Close MIDI device: {}", oldDevice.getMidiDeviceInfo());
+			midi.clearFeedback();
 			oldDevice.closeDevice();
 		}
 
