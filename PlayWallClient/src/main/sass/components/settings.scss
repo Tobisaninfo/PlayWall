@@ -64,3 +64,27 @@
         }
     }
 }
+
+.settings--pad-grid {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+}
+
+.settings--pad-grid-button {
+    -fx-pref-width: 50px;
+    -fx-min-width: 50px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+    -fx-background-color: variables.$component-background-color;
+    -fx-background-radius: variables.$component-border-radius;
+    -fx-text-fill: variables.$component-text-color;
+
+    &:hover {
+        -fx-background-color: variables.$component-background-color-hover;
+    }
+
+    &:selected {
+        -fx-background-color: variables.$primary-color;
+        -fx-text-fill: variables.$on-primary-color;
+    }
+}

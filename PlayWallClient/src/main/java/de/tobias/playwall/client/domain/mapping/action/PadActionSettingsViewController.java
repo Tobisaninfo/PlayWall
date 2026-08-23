@@ -7,10 +7,14 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageSettings;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.view.components.EnumCell;
+import de.tobias.playwall.client.view.components.PseudoClasses;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.GridPane;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +30,16 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 {
 	private static final Page ALL_PAGES = new Page(null, new PageSettings(Localization.getString("ui.action.pad.settings.page.all"), ModernColor.GRAY1), null, null);
 
+	private static final String PAD_GRID_BUTTON_STYLE_CLASS = "settings--pad-grid-button";
+
 	@FXML
 	private ComboBox<PadAction.PadActionMode> modeComboBox;
 
 	@FXML
 	private ComboBox<Page> pageComboBox;
+
+	@FXML
+	private GridPane padGrid;
 
 	private final ClientProjectController projectController;
 
@@ -82,6 +91,17 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 					pageComboBox.getSelectionModel().select(ALL_PAGES);
 				}
 			}
+
+			final ProjectMetadata metadata = projectController.getProject().getMetadata();
+			initializePadGrid(metadata.getNumberOfHorizontalPads(), metadata.getNumberOfVerticalPads());
+
+			if(padAction.getPosition() != null)
+			{
+				padGrid.getChildren().stream()
+						.filter(node -> node.getUserData().equals(padAction.getPosition() + 1))
+						.findFirst()
+						.ifPresent(node -> node.pseudoClassStateChanged(PseudoClasses.SELECTED, true));
+			}
 		}
 	}
 
@@ -92,6 +112,38 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 		{
 			padAction.setPadActionMode(modeComboBox.getSelectionModel().getSelectedItem());
 			padAction.setPageId(pageComboBox.getSelectionModel().getSelectedItem().getId());
+
+			padGrid.getChildren().stream()
+					.filter(node -> node.getPseudoClassStates().contains(PseudoClasses.SELECTED))
+					.findFirst()
+					.ifPresentOrElse(
+							node -> padAction.setPosition((Integer) node.getUserData() - 1),
+							() -> padAction.setPosition(null));
 		}
+	}
+
+	private void initializePadGrid(int columns, int rows)
+	{
+		padGrid.getChildren().clear();
+
+		int index = 1;
+		for(int y = 0; y < rows; y++)
+		{
+			for(int x = 0; x < columns; x++)
+			{
+				final Button button = new Button(String.valueOf(index));
+				button.getStyleClass().add(PAD_GRID_BUTTON_STYLE_CLASS);
+				button.setUserData(index);
+				button.setOnAction(_ -> selectPadButton(button));
+				padGrid.add(button, x, y);
+				index++;
+			}
+		}
+	}
+
+	private void selectPadButton(Button selectedButton)
+	{
+		padGrid.getChildren().forEach(node -> node.pseudoClassStateChanged(PseudoClasses.SELECTED, false));
+		selectedButton.pseudoClassStateChanged(PseudoClasses.SELECTED, true);
 	}
 }

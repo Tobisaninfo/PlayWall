@@ -2,6 +2,7 @@
 
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
@@ -11,4 +12,7 @@
     <SettingsRow icon="FILE_LINES_SOLID" title="%ui.action.pad.settings.page">
         <ComboBox fx:id="pageComboBox"/>
     </SettingsRow>
+    <SettingsRow icon="TABLE_SOLID" title="%ui.action.pad.settings.pad">
+    </SettingsRow>
+    <GridPane fx:id="padGrid" styleClass="settings--pad-grid"/>
 </VBox>
