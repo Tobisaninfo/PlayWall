@@ -4,6 +4,7 @@ import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.midi.feedback.FeedbackValueSettingsViewController;
+import de.tobias.playwall.client.utils.Localizable;
 import de.tobias.playwall.client.view.components.ColorButton;
 import de.tobias.playwall.client.view.components.ColorPicker;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
@@ -33,7 +34,14 @@ class LPFeedbackValueViewController extends FeedbackValueSettingsViewController
 		{
 			throw new IllegalArgumentException("FeedbackValue must be of type LPFeedbackValue");
 		}
-		settingsRow.setTitle(feedbackState.toString());
+		if(feedbackState instanceof Localizable localizable)
+		{
+			settingsRow.setTitle(localizable.localize());
+		}
+		else
+		{
+			settingsRow.setTitle(feedbackState.toString());
+		}
 
 		final LPColor color = LPColor.fromMidiValue(lpFeedbackValue.getValue());
 
