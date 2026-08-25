@@ -40,7 +40,7 @@ import de.tobias.playwall.client.domain.project.view.management.ProjectManagemen
 import de.tobias.playwall.client.domain.project.view.media.MissingMediaEntry;
 import de.tobias.playwall.client.domain.project.view.media.ReplaceMediaViewController;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
-import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsMappingViewController;
+import de.tobias.playwall.client.domain.project.view.settings.mapping.ProjectSettingsMappingViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;

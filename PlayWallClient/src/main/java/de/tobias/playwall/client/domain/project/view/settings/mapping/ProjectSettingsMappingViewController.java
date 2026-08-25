@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.domain.project.view.settings;
+package de.tobias.playwall.client.domain.project.view.settings.mapping;
 
 import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.MappingRegistry;
@@ -19,11 +19,11 @@ import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewControl
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
-import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
-import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValue;
 import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
-import de.tobias.playwall.client.domain.project.view.settings.cell.InputKeyCell;
-import de.tobias.playwall.client.domain.project.view.settings.cell.MidiDeviceInfoCell;
+import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
+import de.tobias.playwall.client.domain.project.view.settings.InputKeyLocalizer;
+import de.tobias.playwall.client.domain.project.view.settings.mapping.cell.InputKeyCell;
+import de.tobias.playwall.client.domain.project.view.settings.mapping.cell.MidiDeviceInfoCell;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
@@ -53,7 +53,11 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	}
 
 	private record ActionTab(Tab tab, int order, ActionSettingsViewController actionSettingsViewController,
-	                         List<? extends FeedbackState> feedbackStates)
+							 List<? extends FeedbackState> feedbackStates)
+	{
+	}
+
+	public record MidiDeviceInfoCellData(String displayName, MidiDeviceInfo deviceInfo, boolean isError)
 	{
 	}
 
@@ -63,7 +67,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private TabPane actionTabs;
 
 	@FXML
-	private ComboBox<MidiDeviceInfo> midiDeviceComboBox;
+	private ComboBox<MidiDeviceInfoCellData> midiDeviceComboBox;
 
 	@FXML
 	private TextField searchTextField;
@@ -120,14 +124,18 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		actionTabs.disableProperty().bind(mappingListView.getSelectionModel().selectedItemProperty().isNull());
 		actionTabs.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> onTabChanged(newValue));
 
-		midiDeviceComboBox.getItems().add(null);
-		midiDeviceComboBox.getItems().addAll(midi.getMidiDevices());
+		midiDeviceComboBox.getItems().add(new MidiDeviceInfoCellData(null, null, false));
+		midiDeviceComboBox.getItems().addAll(midi.getMidiDevices().stream().map(device -> new MidiDeviceInfoCellData(device.displayName(), device, false)).toList());
 		midiDeviceComboBox.setCellFactory(_ -> new MidiDeviceInfoCell());
 		midiDeviceComboBox.setButtonCell(new MidiDeviceInfoCell());
 		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
 			try
 			{
-				eventHandler.fireEvent(new MidiDeviceSelected(Optional.ofNullable(newValue).map(MidiDeviceInfo::name).orElse(null)));
+				if(newValue.isError())
+				{
+					return;
+				}
+				eventHandler.fireEvent(new MidiDeviceSelected(newValue.displayName()));
 			}
 			catch(RuntimeException e)
 			{
@@ -166,7 +174,18 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		this.isValidProperty.set(true);
 
-		midi.getMidiDeviceInfo(parameter.getProjectMetadata().getMidiDevice()).ifPresent(midiDeviceComboBox.getSelectionModel()::select);
+		// Preselect the midi device or create shallow error device, if not present
+		final String selectedMidiDevice = parameter.getProjectMetadata().getMidiDevice();
+		if(selectedMidiDevice != null)
+		{
+			midiDeviceComboBox.getItems().stream()
+					.filter(deviceData -> Objects.equals(selectedMidiDevice, deviceData.displayName()))
+					.findFirst().ifPresentOrElse(midiDeviceComboBox.getSelectionModel()::select, () -> {
+						final MidiDeviceInfoCellData data = new MidiDeviceInfoCellData(selectedMidiDevice, null, true);
+						midiDeviceComboBox.getItems().addLast(data);
+						midiDeviceComboBox.getSelectionModel().select(data);
+					});
+		}
 
 		// Copy mappings from the project. Do not edit the original object, otherwise changes won't be discarded on settings cancel action
 		mappings = new HashMap<>();
@@ -206,7 +225,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		actionTab.actionSettingsViewController.applySettingsForFeedbackValues(selectedKey, actionTab.feedbackStates);
 
 		param.getProjectMetadata().setMidiDevice(Optional.ofNullable(midiDeviceComboBox.getSelectionModel().getSelectedItem())
-				.map(MidiDeviceInfo::name)
+				.map(MidiDeviceInfoCellData::displayName)
 				.orElse(null));
 		param.getProjectMetadata().setMappings(mappings);
 		param.getProjectMetadata().setSelectedMapping(selectedMapping);

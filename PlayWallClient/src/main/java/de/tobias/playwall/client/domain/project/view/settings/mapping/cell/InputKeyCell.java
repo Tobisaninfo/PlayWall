@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.domain.project.view.settings.cell;
+package de.tobias.playwall.client.domain.project.view.settings.mapping.cell;
 
 import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.action.Action;
