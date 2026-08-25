@@ -88,3 +88,9 @@
         -fx-text-fill: variables.$on-primary-color;
     }
 }
+
+.sub-headline {
+    -fx-underline: true;
+    -fx-font-size: variables.$component-text-size;
+    -fx-font-weight: bold;
+}

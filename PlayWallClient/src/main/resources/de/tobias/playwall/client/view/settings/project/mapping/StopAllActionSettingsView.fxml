@@ -2,8 +2,9 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="TOP_CENTER" spacing="14" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <Label text="%ui.settings.project.mapping.placeholder"/>
+<VBox spacing="14" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <Label text="Aktion" styleClass="sub-headline"/>
+    <Label alignment="CENTER" text="%ui.settings.project.mapping.placeholder" maxWidth="Infinity"/>
 
     <VBox fx:id="feedbackValueContainer" spacing="14"/>
 </VBox>

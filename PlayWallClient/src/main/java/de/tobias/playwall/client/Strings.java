@@ -196,4 +196,6 @@ public class Strings
 	public static final String UI_ERRORS_PAGE_EXPORT = "ui.errors.page.export";
 	public static final String UI_ERRORS_PAGE_IMPORT = "ui.errors.page.import";
 	public static final String UI_ERRORS_REPLACE_MEDIA = "ui.errors.replace.media";
+
+	public static String LAUNCHPAD_MK3_MINI = "LaunchPadMK3Mini";
 }

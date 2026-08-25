@@ -6,4 +6,6 @@ import de.thecodelabs.midi.midi.device.MidiListener;
 public abstract class CustomMidiDevice implements MidiListener
 {
 	public abstract Class<? extends FeedbackValue> supportedFeedbackValue();
+
+	public abstract String getName();
 }
