@@ -40,6 +40,7 @@ import de.tobias.playwall.client.domain.project.view.management.ProjectManagemen
 import de.tobias.playwall.client.domain.project.view.media.MissingMediaEntry;
 import de.tobias.playwall.client.domain.project.view.media.ReplaceMediaViewController;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
+import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsMappingViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
@@ -548,7 +549,7 @@ public class MainViewController extends ViewControllerBase
 						Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_TITLE),
 						Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_MESSAGE, notFoundException.getDeviceName()),
 						ToastType.ERROR,
-						new ToastAction(Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_LINK), () -> onMenuItemProjectSettings(null))
+						new ToastAction(Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_LINK), () -> onMenuItemProjectSettings(null, ProjectSettingsMappingViewController.class))
 				);
 			}
 		}
@@ -1058,12 +1059,17 @@ public class MainViewController extends ViewControllerBase
 
 	private void onMenuItemProjectSettings(ActionEvent event)
 	{
+		onMenuItemProjectSettings(event, null);
+	}
+
+	private void onMenuItemProjectSettings(ActionEvent event, Class<? extends BaseProjectSettingsViewController> openTab)
+	{
 		if(projectSettingsViewController == null)
 		{
 			projectSettingsViewController = AppContextHolder.getInstance().get(ProjectSettingsViewController.class);
 		}
 
-		projectSettingsViewController.showAndWait(new BaseProjectSettingsViewController.Param(projectController.getProject().getMetadata()), getContainingWindow());
+		projectSettingsViewController.showAndWait(new BaseProjectSettingsViewController.Param(projectController.getProject().getMetadata(), openTab), getContainingWindow());
 	}
 
 	public void onMenuItemSettings(ActionEvent event)

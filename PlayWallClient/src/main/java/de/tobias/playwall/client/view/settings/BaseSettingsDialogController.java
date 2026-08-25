@@ -5,6 +5,7 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
+import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.ParamDialogBase;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
@@ -16,6 +17,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -24,6 +26,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Base class for settings dialogs.
@@ -103,6 +106,20 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 		return (BaseSettingsViewController<P>) category.getSettingsPageController();
 	}
 
+	public BaseSettingsViewController<P> selectCategory(Class<? extends BaseProjectSettingsViewController> settingsViewController)
+	{
+		final Optional<Node> categoryOptional = boxCategories.getChildren().stream()
+				.filter(SettingsCategory.class::isInstance)
+				.filter(c -> ((SettingsCategory) c).getSettingsPageController().getClass().equals(settingsViewController))
+				.findAny();
+		return categoryOptional.map(node -> selectCategory((SettingsCategory) node)).orElse(null);
+	}
+
+	public BaseSettingsViewController<P> selectCategory(int index)
+	{
+		return selectCategory((SettingsCategory) boxCategories.getChildren().get(index));
+	}
+
 	protected void initButtons()
 	{
 		final BooleanBinding allValidBinding = Bindings.createBooleanBinding(
@@ -125,10 +142,5 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 		settingViewController.forEach(BaseSettingsViewController::cleanup);
 
 		getStageContainer().ifPresent(NVCStage::close);
-	}
-
-	public BaseSettingsViewController<P> selectCategory(int index)
-	{
-		return selectCategory((SettingsCategory) boxCategories.getChildren().get(index));
 	}
 }

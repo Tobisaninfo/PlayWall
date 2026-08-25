@@ -17,6 +17,7 @@ public abstract class BaseProjectSettingsViewController extends BaseSettingsView
 	public static class Param
 	{
 		protected ProjectMetadata projectMetadata;
+		protected Class<? extends BaseProjectSettingsViewController> openTab;
 	}
 
 	@InjectConstructor

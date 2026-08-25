@@ -72,7 +72,7 @@ class ProjectSettingsFadeViewControllerTest extends AbstractViewControllerTest
 			context.registerLazy(Stage.class, _ -> new Stage());
 			projectSettingsViewController = context.get(ProjectSettingsViewController.class);
 			fadeViewController = ((ProjectSettingsFadeViewController) projectSettingsViewController.selectCategory(3)).getFadeSettingsController();
-			projectSettingsViewController.showAndWait(new BaseProjectSettingsViewController.Param(projectMetadata), stage);
+			projectSettingsViewController.showAndWait(new BaseProjectSettingsViewController.Param(projectMetadata, null), stage);
 
 		});
 		WaitForAsyncUtils.waitForFxEvents();

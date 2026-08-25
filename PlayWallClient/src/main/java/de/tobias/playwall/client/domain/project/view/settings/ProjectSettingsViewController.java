@@ -78,14 +78,20 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 		oldNumberOfHorizontalPads = projectMetadata.getNumberOfHorizontalPads();
 		oldNumberOfVerticalPads = projectMetadata.getNumberOfVerticalPads();
 
-		settingViewController.forEach(controller -> controller.initParameter(new BaseProjectSettingsViewController.Param(projectMetadata)));
+		settingViewController.forEach(controller -> controller.initParameter(parameter));
 		stage.setTitle(Localization.getString(Strings.UI_SETTINGS_PROJECT_TITLE, projectMetadata.getName()));
+
+		if(parameter.openTab != null)
+		{
+			selectCategory(parameter.openTab);
+		}
 	}
 
 	@FXML
 	protected void saveButtonHandler(ActionEvent event)
 	{
-		settingViewController.forEach(controller -> controller.applySettings(new BaseProjectSettingsViewController.Param(projectMetadata)));
+		final BaseProjectSettingsViewController.Param param = new BaseProjectSettingsViewController.Param(projectMetadata, null);
+		settingViewController.forEach(controller -> controller.applySettings(param));
 
 		PadActionPositionRemapper.remapPositions(projectMetadata.getMappings(), oldNumberOfHorizontalPads, projectMetadata.getNumberOfHorizontalPads(), projectMetadata.getNumberOfVerticalPads());
 
