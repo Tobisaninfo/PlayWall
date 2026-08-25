@@ -64,11 +64,11 @@ public class MidiCoordinator
 		{
 			try
 			{
-				final Optional<MidiDeviceInfo> midiDeviceInfoOptional = midi.getMidiDeviceInfo(event.getDeviceName());
+				final Optional<MidiDeviceInfo> midiDeviceInfoOptional = midi.getMidiDeviceInfo(newDeviceName);
 				if(midiDeviceInfoOptional.isEmpty())
 				{
-					log.error("Could not find MIDI device with name: {}", event.getDeviceName());
-					return;
+					log.error("Could not find MIDI device with name: {}", newDeviceName);
+					throw new MidiDeviceNotFoundException(newDeviceName);
 				}
 				final MidiDevice device = midi.openDevice(midiDeviceInfoOptional.get(), Midi.Mode.INPUT, Midi.Mode.OUTPUT);
 				log.info("Open MIDI device: {}", device.getMidiDeviceInfo());

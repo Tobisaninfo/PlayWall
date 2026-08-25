@@ -18,6 +18,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
+import de.tobias.playwall.client.domain.midi.MidiDeviceNotFoundException;
 import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.pad.*;
@@ -519,7 +520,7 @@ public class MainViewController extends ViewControllerBase
 
 			if(project.getMetadata().getMidiDevice() != null)
 			{
-				eventHandler.fireEvent(new MidiDeviceSelected(project.getMetadata().getMidiDevice()));
+				openMidiDevice(project);
 			}
 
 			registerMappingListener();
@@ -530,6 +531,26 @@ public class MainViewController extends ViewControllerBase
 			loadingOverlay.hide();
 			log.error("Cannot show project", e);
 			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PROJECT_LOAD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
+		}
+	}
+
+	private void openMidiDevice(Project project)
+	{
+		try
+		{
+			eventHandler.fireEvent(new MidiDeviceSelected(project.getMetadata().getMidiDevice()));
+		}
+		catch(RuntimeException e)
+		{
+			if(e.getCause() instanceof MidiDeviceNotFoundException notFoundException)
+			{
+				materialToastManager.showPermanent(
+						Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_TITLE),
+						Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_MESSAGE, notFoundException.getDeviceName()),
+						ToastType.ERROR,
+						new ToastAction(Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_LINK), () -> onMenuItemProjectSettings(null))
+				);
+			}
 		}
 	}
 

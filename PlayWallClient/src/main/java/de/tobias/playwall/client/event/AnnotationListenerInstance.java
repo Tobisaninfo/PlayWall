@@ -18,7 +18,7 @@ record AnnotationListenerInstance(Object instance, Method method) implements Lis
 		}
 		catch(IllegalAccessException | InvocationTargetException e)
 		{
-			throw new RuntimeException(e);
+			throw new RuntimeException(e.getCause());
 		}
 	}
 }
