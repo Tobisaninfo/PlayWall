@@ -46,6 +46,13 @@ public class MidiCoordinator
 	void onDeviceSelected(MidiDeviceSelected event)
 	{
 		final MidiDevice oldDevice = midi.getDevice();
+		final String newDeviceName = event.getDeviceName();
+		if(oldDevice != null && oldDevice.getMidiDeviceInfo().name().equals(newDeviceName))
+		{
+			log.debug("Device already selected: {}", newDeviceName);
+			return;
+		}
+
 		if(oldDevice != null)
 		{
 			log.info("Close MIDI device: {}", oldDevice.getMidiDeviceInfo());
@@ -53,7 +60,7 @@ public class MidiCoordinator
 			oldDevice.closeDevice();
 		}
 
-		if(event.getDeviceName() != null)
+		if(newDeviceName != null)
 		{
 			try
 			{
