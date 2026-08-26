@@ -138,7 +138,7 @@ public class PadActionHandler implements ActionHandler
 		}
 		else
 		{
-			client.pad(padController.getPad().getId()).stopImmediately();
+			client.pad(padController.getPad().getId()).stop();
 		}
 	}
 
