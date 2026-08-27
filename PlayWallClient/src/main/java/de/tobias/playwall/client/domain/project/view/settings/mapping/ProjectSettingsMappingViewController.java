@@ -176,16 +176,13 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 		// Preselect the midi device or create shallow error device, if not present
 		final String selectedMidiDevice = parameter.getProjectMetadata().getMidiDevice();
-		if(selectedMidiDevice != null)
-		{
-			midiDeviceComboBox.getItems().stream()
-					.filter(deviceData -> Objects.equals(selectedMidiDevice, deviceData.deviceName()))
-					.findFirst().ifPresentOrElse(midiDeviceComboBox.getSelectionModel()::select, () -> {
-						final MidiDeviceInfoCellData data = new MidiDeviceInfoCellData(selectedMidiDevice, null, true);
-						midiDeviceComboBox.getItems().addLast(data);
-						midiDeviceComboBox.getSelectionModel().select(data);
-					});
-		}
+		midiDeviceComboBox.getItems().stream()
+				.filter(deviceData -> Objects.equals(selectedMidiDevice, deviceData.deviceName()))
+				.findFirst().ifPresentOrElse(midiDeviceComboBox.getSelectionModel()::select, () -> {
+					final MidiDeviceInfoCellData data = new MidiDeviceInfoCellData(selectedMidiDevice, null, true);
+					midiDeviceComboBox.getItems().addLast(data);
+					midiDeviceComboBox.getSelectionModel().select(data);
+				});
 
 		// Copy mappings from the project. Do not edit the original object, otherwise changes won't be discarded on settings cancel action
 		mappings = new HashMap<>();
