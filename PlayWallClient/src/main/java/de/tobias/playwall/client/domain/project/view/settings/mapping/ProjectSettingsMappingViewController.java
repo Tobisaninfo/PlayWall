@@ -57,7 +57,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 	}
 
-	public record MidiDeviceInfoCellData(String displayName, MidiDeviceInfo deviceInfo, boolean isError)
+	public record MidiDeviceInfoCellData(String deviceName, MidiDeviceInfo deviceInfo, boolean isError)
 	{
 	}
 
@@ -125,7 +125,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		actionTabs.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> onTabChanged(newValue));
 
 		midiDeviceComboBox.getItems().add(new MidiDeviceInfoCellData(null, null, false));
-		midiDeviceComboBox.getItems().addAll(midi.getMidiDevices().stream().map(device -> new MidiDeviceInfoCellData(device.displayName(), device, false)).toList());
+		midiDeviceComboBox.getItems().addAll(midi.getMidiDevices().stream().map(device -> new MidiDeviceInfoCellData(device.name(), device, false)).toList());
 		midiDeviceComboBox.setCellFactory(_ -> new MidiDeviceInfoCell());
 		midiDeviceComboBox.setButtonCell(new MidiDeviceInfoCell());
 		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
@@ -135,7 +135,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 				{
 					return;
 				}
-				eventHandler.fireEvent(new MidiDeviceSelected(newValue.displayName()));
+				eventHandler.fireEvent(new MidiDeviceSelected(newValue.deviceName()));
 			}
 			catch(RuntimeException e)
 			{
@@ -179,7 +179,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		if(selectedMidiDevice != null)
 		{
 			midiDeviceComboBox.getItems().stream()
-					.filter(deviceData -> Objects.equals(selectedMidiDevice, deviceData.displayName()))
+					.filter(deviceData -> Objects.equals(selectedMidiDevice, deviceData.deviceName()))
 					.findFirst().ifPresentOrElse(midiDeviceComboBox.getSelectionModel()::select, () -> {
 						final MidiDeviceInfoCellData data = new MidiDeviceInfoCellData(selectedMidiDevice, null, true);
 						midiDeviceComboBox.getItems().addLast(data);
@@ -225,7 +225,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		actionTab.actionSettingsViewController.applySettingsForFeedbackValues(selectedKey, actionTab.feedbackStates);
 
 		param.getProjectMetadata().setMidiDevice(Optional.ofNullable(midiDeviceComboBox.getSelectionModel().getSelectedItem())
-				.map(MidiDeviceInfoCellData::displayName)
+				.map(MidiDeviceInfoCellData::deviceName)
 				.orElse(null));
 		param.getProjectMetadata().setMappings(mappings);
 		param.getProjectMetadata().setSelectedMapping(selectedMapping);

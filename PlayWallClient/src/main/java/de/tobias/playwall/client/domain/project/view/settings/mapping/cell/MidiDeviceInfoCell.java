@@ -20,13 +20,13 @@ public class MidiDeviceInfoCell extends ListCell<ProjectSettingsMappingViewContr
 			return;
 		}
 
-		if(item.displayName() == null)
+		if(item.deviceName() == null)
 		{
 			setText(Localization.getString(Strings.UI_SETTINGS_PROJECT_MAPPING_MIDI_DEVICE_DISABLED));
 		}
 		else
 		{
-			setText(item.displayName());
+			setText(item.deviceName());
 		}
 
 		if(item.isError())
