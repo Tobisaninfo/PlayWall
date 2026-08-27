@@ -10,4 +10,6 @@
     <SettingsRow icon="PERCENT_SOLID" title="%ui.action.global.volume.delta">
         <ComboBox fx:id="deltaComboBox"/>
     </SettingsRow>
+
+    <VBox fx:id="feedbackValueContainer" spacing="14"/>
 </VBox>

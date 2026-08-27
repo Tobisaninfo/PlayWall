@@ -7,6 +7,7 @@ import de.thecodelabs.midi.mapping.action.ActionHandler;
 import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
@@ -31,7 +32,7 @@ public class GlobalVolumeActionHandler implements ActionHandler
 	{
 		if(keyInputEvent.keyInputType() != KeyInputType.UP)
 		{
-			return null;
+			return DefaultFeedbackState.NORMAL;
 		}
 		if(!(action instanceof GlobalVolumeAction globalVolumeAction))
 		{
@@ -48,7 +49,7 @@ public class GlobalVolumeActionHandler implements ActionHandler
 
 		if(volume.equals(newVolume))
 		{
-			return null;
+			return DefaultFeedbackState.NORMAL;
 		}
 
 		try
@@ -60,12 +61,12 @@ public class GlobalVolumeActionHandler implements ActionHandler
 			log.error("Cannot perform action: GlobalVolumeAction", e);
 		}
 
-		return null;
+		return DefaultFeedbackState.NORMAL;
 	}
 
 	@Override
 	public FeedbackState getCurrentState(Action action)
 	{
-		return null;
+		return DefaultFeedbackState.NORMAL;
 	}
 }

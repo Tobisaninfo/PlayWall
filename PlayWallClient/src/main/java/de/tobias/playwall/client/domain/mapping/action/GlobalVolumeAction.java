@@ -3,13 +3,14 @@ package de.tobias.playwall.client.domain.mapping.action;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @JsonTypeName("globalVolume")
-@ActionDescription(nameKey = "action.global.volume.name", order = 4, settingsViewController = GlobalVolumeActionSettingsViewController.class)
+@ActionDescription(nameKey = "action.global.volume.name", order = 4, feedbackTypes = DefaultFeedbackState.NORMAL, settingsViewController = GlobalVolumeActionSettingsViewController.class)
 @Getter
 @Setter
 @AllArgsConstructor
