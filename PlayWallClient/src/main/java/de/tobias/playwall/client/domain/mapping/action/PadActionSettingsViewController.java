@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = @InjectConstructor)
 class PadActionSettingsViewController extends ActionSettingsViewController
 {
-	private static final Page ALL_PAGES = new Page(null, new PageSettings(Localization.getString("ui.action.pad.settings.page.all"), ModernColor.GRAY1), null, null);
+	private static final Page ACTIVE_PAGE = new Page(null, new PageSettings(Localization.getString("ui.action.pad.settings.page.active"), ModernColor.GRAY1), null, null);
 
 	private static final String PAD_GRID_BUTTON_STYLE_CLASS = "settings--pad-grid-button";
 
@@ -69,12 +69,12 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 			modeComboBox.getSelectionModel().select(padAction.getPadActionMode());
 
 			final List<Page> pages = new ArrayList<>(projectController.getProject().getPages());
-			pages.addFirst(ALL_PAGES);
+			pages.addFirst(ACTIVE_PAGE);
 			pageComboBox.getItems().setAll(pages);
 
 			if(padAction.getPageId() == null)
 			{
-				pageComboBox.getSelectionModel().select(ALL_PAGES);
+				pageComboBox.getSelectionModel().select(ACTIVE_PAGE);
 			}
 			else
 			{
@@ -88,7 +88,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 				else
 				{
 					// page no longer exists, fallback to all pages
-					pageComboBox.getSelectionModel().select(ALL_PAGES);
+					pageComboBox.getSelectionModel().select(ACTIVE_PAGE);
 				}
 			}
 

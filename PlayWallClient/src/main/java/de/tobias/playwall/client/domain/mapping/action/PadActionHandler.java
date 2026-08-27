@@ -8,6 +8,7 @@ import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.ClientPadController;
+import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
@@ -16,8 +17,6 @@ import de.tobias.playwall.client.net.PlayWallApiException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 
@@ -48,38 +47,35 @@ public class PadActionHandler implements ActionHandler
 
 		final UUID pageId = padAction.getPageId();
 
-		final List<Page> pages;
+		final Page page;
 		if(pageId == null)
 		{
-			pages = clientProjectController.getProject().getPages();
+			page = clientProjectController.getCurrentPage();
 		}
 		else
 		{
-			pages = List.of(clientProjectController.getProject().getPage(pageId));
+			page = clientProjectController.getProject().getPage(pageId);
 		}
 
-		if(pages.isEmpty())
+		if(page == null)
 		{
 			return null;
 		}
 
-		final List<ClientPadController> padControllers = determineNonEmptyMatchingPadControllers(padAction, pages);
-		if(padControllers.isEmpty())
+		final ClientPadController padController = findPadController(padAction, page);
+		if(padController == null)
 		{
 			return null;
 		}
 
 		try
 		{
-			for(ClientPadController controller : padControllers)
+			switch(padAction.getPadActionMode())
 			{
-				switch(padAction.getPadActionMode())
-				{
-					case PLAY_STOP -> onPlayStop(controller);
-					case PLAY_PAUSE -> onPlayPause(controller);
-					case PLAY_PLAY -> onPlayPlay(controller);
-					case PLAY_HOLD -> onPlayHold(keyInputEvent, controller);
-				}
+				case PLAY_STOP -> onPlayStop(padController);
+				case PLAY_PAUSE -> onPlayPause(padController);
+				case PLAY_PLAY -> onPlayPlay(padController);
+				case PLAY_HOLD -> onPlayHold(keyInputEvent, padController);
 			}
 		}
 		catch(PlayWallApiException e)
@@ -90,14 +86,27 @@ public class PadActionHandler implements ActionHandler
 		return null;
 	}
 
-	private List<ClientPadController> determineNonEmptyMatchingPadControllers(PadAction padAction, List<Page> pages)
+	private ClientPadController findPadController(PadAction padAction, Page page)
 	{
-		return pages.stream()
-				.map(p -> p.getPad(padAction.getPosition()))
-				.filter(Objects::nonNull)
-				.map(pad -> clientProjectController.getPadController(pad.getId()))
-				.filter(c -> c.getStatus() != null && c.getStatus() != PadStatus.ERROR && c.getStatus() != PadStatus.EMPTY)
-				.toList();
+		final Pad pad = page.getPad(padAction.getPosition());
+		if(pad == null)
+		{
+			return null;
+		}
+
+		final ClientPadController padController = clientProjectController.getPadController(pad.getId());
+		if(padController == null)
+		{
+			return null;
+		}
+
+		final PadStatus status = padController.getStatus();
+		if(status == null || status == PadStatus.ERROR || status == PadStatus.EMPTY)
+		{
+			return null;
+		}
+
+		return padController;
 	}
 
 	private void onPlayStop(ClientPadController padController) throws PlayWallApiException
