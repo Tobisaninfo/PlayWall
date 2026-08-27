@@ -16,7 +16,7 @@ public class CustomMidiDeviceRegistry
 	@PostConstruct
 	private void init()
 	{
-		midiListeners.put("LPMiniMK3 MIDI Out", new LPMiniMK3());
+		midiListeners.put("LPMiniMK3 MIDI", new LPMiniMK3());
 	}
 
 	public Optional<CustomMidiDevice> lookup(String name)
