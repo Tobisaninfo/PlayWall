@@ -95,6 +95,8 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private final ObservableList<InputKey> masterInputKeys = FXCollections.observableArrayList();
 	private final FilteredList<InputKey> filteredInputKeys = new FilteredList<>(masterInputKeys, _ -> true);
 
+	private final ProjectSettingsMappingPageListener projectSettingsMappingPageListener = new ProjectSettingsMappingPageListener(this);
+
 	private KeyCode searchKeyCode;
 
 	private Map<UUID, Mapping> mappings;
@@ -166,6 +168,8 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 		actionTabMap.values().stream().sorted(Comparator.comparingInt(tab -> tab.order))
 				.forEach(tab -> actionTabs.getTabs().add(tab.tab));
+
+		eventHandler.registerListener(projectSettingsMappingPageListener);
 	}
 
 	@Override
@@ -378,7 +382,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		return mappings.get(selectedMapping);
 	}
 
-	private void updateInputListView()
+	void updateInputListView()
 	{
 		final Mapping mapping = getActiveMapping();
 		if(mapping != null)
