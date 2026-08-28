@@ -45,8 +45,8 @@ public class LPMiniMK3 extends CustomMidiDevice
 		}
 
 		// Obere Reihe an Tasten
-		final int liveKeyMin = 104;
-		final int liveKeyMax = 111;
+		final int liveKeyMin = 91;
+		final int liveKeyMax = 98;
 
 		for(byte i = liveKeyMin; i <= liveKeyMax; i++)
 		{
