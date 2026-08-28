@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.project;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.thecodelabs.midi.mapping.Mapping;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
@@ -34,5 +35,11 @@ public final class ProjectMetadata
 	public int getNumberOfPadsPerPage()
 	{
 		return numberOfHorizontalPads * numberOfVerticalPads;
+	}
+
+	@JsonIgnore
+	public Mapping getActiveMapping()
+	{
+		return mappings.get(selectedMapping);
 	}
 }

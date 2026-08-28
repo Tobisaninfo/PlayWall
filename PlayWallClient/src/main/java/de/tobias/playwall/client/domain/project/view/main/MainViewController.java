@@ -63,6 +63,7 @@ import de.tobias.playwall.client.view.toast.MaterialToastManager;
 import de.tobias.playwall.client.view.toast.Toast;
 import de.tobias.playwall.client.view.toast.ToastAction;
 import de.tobias.playwall.client.view.toast.ToastType;
+import de.tobias.playwall.common.api.project.update.ProjectPageShownUpdate;
 import javafx.application.Platform;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
@@ -232,7 +233,7 @@ public class MainViewController extends ViewControllerBase
 
 		projectLoadedListener = new ProjectLoadedListener(this, settingsController);
 		eventHandler.registerListener(projectLoadedListener);
-		projectListener = new ProjectListener(projectMapper, this);
+		projectListener = new ProjectListener(projectMapper, this, projectController, midiCoordinator);
 		eventHandler.registerListener(projectListener);
 		pageAddListener = new PageListener(projectController, this, pageMapper, pageSettingsMapper);
 		eventHandler.registerListener(pageAddListener);
@@ -471,12 +472,7 @@ public class MainViewController extends ViewControllerBase
 		}
 
 		final ProjectMetadata projectMetadata = projectController.getProject().getMetadata();
-		if(projectMetadata.getSelectedMapping() == null)
-		{
-			return;
-		}
-
-		final Mapping activeMapping = projectMetadata.getMappings().get(projectMetadata.getSelectedMapping());
+		final Mapping activeMapping = projectMetadata.getActiveMapping();
 
 		midiMappingListener = new MidiMappingListener(activeMapping, actionHandlerResolver, feedbackValueWriterResolver);
 		midiCoordinator.setListener(midiMappingListener);
@@ -666,6 +662,8 @@ public class MainViewController extends ViewControllerBase
 		pageButtons.highlightPageButton(page);
 
 		styleable.renderStylesheets(getStage(), page, projectMetadata);
+
+		eventHandler.fireEvent(new ProjectPageShownUpdate(page.getPosition()));
 	}
 
 	public void updateStyle()
