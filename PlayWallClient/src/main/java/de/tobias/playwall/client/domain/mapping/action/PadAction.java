@@ -46,22 +46,12 @@ public class PadAction implements Action, ActionStringify, ActionValidation
 	@Override
 	public boolean isValid(Project project)
 	{
-		if(pageId == null)
-		{
-			return true;
-		}
-
-		if(project.getPage(pageId) == null)
+		if(pageId != null && project.getPage(pageId) == null)
 		{
 			return false;
 		}
 
-		if(position == null)
-		{
-			return false;
-		}
-
-		return true;
+		return position != null;
 	}
 
 	@Override
