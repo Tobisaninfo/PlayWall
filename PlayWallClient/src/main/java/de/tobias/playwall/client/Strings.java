@@ -122,6 +122,9 @@ public class Strings
 
 	public static final String UI_ACTION_PAGE_NAME = "action.page.name";
 
+	public static final String ACTION_PAD_DETAILS_PAGE_ID = "action.pad.details.page.id";
+	public static final String ACTION_PAD_DETAILS_PAGE_ACTIVE = "action.pad.details.page.active";
+
 	// ui - settings - program
 	public static final String UI_SETTINGS_PROGRAM_TITLE  = "ui.settings.program.title";
 	public static final String UI_SETTINGS_PROGRAM_GENERAL_TITLE  = "ui.settings.program.general.title";

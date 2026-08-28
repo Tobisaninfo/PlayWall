@@ -3,13 +3,14 @@ package de.tobias.playwall.client.domain.mapping.action;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @JsonTypeName("page")
-@ActionDescription(nameKey = "action.page.name", order = 2, settingsViewController = PageActionSettingsViewController.class)
+@ActionDescription(nameKey = Strings.UI_ACTION_PAGE_NAME, order = 2, settingsViewController = PageActionSettingsViewController.class)
 @Getter
 @Setter
 @NoArgsConstructor

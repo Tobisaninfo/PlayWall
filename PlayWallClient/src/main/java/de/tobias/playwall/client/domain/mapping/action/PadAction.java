@@ -3,11 +3,14 @@ package de.tobias.playwall.client.domain.mapping.action;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.domain.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @JsonTypeName("pad")
@@ -16,8 +19,10 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PadAction implements Action
+public class PadAction implements Action, ActionStringify
 {
+	public static final UUID ACTIVE_PAGE_ID = null;
+
 	public enum PadActionMode
 	{
 		PLAY_STOP,
@@ -39,13 +44,20 @@ public class PadAction implements Action
 	}
 
 	@Override
-	public String toString()
+	public String stringify(Project project)
 	{
 		if(position == null)
 		{
 			return Localization.getString("PadActionMode." + padActionMode);
 		}
 
-		return Localization.getString("action.pad.details", position + 1, Localization.getString("PadActionMode." + padActionMode));
+		if(pageId == ACTIVE_PAGE_ID)
+		{
+			return Localization.getString(Strings.ACTION_PAD_DETAILS_PAGE_ACTIVE, position + 1);
+		}
+
+		return Localization.getString(Strings.ACTION_PAD_DETAILS_PAGE_ID, position + 1, Optional.ofNullable(project.getPage(pageId))
+				.map(page -> page.getSettings().getName())
+				.orElse("?"));
 	}
 }

@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = @InjectConstructor)
 class PadActionSettingsViewController extends ActionSettingsViewController
 {
-	private static final Page ACTIVE_PAGE = new Page(null, new PageSettings(Localization.getString("ui.action.pad.settings.page.active"), ModernColor.GRAY1), null, null);
+	private static final Page ACTIVE_PAGE = new Page(PadAction.ACTIVE_PAGE_ID, new PageSettings(Localization.getString("ui.action.pad.settings.page.active"), ModernColor.GRAY1), null, null);
 
 	private static final String PAD_GRID_BUTTON_STYLE_CLASS = "settings--pad-grid-button";
 

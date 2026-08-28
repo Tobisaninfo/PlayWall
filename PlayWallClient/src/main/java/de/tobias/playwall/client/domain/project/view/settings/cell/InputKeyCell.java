@@ -4,6 +4,8 @@ import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.tobias.playwall.client.domain.mapping.action.ActionStringify;
+import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.view.settings.InputKeyLocalizer;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.ViewConstants;
@@ -18,6 +20,7 @@ import java.util.function.Consumer;
 
 public class InputKeyCell extends ListCell<InputKey>
 {
+	private final Project project;
 	private final Mapping mapping;
 
 	final HBox hbox;
@@ -27,8 +30,9 @@ public class InputKeyCell extends ListCell<InputKey>
 	final PlayWallButton buttonDelete;
 	final Consumer<InputKey> deleteActionHandler;
 
-	public InputKeyCell(Mapping mapping, Consumer<InputKey> deleteActionHandler)
+	public InputKeyCell(Project project, Mapping mapping, Consumer<InputKey> deleteActionHandler)
 	{
+		this.project = project;
 		this.mapping = mapping;
 		this.deleteActionHandler = deleteActionHandler;
 
@@ -66,6 +70,10 @@ public class InputKeyCell extends ListCell<InputKey>
 		if(action == null)
 		{
 			actionLabel.setText("<Leer>");
+		}
+		else if(action instanceof ActionStringify stringify)
+		{
+			actionLabel.setText(stringify.stringify(project));
 		}
 		else
 		{

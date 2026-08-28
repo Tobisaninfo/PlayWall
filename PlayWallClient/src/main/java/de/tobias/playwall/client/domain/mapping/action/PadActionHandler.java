@@ -48,7 +48,7 @@ public class PadActionHandler implements ActionHandler
 		final UUID pageId = padAction.getPageId();
 
 		final Page page;
-		if(pageId == null)
+		if(pageId == PadAction.ACTIVE_PAGE_ID)
 		{
 			page = clientProjectController.getCurrentPage();
 		}

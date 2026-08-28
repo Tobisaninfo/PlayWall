@@ -13,6 +13,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewController;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
 import de.tobias.playwall.client.domain.project.view.settings.cell.InputKeyCell;
 import de.tobias.playwall.client.net.FluentClient;
@@ -68,6 +69,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	@FXML
 	private PlayWallButton midiAddButton;
 
+	private final ClientProjectController projectController;
 	private final MappingRegistry mappingRegistry;
 	private final Map<Class<? extends Action>, ActionTab> actionTabMap = FXCollections.observableHashMap();
 
@@ -80,9 +82,10 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private UUID selectedMapping;
 
 	@InjectConstructor
-	public ProjectSettingsMappingViewController(FluentClient client, MappingRegistry mappingRegistry)
+	public ProjectSettingsMappingViewController(FluentClient client, ClientProjectController projectController, MappingRegistry mappingRegistry)
 	{
 		super(client);
+		this.projectController = projectController;
 		this.mappingRegistry = mappingRegistry;
 	}
 
@@ -91,7 +94,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		super.init();
 
-		mappingListView.setCellFactory(_ -> new InputKeyCell(getActiveMapping(), this::onInputKeyDeleted));
+		mappingListView.setCellFactory(_ -> new InputKeyCell(projectController.getProject(), getActiveMapping(), this::onInputKeyDeleted));
 		mappingListView.getSelectionModel().selectedItemProperty()
 				.addListener((_, oldValue, newValue) -> onInputKeySelected(oldValue, newValue));
 
