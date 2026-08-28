@@ -12,4 +12,6 @@
     <SettingsRow fx:id="pageNumberRow" icon="FILE_SOLID" title="%ui.action.page.settings.pageNumber">
         <NumberTextField fx:id="pageNumber"/>
     </SettingsRow>
+
+    <VBox fx:id="feedbackValueContainer" spacing="14"/>
 </VBox>

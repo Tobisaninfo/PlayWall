@@ -7,11 +7,14 @@ import de.thecodelabs.midi.mapping.action.ActionHandler;
 import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.common.api.project.update.ProjectShowPageCommand;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Objects;
 
 
 @Service
@@ -67,6 +70,22 @@ public class PageActionHandler implements ActionHandler
 	@Override
 	public FeedbackState getCurrentState(Action action)
 	{
-		return null;
+		if((!(action instanceof PageAction pageAction)))
+		{
+			return null;
+		}
+
+		return switch(pageAction.getPageActionMode())
+		{
+			case NEXT, PREVIOUS -> DefaultFeedbackState.NORMAL;
+			case JUMP ->
+			{
+				if(Objects.equals(clientProjectController.getCurrentPage().getPosition(), pageAction.getPageNumber()))
+				{
+					yield DefaultFeedbackState.ACTIVE;
+				}
+				yield DefaultFeedbackState.NORMAL;
+			}
+		};
 	}
 }
