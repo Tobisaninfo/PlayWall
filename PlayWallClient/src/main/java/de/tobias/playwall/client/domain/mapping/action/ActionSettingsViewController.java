@@ -99,6 +99,11 @@ public abstract class ActionSettingsViewController extends NVC
 
 	public void applySettingsForFeedbackValues(InputKey key, List<? extends FeedbackState> feedbackStates)
 	{
+		if(feedbackValueSettingsViewControllers == null)
+		{
+			return;
+		}
+
 		if(!(key instanceof FeedbackProvider feedbackProvider))
 		{
 			return;
