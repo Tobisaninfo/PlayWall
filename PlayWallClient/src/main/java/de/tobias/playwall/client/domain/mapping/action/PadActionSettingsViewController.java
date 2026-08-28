@@ -19,16 +19,16 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @ViewController(path = "de/tobias/playwall/client/view/settings/project/mapping", view = "PadActionSettingsView", applyToStage = false)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE, onConstructor_ = @InjectConstructor)
 class PadActionSettingsViewController extends ActionSettingsViewController
 {
-	private static final Page ACTIVE_PAGE = new Page(PadAction.ACTIVE_PAGE_ID, new PageSettings(Localization.getString("ui.action.pad.settings.page.active"), ModernColor.GRAY1), null, null);
+	private static final PageCell.PageCellData ACTIVE_PAGE = new PageCell.PageCellData(new Page(PadAction.ACTIVE_PAGE_ID, new PageSettings(Localization.getString("ui.action.pad.settings.page.active"), ModernColor.GRAY1), null, null), false);
 
 	private static final String PAD_GRID_BUTTON_STYLE_CLASS = "settings--pad-grid-button";
 
@@ -36,7 +36,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 	private ComboBox<PadAction.PadActionMode> modeComboBox;
 
 	@FXML
-	private ComboBox<Page> pageComboBox;
+	private ComboBox<PageCell.PageCellData> pageComboBox;
 
 	@FXML
 	private GridPane padGrid;
@@ -68,7 +68,9 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 		{
 			modeComboBox.getSelectionModel().select(padAction.getPadActionMode());
 
-			final List<Page> pages = new ArrayList<>(projectController.getProject().getPages());
+			final List<PageCell.PageCellData> pages = projectController.getProject().getPages().stream()
+					.map(page -> new PageCell.PageCellData(page, false))
+					.collect(Collectors.toList());
 			pages.addFirst(ACTIVE_PAGE);
 			pageComboBox.getItems().setAll(pages);
 
@@ -78,8 +80,8 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 			}
 			else
 			{
-				final Optional<Page> selectedPage = pages.stream()
-						.filter(p -> p.getId() != null && p.getId().equals(padAction.getPageId()))
+				final Optional<PageCell.PageCellData> selectedPage = pages.stream()
+						.filter(p -> p.page().getId() != null && p.page().getId().equals(padAction.getPageId()))
 						.findFirst();
 				if(selectedPage.isPresent())
 				{
@@ -88,7 +90,8 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 				else
 				{
 					// page no longer exists, fallback to all pages
-					pageComboBox.getSelectionModel().select(ACTIVE_PAGE);
+					pageComboBox.getItems().add(new PageCell.PageCellData(new Page(padAction.getPageId(), new PageSettings("Gelöschte Seite", null), null, null), true));
+					pageComboBox.getSelectionModel().selectLast();
 				}
 			}
 
@@ -111,7 +114,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 		if(action instanceof PadAction padAction)
 		{
 			padAction.setPadActionMode(modeComboBox.getSelectionModel().getSelectedItem());
-			padAction.setPageId(pageComboBox.getSelectionModel().getSelectedItem().getId());
+			padAction.setPageId(pageComboBox.getSelectionModel().getSelectedItem().page().getId());
 
 			padGrid.getChildren().stream()
 					.filter(node -> node.getPseudoClassStates().contains(PseudoClasses.SELECTED))
