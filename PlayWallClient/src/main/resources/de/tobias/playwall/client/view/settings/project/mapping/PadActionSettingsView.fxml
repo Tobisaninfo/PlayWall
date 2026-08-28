@@ -15,4 +15,6 @@
     <SettingsRow icon="TABLE_SOLID" title="%ui.action.pad.settings.pad">
     </SettingsRow>
     <GridPane fx:id="padGrid" styleClass="settings--pad-grid"/>
+
+    <VBox fx:id="feedbackValueContainer" spacing="14"/>
 </VBox>
