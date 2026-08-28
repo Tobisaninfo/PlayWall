@@ -16,12 +16,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.util.function.Consumer;
 
 public class InputKeyCell extends ListCell<InputKey>
 {
+	private static final double SCROLLBAR_RESERVE = 25.0;
+
 	private final Project project;
 	private final Mapping mapping;
 
@@ -39,14 +42,15 @@ public class InputKeyCell extends ListCell<InputKey>
 		this.mapping = mapping;
 		this.deleteActionHandler = deleteActionHandler;
 
+		icon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
+		icon.getStyleClass().add("warning");
+		icon.managedProperty().bind(icon.visibleProperty());
+
 		hbox = new HBox(ViewConstants.DEFAULT_SPACING);
 		vbox = new VBox(4);
 		keyLabel = new Label();
 		actionLabel = new Label();
 
-		icon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
-		icon.getStyleClass().add("warning");
-		icon.managedProperty().bind(icon.visibleProperty());
 
 		vbox.getChildren().addAll(keyLabel, actionLabel);
 
@@ -55,6 +59,16 @@ public class InputKeyCell extends ListCell<InputKey>
 		hbox.getChildren().addAll(vbox, icon, buttonDelete);
 		hbox.setAlignment(Pos.CENTER_LEFT);
 		HBox.setHgrow(vbox, Priority.ALWAYS);
+
+		setMaxWidth(Region.USE_PREF_SIZE);
+		listViewProperty().addListener((_, _, newListView) ->
+		{
+			prefWidthProperty().unbind();
+			if(newListView != null)
+			{
+				prefWidthProperty().bind(newListView.widthProperty().subtract(SCROLLBAR_RESERVE));
+			}
+		});
 	}
 
 	@Override
