@@ -386,6 +386,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			final List<InputKey> sortedInputKeys = new ArrayList<>(mapping.getAllInputKeys());
 			sortedInputKeys.sort(new InputKeyComparator());
 			masterInputKeys.setAll(sortedInputKeys);
+			mappingListView.setItems(filteredInputKeys); // Try to motivate JavaFX to update the list view
 		}
 	}
 
