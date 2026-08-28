@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Map;
 import java.util.UUID;
@@ -67,7 +68,7 @@ class ProjectSettingsUpdateListenerTest extends AbstractViewControllerTest
 				.playColor(Color.RED3)
 				.introColor(Color.LIGHT_GREEN1)
 				.volume(1.0)
-				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), "[]"))
+				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new JsonMapper().createArrayNode()))
 				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
 				.build()));
 		WaitForAsyncUtils.waitForFxEvents();
