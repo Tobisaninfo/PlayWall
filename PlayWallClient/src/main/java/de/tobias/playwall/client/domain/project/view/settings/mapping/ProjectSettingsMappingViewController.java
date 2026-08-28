@@ -8,7 +8,6 @@ import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.midi.midi.Midi;
-import de.thecodelabs.midi.midi.device.MidiDeviceInfo;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
@@ -16,13 +15,14 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.domain.mapping.action.ActionDescription;
 import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewController;
-import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
+import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.InputKeyLocalizer;
 import de.tobias.playwall.client.domain.project.view.settings.mapping.cell.InputKeyCell;
 import de.tobias.playwall.client.domain.project.view.settings.mapping.cell.MidiDeviceInfoCell;
+import de.tobias.playwall.client.domain.project.view.settings.mapping.cell.MidiDeviceInfoCell.MidiDeviceInfoCellData;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
@@ -53,10 +53,6 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 	private record ActionTab(Tab tab, int order, ActionSettingsViewController actionSettingsViewController,
 							 List<? extends FeedbackState> feedbackStates)
-	{
-	}
-
-	public record MidiDeviceInfoCellData(String deviceName, MidiDeviceInfo deviceInfo, boolean isError)
 	{
 	}
 
