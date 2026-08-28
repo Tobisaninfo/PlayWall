@@ -57,17 +57,17 @@ public class PadAction implements Action, ActionStringify, ActionValidation
 	@Override
 	public String stringify(Project project)
 	{
-		if(position == null)
-		{
-			return Localization.getString("PadActionMode." + padActionMode);
-		}
+		final String positionString = Optional.ofNullable(position)
+				.map(i -> i + 1)
+				.map(String::valueOf)
+				.orElse("?");
 
 		if(pageId == ACTIVE_PAGE_ID)
 		{
-			return Localization.getString(Strings.ACTION_PAD_DETAILS_PAGE_ACTIVE, position + 1);
+			return Localization.getString(Strings.ACTION_PAD_DETAILS_PAGE_ACTIVE, positionString);
 		}
 
-		return Localization.getString(Strings.ACTION_PAD_DETAILS_PAGE_ID, position + 1, Optional.ofNullable(project.getPage(pageId))
+		return Localization.getString(Strings.ACTION_PAD_DETAILS_PAGE_ID, positionString, Optional.ofNullable(project.getPage(pageId))
 				.map(page -> page.getSettings().getName())
 				.orElse("?"));
 	}
