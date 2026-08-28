@@ -202,8 +202,10 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			selectedMapping = mappings.keySet().iterator().next();
 		}
 
+		final InputKey selectedItem = mappingListView.getSelectionModel().getSelectedItem();
 		mappingListView.getSelectionModel().select(null);
 		updateInputListView();
+		mappingListView.getSelectionModel().select(selectedItem);
 	}
 
 	@Override
