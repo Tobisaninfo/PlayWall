@@ -4,7 +4,9 @@ import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playwall.client.domain.mapping.action.ActionStringify;
+import de.tobias.playwall.client.domain.mapping.action.ActionValidation;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.view.settings.InputKeyLocalizer;
 import de.tobias.playwall.client.view.components.PlayWallButton;
@@ -25,6 +27,7 @@ public class InputKeyCell extends ListCell<InputKey>
 
 	final HBox hbox;
 	final VBox vbox;
+	final FontIcon icon;
 	final Label keyLabel;
 	final Label actionLabel;
 	final PlayWallButton buttonDelete;
@@ -41,11 +44,15 @@ public class InputKeyCell extends ListCell<InputKey>
 		keyLabel = new Label();
 		actionLabel = new Label();
 
+		icon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
+		icon.getStyleClass().add("warning");
+		icon.managedProperty().bind(icon.visibleProperty());
+
 		vbox.getChildren().addAll(keyLabel, actionLabel);
 
 		buttonDelete = new PlayWallButton(FontAwesomeType.TRASH_CAN_SOLID);
 
-		hbox.getChildren().addAll(vbox, buttonDelete);
+		hbox.getChildren().addAll(vbox, icon, buttonDelete);
 		hbox.setAlignment(Pos.CENTER_LEFT);
 		HBox.setHgrow(vbox, Priority.ALWAYS);
 	}
@@ -61,6 +68,7 @@ public class InputKeyCell extends ListCell<InputKey>
 			keyLabel.setText("");
 			actionLabel.setText("");
 			buttonDelete.setVisible(false);
+			icon.setVisible(false);
 			return;
 		}
 
@@ -78,6 +86,15 @@ public class InputKeyCell extends ListCell<InputKey>
 		else
 		{
 			actionLabel.setText(action.toString());
+		}
+
+		if(action instanceof ActionValidation validation)
+		{
+			icon.setVisible(!validation.isValid(project));
+		}
+		else
+		{
+			icon.setVisible(false);
 		}
 
 		buttonDelete.setVisible(true);

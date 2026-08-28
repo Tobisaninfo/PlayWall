@@ -19,7 +19,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PadAction implements Action, ActionStringify
+public class PadAction implements Action, ActionStringify, ActionValidation
 {
 	public static final UUID ACTIVE_PAGE_ID = null;
 
@@ -41,6 +41,27 @@ public class PadAction implements Action, ActionStringify
 	public Action copy()
 	{
 		return new PadAction(padActionMode, pageId, position);
+	}
+
+	@Override
+	public boolean isValid(Project project)
+	{
+		if(pageId == null)
+		{
+			return true;
+		}
+
+		if(project.getPage(pageId) == null)
+		{
+			return false;
+		}
+
+		if(position == null)
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
