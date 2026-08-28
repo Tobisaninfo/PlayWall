@@ -245,7 +245,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 
 		final KeyboardInputDialog dialog = AppContextHolder.getInstance().get(KeyboardInputDialog.class);
-		final Optional<KeyboardInputKey> result = dialog.showAndWait(new KeyboardInputDialog.Param(mapping, false), getContainingWindow());
+		final Optional<KeyboardInputKey> result = dialog.showAndWait(new AbstractInputKeyDialog.Param(mapping, false), getContainingWindow());
 		result.ifPresent(key -> {
 			mapping.addInputKeyWithAction(key, null);
 			updateInputListView();
@@ -263,7 +263,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 
 		final MidiInputDialog dialog = AppContextHolder.getInstance().get(MidiInputDialog.class);
-		final Optional<MidiInputKey> result = dialog.showAndWait(new MidiInputDialog.Param(mapping, false), getContainingWindow());
+		final Optional<MidiInputKey> result = dialog.showAndWait(new AbstractInputKeyDialog.Param(mapping, false), getContainingWindow());
 		result.ifPresent(key -> {
 			mapping.addInputKeyWithAction(key, null);
 			updateInputListView();
@@ -275,7 +275,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private void onSearchByKey()
 	{
 		final KeyboardInputDialog dialog = AppContextHolder.getInstance().get(KeyboardInputDialog.class);
-		final Optional<KeyboardInputKey> result = dialog.showAndWait(new KeyboardInputDialog.Param(getActiveMapping(), true), getContainingWindow());
+		final Optional<KeyboardInputKey> result = dialog.showAndWait(new AbstractInputKeyDialog.Param(getActiveMapping(), true), getContainingWindow());
 		result.ifPresent(key ->
 		{
 			searchTextField.clear();
