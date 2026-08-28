@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class ProjectShowPageCommand extends UpdateMessage
+public class ProjectPageShowCommand extends UpdateMessage
 {
 	private int index;
 }

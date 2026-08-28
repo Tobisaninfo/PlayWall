@@ -10,7 +10,7 @@ import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.event.UpdateMessageEventHandler;
-import de.tobias.playwall.common.api.project.update.ProjectShowPageCommand;
+import de.tobias.playwall.common.api.project.update.ProjectPageShowCommand;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -45,14 +45,14 @@ public class PageActionHandler implements ActionHandler
 			{
 				if(currentPage > 0)
 				{
-					updateMessageEventHandler.fireEvent(new ProjectShowPageCommand(currentPage - 1));
+					updateMessageEventHandler.fireEvent(new ProjectPageShowCommand(currentPage - 1));
 				}
 			}
 			case NEXT ->
 			{
 				if(currentPage < maxPage)
 				{
-					updateMessageEventHandler.fireEvent(new ProjectShowPageCommand(currentPage + 1));
+					updateMessageEventHandler.fireEvent(new ProjectPageShowCommand(currentPage + 1));
 				}
 			}
 			case JUMP ->
@@ -62,7 +62,7 @@ public class PageActionHandler implements ActionHandler
 				{
 					return;
 				}
-				updateMessageEventHandler.fireEvent(new ProjectShowPageCommand(targetPage));
+				updateMessageEventHandler.fireEvent(new ProjectPageShowCommand(targetPage));
 			}
 		}
 	}

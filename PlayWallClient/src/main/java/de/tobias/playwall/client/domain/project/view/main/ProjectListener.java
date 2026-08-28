@@ -3,7 +3,7 @@ package de.tobias.playwall.client.domain.project.view.main;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.ProjectMapper;
 import de.tobias.playwall.client.event.EventListener;
-import de.tobias.playwall.common.api.project.update.ProjectShowPageCommand;
+import de.tobias.playwall.common.api.project.update.ProjectPageShowCommand;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
@@ -22,8 +22,8 @@ public class ProjectListener
 		mainViewController.updateProject(project);
 	}
 
-	@EventListener(ProjectShowPageCommand.class)
-	void showPage(ProjectShowPageCommand command)
+	@EventListener(ProjectPageShowCommand.class)
+	void showPage(ProjectPageShowCommand command)
 	{
 		Platform.runLater(() -> mainViewController.showPage(command.getIndex()));
 	}
