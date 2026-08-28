@@ -5,6 +5,7 @@ import de.tobias.playwall.client.domain.project.ProjectMapper;
 import de.tobias.playwall.client.event.EventListener;
 import de.tobias.playwall.common.api.project.update.ProjectShowPageCommand;
 import de.tobias.playwall.common.api.project.update.ProjectUpdate;
+import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -24,6 +25,6 @@ public class ProjectListener
 	@EventListener(ProjectShowPageCommand.class)
 	void showPage(ProjectShowPageCommand command)
 	{
-		mainViewController.showPage(command.getIndex());
+		Platform.runLater(() -> mainViewController.showPage(command.getIndex()));
 	}
 }
