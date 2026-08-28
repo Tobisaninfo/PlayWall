@@ -58,7 +58,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 	@Override
 	public Action createNewAction()
 	{
-		return new PadAction(PadAction.PadActionMode.PLAY_STOP, null, null);
+		return new PadAction(PadAction.PadActionMode.PLAY_STOP, null, 0);
 	}
 
 	@Override
