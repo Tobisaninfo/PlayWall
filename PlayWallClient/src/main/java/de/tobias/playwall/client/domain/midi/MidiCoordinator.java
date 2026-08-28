@@ -80,6 +80,14 @@ public class MidiCoordinator
 		}
 	}
 
+	public void clearFeedback()
+	{
+		if(midi.isOpen())
+		{
+			midi.clearFeedback();
+		}
+	}
+
 	public void showCurrentFeedback(Mapping mapping)
 	{
 		if(midi.isOpen())

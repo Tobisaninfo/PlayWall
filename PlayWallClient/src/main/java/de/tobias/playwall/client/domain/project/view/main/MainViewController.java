@@ -476,6 +476,7 @@ public class MainViewController extends ViewControllerBase
 
 		midiMappingListener = new MidiMappingListener(activeMapping, actionHandlerResolver, feedbackValueWriterResolver);
 		midiCoordinator.setListener(midiMappingListener);
+		midiCoordinator.clearFeedback();
 		midiCoordinator.showCurrentFeedback(activeMapping);
 
 		keyboardMappingListener = new KeyboardMappingListener(activeMapping, actionHandlerResolver);
