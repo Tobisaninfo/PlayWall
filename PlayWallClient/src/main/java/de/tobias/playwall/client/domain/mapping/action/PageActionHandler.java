@@ -80,7 +80,7 @@ public class PageActionHandler implements ActionHandler
 			case NEXT, PREVIOUS -> DefaultFeedbackState.NORMAL;
 			case JUMP ->
 			{
-				if(Objects.equals(clientProjectController.getCurrentPage().getPosition(), pageAction.getPageNumber()))
+				if(Objects.equals(clientProjectController.getCurrentPage().getPosition(), pageAction.getPageNumber() - 1))
 				{
 					yield DefaultFeedbackState.ACTIVE;
 				}
