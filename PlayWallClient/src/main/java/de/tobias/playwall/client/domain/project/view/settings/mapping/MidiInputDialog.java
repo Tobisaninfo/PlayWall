@@ -1,39 +1,34 @@
-package de.tobias.playwall.client.domain.project.view;
+package de.tobias.playwall.client.domain.project.view.settings.mapping;
 
 import de.thecodelabs.midi.mapping.Mapping;
-import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
+import de.thecodelabs.midi.mapping.input.MidiInputKey;
+import de.thecodelabs.midi.midi.Midi;
+import de.thecodelabs.midi.midi.message.MidiMessageListener;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
-import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.view.ParamModalDialogBase;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Set;
-
-@ViewController(path = "de/tobias/playwall/client/view/dialog", view = "KeyboardInputDialog")
-public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialog.Param, KeyboardInputKey>
+@ViewController(path = "de/tobias/playwall/client/view/dialog", view = "InputKeyDialog")
+@RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
+public class MidiInputDialog extends ParamModalDialogBase<MidiInputDialog.Param, MidiInputKey>
 {
-	@AllArgsConstructor
-	@Getter
-	public static class Param
+	public record Param(Mapping mapping, boolean autoSubmit)
 	{
-		private final Mapping mapping;
-		private final boolean autoSubmit;
 	}
-
-	private static final Set<KeyCode> RESERVED_KEYS = Set.of(KeyCode.ENTER, KeyCode.SPACE, KeyCode.ESCAPE, KeyCode.NUM_LOCK);
 
 	@FXML
 	private VBox root;
@@ -46,6 +41,9 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	@FXML
 	private Button cancelButton;
 
+	private final Midi midi;
+	private MidiMessageListener midiListener;
+
 	@Getter(AccessLevel.NONE)
 	private Mapping mapping;
 
@@ -53,19 +51,31 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 	private boolean autoSubmit;
 
 	@Getter(AccessLevel.NONE)
-	private KeyboardInputKey selectedKey;
+	private MidiInputKey selectedKey;
 
 	@Override
 	protected void init()
 	{
 		updateInputState(null);
+		midiListener = midiMessage -> {
+			midiMessage.consume();
+			selectedKey = new MidiInputKey(midiMessage.getPayload()[0]);
+
+			Platform.runLater(() -> {
+				updateInputState(selectedKey);
+				if(autoSubmit)
+				{
+					getStageContainer().ifPresent(NVCStage::close);
+				}
+			});
+		};
 	}
 
 	@Override
 	public void initParameter(Param parameter)
 	{
-		this.mapping = parameter.getMapping();
-		this.autoSubmit = parameter.isAutoSubmit();
+		this.mapping = parameter.mapping();
+		this.autoSubmit = parameter.autoSubmit();
 		cancelButton.setFocusTraversable(false);
 		saveButton.setFocusTraversable(false);
 		saveButton.setVisible(!autoSubmit);
@@ -82,11 +92,12 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 		stage.setHeight(210);
 		stage.setWidth(350);
 
-		stage.getScene().addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+		stage.setOnShowing(_ -> midi.getDevice().getPublisher().addMidiListener(midiListener, 1));
+		stage.setOnHiding(_ -> midi.getDevice().getPublisher().removeMidiListener(midiListener));
 	}
 
 	@Override
-	protected KeyboardInputKey getResultValue()
+	protected MidiInputKey getResultValue()
 	{
 		return selectedKey;
 	}
@@ -112,33 +123,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 		getStageContainer().ifPresent(NVCStage::close);
 	}
 
-	private void onKeyPressed(KeyEvent event)
-	{
-		final KeyCode code = event.getCode();
-		if(code == KeyCode.SPACE)
-		{
-			event.consume();
-			return;
-		}
-		if(code.isModifierKey() || code == KeyCode.UNDEFINED || RESERVED_KEYS.contains(code))
-		{
-			return;
-		}
-
-		final KeyboardInputKey key = new KeyboardInputKey(code, code.getName());
-		if(mapping != null)
-		{
-			selectedKey = key;
-			event.consume();
-			updateInputState(key);
-			if(autoSubmit)
-			{
-				getStageContainer().ifPresent(NVCStage::close);
-			}
-		}
-	}
-
-	private void updateInputState(KeyboardInputKey key)
+	private void updateInputState(MidiInputKey key)
 	{
 		keyLabel.getStyleClass().removeAll("key-input-placeholder", "key-input-label", "error-label");
 
@@ -151,7 +136,7 @@ public class KeyboardInputDialog extends ParamModalDialogBase<KeyboardInputDialo
 
 		final boolean isAlreadyUsed = !autoSubmit && mapping.getAllInputKeys().contains(key);
 
-		keyLabel.setText(KeyNameLocalizer.getKeyName(key.code()));
+		keyLabel.setText(String.valueOf(key.value()));
 		keyLabel.getStyleClass().add("key-input-label");
 		if(isAlreadyUsed)
 		{

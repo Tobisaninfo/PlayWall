@@ -19,7 +19,6 @@ import de.tobias.playwall.client.domain.mapping.action.ActionSettingsViewControl
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
-import de.tobias.playwall.client.domain.project.view.KeyboardInputDialog;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.InputKeyLocalizer;
 import de.tobias.playwall.client.domain.project.view.settings.mapping.cell.InputKeyCell;
@@ -263,10 +262,13 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			return;
 		}
 
-		MidiInputKey key = new MidiInputKey((byte) 11);
-		mapping.addInputKeyWithAction(key, null);
-		updateInputListView();
-		mappingListView.getSelectionModel().select(key);
+		final MidiInputDialog dialog = AppContextHolder.getInstance().get(MidiInputDialog.class);
+		final Optional<MidiInputKey> result = dialog.showAndWait(new MidiInputDialog.Param(mapping, false), getContainingWindow());
+		result.ifPresent(key -> {
+			mapping.addInputKeyWithAction(key, null);
+			updateInputListView();
+			mappingListView.getSelectionModel().select(key);
+		});
 	}
 
 	@FXML
