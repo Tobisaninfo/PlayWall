@@ -28,11 +28,11 @@ public class GlobalVolumeActionHandler implements ActionHandler
 	private final ClientProjectController projectController;
 
 	@Override
-	public FeedbackState handleAction(KeyInputEvent keyInputEvent, Action action)
+	public void handleAction(KeyInputEvent keyInputEvent, Action action)
 	{
 		if(keyInputEvent.keyInputType() != KeyInputType.UP)
 		{
-			return DefaultFeedbackState.NORMAL;
+			return;
 		}
 		if(!(action instanceof GlobalVolumeAction globalVolumeAction))
 		{
@@ -49,7 +49,7 @@ public class GlobalVolumeActionHandler implements ActionHandler
 
 		if(volume.equals(newVolume))
 		{
-			return DefaultFeedbackState.NORMAL;
+			return;
 		}
 
 		try
@@ -60,8 +60,6 @@ public class GlobalVolumeActionHandler implements ActionHandler
 		{
 			log.error("Cannot perform action: GlobalVolumeAction", e);
 		}
-
-		return DefaultFeedbackState.NORMAL;
 	}
 
 	@Override

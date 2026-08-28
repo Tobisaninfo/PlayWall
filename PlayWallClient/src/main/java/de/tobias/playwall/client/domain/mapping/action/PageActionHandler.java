@@ -22,11 +22,11 @@ public class PageActionHandler implements ActionHandler
 	private final UpdateMessageEventHandler updateMessageEventHandler;
 
 	@Override
-	public FeedbackState handleAction(KeyInputEvent keyInputEvent, Action action)
+	public void handleAction(KeyInputEvent keyInputEvent, Action action)
 	{
 		if(keyInputEvent.keyInputType() != KeyInputType.UP)
 		{
-			return null;
+			return;
 		}
 		if(!(action instanceof PageAction pageAction))
 		{
@@ -57,13 +57,11 @@ public class PageActionHandler implements ActionHandler
 				int targetPage = pageAction.getPageNumber() - 1;
 				if(targetPage < 0 || targetPage > maxPage)
 				{
-					return null;
+					return;
 				}
 				updateMessageEventHandler.fireEvent(new ProjectShowPageCommand(targetPage));
 			}
 		}
-
-		return null;
 	}
 
 	@Override

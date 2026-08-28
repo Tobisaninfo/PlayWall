@@ -22,11 +22,11 @@ public class StopAllActionHandler implements ActionHandler
 	private final FluentClient client;
 
 	@Override
-	public FeedbackState handleAction(KeyInputEvent keyInputEvent, Action action)
+	public void handleAction(KeyInputEvent keyInputEvent, Action action)
 	{
 		if(keyInputEvent.keyInputType() != KeyInputType.UP)
 		{
-			return DefaultFeedbackState.NORMAL;
+			return;
 		}
 
 		try
@@ -37,8 +37,6 @@ public class StopAllActionHandler implements ActionHandler
 		{
 			log.error("Cannot perform action: StopAllAction", e);
 		}
-
-		return DefaultFeedbackState.NORMAL;
 	}
 
 	@Override

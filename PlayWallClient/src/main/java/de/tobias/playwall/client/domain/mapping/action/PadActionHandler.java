@@ -28,7 +28,7 @@ public class PadActionHandler implements ActionHandler
 	private final FluentClient client;
 
 	@Override
-	public FeedbackState handleAction(KeyInputEvent keyInputEvent, Action action)
+	public void handleAction(KeyInputEvent keyInputEvent, Action action)
 	{
 		if(!(action instanceof PadAction padAction))
 		{
@@ -37,12 +37,12 @@ public class PadActionHandler implements ActionHandler
 
 		if(padAction.getPosition() == null)
 		{
-			return null;
+			return;
 		}
 
 		if(keyInputEvent.keyInputType() != KeyInputType.UP && padAction.getPadActionMode() != PadAction.PadActionMode.PLAY_HOLD)
 		{
-			return null;
+			return;
 		}
 
 		final UUID pageId = padAction.getPageId();
@@ -59,13 +59,13 @@ public class PadActionHandler implements ActionHandler
 
 		if(page == null)
 		{
-			return null;
+			return;
 		}
 
 		final ClientPadController padController = findPadController(padAction, page);
 		if(padController == null)
 		{
-			return null;
+			return;
 		}
 
 		try
@@ -82,8 +82,6 @@ public class PadActionHandler implements ActionHandler
 		{
 			throw new RuntimeException(e);
 		}
-
-		return null;
 	}
 
 	private ClientPadController findPadController(PadAction padAction, Page page)
