@@ -15,7 +15,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @JsonTypeName("pad")
-@ActionDescription(nameKey = "action.pad.name", order = 1, feedbackTypes = {DefaultFeedbackState.NORMAL, DefaultFeedbackState.ACTIVE}, settingsViewController = PadActionSettingsViewController.class)
+@ActionDescription(
+		nameKey = "action.pad.name",
+		order = 1,
+		feedbackTypes = {DefaultFeedbackState.NORMAL, DefaultFeedbackState.ACTIVE, DefaultFeedbackState.WARNING},
+		settingsViewController = PadActionSettingsViewController.class
+)
 @Getter
 @Setter
 @NoArgsConstructor

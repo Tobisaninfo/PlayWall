@@ -9,7 +9,8 @@ import de.tobias.playwall.client.utils.Localizable;
 public enum DefaultFeedbackState implements FeedbackState, Localizable
 {
 	NORMAL,
-	ACTIVE;
+	ACTIVE,
+	WARNING;
 
 	@Override
 	public FeedbackState copy()

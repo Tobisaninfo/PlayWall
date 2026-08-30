@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <SettingsRow fx:id="settingsRow" icon="BOLT_SOLID">
+        <CheckBox fx:id="activeCheckbox" text="%ui.feedback.lp.animated" focusTraversable="false"
+                  mnemonicParsing="false" minWidth="150.0" prefWidth="200.0" wrapText="true"/>
+    </SettingsRow>
+</VBox>

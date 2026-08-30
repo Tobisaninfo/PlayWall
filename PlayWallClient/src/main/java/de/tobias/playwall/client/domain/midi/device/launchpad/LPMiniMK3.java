@@ -28,6 +28,10 @@ public class LPMiniMK3 extends CustomMidiDevice
 		{
 			return LPFeedbackValue.class;
 		}
+		else if(state == DefaultFeedbackState.WARNING)
+		{
+			return LPAnimatedFeedbackValue.class;
+		}
 		return null;
 	}
 

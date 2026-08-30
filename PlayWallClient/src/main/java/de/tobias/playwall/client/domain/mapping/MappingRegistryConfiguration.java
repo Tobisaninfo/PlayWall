@@ -11,6 +11,7 @@ import de.tobias.playwall.client.domain.mapping.action.GlobalVolumeAction;
 import de.tobias.playwall.client.domain.mapping.action.PadAction;
 import de.tobias.playwall.client.domain.mapping.action.PageAction;
 import de.tobias.playwall.client.domain.mapping.action.StopAllAction;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPAnimatedFeedbackValue;
 import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValue;
 
@@ -35,7 +36,8 @@ class MappingRegistryConfiguration
 				.registerAction(GlobalVolumeAction.class);
 
 		registry.registerFeedbackState(DefaultFeedbackState.class)
-				.registerFeedbackValue(LPFeedbackValue.class);
+				.registerFeedbackValue(LPFeedbackValue.class)
+				.registerFeedbackValue(LPAnimatedFeedbackValue.class);
 	}
 
 	@Bean

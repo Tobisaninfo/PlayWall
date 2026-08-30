@@ -8,6 +8,8 @@ import de.tobias.playwall.client.appcontext.Bean;
 import de.tobias.playwall.client.appcontext.Configuration;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceClearWriter;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPAnimatedFeedbackValue;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPAnimatedFeedbackValueWriter;
 import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValue;
 import de.tobias.playwall.client.domain.midi.device.launchpad.LPFeedbackValueWriter;
 import lombok.AccessLevel;
@@ -24,6 +26,7 @@ class FeedbackValueWriteResolverConfiguration
 	{
 		return new DefaultFeedbackValueWriterResolver()
 				.registerFeedbackClear(MidiInputKey.class, new CustomMidiDeviceClearWriter(midi))
-				.registerFeedbackValue(MidiInputKey.class, LPFeedbackValue.class, new LPFeedbackValueWriter(midi));
+				.registerFeedbackValue(MidiInputKey.class, LPFeedbackValue.class, new LPFeedbackValueWriter(midi))
+				.registerFeedbackValue(MidiInputKey.class, LPAnimatedFeedbackValue.class, new LPAnimatedFeedbackValueWriter(midi));
 	}
 }
