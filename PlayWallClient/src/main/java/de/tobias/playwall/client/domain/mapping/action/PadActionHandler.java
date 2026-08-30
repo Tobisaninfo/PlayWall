@@ -187,7 +187,14 @@ public class PadActionHandler implements ActionHandler
 
 		if(padController.getStatus().isAnyPlayingState())
 		{
-			return DefaultFeedbackState.ACTIVE;
+			if(padController.shouldWarningAnimationPlay())
+			{
+				return DefaultFeedbackState.WARNING;
+			}
+			else
+			{
+				return DefaultFeedbackState.ACTIVE;
+			}
 		}
 		return DefaultFeedbackState.NORMAL;
 	}
