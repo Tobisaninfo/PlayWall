@@ -87,6 +87,11 @@ public abstract class ActionSettingsViewController extends NVC
 			feedbackValueSettingsViewControllers.add(viewController);
 		}
 
+		createHeaderNodes(customMidiDevice);
+	}
+
+	private void createHeaderNodes(CustomMidiDevice customMidiDevice)
+	{
 		if(!feedbackValueContainer.getChildren().isEmpty())
 		{
 			feedbackValueContainer.getChildren().addFirst(new Separator());
