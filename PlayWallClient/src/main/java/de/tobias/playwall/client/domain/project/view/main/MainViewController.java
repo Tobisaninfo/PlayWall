@@ -17,6 +17,7 @@ import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
+import de.tobias.playwall.client.domain.mapping.listener.PadFeedbackListener;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
 import de.tobias.playwall.client.domain.midi.MidiDeviceNotFoundException;
 import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
@@ -176,6 +177,7 @@ public class MainViewController extends ViewControllerBase
 	private final MidiCoordinator midiCoordinator;
 	private KeyboardMappingListener keyboardMappingListener;
 	private MidiMappingListener midiMappingListener;
+	private PadFeedbackListener padFeedbackListener;
 
 	private MaterialToastManager materialToastManager;
 	private Toast padErrorsToast;
@@ -255,6 +257,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(undoHistoryUpdateListener);
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
+		padFeedbackListener = AppContextHolder.getInstance().get(PadFeedbackListener.class);
+		eventHandler.registerListener(padFeedbackListener);
 
 		eventHandler.registerListener(midiCoordinator);
 

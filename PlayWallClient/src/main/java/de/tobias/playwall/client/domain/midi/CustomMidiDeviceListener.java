@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.midi;
 
+import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.device.MidiListener;
 import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
@@ -22,5 +23,12 @@ public class CustomMidiDeviceListener implements MidiListener
 	{
 		midiDeviceRegistry.lookup(midiDevice.getMidiDeviceInfo().name())
 				.ifPresent(midiListener -> midiListener.onFeedbackClear(midiDevice));
+	}
+
+	@Override
+	public void onFeedbackClear(MidiDevice midiDevice, MidiInputKey midiInputKey)
+	{
+		midiDeviceRegistry.lookup(midiDevice.getMidiDeviceInfo().name())
+				.ifPresent(midiListener -> midiListener.onFeedbackClear(midiDevice, midiInputKey));
 	}
 }

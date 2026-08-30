@@ -1,6 +1,8 @@
 package de.tobias.playwall.client.domain.midi.device.launchpad;
 
 import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
+import de.thecodelabs.midi.mapping.input.InputKey;
+import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.message.MidiMessage;
 import de.thecodelabs.midi.midi.message.MidiMessageType;
@@ -51,6 +53,21 @@ public class LPMiniMK3 extends CustomMidiDevice
 		for(byte i = liveKeyMin; i <= liveKeyMax; i++)
 		{
 			midiDevice.sendMidiMessage(new MidiMessage(MidiMessageType.CONTROL_CHANGE, i, (byte) 0));
+		}
+	}
+
+	@Override
+	public void onFeedbackClear(MidiDevice midiDevice, MidiInputKey key)
+	{
+		final byte note = key.value();
+
+		if(note < 91)
+		{
+			midiDevice.sendMidiMessage(new MidiMessage(MidiMessageType.NOTE_ON, note, (byte) 0));
+		}
+		else
+		{
+			midiDevice.sendMidiMessage(new MidiMessage(MidiMessageType.CONTROL_CHANGE, note, (byte) 0));
 		}
 	}
 }
