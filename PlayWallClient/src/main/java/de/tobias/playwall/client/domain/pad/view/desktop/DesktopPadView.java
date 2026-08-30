@@ -363,15 +363,6 @@ public class DesktopPadView implements PadView
 			errorLabel.setVisible(status == PadStatus.ERROR);
 
 			pseudoClassStateChanged(PLAY_CLASS, status.isAnyPlayingState());
-
-			if(status == PadStatus.PAUSING || status == PadStatus.STOPPING)
-			{
-				padController.getShouldWarningAnimationPlayFading().setValue(true);
-			}
-			else if(status == PadStatus.PLAYING || status == PadStatus.PAUSED || status == PadStatus.STOPPED)
-			{
-				padController.getShouldWarningAnimationPlayFading().setValue(false);
-			}
 		});
 	}
 

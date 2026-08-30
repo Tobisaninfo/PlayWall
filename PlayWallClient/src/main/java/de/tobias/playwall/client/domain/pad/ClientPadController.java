@@ -9,6 +9,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.util.Duration;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +28,7 @@ public class ClientPadController
 	private Duration position;
 	private ProjectMetadata	projectMetadata;
 
+	@Getter(AccessLevel.NONE)
 	private final BooleanProperty shouldWarningAnimationPlayEndOfFile = new SimpleBooleanProperty(false);
 	private final BooleanProperty shouldWarningAnimationPlayFading = new SimpleBooleanProperty(false);
 	private final BooleanBinding shouldWarningAnimationPlay = Bindings.or(shouldWarningAnimationPlayEndOfFile, shouldWarningAnimationPlayFading);
@@ -39,6 +41,20 @@ public class ClientPadController
 
 		shouldWarningAnimationPlay.addListener((_, _, newValue) ->
 				eventHandler.fireEvent(new PadWarningAnimationPlayUpdate(pad.getId(), newValue)));
+	}
+
+	public void setStatus(PadStatus status)
+	{
+		this.status = status;
+
+		if(status == PadStatus.PAUSING || status == PadStatus.STOPPING)
+		{
+			shouldWarningAnimationPlayFading.setValue(true);
+		}
+		else if(status == PadStatus.PLAYING || status == PadStatus.PAUSED || status == PadStatus.STOPPED)
+		{
+			shouldWarningAnimationPlayFading.setValue(false);
+		}
 	}
 
 	public boolean shouldWarningAnimationPlay()
