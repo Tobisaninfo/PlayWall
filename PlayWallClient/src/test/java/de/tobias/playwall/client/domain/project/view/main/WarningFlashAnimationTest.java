@@ -5,6 +5,7 @@ import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -40,7 +41,7 @@ class WarningFlashAnimationTest extends AbstractViewControllerTest
 		when(pad.getDefaultColor()).thenReturn(ModernColor.BLUE1);
 		when(pad.getPlayColor()).thenReturn(ModernColor.RED1);
 
-		padView.updateFromPad(0, new ClientPadController(pad, mock(ProjectMetadata.class)));
+		padView.updateFromPad(0, new ClientPadController(new UpdateMessageEventHandler(), pad, mock(ProjectMetadata.class)));
 
 		animation = new WarningFlashAnimation();
 		animation.init(padView);

@@ -25,7 +25,6 @@ import de.tobias.playwall.client.view.components.LoadingSpinner;
 import de.tobias.playwall.client.view.components.drag.DropOptionSelect;
 import de.tobias.playwall.common.api.common.TimeMode;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -103,9 +102,7 @@ public class DesktopPadView implements PadView
 	private PadIndex currentPadIndex;
 
 	private final WarningFlashAnimation warningAnimation;
-	private final BooleanProperty shouldWarningAnimationPlayEndOfFile = new SimpleBooleanProperty(false);
-	private final BooleanProperty shouldWarningAnimationPlayFading = new SimpleBooleanProperty(false);
-	private final BooleanBinding shouldWarningAnimationPlay = Bindings.or(shouldWarningAnimationPlayEndOfFile, shouldWarningAnimationPlayFading);
+	private final BooleanProperty shouldWarningAnimationPlay = new SimpleBooleanProperty(false);
 
 	public DesktopPadView()
 	{
@@ -308,6 +305,8 @@ public class DesktopPadView implements PadView
 
 		updateTimeNodes();
 		busyView.showProgress(false);
+
+		shouldWarningAnimationPlay.bind(controller.getShouldWarningAnimationPlay());
 	}
 
 	private void reset()
@@ -367,11 +366,11 @@ public class DesktopPadView implements PadView
 
 			if(status == PadStatus.PAUSING || status == PadStatus.STOPPING)
 			{
-				shouldWarningAnimationPlayFading.setValue(true);
+				padController.getShouldWarningAnimationPlayFading().setValue(true);
 			}
 			else if(status == PadStatus.PLAYING || status == PadStatus.PAUSED || status == PadStatus.STOPPED)
 			{
-				shouldWarningAnimationPlayFading.setValue(false);
+				padController.getShouldWarningAnimationPlayFading().setValue(false);
 			}
 		});
 	}
@@ -428,12 +427,12 @@ public class DesktopPadView implements PadView
 		// Start warning animation if the threshold is reached
 		if(status == PadStatus.PLAYING && position != null && padController.isWarningThresholdReached())
 		{
-			shouldWarningAnimationPlayEndOfFile.setValue(true);
+			padController.getShouldWarningAnimationPlayEndOfFile().setValue(true);
 		}
 		// Stop animation if any of the above conditions are not met and a animation is running
 		else if(warningAnimation.isRunning())
 		{
-			shouldWarningAnimationPlayEndOfFile.setValue(false);
+			padController.getShouldWarningAnimationPlayEndOfFile().setValue(false);
 		}
 	}
 

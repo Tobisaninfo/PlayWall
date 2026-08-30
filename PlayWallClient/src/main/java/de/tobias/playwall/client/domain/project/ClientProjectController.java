@@ -1,20 +1,27 @@
 package de.tobias.playwall.client.domain.project;
 
+import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadStatus;
 import de.tobias.playwall.client.domain.page.Page;
 import de.tobias.playwall.client.domain.page.PageSettings;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor(onConstructor_ = @InjectConstructor, access = AccessLevel.PACKAGE)
 @Getter
 public class ClientProjectController
 {
+	private final UpdateMessageEventHandler eventHandler;
+
 	private final Map<UUID, ClientPadController> padControllers = new HashMap<>();
 	private Project project;
 
@@ -49,7 +56,7 @@ public class ClientProjectController
 				final ClientPadController padController = getPadController(pad.getId());
 				if(padController == null)
 				{
-					final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
+					final ClientPadController controller = new ClientPadController(eventHandler, pad, getProject().getMetadata());
 					newPadControllers.put(pad.getId(), controller);
 				}
 				else
@@ -154,7 +161,7 @@ public class ClientProjectController
 
 	public void createPadController(Pad pad)
 	{
-		final ClientPadController controller = new ClientPadController(pad, getProject().getMetadata());
+		final ClientPadController controller = new ClientPadController(eventHandler, pad, getProject().getMetadata());
 		padControllers.put(pad.getId(), controller);
 	}
 
