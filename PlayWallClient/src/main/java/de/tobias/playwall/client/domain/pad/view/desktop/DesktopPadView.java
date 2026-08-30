@@ -428,11 +428,7 @@ public class DesktopPadView implements PadView
 		// Start warning animation if the threshold is reached
 		if(status == PadStatus.PLAYING && position != null && padController.isWarningThresholdReached())
 		{
-			// ⚠️do not join conditions, elsewhere the animation is instantly stopped on the "else if" case
-			if(!warningAnimation.isRunning())
-			{
-				shouldWarningAnimationPlayEndOfFile.setValue(true);
-			}
+			shouldWarningAnimationPlayEndOfFile.setValue(true);
 		}
 		// Stop animation if any of the above conditions are not met and a animation is running
 		else if(warningAnimation.isRunning())
