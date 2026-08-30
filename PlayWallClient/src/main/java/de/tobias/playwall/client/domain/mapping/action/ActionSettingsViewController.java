@@ -68,7 +68,13 @@ public abstract class ActionSettingsViewController extends NVC
 		final CustomMidiDevice customMidiDevice = customMidiDeviceOptional.get();
 		for(FeedbackState feedbackState : feedbackStates)
 		{
-			final FeedbackValueSettingsViewController viewController = createFeedbackValueSettingsViewController(customMidiDevice.supportedFeedbackValue());
+			// Get the supported feedback value and its view controller based on the feedback state
+			final Class<? extends FeedbackValue> feedbackValueType = customMidiDevice.supportedFeedbackValueForState(feedbackState);
+			if(feedbackValueType == null)
+			{
+				continue;
+			}
+			final FeedbackValueSettingsViewController viewController = createFeedbackValueSettingsViewController(feedbackValueType);
 			final FeedbackValue feedbackValue = Optional.ofNullable(feedbackProvider.getFeedbackValueForState(feedbackState)).orElseGet(() -> {
 				// Create new feedback value if not existing for the state
 				final FeedbackValue newFeedbackValue = viewController.createNewFeedback();

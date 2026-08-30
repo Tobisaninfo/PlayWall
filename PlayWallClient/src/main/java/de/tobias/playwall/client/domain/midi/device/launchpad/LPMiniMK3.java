@@ -1,7 +1,7 @@
 package de.tobias.playwall.client.domain.midi.device.launchpad;
 
+import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.thecodelabs.midi.mapping.feedback.FeedbackValue;
-import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.thecodelabs.midi.midi.device.MidiDevice;
 import de.thecodelabs.midi.midi.message.MidiMessage;
@@ -9,6 +9,7 @@ import de.thecodelabs.midi.midi.message.MidiMessageType;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.midi.device.CustomMidiDevice;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,9 +22,13 @@ public class LPMiniMK3 extends CustomMidiDevice
 	}
 
 	@Override
-	public Class<? extends FeedbackValue> supportedFeedbackValue()
+	public Class<? extends FeedbackValue> supportedFeedbackValueForState(FeedbackState state)
 	{
-		return LPFeedbackValue.class;
+		if(state == DefaultFeedbackState.NORMAL || state == DefaultFeedbackState.ACTIVE)
+		{
+			return LPFeedbackValue.class;
+		}
+		return null;
 	}
 
 	@Override
