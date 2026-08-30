@@ -18,6 +18,7 @@ import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.mapping.listener.PadFeedbackListener;
+import de.tobias.playwall.client.domain.mapping.listener.PageFeedbackListener;
 import de.tobias.playwall.client.domain.midi.MidiCoordinator;
 import de.tobias.playwall.client.domain.midi.MidiDeviceNotFoundException;
 import de.tobias.playwall.client.domain.midi.device.CustomMidiDeviceRegistry;
@@ -41,8 +42,8 @@ import de.tobias.playwall.client.domain.project.view.management.ProjectManagemen
 import de.tobias.playwall.client.domain.project.view.media.MissingMediaEntry;
 import de.tobias.playwall.client.domain.project.view.media.ReplaceMediaViewController;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
-import de.tobias.playwall.client.domain.project.view.settings.mapping.ProjectSettingsMappingViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
+import de.tobias.playwall.client.domain.project.view.settings.mapping.ProjectSettingsMappingViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
 import de.tobias.playwall.client.domain.settings.view.main.SettingsListener;
@@ -178,6 +179,7 @@ public class MainViewController extends ViewControllerBase
 	private KeyboardMappingListener keyboardMappingListener;
 	private MidiMappingListener midiMappingListener;
 	private PadFeedbackListener padFeedbackListener;
+	private PageFeedbackListener pageFeedbackListener;
 
 	private MaterialToastManager materialToastManager;
 	private Toast padErrorsToast;
@@ -235,7 +237,7 @@ public class MainViewController extends ViewControllerBase
 
 		projectLoadedListener = new ProjectLoadedListener(this, settingsController);
 		eventHandler.registerListener(projectLoadedListener);
-		projectListener = new ProjectListener(projectMapper, this, projectController, midiCoordinator);
+		projectListener = new ProjectListener(projectMapper, this);
 		eventHandler.registerListener(projectListener);
 		pageAddListener = new PageListener(projectController, this, pageMapper, pageSettingsMapper);
 		eventHandler.registerListener(pageAddListener);
@@ -259,6 +261,8 @@ public class MainViewController extends ViewControllerBase
 		eventHandler.registerListener(settingsListener);
 		padFeedbackListener = AppContextHolder.getInstance().get(PadFeedbackListener.class);
 		eventHandler.registerListener(padFeedbackListener);
+		pageFeedbackListener = AppContextHolder.getInstance().get(PageFeedbackListener.class);
+		eventHandler.registerListener(pageFeedbackListener);
 
 		eventHandler.registerListener(midiCoordinator);
 
