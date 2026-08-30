@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import de.tobias.playwall.client.domain.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @JsonTypeName("pad")
-@ActionDescription(nameKey = "action.pad.name", order = 1, settingsViewController = PadActionSettingsViewController.class)
+@ActionDescription(nameKey = "action.pad.name", order = 1, feedbackTypes = {DefaultFeedbackState.NORMAL, DefaultFeedbackState.ACTIVE}, settingsViewController = PadActionSettingsViewController.class)
 @Getter
 @Setter
 @NoArgsConstructor

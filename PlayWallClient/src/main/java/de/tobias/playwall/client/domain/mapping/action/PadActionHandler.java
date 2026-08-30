@@ -7,6 +7,7 @@ import de.thecodelabs.midi.mapping.action.ActionHandler;
 import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.Pad;
 import de.tobias.playwall.client.domain.pad.PadStatus;
@@ -18,7 +19,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
-
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@InjectConstructor}, access = AccessLevel.PACKAGE)
@@ -152,6 +152,43 @@ public class PadActionHandler implements ActionHandler
 	@Override
 	public FeedbackState getCurrentState(Action action)
 	{
-		return null;
+		if(!(action instanceof PadAction padAction))
+		{
+			throw new IllegalArgumentException("Action is not a PadAction");
+		}
+
+		if(padAction.getPosition() == null)
+		{
+			return null;
+		}
+
+		final UUID pageId = padAction.getPageId();
+
+		final Page page;
+		if(pageId == PadAction.ACTIVE_PAGE_ID)
+		{
+			page = clientProjectController.getCurrentPage();
+		}
+		else
+		{
+			page = clientProjectController.getProject().getPage(pageId);
+		}
+
+		if(page == null)
+		{
+			return null;
+		}
+
+		final ClientPadController padController = findPadController(padAction, page);
+		if(padController == null)
+		{
+			return null;
+		}
+
+		if(padController.getStatus().isAnyPlayingState())
+		{
+			return DefaultFeedbackState.ACTIVE;
+		}
+		return DefaultFeedbackState.NORMAL;
 	}
 }
