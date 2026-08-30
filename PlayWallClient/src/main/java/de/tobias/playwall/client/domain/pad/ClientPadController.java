@@ -26,10 +26,11 @@ public class ClientPadController
 	private PadStatus status;
 	private Duration duration;
 	private Duration position;
-	private ProjectMetadata	projectMetadata;
+	private ProjectMetadata projectMetadata;
 
 	@Getter(AccessLevel.NONE)
 	private final BooleanProperty shouldWarningAnimationPlayEndOfFile = new SimpleBooleanProperty(false);
+	@Getter(AccessLevel.NONE)
 	private final BooleanProperty shouldWarningAnimationPlayFading = new SimpleBooleanProperty(false);
 	private final BooleanBinding shouldWarningAnimationPlay = Bindings.or(shouldWarningAnimationPlayEndOfFile, shouldWarningAnimationPlayFading);
 
@@ -54,6 +55,27 @@ public class ClientPadController
 		else if(status == PadStatus.PLAYING || status == PadStatus.PAUSED || status == PadStatus.STOPPED)
 		{
 			shouldWarningAnimationPlayFading.setValue(false);
+		}
+	}
+
+	public void setPosition(Duration position)
+	{
+		this.position = position;
+		// No warning animation if loop is active
+		if(pad.getContent() instanceof Loopable loopable && loopable.isLoop())
+		{
+			return;
+		}
+
+		// Start warning animation if the threshold is reached
+		if(status == PadStatus.PLAYING && position != null && isWarningThresholdReached())
+		{
+			shouldWarningAnimationPlayEndOfFile.setValue(true);
+		}
+		// Stop animation if any of the above conditions are not met and a animation is running
+		else if(shouldWarningAnimationPlayEndOfFile.get())
+		{
+			shouldWarningAnimationPlayEndOfFile.setValue(false);
 		}
 	}
 

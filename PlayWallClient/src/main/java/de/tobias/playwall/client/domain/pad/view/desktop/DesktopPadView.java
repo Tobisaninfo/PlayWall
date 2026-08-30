@@ -402,29 +402,6 @@ public class DesktopPadView implements PadView
 			this.playBar.setProgress(0.0);
 			this.introLayer.setPrefWidth(0);
 		}
-
-		handleEndOfFileWarningAnimation();
-	}
-
-	private void handleEndOfFileWarningAnimation()
-	{
-		// No warning animation if loop is active
-		if(padController.getPad().getContent() instanceof Loopable loopable && loopable.isLoop())
-		{
-			return;
-		}
-
-		final Duration position = padController.getPosition();
-		// Start warning animation if the threshold is reached
-		if(status == PadStatus.PLAYING && position != null && padController.isWarningThresholdReached())
-		{
-			padController.getShouldWarningAnimationPlayEndOfFile().setValue(true);
-		}
-		// Stop animation if any of the above conditions are not met and a animation is running
-		else if(warningAnimation.isRunning())
-		{
-			padController.getShouldWarningAnimationPlayEndOfFile().setValue(false);
-		}
 	}
 
 	@Override
