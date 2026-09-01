@@ -28,8 +28,6 @@ import de.tobias.playwall.client.domain.page.PageSettingsMapper;
 import de.tobias.playwall.client.domain.page.view.PageButtonInputListener;
 import de.tobias.playwall.client.domain.page.view.PageButtons;
 import de.tobias.playwall.client.domain.page.view.PageButtonsEventDispatcher;
-import de.tobias.playwall.client.domain.page.view.settings.BasePageSettingsViewController;
-import de.tobias.playwall.client.domain.page.view.settings.PageSettingsViewController;
 import de.tobias.playwall.client.domain.project.*;
 import de.tobias.playwall.client.domain.project.view.ProjectNewDialog;
 import de.tobias.playwall.client.domain.project.view.management.ProjectManagementViewController;
@@ -47,8 +45,6 @@ import de.tobias.playwall.client.log.LogViewer;
 import de.tobias.playwall.client.net.ConnectionState;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
-import de.tobias.playwall.client.utils.ExportFile;
-import de.tobias.playwall.client.utils.MimeType;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ViewControllerBase;
@@ -82,12 +78,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tools.jackson.databind.json.JsonMapper;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import static de.thecodelabs.utils.util.Localization.getString;
 import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TESTING;
@@ -181,6 +173,8 @@ public class MainViewController extends ViewControllerBase
 	private final ClientProjectController projectController;
 	private final ClientSettingsController settingsController;
 
+	private PageViewActions pageViewActions;
+
 	private ProjectSettingsViewController projectSettingsViewController;
 	private ProgramSettingsViewController programSettingsViewController;
 
@@ -250,6 +244,8 @@ public class MainViewController extends ViewControllerBase
 		settingsListener = new SettingsListener(settingsMapper, settingsController);
 		eventHandler.registerListener(settingsListener);
 
+		pageViewActions = new PageViewActions(projectController, client, errorAlertBuilder, fileChooserWrapper, this);
+
 		globalColorPicker.init(padEventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, this::onColorChange, this::onColorSubmit));
 
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
@@ -279,9 +275,9 @@ public class MainViewController extends ViewControllerBase
 
 		pageAddButtonContextMenu = new ContextMenu();
 		final MenuItem newPageMenuItem = new MenuItem(getString(Strings.UI_PAGE_ADD_NEW), new FontIcon(FontAwesomeType.PLUS_SOLID));
-		newPageMenuItem.setOnAction(this::onPageAddNew);
+		newPageMenuItem.setOnAction(pageViewActions::onPageAddNew);
 		final MenuItem importPageMenuItem = new MenuItem(getString(Strings.UI_PAGE_ADD_IMPORT), new FontIcon(FontAwesomeType.FILE_IMPORT_SOLID));
-		importPageMenuItem.setOnAction(this::onPageImport);
+		importPageMenuItem.setOnAction(pageViewActions::onPageImport);
 		pageAddButtonContextMenu.getItems().addAll(newPageMenuItem, importPageMenuItem);
 
 		padEventDispatcher.addPadInputListener(new FileDragListener());
@@ -578,12 +574,12 @@ public class MainViewController extends ViewControllerBase
 	void buildPageButtons()
 	{
 		pageButtons.buildPageButtons(projectController.getProject().getPages(), page -> {
-			final MenuItem deleteMenuItem = createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_CAN_SOLID, Optional.of(_ -> onPageDeleteMenuItem(page)));
+			final MenuItem deleteMenuItem = createMenuItem(Strings.UI_PAGE_DELETE, FontAwesomeType.TRASH_CAN_SOLID, Optional.of(_ -> pageViewActions.onPageDeleteMenuItem(page)));
 			deleteMenuItem.getStyleClass().add("danger");
 			return new ContextMenu(
-					createMenuItem(Strings.UI_PAGE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.of(_ -> onPageSettingsMenuItem(page))),
-					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> onPageDuplicateMenuItem(page))),
-					createMenuItem(Strings.UI_PAGE_EXPORT, FontAwesomeType.FILE_IMPORT_SOLID, Optional.of(_ -> onPageExportMenuItem(page))),
+					createMenuItem(Strings.UI_PAGE_SETTINGS, FontAwesomeType.GEAR_SOLID, Optional.of(_ -> pageViewActions.onPageSettingsMenuItem(page))),
+					createMenuItem(Strings.UI_PAGE_DUPLICATE, FontAwesomeType.COPY_SOLID, Optional.of(_ -> pageViewActions.onPageDuplicateMenuItem(page))),
+					createMenuItem(Strings.UI_PAGE_EXPORT, FontAwesomeType.FILE_IMPORT_SOLID, Optional.of(_ -> pageViewActions.onPageExportMenuItem(page))),
 					new SeparatorMenuItem(),
 					deleteMenuItem
 			);
@@ -592,83 +588,10 @@ public class MainViewController extends ViewControllerBase
 		pageButtons.highlightPageButton(projectController.getCurrentPage());
 	}
 
-	private void onPageSettingsMenuItem(Page page)
-	{
-		final PageSettingsViewController controller = AppContextHolder.getInstance().get(PageSettingsViewController.class);
-		controller.showAndWait(new BasePageSettingsViewController.Param(page), getContainingWindow());
-	}
-
-	private void onPageDuplicateMenuItem(Page page)
-	{
-		try
-		{
-			client.currentProject().page(page.getId()).duplicate();
-		}
-		catch(PlayWallApiException e)
-		{
-			log.error("Cannot duplicate page", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DUPLICATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-		}
-	}
-
-	private void onPageExportMenuItem(Page page)
-	{
-		try
-		{
-			final ExportFile export = client.currentProject().page(page.getId()).export();
-			final String initialFileName = Localization.getString(Strings.UI_PAGE_EXPORT_NAME,
-							projectController.getProject().getMetadata().getName(),
-							page.getSettings().getName())
-					.replaceAll("[^a-zA-Z0-9\\s\\-_]", "_");
-
-			final MimeType mimeType = MimeType.getByMimeType(export.mimetype());
-			fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
-			fileChooserWrapper.setInitialFilename(initialFileName + "." + mimeType.getExtension());
-			final Optional<Path> pathOptional = fileChooserWrapper.showSaveFile(getContainingWindow());
-			if(pathOptional.isEmpty())
-			{
-				return;
-			}
-			final Path path = pathOptional.get();
-			Files.write(path, export.data());
-		}
-		catch(PlayWallApiException e)
-		{
-			log.error("Cannot export page", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_EXPORT), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-		}
-		catch(IOException e)
-		{
-			log.error("Cannot write file", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_EXPORT), e.getMessage(), getContainingWindow()).showAndWait();
-		}
-	}
-
-	private void onPageDeleteMenuItem(Page page)
-	{
-		try
-		{
-			client.currentProject().page(page.getId()).delete();
-		}
-		catch(PlayWallApiException e)
-		{
-			log.error("Cannot delete page", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_DELETE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-		}
-	}
-
 	@FXML
 	private void onPageReorder(PageButtons.PageReorderEvent event)
 	{
-		try
-		{
-			client.currentProject().reorderPages(event.getPages().stream().collect(Collectors.toMap(Page::getId, page -> event.getPages().indexOf(page))));
-		}
-		catch(PlayWallApiException e)
-		{
-			log.error("Cannot reorder page", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_REORDER), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-		}
+		pageViewActions.onPageReorder(event);
 	}
 
 	public void showLoadingOverlay(boolean visible)
@@ -842,45 +765,6 @@ public class MainViewController extends ViewControllerBase
 	private void onPageAdd(ActionEvent event)
 	{
 		pageAddButtonContextMenu.show(pageAddButton, Side.BOTTOM, 0, DEFAULT_CONTEXT_MANU_GAP);
-	}
-
-	private void onPageAddNew(ActionEvent event)
-	{
-		try
-		{
-			client.currentProject().addPage();
-		}
-		catch(PlayWallApiException e)
-		{
-			log.error("Cannot add page", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_ADD), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-		}
-	}
-
-	private void onPageImport(ActionEvent event)
-	{
-		final MimeType mimeType = MimeType.APPLICATION_JSON;
-		fileChooserWrapper.setExtensionFilter(List.of(mimeType.toExtensionFilter()));
-		final Optional<Path> pathOptional = fileChooserWrapper.showOpenFile(getContainingWindow());
-		if(pathOptional.isEmpty())
-		{
-			return;
-		}
-		try
-		{
-			final byte[] bytes = Files.readAllBytes(pathOptional.get());
-			client.currentProject().importPage(new ExportFile(mimeType.getMimeTypeValue(), bytes));
-		}
-		catch(IOException e)
-		{
-			log.error("Cannot read file", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_IMPORT), e.getMessage(), getContainingWindow()).showAndWait();
-		}
-		catch(PlayWallApiException e)
-		{
-			log.error("Cannot import page", e);
-			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAGE_IMPORT), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
-		}
 	}
 
 	// Menu
