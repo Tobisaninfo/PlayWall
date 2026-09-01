@@ -2,7 +2,7 @@ package de.tobias.playwall.nativeaudio.audio.rust;
 
 import java.util.Objects;
 
-public record AudioDevice(String name, int channels, int sampleRate, boolean defaultDevice)
+public record AudioDevice(String name, int channels, int sampleRate, boolean defaultDevice, String driver)
 {
 	@Override
 	public boolean equals(Object o)

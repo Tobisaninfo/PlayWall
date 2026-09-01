@@ -33,7 +33,7 @@ import java.util.Optional;
 @Slf4j
 public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewController
 {
-	private static final AudioDeviceInstance AUDIO_DEVICE_USE_DEFAULT_FROM_OS = new AudioDeviceInstance(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT_ALWAYS), false, false);
+	private static final AudioDeviceInstance AUDIO_DEVICE_USE_DEFAULT_FROM_OS = new AudioDeviceInstance(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT_ALWAYS), null, false, false);
 
 	private final ClientProjectController projectController;
 
@@ -85,7 +85,7 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 			}
 			else
 			{
-				final AudioDeviceInstance errorDevice = new AudioDeviceInstance(selectedAudioDevice, false, true);
+				final AudioDeviceInstance errorDevice = new AudioDeviceInstance(selectedAudioDevice, null, false, true);
 				comboBoxOutputDevices.getItems().add(errorDevice);
 				comboBoxOutputDevices.getSelectionModel().select(errorDevice);
 			}

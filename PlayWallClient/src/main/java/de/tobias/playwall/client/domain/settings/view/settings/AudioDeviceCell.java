@@ -7,7 +7,8 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.common.api.settings.audiodevices.AudioDeviceInstance;
 import javafx.scene.control.ListCell;
 
-import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 class AudioDeviceCell extends ListCell<AudioDeviceInstance>
 {
@@ -23,12 +24,6 @@ class AudioDeviceCell extends ListCell<AudioDeviceInstance>
 			return;
 		}
 
-		if(item.isDefault())
-		{
-			setText(MessageFormat.format("{0} ({1})", item.name(), Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT)));
-			return;
-		}
-
 		if(item.isError())
 		{
 			final FontIcon icon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
@@ -40,6 +35,21 @@ class AudioDeviceCell extends ListCell<AudioDeviceInstance>
 			setGraphic(null);
 		}
 
-		setText(item.name());
+		final List<String> details = new ArrayList<>();
+		if(item.driver() != null && !item.driver().isBlank())
+		{
+			details.add(item.driver());
+		}
+		if(item.isDefault())
+		{
+			details.add(Localization.getString(Strings.UI_SETTINGS_PROGRAM_AUDIO_DEVICE_DEFAULT));
+		}
+
+		String label = item.name();
+		if(!details.isEmpty())
+		{
+			label += " (" + String.join(", ", details) + ")";
+		}
+		setText(label);
 	}
 }
