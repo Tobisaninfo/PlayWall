@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
+import de.tobias.playwall.client.domain.pad.ClientPadController;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.PadDropDuplicateOption;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.PadDropMoveOption;
@@ -34,6 +35,13 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 	@Override
 	public void onDragDetected(DesktopPadView padView, MouseEvent event)
 	{
+		final ClientPadController padController = padView.getPadController();
+		if(padController.getStatus() != null && padController.getStatus().isAnyPlayingState())
+		{
+			event.consume();
+			return;
+		}
+
 		final Node rootNode = padView.getRootNode();
 		final Dragboard dragboard = rootNode.startDragAndDrop(TransferMode.MOVE);
 
@@ -72,6 +80,13 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 	@Override
 	public void onDragOver(DesktopPadView padView, DragEvent event)
 	{
+		final ClientPadController padController = padView.getPadController();
+		if(padController.getStatus() != null && padController.getStatus().isAnyPlayingState())
+		{
+			event.consume();
+			return;
+		}
+
 		if(event.getDragboard().hasContent(DATA_FORMAT))
 		{
 			if(padView.getCurrentPadIndex().equals(event.getDragboard().getContent(DATA_FORMAT)))
@@ -95,6 +110,13 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 	@Override
 	public void onDragDropped(DesktopPadView padView, DragEvent event)
 	{
+		final ClientPadController padController = padView.getPadController();
+		if(padController.getStatus() != null && padController.getStatus().isAnyPlayingState())
+		{
+			event.consume();
+			return;
+		}
+
 		final Dragboard dragboard = event.getDragboard();
 		if(dragboard.hasContent(DATA_FORMAT))
 		{
