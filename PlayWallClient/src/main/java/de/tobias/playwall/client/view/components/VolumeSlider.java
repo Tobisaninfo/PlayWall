@@ -2,9 +2,11 @@ package de.tobias.playwall.client.view.components;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
@@ -44,6 +46,8 @@ public class VolumeSlider extends HBox
 		slider.setShowTickMarks(false);
 		slider.setSnapToTicks(false);
 		slider.setPrefWidth(250);
+		slider.setFocusTraversable(false);
+		slider.addEventFilter(KeyEvent.ANY, Event::consume);
 
 		slider.valueProperty().addListener((_, _, newVal) -> {
 			if(Math.abs(newVal.doubleValue() - DEFAULT_VALUE) < SNAP_DELTA)
