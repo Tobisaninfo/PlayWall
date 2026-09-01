@@ -34,7 +34,7 @@
 
         <spring-boot-dependencies.version>4.1.1</spring-boot-dependencies.version>
         <jackson.version>3.2.2</jackson.version>
-        <lombok.version>1.18.46</lombok.version>
+        <lombok.version>1.18.48</lombok.version>
 
         <slf4j-api.version>2.0.18</slf4j-api.version>
         <log4j2.version>2.26.1</log4j2.version>
