@@ -67,7 +67,7 @@ class MainViewControllerLoadingOverlayTest extends AbstractViewControllerTest
 						.selectedAudioDevice("My Audio Device")
 						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.build());
-		mainViewController.getSettingsController().setOutputDevices(List.of(new AudioDeviceInstance("My Audio Device", false, false)));
+		mainViewController.getSettingsController().setOutputDevices(List.of(new AudioDeviceInstance("My Audio Device", null, false, false)));
 
 		assertThat(mainViewController.getLoadingOverlay()).isVisible();
 		assertThat(mainViewController.getLoadingOverlay().getProgressBar().getProgress()).isZero();
