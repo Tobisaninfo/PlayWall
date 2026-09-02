@@ -47,9 +47,8 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 	protected void init()
 	{
 		modeComboBox.getItems().addAll(PadAction.PadActionMode.values());
-		final String modePrefix = PadAction.PadActionMode.class.getSimpleName() + ".";
-		modeComboBox.setCellFactory(_ -> new EnumCell<>(modePrefix));
-		modeComboBox.setButtonCell(new EnumCell<>(modePrefix));
+		modeComboBox.setCellFactory(_ -> new EnumCell<>(PadAction.PadActionMode.class));
+		modeComboBox.setButtonCell(new EnumCell<>(PadAction.PadActionMode.class));
 
 		pageComboBox.setButtonCell(new PageCell());
 		pageComboBox.setCellFactory(_ -> new PageCell());

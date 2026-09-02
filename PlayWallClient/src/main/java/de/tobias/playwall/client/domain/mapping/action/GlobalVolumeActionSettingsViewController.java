@@ -19,14 +19,12 @@ class GlobalVolumeActionSettingsViewController extends ActionSettingsViewControl
 	protected void init()
 	{
 		modeComboBox.getItems().addAll(GlobalVolumeAction.VolumeChangeMode.values());
-		final String modePrefix = GlobalVolumeAction.VolumeChangeMode.class.getSimpleName() + ".";
-		modeComboBox.setCellFactory(_ -> new EnumCell<>(modePrefix));
-		modeComboBox.setButtonCell(new EnumCell<>(modePrefix));
+		modeComboBox.setCellFactory(_ -> new EnumCell<>(GlobalVolumeAction.VolumeChangeMode.class));
+		modeComboBox.setButtonCell(new EnumCell<>(GlobalVolumeAction.VolumeChangeMode.class));
 
 		deltaComboBox.getItems().addAll(GlobalVolumeAction.VolumeChangeDelta.values());
-		final String deltaPrefix = GlobalVolumeAction.VolumeChangeDelta.class.getSimpleName() + ".";
-		deltaComboBox.setCellFactory(_ -> new EnumCell<>(deltaPrefix));
-		deltaComboBox.setButtonCell(new EnumCell<>(deltaPrefix));
+		deltaComboBox.setCellFactory(_ -> new EnumCell<>(GlobalVolumeAction.VolumeChangeDelta.class));
+		deltaComboBox.setButtonCell(new EnumCell<>(GlobalVolumeAction.VolumeChangeDelta.class));
 	}
 
 	@Override

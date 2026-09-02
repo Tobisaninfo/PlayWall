@@ -9,6 +9,11 @@ public class EnumCell<T extends Enum<?>> extends ListCell<T>
 {
 	private final String baseName;
 
+	public EnumCell(Class<T> clazz)
+	{
+		this.baseName = clazz.getSimpleName() + ".";
+	}
+
 	@Override
 	protected void updateItem(T item, boolean empty)
 	{

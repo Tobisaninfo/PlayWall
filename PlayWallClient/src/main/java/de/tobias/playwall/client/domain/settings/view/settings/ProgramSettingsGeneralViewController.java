@@ -2,11 +2,11 @@ package de.tobias.playwall.client.domain.settings.view.settings;
 
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
-import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.view.components.EnumCell;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
@@ -79,8 +79,8 @@ public class ProgramSettingsGeneralViewController extends BaseProgramSettingsVie
 	protected void init()
 	{
 		comboBoxUnsavedChanges.getItems().addAll(UnsavedChangesMode.values());
-		comboBoxUnsavedChanges.setButtonCell(new EnumCell<>(Strings.UI_SETTINGS_UNSAVED_CHANGES_MODE_BASE));
-		comboBoxUnsavedChanges.setCellFactory(_ -> new EnumCell<>(Strings.UI_SETTINGS_UNSAVED_CHANGES_MODE_BASE));
+		comboBoxUnsavedChanges.setButtonCell(new EnumCell<>(UnsavedChangesMode.class));
+		comboBoxUnsavedChanges.setCellFactory(_ -> new EnumCell<>(UnsavedChangesMode.class));
 
 		comboBoxUiScale.getItems().addAll(UI_SCALE_AUTO, 100, 125, 150, 175, 200);
 		comboBoxUiScale.setConverter(new StringConverter<>()

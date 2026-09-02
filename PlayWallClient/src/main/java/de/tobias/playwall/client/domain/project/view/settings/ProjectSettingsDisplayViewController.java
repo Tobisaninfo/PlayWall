@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view.settings;
 
-import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.net.FluentClient;
@@ -46,8 +45,8 @@ public class ProjectSettingsDisplayViewController extends BaseProjectSettingsVie
 	protected void init()
 	{
 		comboBoxTime.getItems().addAll(TimeMode.values());
-		comboBoxTime.setButtonCell(new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
-		comboBoxTime.setCellFactory(_ -> new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
+		comboBoxTime.setButtonCell(new EnumCell<>(TimeMode.class));
+		comboBoxTime.setCellFactory(_ -> new EnumCell<>(TimeMode.class));
 	}
 
 	@Override

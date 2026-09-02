@@ -111,7 +111,6 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE = "ui.settings.project.view.title";
 	public static final String UI_SETTINGS_PROJECT_FADE_TITLE = "ui.settings.project.fade.title";
 	public static final String UI_SETTINGS_PROJECT_MAPPING_TITLE = "ui.settings.project.mapping.title";
-	public static final String UI_SETTINGS_PROJECT_TIME_MODE_BASE  = "ui.settings.project.time.mode.";
 	public static final String UI_SETTINGS_PROJECT_WARNING_EOF_SEC = "ui.settings.project.warning.eof.sec";
 
 	public static final String UI_SETTINGS_PROJECT_MAPPING_MIDI_DEVICE_DISABLED = "ui.settings.project.mapping.midi.device.disabled";
@@ -129,7 +128,6 @@ public class Strings
 	// ui - settings - program
 	public static final String UI_SETTINGS_PROGRAM_TITLE  = "ui.settings.program.title";
 	public static final String UI_SETTINGS_PROGRAM_GENERAL_TITLE  = "ui.settings.program.general.title";
-	public static final String UI_SETTINGS_UNSAVED_CHANGES_MODE_BASE  = "ui.settings.program.exit.unsaved-changes.mode.";
 	public static final String UI_SETTINGS_PROGRAM_DEBUG_TITLE = "ui.settings.program.debug.title";
 	public static final String UI_SETTINGS_PROGRAM_DEBUG_ERROR = "ui.settings.program.debug.error";
 	public static final String UI_SETTINGS_PROGRAM_DISPLAY_TITLE = "ui.settings.program.display.title";

@@ -25,9 +25,8 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	protected void init()
 	{
 		modeComboBox.getItems().addAll(PageAction.PageActionMode.values());
-		final String modePrefix = PageAction.PageActionMode.class.getSimpleName() + ".";
-		modeComboBox.setCellFactory(_ -> new EnumCell<>(modePrefix));
-		modeComboBox.setButtonCell(new EnumCell<>(modePrefix));
+		modeComboBox.setCellFactory(_ -> new EnumCell<>(PageAction.PageActionMode.class));
+		modeComboBox.setButtonCell(new EnumCell<>(PageAction.PageActionMode.class));
 
 		pageNumberRow.visibleProperty().bind(modeComboBox.getSelectionModel().selectedItemProperty()
 				.isEqualTo(PageAction.PageActionMode.JUMP));

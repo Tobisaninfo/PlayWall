@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.pad.view.settings;
 
-import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.content.PadContentSettingsContainerFactory;
@@ -58,8 +57,8 @@ public class PadSettingsDisplayViewController extends BasePadSettingsViewControl
 	{
 		comboBoxTime.getItems().add(null);  // use project settings
 		comboBoxTime.getItems().addAll(TimeMode.values());
-		comboBoxTime.setButtonCell(new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
-		comboBoxTime.setCellFactory(_ -> new EnumCell<>(Strings.UI_SETTINGS_PROJECT_TIME_MODE_BASE));
+		comboBoxTime.setButtonCell(new EnumCell<>(TimeMode.class));
+		comboBoxTime.setCellFactory(_ -> new EnumCell<>(TimeMode.class));
 	}
 
 	@Override
