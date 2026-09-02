@@ -57,7 +57,7 @@ public class PageActionHandler implements ActionHandler
 			}
 			case JUMP ->
 			{
-				int targetPage = pageAction.getPageNumber() - 1;
+				int targetPage = pageAction.getPageNumber();
 				if(targetPage < 0 || targetPage > maxPage)
 				{
 					return;
@@ -80,7 +80,7 @@ public class PageActionHandler implements ActionHandler
 			case NEXT, PREVIOUS -> DefaultFeedbackState.NORMAL;
 			case JUMP ->
 			{
-				if(Objects.equals(clientProjectController.getCurrentPage().getPosition(), pageAction.getPageNumber() - 1))
+				if(Objects.equals(clientProjectController.getCurrentPage().getPosition(), pageAction.getPageNumber()))
 				{
 					yield DefaultFeedbackState.ACTIVE;
 				}

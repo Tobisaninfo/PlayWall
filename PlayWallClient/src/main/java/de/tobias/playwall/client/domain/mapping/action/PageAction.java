@@ -38,7 +38,7 @@ public class PageAction implements Action
 		String string = Localization.getString("PageActionMode." + pageActionMode);
 		if(pageActionMode == PageActionMode.JUMP)
 		{
-			string += " " + pageNumber;
+			string += " " + (pageNumber + 1);
 		}
 		return string;
 	}

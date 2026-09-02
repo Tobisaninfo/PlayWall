@@ -46,7 +46,7 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 			modeComboBox.getSelectionModel().select(pageAction.getPageActionMode());
 			if(pageAction.getPageActionMode() == PageAction.PageActionMode.JUMP)
 			{
-				pageNumber.setText(String.valueOf(pageAction.getPageNumber()));
+				pageNumber.setText(String.valueOf(pageAction.getPageNumber() + 1));
 			}
 		}
 	}
@@ -59,7 +59,7 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 			pageAction.setPageActionMode(modeComboBox.getSelectionModel().getSelectedItem());
 			if(pageAction.getPageActionMode() == PageAction.PageActionMode.JUMP)
 			{
-				pageAction.setPageNumber(Integer.parseInt(pageNumber.getText()));
+				pageAction.setPageNumber(Integer.parseInt(pageNumber.getText()) - 1);
 			}
 		}
 	}
