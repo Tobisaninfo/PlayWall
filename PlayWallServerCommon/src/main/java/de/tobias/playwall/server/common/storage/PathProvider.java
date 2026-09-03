@@ -39,6 +39,11 @@ public class PathProvider
 		return getBaseDirectory().resolve("Library").resolve("Native").resolve(path);
 	}
 
+	public Path getPathForTemp()
+	{
+		return getBaseDirectory().resolve("tmp");
+	}
+
 	public Path getPathFor(String path)
 	{
 		return getBaseDirectory().resolve(path);
