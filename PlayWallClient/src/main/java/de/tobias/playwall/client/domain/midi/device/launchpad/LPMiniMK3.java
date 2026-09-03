@@ -40,7 +40,7 @@ public class LPMiniMK3 extends CustomMidiDevice
 	}
 
 	@Override
-	public void onDeviceOpen(MidiDevice midiDevice)
+	public void onDeviceConnected(MidiDevice midiDevice)
 	{
 		midiDevice.sendMidiMessage(new MidiMessage(new byte[]{(byte) 240, 126, 127, 6, 1, (byte) 247}));
 		midiDevice.sendMidiMessage(new MidiMessage(new byte[]{(byte) 240, 0, 32, 41, 2, 13, 0, 127, (byte) 247}));
@@ -70,7 +70,7 @@ public class LPMiniMK3 extends CustomMidiDevice
 	}
 
 	@Override
-	public void onFeedbackClear(MidiDevice midiDevice, MidiInputKey key)
+	public void onFeedbackClearForKey(MidiDevice midiDevice, MidiInputKey key)
 	{
 		final byte note = key.value();
 

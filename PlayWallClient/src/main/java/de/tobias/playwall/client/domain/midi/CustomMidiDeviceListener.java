@@ -12,10 +12,10 @@ public class CustomMidiDeviceListener implements MidiListener
 	private final CustomMidiDeviceRegistry midiDeviceRegistry;
 
 	@Override
-	public void onDeviceOpen(MidiDevice midiDevice)
+	public void onDeviceConnected(MidiDevice midiDevice)
 	{
 		midiDeviceRegistry.lookup(midiDevice.getMidiDeviceInfo().name())
-				.ifPresent(midiListener -> midiListener.onDeviceOpen(midiDevice));
+				.ifPresent(midiListener -> midiListener.onDeviceConnected(midiDevice));
 	}
 
 	@Override
@@ -26,9 +26,9 @@ public class CustomMidiDeviceListener implements MidiListener
 	}
 
 	@Override
-	public void onFeedbackClear(MidiDevice midiDevice, MidiInputKey midiInputKey)
+	public void onFeedbackClearForKey(MidiDevice midiDevice, MidiInputKey midiInputKey)
 	{
 		midiDeviceRegistry.lookup(midiDevice.getMidiDeviceInfo().name())
-				.ifPresent(midiListener -> midiListener.onFeedbackClear(midiDevice, midiInputKey));
+				.ifPresent(midiListener -> midiListener.onFeedbackClearForKey(midiDevice, midiInputKey));
 	}
 }

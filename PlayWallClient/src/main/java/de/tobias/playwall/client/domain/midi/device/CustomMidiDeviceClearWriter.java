@@ -13,6 +13,6 @@ public class CustomMidiDeviceClearWriter implements FeedbackClearWriter<MidiInpu
 	@Override
 	public void write(MidiInputKey midiInputKey)
 	{
-		midi.clearFeedback(midiInputKey);
+		midi.clearFeedbackForKey(midiInputKey);
 	}
 }

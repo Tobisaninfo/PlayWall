@@ -43,7 +43,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
 
         <!-- Client -->
-        <jlibs.version>4.6.0</jlibs.version>
+        <jlibs.version>4.7.0</jlibs.version>
         <mockito.version>5.23.0</mockito.version>
         <javafx.version>25.0.4</javafx.version>
         <controlsfx.version>11.2.5</controlsfx.version>
