@@ -29,7 +29,7 @@ class LPAnimatedFeedbackValueViewController extends FeedbackValueSettingsViewCon
 	{
 		if(!(feedbackValue instanceof LPAnimatedFeedbackValue lpAnimatedFeedbackValue))
 		{
-			throw new IllegalArgumentException("FeedbackValue must be of type LPFeedbackValue");
+			throw new IllegalArgumentException("FeedbackValue must be of type LPAnimatedFeedbackValue");
 		}
 		if(feedbackState instanceof Localizable localizable)
 		{

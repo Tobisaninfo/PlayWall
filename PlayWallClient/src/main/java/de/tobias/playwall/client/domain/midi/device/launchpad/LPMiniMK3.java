@@ -15,6 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LPMiniMK3 extends CustomMidiDevice
 {
+	static final int FEEDBACK_LIGHT = 0;
+	static final int FEEDBACK_FLASH = 1;
+	static final int FEEDBACK_PULSE = 2;
+
 	@Override
 	public String getName()
 	{

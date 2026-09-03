@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sound.midi.MidiUnavailableException;
+import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
@@ -112,5 +113,10 @@ public class MidiCoordinator
 		{
 			device.getPublisher().addMidiListener(midiMappingListener);
 		}
+	}
+
+	public Collection<MidiDeviceInfo> getMidiDevices()
+	{
+		return midi.getMidiDevices();
 	}
 }

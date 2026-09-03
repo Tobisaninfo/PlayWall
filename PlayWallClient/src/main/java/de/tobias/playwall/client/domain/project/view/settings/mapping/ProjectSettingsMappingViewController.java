@@ -7,7 +7,6 @@ import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
-import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
@@ -83,7 +82,6 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 	private final ClientProjectController projectController;
 	private final UpdateMessageEventHandler eventHandler;
-	private final Midi midi;
 	private final MidiCoordinator midiCoordinator;
 	private final MappingRegistry mappingRegistry;
 	private final Map<Class<? extends Action>, ActionTab> actionTabMap = FXCollections.observableHashMap();
@@ -99,12 +97,11 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private UUID selectedMapping;
 
 	@InjectConstructor
-	public ProjectSettingsMappingViewController(FluentClient client, UpdateMessageEventHandler eventHandler, ClientProjectController projectController, Midi midi, MidiCoordinator midiCoordinator, MappingRegistry mappingRegistry)
+	public ProjectSettingsMappingViewController(FluentClient client, UpdateMessageEventHandler eventHandler, ClientProjectController projectController, MidiCoordinator midiCoordinator, MappingRegistry mappingRegistry)
 	{
 		super(client);
 		this.projectController = projectController;
 		this.eventHandler = eventHandler;
-		this.midi = midi;
 		this.midiCoordinator = midiCoordinator;
 		this.mappingRegistry = mappingRegistry;
 	}
@@ -122,7 +119,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		actionTabs.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> onTabChanged(newValue));
 
 		midiDeviceComboBox.getItems().add(new MidiDeviceInfoCellData(null, null, false));
-		midiDeviceComboBox.getItems().addAll(midi.getMidiDevices().stream().map(device -> new MidiDeviceInfoCellData(device.name(), device, false)).toList());
+		midiDeviceComboBox.getItems().addAll(midiCoordinator.getMidiDevices().stream().map(device -> new MidiDeviceInfoCellData(device.name(), device, false)).toList());
 		midiDeviceComboBox.setCellFactory(_ -> new MidiDeviceInfoCell());
 		midiDeviceComboBox.setButtonCell(new MidiDeviceInfoCell());
 		midiDeviceComboBox.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {

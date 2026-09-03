@@ -22,7 +22,7 @@ public class LPAnimatedFeedbackValueWriter implements FeedbackValueWriter<MidiIn
 		if(value.isFlashing())
 		{
 			final LPFeedbackValue activeFeedbackValue = (LPFeedbackValue) key.getFeedbackValueForState(DefaultFeedbackState.ACTIVE);
-			midi.getDevice().sendMidiMessage(new MidiMessage(MidiMessageType.NOTE_ON, (byte) 2, key.value(), (byte) activeFeedbackValue.getValue()));
+			midi.getDevice().sendMidiMessage(new MidiMessage(MidiMessageType.NOTE_ON, (byte) LPMiniMK3.FEEDBACK_PULSE, key.value(), (byte) activeFeedbackValue.getValue()));
 		}
 	}
 }
