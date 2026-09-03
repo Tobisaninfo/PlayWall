@@ -7,7 +7,9 @@ import de.thecodelabs.midi.mapping.feedback.FeedbackState;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.midi.mapping.input.MidiInputKey;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
@@ -31,6 +33,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Modality;
 
 import java.util.*;
 
@@ -133,7 +136,15 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			}
 			catch(RuntimeException e)
 			{
-				// TODO Show error
+				final Alert alert = Alerts.getInstance().createAlert(Alert.AlertType.ERROR,
+						Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_TITLE),
+						Localization.getString(Strings.UI_ERRORS_MIDI_DEVICE_ERRORS_MESSAGE, newValue.deviceName()));
+				if(getParent().getParent() != null)
+				{
+					alert.initOwner(getParent().getParent().getScene().getWindow());
+				}
+				alert.initModality(Modality.WINDOW_MODAL);
+				alert.showAndWait();
 				throw new RuntimeException(e);
 			}
 		});
