@@ -1,6 +1,5 @@
 package de.tobias.playwall.client.domain.project.view.settings.mapping.cell;
 
-import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.action.Action;
 import de.thecodelabs.midi.mapping.input.InputKey;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -20,13 +19,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class InputKeyCell extends ListCell<InputKey>
 {
 	private static final double SCROLLBAR_RESERVE = 25.0;
 
 	private final Project project;
-	private final Mapping mapping;
+	private final Function<InputKey, Action> actionProvider;
 
 	final HBox hbox;
 	final VBox vbox;
@@ -36,10 +36,10 @@ public class InputKeyCell extends ListCell<InputKey>
 	final PlayWallButton buttonDelete;
 	final Consumer<InputKey> deleteActionHandler;
 
-	public InputKeyCell(Project project, Mapping mapping, Consumer<InputKey> deleteActionHandler)
+	public InputKeyCell(Project project, Function<InputKey, Action> actionProvider, Consumer<InputKey> deleteActionHandler)
 	{
 		this.project = project;
-		this.mapping = mapping;
+		this.actionProvider = actionProvider;
 		this.deleteActionHandler = deleteActionHandler;
 
 		icon = new FontIcon(FontAwesomeType.TRIANGLE_EXCLAMATION_SOLID);
@@ -88,7 +88,7 @@ public class InputKeyCell extends ListCell<InputKey>
 
 		keyLabel.setText(InputKeyLocalizer.localize(item));
 
-		final Action action = mapping.getAction(item);
+		final Action action = actionProvider.apply(item);
 		if(action == null)
 		{
 			actionLabel.setText("<Leer>");

@@ -29,7 +29,6 @@ import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -89,12 +88,14 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	private final MappingRegistry mappingRegistry;
 	private final Map<Class<? extends Action>, ActionTab> actionTabMap = FXCollections.observableHashMap();
 
-	private final ObservableList<InputKey> masterInputKeys = FXCollections.observableArrayList();
-	private final FilteredList<InputKey> filteredInputKeys = new FilteredList<>(masterInputKeys, _ -> true);
+	private final ObservableList<InputKey> inputKeyList = FXCollections.observableArrayList();
 
 	private final ProjectSettingsMappingPageListener projectSettingsMappingPageListener = new ProjectSettingsMappingPageListener(this);
 
 	private KeyCode searchKeyCode;
+
+	private boolean updatingActionTabs;
+	private InputKey activeSettingsKey;
 
 	private Map<UUID, Mapping> mappings;
 	private UUID selectedMapping;
@@ -114,7 +115,10 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	{
 		super.init();
 
-		mappingListView.setCellFactory(_ -> new InputKeyCell(projectController.getProject(), getActiveMapping(), this::onInputKeyDeleted));
+		mappingListView.setCellFactory(_ -> new InputKeyCell(projectController.getProject(), key -> {
+			final Mapping mapping = getActiveMapping();
+			return mapping == null ? null : mapping.getAction(key);
+		}, this::onInputKeyDeleted));
 		mappingListView.getSelectionModel().selectedItemProperty()
 				.addListener((_, oldValue, newValue) -> onInputKeySelected(oldValue, newValue));
 
@@ -149,14 +153,14 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			}
 		});
 
-		mappingListView.setItems(filteredInputKeys);
+		mappingListView.setItems(inputKeyList);
 		searchTextField.textProperty().addListener((_, _, newValue) ->
 		{
 			if(newValue != null && !newValue.isBlank())
 			{
 				onSearchByKeyClear();
 			}
-			updateSearchPredicate();
+			rebuildInputListView();
 		});
 
 		for(Class<? extends Action> action : mappingRegistry.getRegisteredActions())
@@ -212,7 +216,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 		final InputKey selectedItem = mappingListView.getSelectionModel().getSelectedItem();
 		mappingListView.getSelectionModel().select(null);
-		updateInputListView();
+		rebuildInputListView();
 		mappingListView.getSelectionModel().select(selectedItem);
 	}
 
@@ -226,9 +230,12 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 		final InputKey selectedKey = getSelectedKey();
 
-		final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
-		actionTab.actionSettingsViewController.applySettings(activeMapping.getAction(selectedKey));
-		actionTab.actionSettingsViewController.applySettingsForFeedbackValues(selectedKey, actionTab.feedbackStates);
+		if(selectedKey == activeSettingsKey)
+		{
+			final ActionTab actionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
+			actionTab.actionSettingsViewController.applySettings(activeMapping.getAction(selectedKey));
+			actionTab.actionSettingsViewController.applySettingsForFeedbackValues(selectedKey, actionTab.feedbackStates);
+		}
 
 		param.getProjectMetadata().setMidiDevice(Optional.ofNullable(midiDeviceComboBox.getSelectionModel().getSelectedItem())
 				.map(MidiDeviceInfoCellData::deviceName)
@@ -258,7 +265,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		final Optional<KeyboardInputKey> result = dialog.showAndWait(new AbstractInputKeyDialog.Param(mapping, false), getContainingWindow());
 		result.ifPresent(key -> {
 			mapping.addInputKeyWithAction(key, null);
-			updateInputListView();
+			rebuildInputListView();
 			mappingListView.getSelectionModel().select(key);
 		});
 	}
@@ -276,7 +283,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		final Optional<MidiInputKey> result = dialog.showAndWait(new AbstractInputKeyDialog.Param(mapping, false), getContainingWindow());
 		result.ifPresent(key -> {
 			mapping.addInputKeyWithAction(key, null);
-			updateInputListView();
+			rebuildInputListView();
 			mappingListView.getSelectionModel().select(key);
 		});
 	}
@@ -294,7 +301,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			searchByKeyLabel.setText(KeyNameLocalizer.getKeyName(key.code()));
 			searchByKeyLabel.setVisible(true);
 			searchByKeyClearButton.setVisible(true);
-			updateSearchPredicate();
+			rebuildInputListView();
 		});
 	}
 
@@ -305,7 +312,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		searchByKeyLabel.setText(null);
 		searchByKeyLabel.setVisible(false);
 		searchByKeyClearButton.setVisible(false);
-		updateSearchPredicate();
+		rebuildInputListView();
 	}
 
 	private InputKey getSelectedKey()
@@ -315,6 +322,11 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 
 	private void onTabChanged(Tab newTab)
 	{
+		if(newTab == null || updatingActionTabs)
+		{
+			return;
+		}
+
 		final Mapping mapping = getActiveMapping();
 		if(mapping == null)
 		{
@@ -328,7 +340,8 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		mapping.addInputKeyWithAction(selectedKey, newAction);
 		actionTab.actionSettingsViewController.initSettings(newAction);
 		actionTab.actionSettingsViewController.createFeedbackValueViews(selectedKey, actionTab.feedbackStates, midiCoordinator);
-		updateInputListView();
+		activeSettingsKey = selectedKey;
+		rebuildInputListView();
 	}
 
 	private void onInputKeySelected(InputKey oldValue, InputKey newValue)
@@ -340,7 +353,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 
 		// Save old action
-		if(oldValue != null)
+		if(oldValue != null && oldValue == activeSettingsKey)
 		{
 			final ActionTab oldActionTab = (ActionTab) actionTabs.getSelectionModel().getSelectedItem().getUserData();
 			oldActionTab.actionSettingsViewController.applySettings(mapping.getAction(oldValue));
@@ -354,9 +367,18 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 			if(action != null)
 			{
 				final ActionTab newActionTab = actionTabMap.get(action.getClass());
-				actionTabs.getSelectionModel().select(newActionTab.tab);
+				updatingActionTabs = true;
+				try
+				{
+					actionTabs.getSelectionModel().select(newActionTab.tab);
+				}
+				finally
+				{
+					updatingActionTabs = false;
+				}
 				newActionTab.actionSettingsViewController.initSettings(action);
 				newActionTab.actionSettingsViewController.createFeedbackValueViews(newValue, newActionTab.feedbackStates, midiCoordinator);
+				activeSettingsKey = newValue;
 			}
 			else
 			{
@@ -365,6 +387,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 				mapping.addInputKeyWithAction(newValue, actionTab.actionSettingsViewController.createNewAction());
 				actionTab.actionSettingsViewController.initSettings(mapping.getAction(newValue));
 				actionTab.actionSettingsViewController.createFeedbackValueViews(newValue, actionTab.feedbackStates, midiCoordinator);
+				activeSettingsKey = newValue;
 			}
 		}
 	}
@@ -375,7 +398,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		if(mapping != null)
 		{
 			mapping.removeInputKey(key);
-			updateInputListView();
+			rebuildInputListView();
 		}
 	}
 
@@ -388,16 +411,22 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		return mappings.get(selectedMapping);
 	}
 
-	void updateInputListView()
+	public void rebuildInputListView()
 	{
 		final Mapping mapping = getActiveMapping();
-		if(mapping != null)
+		if(mapping == null)
 		{
-			final List<InputKey> sortedInputKeys = new ArrayList<>(mapping.getAllInputKeys());
-			sortedInputKeys.sort(new InputKeyComparator());
-			masterInputKeys.setAll(sortedInputKeys);
-			mappingListView.setItems(filteredInputKeys); // Try to motivate JavaFX to update the list view
+			inputKeyList.clear();
+			return;
 		}
+
+		final String query = searchTextField.getText();
+		final List<InputKey> visibleInputKeys = mapping.getAllInputKeys().stream()
+				.sorted(new InputKeyComparator())
+				.filter(key -> searchKeyCode != null ? matchesKey(key, searchKeyCode) : matchesSearch(key, query))
+				.toList();
+		inputKeyList.setAll(visibleInputKeys);
+		mappingListView.refresh();
 	}
 
 	private boolean matchesSearch(InputKey key, String query)
@@ -419,18 +448,6 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		}
 
 		return action.toString().toLowerCase().contains(query.toLowerCase());
-	}
-
-	private void updateSearchPredicate()
-	{
-		filteredInputKeys.setPredicate(key ->
-		{
-			if(searchKeyCode != null)
-			{
-				return matchesKey(key, searchKeyCode);
-			}
-			return matchesSearch(key, searchTextField.getText());
-		});
 	}
 
 	private boolean matchesKey(InputKey key, KeyCode keyCode)

@@ -13,36 +13,36 @@ class ProjectSettingsMappingPageListener
 	@EventListener(PageSettingsUpdate.class)
 	void onPageRename(PageSettingsUpdate event)
 	{
-		Platform.runLater(controller::updateInputListView);
+		Platform.runLater(controller::rebuildInputListView);
 	}
 
 	@EventListener(PageAddUpdate.class)
 	void onPageAdd(PageAddUpdate event)
 	{
-		Platform.runLater(controller::updateInputListView);
+		Platform.runLater(controller::rebuildInputListView);
 	}
 
 	@EventListener(PageDeleteUpdate.class)
 	void onPageDelete(PageDeleteUpdate event)
 	{
-		Platform.runLater(controller::updateInputListView);
+		Platform.runLater(controller::rebuildInputListView);
 	}
 
 	@EventListener(PageInsertUpdate.class)
 	void onPageInsert(PageInsertUpdate event)
 	{
-		Platform.runLater(controller::updateInputListView);
+		Platform.runLater(controller::rebuildInputListView);
 	}
 
 	@EventListener(PageReplaceUpdate.class)
 	void onPageReplace(PageReplaceUpdate event)
 	{
-		Platform.runLater(controller::updateInputListView);
+		Platform.runLater(controller::rebuildInputListView);
 	}
 
 	@EventListener(PageReorderUpdate.class)
 	void onPageReorder(PageReorderUpdate event)
 	{
-		Platform.runLater(controller::updateInputListView);
+		Platform.runLater(controller::rebuildInputListView);
 	}
 }
