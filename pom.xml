@@ -17,6 +17,7 @@
         <module>PlayWallServer</module>
         <module>PlayWallClient</module>
         <module>PlayWallIconOverview</module>
+        <module>PlayWallCompanionPlugin</module>
         <module>coverage</module>
     </modules>
 
@@ -56,6 +57,10 @@
         <openjfx-monocle.version>21.0.2</openjfx-monocle.version>
         <awaitility.version>4.3.0</awaitility.version>
         <instancio-core.version>6.0.1</instancio-core.version>
+
+        <!-- Companion plugin (Node.js/TypeScript, wrapped for the Maven reactor) -->
+        <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
+        <companion-plugin.node.version>v22.23.2</companion-plugin.node.version>
 
         <maven-compiler.version>3.16.0</maven-compiler.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>

@@ -1,0 +1,34 @@
+{
+    "$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
+    "type": "connection",
+    "id": "playwall",
+    "name": "PlayWall",
+    "shortname": "playwall",
+    "description": "Connects to a PlayWall server over its WebSocket API.",
+    "version": "0.0.0",
+    "license": "MIT",
+    "repository": "git+https://github.com/Tobisaninfo/PlayWall.git",
+    "bugs": "https://github.com/Tobisaninfo/PlayWall/issues",
+    "maintainers": [
+        {
+            "name": "Tobias",
+            "email": "thinkdifferent055@gmail.com"
+        }
+    ],
+    "runtime": {
+        "type": "node22",
+        "api": "nodejs-ipc",
+        "apiVersion": "0.0.0",
+        "entrypoint": "../dist/main.js"
+    },
+    "legacyIds": [],
+    "manufacturer": "PlayWall",
+    "products": [
+        "PlayWall Server"
+    ],
+    "keywords": [
+        "audio",
+        "soundboard",
+        "playback"
+    ]
+}
