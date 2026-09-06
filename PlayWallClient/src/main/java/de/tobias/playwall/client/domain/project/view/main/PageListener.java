@@ -70,12 +70,13 @@ class PageListener
 	@EventListener(PageDeleteUpdate.class)
 	void onPageDeleteUpdate(PageDeleteUpdate message)
 	{
+		final boolean isDeletedPageShown = projectController.getCurrentPage().getId().equals(message.getPageId());
 		projectController.deletePage(message.getPageId(), message.getPositions());
 
 		Platform.runLater(() -> {
 			mainViewController.buildPageButtons();
 
-			if(projectController.getCurrentPage().getId().equals(message.getPageId()))
+			if(isDeletedPageShown)
 			{
 				mainViewController.showPage(0);
 			}
