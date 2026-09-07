@@ -4,11 +4,11 @@ import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.domain.midi.feedback.DefaultFeedbackState;
 import de.tobias.playwall.client.domain.project.Project;
 import de.tobias.playwall.client.domain.project.view.main.MainViewController;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
-import de.tobias.playwall.client.view.FileChooserWrapper;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -21,6 +21,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class GlobalVolumeActionHandlerTest extends AbstractViewControllerTest
@@ -33,7 +34,7 @@ class GlobalVolumeActionHandlerTest extends AbstractViewControllerTest
 	private Project project;
 
 	private final Client client = mock(Client.class);
-	private final FileChooserWrapper fileChooserWrapper = mock(FileChooserWrapper.class);
+	private GlobalVolumeActionHandler actionHandler;
 
 	@Start
 	private void start(Stage stage)
@@ -43,9 +44,9 @@ class GlobalVolumeActionHandlerTest extends AbstractViewControllerTest
 		context.registerLazy(Stage.class, _ -> stage);
 
 		context.registerLazySingleton(Client.class, _ -> client);
-		context.registerLazySingleton(FileChooserWrapper.class, _ -> fileChooserWrapper);
 
 		project = loadProject("projects/project_1.json");
+		actionHandler = context.get(GlobalVolumeActionHandler.class);
 	}
 
 	private void showMainView()
@@ -156,5 +157,18 @@ class GlobalVolumeActionHandlerTest extends AbstractViewControllerTest
 		robot.release(KeyCode.A);
 		WaitForAsyncUtils.waitForFxEvents();
 		verify(client, never()).changeGlobalVolume(1);
+	}
+
+	// Feedback
+
+	@Test
+	void testCurrentFeedback()
+	{
+		showMainView();
+
+		final GlobalVolumeAction action = new GlobalVolumeAction(GlobalVolumeAction.VolumeChangeMode.INCREASE, GlobalVolumeAction.VolumeChangeDelta.FIVE);
+		project.getMetadata().getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.A, "A"), action);
+
+		assertThat(actionHandler.getCurrentState(action)).isEqualTo(DefaultFeedbackState.NORMAL);
 	}
 }
