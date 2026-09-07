@@ -103,6 +103,10 @@ public abstract class BaseSettingsDialogController<P> extends ParamDialogBase<P>
 				.ifPresent(c -> c.pseudoClassStateChanged(PseudoClasses.SELECTED, true));
 
 		settingsPageContainer.getChildren().setAll(category.getSettingsPageController().getSettingsPage());
+		// Need to force JavaFX to compute layout and style for new tab (works for the initial tab, but not for any further tab, especially in tests)
+		settingsPageContainer.applyCss();
+		settingsPageContainer.layout();
+
 		return (BaseSettingsViewController<P>) category.getSettingsPageController();
 	}
 
