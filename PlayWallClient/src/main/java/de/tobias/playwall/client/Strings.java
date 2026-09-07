@@ -20,7 +20,6 @@ public class Strings
 	public static final String UI_DIALOG_PROJECT_DELETE_CONTENT = "ui.dialog.project.delete.content";
 	public static final String UI_PLACEHOLDER_PROJECT = "ui.placeholder.project";
 
-	public static final String UI_PROJECT_RENAME = "ui.project.rename";
 	public static final String UI_PROJECT_RENAME_TITLE = "ui.project.rename.title";
 	public static final String UI_PROJECT_RENAME_INPUT = "ui.project.rename.input";
 
@@ -33,7 +32,6 @@ public class Strings
 	public static final String UI_PAGE_ADD_NEW = "ui.page.add.new";
 	public static final String UI_PAGE_ADD_IMPORT = "ui.page.add.import";
 	public static final String UI_PAGE_SETTINGS = "ui.page.settings";
-	public static final String UI_PAGE_RENAME_INPUT = "ui.page.rename.input";
 	public static final String UI_PAGE_RENAME_ERROR_EMPTY = "ui.page.rename.error.empty";
 	public static final String UI_PAGE_RENAME_ERROR_DUPLICATE = "ui.page.rename.error.duplicate";
 	public static final String UI_PAGE_DUPLICATE = "ui.page.duplicate";
@@ -73,7 +71,6 @@ public class Strings
 	public static final String UI_MENU_INFO_UPDATES = "ui.menu.info.updates";
 
 	public static final String UI_REPLACE_MEDIA_PLACEHOLDER = "ui.replace.media.placeholder";
-	public static final String UI_REPLACE_MEDIA_BUTTON_AUTO_SEARCH = "ui.replace.media.button.auto_search";
 
 	// ui - dialog - about
 	public static final String UI_DIALOG_ABOUT_GRAPHICS = "ui.dialog.about.graphics";
@@ -198,5 +195,5 @@ public class Strings
 	public static final String UI_ERRORS_PAGE_IMPORT = "ui.errors.page.import";
 	public static final String UI_ERRORS_REPLACE_MEDIA = "ui.errors.replace.media";
 
-	public static String LAUNCHPAD_MK3_MINI = "LaunchPadMK3Mini";
+	public static final String LAUNCHPAD_MK3_MINI = "LaunchPadMK3Mini";
 }

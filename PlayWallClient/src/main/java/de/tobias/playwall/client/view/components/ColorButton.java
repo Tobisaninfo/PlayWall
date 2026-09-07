@@ -4,7 +4,6 @@ import de.thecodelabs.utils.jfx.ColorUtils;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playwall.client.utils.Paintable;
-import de.tobias.playwall.client.view.style.color.ModernColor;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 

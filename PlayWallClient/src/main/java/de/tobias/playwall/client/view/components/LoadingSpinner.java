@@ -40,7 +40,7 @@ public class LoadingSpinner extends StackPane
 
 	private Window window;
 	private final ChangeListener<Boolean> showingListener = (_, _, showing) -> {
-		if(showing)
+		if(Boolean.TRUE.equals(showing))
 		{
 			play();
 		}

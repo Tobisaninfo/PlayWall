@@ -104,7 +104,7 @@ public class PlayWallMain extends Application
 				}
 			}
 		}
-		catch(IOException | UncheckedIOException e)
+		catch(IOException | UncheckedIOException _)
 		{
 			// Nothing to handle
 		}

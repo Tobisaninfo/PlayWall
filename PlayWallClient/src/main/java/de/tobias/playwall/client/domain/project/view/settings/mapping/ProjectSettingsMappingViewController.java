@@ -455,7 +455,7 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 		return switch(key)
 		{
 			case KeyboardInputKey k -> k.key() != null && k.key().equalsIgnoreCase(keyCode.getName());
-			case MidiInputKey m -> false;
+			case MidiInputKey _ -> false;
 			default -> throw new IllegalStateException("Unexpected value: " + key);
 		};
 	}

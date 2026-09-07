@@ -2,10 +2,8 @@ package de.tobias.playwall.client.domain.project.view.settings.mapping;
 
 import de.thecodelabs.midi.mapping.Mapping;
 import de.thecodelabs.midi.mapping.input.InputKey;
-import de.thecodelabs.midi.mapping.input.KeyboardInputKey;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.domain.mapping.KeyNameLocalizer;
 import de.tobias.playwall.client.view.ParamModalDialogBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,7 +12,6 @@ import javafx.scene.layout.VBox;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public abstract class AbstractInputKeyDialog<T extends InputKey> extends ParamModalDialogBase<AbstractInputKeyDialog.Param, T>
