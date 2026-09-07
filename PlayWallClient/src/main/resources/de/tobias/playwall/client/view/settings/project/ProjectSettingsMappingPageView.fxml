@@ -7,7 +7,7 @@
 <?import de.tobias.playwall.client.view.components.PlayWallButton?>
 <?import java.lang.String?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
-<SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
+<SettingsPage fx:id="settingsPage" provideScrollPane="false" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
     <SettingsRow icon="KEYBOARD_SOLID" title="%ui.settings.project.mapping.midi.device">
@@ -15,7 +15,7 @@
     </SettingsRow>
 
     <Separator/>
-    <HBox spacing="7" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS" prefWidth="200.0">
+    <HBox spacing="7" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
         <children>
             <VBox spacing="7">
                 <children>
@@ -54,9 +54,8 @@
                     </HBox>
                 </children>
             </VBox>
-            <Separator orientation="VERTICAL" prefHeight="200.0"/>
-            <TabPane fx:id="actionTabs"
-                     maxHeight="1.7976931348623157E308" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+            <Separator orientation="VERTICAL"/>
+            <TabPane fx:id="actionTabs" maxWidth="Infinity" maxHeight="Infinity" HBox.hgrow="ALWAYS"
                      tabClosingPolicy="UNAVAILABLE">
             </TabPane>
         </children>

@@ -24,12 +24,7 @@
             <padding>
                 <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
             </padding>
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
-                <padding>
-                    <Insets right="28.0"/>
-                </padding>
-                <VBox fx:id="settingsPageContainer" VBox.vgrow="ALWAYS"/>
-            </ScrollPane>
+            <VBox fx:id="settingsPageContainer" VBox.vgrow="ALWAYS"/>
             <HBox fx:id="boxButtons" alignment="CENTER_RIGHT" spacing="14.0">
                 <PlayWallButton fx:id="cancelButton" icon="XMARK_SOLID" onAction="#cancelButtonHandler" text="%ui.settings.button.cancel"/>
                 <PlayWallButton fx:id="saveButton" icon="FLOPPY_DISK_SOLID" onAction="#saveButtonHandler" text="%ui.settings.button.save" defaultButton="true"/>
