@@ -33,6 +33,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.util.*;
 
@@ -58,26 +60,33 @@ public class ProjectSettingsMappingViewController extends BaseProjectSettingsVie
 	}
 
 	@FXML
+	@Getter(AccessLevel.PACKAGE)
 	private ListView<InputKey> mappingListView;
 	@FXML
+	@Getter(AccessLevel.PACKAGE)
 	private TabPane actionTabs;
 
 	@FXML
 	private ComboBox<MidiDeviceInfoCellData> midiDeviceComboBox;
 
 	@FXML
+	@Getter(AccessLevel.PACKAGE)
 	private TextField searchTextField;
 
 	@FXML
+	@Getter(AccessLevel.PACKAGE)
 	private PlayWallButton searchByKeyButton;
 
 	@FXML
+	@Getter(AccessLevel.PACKAGE)
 	private PlayWallButton searchByKeyClearButton;
 
 	@FXML
+	@Getter(AccessLevel.PACKAGE)
 	private Label searchByKeyLabel;
 
 	@FXML
+	@Getter(AccessLevel.PACKAGE)
 	private PlayWallButton keyboardAddButton;
 	@FXML
 	private PlayWallButton midiAddButton;

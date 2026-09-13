@@ -18,7 +18,7 @@ public class GlobalVolumeAction implements Action
 {
 	@RequiredArgsConstructor
 	@Getter
-	enum VolumeChangeMode
+	public enum VolumeChangeMode
 	{
 		DECREASE("-"),
 		INCREASE("+");
@@ -28,7 +28,7 @@ public class GlobalVolumeAction implements Action
 
 	@RequiredArgsConstructor
 	@Getter
-	enum VolumeChangeDelta
+	public enum VolumeChangeDelta
 	{
 		FIVE(0.05),
 		TEN(0.10);
