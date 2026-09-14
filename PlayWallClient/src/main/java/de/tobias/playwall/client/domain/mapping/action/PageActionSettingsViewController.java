@@ -14,21 +14,21 @@ import lombok.extern.slf4j.Slf4j;
 class PageActionSettingsViewController extends ActionSettingsViewController
 {
 	@FXML
-	private ComboBox<PageAction.PageActionMode> modeComboBox;
+	private ComboBox<PageAction.PageActionMode> pageModeComboBox;
 
 	@FXML
 	private SettingsRow pageNumberRow;
 	@FXML
-	private NumberTextField pageNumber;
+	private NumberTextField pageNumberTextField;
 
 	@Override
 	protected void init()
 	{
-		modeComboBox.getItems().addAll(PageAction.PageActionMode.values());
-		modeComboBox.setCellFactory(_ -> new EnumCell<>(PageAction.PageActionMode.class));
-		modeComboBox.setButtonCell(new EnumCell<>(PageAction.PageActionMode.class));
+		pageModeComboBox.getItems().addAll(PageAction.PageActionMode.values());
+		pageModeComboBox.setCellFactory(_ -> new EnumCell<>(PageAction.PageActionMode.class));
+		pageModeComboBox.setButtonCell(new EnumCell<>(PageAction.PageActionMode.class));
 
-		pageNumberRow.visibleProperty().bind(modeComboBox.getSelectionModel().selectedItemProperty()
+		pageNumberRow.visibleProperty().bind(pageModeComboBox.getSelectionModel().selectedItemProperty()
 				.isEqualTo(PageAction.PageActionMode.JUMP));
 	}
 
@@ -43,10 +43,10 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	{
 		if(action instanceof PageAction pageAction)
 		{
-			modeComboBox.getSelectionModel().select(pageAction.getPageActionMode());
+			pageModeComboBox.getSelectionModel().select(pageAction.getPageActionMode());
 			if(pageAction.getPageActionMode() == PageAction.PageActionMode.JUMP)
 			{
-				pageNumber.setText(String.valueOf(pageAction.getPageNumber() + 1));
+				pageNumberTextField.setText(String.valueOf(pageAction.getPageNumber() + 1));
 			}
 		}
 	}
@@ -56,10 +56,10 @@ class PageActionSettingsViewController extends ActionSettingsViewController
 	{
 		if(action instanceof PageAction pageAction)
 		{
-			pageAction.setPageActionMode(modeComboBox.getSelectionModel().getSelectedItem());
+			pageAction.setPageActionMode(pageModeComboBox.getSelectionModel().getSelectedItem());
 			if(pageAction.getPageActionMode() == PageAction.PageActionMode.JUMP)
 			{
-				pageAction.setPageNumber(Integer.parseInt(pageNumber.getText()) - 1);
+				pageAction.setPageNumber(Integer.parseInt(pageNumberTextField.getText()) - 1);
 			}
 		}
 	}

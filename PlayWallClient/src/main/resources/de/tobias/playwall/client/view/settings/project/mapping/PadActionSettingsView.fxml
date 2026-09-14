@@ -7,7 +7,7 @@
 
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <SettingsRow icon="GEAR_SOLID" title="%ui.action.pad.settings.modus">
-        <ComboBox fx:id="modeComboBox" prefWidth="200" maxWidth="200"/>
+        <ComboBox fx:id="padModeComboBox" prefWidth="200" maxWidth="200"/>
     </SettingsRow>
     <SettingsRow icon="FILE_LINES_SOLID" title="%ui.action.pad.settings.page">
         <ComboBox fx:id="pageComboBox" prefWidth="200" maxWidth="200"/>

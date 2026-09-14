@@ -5,7 +5,7 @@ import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playwall.client.domain.page.Page;
 import javafx.scene.control.ListCell;
 
-class PageCell extends ListCell<PageCell.PageCellData>
+public class PageCell extends ListCell<PageCell.PageCellData>
 {
 	public record PageCellData(Page page, boolean isError)
 	{

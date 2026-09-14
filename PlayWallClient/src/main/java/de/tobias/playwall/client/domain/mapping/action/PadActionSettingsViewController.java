@@ -33,7 +33,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 	private static final String PAD_GRID_BUTTON_STYLE_CLASS = "settings--pad-grid-button";
 
 	@FXML
-	private ComboBox<PadAction.PadActionMode> modeComboBox;
+	private ComboBox<PadAction.PadActionMode> padModeComboBox;
 
 	@FXML
 	private ComboBox<PageCell.PageCellData> pageComboBox;
@@ -46,9 +46,9 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 	@Override
 	protected void init()
 	{
-		modeComboBox.getItems().addAll(PadAction.PadActionMode.values());
-		modeComboBox.setCellFactory(_ -> new EnumCell<>(PadAction.PadActionMode.class));
-		modeComboBox.setButtonCell(new EnumCell<>(PadAction.PadActionMode.class));
+		padModeComboBox.getItems().addAll(PadAction.PadActionMode.values());
+		padModeComboBox.setCellFactory(_ -> new EnumCell<>(PadAction.PadActionMode.class));
+		padModeComboBox.setButtonCell(new EnumCell<>(PadAction.PadActionMode.class));
 
 		pageComboBox.setButtonCell(new PageCell());
 		pageComboBox.setCellFactory(_ -> new PageCell());
@@ -65,7 +65,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 	{
 		if(action instanceof PadAction padAction)
 		{
-			modeComboBox.getSelectionModel().select(padAction.getPadActionMode());
+			padModeComboBox.getSelectionModel().select(padAction.getPadActionMode());
 
 			final List<PageCell.PageCellData> pages = projectController.getProject().getPages().stream()
 					.map(page -> new PageCell.PageCellData(page, false))
@@ -112,7 +112,7 @@ class PadActionSettingsViewController extends ActionSettingsViewController
 	{
 		if(action instanceof PadAction padAction)
 		{
-			padAction.setPadActionMode(modeComboBox.getSelectionModel().getSelectedItem());
+			padAction.setPadActionMode(padModeComboBox.getSelectionModel().getSelectedItem());
 			padAction.setPageId(pageComboBox.getSelectionModel().getSelectedItem().page().getId());
 
 			padGrid.getChildren().stream()

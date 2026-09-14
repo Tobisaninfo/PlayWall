@@ -6,17 +6,18 @@ import de.thecodelabs.midi.mapping.input.MidiInputKey;
 import de.tobias.playwall.client.AbstractViewControllerTest;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
-import de.tobias.playwall.client.domain.mapping.action.GlobalVolumeAction;
-import de.tobias.playwall.client.domain.mapping.action.StopAllAction;
+import de.tobias.playwall.client.domain.mapping.action.*;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
 import de.tobias.playwall.client.domain.project.FadeSettings;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
+import de.tobias.playwall.client.event.UpdateMessageEventHandler;
 import de.tobias.playwall.client.net.Client;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.style.color.ModernColor;
 import de.tobias.playwall.common.api.common.TimeMode;
+import de.tobias.playwall.common.api.page.update.PageDeleteUpdate;
 import javafx.application.Platform;
 import javafx.scene.control.IndexedCell;
 import javafx.scene.control.Label;
@@ -49,6 +50,9 @@ class ProjectSettingsMappingViewControllerTest extends AbstractViewControllerTes
 	private ProjectSettingsViewController projectSettingsViewController;
 	private ProjectSettingsMappingViewController mappingViewController;
 
+	private ClientProjectController clientProjectController;
+	private UpdateMessageEventHandler updateMessageEventHandler;
+
 	private final Client client = mock(Client.class);
 	private final ArgumentCaptor<ProjectMetadata> projectMetadataCaptor = ArgumentCaptor.forClass(ProjectMetadata.class);
 
@@ -60,8 +64,10 @@ class ProjectSettingsMappingViewControllerTest extends AbstractViewControllerTes
 		context.registerLazy(Stage.class, _ -> stage);
 		context.registerLazySingleton(Client.class, _ -> client);
 
-		ClientProjectController clientProjectController = context.get(ClientProjectController.class);
+		clientProjectController = context.get(ClientProjectController.class);
 		clientProjectController.loadProject(loadProject("projects/project_1.json"));
+
+		updateMessageEventHandler = context.get(UpdateMessageEventHandler.class);
 	}
 
 	private ProjectMetadata createProjectMetadata()
@@ -373,6 +379,156 @@ class ProjectSettingsMappingViewControllerTest extends AbstractViewControllerTes
 		// Verifying
 		verify(client, never()).updateProjectSettings(any());
 		assertThat(projectMetadata.getActiveMapping().getAllInputKeys()).hasSize(2);
+	}
+
+	// Pad Action
+
+	@Test
+	void testPadActionSettings(FxRobot robot)
+	{
+		final ProjectMetadata projectMetadata = createProjectMetadata();
+		projectMetadata.getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.A, "A"), new PadAction(PadAction.PadActionMode.PLAY_HOLD, null, 1));
+		projectMetadata.getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.B, "A"), new PadAction(PadAction.PadActionMode.PLAY_HOLD, null, 1));
+		openSettingsTab(projectMetadata);
+
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Kachel: 2 - Aktive Seite");
+
+		Platform.runLater(() -> mappingViewController.getMappingListView().getSelectionModel().select(0));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Assert current settings
+		assertThat(mappingViewController.getActionTabs().getSelectionModel().getSelectedItem().getText()).isEqualTo("Kacheln");
+		assertThat(robot.lookup("#padModeComboBox").queryComboBox().getSelectionModel().getSelectedItem()).isEqualTo(PadAction.PadActionMode.PLAY_HOLD);
+		assertThat(((PageCell.PageCellData) robot.lookup("#pageComboBox").queryComboBox().getSelectionModel().getSelectedItem()).page().getId()).isNull();
+		assertThat(robot.lookup("#padGrid").lookup(".button:selected").queryButton().getText()).isEqualTo("2");
+
+		// Change settings
+		Platform.runLater(() -> {
+			robot.lookup("#padModeComboBox").queryComboBox().getSelectionModel().select(PadAction.PadActionMode.PLAY_PLAY);
+			robot.lookup("#pageComboBox").queryComboBox().getSelectionModel().select(1);
+			robot.clickOn(robot.lookup("#padGrid").lookup(".button").lookup("5").queryButton());
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Select different key to apply settings
+		Platform.runLater(() -> mappingViewController.getMappingListView().getSelectionModel().select(1));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Kachel: 5 - Seite: Page 1");
+
+		// Saving
+		robot.clickOn(robot.lookup("Speichern").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final PadAction padAction = (PadAction) projectMetadata.getActiveMapping().getAction(new KeyboardInputKey(KeyCode.A, "A"));
+		assertThat(padAction.getPadActionMode()).isEqualTo(PadAction.PadActionMode.PLAY_PLAY);
+		assertThat(padAction.getPageId()).isEqualTo(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"));
+		assertThat(padAction.getPosition()).isEqualTo(4);
+	}
+
+	@Test
+	void testPadActionSettingsDeletingPage(FxRobot robot)
+	{
+		final ProjectMetadata projectMetadata = createProjectMetadata();
+		projectMetadata.getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.A, "A"), new PadAction(PadAction.PadActionMode.PLAY_HOLD, UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), 1));
+		openSettingsTab(projectMetadata);
+
+		// Assert list
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Kachel: 2 - Seite: Page 1");
+
+		// Delete page
+		clientProjectController.deletePage(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), Map.of(UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 0));
+		updateMessageEventHandler.fireEvent(new PageDeleteUpdate(UUID.fromString("1e76b8b3-2d58-4533-aa57-e2b66360e9ea"), Map.of(UUID.fromString("44c78975-7e53-432e-8526-bdcc5209c54e"), 0)));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Assert list
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Kachel: 2 - Seite: ?");
+
+		// Select key and look into action settings
+		Platform.runLater(() -> mappingViewController.getMappingListView().getSelectionModel().select(0));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(((PageCell.PageCellData) robot.lookup("#pageComboBox").queryComboBox().getSelectionModel().getSelectedItem()).isError()).isTrue();
+	}
+
+	// Page Action
+
+	@Test
+	void testPageActionSettings(FxRobot robot)
+	{
+		final ProjectMetadata projectMetadata = createProjectMetadata();
+		projectMetadata.getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.A, "A"), new PageAction(PageAction.PageActionMode.NEXT, 0));
+		projectMetadata.getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.B, "B"), new PageAction(PageAction.PageActionMode.PREVIOUS, 0));
+		openSettingsTab(projectMetadata);
+
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Nächste Seite");
+
+		Platform.runLater(() -> mappingViewController.getMappingListView().getSelectionModel().select(0));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Assert current settings
+		assertThat(mappingViewController.getActionTabs().getSelectionModel().getSelectedItem().getText()).isEqualTo("Seiten");
+		assertThat(robot.lookup("#pageModeComboBox").queryComboBox().getSelectionModel().getSelectedItem()).isEqualTo(PageAction.PageActionMode.NEXT);
+		assertThat(robot.lookup("#pageNumberRow").query().isVisible()).isFalse();
+
+		// Change settings
+		Platform.runLater(() -> {
+			robot.lookup("#pageModeComboBox").queryComboBox().getSelectionModel().select(PageAction.PageActionMode.JUMP);
+			robot.lookup("#pageNumberTextField").queryTextInputControl().setText("2");
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Select different key to apply settings
+		Platform.runLater(() -> mappingViewController.getMappingListView().getSelectionModel().select(1));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Zu Seite 2");
+
+		// Saving
+		robot.clickOn(robot.lookup("Speichern").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final PageAction padAction = (PageAction) projectMetadata.getActiveMapping().getAction(new KeyboardInputKey(KeyCode.A, "A"));
+		assertThat(padAction.getPageActionMode()).isEqualTo(PageAction.PageActionMode.JUMP);
+		assertThat(padAction.getPageNumber()).isEqualTo(1);
+	}
+
+	// Global Volume Action
+
+	@Test
+	void testGlobalActionSettings(FxRobot robot)
+	{
+		final ProjectMetadata projectMetadata = createProjectMetadata();
+		projectMetadata.getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.A, "A"), new GlobalVolumeAction(GlobalVolumeAction.VolumeChangeMode.INCREASE, GlobalVolumeAction.VolumeChangeDelta.TEN));
+		projectMetadata.getActiveMapping().addInputKeyWithAction(new KeyboardInputKey(KeyCode.B, "B"), new GlobalVolumeAction(GlobalVolumeAction.VolumeChangeMode.DECREASE, GlobalVolumeAction.VolumeChangeDelta.FIVE));
+		openSettingsTab(projectMetadata);
+
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Globale Lautstärke (+10%)");
+
+		Platform.runLater(() -> mappingViewController.getMappingListView().getSelectionModel().select(0));
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Assert current settings
+		assertThat(mappingViewController.getActionTabs().getSelectionModel().getSelectedItem().getText()).isEqualTo("Globale Lautstärke");
+		assertThat(robot.lookup("#modeComboBox").queryComboBox().getSelectionModel().getSelectedItem()).isEqualTo(GlobalVolumeAction.VolumeChangeMode.INCREASE);
+		assertThat(robot.lookup("#deltaComboBox").queryComboBox().getSelectionModel().getSelectedItem()).isEqualTo(GlobalVolumeAction.VolumeChangeDelta.TEN);
+
+		// Change settings
+		Platform.runLater(() -> {
+			robot.lookup("#modeComboBox").queryComboBox().getSelectionModel().select(GlobalVolumeAction.VolumeChangeMode.DECREASE);
+			robot.lookup("#deltaComboBox").queryComboBox().getSelectionModel().select(GlobalVolumeAction.VolumeChangeDelta.FIVE);
+		});
+		WaitForAsyncUtils.waitForFxEvents();
+
+		// Select different key to apply settings
+		Platform.runLater(() -> mappingViewController.getMappingListView().getSelectionModel().select(1));
+		WaitForAsyncUtils.waitForFxEvents();
+		assertThat(cellLabels(getMappingListCells()[0])).containsExactly("Tastatur: A", "Globale Lautstärke (-5%)");
+
+		// Saving
+		robot.clickOn(robot.lookup("Speichern").queryButton());
+		WaitForAsyncUtils.waitForFxEvents();
+
+		final GlobalVolumeAction padAction = (GlobalVolumeAction) projectMetadata.getActiveMapping().getAction(new KeyboardInputKey(KeyCode.A, "A"));
+		assertThat(padAction.getVolumeChangeMode()).isEqualTo(GlobalVolumeAction.VolumeChangeMode.DECREASE);
+		assertThat(padAction.getDelta()).isEqualTo(GlobalVolumeAction.VolumeChangeDelta.FIVE);
 	}
 
 	// Utils
