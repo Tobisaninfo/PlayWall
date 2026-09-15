@@ -1,5 +1,90 @@
 # PlayWall
 
+## Features
+
+### Tiles (Pads)
+
+![pads.png](doc/screenshots/pad-grid.png)
+
+- Start, pause, and stop playback via the tile
+- Select a media file via file dialog or drag & drop
+- Set a title per tile
+- Set an individual color per tile
+- Show playback progress as a bar on the tile
+- Stop all running tiles with a single action
+
+### Playback & Volume
+
+![pads.png](doc/screenshots/pad-grid.png)
+
+- Adjust playback speed per track
+- Set global volume for all tiles
+- Set volume per tile
+- Loop playback of a track
+- Select a sound card as output device
+- Show a warning shortly before a track ends
+- Set the duration of the ramp-in phase
+
+### Project Management
+
+![project-management.png](doc/screenshots/project-management.png)
+
+- Create, duplicate, and delete projects
+- Export and import projects
+- Undo/redo project changes
+
+### Project Settings
+
+![project-settings.png](doc/screenshots/project-settings.png)
+
+- Define grid layout in rows and columns
+- Configure project display options
+- Set a default color for tiles in the project
+
+### Page Management
+
+![page-settings.png](doc/screenshots/page-settings.png)
+
+- Create, rename, duplicate, and delete pages
+- Reorder pages
+- Set a color per page
+- Import and export pages between projects
+
+### Drag & Drop
+
+![pad-drag.png](doc/screenshots/pad-drag.png)
+
+- Move or duplicate tiles via drag & drop
+- Swap two tiles via drag & drop
+- Add media files via drag & drop from the file system
+
+### Fading
+
+![fading.png](doc/screenshots/fading.png)
+
+- Global fading settings at the project level
+- Individual fading settings at the tile level
+- Fade in on start and fade out on stop
+
+### Keyboard & MIDI Control
+
+![fading.png](doc/screenshots/mapping.png)
+
+- Settings area for managing keyboard and MIDI mappings
+- Record a key combination instead of entering it manually
+- Select a MIDI device
+- Learn MIDI keys and assign them to an action
+- Trigger tiles, page switching, global volume, and stop-all via keyboard or MIDI
+- Show the status of tiles, pages, and volume via LED feedback on the MIDI controller
+
+### Handling Missing Media Files
+
+![missing-media.png](doc/screenshots/missing-media.png)
+
+- Automatically detect missing media files
+- Display a list of missing files
+- Show a notice about missing media on startup
+
 ## System Requirements
 
 ### Linux
