@@ -164,7 +164,7 @@ mvn clean install
 mvn spring-boot:run -pl PlayWallServer
 
 # Run the client
-mvn exec:java@PlayWallMain -pl PlayWallClient
+mvn javafx:run -pl PlayWallClient
 ```
 
 ### Test

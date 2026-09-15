@@ -235,6 +235,23 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
 
+            <!-- Enables `mvn javafx:run -pl PlayWallClient` to launch the client from source. Mirrors the
+                 runtime options used for the packaged app in the package-executables profile's jpackage config. -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>${javafx-maven-plugin.version}</version>
+                <configuration>
+                    <mainClass>de.tobias.playwall.client.PlayWallMain</mainClass>
+                    <options>
+                        <option>--enable-native-access=javafx.graphics</option>
+                        <option>--enable-native-access=de.thecodelabs.libJfx</option>
+                        <option>-Djavafx.enablePreview=true</option>
+                        <option>-Djavafx.suppressPreviewWarning=true</option>
+                    </options>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
