@@ -1,5 +1,10 @@
 # PlayWall
 
+PlayWall is a JavaFX desktop client with a Spring Boot server backend for controlling interactive audio
+presentations during live events. Media files are arranged as tiles ("pads") on one or more pages and can be
+triggered manually, via keyboard shortcut, or via a MIDI controller, with support for fading, ramp-in, and
+end-of-file warnings.
+
 ## Features
 
 ### Tiles (Pads)
@@ -85,6 +90,27 @@
 - Display a list of missing files
 - Show a notice about missing media on startup
 
+## Architecture
+
+PlayWall consists of a JavaFX desktop client and a Spring Boot server, communicating over WebSocket and REST. Projects
+are stored as files on disk (in `{appdata}/PlayWall/de.tobias.playwall.server.v8/`) — there is no database.
+
+| Module                    | Role                                                      |
+|---------------------------|-----------------------------------------------------------|
+| `PlayWallCommon`          | Shared DTOs, network message types, sealed class protocol |
+| `PlayWallServerCommon`    | Shared server interfaces                                  |
+| `PlayWallServer`          | Spring Boot REST + WebSocket backend                      |
+| `PlayWallClient`          | JavaFX desktop UI                                         |
+| `PlayWallNativeAudio`     | JNI wrapper for native audio                              |
+| `PlayWallNativeAudioRust` | Rust audio engine (rodio + symphonia via JNI)             |
+| `PlayWallIconOverview`    | Internal developer tool for browsing available UI icons   |
+| `coverage`                | JaCoCo aggregated test coverage report                    |
+
+The client uses a custom dependency injection container (`AppContext`) instead of a framework like Spring.
+
+Key technologies: Java 25, JavaFX, ControlsFX, Spring Boot, Lombok, MapStruct, and a Rust-based audio engine
+integrated via JNI.
+
 ## System Requirements
 
 ### Linux
@@ -118,9 +144,66 @@ version for the pinned `javafx.version` before assuming it's fixed.
   `LC_BUILD_VERSION` load command embedded in JavaFX 25.0.4's native libraries (`libglass.dylib` etc.). Unlike Linux,
   this has been stable across recent JavaFX versions and both architectures.
 
+## Getting Started
+
+### Prerequisites
+
+- JDK 25
+- Maven
+
+### Build
+
+```bash
+mvn clean install
+```
+
+### Run
+
+```bash
+# Run the server (port 10023)
+mvn spring-boot:run -pl PlayWallServer
+
+# Run the client
+mvn exec:java@PlayWallMain -pl PlayWallClient
+```
+
+### Test
+
+```bash
+# Run tests for a specific module
+mvn test -pl PlayWallClient
+
+# Run UI tests headlessly (for CI)
+mvn test -Pheadless-ui-tests
+
+# Run audio tests (require hardware)
+mvn test -Paudio-tests
+
+# Build with a coverage report
+mvn clean install -Pcode-coverage
+```
+
+### Additional build profiles
+
+```bash
+# Build the native Rust audio library
+mvn install -Pbuild-rust -pl PlayWallNativeAudioRust
+
+# Build platform installers (DMG/EXE/app image), matching the release pipeline
+mvn clean install -Pbuild-rust,custom-jdk,package-executables
+```
+
+Building a complete installer requires `build-rust` and `custom-jdk` in addition to `package-executables` — running
+`package-executables` on its own produces an app image missing the bundled Rust audio library and server runtime.
+On macOS, signing and notarizing the installer additionally requires the `sign-dmg` and `sign-rust` profiles
+together with the signing credentials described in [macOS Signing](#macos-signing).
+
+SASS is compiled automatically during the build via the Maven dart-sass plugin (`src/main/sass/` →
+`target/classes/style/`); no manual SASS compilation is needed.
+
 ## Development
 
-## How to use custom components in SceneBuilder
+### Using custom components in SceneBuilder
 
 - Open SceneBuilder
 - Click on small gears icon next to `Library`
@@ -128,18 +211,18 @@ version for the pinned `javafx.version` before assuming it's fixed.
 
 ![scenebuilder_1.jpg](doc/scenebuilder_1.jpg)
 
-### Add the `PlayWallClient` target folder as root folder
+#### Add the `PlayWallClient` target folder as root folder
 - Click `Add root folder wth *.class files`
 - Select the following folder: `<path_to_your_working_copy/PlayWallClient/target/classes`
 
-### Add TheCodeLabs maven repository
+#### Add TheCodeLabs maven repository
 - Click `Manage repositories`
 - Click `Add`
 - Create a new repository for `https://maven.thecodelabs.de/artifactory/TheCodeLabs-release`
 
 ![scenebuilder_2.jpg](doc/scenebuilder_2.jpg)
 
-### Add additional JARs as repositories
+#### Add additional JARs as repositories
 - Click `Search repositories`
 - Search for the following libraries, select and add them:
   - `de.thecodelabs:libJfx`
