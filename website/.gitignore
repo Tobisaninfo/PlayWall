@@ -1,0 +1,16 @@
+# Nuxt
+.nuxt/
+.output/
+.data/
+dist/
+
+# Node
+node_modules/
+
+# Generiert zur Buildzeit (siehe scripts/fetch-release-info.mjs, Phase 4)
+assets/release.json
+
+# Logs / lokale Umgebung
+*.log
+.env
+.DS_Store

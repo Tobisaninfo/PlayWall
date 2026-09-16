@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/*
+ * Design-Tokens 1:1 aus PlayWallClient übernommen, nicht aus Screenshots
+ * geschätzt. Quellen:
+ *   - pw-bg / pw-panel*  / pw-text*      -> PlayWallClient/src/main/sass/components/variables.scss
+ *   - pw-blue / pw-orange / pw-red       -> PlayWallClient .../view/components/ViewConstants.java (PLAYWALL_ICON_*)
+ *   - pw-success / pw-warning / pw-danger -> variables.scss ($success/$warning/$danger-color)
+ * Bei einer Palettenänderung im Client müssen diese Werte manuell nachgezogen werden.
+ */
+@theme {
+    --color-pw-bg: #333333;
+    --color-pw-panel-dark: #484848;
+    --color-pw-panel: #5c5c5c;
+    --color-pw-panel-light: #7c7c7c;
+    --color-pw-panel-hover: #6c6c6c;
+
+    --color-pw-text: #eeeeee;
+    --color-pw-text-hint: #d4d4d4;
+    --color-pw-text-muted: #888888;
+
+    --color-pw-blue: #2196f3;
+    --color-pw-orange: #f27e28;
+    --color-pw-red: #d13634;
+
+    --color-pw-success: #4caf50;
+    --color-pw-warning: #f6ae2d;
+    --color-pw-danger: #e24444;
+
+    --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+}
+
+/* Die Website ist durchgehend Dark Mode (PW-203) — kein Light-Theme, kein Umschalter. */
+html {
+    color-scheme: dark;
+    background-color: var(--color-pw-bg);
+}
+
+body {
+    background-color: var(--color-pw-bg);
+    color: var(--color-pw-text);
+    font-family: var(--font-body);
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+}

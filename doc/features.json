@@ -1,0 +1,115 @@
+{
+    "product": "PlayWall",
+    "clusters": [
+        {
+            "id": "project-management",
+            "title": "Projektverwaltung",
+            "description": "Projekte anlegen, organisieren und verwalten.",
+            "screenshot": null,
+            "features": [
+                "Projekte anlegen, duplizieren und löschen",
+                "Projekte exportieren und importieren",
+                "Änderungen im Projekt per Undo/Redo rückgängig machen bzw. wiederherstellen"
+            ]
+        },
+        {
+            "id": "project-settings",
+            "title": "Projekteinstellungen",
+            "description": "Grundlegende Einstellungen auf Projektebene.",
+            "screenshot": null,
+            "features": [
+                "Rasterlayout in Zeilen und Spalten definieren",
+                "Anzeigeoptionen des Projekts konfigurieren",
+                "Standardfarbe für Kacheln im Projekt festlegen"
+            ]
+        },
+        {
+            "id": "page-management",
+            "title": "Seitenverwaltung",
+            "description": "Kacheln werden auf Seiten organisiert, zwischen denen gewechselt werden kann.",
+            "screenshot": null,
+            "features": [
+                "Seiten anlegen, benennen, duplizieren und löschen",
+                "Reihenfolge der Seiten anpassen",
+                "Farbe pro Seite festlegen",
+                "Seiten zwischen Projekten importieren und exportieren"
+            ]
+        },
+        {
+            "id": "tiles",
+            "title": "Kacheln (Pads)",
+            "description": "Grundfunktionen der einzelnen Kachel, über die Medien abgespielt werden.",
+            "screenshot": null,
+            "features": [
+                "Wiedergabe über die Kachel starten, pausieren und stoppen",
+                "Wiedergabefortschritt als Balken auf der Kachel anzeigen",
+                "Mediendatei über den Dateidialog oder Drag & Drop auswählen",
+                "Titel pro Kachel festlegen",
+                "Individuelle Farbe pro Kachel festlegen",
+                "Alle laufenden Kacheln mit einer Aktion stoppen"
+            ]
+        },
+        {
+            "id": "playback-control",
+            "title": "Wiedergabe & Lautstärke",
+            "description": "Steuerung von Wiedergabe und Lautstärke.",
+            "screenshot": null,
+            "features": [
+                "Wiedergabegeschwindigkeit pro Titel anpassen",
+                "Globale Lautstärke für alle Kacheln",
+                "Lautstärke pro Kachel einstellen",
+                "Titel in Dauerschleife (Loop) abspielen",
+                "Soundkarte als Ausgabegerät auswählen",
+                "Warnung kurz vor Ende eines Titels anzeigen",
+                "Dauer der Ramp-In-Phase einstellen"
+            ]
+        },
+        {
+            "id": "drag-and-drop",
+            "title": "Drag & Drop",
+            "description": "Bedienung von Kacheln und Dateien per Drag & Drop.",
+            "screenshot": null,
+            "features": [
+                "Kacheln per Drag & Drop verschieben oder duplizieren",
+                "Zwei Kacheln per Drag & Drop tauschen",
+                "Mediendateien per Drag & Drop aus dem Dateisystem hinzufügen"
+            ]
+        },
+        {
+            "id": "fading",
+            "title": "Fading",
+            "description": "Ein- und Ausblenden der Wiedergabe.",
+            "screenshot": null,
+            "features": [
+                "Globale Fading-Einstellungen auf Projektebene",
+                "Individuelle Fading-Einstellungen auf Kachelebene",
+                "Fade-In beim Start und Fade-Out beim Stoppen der Wiedergabe"
+            ]
+        },
+        {
+            "id": "keyboard-midi-control",
+            "title": "Steuerung per Tastatur & MIDI",
+            "description": "Bedienung von PlayWall über Tastatur oder ein angeschlossenes MIDI-Gerät.",
+            "screenshot": null,
+            "features": [
+                "Einstellungsbereich zum Verwalten der Tastatur- und MIDI-Zuordnungen",
+                "Tastenkombination aufzeichnen statt manuell einzugeben",
+                "MIDI-Gerät auswählen",
+                "MIDI-Tasten einlernen und einer Aktion zuordnen",
+                "Kacheln, Seitenwechsel, globale Lautstärke und Stop-All lassen sich per Tastatur oder MIDI auslösen",
+                "Status von Kacheln, Seiten und Lautstärke per LED-Feedback am MIDI-Controller anzeigen"
+            ]
+        },
+        {
+            "id": "missing-media",
+            "title": "Umgang mit fehlenden Mediendateien",
+            "description": "Erkennung und Behandlung von verschobenen oder gelöschten Mediendateien.",
+            "screenshot": null,
+            "features": [
+                "Fehlende Mediendateien automatisch erkennen",
+                "Liste der fehlenden Dateien anzeigen",
+                "Hinweis auf fehlende Medien beim Programmstart"
+            ]
+        }
+    ]
+}

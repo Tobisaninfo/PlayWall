@@ -1,0 +1,48 @@
+{
+    "nav": {
+        "home": "Home",
+        "features": "Features",
+        "download": "Download",
+        "changelog": "Changelog",
+        "github": "GitHub",
+        "languageSwitch": "English",
+        "menuToggle": "Menü öffnen"
+    },
+    "footer": {
+        "tagline": "Interaktive Audio-Wiedergabe für Live-Events.",
+        "legal": "Rechtliches",
+        "imprint": "Impressum",
+        "privacy": "Datenschutz",
+        "copyright": "PlayWall"
+    },
+    "home": {
+        "title": "Interaktive Audio-Wiedergabe für Live-Events",
+        "subtitle": "PlayWall ordnet Mediendateien als Kacheln auf Seiten an, die sich per Tastatur, MIDI-Controller oder Maus auslösen lassen — mit Fading, Ramp-In und Warnhinweisen kurz vor Titelende.",
+        "cta_download": "Jetzt herunterladen",
+        "cta_github": "Auf GitHub ansehen",
+        "heroAlt": "PlayWall mit einem geöffneten Projekt: Kacheln in einem Raster, teils farbig markiert und mit laufender Wiedergabe"
+    },
+    "features": {
+        "title": "Features",
+        "subtitle": "Ein Überblick über die Funktionen von PlayWall.",
+        "placeholder": "Die Feature-Übersicht wird in Phase 2/3 aus doc/features.json erzeugt."
+    },
+    "download": {
+        "title": "Download",
+        "subtitle": "PlayWall für Windows, macOS und Linux.",
+        "placeholder": "Die Plattform-Karten mit Versionsnummer folgen in Phase 4 (Build-Zeit-Auflösung über Artifactory)."
+    },
+    "changelog": {
+        "title": "Changelog",
+        "subtitle": "Was sich in PlayWall zuletzt geändert hat.",
+        "placeholder": "Die Changelog-Ansicht wird in Phase 4 aus CHANGELOG.md erzeugt."
+    },
+    "imprint": {
+        "title": "Impressum",
+        "placeholder": "Inhalt folgt, sobald der Betreiber-Status geklärt ist (siehe Konzept, offener Punkt)."
+    },
+    "privacy": {
+        "title": "Datenschutz",
+        "placeholder": "Inhalt folgt in Phase 5."
+    }
+}

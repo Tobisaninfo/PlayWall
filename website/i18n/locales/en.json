@@ -1,0 +1,48 @@
+{
+    "nav": {
+        "home": "Home",
+        "features": "Features",
+        "download": "Download",
+        "changelog": "Changelog",
+        "github": "GitHub",
+        "languageSwitch": "Deutsch",
+        "menuToggle": "Open menu"
+    },
+    "footer": {
+        "tagline": "Interactive audio playback for live events.",
+        "legal": "Legal",
+        "imprint": "Imprint",
+        "privacy": "Privacy Policy",
+        "copyright": "PlayWall"
+    },
+    "home": {
+        "title": "Interactive Audio Playback for Live Events",
+        "subtitle": "PlayWall arranges media files as tiles on pages, triggered via keyboard, MIDI controller, or mouse — with fading, ramp-in, and end-of-track warnings.",
+        "cta_download": "Download now",
+        "cta_github": "View on GitHub",
+        "heroAlt": "PlayWall with an open project: tiles arranged in a grid, some color-coded and mid-playback"
+    },
+    "features": {
+        "title": "Features",
+        "subtitle": "An overview of what PlayWall can do.",
+        "placeholder": "The feature overview will be generated from doc/features.json in phase 2/3."
+    },
+    "download": {
+        "title": "Download",
+        "subtitle": "PlayWall for Windows, macOS, and Linux.",
+        "placeholder": "Platform cards with the current version follow in phase 4 (resolved at build time via Artifactory)."
+    },
+    "changelog": {
+        "title": "Changelog",
+        "subtitle": "What's new in PlayWall.",
+        "placeholder": "The changelog view will be generated from CHANGELOG.md in phase 4."
+    },
+    "imprint": {
+        "title": "Imprint",
+        "placeholder": "Content pending until the operator status is clarified (see concept, open item)."
+    },
+    "privacy": {
+        "title": "Privacy Policy",
+        "placeholder": "Content follows in phase 5."
+    }
+}
