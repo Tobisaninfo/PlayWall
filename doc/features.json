@@ -2,74 +2,6 @@
     "product": "PlayWall",
     "clusters": [
         {
-            "id": "project-management",
-            "screenshot": "project-management.png",
-            "de": {
-                "title": "Projektverwaltung",
-                "description": "Projekte anlegen, organisieren und verwalten.",
-                "features": [
-                    "Projekte anlegen, duplizieren und löschen",
-                    "Projekte exportieren und importieren",
-                    "Änderungen im Projekt per Undo/Redo rückgängig machen bzw. wiederherstellen"
-                ]
-            },
-            "en": {
-                "title": "Project Management",
-                "description": "Create, organize, and manage projects.",
-                "features": [
-                    "Create, duplicate, and delete projects",
-                    "Export and import projects",
-                    "Undo/redo project changes"
-                ]
-            }
-        },
-        {
-            "id": "project-settings",
-            "screenshot": "project-settings.png",
-            "de": {
-                "title": "Projekteinstellungen",
-                "description": "Grundlegende Einstellungen auf Projektebene.",
-                "features": [
-                    "Rasterlayout in Zeilen und Spalten definieren",
-                    "Anzeigeoptionen des Projekts konfigurieren",
-                    "Standardfarbe für Kacheln im Projekt festlegen"
-                ]
-            },
-            "en": {
-                "title": "Project Settings",
-                "description": "Core settings at the project level.",
-                "features": [
-                    "Define grid layout in rows and columns",
-                    "Configure project display options",
-                    "Set a default color for tiles in the project"
-                ]
-            }
-        },
-        {
-            "id": "page-management",
-            "screenshot": "page-settings.png",
-            "de": {
-                "title": "Seitenverwaltung",
-                "description": "Kacheln werden auf Seiten organisiert, zwischen denen gewechselt werden kann.",
-                "features": [
-                    "Seiten anlegen, benennen, duplizieren und löschen",
-                    "Reihenfolge der Seiten anpassen",
-                    "Farbe pro Seite festlegen",
-                    "Seiten zwischen Projekten importieren und exportieren"
-                ]
-            },
-            "en": {
-                "title": "Page Management",
-                "description": "Tiles are organized across pages that can be switched between.",
-                "features": [
-                    "Create, rename, duplicate, and delete pages",
-                    "Reorder pages",
-                    "Set a color per page",
-                    "Import and export pages between projects"
-                ]
-            }
-        },
-        {
             "id": "tiles",
             "screenshot": "pad-grid.png",
             "de": {
@@ -99,7 +31,7 @@
         },
         {
             "id": "playback-control",
-            "screenshot": "pad-grid.png",
+            "screenshot": "pad-settings.png",
             "de": {
                 "title": "Wiedergabe & Lautstärke",
                 "description": "Steuerung von Wiedergabe und Lautstärke.",
@@ -124,6 +56,30 @@
                     "Select a sound card as output device",
                     "Show a warning shortly before a track ends",
                     "Set the duration of the ramp-in phase"
+                ]
+            }
+        },
+        {
+            "id": "page-management",
+            "screenshot": "page-settings.png",
+            "de": {
+                "title": "Seitenverwaltung",
+                "description": "Kacheln werden auf Seiten organisiert, zwischen denen gewechselt werden kann.",
+                "features": [
+                    "Seiten anlegen, benennen, duplizieren und löschen",
+                    "Reihenfolge der Seiten anpassen",
+                    "Farbe pro Seite festlegen",
+                    "Seiten zwischen Projekten importieren und exportieren"
+                ]
+            },
+            "en": {
+                "title": "Page Management",
+                "description": "Tiles are organized across pages that can be switched between.",
+                "features": [
+                    "Create, rename, duplicate, and delete pages",
+                    "Reorder pages",
+                    "Set a color per page",
+                    "Import and export pages between projects"
                 ]
             }
         },
@@ -196,6 +152,50 @@
                     "Learn MIDI keys and assign them to an action",
                     "Trigger tiles, page switching, global volume, and stop-all via keyboard or MIDI",
                     "Show the status of tiles, pages, and volume via LED feedback on the MIDI controller"
+                ]
+            }
+        },
+        {
+            "id": "project-settings",
+            "screenshot": "project-settings.png",
+            "de": {
+                "title": "Projekteinstellungen",
+                "description": "Grundlegende Einstellungen auf Projektebene.",
+                "features": [
+                    "Rasterlayout in Zeilen und Spalten definieren",
+                    "Anzeigeoptionen des Projekts konfigurieren",
+                    "Standardfarbe für Kacheln im Projekt festlegen"
+                ]
+            },
+            "en": {
+                "title": "Project Settings",
+                "description": "Core settings at the project level.",
+                "features": [
+                    "Define grid layout in rows and columns",
+                    "Configure project display options",
+                    "Set a default color for tiles in the project"
+                ]
+            }
+        },
+        {
+            "id": "project-management",
+            "screenshot": "project-management.png",
+            "de": {
+                "title": "Projektverwaltung",
+                "description": "Projekte anlegen, organisieren und verwalten.",
+                "features": [
+                    "Projekte anlegen, duplizieren und löschen",
+                    "Projekte exportieren und importieren",
+                    "Änderungen im Projekt per Undo/Redo rückgängig machen bzw. wiederherstellen"
+                ]
+            },
+            "en": {
+                "title": "Project Management",
+                "description": "Create, organize, and manage projects.",
+                "features": [
+                    "Create, duplicate, and delete projects",
+                    "Export and import projects",
+                    "Undo/redo project changes"
                 ]
             }
         },
