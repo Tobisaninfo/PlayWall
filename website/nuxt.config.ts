@@ -1,3 +1,4 @@
+import {fileURLToPath} from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 
 // Klassische Root-Struktur (pages/, components/ auf website/-Ebene) statt
@@ -23,6 +24,17 @@ export default defineNuxtConfig({
     // "Warum Nuxt": SPA-Verhalten im Browser, echtes HTML für Crawler/Social-Previews).
     ssr: true,
     nitro: {
+        // Screenshots werden direkt aus doc/screenshots ausgeliefert statt nach
+        // website/public/ kopiert zu werden — eine Quelle statt Doppelpflege.
+        // Betrifft nur den Dev-Server/Build; das generierte .output/public/
+        // enthält die Dateien danach wie gewohnt als reine statische Assets.
+        publicAssets: [
+            {
+                baseURL: '/screenshots',
+                dir: fileURLToPath(new URL('../doc/screenshots', import.meta.url)),
+                maxAge: 60 * 60 * 24 * 7,
+            },
+        ],
         prerender: {
             crawlLinks: true,
             failOnError: true,

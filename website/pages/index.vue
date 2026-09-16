@@ -9,10 +9,12 @@ const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
 
 <template>
   <section class="relative isolate flex min-h-[92vh] flex-col overflow-hidden">
-    <!-- Übergangsweise doc/screenshots/pad-grid.png; wird durch ein eigens
-         für die Website erstelltes Bild ersetzt, sobald verfügbar. -->
+    <!-- Übergangsweise doc/screenshots/pad-grid.png (ausgeliefert über
+         nitro.publicAssets, siehe nuxt.config.ts — keine Kopie hier). Wird
+         durch ein eigens für die Website erstelltes /hero.png ersetzt,
+         sobald verfügbar; das liegt dann in website/public/, nicht in doc/. -->
     <img
-        src="/hero.png"
+        src="/screenshots/pad-grid.png"
         :alt="t('home.heroAlt')"
         width="1680"
         height="1152"

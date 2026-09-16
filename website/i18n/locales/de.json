@@ -24,8 +24,7 @@
     },
     "features": {
         "title": "Features",
-        "subtitle": "Ein Überblick über die Funktionen von PlayWall.",
-        "placeholder": "Die Feature-Übersicht wird in Phase 2/3 aus doc/features.json erzeugt."
+        "subtitle": "Ein Überblick über die Funktionen von PlayWall."
     },
     "download": {
         "title": "Download",

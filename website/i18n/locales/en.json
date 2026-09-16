@@ -24,8 +24,7 @@
     },
     "features": {
         "title": "Features",
-        "subtitle": "An overview of what PlayWall can do.",
-        "placeholder": "The feature overview will be generated from doc/features.json in phase 2/3."
+        "subtitle": "An overview of what PlayWall can do."
     },
     "download": {
         "title": "Download",

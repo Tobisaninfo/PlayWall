@@ -3,113 +3,223 @@
     "clusters": [
         {
             "id": "project-management",
-            "title": "Projektverwaltung",
-            "description": "Projekte anlegen, organisieren und verwalten.",
-            "screenshot": null,
-            "features": [
-                "Projekte anlegen, duplizieren und löschen",
-                "Projekte exportieren und importieren",
-                "Änderungen im Projekt per Undo/Redo rückgängig machen bzw. wiederherstellen"
-            ]
+            "screenshot": "project-management.png",
+            "de": {
+                "title": "Projektverwaltung",
+                "description": "Projekte anlegen, organisieren und verwalten.",
+                "features": [
+                    "Projekte anlegen, duplizieren und löschen",
+                    "Projekte exportieren und importieren",
+                    "Änderungen im Projekt per Undo/Redo rückgängig machen bzw. wiederherstellen"
+                ]
+            },
+            "en": {
+                "title": "Project Management",
+                "description": "Create, organize, and manage projects.",
+                "features": [
+                    "Create, duplicate, and delete projects",
+                    "Export and import projects",
+                    "Undo/redo project changes"
+                ]
+            }
         },
         {
             "id": "project-settings",
-            "title": "Projekteinstellungen",
-            "description": "Grundlegende Einstellungen auf Projektebene.",
-            "screenshot": null,
-            "features": [
-                "Rasterlayout in Zeilen und Spalten definieren",
-                "Anzeigeoptionen des Projekts konfigurieren",
-                "Standardfarbe für Kacheln im Projekt festlegen"
-            ]
+            "screenshot": "project-settings.png",
+            "de": {
+                "title": "Projekteinstellungen",
+                "description": "Grundlegende Einstellungen auf Projektebene.",
+                "features": [
+                    "Rasterlayout in Zeilen und Spalten definieren",
+                    "Anzeigeoptionen des Projekts konfigurieren",
+                    "Standardfarbe für Kacheln im Projekt festlegen"
+                ]
+            },
+            "en": {
+                "title": "Project Settings",
+                "description": "Core settings at the project level.",
+                "features": [
+                    "Define grid layout in rows and columns",
+                    "Configure project display options",
+                    "Set a default color for tiles in the project"
+                ]
+            }
         },
         {
             "id": "page-management",
-            "title": "Seitenverwaltung",
-            "description": "Kacheln werden auf Seiten organisiert, zwischen denen gewechselt werden kann.",
-            "screenshot": null,
-            "features": [
-                "Seiten anlegen, benennen, duplizieren und löschen",
-                "Reihenfolge der Seiten anpassen",
-                "Farbe pro Seite festlegen",
-                "Seiten zwischen Projekten importieren und exportieren"
-            ]
+            "screenshot": "page-settings.png",
+            "de": {
+                "title": "Seitenverwaltung",
+                "description": "Kacheln werden auf Seiten organisiert, zwischen denen gewechselt werden kann.",
+                "features": [
+                    "Seiten anlegen, benennen, duplizieren und löschen",
+                    "Reihenfolge der Seiten anpassen",
+                    "Farbe pro Seite festlegen",
+                    "Seiten zwischen Projekten importieren und exportieren"
+                ]
+            },
+            "en": {
+                "title": "Page Management",
+                "description": "Tiles are organized across pages that can be switched between.",
+                "features": [
+                    "Create, rename, duplicate, and delete pages",
+                    "Reorder pages",
+                    "Set a color per page",
+                    "Import and export pages between projects"
+                ]
+            }
         },
         {
             "id": "tiles",
-            "title": "Kacheln (Pads)",
-            "description": "Grundfunktionen der einzelnen Kachel, über die Medien abgespielt werden.",
-            "screenshot": null,
-            "features": [
-                "Wiedergabe über die Kachel starten, pausieren und stoppen",
-                "Wiedergabefortschritt als Balken auf der Kachel anzeigen",
-                "Mediendatei über den Dateidialog oder Drag & Drop auswählen",
-                "Titel pro Kachel festlegen",
-                "Individuelle Farbe pro Kachel festlegen",
-                "Alle laufenden Kacheln mit einer Aktion stoppen"
-            ]
+            "screenshot": "pad-grid.png",
+            "de": {
+                "title": "Kacheln (Pads)",
+                "description": "Grundfunktionen der einzelnen Kachel, über die Medien abgespielt werden.",
+                "features": [
+                    "Wiedergabe über die Kachel starten, pausieren und stoppen",
+                    "Wiedergabefortschritt als Balken auf der Kachel anzeigen",
+                    "Mediendatei über den Dateidialog oder Drag & Drop auswählen",
+                    "Titel pro Kachel festlegen",
+                    "Individuelle Farbe pro Kachel festlegen",
+                    "Alle laufenden Kacheln mit einer Aktion stoppen"
+                ]
+            },
+            "en": {
+                "title": "Tiles (Pads)",
+                "description": "Core functions of the individual tile used to play media.",
+                "features": [
+                    "Start, pause, and stop playback via the tile",
+                    "Select a media file via file dialog or drag & drop",
+                    "Set a title per tile",
+                    "Set an individual color per tile",
+                    "Show playback progress as a bar on the tile",
+                    "Stop all running tiles with a single action"
+                ]
+            }
         },
         {
             "id": "playback-control",
-            "title": "Wiedergabe & Lautstärke",
-            "description": "Steuerung von Wiedergabe und Lautstärke.",
-            "screenshot": null,
-            "features": [
-                "Wiedergabegeschwindigkeit pro Titel anpassen",
-                "Globale Lautstärke für alle Kacheln",
-                "Lautstärke pro Kachel einstellen",
-                "Titel in Dauerschleife (Loop) abspielen",
-                "Soundkarte als Ausgabegerät auswählen",
-                "Warnung kurz vor Ende eines Titels anzeigen",
-                "Dauer der Ramp-In-Phase einstellen"
-            ]
+            "screenshot": "pad-grid.png",
+            "de": {
+                "title": "Wiedergabe & Lautstärke",
+                "description": "Steuerung von Wiedergabe und Lautstärke.",
+                "features": [
+                    "Wiedergabegeschwindigkeit pro Titel anpassen",
+                    "Globale Lautstärke für alle Kacheln",
+                    "Lautstärke pro Kachel einstellen",
+                    "Titel in Dauerschleife (Loop) abspielen",
+                    "Soundkarte als Ausgabegerät auswählen",
+                    "Warnung kurz vor Ende eines Titels anzeigen",
+                    "Dauer der Ramp-In-Phase einstellen"
+                ]
+            },
+            "en": {
+                "title": "Playback & Volume",
+                "description": "Control over playback and volume.",
+                "features": [
+                    "Adjust playback speed per track",
+                    "Set global volume for all tiles",
+                    "Set volume per tile",
+                    "Loop playback of a track",
+                    "Select a sound card as output device",
+                    "Show a warning shortly before a track ends",
+                    "Set the duration of the ramp-in phase"
+                ]
+            }
         },
         {
             "id": "drag-and-drop",
-            "title": "Drag & Drop",
-            "description": "Bedienung von Kacheln und Dateien per Drag & Drop.",
-            "screenshot": null,
-            "features": [
-                "Kacheln per Drag & Drop verschieben oder duplizieren",
-                "Zwei Kacheln per Drag & Drop tauschen",
-                "Mediendateien per Drag & Drop aus dem Dateisystem hinzufügen"
-            ]
+            "screenshot": "pad-drag.png",
+            "de": {
+                "title": "Drag & Drop",
+                "description": "Bedienung von Kacheln und Dateien per Drag & Drop.",
+                "features": [
+                    "Kacheln per Drag & Drop verschieben oder duplizieren",
+                    "Zwei Kacheln per Drag & Drop tauschen",
+                    "Mediendateien per Drag & Drop aus dem Dateisystem hinzufügen"
+                ]
+            },
+            "en": {
+                "title": "Drag & Drop",
+                "description": "Operate tiles and files via drag & drop.",
+                "features": [
+                    "Move or duplicate tiles via drag & drop",
+                    "Swap two tiles via drag & drop",
+                    "Add media files via drag & drop from the file system"
+                ]
+            }
         },
         {
             "id": "fading",
-            "title": "Fading",
-            "description": "Ein- und Ausblenden der Wiedergabe.",
-            "screenshot": null,
-            "features": [
-                "Globale Fading-Einstellungen auf Projektebene",
-                "Individuelle Fading-Einstellungen auf Kachelebene",
-                "Fade-In beim Start und Fade-Out beim Stoppen der Wiedergabe"
-            ]
+            "screenshot": "fading.png",
+            "de": {
+                "title": "Fading",
+                "description": "Ein- und Ausblenden der Wiedergabe.",
+                "features": [
+                    "Globale Fading-Einstellungen auf Projektebene",
+                    "Individuelle Fading-Einstellungen auf Kachelebene",
+                    "Fade-In beim Start und Fade-Out beim Stoppen der Wiedergabe"
+                ]
+            },
+            "en": {
+                "title": "Fading",
+                "description": "Fading playback in and out.",
+                "features": [
+                    "Global fading settings at the project level",
+                    "Individual fading settings at the tile level",
+                    "Fade in on start and fade out on stop"
+                ]
+            }
         },
         {
             "id": "keyboard-midi-control",
-            "title": "Steuerung per Tastatur & MIDI",
-            "description": "Bedienung von PlayWall über Tastatur oder ein angeschlossenes MIDI-Gerät.",
-            "screenshot": null,
-            "features": [
-                "Einstellungsbereich zum Verwalten der Tastatur- und MIDI-Zuordnungen",
-                "Tastenkombination aufzeichnen statt manuell einzugeben",
-                "MIDI-Gerät auswählen",
-                "MIDI-Tasten einlernen und einer Aktion zuordnen",
-                "Kacheln, Seitenwechsel, globale Lautstärke und Stop-All lassen sich per Tastatur oder MIDI auslösen",
-                "Status von Kacheln, Seiten und Lautstärke per LED-Feedback am MIDI-Controller anzeigen"
-            ]
+            "screenshot": "mapping.png",
+            "de": {
+                "title": "Steuerung per Tastatur & MIDI",
+                "description": "Bedienung von PlayWall über Tastatur oder ein angeschlossenes MIDI-Gerät.",
+                "features": [
+                    "Einstellungsbereich zum Verwalten der Tastatur- und MIDI-Zuordnungen",
+                    "Tastenkombination aufzeichnen statt manuell einzugeben",
+                    "MIDI-Gerät auswählen",
+                    "MIDI-Tasten einlernen und einer Aktion zuordnen",
+                    "Kacheln, Seitenwechsel, globale Lautstärke und Stop-All lassen sich per Tastatur oder MIDI auslösen",
+                    "Status von Kacheln, Seiten und Lautstärke per LED-Feedback am MIDI-Controller anzeigen"
+                ]
+            },
+            "en": {
+                "title": "Keyboard & MIDI Control",
+                "description": "Operate PlayWall via keyboard or a connected MIDI device.",
+                "features": [
+                    "Settings area for managing keyboard and MIDI mappings",
+                    "Record a key combination instead of entering it manually",
+                    "Select a MIDI device",
+                    "Learn MIDI keys and assign them to an action",
+                    "Trigger tiles, page switching, global volume, and stop-all via keyboard or MIDI",
+                    "Show the status of tiles, pages, and volume via LED feedback on the MIDI controller"
+                ]
+            }
         },
         {
             "id": "missing-media",
-            "title": "Umgang mit fehlenden Mediendateien",
-            "description": "Erkennung und Behandlung von verschobenen oder gelöschten Mediendateien.",
-            "screenshot": null,
-            "features": [
-                "Fehlende Mediendateien automatisch erkennen",
-                "Liste der fehlenden Dateien anzeigen",
-                "Hinweis auf fehlende Medien beim Programmstart"
-            ]
+            "screenshot": "missing-media.png",
+            "de": {
+                "title": "Umgang mit fehlenden Mediendateien",
+                "description": "Erkennung und Behandlung von verschobenen oder gelöschten Mediendateien.",
+                "features": [
+                    "Fehlende Mediendateien automatisch erkennen",
+                    "Liste der fehlenden Dateien anzeigen",
+                    "Hinweis auf fehlende Medien beim Programmstart"
+                ]
+            },
+            "en": {
+                "title": "Handling Missing Media Files",
+                "description": "Detection and handling of moved or deleted media files.",
+                "features": [
+                    "Automatically detect missing media files",
+                    "Display a list of missing files",
+                    "Show a notice about missing media on startup"
+                ]
+            }
         }
     ]
 }
