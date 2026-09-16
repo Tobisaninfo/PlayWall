@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+// Löst die aktuelle PlayWallClient-Version samt Download-URLs zur Buildzeit
+// auf (PW-203, Konzept-Abschnitt "Downloads & Versionsnummer"). Läuft vor
+// `nuxt generate`/`nuxt dev` (siehe package.json "pre*"-Hooks) und bricht
+// den Build ab, wenn Artifactory nicht erreichbar ist oder eine der vier
+// Download-Dateien nicht existiert — eine tote Download-Seite darf es nicht
+// geben.
+
+import {mkdir, writeFile} from 'node:fs/promises'
+import {fileURLToPath} from 'node:url'
+
+const ARTIFACT_BASE = 'https://maven.thecodelabs.de/artifactory/TheCodeLabs-release/de/tobias/playwall/PlayWallClient'
+const METADATA_URL = `${ARTIFACT_BASE}/maven-metadata.xml`
+
+// Feste Dateinamens-Konvention, gegen Release 8.2.0 verifiziert (siehe Konzept).
+const PLATFORM_SUFFIXES = {
+    'windows-amd64': 'installer.exe',
+    'macos-arm64': 'installer.dmg',
+    'linux-amd64': 'installer.amd64.tar.gz',
+    'linux-arm64': 'installer.aarch64.tar.gz',
+}
+
+function fail(message) {
+    console.error(`\n✖ fetch-release-info: ${message}\n`)
+    process.exit(1)
+}
+
+async function fetchText(url) {
+    const response = await fetch(url)
+    if (!response.ok) {
+        fail(`GET ${url} -> ${response.status} ${response.statusText}`)
+    }
+    return response.text()
+}
+
+async function assertReachable(url) {
+    const response = await fetch(url, {method: 'HEAD'})
+    if (!response.ok) {
+        fail(`Download-Artefakt nicht erreichbar: ${url} -> ${response.status} ${response.statusText}`)
+    }
+}
+
+async function main() {
+    console.log(`Lese ${METADATA_URL} ...`)
+    const metadataXml = await fetchText(METADATA_URL)
+
+    const releaseMatch = metadataXml.match(/<release>([^<]+)<\/release>/)
+    if (!releaseMatch) {
+        fail(`Konnte <release> nicht aus maven-metadata.xml lesen:\n${metadataXml}`)
+    }
+    const version = releaseMatch[1].trim()
+    console.log(`Aktuelles Release: ${version}`)
+
+    const platforms = {}
+    for (const [platformId, suffix] of Object.entries(PLATFORM_SUFFIXES)) {
+        const url = `${ARTIFACT_BASE}/${version}/PlayWallClient-${version}-${suffix}`
+        console.log(`Prüfe ${platformId}: ${url}`)
+        await assertReachable(url)
+        platforms[platformId] = url
+    }
+
+    const outFile = fileURLToPath(new URL('../assets/release.json', import.meta.url))
+    await mkdir(new URL('../assets/', import.meta.url), {recursive: true})
+    await writeFile(outFile, `${JSON.stringify({version, platforms}, null, 2)}\n`)
+
+    console.log(`\n✔ release.json geschrieben: ${outFile}`)
+}
+
+main().catch((error) => fail(error instanceof Error ? error.stack : String(error)))

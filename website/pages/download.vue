@@ -1,14 +1,31 @@
 <script setup lang="ts">
 const {t} = useI18n()
 useHead({title: t('download.title')})
+
+const detected = useDetectedPlatform()
 </script>
 
 <template>
-  <section class="mx-auto max-w-3xl px-6 pb-16 pt-28">
-    <h1 class="font-display text-3xl font-semibold text-pw-text">{{ t('download.title') }}</h1>
-    <p class="mt-2 text-pw-text-hint">{{ t('download.subtitle') }}</p>
-    <p class="mt-8 rounded-md border border-dashed border-pw-panel-hover px-4 py-3 font-mono text-sm text-pw-text-muted">
-      {{ t('download.placeholder') }}
-    </p>
-  </section>
+  <div>
+    <section class="mx-auto max-w-3xl px-6 pb-4 pt-28 text-center">
+      <h1 class="font-display text-4xl font-semibold text-pw-text sm:text-5xl">{{ t('download.title') }}</h1>
+      <p class="mt-3 text-lg text-pw-text-hint">{{ t('download.subtitle') }}</p>
+      <p class="mt-4 font-mono text-sm text-pw-text-muted">
+        {{ t('download.currentVersion') }}: <span class="text-pw-text">{{ release.version }}</span>
+      </p>
+    </section>
+
+    <section class="mx-auto max-w-4xl px-6 pb-24">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <PlatformCard
+            v-for="platformId in PLATFORM_ORDER"
+            :id="platformId"
+            :key="platformId"
+            :url="release.platforms[platformId]"
+            :highlighted="detected === platformId"
+        />
+      </div>
+      <p class="mt-8 text-center text-sm text-pw-text-muted">{{ t('download.linuxInstructions') }}</p>
+    </section>
+  </div>
 </template>

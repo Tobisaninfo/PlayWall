@@ -29,12 +29,42 @@
     "download": {
         "title": "Download",
         "subtitle": "PlayWall for Windows, macOS, and Linux.",
-        "placeholder": "Platform cards with the current version follow in phase 4 (resolved at build time via Artifactory)."
+        "currentVersion": "Current version",
+        "recommended": "For your system",
+        "downloadCta": "Download",
+        "linuxInstructions": "Linux: extract the archive and run PlayWall/bin/PlayWall.",
+        "platforms": {
+            "windows-amd64": {
+                "name": "Windows",
+                "arch": "AMD64",
+                "requirements": "Windows 10 (version 1903+) or Windows 11, 64-bit",
+                "fileType": ".exe installer"
+            },
+            "macos-arm64": {
+                "name": "macOS",
+                "arch": "Apple Silicon",
+                "requirements": "macOS 11 (Big Sur) or later. Apple Silicon (arm64) only — no Intel build available.",
+                "fileType": ".dmg, signed & notarized"
+            },
+            "linux-amd64": {
+                "name": "Linux",
+                "arch": "AMD64",
+                "requirements": "glibc 2.17 or later — virtually any distribution.",
+                "fileType": ".tar.gz archive (app image)"
+            },
+            "linux-arm64": {
+                "name": "Linux",
+                "arch": "ARM64",
+                "requirements": "glibc 2.38 or later (e.g. Debian 13+, Ubuntu 24.04+). Not supported on Debian 12 or Ubuntu 22.04.",
+                "fileType": ".tar.gz archive (app image)"
+            }
+        }
     },
     "changelog": {
         "title": "Changelog",
         "subtitle": "What's new in PlayWall.",
-        "placeholder": "The changelog view will be generated from CHANGELOG.md in phase 4."
+        "featuresLabel": "New",
+        "bugfixesLabel": "Fixed"
     },
     "imprint": {
         "title": "Imprint",

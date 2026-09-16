@@ -29,12 +29,42 @@
     "download": {
         "title": "Download",
         "subtitle": "PlayWall für Windows, macOS und Linux.",
-        "placeholder": "Die Plattform-Karten mit Versionsnummer folgen in Phase 4 (Build-Zeit-Auflösung über Artifactory)."
+        "currentVersion": "Aktuelle Version",
+        "recommended": "Für dein System",
+        "downloadCta": "Herunterladen",
+        "linuxInstructions": "Linux: Archiv entpacken und PlayWall/bin/PlayWall ausführen.",
+        "platforms": {
+            "windows-amd64": {
+                "name": "Windows",
+                "arch": "AMD64",
+                "requirements": "Windows 10 (Version 1903+) oder Windows 11, 64-Bit",
+                "fileType": ".exe-Installer"
+            },
+            "macos-arm64": {
+                "name": "macOS",
+                "arch": "Apple Silicon",
+                "requirements": "macOS 11 (Big Sur) oder neuer. Nur Apple Silicon (arm64) — kein Intel-Build verfügbar.",
+                "fileType": ".dmg, signiert & notarisiert"
+            },
+            "linux-amd64": {
+                "name": "Linux",
+                "arch": "AMD64",
+                "requirements": "glibc 2.17 oder neuer — praktisch jede Distribution.",
+                "fileType": ".tar.gz-Archiv (App-Image)"
+            },
+            "linux-arm64": {
+                "name": "Linux",
+                "arch": "ARM64",
+                "requirements": "glibc 2.38 oder neuer (z. B. Debian 13+, Ubuntu 24.04+). Läuft nicht auf Debian 12 oder Ubuntu 22.04.",
+                "fileType": ".tar.gz-Archiv (App-Image)"
+            }
+        }
     },
     "changelog": {
         "title": "Changelog",
         "subtitle": "Was sich in PlayWall zuletzt geändert hat.",
-        "placeholder": "Die Changelog-Ansicht wird in Phase 4 aus CHANGELOG.md erzeugt."
+        "featuresLabel": "Neu",
+        "bugfixesLabel": "Behoben"
     },
     "imprint": {
         "title": "Impressum",

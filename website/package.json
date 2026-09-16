@@ -3,12 +3,17 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "predev": "node scripts/fetch-release-info.mjs",
         "dev": "nuxt dev",
+        "prebuild": "node scripts/fetch-release-info.mjs",
         "build": "nuxt build",
+        "pregenerate": "node scripts/fetch-release-info.mjs",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "typecheck": "nuxt typecheck"
+        "pretypecheck": "node scripts/fetch-release-info.mjs",
+        "typecheck": "nuxt typecheck",
+        "test": "vitest run"
     },
     "dependencies": {
         "nuxt": "^4.0.0",
@@ -19,10 +24,11 @@
         "@nuxt/fonts": "^0.11.0",
         "@nuxtjs/i18n": "^9.0.0",
         "@tailwindcss/vite": "^4.0.0",
-      "@types/node": "^22.20.3",
+        "@types/node": "^22.20.3",
         "@vueuse/nuxt": "^12.0.0",
         "tailwindcss": "^4.0.0",
         "typescript": "^5.7.0",
+        "vitest": "^5.0.1",
         "vue-tsc": "^3.3.11"
     }
 }
