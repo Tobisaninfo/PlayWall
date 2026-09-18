@@ -62,8 +62,9 @@ const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
               :href="GITHUB_URL"
               target="_blank"
               rel="noopener noreferrer"
-              class="rounded-md border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-pw-blue hover:bg-white/10"
+              class="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-pw-blue hover:bg-white/10"
           >
+            <GithubIcon class="h-4 w-4 flex-none"/>
             {{ t('home.cta_github') }}
           </a>
         </div>
