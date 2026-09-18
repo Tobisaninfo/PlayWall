@@ -14,3 +14,16 @@ export interface ReleaseInfo {
 export const release: ReleaseInfo = releaseData as ReleaseInfo
 
 export const PLATFORM_ORDER: PlatformId[] = ['windows-amd64', 'macos-arm64', 'linux-amd64', 'linux-arm64']
+
+// Drei Systeme nebeneinander auf der Download-Seite; Linux fasst beide
+// Architekturen als zwei Optionen in einer Spalte zusammen, statt eine
+// eigene vierte Spalte zu belegen.
+export type SystemId = 'windows' | 'macos' | 'linux'
+
+export const SYSTEM_PLATFORMS: Record<SystemId, [PlatformId, ...PlatformId[]]> = {
+    windows: ['windows-amd64'],
+    macos: ['macos-arm64'],
+    linux: ['linux-amd64', 'linux-arm64'],
+}
+
+export const SYSTEM_ORDER: SystemId[] = ['windows', 'macos', 'linux']

@@ -30,7 +30,7 @@
         "title": "Download",
         "subtitle": "PlayWall für Windows, macOS und Linux.",
         "currentVersion": "Aktuelle Version",
-        "recommended": "Für dein System",
+        "recommended": "Empfohlen",
         "downloadCta": "Herunterladen",
         "linuxInstructions": "Linux: Archiv entpacken und PlayWall/bin/PlayWall ausführen.",
         "platforms": {
@@ -44,7 +44,7 @@
                 "name": "macOS",
                 "arch": "Apple Silicon",
                 "requirements": "macOS 11 (Big Sur) oder neuer. Nur Apple Silicon (arm64) — kein Intel-Build verfügbar.",
-                "fileType": ".dmg, signiert & notarisiert"
+                "fileType": ".dmg-Installer"
             },
             "linux-amd64": {
                 "name": "Linux",

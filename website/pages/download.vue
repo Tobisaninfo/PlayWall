@@ -16,13 +16,12 @@ const detected = useDetectedPlatform()
     </section>
 
     <section class="mx-auto max-w-4xl px-6 pb-24">
-      <div class="grid gap-4 sm:grid-cols-2">
-        <PlatformCard
-            v-for="platformId in PLATFORM_ORDER"
-            :id="platformId"
-            :key="platformId"
-            :url="release.platforms[platformId]"
-            :highlighted="detected === platformId"
+      <div class="grid gap-4 sm:grid-cols-3">
+        <SystemCard
+            v-for="systemId in SYSTEM_ORDER"
+            :key="systemId"
+            :system-id="systemId"
+            :highlighted="detected === systemId"
         />
       </div>
       <p class="mt-8 text-center text-sm text-pw-text-muted">{{ t('download.linuxInstructions') }}</p>
