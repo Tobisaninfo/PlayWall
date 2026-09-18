@@ -1,6 +1,17 @@
 <script setup lang="ts">
-const {t} = useI18n()
+const {t, locale} = useI18n()
 useHead({title: t('changelog.title')})
+
+function formatDate(dateStr: string | null): string | null {
+  if (!dateStr) return null
+  // Lokal parsen statt new Date(dateStr) direkt zu übergeben: Ein reines
+  // Datum ("2026-09-14") würde sonst als UTC-Mitternacht interpretiert und
+  // könnte in Zeitzonen westlich von UTC auf den Vortag zurückfallen.
+  const [year, month, day] = dateStr.split('-').map(Number)
+  if (!year || !month || !day) return null
+  const date = new Date(year, month - 1, day)
+  return new Intl.DateTimeFormat(locale.value === 'de' ? 'de-DE' : 'en-US', {dateStyle: 'long'}).format(date)
+}
 </script>
 
 <template>
@@ -16,7 +27,10 @@ useHead({title: t('changelog.title')})
           :key="entry.version"
           class="border-b border-white/10 py-8 first:pt-0 last:border-none"
       >
-        <h2 class="font-mono text-xl font-semibold text-pw-text">{{ entry.version }}</h2>
+        <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+          <h2 class="font-mono text-xl font-semibold text-pw-text">{{ entry.version }}</h2>
+          <p v-if="formatDate(entry.date)" class="font-mono text-xs text-pw-text-muted">{{ formatDate(entry.date) }}</p>
+        </div>
 
         <div v-if="entry.features.length" class="mt-4">
           <p class="font-mono text-xs uppercase tracking-wide text-pw-text-muted">{{ t('changelog.featuresLabel') }}</p>

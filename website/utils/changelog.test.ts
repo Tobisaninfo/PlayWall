@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {changelogVersions} from './changelog'
+import {changelogVersions, parseChangelog} from './changelog'
 
 // Getestet gegen die echte CHANGELOG.md statt einer Fixture — ein Test, der
 // gegen die tatsächliche Datei läuft, fängt echtes Format-Drift ab.
@@ -26,5 +26,19 @@ describe('changelogVersions', () => {
         const versions = changelogVersions.map((v) => v.version)
         expect(versions.indexOf('8.2.0')).toBeLessThan(versions.indexOf('8.1.1'))
         expect(versions.indexOf('8.1.1')).toBeLessThan(versions.indexOf('8.1.0'))
+    })
+
+    it('parses the release date from the "## <version> - <date>" heading', () => {
+        const entry = changelogVersions.find((v) => v.version === '8.2.0')
+        expect(entry?.date).toBe('2026-09-14')
+    })
+
+    it('has a date for every version currently in CHANGELOG.md', () => {
+        expect(changelogVersions.every((v) => v.date !== null)).toBe(true)
+    })
+
+    it('still parses a version heading without a date as null (backward-compatible)', () => {
+        const versions = parseChangelog('# Changelog\n\n## 9.0.0\n\n### Features\n\n- PW-1 - Test\n')
+        expect(versions[0]).toEqual({version: '9.0.0', date: null, features: ['Test'], bugfixes: []})
     })
 })

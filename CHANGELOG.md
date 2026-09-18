@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.2.0
+## 8.2.0 - 2026-09-14
 
 ### Features
 
@@ -33,14 +33,14 @@
 - PW-199 - Liste des Mappingtabs refreshed sich nicht
 - PW-202 - ScrollView Verhalten von Mapping View
 
-## 8.1.1
+## 8.1.1 - 2026-05-28
 
 ### Bugfixes
 
 - PW-129 - Kachel Play Color funktioniert nicht nach Speichern der Kacheleinstellungen
 - PW-130 - Fehlende Mediendatei: Ordner-Button anzeigen
 
-## 8.1.0
+## 8.1.0 - 2026-05-25
 
 ### Features
 
@@ -70,7 +70,7 @@
 - PW-120 - Undo Operationen von einem geschlossenen Projekt möglich
 - PW-128 - Langer Titel verdrängt ProgressBar
 
-## 8.0.0
+## 8.0.0 - 2026-02-16
 
 ### Features
 
