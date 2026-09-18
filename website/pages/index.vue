@@ -36,7 +36,7 @@ const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
           class="flex flex-col items-center gap-6 rounded-2xl border border-white/10 bg-pw-bg/40 px-8 py-10 shadow-2xl ring-1 ring-white/5 backdrop-blur-xl sm:px-14 sm:py-12"
           style="box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 25px 50px -12px rgba(0,0,0,0.5)"
       >
-        <img src="/logo.png" alt="" width="256" height="256" class="h-16 w-16 drop-shadow-lg">
+        <img src="/logo-mark.png" alt="" width="256" height="256" class="h-16 w-16 drop-shadow-lg">
 
         <div class="flex flex-col gap-2">
           <h1 class="text-balance font-display text-5xl font-bold tracking-tight text-white sm:text-6xl">
