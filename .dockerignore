@@ -1,0 +1,13 @@
+.git/
+.idea/
+.vscode/
+*.log
+.DS_Store
+
+**/target/
+PlayWallCompanionPlugin/
+
+website/node_modules/
+website/.nuxt/
+website/.output/
+website/dist/
