@@ -1,6 +1,13 @@
 <script setup lang="ts">
 const {t, locale} = useI18n()
 useHead({title: t('changelog.title')})
+useSeoMeta({
+  description: t('changelog.subtitle'),
+  ogTitle: t('changelog.title'),
+  ogDescription: t('changelog.subtitle'),
+  twitterTitle: t('changelog.title'),
+  twitterDescription: t('changelog.subtitle'),
+})
 
 function formatDate(dateStr: string | null): string | null {
   if (!dateStr) return null

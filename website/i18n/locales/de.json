@@ -68,10 +68,12 @@
     },
     "imprint": {
         "title": "Impressum",
+        "description": "Impressum von PlayWall gemäß § 5 TMG.",
         "placeholder": "Inhalt folgt, sobald der Betreiber-Status geklärt ist (siehe Konzept, offener Punkt)."
     },
     "privacy": {
         "title": "Datenschutz",
+        "description": "Datenschutzerklärung von PlayWall.",
         "placeholder": "Inhalt folgt in Phase 5."
     }
 }

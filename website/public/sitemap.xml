@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://playwall.thecodelabs.de/de</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/en</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/de/features</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/features"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/features"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/features"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/en/features</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/features"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/features"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/features"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/de/download</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/download"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/download"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/download"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/en/download</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/download"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/download"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/download"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/de/changelog</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/changelog"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/changelog"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/changelog"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/en/changelog</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/changelog"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/changelog"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/changelog"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/de/impressum</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/impressum"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/impressum"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/impressum"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/en/impressum</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/impressum"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/impressum"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/impressum"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/de/datenschutz</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/datenschutz"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/datenschutz"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/datenschutz"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/en/datenschutz</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/datenschutz"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/datenschutz"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/datenschutz"/>
+    </url>
+</urlset>

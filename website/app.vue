@@ -15,6 +15,17 @@ useHead(() => ({
   meta: [...(i18nHead.value.meta || [])],
   titleTemplate: (title) => (title ? `${title} · PlayWall` : 'PlayWall'),
 }))
+
+useSeoMeta({
+  ogSiteName: 'PlayWall',
+  ogType: 'website',
+  ogImage: 'https://playwall.thecodelabs.de/og-image.png',
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogImageAlt: 'PlayWall',
+  twitterCard: 'summary_large_image',
+  twitterImage: 'https://playwall.thecodelabs.de/og-image.png',
+})
 </script>
 
 <template>

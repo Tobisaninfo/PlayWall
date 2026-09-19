@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const {t} = useI18n()
 useHead({title: t('privacy.title')})
+useSeoMeta({description: t('privacy.description')})
 </script>
 
 <template>

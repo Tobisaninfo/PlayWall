@@ -3,6 +3,13 @@ const {t} = useI18n()
 const localePath = useLocalePath()
 
 useHead({title: t('home.title')})
+useSeoMeta({
+  description: t('home.subtitle'),
+  ogTitle: t('home.title'),
+  ogDescription: t('home.subtitle'),
+  twitterTitle: t('home.title'),
+  twitterDescription: t('home.subtitle'),
+})
 
 const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
 </script>
@@ -54,7 +61,7 @@ const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
         <div class="mt-2 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <NuxtLink
               :to="localePath('download')"
-              class="rounded-md bg-pw-blue px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              class="rounded-md bg-pw-blue-strong px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
           >
             {{ t('home.cta_download') }}
           </NuxtLink>

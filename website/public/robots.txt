@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://playwall.thecodelabs.de/sitemap.xml

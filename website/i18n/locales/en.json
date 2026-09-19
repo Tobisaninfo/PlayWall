@@ -68,10 +68,12 @@
     },
     "imprint": {
         "title": "Imprint",
+        "description": "Legal notice for PlayWall.",
         "placeholder": "Content pending until the operator status is clarified (see concept, open item)."
     },
     "privacy": {
         "title": "Privacy Policy",
+        "description": "Privacy policy for PlayWall.",
         "placeholder": "Content follows in phase 5."
     }
 }

@@ -38,7 +38,7 @@ const rows = computed(() =>
       </div>
       <span
           v-if="highlighted"
-          class="rounded-full bg-pw-blue/15 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide text-pw-blue"
+          class="rounded-full bg-pw-blue-strong px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide text-white"
       >
         {{ t('download.recommended') }}
       </span>
@@ -55,7 +55,7 @@ const rows = computed(() =>
       </div>
       <a
           :href="rows[0].url"
-          class="inline-flex items-center justify-center rounded-md bg-pw-blue px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          class="inline-flex items-center justify-center rounded-md bg-pw-blue-strong px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
       >
         {{ t('download.downloadCta') }}
       </a>
@@ -73,7 +73,7 @@ const rows = computed(() =>
         <p class="font-mono text-xs text-pw-text-muted">{{ row.fileType }}</p>
         <a
             :href="row.url"
-            class="inline-flex items-center justify-center rounded-md bg-pw-blue px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            class="inline-flex items-center justify-center rounded-md bg-pw-blue-strong px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
           {{ t('download.downloadCta') }}
         </a>

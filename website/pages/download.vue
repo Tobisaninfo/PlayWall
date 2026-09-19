@@ -1,6 +1,13 @@
 <script setup lang="ts">
 const {t} = useI18n()
 useHead({title: t('download.title')})
+useSeoMeta({
+  description: t('download.subtitle'),
+  ogTitle: t('download.title'),
+  ogDescription: t('download.subtitle'),
+  twitterTitle: t('download.title'),
+  twitterDescription: t('download.subtitle'),
+})
 
 const detected = useDetectedPlatform()
 </script>
