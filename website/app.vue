@@ -31,4 +31,5 @@ useSeoMeta({
   <NuxtLayout>
     <NuxtPage/>
   </NuxtLayout>
+  <AppLightbox/>
 </template>

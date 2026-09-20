@@ -23,6 +23,13 @@ const {stop} = useIntersectionObserver(
     },
     {threshold: 0.2},
 )
+
+const {t} = useI18n()
+const {open: openLightbox} = useLightbox()
+
+function onImageClick() {
+  openLightbox(`/screenshots/${props.screenshot}`, props.title, dimensions[0], dimensions[1])
+}
 </script>
 
 <template>
@@ -33,14 +40,22 @@ const {stop} = useIntersectionObserver(
       :class="isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'"
   >
     <div :class="reversed ? 'lg:order-last' : ''">
-      <img
-          :src="`/screenshots/${screenshot}`"
-          :alt="title"
-          :width="dimensions[0]"
-          :height="dimensions[1]"
-          loading="lazy"
-          class="w-full rounded-xl border border-white/10 shadow-xl"
+      <button
+          type="button"
+          class="group relative block w-full cursor-zoom-in overflow-hidden rounded-xl border border-white/10 shadow-xl"
+          :aria-label="t('features.lightboxOpen', {title})"
+          @click="onImageClick"
       >
+        <img
+            :src="`/screenshots/${screenshot}`"
+            :alt="title"
+            :width="dimensions[0]"
+            :height="dimensions[1]"
+            loading="lazy"
+            class="w-full transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        >
+        <span class="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10"/>
+      </button>
     </div>
 
     <div>

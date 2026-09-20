@@ -1,4 +1,7 @@
 {
+    "common": {
+        "close": "Close"
+    },
     "nav": {
         "home": "Home",
         "features": "Features",
@@ -24,7 +27,8 @@
     },
     "features": {
         "title": "Features",
-        "subtitle": "An overview of what PlayWall can do."
+        "subtitle": "An overview of what PlayWall can do.",
+        "lightboxOpen": "View {title} enlarged"
     },
     "download": {
         "title": "Download",

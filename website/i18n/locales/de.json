@@ -1,4 +1,7 @@
 {
+    "common": {
+        "close": "Schließen"
+    },
     "nav": {
         "home": "Home",
         "features": "Features",
@@ -24,7 +27,8 @@
     },
     "features": {
         "title": "Features",
-        "subtitle": "Ein Überblick über die Funktionen von PlayWall."
+        "subtitle": "Ein Überblick über die Funktionen von PlayWall.",
+        "lightboxOpen": "{title} vergrößert anzeigen"
     },
     "download": {
         "title": "Download",
