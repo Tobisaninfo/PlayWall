@@ -2,16 +2,7 @@
 const {t} = useI18n()
 const localePath = useLocalePath()
 
-useHead({title: t('home.title')})
-useSeoMeta({
-  description: t('home.subtitle'),
-  ogTitle: t('home.title'),
-  ogDescription: t('home.subtitle'),
-  twitterTitle: t('home.title'),
-  twitterDescription: t('home.subtitle'),
-})
-
-const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
+usePageSeo('home.title', 'home.subtitle')
 </script>
 
 <template>

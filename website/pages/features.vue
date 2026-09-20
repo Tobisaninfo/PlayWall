@@ -1,13 +1,6 @@
 <script setup lang="ts">
 const {t, locale} = useI18n()
-useHead({title: t('features.title')})
-useSeoMeta({
-  description: t('features.subtitle'),
-  ogTitle: t('features.title'),
-  ogDescription: t('features.subtitle'),
-  twitterTitle: t('features.title'),
-  twitterDescription: t('features.subtitle'),
-})
+usePageSeo('features.title', 'features.subtitle')
 
 const clusters = computed(() => localizedFeatureClusters(locale.value as FeatureLocale))
 </script>

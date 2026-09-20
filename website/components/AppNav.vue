@@ -15,8 +15,6 @@ const navLinks = computed(() => [
   {to: localePath('changelog'), label: t('nav.changelog')},
 ])
 
-const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
-
 const isMobileMenuOpen = ref(false)
 watch(() => route.fullPath, () => {
   isMobileMenuOpen.value = false
@@ -47,8 +45,9 @@ watch(() => route.fullPath, () => {
           :href="GITHUB_URL"
           target="_blank"
           rel="noopener noreferrer"
-          class="hidden text-sm text-pw-text-hint transition-colors hover:text-pw-text sm:block"
+          class="hidden items-center gap-1.5 text-sm text-pw-text-hint transition-colors hover:text-pw-text sm:flex"
       >
+        <GithubIcon class="h-4 w-4 flex-none"/>
         {{ t('nav.github') }}
       </a>
 
@@ -104,8 +103,9 @@ watch(() => route.fullPath, () => {
             :href="GITHUB_URL"
             target="_blank"
             rel="noopener noreferrer"
-            class="rounded-md px-2 py-2 text-sm text-pw-text-hint transition-colors hover:bg-white/5 hover:text-pw-text"
+            class="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-pw-text-hint transition-colors hover:bg-white/5 hover:text-pw-text"
         >
+          <GithubIcon class="h-4 w-4 flex-none"/>
           {{ t('nav.github') }}
         </a>
         <NuxtLink

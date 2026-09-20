@@ -16,15 +16,21 @@ useHead(() => ({
   titleTemplate: (title) => (title ? `${title} · PlayWall` : 'PlayWall'),
 }))
 
+// Seitenweite OG/Twitter-Defaults, damit geteilte Links (Social-Preview,
+// Messenger) immer ein Bild und eine Beschreibung zeigen. og:title/
+// og:description/twitter:title/twitter:description werden pro Seite
+// überschrieben (siehe usePageSeo in den Pages).
+const ogImageUrl = `${useRuntimeConfig().public.siteUrl}/og-image.png`
+
 useSeoMeta({
   ogSiteName: 'PlayWall',
   ogType: 'website',
-  ogImage: 'https://playwall.thecodelabs.de/og-image.png',
+  ogImage: ogImageUrl,
   ogImageWidth: 1200,
   ogImageHeight: 630,
   ogImageAlt: 'PlayWall',
   twitterCard: 'summary_large_image',
-  twitterImage: 'https://playwall.thecodelabs.de/og-image.png',
+  twitterImage: ogImageUrl,
 })
 </script>
 

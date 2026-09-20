@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const {t} = useI18n()
-useHead({title: t('imprint.title')})
-useSeoMeta({description: t('imprint.description')})
+usePageSeo('imprint.title', 'imprint.description')
 </script>
 
 <template>

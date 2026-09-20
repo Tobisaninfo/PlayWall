@@ -2,7 +2,6 @@
 const {t} = useI18n()
 const localePath = useLocalePath()
 
-const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
 const year = new Date().getFullYear()
 </script>
 
@@ -27,8 +26,9 @@ const year = new Date().getFullYear()
               :href="GITHUB_URL"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-pw-text-hint hover:text-pw-text"
+              class="flex items-center gap-1.5 text-pw-text-hint hover:text-pw-text"
           >
+            <GithubIcon class="h-4 w-4 flex-none"/>
             GitHub
           </a>
         </div>

@@ -1,24 +1,18 @@
 <script setup lang="ts">
 const {t, locale} = useI18n()
-useHead({title: t('changelog.title')})
-useSeoMeta({
-  description: t('changelog.subtitle'),
-  ogTitle: t('changelog.title'),
-  ogDescription: t('changelog.subtitle'),
-  twitterTitle: t('changelog.title'),
-  twitterDescription: t('changelog.subtitle'),
-})
+usePageSeo('changelog.title', 'changelog.subtitle')
 
 function formatDate(dateStr: string | null): string | null {
   if (!dateStr) return null
-  // Lokal parsen statt new Date(dateStr) direkt zu übergeben: Ein reines
-  // Datum ("2026-09-14") würde sonst als UTC-Mitternacht interpretiert und
-  // könnte in Zeitzonen westlich von UTC auf den Vortag zurückfallen.
   const [year, month, day] = dateStr.split('-').map(Number)
   if (!year || !month || !day) return null
   const date = new Date(year, month - 1, day)
   return new Intl.DateTimeFormat(locale.value === 'de' ? 'de-DE' : 'en-US', {dateStyle: 'long'}).format(date)
 }
+
+const entries = computed(() =>
+    changelogVersions.map((entry) => ({...entry, formattedDate: formatDate(entry.date)})),
+)
 </script>
 
 <template>
@@ -30,13 +24,13 @@ function formatDate(dateStr: string | null): string | null {
 
     <section class="mx-auto max-w-2xl px-6 pb-24">
       <div
-          v-for="entry in changelogVersions"
+          v-for="entry in entries"
           :key="entry.version"
           class="border-b border-white/10 py-8 first:pt-0 last:border-none"
       >
         <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
           <h2 class="font-mono text-xl font-semibold text-pw-text">{{ entry.version }}</h2>
-          <p v-if="formatDate(entry.date)" class="font-mono text-xs text-pw-text-hint">{{ formatDate(entry.date) }}</p>
+          <p v-if="entry.formattedDate" class="font-mono text-xs text-pw-text-hint">{{ entry.formattedDate }}</p>
         </div>
 
         <div v-if="entry.features.length" class="mt-4">

@@ -1,12 +1,22 @@
 import {fileURLToPath} from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 
+// Einzige Quelle für die Domain — sonst müsste sie in i18n.baseUrl UND im
+// OG-Bild-Link in app.vue getrennt gepflegt werden.
+const SITE_URL = 'https://playwall.thecodelabs.de'
+
 // Klassische Root-Struktur (pages/, components/ auf website/-Ebene) statt
 // Nuxt 4s neuem app/-Unterordner, damit sie zur im Konzept dokumentierten
 // Ordnerstruktur passt.
 export default defineNuxtConfig({
     compatibilityDate: '2026-01-01',
     srcDir: '.',
+
+    runtimeConfig: {
+        public: {
+            siteUrl: SITE_URL,
+        },
+    },
 
     modules: [
         '@nuxtjs/i18n',
@@ -60,7 +70,7 @@ export default defineNuxtConfig({
     },
 
     i18n: {
-        baseUrl: 'https://playwall.thecodelabs.de',
+        baseUrl: SITE_URL,
         bundle: {
             optimizeTranslationDirective: false,
         },
