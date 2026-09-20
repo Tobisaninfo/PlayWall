@@ -49,28 +49,4 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/changelog"/>
         <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/changelog"/>
     </url>
-    <url>
-        <loc>https://playwall.thecodelabs.de/de/impressum</loc>
-        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/impressum"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/impressum"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/impressum"/>
-    </url>
-    <url>
-        <loc>https://playwall.thecodelabs.de/en/impressum</loc>
-        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/impressum"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/impressum"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/impressum"/>
-    </url>
-    <url>
-        <loc>https://playwall.thecodelabs.de/de/datenschutz</loc>
-        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/datenschutz"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/datenschutz"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/datenschutz"/>
-    </url>
-    <url>
-        <loc>https://playwall.thecodelabs.de/en/datenschutz</loc>
-        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/datenschutz"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/datenschutz"/>
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/datenschutz"/>
-    </url>
 </urlset>

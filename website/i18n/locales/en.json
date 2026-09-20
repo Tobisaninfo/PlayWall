@@ -13,9 +13,6 @@
     },
     "footer": {
         "tagline": "Interactive audio playback for live events.",
-        "legal": "Legal",
-        "imprint": "Imprint",
-        "privacy": "Privacy Policy",
         "copyright": "PlayWall"
     },
     "home": {
@@ -73,15 +70,5 @@
         "subtitle": "What's new in PlayWall.",
         "featuresLabel": "New",
         "bugfixesLabel": "Fixed"
-    },
-    "imprint": {
-        "title": "Imprint",
-        "description": "Legal notice for PlayWall.",
-        "placeholder": "Content pending until the operator status is clarified (see concept, open item)."
-    },
-    "privacy": {
-        "title": "Privacy Policy",
-        "description": "Privacy policy for PlayWall.",
-        "placeholder": "Content follows in phase 5."
     }
 }
