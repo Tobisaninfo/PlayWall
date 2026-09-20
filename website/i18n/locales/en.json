@@ -37,24 +37,28 @@
             "windows-amd64": {
                 "name": "Windows",
                 "arch": "AMD64",
+                "extension": ".exe",
                 "requirements": "Windows 10 (version 1903+) or Windows 11, 64-bit",
                 "fileType": ".exe installer"
             },
             "macos-arm64": {
                 "name": "macOS",
                 "arch": "Apple Silicon",
+                "extension": ".dmg",
                 "requirements": "macOS 11 (Big Sur) or later. Apple Silicon (arm64) only — no Intel build available.",
                 "fileType": ".dmg installer"
             },
             "linux-amd64": {
                 "name": "Linux",
                 "arch": "AMD64",
+                "extension": ".tar.gz",
                 "requirements": "glibc 2.17 or later — virtually any distribution.",
                 "fileType": ".tar.gz archive (app image)"
             },
             "linux-arm64": {
                 "name": "Linux",
                 "arch": "ARM64",
+                "extension": ".tar.gz",
                 "requirements": "glibc 2.38 or later (e.g. Debian 13+, Ubuntu 24.04+). Not supported on Debian 12 or Ubuntu 22.04.",
                 "fileType": ".tar.gz archive (app image)"
             }

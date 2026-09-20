@@ -15,6 +15,7 @@ const rows = computed(() =>
       id,
       url: release.platforms[id],
       arch: t(`download.platforms.${id}.arch`),
+      extension: t(`download.platforms.${id}.extension`),
       requirements: t(`download.platforms.${id}.requirements`),
       fileType: t(`download.platforms.${id}.fileType`),
     })),
@@ -55,9 +56,10 @@ const rows = computed(() =>
       </div>
       <a
           :href="rows[0].url"
-          class="inline-flex items-center justify-center rounded-md bg-pw-blue-strong px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          class="flex flex-col items-center justify-center gap-0.5 rounded-md bg-pw-blue-strong px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
       >
-        {{ t('download.downloadCta') }}
+        <span>{{ t('download.downloadCta') }}</span>
+        <span class="text-xs font-normal text-white/75">({{ rows[0].extension }}, {{ rows[0].arch }})</span>
       </a>
     </template>
 
@@ -73,9 +75,10 @@ const rows = computed(() =>
         <p class="font-mono text-xs text-pw-text-muted">{{ row.fileType }}</p>
         <a
             :href="row.url"
-            class="inline-flex items-center justify-center rounded-md bg-pw-blue-strong px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            class="flex flex-col items-center justify-center gap-0.5 rounded-md bg-pw-blue-strong px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
-          {{ t('download.downloadCta') }}
+          <span>{{ t('download.downloadCta') }}</span>
+          <span class="text-xs font-normal text-white/75">({{ row.extension }}, {{ row.arch }})</span>
         </a>
       </div>
     </div>
