@@ -1,8 +1,5 @@
 import featuresData from '../../doc/features.json'
 
-// doc/features.json ist die einzige Quelle für die Feature-Cluster (PW-203).
-// Neue Cluster oder Sprachtexte werden dort gepflegt, nicht hier dupliziert.
-
 export interface FeatureClusterContent {
     title: string
     description: string
@@ -29,11 +26,6 @@ export function localizedFeatureClusters(locale: FeatureLocale) {
     }))
 }
 
-// Intrinsische Bildmaße der Screenshots aus doc/screenshots (ausgeliefert
-// über nitro.publicAssets, siehe nuxt.config.ts) — hier statt in
-// features.json, da es sich um ein Präsentationsdetail handelt, nicht um
-// Feature-Inhalt. Muss von Hand gepflegt werden, wenn ein Cluster auf ein
-// neues Bild zeigt.
 export const screenshotDimensions: Record<string, [number, number]> = {
     'project-management.png': [1000, 1176],
     'project-settings.png': [1700, 1060],

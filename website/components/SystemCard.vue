@@ -45,10 +45,6 @@ const rows = computed(() =>
       </span>
     </div>
 
-    <!-- Einzelne Architektur: Windows, macOS. Die Beschreibung nimmt den
-         Platz vor dem Button ein (flex-1), sodass der Button unabhängig von
-         der Textlänge immer am unteren Kartenrand sitzt — nicht irgendwo
-         mit Leerraum darunter. -->
     <template v-if="rows.length === 1 && rows[0]">
       <div class="flex flex-1 flex-col gap-2">
         <p class="text-sm text-pw-text-hint">{{ rows[0].requirements }}</p>
@@ -63,11 +59,6 @@ const rows = computed(() =>
       </a>
     </template>
 
-    <!-- Mehrere Architekturen: Linux (amd64 / arm64). Jede Architektur
-         behält ihren eigenen Button direkt unter der zugehörigen
-         Beschreibung — die beiden Buttons gehören inhaltlich zusammen mit
-         ihrem jeweiligen Block, ein gemeinsamer Bündig-unten-Anker wie oben
-         ergäbe hier keinen Sinn. -->
     <div v-else class="flex flex-1 flex-col gap-4">
       <div v-for="row in rows" :key="row.id" class="flex flex-col gap-1.5 border-t border-white/5 pt-4 first:border-none first:pt-0">
         <p class="font-mono text-xs uppercase tracking-wide text-pw-text-muted">{{ row.arch }}</p>

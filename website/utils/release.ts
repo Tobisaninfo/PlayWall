@@ -1,9 +1,5 @@
 import releaseData from '../assets/release.json'
 
-// assets/release.json wird von scripts/fetch-release-info.mjs erzeugt (siehe
-// package.json "pre*"-Hooks) und nicht eingecheckt. Existiert die Datei
-// nicht, ist noch keiner der "pre*"-Hooks gelaufen — siehe README/Konzept.
-
 export type PlatformId = 'windows-amd64' | 'macos-arm64' | 'linux-amd64' | 'linux-arm64'
 
 export interface ReleaseInfo {
@@ -15,9 +11,6 @@ export const release: ReleaseInfo = releaseData as ReleaseInfo
 
 export const PLATFORM_ORDER: PlatformId[] = ['windows-amd64', 'macos-arm64', 'linux-amd64', 'linux-arm64']
 
-// Drei Systeme nebeneinander auf der Download-Seite; Linux fasst beide
-// Architekturen als zwei Optionen in einer Spalte zusammen, statt eine
-// eigene vierte Spalte zu belegen.
 export type SystemId = 'windows' | 'macos' | 'linux'
 
 export const SYSTEM_PLATFORMS: Record<SystemId, [PlatformId, ...PlatformId[]]> = {

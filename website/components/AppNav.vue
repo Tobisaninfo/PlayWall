@@ -4,8 +4,6 @@ const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const route = useRoute()
 
-// Nur zwei Locales konfiguriert (de/en) — direkte Ableitung statt Suche
-// in locales.value, damit der Rückgabetyp die vue-i18n-Locale-Union bleibt.
 const otherLocaleCode = computed(() => (locale.value === 'de' ? 'en' : 'de'))
 
 const navLinks = computed(() => [

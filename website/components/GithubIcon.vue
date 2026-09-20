@@ -1,9 +1,3 @@
-<script setup lang="ts">
-// Marken-Icon aus Simple Icons (CC0), inline statt Icon-Font oder externem
-// Request — gleiches Prinzip wie OsIcon.vue. fill="currentColor" übernimmt
-// die Textfarbe des umgebenden Buttons/Links.
-</script>
-
 <template>
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path

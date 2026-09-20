@@ -1,8 +1,3 @@
-// Vites "?raw"-Suffix inlined den Dateiinhalt zur Buildzeit als String —
-// funktioniert sowohl im Server- als auch im Client-Bundle, anders als
-// node:fs (das im Browser nicht existiert). CHANGELOG.md bleibt dabei
-// unverändert und weiterhin inklusive Ticket-IDs die interne Quelle;
-// nur die öffentliche Anzeige unten entfernt das "PW-<id> - "-Präfix.
 import changelogMarkdown from '../../CHANGELOG.md?raw'
 
 export interface ChangelogVersion {
@@ -14,16 +9,12 @@ export interface ChangelogVersion {
 
 const TICKET_PREFIX = /^PW-\d+ - /
 
-// "## 8.2.0" oder "## 8.2.0 - 2026-09-14" — das Datum wird beim Release von
-// Hand ergänzt (siehe README/Konzept), nicht automatisch aus Git generiert.
 const VERSION_HEADING = /^##\s+(\S+)(?:\s*-\s*(\d{4}-\d{2}-\d{2}))?\s*$/
 
 function stripTicketPrefix(line: string): string {
     return line.replace(TICKET_PREFIX, '')
 }
 
-// Exportiert für utils/changelog.test.ts (Backward-Compat-Test mit
-// synthetischem Markdown); für alles andere ist changelogVersions die API.
 export function parseChangelog(markdown: string): ChangelogVersion[] {
     const versions: ChangelogVersion[] = []
     let current: ChangelogVersion | null = null

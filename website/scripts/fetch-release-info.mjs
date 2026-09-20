@@ -1,18 +1,10 @@
 #!/usr/bin/env node
-// Löst die aktuelle PlayWallClient-Version samt Download-URLs zur Buildzeit
-// auf (PW-203, Konzept-Abschnitt "Downloads & Versionsnummer"). Läuft vor
-// `nuxt generate`/`nuxt dev` (siehe package.json "pre*"-Hooks) und bricht
-// den Build ab, wenn Artifactory nicht erreichbar ist oder eine der vier
-// Download-Dateien nicht existiert — eine tote Download-Seite darf es nicht
-// geben.
-
 import {mkdir, writeFile} from 'node:fs/promises'
 import {fileURLToPath} from 'node:url'
 
 const ARTIFACT_BASE = 'https://maven.thecodelabs.de/artifactory/TheCodeLabs-release/de/tobias/playwall/PlayWallClient'
 const METADATA_URL = `${ARTIFACT_BASE}/maven-metadata.xml`
 
-// Feste Dateinamens-Konvention, gegen Release 8.2.0 verifiziert (siehe Konzept).
 const PLATFORM_SUFFIXES = {
     'windows-amd64': 'installer.exe',
     'macos-arm64': 'installer.dmg',

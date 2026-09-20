@@ -1,9 +1,6 @@
 import {describe, expect, it} from 'vitest'
 import {changelogVersions, parseChangelog} from './changelog'
 
-// Getestet gegen die echte CHANGELOG.md statt einer Fixture — ein Test, der
-// gegen die tatsächliche Datei läuft, fängt echtes Format-Drift ab.
-
 describe('changelogVersions', () => {
     it('parses every version block in CHANGELOG.md', () => {
         expect(changelogVersions.length).toBeGreaterThanOrEqual(4)

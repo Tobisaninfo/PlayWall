@@ -1,13 +1,8 @@
 import {fileURLToPath} from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 
-// Einzige Quelle für die Domain — sonst müsste sie in i18n.baseUrl UND im
-// OG-Bild-Link in app.vue getrennt gepflegt werden.
 const SITE_URL = 'https://playwall.thecodelabs.de'
 
-// Klassische Root-Struktur (pages/, components/ auf website/-Ebene) statt
-// Nuxt 4s neuem app/-Unterordner, damit sie zur im Konzept dokumentierten
-// Ordnerstruktur passt.
 export default defineNuxtConfig({
     compatibilityDate: '2026-01-01',
     srcDir: '.',
@@ -40,14 +35,8 @@ export default defineNuxtConfig({
         plugins: [tailwindcss()],
     },
 
-    // Betrieb ausschließlich als vorgerendertes statisches Image (siehe Konzept
-    // "Warum Nuxt": SPA-Verhalten im Browser, echtes HTML für Crawler/Social-Previews).
     ssr: true,
     nitro: {
-        // Screenshots werden direkt aus doc/screenshots ausgeliefert statt nach
-        // website/public/ kopiert zu werden — eine Quelle statt Doppelpflege.
-        // Betrifft nur den Dev-Server/Build; das generierte .output/public/
-        // enthält die Dateien danach wie gewohnt als reine statische Assets.
         publicAssets: [
             {
                 baseURL: '/screenshots',

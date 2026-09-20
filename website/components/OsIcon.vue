@@ -1,8 +1,4 @@
 <script setup lang="ts">
-// Marken-Icons aus Simple Icons (CC0), als Inline-SVG statt Icon-Font oder
-// externem Request eingebettet — passend zum Rest der Seite (selbst
-// gehostete Schriften, keine Fremdaufrufe zur Laufzeit). fill="currentColor"
-// übernimmt die Textfarbe der Karte, inkl. Hervorhebung.
 defineProps<{
   system: SystemId
 }>()
