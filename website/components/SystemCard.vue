@@ -52,6 +52,7 @@ const rows = computed(() =>
       </div>
       <a
           :href="rows[0].url"
+          download
           class="flex flex-col items-center justify-center gap-0.5 rounded-md bg-pw-blue-strong px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
       >
         <span>{{ t('download.downloadCta') }}</span>
@@ -66,6 +67,7 @@ const rows = computed(() =>
         <p class="font-mono text-xs text-pw-text-muted">{{ row.fileType }}</p>
         <a
             :href="row.url"
+            download
             class="flex flex-col items-center justify-center gap-0.5 rounded-md bg-pw-blue-strong px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
           <span>{{ t('download.downloadCta') }}</span>

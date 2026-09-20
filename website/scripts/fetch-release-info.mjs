@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url'
 
 const ARTIFACT_BASE = 'https://maven.thecodelabs.de/artifactory/TheCodeLabs-release/de/tobias/playwall/PlayWallClient'
 const METADATA_URL = `${ARTIFACT_BASE}/maven-metadata.xml`
+const DOWNLOAD_PROXY_BASE = '/downloads'
 
 const PLATFORM_SUFFIXES = {
     'windows-amd64': 'installer.exe',
@@ -45,10 +46,11 @@ async function main() {
 
     const platforms = {}
     for (const [platformId, suffix] of Object.entries(PLATFORM_SUFFIXES)) {
-        const url = `${ARTIFACT_BASE}/${version}/PlayWallClient-${version}-${suffix}`
+        const artifactPath = `${version}/PlayWallClient-${version}-${suffix}`
+        const url = `${ARTIFACT_BASE}/${artifactPath}`
         console.log(`Prüfe ${platformId}: ${url}`)
         await assertReachable(url)
-        platforms[platformId] = url
+        platforms[platformId] = `${DOWNLOAD_PROXY_BASE}/${artifactPath}`
     }
 
     const outFile = fileURLToPath(new URL('../assets/release.json', import.meta.url))
