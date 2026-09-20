@@ -61,8 +61,9 @@ const GITHUB_URL = 'https://github.com/Tobisaninfo/PlayWall'
         <div class="mt-2 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <NuxtLink
               :to="localePath('download')"
-              class="rounded-md bg-pw-blue-strong px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              class="inline-flex items-center gap-2 rounded-md bg-pw-blue-strong px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
           >
+            <DownloadIcon class="h-4 w-4 flex-none"/>
             {{ t('home.cta_download') }}
           </NuxtLink>
           <a
