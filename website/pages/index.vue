@@ -17,8 +17,14 @@ usePageSeo('home.title', 'home.subtitle')
         class="absolute inset-0 h-full w-full object-cover object-top"
     >
 
-    <div class="pointer-events-none absolute -top-40 left-[8%] h-[46rem] w-[46rem] rounded-full bg-white/10 blur-3xl"></div>
-    <div class="pointer-events-none absolute top-1/3 right-[4%] h-[34rem] w-[34rem] rounded-full bg-pw-blue/25 blur-3xl"></div>
+    <div
+        class="pointer-events-none absolute -top-40 left-[8%] h-[46rem] w-[46rem] rounded-full"
+        style="background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 70%)"
+    ></div>
+    <div
+        class="pointer-events-none absolute top-1/3 right-[4%] h-[34rem] w-[34rem] rounded-full"
+        style="background: radial-gradient(circle, rgba(33,150,243,0.32) 0%, rgba(33,150,243,0) 70%)"
+    ></div>
 
     <div class="absolute inset-0 bg-gradient-to-b from-pw-bg/85 via-pw-bg/25 to-pw-bg"></div>
 

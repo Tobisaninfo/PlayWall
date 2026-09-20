@@ -20,7 +20,7 @@ watch(() => route.fullPath, () => {
 </script>
 
 <template>
-  <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-pw-bg/40 backdrop-blur-xl">
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-pw-bg/70 backdrop-blur-md">
     <div class="mx-auto flex h-16 max-w-5xl items-center gap-6 px-6">
       <NuxtLink :to="localePath('index')" class="flex items-center gap-2">
         <img src="/logo.png" alt="" width="256" height="256" class="h-7 w-7">
@@ -86,7 +86,7 @@ watch(() => route.fullPath, () => {
     >
       <nav
           v-if="isMobileMenuOpen"
-          class="flex flex-col gap-1 border-t border-white/10 bg-pw-bg/70 px-6 py-4 backdrop-blur-xl sm:hidden"
+          class="flex flex-col gap-1 border-t border-white/10 bg-pw-bg/90 px-6 py-4 sm:hidden"
       >
         <NuxtLink
             v-for="link in navLinks"
