@@ -162,7 +162,7 @@ class PadStatusListenerTest extends AbstractViewControllerTest
 		eventHandler.fireEvent(new PadStatusUpdate(padId, PadControllerStatus.ERROR));
 		WaitForAsyncUtils.waitForFxEvents();
 
-		eventHandler.fireEvent(new ProjectLoadedUpdate());
+		eventHandler.fireEvent(new ProjectLoadedUpdate(null));
 		WaitForAsyncUtils.waitForFxEvents();
 		assertThat(mainViewController.getPadErrorsToast()).isNotNull();
 

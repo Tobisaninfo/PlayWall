@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate;
 import de.tobias.playwall.server.api.history.UndoManager;
 import de.tobias.playwall.server.api.pad.PadNotExistsException;
+import de.tobias.playwall.server.api.project.ProjectMapper;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
@@ -31,6 +32,7 @@ public class ProjectController
 	private final PadContentControllerFactory padControllerFactory;
 	private Project loadedProject;
 	private final UndoManager undoManager;
+	private final ProjectMapper projectMapper;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
@@ -96,7 +98,7 @@ public class ProjectController
 				.forEach(this::createNewPadController);
 
 		padControllers.values().forEach(PadController::load);
-		context.publishEvent(new ProjectLoadedUpdate());
+		context.publishEvent(new ProjectLoadedUpdate(projectMapper.projectToProjectDto(getLoadedProject())));
 	}
 
 	public boolean isAnyProjectLoaded()

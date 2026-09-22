@@ -84,7 +84,7 @@ class MainViewControllerLoadingOverlayTest extends AbstractViewControllerTest
 
 		assertThat(mainViewController.getLoadingOverlay().getProgressBar().getProgress()).isEqualTo(1.0);
 
-		eventHandler.fireEvent(new ProjectLoadedUpdate());
+		eventHandler.fireEvent(new ProjectLoadedUpdate(null));
 		WaitForAsyncUtils.waitForFxEvents();
 
 		await()

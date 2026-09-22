@@ -3,6 +3,8 @@ import {GetConfigFields, type ModuleConfig} from './config.js'
 import {UpdateVariableDefinitions, type VariablesSchema} from './variables.js'
 import {UpgradeScripts} from './upgrades.js'
 import {ClientWebSocketHandler, type ConnectionStatus} from './connection/ClientWebSocketHandler.js'
+import type {ProjectDto} from './connection/protocol.js'
+import {ProjectStore} from './domain/projectStore.js'
 
 export type ModuleSchema = {
     config: ModuleConfig
@@ -17,6 +19,7 @@ export {UpgradeScripts}
 export default class ModuleInstance extends InstanceBase<ModuleSchema> {
     config!: ModuleConfig
     connection: ClientWebSocketHandler | undefined
+    readonly projectStore = new ProjectStore()
 
     constructor(internal: unknown) {
         super(internal)
@@ -57,9 +60,21 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
             useTls: this.config.useTls,
             reconnectDelaySeconds: this.config.reconnectDelaySeconds,
             onStatusChange: (status) => this.handleStatusChange(status),
+            onProjectLoaded: (project) => this.handleProjectLoaded(project),
+            onProjectCleared: () => this.handleProjectCleared(),
             log: (level, message) => this.log(level, message),
         })
         this.connection.connect()
+    }
+
+    private handleProjectLoaded(project: ProjectDto): void {
+        this.projectStore.setProject(project)
+        this.setVariableValues({project_name: project.metadata.name})
+    }
+
+    private handleProjectCleared(): void {
+        this.projectStore.clear()
+        this.setVariableValues({project_name: ''})
     }
 
     private handleStatusChange(status: ConnectionStatus): void {
