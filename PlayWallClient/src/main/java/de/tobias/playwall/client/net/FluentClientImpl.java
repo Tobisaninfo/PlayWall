@@ -210,6 +210,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public void showPage(int index) throws PlayWallApiException
+		{
+			delegate.showPage(index);
+		}
+
+		@Override
 		public void batchColorPads(Set<UUID> padIds, ModernColor color) throws PlayWallApiException
 		{
 			delegate.batchColorPads(padIds, color);

@@ -1,14 +1,20 @@
 import {randomUUID} from 'node:crypto'
 import {WebSocket} from 'ws'
-import type {z} from 'zod'
+import {z} from 'zod'
 import {
+    buildPadPlayRequest,
+    buildPadStopRequest,
     buildProjectGetRequest,
     ERROR_MESSAGE,
     ERROR_MESSAGE_CLASS,
+    PAD_STATUS_UPDATE,
+    PAD_STATUS_UPDATE_CLASS,
     parseEnvelope,
     PROJECT_GET_RESPONSE,
     PROJECT_LOADED_UPDATE,
     PROJECT_LOADED_UPDATE_CLASS,
+    PROJECT_PAGE_SHOWN_UPDATE,
+    PROJECT_PAGE_SHOWN_UPDATE_CLASS,
     type ProjectDto,
 } from './protocol.js'
 
@@ -22,8 +28,13 @@ export interface ClientWebSocketHandlerOptions {
     onStatusChange: (status: ConnectionStatus) => void
     onProjectLoaded: (project: ProjectDto) => void
     onProjectCleared: () => void
+    onPageShown: (index: number) => void
+    onPadStatus: (padId: string, status: string) => void
     log: (level: 'debug' | 'warn', message: string) => void
 }
+
+/** A generic PlayWall ResponseMessage carries no fields beyond the base envelope. */
+const GENERIC_RESPONSE = z.looseObject({})
 
 const MAX_RECONNECT_DELAY_MS = 30_000
 const REQUEST_TIMEOUT_MS = 5_000
@@ -124,6 +135,7 @@ export class ClientWebSocketHandler {
         this.sendRequest(buildProjectGetRequest(), PROJECT_GET_RESPONSE)
             .then((response) => {
                 this.options.onProjectLoaded(response.project)
+                this.options.onPageShown(response.currentPageIndex ?? 0)
             })
             .catch((error: unknown) => {
                 if (error instanceof ServerErrorResponse) {
@@ -136,11 +148,25 @@ export class ClientWebSocketHandler {
             })
     }
 
+    /** Plays the given pad. Errors (e.g. an invalid/empty pad) are logged, not thrown. */
+    playPad(padId: string): void {
+        this.sendRequest(buildPadPlayRequest(padId), GENERIC_RESPONSE).catch((error: unknown) => {
+            this.options.log('warn', `Failed to play pad ${padId}: ${String(error)}`)
+        })
+    }
+
+    /** Stops the given pad with a graceful fade-out. Errors are logged, not thrown. */
+    stopPad(padId: string): void {
+        this.sendRequest(buildPadStopRequest(padId), GENERIC_RESPONSE).catch((error: unknown) => {
+            this.options.log('warn', `Failed to stop pad ${padId}: ${String(error)}`)
+        })
+    }
+
     private sendRequest<Schema extends z.ZodType>(message: {
         messageId: string
     }, schema: Schema): Promise<z.infer<Schema>> {
         return new Promise((resolve, reject) => {
-            if (this.socket === undefined || this.socket.readyState !== WebSocket.OPEN) {
+            if (this.socket?.readyState !== WebSocket.OPEN) {
                 reject(new Error('WebSocket is not connected'))
                 return
             }
@@ -179,12 +205,40 @@ export class ClientWebSocketHandler {
             return
         }
 
-        if (envelope['@class'] === PROJECT_LOADED_UPDATE_CLASS) {
-            const update = PROJECT_LOADED_UPDATE.safeParse(envelope)
-            if (update.success) {
-                this.options.onProjectLoaded(update.data.project)
-            } else {
-                this.options.log('warn', `Received malformed ProjectLoadedUpdate: ${String(update.error)}`)
+        switch (envelope['@class']) {
+            case PROJECT_LOADED_UPDATE_CLASS: {
+                const update = PROJECT_LOADED_UPDATE.safeParse(envelope)
+                if (update.success) {
+                    this.options.onProjectLoaded(update.data.project)
+                } else {
+                    this.options.log('warn', `Received malformed ProjectLoadedUpdate: ${String(update.error)}`)
+                }
+                break
+            }
+            case PROJECT_PAGE_SHOWN_UPDATE_CLASS: {
+                const update = PROJECT_PAGE_SHOWN_UPDATE.safeParse(envelope)
+                if (update.success) {
+                    this.options.onPageShown(update.data.index)
+                } else {
+                    this.options.log('warn', `Received malformed ProjectPageShownUpdate: ${String(update.error)}`)
+                }
+                break
+            }
+            case PAD_STATUS_UPDATE_CLASS: {
+                const update = PAD_STATUS_UPDATE.safeParse(envelope)
+                if (update.success) {
+                    this.options.onPadStatus(update.data.padId, update.data.status)
+                } else {
+                    this.options.log('warn', `Received malformed PadStatusUpdate: ${String(update.error)}`)
+                }
+                break
+            }
+            case ERROR_MESSAGE_CLASS: {
+                const error = ERROR_MESSAGE.safeParse(envelope)
+                this.options.log('warn', error.success
+                    ? `Received an unsolicited error from the PlayWall server: ${error.data.message}`
+                    : `Received a malformed ErrorMessage: ${String(error.error)}`)
+                break
             }
         }
     }

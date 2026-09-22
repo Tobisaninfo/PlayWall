@@ -9,7 +9,9 @@ import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.project.Project;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -30,9 +32,13 @@ public class ProjectController
 {
 	private final ApplicationContext context;
 	private final PadContentControllerFactory padControllerFactory;
-	private Project loadedProject;
 	private final UndoManager undoManager;
 	private final ProjectMapper projectMapper;
+
+	private Project loadedProject;
+	@Setter
+	@Getter
+	private int currentPageIndex;
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
@@ -49,6 +55,7 @@ public class ProjectController
 	{
 		unloadPads();
 		loadedProject = null;
+		currentPageIndex = 0;
 		undoManager.clear();
 	}
 

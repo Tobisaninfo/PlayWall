@@ -25,9 +25,15 @@ class ProjectGetHandler implements GetRequestHandler<ProjectGetRequest>
 	@Override
 	public Optional<ResponseMessage> handleRequest(ProjectGetRequest requestMessage) throws IOException
 	{
-		final Project project = requestMessage.getProjectId() != null
-				? projectService.getProjectById(requestMessage.getProjectId())
-				: projectController.getLoadedProject();
-		return Optional.of(new ProjectGetResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project)));
+		if(requestMessage.getProjectId() != null) // any project from disk by id
+		{
+			final Project project = projectService.getProjectById(requestMessage.getProjectId());
+			return Optional.of(new ProjectGetResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project)));
+		}
+		else // Current project is loaded
+		{
+			final Project project = projectController.getLoadedProject();
+			return Optional.of(new ProjectGetResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project), projectController.getCurrentPageIndex()));
+		}
 	}
 }

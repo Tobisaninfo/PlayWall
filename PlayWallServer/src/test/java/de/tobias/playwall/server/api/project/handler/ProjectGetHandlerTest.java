@@ -93,11 +93,29 @@ class ProjectGetHandlerTest extends AbstractRequestHandlerTest
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
 		projectController.loadProject(project).get();
+		projectController.setCurrentPageIndex(2);
 
 		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(null));
 
 		assertThat(response).isNotEmpty();
-		assertThat(((ProjectGetResponse) response.get()).getProject().metadata().id()).isEqualTo(projectId);
+		final ProjectGetResponse projectGetResponse = (ProjectGetResponse) response.get();
+		assertThat(projectGetResponse.getProject().metadata().id()).isEqualTo(projectId);
+		assertThat(projectGetResponse.getCurrentPageIndex()).isEqualTo(2);
+	}
+
+	@Test
+	void testProjectGetRequestByIdDoesNotReturnCurrentPageIndex() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
+		when(projectRepository.loadProject(projectId)).thenReturn(project);
+		projectController.loadProject(project).get();
+		projectController.setCurrentPageIndex(2);
+
+		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(projectId));
+
+		assertThat(response).isNotEmpty();
+		assertThat(((ProjectGetResponse) response.get()).getCurrentPageIndex()).isNull();
 	}
 
 	@Test

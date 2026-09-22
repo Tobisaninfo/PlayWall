@@ -325,6 +325,12 @@ class ClientImpl implements Client
 	}
 
 	@Override
+	public void showPage(int index) throws PlayWallApiException
+	{
+		clientWebSocketHandler.send(new ProjectPageShowRequest(index));
+	}
+
+	@Override
 	public void batchColorPads(Set<UUID> padIds, ModernColor color) throws PlayWallApiException
 	{
 		final Color mappedColor = colorMapper.modernColorToColor(color);

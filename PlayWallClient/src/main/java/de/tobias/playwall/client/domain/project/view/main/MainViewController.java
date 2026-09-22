@@ -518,9 +518,10 @@ public class MainViewController extends ViewControllerBase
 			initializePadViews(project.getMetadata().getNumberOfHorizontalPads(), project.getMetadata().getNumberOfVerticalPads());
 
 			buildPageButtons();
-			showPage(0);
 
 			client.project(project.getMetadata().getId()).load();
+
+			showPage(0);
 
 			volumeSlider.setValue(projectController.getProject().getMetadata().getVolume() * 100);
 
@@ -673,6 +674,15 @@ public class MainViewController extends ViewControllerBase
 		styleable.renderStylesheets(getStage(), page, projectMetadata);
 
 		eventHandler.fireEvent(new ProjectPageShownUpdate(page.getPosition()));
+
+		try
+		{
+			client.currentProject().showPage(page.getPosition());
+		}
+		catch(PlayWallApiException e)
+		{
+			log.warn("Cannot notify server about the currently shown page", e);
+		}
 	}
 
 	public void updateStyle()

@@ -102,6 +102,8 @@ public interface Client
 
 	void stopAllPads() throws PlayWallApiException;
 
+	void showPage(int index) throws PlayWallApiException;
+
 	void batchColorPads(Set<UUID> padIds, ModernColor color) throws PlayWallApiException;
 
 	void batchReplaceMedia(Map<UUID, String> newMediaPathsByPadId, Set<UUID> padIdsToDelete) throws PlayWallApiException;
