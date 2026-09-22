@@ -33,7 +33,7 @@ class ProjectGetHandler implements GetRequestHandler<ProjectGetRequest>
 		else // Current project is loaded
 		{
 			final Project project = projectController.getLoadedProject();
-			return Optional.of(new ProjectGetResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project), projectController.getCurrentPageIndex()));
+			return Optional.of(new ProjectGetResponse(requestMessage.getMessageId(), projectMapper.projectToProjectDto(project), projectController.getCurrentPageIndex(), projectController.getPadStatuses()));
 		}
 	}
 }

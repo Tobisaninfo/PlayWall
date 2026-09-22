@@ -115,7 +115,21 @@ class ProjectGetHandlerTest extends AbstractRequestHandlerTest
 		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(projectId));
 
 		assertThat(response).isNotEmpty();
-		assertThat(((ProjectGetResponse) response.get()).getCurrentPageIndex()).isNull();
+		final ProjectGetResponse projectGetResponse = (ProjectGetResponse) response.get();
+		assertThat(projectGetResponse.getCurrentPageIndex()).isNull();
+		assertThat(projectGetResponse.getPadStatuses()).isNull();
+	}
+
+	@Test
+	void testProjectGetRequestWithoutIdReturnsPadStatuses() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		projectController.loadProject(project).get();
+
+		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(null));
+
+		assertThat(response).isNotEmpty();
+		assertThat(((ProjectGetResponse) response.get()).getPadStatuses()).isEqualTo(projectController.getPadStatuses());
 	}
 
 	@Test

@@ -2,7 +2,7 @@ import {InstanceBase, InstanceStatus, type SomeCompanionConfigField} from '@comp
 import {GetActionDefinitions} from './actions.js'
 import {GetConfigFields, type ModuleConfig} from './config.js'
 import {GetFeedbackDefinitions} from './feedbacks.js'
-import {UpdatePadNameVariableValues, UpdateVariableDefinitions, type VariablesSchema} from './variables.js'
+import {UpdatePadVariableValues, UpdateVariableDefinitions, type VariablesSchema} from './variables.js'
 import {UpgradeScripts} from './upgrades.js'
 import {ClientWebSocketHandler, type ConnectionStatus} from './connection/ClientWebSocketHandler.js'
 import type {ProjectDto} from './connection/protocol.js'
@@ -78,6 +78,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
             onProjectCleared: () => this.handleProjectCleared(),
             onPageShown: (index) => this.handlePageShown(index),
             onPadStatus: (padId, status) => this.handlePadStatus(padId, status),
+            onPadStatuses: (statuses) => this.handlePadStatuses(statuses),
             log: (level, message) => this.log(level, message),
         })
         this.connection.connect()
@@ -85,10 +86,10 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
 
     private handleProjectLoaded(project: ProjectDto): void {
         this.projectStore.setProject(project)
-        this.playbackStore.clear()
+        this.playbackStore.resetPage()
         this.setVariableValues({project_name: project.metadata.name})
         this.updateVariableDefinitions()
-        this.refreshPadNameVariableValues()
+        this.refreshPadVariableValues()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
     }
 
@@ -102,17 +103,24 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
 
     private handlePageShown(index: number): void {
         this.playbackStore.setCurrentPageIndex(index)
-        this.refreshPadNameVariableValues()
+        this.refreshPadVariableValues()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
     }
 
     private handlePadStatus(padId: string, status: string): void {
         this.playbackStore.setPadStatus(padId, status)
+        this.refreshPadVariableValues()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
     }
 
-    private refreshPadNameVariableValues(): void {
-        UpdatePadNameVariableValues(this, this.projectStore.getProject(), this.playbackStore.getCurrentPageIndex())
+    private handlePadStatuses(statuses: Record<string, string>): void {
+        this.playbackStore.setPadStatuses(statuses)
+        this.refreshPadVariableValues()
+        this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
+    }
+
+    private refreshPadVariableValues(): void {
+        UpdatePadVariableValues(this, this.projectStore.getProject(), this.playbackStore.getCurrentPageIndex())
     }
 
     private handleStatusChange(status: ConnectionStatus): void {

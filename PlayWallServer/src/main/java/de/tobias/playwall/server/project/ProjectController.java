@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -125,6 +126,12 @@ public class ProjectController
 	public PadController getPadController(UUID padId)
 	{
 		return padControllers.get(padId);
+	}
+
+	public Map<UUID, PadControllerStatus> getPadStatuses()
+	{
+		return padControllers.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getStatus()));
 	}
 
 	public @NonNull Pad getPad(UUID padId)

@@ -1,9 +1,11 @@
 package de.tobias.playwall.common.api.project.request;
 
+import de.tobias.playwall.common.api.pad.PadControllerStatus;
 import de.tobias.playwall.common.api.project.model.ProjectDto;
 import de.tobias.playwall.common.net.ResponseMessage;
 import lombok.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -21,16 +23,25 @@ public class ProjectGetResponse extends ResponseMessage
 	 */
 	private Integer currentPageIndex;
 
+	/**
+	 * The current playback status of every pad that has content, keyed by pad id. Only populated
+	 * together with {@link #currentPageIndex}, for the same reason: a fresh (or reconnecting) client
+	 * would otherwise only learn a pad's status from the next {@code PadStatusUpdate} broadcast, which
+	 * may never come if nothing changes after it connects.
+	 */
+	private Map<UUID, PadControllerStatus> padStatuses;
+
 	public ProjectGetResponse(UUID messageId, ProjectDto project)
 	{
 		super(messageId);
 		this.project = project;
 	}
 
-	public ProjectGetResponse(UUID messageId, ProjectDto project, Integer currentPageIndex)
+	public ProjectGetResponse(UUID messageId, ProjectDto project, Integer currentPageIndex, Map<UUID, PadControllerStatus> padStatuses)
 	{
 		super(messageId);
 		this.project = project;
 		this.currentPageIndex = currentPageIndex;
+		this.padStatuses = padStatuses;
 	}
 }

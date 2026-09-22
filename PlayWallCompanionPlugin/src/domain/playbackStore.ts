@@ -29,12 +29,30 @@ export class PlaybackStore {
         this.padStatuses.set(padId, status)
     }
 
+    /** Bulk-seeds statuses, e.g. from the initial "currently loaded project" fetch on (re)connect. */
+    setPadStatuses(statuses: Record<string, string>): void {
+        for (const [padId, status] of Object.entries(statuses)) {
+            this.padStatuses.set(padId, status)
+        }
+    }
+
     /** `undefined` means no status has been observed yet for this pad — treat as not playing. */
     getPadStatus(padId: string): string | undefined {
         return this.padStatuses.get(padId)
     }
 
-    /** Called when a (new) project is loaded: page 0, no known pad statuses yet. */
+    /**
+     * Called when a (new) project is loaded: resets to page 0. Deliberately keeps known pad
+     * statuses — pad ids are never reused across projects, so old entries are simply inert, and
+     * dropping them here would lose statuses that can legitimately already have arrived: the server
+     * broadcasts each pad's initial PadStatusUpdate *while* loading, before the final
+     * ProjectLoadedUpdate that triggers this call.
+     */
+    resetPage(): void {
+        this.currentPageIndex = 0
+    }
+
+    /** Called when no project is loaded at all: nothing is relevant anymore. */
     clear(): void {
         this.currentPageIndex = 0
         this.padStatuses.clear()

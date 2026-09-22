@@ -30,6 +30,7 @@ export interface ClientWebSocketHandlerOptions {
     onProjectCleared: () => void
     onPageShown: (index: number) => void
     onPadStatus: (padId: string, status: string) => void
+    onPadStatuses: (statuses: Record<string, string>) => void
     log: (level: 'debug' | 'warn', message: string) => void
 }
 
@@ -129,12 +130,17 @@ export class ClientWebSocketHandler {
     /**
      * Asks the server whether a project is currently open and, if so, reports it via
      * `onProjectLoaded`. Runs after every successful (re)connect so state missed while
-     * disconnected is picked up too.
+     * disconnected is picked up too — this includes each pad's current status: a `PadStatusUpdate`
+     * only broadcasts when a status *changes*, so without this a pad that hasn't changed since
+     * connecting would otherwise never be known.
      */
     private fetchCurrentProject(): void {
         this.sendRequest(buildProjectGetRequest(), PROJECT_GET_RESPONSE)
             .then((response) => {
                 this.options.onProjectLoaded(response.project)
+                if (response.padStatuses) {
+                    this.options.onPadStatuses(response.padStatuses)
+                }
                 this.options.onPageShown(response.currentPageIndex ?? 0)
             })
             .catch((error: unknown) => {
