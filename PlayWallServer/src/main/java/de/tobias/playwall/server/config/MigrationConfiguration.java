@@ -18,4 +18,10 @@ class MigrationConfiguration
 	{
 		return MigrationRegistry.builder(1, "/VERSION").build();
 	}
+
+	@Bean
+	public MigrationRegistry settingsMigrationRegistry()
+	{
+		return MigrationRegistry.builder(2, "/VERSION").migrateTo(2).build();
+	}
 }
