@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.config;
 
-import de.tobias.playwall.server.common.migration.JsonMigrationEngine;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,24 +10,12 @@ class MigrationConfiguration
 	@Bean
 	public MigrationRegistry projectMigrationRegistry()
 	{
-		return MigrationRegistry.builder(1).build();
-	}
-
-	@Bean
-	public JsonMigrationEngine projectMigrationEngine()
-	{
-		return new JsonMigrationEngine(projectMigrationRegistry(), "/metadata/VERSION");
+		return MigrationRegistry.builder(1, "/metadata/VERSION").build();
 	}
 
 	@Bean
 	public MigrationRegistry allProjectsInfoMigrationRegistry()
 	{
-		return MigrationRegistry.builder(1).build();
-	}
-
-	@Bean
-	public JsonMigrationEngine allProjectsInfoMigrationEngine()
-	{
-		return new JsonMigrationEngine(allProjectsInfoMigrationRegistry(), "/VERSION");
+		return MigrationRegistry.builder(1, "/VERSION").build();
 	}
 }

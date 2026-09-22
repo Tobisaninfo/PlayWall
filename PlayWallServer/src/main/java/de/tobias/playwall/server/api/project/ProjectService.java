@@ -3,7 +3,6 @@ package de.tobias.playwall.server.api.project;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
-import de.tobias.playwall.server.common.migration.JsonMigrationEngine;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
@@ -31,21 +30,18 @@ public class ProjectService
 	private final ProjectRepository projectRepository;
 	private final MessageSource messageSource;
 	private final JsonMapper jsonMapper;
-	private final JsonMigrationEngine projectMigrationEngine;
 	private final MigrationRegistry projectMigrationRegistry;
 
 	public ProjectService(AllProjectsInfoRepository allProjectsInfoRepository,
 			ProjectRepository projectRepository,
 			MessageSource messageSource,
 			JsonMapper jsonMapper,
-			@Qualifier("projectMigrationEngine") JsonMigrationEngine projectMigrationEngine,
 			@Qualifier("projectMigrationRegistry") MigrationRegistry projectMigrationRegistry)
 	{
 		this.allProjectsInfoRepository = allProjectsInfoRepository;
 		this.projectRepository = projectRepository;
 		this.messageSource = messageSource;
 		this.jsonMapper = jsonMapper;
-		this.projectMigrationEngine = projectMigrationEngine;
 		this.projectMigrationRegistry = projectMigrationRegistry;
 	}
 
@@ -144,7 +140,7 @@ public class ProjectService
 			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()));
 		}
 
-		final Project project = jsonMapper.treeToValue(projectMigrationEngine.migrate(root), Project.class);
+		final Project project = jsonMapper.treeToValue(projectMigrationRegistry.migrate(root), Project.class);
 
 		allProjectsInfoRepository.importProject(project);
 		projectRepository.saveProject(project);

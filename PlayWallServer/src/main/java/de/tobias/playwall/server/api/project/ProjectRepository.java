@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.project;
 
-import de.tobias.playwall.server.common.migration.JsonMigrationEngine;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
@@ -25,16 +24,13 @@ public class ProjectRepository
 
 	private final PathProvider pathProvider;
 	private final JsonMapper mapper;
-	private final JsonMigrationEngine projectMigrationEngine;
 	private final MigrationRegistry projectMigrationRegistry;
 
 	public ProjectRepository(PathProvider pathProvider, JsonMapper mapper,
-			@Qualifier("projectMigrationEngine") JsonMigrationEngine projectMigrationEngine,
 			@Qualifier("projectMigrationRegistry") MigrationRegistry projectMigrationRegistry)
 	{
 		this.pathProvider = pathProvider;
 		this.mapper = mapper;
-		this.projectMigrationEngine = projectMigrationEngine;
 		this.projectMigrationRegistry = projectMigrationRegistry;
 	}
 
@@ -47,10 +43,10 @@ public class ProjectRepository
 		}
 
 		final JsonNode root = mapper.readTree(Files.newBufferedReader(path));
-		final JsonNode migrated = projectMigrationEngine.migrate(root);
+		final JsonNode migrated = projectMigrationRegistry.migrate(root);
 		final Project project = mapper.treeToValue(migrated, Project.class);
 
-		if(root.path("/metadata/VERSION").asInt() < projectMigrationRegistry.currentVersion())
+		if(root.at(projectMigrationRegistry.versionPath()).asInt() < projectMigrationRegistry.currentVersion())
 		{
 			saveProject(project);
 		}

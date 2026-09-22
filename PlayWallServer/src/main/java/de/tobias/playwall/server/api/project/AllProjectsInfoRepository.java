@@ -1,6 +1,5 @@
 package de.tobias.playwall.server.api.project;
 
-import de.tobias.playwall.server.common.migration.JsonMigrationEngine;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -32,19 +31,16 @@ public class AllProjectsInfoRepository
 	private final PathProvider pathProvider;
 	private final JsonMapper mapper;
 	private final ProjectRepository projectRepository;
-	private final JsonMigrationEngine allProjectsInfoMigrationEngine;
 	private final MigrationRegistry allProjectsInfoMigrationRegistry;
 
 	private AllProjectsInfo allProjectsInfo;
 
 	public AllProjectsInfoRepository(PathProvider pathProvider, JsonMapper mapper, ProjectRepository projectRepository,
-			@Qualifier("allProjectsInfoMigrationEngine") JsonMigrationEngine allProjectsInfoMigrationEngine,
 			@Qualifier("allProjectsInfoMigrationRegistry") MigrationRegistry allProjectsInfoMigrationRegistry)
 	{
 		this.pathProvider = pathProvider;
 		this.mapper = mapper;
 		this.projectRepository = projectRepository;
-		this.allProjectsInfoMigrationEngine = allProjectsInfoMigrationEngine;
 		this.allProjectsInfoMigrationRegistry = allProjectsInfoMigrationRegistry;
 	}
 
@@ -78,10 +74,10 @@ public class AllProjectsInfoRepository
 		final JsonNode root = mapper.readTree(Files.newBufferedReader(path));
 		addVersionIfMissing((ObjectNode) root);
 
-		final JsonNode migrated = allProjectsInfoMigrationEngine.migrate(root);
+		final JsonNode migrated = allProjectsInfoMigrationRegistry.migrate(root);
 		allProjectsInfo = mapper.treeToValue(migrated, AllProjectsInfo.class);
 
-		if(root.path(VERSION_FIELD_NAME).asInt() < allProjectsInfoMigrationRegistry.currentVersion())
+		if(root.at(allProjectsInfoMigrationRegistry.versionPath()).asInt() < allProjectsInfoMigrationRegistry.currentVersion())
 		{
 			saveAllProjectsInfo();
 		}

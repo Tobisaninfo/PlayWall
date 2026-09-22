@@ -1,5 +1,9 @@
 package de.tobias.playwall.server.common.migration;
 
+import tools.jackson.core.JsonPointer;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.IntNode;
+
 import java.util.*;
 
 /**
@@ -9,30 +13,40 @@ import java.util.*;
  * <p>Supported versions must be contiguous: every version between the first registered migration and
  * {@link #currentVersion()} has to be registered (empty step lists are allowed) so that any supported
  * JSON node can be migrated to the latest version by applying the migrations in order.
+ *
+ * <p>The registry also performs the migrations: {@link #migrate(JsonNode)} migrates a JSON node to the latest
+ * version defined by {@link #currentVersion()}.
  */
 public final class MigrationRegistry
 {
 	private final int currentVersion;
+	private final String versionPath;
 	private final SortedMap<Integer, List<JsonMigrationStep>> steps;
 
-	private MigrationRegistry(int currentVersion, SortedMap<Integer, List<JsonMigrationStep>> steps)
+	private MigrationRegistry(int currentVersion, String versionPath, SortedMap<Integer, List<JsonMigrationStep>> steps)
 	{
 		this.currentVersion = currentVersion;
+		this.versionPath = versionPath;
 		this.steps = Collections.unmodifiableSortedMap(steps);
 	}
 
-	public static Builder builder(int currentVersion)
+	public static Builder builder(int currentVersion, String versionPath)
 	{
 		if(currentVersion < 1)
 		{
 			throw new IllegalArgumentException("currentVersion must be at least 1: " + currentVersion);
 		}
-		return new Builder(currentVersion);
+		return new Builder(currentVersion, versionPath);
 	}
 
 	public int currentVersion()
 	{
 		return currentVersion;
+	}
+
+	public String versionPath()
+	{
+		return versionPath;
 	}
 
 	public int getMinSupportedVersion()
@@ -46,14 +60,107 @@ public final class MigrationRegistry
 		return versionSteps == null ? List.of() : versionSteps;
 	}
 
+	/**
+	 * Migrates the given JSON node to {@link #currentVersion()}.
+	 *
+	 * @param node the JSON node to migrate
+	 * @return a migrated deep copy of the node
+	 * @throws MigrationException if the node is not an object, is too old to migrate, or newer than the current version
+	 */
+	public JsonNode migrate(JsonNode node)
+	{
+		if(node == null)
+		{
+			throw new MigrationException("Node must not be null");
+		}
+
+		if(!node.isObject())
+		{
+			throw new MigrationException("Node must be a valid JSON node");
+		}
+
+		final JsonNode root = node.deepCopy();
+		final int version = parseVersion(root);
+
+		if(version > currentVersion)
+		{
+			throw new MigrationException("Format version " + version + " is newer than the supported version: " + currentVersion);
+		}
+
+		if(version < getMinSupportedVersion())
+		{
+			throw new MigrationException("Format version " + version + " is too old to migrate. Minimum supported version is: " + getMinSupportedVersion());
+		}
+
+		int current = version;
+		while(current < currentVersion)
+		{
+			for(final JsonMigrationStep step : getStepsByTargetVersion(current + 1))
+			{
+				apply(root, step);
+			}
+
+			current++;
+			JsonPathOperations.add(root, versionPath, new IntNode(current));
+		}
+		return root;
+	}
+
+	private int parseVersion(JsonNode root)
+	{
+		final JsonNode versionNode = root.at(versionPath);
+		if(versionNode.isMissingNode())
+		{
+			throw new MigrationException("Cannot determine version");
+		}
+
+		return versionNode.asInt();
+	}
+
+	private static void apply(JsonNode root, JsonMigrationStep step)
+	{
+		switch(step)
+		{
+			case JsonMigrationStepAdd addStep -> JsonPathOperations.add(root, addStep.path(), addStep.value());
+			case JsonMigrationStepDelete deleteStep -> JsonPathOperations.remove(root, deleteStep.path());
+			case JsonMigrationStepMove moveStep ->
+			{
+				final JsonNode value = JsonPathOperations.remove(root, moveStep.from());
+				JsonPathOperations.add(root, moveStep.to(), value);
+			}
+			case JsonMigrationStepForEach forEachStep -> applyToEach(root, forEachStep);
+		}
+	}
+
+	private static void applyToEach(JsonNode root, JsonMigrationStepForEach step)
+	{
+		final JsonNode array = root.at(JsonPointer.compile(step.arrayPath()));
+		if(array.isMissingNode() || !array.isArray())
+		{
+			throw new MigrationException("Cannot apply for-each at '" + step.arrayPath() + "': target is not an array");
+		}
+
+		for(final JsonNode element : array)
+		{
+			if(!element.isObject())
+			{
+				throw new MigrationException("Cannot apply for-each at '" + step.arrayPath() + "': array element is not an object");
+			}
+
+			apply(element, step.step());
+		}
+	}
+
 	public static final class Builder
 	{
 		private final int currentVersion;
+		private final String versionPath;
 		private final SortedMap<Integer, List<JsonMigrationStep>> steps = new TreeMap<>();
 
-		private Builder(int currentVersion)
+		private Builder(int currentVersion, String versionPath)
 		{
 			this.currentVersion = currentVersion;
+			this.versionPath = versionPath;
 		}
 
 		public Builder migrateTo(int targetVersion, JsonMigrationStep... migrationSteps)
@@ -80,9 +187,11 @@ public final class MigrationRegistry
 
 		public MigrationRegistry build()
 		{
+			JsonMigrationStep.validatePath(versionPath);
+
 			if(steps.isEmpty())
 			{
-				return new MigrationRegistry(currentVersion, new TreeMap<>());
+				return new MigrationRegistry(currentVersion, versionPath, new TreeMap<>());
 			}
 
 			final int first = steps.firstKey();
@@ -94,7 +203,7 @@ public final class MigrationRegistry
 				}
 			}
 
-			return new MigrationRegistry(currentVersion, new TreeMap<>(steps));
+			return new MigrationRegistry(currentVersion, versionPath, new TreeMap<>(steps));
 		}
 	}
 }
