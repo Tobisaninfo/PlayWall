@@ -3,13 +3,15 @@ package de.tobias.playwall.server.api.project;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.common.migration.JsonMigrationEngine;
+import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
 import de.tobias.playwall.server.common.model.page.PageSettings;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,17 +24,30 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ProjectService
 {
-	private static final int MINIMUM_VERSION = 1;
-	private static final int LATEST_VERSION = 1;
-
 	private final AllProjectsInfoRepository allProjectsInfoRepository;
 	private final ProjectRepository projectRepository;
 	private final MessageSource messageSource;
 	private final JsonMapper jsonMapper;
+	private final JsonMigrationEngine projectMigrationEngine;
+	private final MigrationRegistry projectMigrationRegistry;
+
+	public ProjectService(AllProjectsInfoRepository allProjectsInfoRepository,
+			ProjectRepository projectRepository,
+			MessageSource messageSource,
+			JsonMapper jsonMapper,
+			@Qualifier("projectMigrationEngine") JsonMigrationEngine projectMigrationEngine,
+			@Qualifier("projectMigrationRegistry") MigrationRegistry projectMigrationRegistry)
+	{
+		this.allProjectsInfoRepository = allProjectsInfoRepository;
+		this.projectRepository = projectRepository;
+		this.messageSource = messageSource;
+		this.jsonMapper = jsonMapper;
+		this.projectMigrationEngine = projectMigrationEngine;
+		this.projectMigrationRegistry = projectMigrationRegistry;
+	}
 
 	public boolean deleteProjectById(UUID id) throws IOException
 	{
@@ -117,18 +132,19 @@ public class ProjectService
 			throw new IllegalArgumentException("Unsupported mimetype: " + mimeType);
 		}
 
-		final int version = parseVersion(data);
-		if(version < MINIMUM_VERSION)
+		final JsonNode root = parseJson(data);
+		final int version = parseVersion(root);
+		if(version < projectMigrationRegistry.getMinSupportedVersion())
 		{
-			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.version.too_old", new Object[]{version, MINIMUM_VERSION}, LocaleContextHolder.getLocale()));
+			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.version.too_old", new Object[]{version, projectMigrationRegistry.getMinSupportedVersion()}, LocaleContextHolder.getLocale()));
 		}
 
-		if(version > LATEST_VERSION)
+		if(version > projectMigrationRegistry.currentVersion())
 		{
 			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()));
 		}
 
-		final Project project = jsonMapper.readValue(data, Project.class);
+		final Project project = jsonMapper.treeToValue(projectMigrationEngine.migrate(root), Project.class);
 
 		allProjectsInfoRepository.importProject(project);
 		projectRepository.saveProject(project);
@@ -136,11 +152,23 @@ public class ProjectService
 		return project.getMetadata().getId();
 	}
 
-	private int parseVersion(byte[] data)
+	private JsonNode parseJson(byte[] data)
 	{
 		try
 		{
-			final JsonNode root = jsonMapper.readTree(data);
+			return jsonMapper.readTree(data);
+		}
+		catch(Exception e)
+		{
+			log.debug("Error parsing project file", e);
+			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()), e);
+		}
+	}
+
+	private int parseVersion(JsonNode root)
+	{
+		try
+		{
 			if(!root.has("metadata"))
 			{
 				throw new NullPointerException("No metadata found");

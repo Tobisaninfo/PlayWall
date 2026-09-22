@@ -1,12 +1,15 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.common.migration.JsonMigrationEngine;
+import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.model.project.Views;
 import de.tobias.playwall.server.common.storage.PathProvider;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -16,13 +19,24 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ProjectRepository
 {
 	private static final String FILE_EXTENSION = ".json";
 
 	private final PathProvider pathProvider;
 	private final JsonMapper mapper;
+	private final JsonMigrationEngine projectMigrationEngine;
+	private final MigrationRegistry projectMigrationRegistry;
+
+	public ProjectRepository(PathProvider pathProvider, JsonMapper mapper,
+			@Qualifier("projectMigrationEngine") JsonMigrationEngine projectMigrationEngine,
+			@Qualifier("projectMigrationRegistry") MigrationRegistry projectMigrationRegistry)
+	{
+		this.pathProvider = pathProvider;
+		this.mapper = mapper;
+		this.projectMigrationEngine = projectMigrationEngine;
+		this.projectMigrationRegistry = projectMigrationRegistry;
+	}
 
 	public Project loadProject(UUID id) throws IOException, ProjectNotExistsException
 	{
@@ -32,7 +46,16 @@ public class ProjectRepository
 			throw new ProjectNotExistsException(id);
 		}
 
-		return mapper.readValue(Files.newBufferedReader(path), Project.class);
+		final JsonNode root = mapper.readTree(Files.newBufferedReader(path));
+		final JsonNode migrated = projectMigrationEngine.migrate(root);
+		final Project project = mapper.treeToValue(migrated, Project.class);
+
+		if(root.path("/metadata/VERSION").asInt() < projectMigrationRegistry.currentVersion())
+		{
+			saveProject(project);
+		}
+
+		return project;
 	}
 
 	public ProjectMetadata loadProjectMetadata(UUID id) throws IOException, ProjectNotExistsException

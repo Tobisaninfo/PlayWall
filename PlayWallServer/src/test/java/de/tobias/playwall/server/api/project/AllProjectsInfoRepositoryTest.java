@@ -10,8 +10,11 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -47,6 +50,9 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 
 	@Autowired
 	private AllProjectsInfoRepository allProjectsInfoRepository;
+
+	@Autowired
+	private JsonMapper objectMapper;
 
 	@Test
 	void test_noProjects()
@@ -113,6 +119,32 @@ class AllProjectsInfoRepositoryTest extends AbstractRequestHandlerTest
 	{
 		allProjectsInfoRepository.onProjectOpened(UUID.fromString("595775f1-20d6-4802-bd3d-2ed678effebe"));
 		assertThat(allProjectsInfoRepository.getRecentProjectIds()).containsExactly(UUID.fromString("595775f1-20d6-4802-bd3d-2ed678effebe"));
+	}
+
+	@Test
+	void test_loadAllProjectsInfo_legacyFileWithoutVersion() throws IOException
+	{
+		final Path projectsFile = tempDir.resolve("projects.json");
+		Files.writeString(projectsFile, """
+				{
+					"recentProjects": [],
+					"allProjects": ["a09d1f3c-2384-4ee5-b13d-07f428efe35c"]
+				}
+				""");
+
+		allProjectsInfoRepository.loadAllProjectsInfo();
+
+		assertThat(allProjectsInfoRepository.getAllProjects()).containsExactly(UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c"));
+		assertThat(Files.readString(projectsFile)).doesNotContain("VERSION");
+	}
+
+	@Test
+	void test_saveAllProjectsInfoWritesVersion() throws IOException, ProjectNameAlreadyExistsException
+	{
+		allProjectsInfoRepository.addProject("New ProjectMetadata", 6, 4);
+
+		final ObjectNode root = (ObjectNode) objectMapper.readTree(Files.readString(tempDir.resolve("projects.json")));
+		assertThat(root.path("VERSION").asInt()).isEqualTo(1);
 	}
 
 }

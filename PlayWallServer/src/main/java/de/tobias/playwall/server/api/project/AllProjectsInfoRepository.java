@@ -1,12 +1,16 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.common.migration.JsonMigrationEngine;
+import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.storage.PathProvider;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -20,16 +24,29 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AllProjectsInfoRepository
 {
 	private static final String PROJECTS_FILENAME = "projects.json";
+	private static final String VERSION_FIELD_NAME = "VERSION";
 
 	private final PathProvider pathProvider;
 	private final JsonMapper mapper;
 	private final ProjectRepository projectRepository;
+	private final JsonMigrationEngine allProjectsInfoMigrationEngine;
+	private final MigrationRegistry allProjectsInfoMigrationRegistry;
 
 	private AllProjectsInfo allProjectsInfo;
+
+	public AllProjectsInfoRepository(PathProvider pathProvider, JsonMapper mapper, ProjectRepository projectRepository,
+			@Qualifier("allProjectsInfoMigrationEngine") JsonMigrationEngine allProjectsInfoMigrationEngine,
+			@Qualifier("allProjectsInfoMigrationRegistry") MigrationRegistry allProjectsInfoMigrationRegistry)
+	{
+		this.pathProvider = pathProvider;
+		this.mapper = mapper;
+		this.projectRepository = projectRepository;
+		this.allProjectsInfoMigrationEngine = allProjectsInfoMigrationEngine;
+		this.allProjectsInfoMigrationRegistry = allProjectsInfoMigrationRegistry;
+	}
 
 	public AllProjectsInfo getAllProjectsInfo()
 	{
@@ -55,9 +72,19 @@ public class AllProjectsInfoRepository
 			log.debug("No projects.json found, creating empty file in: \"{}\"", path);
 			allProjectsInfo = AllProjectsInfo.builder().build();
 			saveAllProjectsInfo();
+			return;
 		}
 
-		allProjectsInfo = mapper.readValue(Files.newBufferedReader(path), AllProjectsInfo.class);
+		final JsonNode root = mapper.readTree(Files.newBufferedReader(path));
+		addVersionIfMissing((ObjectNode) root);
+
+		final JsonNode migrated = allProjectsInfoMigrationEngine.migrate(root);
+		allProjectsInfo = mapper.treeToValue(migrated, AllProjectsInfo.class);
+
+		if(root.path(VERSION_FIELD_NAME).asInt() < allProjectsInfoMigrationRegistry.currentVersion())
+		{
+			saveAllProjectsInfo();
+		}
 	}
 
 	public void saveAllProjectsInfo() throws IOException
@@ -65,6 +92,19 @@ public class AllProjectsInfoRepository
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
 		Files.createDirectories(path.getParent());
 		mapper.writeValue(Files.newBufferedWriter(path), getAllProjectsInfo());
+	}
+
+	/**
+	 * Temporary helper: Adds the VERSION marker for legacy projects.json files that predate format versioning.
+	 * Can be removed once all legacy files have been migrated to a versioned format.
+	 */
+	@Deprecated(since="8.3.0", forRemoval = true)
+	private void addVersionIfMissing(ObjectNode root)
+	{
+		if(!root.has(VERSION_FIELD_NAME))
+		{
+			root.put(VERSION_FIELD_NAME, allProjectsInfoMigrationRegistry.getMinSupportedVersion());
+		}
 	}
 
 	void clearProjects() throws IOException
