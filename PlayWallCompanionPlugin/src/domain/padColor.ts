@@ -53,26 +53,49 @@ const MODERN_COLOR_HEX: Record<string, string> = {
  */
 const UNSET_COLOR_FALLBACK = 'GRAY1'
 const FALLBACK_COLOR = combineRgb(0, 0, 0)
+const BLACK = combineRgb(0, 0, 0)
+const WHITE = combineRgb(255, 255, 255)
 
-function hexToRgbNumber(hex: string): number {
+function hexToRgbComponents(hex: string): [r: number, g: number, b: number] | undefined {
     const match = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/.exec(hex)
     if (!match) {
-        return FALLBACK_COLOR
+        return undefined
     }
-    return combineRgb(parseInt(match[1], 16), parseInt(match[2], 16), parseInt(match[3], 16))
+    return [Number.parseInt(match[1], 16), Number.parseInt(match[2], 16), Number.parseInt(match[3], 16)]
 }
 
 /**
- * Resolves the feedback color for a pad: the pad's own color if configured, otherwise the project's,
- * picking the "play" or "default" color depending on whether the pad is currently playing. PlayWall's
- * `introColor` is a CSS keyframe accent in the desktop UI, not a discrete playback state broadcast over
- * the wire, so it has no equivalent here — this feedback is intentionally binary (playing/not playing).
+ * Ported from PlayWallClient's `get-appropriate-text-color()` (src/main/sass/utils/colors.scss):
+ * picks black or white text by perceived brightness (ITU-R BT.601 luma weights), so pad names stay
+ * readable against any of the named background colors.
  */
-export function resolvePadColor(pad: PadDto, projectMetadata: ProjectMetadata, isPlaying: boolean): number {
+function getAppropriateTextColor(r: number, g: number, b: number): number {
+    const darkness = 1 - (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    return darkness < 0.5 ? BLACK : WHITE
+}
+
+export interface PadFeedbackStyle {
+    bgcolor: number
+    color: number
+}
+
+/**
+ * Resolves the feedback style for a pad: background from the pad's own color if configured,
+ * otherwise the project's, picking the "play" or "default" color depending on whether the pad is
+ * currently playing, plus a matching black/white text color. PlayWall's `introColor` is a CSS
+ * keyframe accent in the desktop UI, not a discrete playback state broadcast over the wire, so it
+ * has no equivalent here — this feedback is intentionally binary (playing/not playing).
+ */
+export function resolvePadStyle(pad: PadDto, projectMetadata: ProjectMetadata, isPlaying: boolean): PadFeedbackStyle {
     const colorName = (isPlaying
         ? (pad.playColor ?? projectMetadata.playColor)
         : (pad.defaultColor ?? projectMetadata.defaultColor)) ?? UNSET_COLOR_FALLBACK
 
-    const hex = MODERN_COLOR_HEX[colorName]
-    return hex ? hexToRgbNumber(hex) : FALLBACK_COLOR
+    const components = hexToRgbComponents(MODERN_COLOR_HEX[colorName] ?? '')
+    if (!components) {
+        return {bgcolor: FALLBACK_COLOR, color: WHITE}
+    }
+
+    const [r, g, b] = components
+    return {bgcolor: combineRgb(r, g, b), color: getAppropriateTextColor(r, g, b)}
 }
