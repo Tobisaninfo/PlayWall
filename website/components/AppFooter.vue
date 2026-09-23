@@ -12,16 +12,6 @@ const year = new Date().getFullYear()
           <p class="font-display text-sm font-semibold text-pw-text">PlayWall</p>
           <p class="mt-1 max-w-sm text-sm text-pw-text-muted">{{ t('footer.tagline') }}</p>
         </div>
-
-        <a
-            :href="GITHUB_URL"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-1.5 text-sm text-pw-text-hint hover:text-pw-text"
-        >
-          <GithubIcon class="h-4 w-4 flex-none"/>
-          GitHub
-        </a>
       </div>
 
       <p class="mt-8 font-mono text-xs text-pw-text-muted">
