@@ -5,6 +5,9 @@ presentations during live events. Media files are arranged as tiles ("pads") on 
 triggered manually, via keyboard shortcut, or via a MIDI controller, with support for fading, ramp-in, and
 end-of-file warnings.
 
+## License
+This project is licensed under GPLv3.
+
 ## Features
 
 ### Tiles (Pads)
