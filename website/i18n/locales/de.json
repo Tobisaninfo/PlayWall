@@ -17,7 +17,7 @@
     },
     "home": {
         "title": "Interaktive Audio-Wiedergabe für Live-Events",
-        "subtitle": "PlayWall ordnet Mediendateien als Kacheln auf Seiten an, die sich per Tastatur, MIDI-Controller oder Maus auslösen lassen — mit Fading, Ramp-In und Warnhinweisen kurz vor Titelende.",
+        "subtitle": "PlayWall ordnet Mediendateien als Kacheln auf Seiten an, die sich per Tastatur, MIDI-Controller oder Maus auslösen lassen inkl. Fading, Ramp-In und Warnhinweisen kurz vor Titelende.",
         "cta_download": "Jetzt herunterladen",
         "cta_github": "Auf GitHub ansehen",
         "heroAlt": "PlayWall mit einem geöffneten Projekt: Kacheln in einem Raster, teils farbig markiert und mit laufender Wiedergabe"
@@ -33,35 +33,31 @@
         "currentVersion": "Aktuelle Version",
         "recommended": "Empfohlen",
         "downloadCta": "Herunterladen",
-        "linuxInstructions": "Linux: Archiv entpacken und PlayWall/bin/PlayWall ausführen.",
+        "linuxInstructions": "Archiv entpacken und PlayWall/bin/PlayWall ausführen.",
         "platforms": {
             "windows-amd64": {
                 "name": "Windows",
                 "arch": "AMD64",
                 "extension": ".exe",
-                "requirements": "Windows 10 (Version 1903+) oder Windows 11, 64-Bit",
-                "fileType": ".exe-Installer"
+                "requirements": "Windows 10 (Version 1903+) oder Windows 11\n64-Bit"
             },
             "macos-arm64": {
                 "name": "macOS",
                 "arch": "Apple Silicon",
                 "extension": ".dmg",
-                "requirements": "macOS 11 (Big Sur) oder neuer. Nur Apple Silicon (arm64) — kein Intel-Build verfügbar.",
-                "fileType": ".dmg-Installer"
+                "requirements": "macOS 11 (Big Sur) oder neuer\n Apple Silicon (arm64, kein Intel-Build verfügbar)"
             },
             "linux-amd64": {
                 "name": "Linux",
                 "arch": "AMD64",
                 "extension": ".tar.gz",
-                "requirements": "glibc 2.17 oder neuer — praktisch jede Distribution.",
-                "fileType": ".tar.gz-Archiv (App-Image)"
+                "requirements": "glibc 2.17 oder neuer\nPraktisch jede Distribution"
             },
             "linux-arm64": {
                 "name": "Linux",
                 "arch": "ARM64",
                 "extension": ".tar.gz",
-                "requirements": "glibc 2.38 oder neuer (z. B. Debian 13+, Ubuntu 24.04+). Läuft nicht auf Debian 12 oder Ubuntu 22.04.",
-                "fileType": ".tar.gz-Archiv (App-Image)"
+                "requirements": "glibc 2.38 oder neuer\nz.B. Debian 13+ oder Ubuntu 24.04+"
             }
         }
     },

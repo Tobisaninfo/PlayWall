@@ -2,6 +2,7 @@
 const props = defineProps<{
   systemId: SystemId
   highlighted: boolean
+  note?: string
 }>()
 
 const {t} = useI18n()
@@ -16,8 +17,7 @@ const rows = computed(() =>
       url: release.platforms[id],
       arch: t(`download.platforms.${id}.arch`),
       extension: t(`download.platforms.${id}.extension`),
-      requirements: t(`download.platforms.${id}.requirements`),
-      fileType: t(`download.platforms.${id}.fileType`),
+      requirements: t(`download.platforms.${id}.requirements`).split('\n'),
     })),
 )
 </script>
@@ -25,7 +25,7 @@ const rows = computed(() =>
 <template>
   <div
       class="flex flex-col gap-4 rounded-xl border p-5 transition-colors"
-      :class="highlighted ? 'border-pw-blue bg-pw-blue/5' : 'border-white/10 bg-white/[0.02]'"
+      :class="highlighted ? 'border-pw-blue bg-pw-blue/5' : 'border-white/40 bg-white/[0.02]'"
   >
     <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-1.5">
       <div>
@@ -47,31 +47,58 @@ const rows = computed(() =>
 
     <template v-if="rows.length === 1 && rows[0]">
       <div class="flex flex-1 flex-col gap-2">
-        <p class="text-sm text-pw-text-hint">{{ rows[0].requirements }}</p>
-        <p class="font-mono text-xs text-pw-text-muted">{{ rows[0].fileType }}</p>
+        <ul class="flex flex-col gap-1.5">
+          <li
+              v-for="requirement in rows[0].requirements"
+              :key="requirement"
+              class="flex items-start gap-2 text-sm text-pw-text-hint"
+          >
+            <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-pw-blue"/>
+            <span>{{ requirement }}</span>
+          </li>
+        </ul>
       </div>
       <a
           :href="rows[0].url"
           download
-          class="flex flex-col items-center justify-center gap-0.5 rounded-md bg-pw-blue-strong px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          class="flex items-center gap-2.5 rounded-md bg-pw-blue-strong px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
       >
-        <span>{{ t('download.downloadCta') }}</span>
-        <span class="text-xs font-normal text-white/75">({{ rows[0].extension }}, {{ rows[0].arch }})</span>
+        <DownloadIcon class="h-5 w-5 flex-none"/>
+        <span class="flex flex-1 flex-col items-start justify-center">
+          <span>{{ t('download.downloadCta') }} ({{ rows[0].extension }})</span>
+          <span class="text-xs font-normal text-white/75">{{ rows[0].arch }}</span>
+        </span>
       </a>
     </template>
 
     <div v-else class="flex flex-1 flex-col gap-4">
-      <div v-for="row in rows" :key="row.id" class="flex flex-col gap-1.5 border-t border-white/5 pt-4 first:border-none first:pt-0">
+      <div
+          v-for="row in rows"
+          :key="row.id"
+          class="flex flex-col gap-1.5 border-t border-white/40 pt-4 first:border-none first:pt-0"
+      >
         <p class="font-mono text-xs uppercase tracking-wide text-pw-text-muted">{{ row.arch }}</p>
-        <p class="text-sm text-pw-text-hint">{{ row.requirements }}</p>
-        <p class="font-mono text-xs text-pw-text-muted">{{ row.fileType }}</p>
+        <ul class="flex flex-col gap-1.5">
+          <li
+              v-for="requirement in row.requirements"
+              :key="requirement"
+              class="flex items-start gap-2 text-sm text-pw-text-hint"
+          >
+            <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-pw-blue"/>
+            <span>{{ requirement }}</span>
+          </li>
+        </ul>
+        <p v-if="note" class="mt-3 text-xs text-pw-text-muted">{{ note }}</p>
         <a
             :href="row.url"
             download
-            class="flex flex-col items-center justify-center gap-0.5 rounded-md bg-pw-blue-strong px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            class="flex items-center gap-2.5 rounded-md bg-pw-blue-strong px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
-          <span>{{ t('download.downloadCta') }}</span>
-          <span class="text-xs font-normal text-white/75">({{ row.extension }}, {{ row.arch }})</span>
+          <DownloadIcon class="h-5 w-5 flex-none"/>
+          <span class="flex flex-1 flex-col items-start justify-center">
+            <span>{{ t('download.downloadCta') }} ({{ row.extension }})</span>
+            <span class="text-xs font-normal text-white/75">{{ row.arch }}</span>
+          </span>
         </a>
       </div>
     </div>
