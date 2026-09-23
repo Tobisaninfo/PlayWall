@@ -24,11 +24,7 @@ final class JsonPathOperations
 		{
 			final ObjectNode object = (ObjectNode) parent;
 			final String property = pointer.last().getMatchingProperty();
-			if(!object.has(property))
-			{
-				throw new MigrationException("Cannot delete '" + path + "': path does not exist");
-			}
-			return object.remove(property);
+			return object.has(property) ? object.remove(property) : null;
 		}
 
 		if(parent.isArray())
@@ -37,12 +33,12 @@ final class JsonPathOperations
 			final int index = pointer.last().getMatchingIndex();
 			if(!pointer.last().mayMatchElement() || index < 0 || index >= array.size())
 			{
-				throw new MigrationException("Cannot delete '" + path + "': path does not exist");
+				return null;
 			}
 			return array.remove(index);
 		}
 
-		throw new MigrationException("Cannot delete '" + path + "': path does not exist");
+		return null;
 	}
 
 	static void add(JsonNode root, String path, JsonNode value)

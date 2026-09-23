@@ -45,7 +45,9 @@ class MigrationRegistryTest
 	@Test
 	void testBuildRejectsInvalidVersionPath()
 	{
-		assertThatThrownBy(() -> MigrationRegistry.builder(1, "VERSION").build())
+		final MigrationRegistry.Builder builder = MigrationRegistry.builder(1, "VERSION");
+
+		assertThatThrownBy(builder::build)
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("starting with '/'");
 	}
@@ -53,10 +55,11 @@ class MigrationRegistryTest
 	@Test
 	void testRejectsGapBetweenVersions()
 	{
-		assertThatThrownBy(() -> MigrationRegistry.builder(4, "/VERSION")
+		final MigrationRegistry.Builder builder = MigrationRegistry.builder(4, "/VERSION")
 				.migrateTo(2)
-				.migrateTo(4)
-				.build())
+				.migrateTo(4);
+
+		assertThatThrownBy(builder::build)
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("Missing migration for format version 3");
 	}
@@ -64,9 +67,9 @@ class MigrationRegistryTest
 	@Test
 	void testRejectsDuplicateVersion()
 	{
-		assertThatThrownBy(() -> MigrationRegistry.builder(3, "/VERSION")
-				.migrateTo(2)
-				.migrateTo(2))
+		final MigrationRegistry.Builder builder = MigrationRegistry.builder(3, "/VERSION").migrateTo(2);
+
+		assertThatThrownBy(() -> builder.migrateTo(2))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("Duplicate migration registered for format version 2");
 	}
@@ -74,10 +77,12 @@ class MigrationRegistryTest
 	@Test
 	void testRejectsOutOfRangeVersion()
 	{
-		assertThatThrownBy(() -> MigrationRegistry.builder(3, "/VERSION").migrateTo(4))
+		final MigrationRegistry.Builder builder = MigrationRegistry.builder(3, "/VERSION");
+
+		assertThatThrownBy(() -> builder.migrateTo(4))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("2 <= targetVersion <= currentVersion");
-		assertThatThrownBy(() -> MigrationRegistry.builder(3, "/VERSION").migrateTo(1))
+		assertThatThrownBy(() -> builder.migrateTo(1))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("2 <= targetVersion <= currentVersion");
 	}
@@ -85,7 +90,7 @@ class MigrationRegistryTest
 	@Test
 	void testRejectsSelfMove()
 	{
-		assertThatThrownBy(() -> MigrationRegistry.builder(3, "/VERSION").migrateTo(2, new JsonMigrationStepMove("/a", "/a")))
+		assertThatThrownBy(() -> new JsonMigrationStepMove("/a", "/a"))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("Cannot move path onto itself");
 	}
@@ -99,7 +104,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testMigrateAppliesAllVersionsSequentially() throws Exception
+	void testMigrateAppliesAllVersionsSequentially()
 	{
 		final JsonNode migrated = registry().migrate(json("""
 				{
@@ -120,7 +125,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testMigrateStartsFromIntermediateVersion() throws Exception
+	void testMigrateStartsFromIntermediateVersion()
 	{
 		final JsonNode migrated = registry().migrate(json("""
 				{
@@ -140,7 +145,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testMigrateDoesNotModifyOriginalDocument() throws Exception
+	void testMigrateDoesNotModifyOriginalDocument()
 	{
 		final JsonNode original = json("""
 				{"VERSION": 1, "layout": {"style": "grid"}, "pads": [{"id": "a", "label": "A"}]}
@@ -153,24 +158,43 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testMigrateRejectsMissingVersion() throws Exception
+	void testDeleteOfMissingPathIsIgnored()
 	{
-		assertThatThrownBy(() -> registry().migrate(json("""
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, new JsonMigrationStepDelete("/missing"))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{"VERSION": 1}""")))
+				.isEqualTo(json("""
+						{"VERSION": 2}"""));
+	}
+
+	@Test
+	void testMigrateRejectsMissingVersion()
+	{
+		final MigrationRegistry registry = registry();
+		final JsonNode node = json("""
 				{
 					"layout": {"style": "grid"},
 					"legacy": {"debug": true},
 					"pads": [{"id": "a", "label": "A"}]
 				}
-				""")))
+				""");
+
+		assertThatThrownBy(() -> registry.migrate(node))
 				.isInstanceOf(MigrationException.class)
 				.hasMessageContaining("Cannot determine version");
 	}
 
 	@Test
-	void testMigrateRejectsNewerVersion() throws Exception
+	void testMigrateRejectsNewerVersion()
 	{
-		assertThatThrownBy(() -> registry().migrate(json("""
-				{"VERSION": 5}""")))
+		final MigrationRegistry registry = registry();
+		final JsonNode node = json("""
+				{"VERSION": 5}""");
+
+		assertThatThrownBy(() -> registry.migrate(node))
 				.isInstanceOf(MigrationException.class)
 				.hasMessageContaining("newer than the supported version: 4");
 	}
@@ -179,23 +203,27 @@ class MigrationRegistryTest
 	void testMigrateRejectsTooOldVersion()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(4, "/VERSION").migrateTo(4).build();
+		final JsonNode node = json("""
+				{"VERSION": 1}""");
 
-		assertThatThrownBy(() -> registry.migrate(json("""
-				{"VERSION": 1}""")))
+		assertThatThrownBy(() -> registry.migrate(node))
 				.isInstanceOf(MigrationException.class)
 				.hasMessageContaining("too old to migrate");
 	}
 
 	@Test
-	void testMigrateRejectsNonObjectDocument() throws Exception
+	void testMigrateRejectsNonObjectDocument()
 	{
-		assertThatThrownBy(() -> registry().migrate(json("5")))
+		final MigrationRegistry registry = registry();
+		final JsonNode node = json("5");
+
+		assertThatThrownBy(() -> registry.migrate(node))
 				.isInstanceOf(MigrationException.class)
 				.hasMessageContaining("valid JSON node");
 	}
 
 	@Test
-	void testAddCreatesMissingIntermediateObjects() throws Exception
+	void testAddCreatesMissingIntermediateObjects()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepAdd.of("/brand/new/field", "hello"))
@@ -208,7 +236,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testForEachAddsDefaultValueToAllElements() throws Exception
+	void testForEachAddsDefaultValueToAllElements()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepForEach.of("/pads", JsonMigrationStepAdd.of("/active", false)))
@@ -221,7 +249,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testForEachDeletesPropertyFromAllElements() throws Exception
+	void testForEachDeletesPropertyFromAllElements()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepForEach.of("/pads", new JsonMigrationStepDelete("/debug")))
@@ -234,7 +262,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testForEachSupportsNestedArrays() throws Exception
+	void testForEachSupportsNestedArrays()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepForEach.of("/rows", JsonMigrationStepForEach.of("/cells", JsonMigrationStepAdd.of("/active", true))))
@@ -252,33 +280,35 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testForEachRejectsMissingArray() throws Exception
+	void testForEachRejectsMissingArray()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepForEach.of("/pads", JsonMigrationStepAdd.of("/active", true)))
 				.build();
+		final JsonNode node = json("""
+				{"VERSION": 1, "other": {}}""");
 
-		assertThatThrownBy(() -> registry.migrate(json("""
-				{"VERSION": 1, "other": {}}""")))
+		assertThatThrownBy(() -> registry.migrate(node))
 				.isInstanceOf(MigrationException.class)
 				.hasMessageContaining("not an array");
 	}
 
 	@Test
-	void testForEachRejectsNonObjectElement() throws Exception
+	void testForEachRejectsNonObjectElement()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepForEach.of("/pads", JsonMigrationStepAdd.of("/active", true)))
 				.build();
+		final JsonNode node = json("""
+				{"VERSION": 1, "pads": [1, 2]}""");
 
-		assertThatThrownBy(() -> registry.migrate(json("""
-				{"VERSION": 1, "pads": [1, 2]}""")))
+		assertThatThrownBy(() -> registry.migrate(node))
 				.isInstanceOf(MigrationException.class)
 				.hasMessageContaining("not an object");
 	}
 
 	@Test
-	void testDecodesEscapedTokens() throws Exception
+	void testDecodesEscapedTokens()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepAdd.of("/meta~1name", "v"))
@@ -291,7 +321,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testMoveIntoNestedPathRebuildsSource() throws Exception
+	void testMoveIntoNestedPathRebuildsSource()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, new JsonMigrationStepMove("/a", "/a/b"))
@@ -304,7 +334,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testMoveOfNestedObjects() throws Exception
+	void testMoveOfNestedObjects()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, new JsonMigrationStepMove("/server/host", "/endpoint/address/host"))
@@ -317,7 +347,7 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testVersionPathInsideNestedObject() throws Exception
+	void testVersionPathInsideNestedObject()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/metadata/VERSION")
 				.migrateTo(2, JsonMigrationStepAdd.of("/ui/fullscreen", false))
@@ -355,7 +385,7 @@ class MigrationRegistryTest
 				.build();
 	}
 
-	private static JsonNode json(String source) throws Exception
+	private static JsonNode json(String source)
 	{
 		return new JsonMapper().readTree(source);
 	}
