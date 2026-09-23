@@ -26,7 +26,7 @@ const entries = computed(() =>
       <div
           v-for="entry in entries"
           :key="entry.version"
-          class="border-b border-white/10 py-8 first:pt-0 last:border-none"
+          class="border-b border-white/40 py-8 first:pt-0 last:border-none"
       >
         <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
           <h2 class="font-mono text-xl font-semibold text-pw-text">{{ entry.version }}</h2>
@@ -36,8 +36,8 @@ const entries = computed(() =>
         <div v-if="entry.features.length" class="mt-4">
           <p class="font-mono text-xs uppercase tracking-wide text-pw-text-hint">{{ t('changelog.featuresLabel') }}</p>
           <ul class="mt-2 flex flex-col gap-1.5">
-            <li v-for="item in entry.features" :key="item" class="flex items-start gap-2.5 text-sm text-pw-text-hint">
-              <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-pw-success"/>
+            <li v-for="item in entry.features" :key="item" class="flex items-start gap-2.5 text-base text-pw-text-hint">
+              <span class="mt-[9px] h-1.5 w-1.5 flex-none rounded-full bg-pw-success"/>
               <span>{{ item }}</span>
             </li>
           </ul>
@@ -46,8 +46,8 @@ const entries = computed(() =>
         <div v-if="entry.bugfixes.length" class="mt-4">
           <p class="font-mono text-xs uppercase tracking-wide text-pw-text-hint">{{ t('changelog.bugfixesLabel') }}</p>
           <ul class="mt-2 flex flex-col gap-1.5">
-            <li v-for="item in entry.bugfixes" :key="item" class="flex items-start gap-2.5 text-sm text-pw-text-hint">
-              <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-pw-warning"/>
+            <li v-for="item in entry.bugfixes" :key="item" class="flex items-start gap-2.5 text-base text-pw-text-hint">
+              <span class="mt-[9px] h-1.5 w-1.5 flex-none rounded-full bg-pw-warning"/>
               <span>{{ item }}</span>
             </li>
           </ul>
