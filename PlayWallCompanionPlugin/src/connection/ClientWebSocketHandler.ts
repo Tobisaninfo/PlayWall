@@ -7,14 +7,19 @@ import {
     buildProjectGetRequest,
     ERROR_MESSAGE,
     ERROR_MESSAGE_CLASS,
+    PAD_REPLACE_UPDATE,
+    PAD_REPLACE_UPDATE_CLASS,
     PAD_STATUS_UPDATE,
     PAD_STATUS_UPDATE_CLASS,
+    PAD_SWAP_UPDATE,
+    PAD_SWAP_UPDATE_CLASS,
     parseEnvelope,
     PROJECT_GET_RESPONSE,
     PROJECT_LOADED_UPDATE,
     PROJECT_LOADED_UPDATE_CLASS,
     PROJECT_PAGE_SHOWN_UPDATE,
     PROJECT_PAGE_SHOWN_UPDATE_CLASS,
+    type PadDto,
     type ProjectDto,
 } from './protocol.js'
 
@@ -31,6 +36,10 @@ export interface ClientWebSocketHandlerOptions {
     onPageShown: (index: number) => void
     onPadStatus: (padId: string, status: string) => void
     onPadStatuses: (statuses: Record<string, string>) => void
+    /** A pad was moved or duplicated onto another pad's slot via drag & drop on the desktop client. */
+    onPadReplaced: (newPad: PadDto, targetPadId: string) => void
+    /** Two pads swapped places via drag & drop on the desktop client. */
+    onPadsSwapped: (padId1: string, padId2: string) => void
     log: (level: 'debug' | 'warn', message: string) => void
 }
 
@@ -236,6 +245,24 @@ export class ClientWebSocketHandler {
                     this.options.onPadStatus(update.data.padId, update.data.status)
                 } else {
                     this.options.log('warn', `Received malformed PadStatusUpdate: ${String(update.error)}`)
+                }
+                break
+            }
+            case PAD_REPLACE_UPDATE_CLASS: {
+                const update = PAD_REPLACE_UPDATE.safeParse(envelope)
+                if (update.success) {
+                    this.options.onPadReplaced(update.data.sourcePad, update.data.targetPadId)
+                } else {
+                    this.options.log('warn', `Received malformed PadReplaceUpdate: ${String(update.error)}`)
+                }
+                break
+            }
+            case PAD_SWAP_UPDATE_CLASS: {
+                const update = PAD_SWAP_UPDATE.safeParse(envelope)
+                if (update.success) {
+                    this.options.onPadsSwapped(update.data.pad1, update.data.pad2)
+                } else {
+                    this.options.log('warn', `Received malformed PadSwapUpdate: ${String(update.error)}`)
                 }
                 break
             }

@@ -6,8 +6,9 @@ import {GetPresetDefinitions, GetPresetSections} from './presets.js'
 import {UpdatePadVariableValues, UpdateVariableDefinitions, type VariablesSchema} from './variables.js'
 import {UpgradeScripts} from './upgrades.js'
 import {ClientWebSocketHandler, type ConnectionStatus} from './connection/ClientWebSocketHandler.js'
-import type {ProjectDto} from './connection/protocol.js'
+import type {PadDto, ProjectDto} from './connection/protocol.js'
 import type {PadSelectorOptions} from './domain/padSelector.js'
+import {replacePadInProject, swapPadsInProject} from './domain/projectMutations.js'
 import {PlaybackStore} from './domain/playbackStore.js'
 import {ProjectStore} from './domain/projectStore.js'
 import {PAD_CURRENT_COLOR_FEEDBACK_ID, PAD_PLAY_STOP_ACTION_ID} from './ids.js'
@@ -81,6 +82,8 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
             onPageShown: (index) => this.handlePageShown(index),
             onPadStatus: (padId, status) => this.handlePadStatus(padId, status),
             onPadStatuses: (statuses) => this.handlePadStatuses(statuses),
+            onPadReplaced: (newPad, targetPadId) => this.handlePadReplaced(newPad, targetPadId),
+            onPadsSwapped: (padId1, padId2) => this.handlePadsSwapped(padId1, padId2),
             log: (level, message) => this.log(level, message),
         })
         this.connection.connect()
@@ -117,6 +120,28 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
 
     private handlePadStatuses(statuses: Record<string, string>): void {
         this.playbackStore.setPadStatuses(statuses)
+        this.refreshPadVariableValues()
+        this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
+    }
+
+    private handlePadReplaced(newPad: PadDto, targetPadId: string): void {
+        const project = this.projectStore.getProject()
+        if (!project) {
+            return
+        }
+
+        this.projectStore.setProject(replacePadInProject(project, newPad, targetPadId))
+        this.refreshPadVariableValues()
+        this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
+    }
+
+    private handlePadsSwapped(padId1: string, padId2: string): void {
+        const project = this.projectStore.getProject()
+        if (!project) {
+            return
+        }
+
+        this.projectStore.setProject(swapPadsInProject(project, padId1, padId2))
         this.refreshPadVariableValues()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
     }

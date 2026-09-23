@@ -22,6 +22,8 @@ export const PROJECT_GET_RESPONSE_CLASS = 'de.tobias.playwall.common.api.project
 export const PROJECT_LOADED_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate'
 export const PROJECT_PAGE_SHOWN_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectPageShownUpdate'
 export const PAD_STATUS_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadStatusUpdate'
+export const PAD_REPLACE_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadReplaceUpdate'
+export const PAD_SWAP_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadSwapUpdate'
 export const PAD_PLAY_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.PadPlayRequest'
 export const PAD_STOP_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.PadStopRequest'
 export const ERROR_MESSAGE_CLASS = 'de.tobias.playwall.common.net.ErrorMessage'
@@ -92,6 +94,22 @@ export const PROJECT_PAGE_SHOWN_UPDATE = BASE_ENVELOPE.extend({
 export const PAD_STATUS_UPDATE = BASE_ENVELOPE.extend({
     padId: z.string(),
     status: z.string(),
+})
+
+/**
+ * Broadcast when a pad is moved (dropped onto an empty slot) or replaced (dropped-with-modifier to
+ * duplicate) via drag & drop on the desktop client: `targetPadId` is the id of the pad being
+ * overwritten, `sourcePad` is its full new content (including its new `position`).
+ */
+export const PAD_REPLACE_UPDATE = BASE_ENVELOPE.extend({
+    sourcePad: PAD_DTO,
+    targetPadId: z.string(),
+})
+
+/** Broadcast when two pads swap places via drag & drop on the desktop client. */
+export const PAD_SWAP_UPDATE = BASE_ENVELOPE.extend({
+    pad1: z.string(),
+    pad2: z.string(),
 })
 
 export const ERROR_MESSAGE = BASE_ENVELOPE.extend({
