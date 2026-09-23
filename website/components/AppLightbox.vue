@@ -54,7 +54,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           :alt="state.alt"
           :width="state.width"
           :height="state.height"
-          class="max-h-[85vh] max-w-[90vw] rounded-lg border border-white/10 object-contain shadow-2xl"
+          class="max-h-[85vh] max-w-[90vw] h-auto w-auto rounded-lg shadow-2xl"
       >
     </div>
   </Transition>
