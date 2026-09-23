@@ -6,26 +6,24 @@
             "screenshot": "pad-grid.png",
             "de": {
                 "title": "Kacheln (Pads)",
-                "description": "Grundfunktionen der einzelnen Kachel, über die Medien abgespielt werden.",
+                "description": "Kacheln erlauben es Mediendateien wiederzugeben. Sie bieten diverse Grundfunktionen:",
                 "features": [
-                    "Wiedergabe über die Kachel starten, pausieren und stoppen",
-                    "Wiedergabefortschritt als Balken auf der Kachel anzeigen",
-                    "Mediendatei über den Dateidialog oder Drag & Drop auswählen",
-                    "Titel pro Kachel festlegen",
-                    "Individuelle Farbe pro Kachel festlegen",
-                    "Alle laufenden Kacheln mit einer Aktion stoppen"
+                    "Wiedergabe starten, pausieren und stoppen",
+                    "Anzeige des Wiedergabefortschritts als Balken auf der Kachel",
+                    "Auswählen von Mediendateien per Dateidialog oder Drag & Drop",
+                    "Festlegen eines eigenen Titels für die Kachel",
+                    "Festlegen individueller Farben pro Kachel"
                 ]
             },
             "en": {
-                "title": "Tiles (Pads)",
-                "description": "Core functions of the individual tile used to play media.",
+                "title": "Pads",
+                "description": "Pads allow to play media files and offer a variety of core functionality:",
                 "features": [
-                    "Start, pause, and stop playback via the tile",
+                    "Start, pause, and stop playback",
+                    "Show playback progress as a bar on the pad",
                     "Select a media file via file dialog or drag & drop",
-                    "Set a title per tile",
-                    "Set an individual color per tile",
-                    "Show playback progress as a bar on the tile",
-                    "Stop all running tiles with a single action"
+                    "Set a custom title per pad",
+                    "Set individual colors per pad"
                 ]
             }
         },
@@ -50,8 +48,8 @@
                 "description": "Control over playback and volume.",
                 "features": [
                     "Adjust playback speed per track",
-                    "Set global volume for all tiles",
-                    "Set volume per tile",
+                    "Set global volume for all pads",
+                    "Set volume per pad",
                     "Loop playback of a track",
                     "Select a sound card as output device",
                     "Show a warning shortly before a track ends",
@@ -74,7 +72,7 @@
             },
             "en": {
                 "title": "Page Management",
-                "description": "Tiles are organized across pages that can be switched between.",
+                "description": "Pads are organized across pages that can be switched between.",
                 "features": [
                     "Create, rename, duplicate, and delete pages",
                     "Reorder pages",
@@ -97,10 +95,10 @@
             },
             "en": {
                 "title": "Drag & Drop",
-                "description": "Operate tiles and files via drag & drop.",
+                "description": "Operate pads and files via drag & drop.",
                 "features": [
-                    "Move or duplicate tiles via drag & drop",
-                    "Swap two tiles via drag & drop",
+                    "Move or duplicate pads via drag & drop",
+                    "Swap two pads via drag & drop",
                     "Add media files via drag & drop from the file system"
                 ]
             }
@@ -122,7 +120,7 @@
                 "description": "Fading playback in and out.",
                 "features": [
                     "Global fading settings at the project level",
-                    "Individual fading settings at the tile level",
+                    "Individual fading settings at the pad level",
                     "Fade in on start and fade out on stop"
                 ]
             }
@@ -135,11 +133,11 @@
                 "description": "Bedienung von PlayWall über Tastatur oder ein angeschlossenes MIDI-Gerät.",
                 "features": [
                     "Einstellungsbereich zum Verwalten der Tastatur- und MIDI-Zuordnungen",
-                    "Tastenkombination aufzeichnen statt manuell einzugeben",
+                    "Tasten aufzeichnen und einer Aktion zuordnen",
                     "MIDI-Gerät auswählen",
-                    "MIDI-Tasten einlernen und einer Aktion zuordnen",
+                    "MIDI-Tasten aufzeichnen und einer Aktion zuordnen",
                     "Kacheln, Seitenwechsel, globale Lautstärke und Stop-All lassen sich per Tastatur oder MIDI auslösen",
-                    "Status von Kacheln, Seiten und Lautstärke per LED-Feedback am MIDI-Controller anzeigen"
+                    "Status von Kacheln, Seiten und Lautstärke wird per LED-Feedback am MIDI-Controller angezeigt (bei unterstützten Geräten)"
                 ]
             },
             "en": {
@@ -147,11 +145,11 @@
                 "description": "Operate PlayWall via keyboard or a connected MIDI device.",
                 "features": [
                     "Settings area for managing keyboard and MIDI mappings",
-                    "Record a key combination instead of entering it manually",
+                    "Record keys and and assign them to an action.",
                     "Select a MIDI device",
-                    "Learn MIDI keys and assign them to an action",
-                    "Trigger tiles, page switching, global volume, and stop-all via keyboard or MIDI",
-                    "Show the status of tiles, pages, and volume via LED feedback on the MIDI controller"
+                    "Record MIDI keys and assign them to an action",
+                    "Trigger pads, page switching, global volume, and stop-all via keyboard or MIDI",
+                    "Show the status of pads, pages, and volume via LED feedback on the MIDI controller (for supported devices)r"
                 ]
             }
         },
@@ -162,7 +160,7 @@
                 "title": "Projekteinstellungen",
                 "description": "Grundlegende Einstellungen auf Projektebene.",
                 "features": [
-                    "Rasterlayout in Zeilen und Spalten definieren",
+                    "Anzahl der Zeilen und Spalten definieren",
                     "Anzeigeoptionen des Projekts konfigurieren",
                     "Standardfarbe für Kacheln im Projekt festlegen"
                 ]
@@ -171,9 +169,9 @@
                 "title": "Project Settings",
                 "description": "Core settings at the project level.",
                 "features": [
-                    "Define grid layout in rows and columns",
+                    "Define number of rows and columns",
                     "Configure project display options",
-                    "Set a default color for tiles in the project"
+                    "Set a default color for pads in the project"
                 ]
             }
         },
