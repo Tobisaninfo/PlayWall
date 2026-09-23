@@ -2,6 +2,7 @@ import {InstanceBase, InstanceStatus, type SomeCompanionConfigField} from '@comp
 import {GetActionDefinitions} from './actions.js'
 import {GetConfigFields, type ModuleConfig} from './config.js'
 import {GetFeedbackDefinitions} from './feedbacks.js'
+import {GetPresetDefinitions, GetPresetSections} from './presets.js'
 import {UpdatePadVariableValues, UpdateVariableDefinitions, type VariablesSchema} from './variables.js'
 import {UpgradeScripts} from './upgrades.js'
 import {ClientWebSocketHandler, type ConnectionStatus} from './connection/ClientWebSocketHandler.js'
@@ -41,6 +42,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         this.updateVariableDefinitions()
         this.setActionDefinitions(GetActionDefinitions(this))
         this.setFeedbackDefinitions(GetFeedbackDefinitions(this))
+        this.setPresetDefinitions(GetPresetSections(), GetPresetDefinitions())
 
         this.connectToServer()
     }
