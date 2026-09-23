@@ -12,11 +12,11 @@ const year = new Date().getFullYear()
           <p class="font-display text-sm font-semibold text-pw-text">PlayWall</p>
           <p class="mt-1 max-w-sm text-sm text-pw-text-muted">{{ t('footer.tagline') }}</p>
         </div>
-      </div>
 
-      <p class="mt-8 font-mono text-xs text-pw-text-muted">
-        &copy; {{ year }} {{ t('footer.copyright') }}
-      </p>
+        <p class="font-mono text-xs text-pw-text-muted">
+          &copy; {{ year }} {{ t('footer.copyright') }}
+        </p>
+      </div>
     </div>
   </footer>
 </template>
