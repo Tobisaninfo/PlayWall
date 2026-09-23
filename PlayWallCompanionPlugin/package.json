@@ -6,8 +6,9 @@
     "main": "dist/main.js",
     "type": "module",
     "scripts": {
-        "build": "rimraf dist && tsc -p tsconfig.build.json",
-        "dev": "tsc -p tsconfig.build.json --watch",
+        "sync-colors": "node scripts/generate-modern-color-palette.mjs",
+        "build": "npm run sync-colors && rimraf dist && tsc -p tsconfig.build.json",
+        "dev": "npm run sync-colors && tsc -p tsconfig.build.json --watch",
         "package": "npm run build && companion-module-build"
     },
     "license": "MIT",

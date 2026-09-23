@@ -2,3 +2,4 @@ node_modules/
 dist/
 pkg/
 *.tgz
+src/domain/modernColorPalette.generated.ts
