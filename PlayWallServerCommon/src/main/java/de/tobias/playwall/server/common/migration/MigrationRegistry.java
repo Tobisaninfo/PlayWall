@@ -67,7 +67,7 @@ public final class MigrationRegistry
 	 * @return a migrated deep copy of the node
 	 * @throws MigrationException if the node is not an object, is too old to migrate, or newer than the current version
 	 */
-	public JsonNode migrate(JsonNode node)
+	public JsonMigrationResult migrate(JsonNode node)
 	{
 		if(node == null)
 		{
@@ -93,6 +93,7 @@ public final class MigrationRegistry
 		}
 
 		int current = version;
+		boolean isMigrated = false;
 		while(current < currentVersion)
 		{
 			for(final JsonMigrationStep step : getStepsByTargetVersion(current + 1))
@@ -102,8 +103,10 @@ public final class MigrationRegistry
 
 			current++;
 			JsonPathOperations.add(root, versionPath, new IntNode(current));
+			isMigrated = true;
 		}
-		return root;
+
+		return new JsonMigrationResult(root, isMigrated);
 	}
 
 	public int parseVersion(JsonNode root)

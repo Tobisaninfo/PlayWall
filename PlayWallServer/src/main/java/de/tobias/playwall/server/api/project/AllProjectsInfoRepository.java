@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.server.common.migration.JsonMigrationResult;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
@@ -74,10 +75,10 @@ public class AllProjectsInfoRepository
 		final JsonNode root = mapper.readTree(Files.newBufferedReader(path));
 		addVersionIfMissing((ObjectNode) root);
 
-		final JsonNode migrated = allProjectsInfoMigrationRegistry.migrate(root);
-		allProjectsInfo = mapper.treeToValue(migrated, AllProjectsInfo.class);
+		final JsonMigrationResult migrationResult = allProjectsInfoMigrationRegistry.migrate(root);
+		allProjectsInfo = mapper.treeToValue(migrationResult.node(), AllProjectsInfo.class);
 
-		if(root.at(allProjectsInfoMigrationRegistry.versionPath()).asInt() < allProjectsInfoMigrationRegistry.currentVersion())
+		if(migrationResult.isMigrated())
 		{
 			saveAllProjectsInfo();
 		}

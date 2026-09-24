@@ -150,7 +150,7 @@ public class ProjectService
 			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()));
 		}
 
-		final Project project = jsonMapper.treeToValue(projectMigrationRegistry.migrate(root), Project.class);
+		final Project project = jsonMapper.treeToValue(projectMigrationRegistry.migrate(root).node(), Project.class);
 
 		allProjectsInfoRepository.importProject(project);
 		projectRepository.saveProject(project);

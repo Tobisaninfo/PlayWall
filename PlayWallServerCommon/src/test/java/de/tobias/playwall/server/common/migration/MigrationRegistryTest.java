@@ -106,7 +106,7 @@ class MigrationRegistryTest
 	@Test
 	void testMigrateAppliesAllVersionsSequentially()
 	{
-		final JsonNode migrated = registry().migrate(json("""
+		final JsonMigrationResult result = registry().migrate(json("""
 				{
 					"VERSION": 1,
 					"layout": {"style": "grid"},
@@ -115,19 +115,41 @@ class MigrationRegistryTest
 				}
 				"""));
 
-		assertThat(migrated).isEqualTo(json("""
+		assertThat(result.node()).isEqualTo(json("""
 				{
 					"VERSION": 4,
 					"ui": {"layout": {"style": "grid"}, "fullscreen": false, "autosave": true},
 					"pads": [{"id": "a", "name": "A", "active": true}]
 				}
 				"""));
+		assertThat(result.isMigrated()).isTrue();
+	}
+
+	@Test
+	void testMigrateNotNeeded()
+	{
+		final JsonMigrationResult result = registry().migrate(json("""
+				{
+					"VERSION": 4,
+					"ui": {"layout": {"style": "grid"}, "fullscreen": false, "autosave": true},
+					"pads": [{"id": "a", "name": "A", "active": true}]
+				}
+				"""));
+
+		assertThat(result.node()).isEqualTo(json("""
+				{
+					"VERSION": 4,
+					"ui": {"layout": {"style": "grid"}, "fullscreen": false, "autosave": true},
+					"pads": [{"id": "a", "name": "A", "active": true}]
+				}
+				"""));
+		assertThat(result.isMigrated()).isFalse();
 	}
 
 	@Test
 	void testMigrateStartsFromIntermediateVersion()
 	{
-		final JsonNode migrated = registry().migrate(json("""
+		final JsonMigrationResult result = registry().migrate(json("""
 				{
 					"VERSION": 3,
 					"ui": {"layout": {"style": "grid"}, "fullscreen": false, "autosave": true},
@@ -135,13 +157,14 @@ class MigrationRegistryTest
 				}
 				"""));
 
-		assertThat(migrated).isEqualTo(json("""
+		assertThat(result.node()).isEqualTo(json("""
 				{
 					"VERSION": 4,
 					"ui": {"layout": {"style": "grid"}, "fullscreen": false, "autosave": true},
 					"pads": [{"id": "a", "name": "A", "active": true}]
 				}
 				"""));
+		assertThat(result.isMigrated()).isTrue();
 	}
 
 	@Test
@@ -151,9 +174,9 @@ class MigrationRegistryTest
 				{"VERSION": 1, "layout": {"style": "grid"}, "pads": [{"id": "a", "label": "A"}]}
 				""");
 
-		final JsonNode migrated = registry().migrate(original);
+		final JsonMigrationResult result = registry().migrate(original);
 
-		assertThat(migrated.path("VERSION").asInt()).isEqualTo(4);
+		assertThat(result.node().path("VERSION").asInt()).isEqualTo(4);
 		assertThat(original.path("VERSION").asInt()).isEqualTo(1);
 	}
 
@@ -165,7 +188,7 @@ class MigrationRegistryTest
 				.build();
 
 		assertThat(registry.migrate(json("""
-				{"VERSION": 1}""")))
+				{"VERSION": 1}""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2}"""));
 	}
@@ -230,7 +253,7 @@ class MigrationRegistryTest
 				.build();
 
 		assertThat(registry.migrate(json("""
-				{"VERSION": 1}""")))
+				{"VERSION": 1}""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2, "brand": {"new": {"field": "hello"}}}"""));
 	}
@@ -243,7 +266,7 @@ class MigrationRegistryTest
 				.build();
 
 		assertThat(registry.migrate(json("""
-				{"VERSION": 1, "pads": [{"id": "a"}, {"id": "b"}]}""")))
+				{"VERSION": 1, "pads": [{"id": "a"}, {"id": "b"}]}""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2, "pads": [{"id": "a", "active": false}, {"id": "b", "active": false}]}"""));
 	}
@@ -256,7 +279,7 @@ class MigrationRegistryTest
 				.build();
 
 		assertThat(registry.migrate(json("""
-				{"VERSION": 1, "pads": [{"id": "a", "debug": true}, {"id": "b", "debug": false}]}""")))
+				{"VERSION": 1, "pads": [{"id": "a", "debug": true}, {"id": "b", "debug": false}]}""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2, "pads": [{"id": "a"}, {"id": "b"}]}"""));
 	}
@@ -270,7 +293,7 @@ class MigrationRegistryTest
 
 		assertThat(registry.migrate(json("""
 				{"VERSION": 1, "rows": [{"cells": [{"id": "c1"}, {"id": "c2"}]}, {"cells": [{"id": "c3"}]}]}
-				""")))
+				""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2, "rows": [
 							{"cells": [{"id": "c1", "active": true}, {"id": "c2", "active": true}]},
@@ -315,7 +338,7 @@ class MigrationRegistryTest
 				.build();
 
 		assertThat(registry.migrate(json("""
-				{"VERSION": 1}""")))
+				{"VERSION": 1}""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2, "meta/name": "v"}"""));
 	}
@@ -328,7 +351,7 @@ class MigrationRegistryTest
 				.build();
 
 		assertThat(registry.migrate(json("""
-				{"VERSION": 1, "a": {}}""")))
+				{"VERSION": 1, "a": {}}""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2, "a": {"b": {}}}"""));
 	}
@@ -341,7 +364,7 @@ class MigrationRegistryTest
 				.build();
 
 		assertThat(registry.migrate(json("""
-				{"VERSION": 1, "server": {"host": "localhost", "port": 8080}}""")))
+				{"VERSION": 1, "server": {"host": "localhost", "port": 8080}}""")).node())
 				.isEqualTo(json("""
 						{"VERSION": 2, "server": {"port": 8080}, "endpoint": {"address": {"host": "localhost"}}}"""));
 	}
@@ -353,15 +376,14 @@ class MigrationRegistryTest
 				.migrateTo(2, JsonMigrationStepAdd.of("/ui/fullscreen", false))
 				.build();
 
-		final JsonNode migrated = registry.migrate(json("""
+		final JsonMigrationResult result = registry.migrate(json("""
 				{
 					"metadata": {"VERSION": 1, "name": "Project"},
 					"pads": []
 				}
 				"""));
 
-		assertThat(migrated.at("/metadata/VERSION").asInt()).isEqualTo(2);
-		assertThat(migrated).isEqualTo(json("""
+		assertThat(result.node()).isEqualTo(json("""
 				{
 					"metadata": {"VERSION": 2, "name": "Project"},
 					"pads": [],

@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.settings;
 
+import de.tobias.playwall.server.common.migration.JsonMigrationResult;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.settings.Settings;
 import de.tobias.playwall.server.common.storage.PathProvider;
@@ -24,7 +25,7 @@ public class SettingsRepository
 	private final MigrationRegistry settingsMigrationRegistry;
 
 	public SettingsRepository(PathProvider pathProvider, JsonMapper mapper,
-			@Qualifier("settingsMigrationRegistry") MigrationRegistry settingsMigrationRegistry)
+							  @Qualifier("settingsMigrationRegistry") MigrationRegistry settingsMigrationRegistry)
 	{
 		this.pathProvider = pathProvider;
 		this.mapper = mapper;
@@ -41,10 +42,10 @@ public class SettingsRepository
 		}
 
 		final JsonNode root = mapper.readTree(Files.newBufferedReader(path));
-		final JsonNode migrated = settingsMigrationRegistry.migrate(root);
-		final Settings settings = mapper.treeToValue(migrated, Settings.class);
+		final JsonMigrationResult migrationResult = settingsMigrationRegistry.migrate(root);
+		final Settings settings = mapper.treeToValue(migrationResult.node(), Settings.class);
 
-		if(root.at(settingsMigrationRegistry.versionPath()).asInt() < settingsMigrationRegistry.currentVersion())
+		if(migrationResult.isMigrated())
 		{
 			saveSettings(settings);
 		}
