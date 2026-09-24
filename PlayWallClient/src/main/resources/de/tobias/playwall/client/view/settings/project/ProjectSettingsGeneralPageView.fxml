@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.tobias.playwall.client.view.components.PlayWallToggleButton?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
 <?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
 <?import javafx.scene.control.*?>
@@ -22,6 +23,23 @@
         <HBox alignment="CENTER_LEFT" spacing="10">
             <Label minWidth="75" prefWidth="75" text="Vertikal"/>
             <Spinner fx:id="spinnerNumberOfVerticalPads" editable="true" max="10" min="3"/>
+        </HBox>
+    </SettingsRow>
+
+    <Separator/>
+
+    <SettingsRow icon="PLAY_SOLID" title="%ui.settings.pad.general.playback.mode">
+        <fx:define>
+            <ToggleGroup fx:id="playbackModeGroup"/>
+        </fx:define>
+
+        <HBox alignment="CENTER_LEFT">
+            <PlayWallToggleButton icon="PLAY_SOLID" maxWidth="120" minHeight="50" minWidth="120" prefWidth="120"
+                                  styleClass="toggle-button--segmented-left"
+                                  text="%ui.settings.pad.general.playback.mode.solo" toggleGroup="$playbackModeGroup"/>
+            <PlayWallToggleButton icon="LAYER_GROUP_SOLID" maxWidth="120" minHeight="50" minWidth="120" prefWidth="120"
+                                  styleClass="toggle-button--segmented-right"
+                                  text="%ui.settings.pad.general.playback.mode.multi" toggleGroup="$playbackModeGroup"/>
         </HBox>
     </SettingsRow>
 

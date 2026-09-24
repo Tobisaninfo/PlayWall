@@ -4,6 +4,14 @@
     -fx-font-size: 12px;
 }
 
+.toggle-button--segmented-left {
+    -fx-background-radius: variables.$component-border-radius 0 0 variables.$component-border-radius;
+}
+
+.toggle-button--segmented-right {
+    -fx-background-radius: 0 variables.$component-border-radius variables.$component-border-radius 0;
+}
+
 .project-settings--search-by-key-label.key-input-label {
     -fx-font-size: 12px;
     -fx-padding: 2px 8px;
