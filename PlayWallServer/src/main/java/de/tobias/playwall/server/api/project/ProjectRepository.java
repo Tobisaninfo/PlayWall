@@ -37,6 +37,8 @@ public class ProjectRepository
 
 	public Project loadProject(UUID id) throws IOException, ProjectNotExistsException
 	{
+		log.info("Loading project {}", id);
+
 		final Path path = getProjectPath(id);
 		if(!Files.exists(path))
 		{

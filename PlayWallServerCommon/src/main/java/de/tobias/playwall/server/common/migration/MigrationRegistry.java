@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.common.migration;
 
+import lombok.extern.slf4j.Slf4j;
 import tools.jackson.core.JsonPointer;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.IntNode;
@@ -17,6 +18,7 @@ import java.util.*;
  * <p>The registry also performs the migrations: {@link #migrate(JsonNode)} migrates a JSON node to the latest
  * version defined by {@link #currentVersion()}.
  */
+@Slf4j
 public final class MigrationRegistry
 {
 	private final int currentVersion;
@@ -96,6 +98,7 @@ public final class MigrationRegistry
 		boolean isMigrated = false;
 		while(current < currentVersion)
 		{
+			log.debug("Migrate JSON from version {} to {}", current, current + 1);
 			for(final JsonMigrationStep step : getStepsByTargetVersion(current + 1))
 			{
 				apply(root, step);
