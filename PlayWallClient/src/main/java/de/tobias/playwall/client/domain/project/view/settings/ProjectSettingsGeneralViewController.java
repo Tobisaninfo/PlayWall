@@ -6,6 +6,7 @@ import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
+import de.tobias.playwall.client.view.components.PlayWallToggleButton;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -31,8 +32,15 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 
 	@FXML
 	private Slider eofWarningTimeSlider;
+
 	@FXML
 	private Label eofWarningTimeLabel;
+
+	@FXML
+	private PlayWallToggleButton toggleButtonPlaybackModeSolo;
+
+	@FXML
+	private PlayWallToggleButton toggleButtonPlaybackModeMulti;
 
 	@InjectConstructor
 	public ProjectSettingsGeneralViewController(FluentClient client)
@@ -62,10 +70,12 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 		spinnerNumberOfHorizontalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfHorizontalPads());
 		spinnerNumberOfVerticalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfVerticalPads());
 		eofWarningTimeSlider.setValue(param.getProjectMetadata().getEofWarningTime());
+		toggleButtonPlaybackModeSolo.setSelected(param.getProjectMetadata().getIsSoloMode());
+		toggleButtonPlaybackModeMulti.setSelected(!param.getProjectMetadata().getIsSoloMode());
 
 		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty()
 				.and(spinnerNumberOfHorizontalPads.valueProperty().isNotNull()
-				.and(spinnerNumberOfVerticalPads.valueProperty().isNotNull())));
+						.and(spinnerNumberOfVerticalPads.valueProperty().isNotNull())));
 	}
 
 	@Override
@@ -77,6 +87,7 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 		projectMetadata.setNumberOfHorizontalPads(spinnerNumberOfHorizontalPads.getValue());
 		projectMetadata.setNumberOfVerticalPads(spinnerNumberOfVerticalPads.getValue());
 		projectMetadata.setEofWarningTime(eofWarningTimeSlider.getValue());
+		projectMetadata.setIsSoloMode(toggleButtonPlaybackModeSolo.isSelected());
 	}
 
 	@Override

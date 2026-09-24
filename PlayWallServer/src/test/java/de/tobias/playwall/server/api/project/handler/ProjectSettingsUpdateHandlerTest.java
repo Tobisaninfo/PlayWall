@@ -90,18 +90,19 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.defaultColor(Color.DARK_RED1)
 				.playColor(Color.BLUE1)
 				.introColor(Color.LIGHT_GREEN2)
+				.isSoloMode(true)
 				.build());
 		handler.handleRequest(request);
 
-		assertThat(project.getMetadata()).extracting(ProjectMetadata::getName, ProjectMetadata::getTimeMode, ProjectMetadata::getDefaultColor, ProjectMetadata::getPlayColor, ProjectMetadata::getIntroColor, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads)
-				.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, Color.LIGHT_GREEN2, 3, 5);
+		assertThat(project.getMetadata()).extracting(ProjectMetadata::getName, ProjectMetadata::getTimeMode, ProjectMetadata::getDefaultColor, ProjectMetadata::getPlayColor, ProjectMetadata::getIntroColor, ProjectMetadata::getNumberOfHorizontalPads, ProjectMetadata::getNumberOfVerticalPads, ProjectMetadata::getIsSoloMode)
+				.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, Color.LIGHT_GREEN2, 3, 5, true);
 
 		assertThat(applicationEvents.stream(ProjectSettingsUpdate.class))
 				.hasSize(1)
 				.first()
 				.satisfies(event -> assertThat(event.getProjectMetadata())
-						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor, ProjectMetadataDto::introColor, ProjectMetadataDto::numberOfHorizontalPads, ProjectMetadataDto::numberOfVerticalPads)
-						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, Color.LIGHT_GREEN2, 3, 5));
+						.extracting(ProjectMetadataDto::name, ProjectMetadataDto::timeMode, ProjectMetadataDto::defaultColor, ProjectMetadataDto::playColor, ProjectMetadataDto::introColor, ProjectMetadataDto::numberOfHorizontalPads, ProjectMetadataDto::numberOfVerticalPads, ProjectMetadataDto::isSoloMode)
+						.containsExactly("Fancy project name", TimeMode.ELAPSED_AND_TOTAL, Color.DARK_RED1, Color.BLUE1, Color.LIGHT_GREEN2, 3, 5, true));
 
 		assertThat(applicationEvents.stream(ProjectUpdate.class))
 				.hasSize(1)
@@ -139,6 +140,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.defaultColor(Color.GRAY1)
 				.playColor(Color.RED3)
 				.eofWarningTime(2.0)
+				.isSoloMode(false)
 				.build());
 		handler.handleRequest(request);
 
@@ -182,6 +184,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.defaultColor(Color.GRAY1)
 				.playColor(Color.RED3)
 				.eofWarningTime(2.0)
+				.isSoloMode(false)
 				.build());
 
 		testInverseOperation(project, request);
@@ -200,6 +203,7 @@ class ProjectSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTes
 				.timeMode(TimeMode.ELAPSED)
 				.defaultColor(Color.GRAY1)
 				.playColor(Color.RED3)
+				.isSoloMode(false)
 				.build());
 
 		testInverseOperation(project, request);

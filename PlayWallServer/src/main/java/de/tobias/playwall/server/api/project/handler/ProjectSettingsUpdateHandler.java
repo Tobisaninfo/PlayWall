@@ -82,6 +82,7 @@ class ProjectSettingsUpdateHandler extends UndoableRequestHandler<ProjectSetting
 			metadata.setMidiDevice(requestMessage.getProjectMetadata().midiDevice());
 			metadata.setMappings(requestMessage.getProjectMetadata().mappings());
 			metadata.setSelectedMapping(requestMessage.getProjectMetadata().selectedMapping());
+			metadata.setIsSoloMode(requestMessage.getProjectMetadata().isSoloMode());
 
 			projectService.rename(metadata.getId(), requestMessage.getProjectMetadata().name());
 			context.publishEvent(new ProjectSettingsUpdate(projectMetadataMapper.projectMetadataToProjectMetadataDto(metadata)));

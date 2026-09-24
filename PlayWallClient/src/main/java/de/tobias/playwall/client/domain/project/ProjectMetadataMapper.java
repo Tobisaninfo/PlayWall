@@ -38,7 +38,8 @@ public class ProjectMetadataMapper
 						Map.Entry::getKey,
 						entry -> mappingSerializer.fromNode(entry.getValue())
 				)) : null,
-				metadataDto.selectedMapping()
+				metadataDto.selectedMapping(),
+				metadataDto.isSoloMode()
 		);
 	}
 
@@ -61,7 +62,8 @@ public class ProjectMetadataMapper
 						Map.Entry::getKey,
 						entry -> mappingSerializer.toNode(entry.getValue())
 				)) : null,
-				metadata.getSelectedMapping()
+				metadata.getSelectedMapping(),
+				metadata.getIsSoloMode()
 		);
 	}
 }

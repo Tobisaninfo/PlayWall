@@ -12,6 +12,6 @@ import java.util.UUID;
 public record ProjectMetadataDto(UUID id, String name, Integer numberOfHorizontalPads, Integer numberOfVerticalPads,
                                  Double volume, TimeMode timeMode, Color defaultColor, Color playColor,
                                  Color introColor, Double eofWarningTime, FadeSettingsDto fadeSettings,
-								 String midiDevice, Map<UUID, JsonNode> mappings, UUID selectedMapping)
+								 String midiDevice, Map<UUID, JsonNode> mappings, UUID selectedMapping, Boolean isSoloMode)
 {
 }

@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.config;
 
+import de.tobias.playwall.server.common.migration.JsonMigrationStepAdd;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,10 @@ class MigrationConfiguration
 	@Bean
 	public MigrationRegistry projectMigrationRegistry()
 	{
-		return MigrationRegistry.builder(1, "/metadata/VERSION").build();
+		return MigrationRegistry.builder(2, "/metadata/VERSION")
+				.migrateTo(2,
+						JsonMigrationStepAdd.of("/metadata/isSoloMode", false))
+				.build();
 	}
 
 	@Bean

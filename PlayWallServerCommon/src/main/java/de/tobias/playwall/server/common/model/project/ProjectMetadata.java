@@ -23,7 +23,7 @@ public class ProjectMetadata
 	private static final double DEFAULT_VOLUME = 1.0;
 
 	@SuppressWarnings({"java:S116", "java:S1170"})
-	private final int VERSION = 1;
+	private final int VERSION = 2;
 
 	@JsonView(Views.IdAndNameOnly.class)
 	private UUID id;
@@ -63,6 +63,9 @@ public class ProjectMetadata
 
 	private UUID selectedMapping;
 
+	@Builder.Default
+	private Boolean isSoloMode = false;
+
 	public ProjectMetadata(UUID id, String name)
 	{
 		this.id = id;
@@ -92,6 +95,7 @@ public class ProjectMetadata
 				.midiDevice(midiDevice)
 				.mappings(mappings)
 				.selectedMapping(selectedMapping)
+				.isSoloMode(isSoloMode)
 				.build();
 	}
 }

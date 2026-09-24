@@ -31,6 +31,7 @@ public final class ProjectMetadata
 	private String midiDevice;
 	private Map<UUID, Mapping> mappings;
 	private UUID selectedMapping;
+	private Boolean isSoloMode;
 
 	public int getNumberOfPadsPerPage()
 	{
