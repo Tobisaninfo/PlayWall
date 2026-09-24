@@ -106,7 +106,7 @@ public final class MigrationRegistry
 		return root;
 	}
 
-	private int parseVersion(JsonNode root)
+	public int parseVersion(JsonNode root)
 	{
 		final JsonNode versionNode = root.at(versionPath);
 		if(versionNode.isMissingNode())

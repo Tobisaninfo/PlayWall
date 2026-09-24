@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.project;
 import de.tobias.playwall.common.api.common.Color;
 import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
+import de.tobias.playwall.server.common.migration.MigrationException;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.page.Page;
@@ -33,10 +34,10 @@ public class ProjectService
 	private final MigrationRegistry projectMigrationRegistry;
 
 	public ProjectService(AllProjectsInfoRepository allProjectsInfoRepository,
-			ProjectRepository projectRepository,
-			MessageSource messageSource,
-			JsonMapper jsonMapper,
-			@Qualifier("projectMigrationRegistry") MigrationRegistry projectMigrationRegistry)
+						  ProjectRepository projectRepository,
+						  MessageSource messageSource,
+						  JsonMapper jsonMapper,
+						  @Qualifier("projectMigrationRegistry") MigrationRegistry projectMigrationRegistry)
 	{
 		this.allProjectsInfoRepository = allProjectsInfoRepository;
 		this.projectRepository = projectRepository;
@@ -129,7 +130,16 @@ public class ProjectService
 		}
 
 		final JsonNode root = parseJson(data);
-		final int version = parseVersion(root);
+		final int version;
+		try
+		{
+			version = projectMigrationRegistry.parseVersion(root);
+		}
+		catch(MigrationException e)
+		{
+			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()), e);
+		}
+
 		if(version < projectMigrationRegistry.getMinSupportedVersion())
 		{
 			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.version.too_old", new Object[]{version, projectMigrationRegistry.getMinSupportedVersion()}, LocaleContextHolder.getLocale()));
@@ -157,38 +167,6 @@ public class ProjectService
 		catch(Exception e)
 		{
 			log.debug("Error parsing project file", e);
-			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()), e);
-		}
-	}
-
-	private int parseVersion(JsonNode root)
-	{
-		try
-		{
-			if(!root.has("metadata"))
-			{
-				throw new NullPointerException("No metadata found");
-			}
-
-			final JsonNode metadata = root.path("metadata");
-			if(!metadata.has("VERSION"))
-			{
-				throw new NullPointerException("No version found");
-			}
-
-			final JsonNode versionNode = metadata.path("VERSION");
-			if(versionNode.asString().isEmpty())
-			{
-				throw new NullPointerException("Empty version");
-			}
-
-			final int version = versionNode.asInt();
-			log.debug("Parsing PlayWall project file with version {}", version);
-			return version;
-		}
-		catch(Exception e)
-		{
-			log.debug("Error parsing project file version", e);
 			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()), e);
 		}
 	}
