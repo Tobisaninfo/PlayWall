@@ -7,7 +7,9 @@ import de.tobias.playwall.server.api.pad.PadNotExistsException;
 import de.tobias.playwall.server.common.audio.AudioHandler;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.model.pad.AudioPadContent;
+import de.tobias.playwall.server.common.model.pad.Pad;
 import de.tobias.playwall.server.common.model.project.Project;
+import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static java.util.Objects.requireNonNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -41,6 +46,9 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 
 	private final AudioHandler audioHandler = mock(AudioHandler.class);
 
+	private static final UUID PAD_ID = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+	private static final UUID SECOND_PAD_ID = UUID.fromString("fc427184-2e55-4734-8148-5fb657963617");
+
 	@BeforeEach
 	void init()
 	{
@@ -48,7 +56,7 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 	}
 
 	@Test
-	void testPadPauseHandlerOnExistingPad() throws Exception
+	void testPadPlayHandlerOnExistingPad() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
@@ -63,7 +71,7 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 	}
 
 	@Test
-	void testPadPauseHandlerOnNotExistingPad() throws Exception
+	void testPadPlayHandlerOnNotExistingPad() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8448-5fb657963616");
 
@@ -76,4 +84,54 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 
 		verify(audioHandler, never()).play();
 	}
+
+
+	@Test
+	void testPadPlayHandlerInSoloModeStopsCurrentlyPlayingPads() throws Exception
+	{
+		loadProjectWithTwoPads(true);
+
+		handler.handleRequest(new PadPlayRequest(PAD_ID));
+		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
+
+		verify(audioHandler, times(2)).play();
+		verify(audioHandler).stop();
+
+		assertThat(projectController.getPlayingPadControllers())
+				.extracting(PadController::getPad)
+				.extracting(Pad::getId)
+				.containsExactly(SECOND_PAD_ID);
+	}
+
+	@Test
+	void testPadPlayHandlerInMultiModeDoesNotStopCurrentlyPlayingPads() throws Exception
+	{
+		loadProjectWithTwoPads(false);
+
+		handler.handleRequest(new PadPlayRequest(PAD_ID));
+		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
+
+		verify(audioHandler, times(2)).play();
+		verify(audioHandler, never()).stop();
+	}
+
+	private void loadProjectWithTwoPads(boolean isSoloMode) throws URISyntaxException, ExecutionException, InterruptedException
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		project.getMetadata().setIsSoloMode(isSoloMode);
+
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		project.getPad(PAD_ID).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
+
+		final Pad secondPad = Pad.builder()
+				.id(SECOND_PAD_ID)
+				.name("Second Pad")
+				.position(1)
+				.content(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build())
+				.build();
+		project.getPageByPad(PAD_ID).getPads().add(secondPad);
+
+		projectController.loadProject(project).get();
+	}
+
 }

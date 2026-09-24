@@ -20,8 +20,15 @@ class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 	@Override
 	void handlePlayback(PadController controller, PadPlayRequest requestMessage)
 	{
+		final Boolean isSoloMode = projectController.getLoadedProject().getMetadata().getIsSoloMode();
+
 		try
 		{
+			if(Boolean.TRUE.equals(isSoloMode))
+			{
+				projectController.getPlayingPadControllers().forEach(PadController::stop);
+			}
+
 			controller.play();
 		}
 		catch(IOException e)
