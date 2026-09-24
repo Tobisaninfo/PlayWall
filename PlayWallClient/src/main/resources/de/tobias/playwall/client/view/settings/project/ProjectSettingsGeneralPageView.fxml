@@ -33,14 +33,17 @@
             <ToggleGroup fx:id="playbackModeGroup"/>
         </fx:define>
 
-        <HBox alignment="CENTER_LEFT">
-            <PlayWallToggleButton icon="PLAY_SOLID" maxWidth="120" minHeight="50" minWidth="120" prefWidth="120"
-                                  styleClass="toggle-button--segmented-left"
-                                  text="%ui.settings.pad.general.playback.mode.solo" toggleGroup="$playbackModeGroup"/>
-            <PlayWallToggleButton icon="LAYER_GROUP_SOLID" maxWidth="120" minHeight="50" minWidth="120" prefWidth="120"
-                                  styleClass="toggle-button--segmented-right"
-                                  text="%ui.settings.pad.general.playback.mode.multi" toggleGroup="$playbackModeGroup"/>
-        </HBox>
+        <VBox spacing="14">
+            <HBox alignment="CENTER_LEFT">
+                <PlayWallToggleButton icon="PLAY_SOLID" maxWidth="120" minHeight="50" minWidth="120" prefWidth="120"
+                                      styleClass="toggle-button--segmented-left"
+                                      text="%ui.settings.pad.general.playback.mode.solo" toggleGroup="$playbackModeGroup"/>
+                <PlayWallToggleButton icon="LAYER_GROUP_SOLID" maxWidth="120" minHeight="50" minWidth="120" prefWidth="120"
+                                      styleClass="toggle-button--segmented-right"
+                                      text="%ui.settings.pad.general.playback.mode.multi" toggleGroup="$playbackModeGroup"/>
+            </HBox>
+            <Label text="%ui.settings.pad.general.playback.mode.description" wrapText="true"/>
+        </VBox>
     </SettingsRow>
 
     <Separator/>
