@@ -5,6 +5,7 @@ export type ModuleConfig = {
     port: number
     useTls: boolean
     reconnectDelaySeconds: number
+    pageSyncMode: 'sync' | 'async'
 }
 
 export function GetConfigFields(): SomeCompanionConfigField[] {
@@ -42,6 +43,18 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
             max: 60,
             default: 2,
             tooltip: 'Base delay before reconnecting after a lost connection. Backs off exponentially up to 30s.',
+        },
+        {
+            type: 'dropdown',
+            id: 'pageSyncMode',
+            label: 'Page navigation mode',
+            width: 8,
+            choices: [
+                {id: 'sync', label: 'Synchronous — mirrors the page shown in PlayWall'},
+                {id: 'async', label: 'Asynchronous — independent of PlayWall'},
+            ],
+            default: 'sync',
+            tooltip: 'Synchronous: changing the page in Companion also changes it in PlayWall, and vice versa. Asynchronous: Companion tracks its own page, unrelated to what PlayWall shows.',
         },
     ]
 }

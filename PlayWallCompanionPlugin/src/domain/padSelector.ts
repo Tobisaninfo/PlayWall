@@ -4,7 +4,6 @@ import type {
     CompanionInputFieldTextInput
 } from '@companion-module/base'
 import {findPadByName, findPadByPosition} from './padResolver.js'
-import type {PlaybackStore} from './playbackStore.js'
 import type {PadDto, ProjectDto} from '../connection/protocol.js'
 
 export type PadSelectorMode = 'name' | 'index'
@@ -27,7 +26,7 @@ export const PAD_SELECTOR_OPTIONS: (CompanionInputFieldDropdown<keyof PadSelecto
         label: 'Select pad by',
         choices: [
             {id: 'name', label: 'Name'},
-            {id: 'index', label: 'Position on the current page'},
+            {id: 'index', label: "Position on Companion's active page"},
         ],
         default: 'name',
         disableAutoExpression: true,
@@ -43,7 +42,7 @@ export const PAD_SELECTOR_OPTIONS: (CompanionInputFieldDropdown<keyof PadSelecto
         id: 'padPosition',
         type: 'number',
         label: 'Pad position (1-based)',
-        tooltip: "The pad's position on the page currently shown in PlayWall.",
+        tooltip: "The pad's position on Companion's currently active page (see the module's Page navigation mode setting; in \"sync\" mode this is also whatever PlayWall itself shows).",
         min: 1,
         max: 100,
         default: 1,
@@ -52,16 +51,19 @@ export const PAD_SELECTOR_OPTIONS: (CompanionInputFieldDropdown<keyof PadSelecto
 ]
 
 /**
- * Resolves the pad an action/feedback instance points to, given the current project and playback
- * state. Returns `undefined` if the project isn't known yet, or no matching pad exists.
+ * Resolves the pad an action/feedback instance points to, given the current project. "Index" mode
+ * resolves against Companion's own active page (`PageNavigationStore`, PW-196) — not PlayWall's real
+ * shown page — so pad and page actions stay tied to each other and both work independently of
+ * PlayWall in "async" page-sync mode; "sync" mode is what keeps them equal to PlayWall's page.
+ * Returns `undefined` if the project isn't known yet, or no matching pad exists.
  */
-export function resolvePad(options: PadSelectorOptions, project: ProjectDto | undefined, playbackStore: PlaybackStore): PadDto | undefined {
+export function resolvePad(options: PadSelectorOptions, project: ProjectDto | undefined, activePageIndex: number): PadDto | undefined {
     if (!project) {
         return undefined
     }
 
     if (options.mode === 'index') {
-        return findPadByPosition(project, playbackStore.getCurrentPageIndex(), options.padPosition - 1)
+        return findPadByPosition(project, activePageIndex, options.padPosition - 1)
     }
 
     return findPadByName(project, options.padName)

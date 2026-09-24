@@ -1,7 +1,8 @@
 import type {CompanionActionDefinitions} from '@companion-module/base'
 import {isPlayingStatus} from './domain/playbackStore.js'
 import {PAD_SELECTOR_OPTIONS, resolvePad} from './domain/padSelector.js'
-import {PAD_PLAY_STOP_ACTION_ID} from './ids.js'
+import {computeTargetPage, PAGE_ACTION_OPTIONS} from './domain/pageSelector.js'
+import {PAD_PLAY_STOP_ACTION_ID, PAGE_NAVIGATE_ACTION_ID} from './ids.js'
 import type ModuleInstance from './main.js'
 import type {ModuleSchema} from './main.js'
 
@@ -13,7 +14,7 @@ export function GetActionDefinitions(self: ModuleInstance): CompanionActionDefin
             options: PAD_SELECTOR_OPTIONS,
             callback: (action) => {
                 const options = action.options
-                const pad = resolvePad(options, self.projectStore.getProject(), self.playbackStore)
+                const pad = resolvePad(options, self.projectStore.getProject(), self.pageNavigationStore.getActivePage())
                 if (!pad) {
                     self.log('warn', `Toggle Play/Stop: could not resolve a pad for options ${JSON.stringify(options)}`)
                     return
@@ -23,6 +24,30 @@ export function GetActionDefinitions(self: ModuleInstance): CompanionActionDefin
                     self.connection?.stopPad(pad.id)
                 } else {
                     self.connection?.playPad(pad.id)
+                }
+            },
+        },
+        [PAGE_NAVIGATE_ACTION_ID]: {
+            name: 'Change page',
+            description: 'Moves to the previous/next page, or jumps to a specific page.',
+            options: PAGE_ACTION_OPTIONS,
+            callback: (action) => {
+                const options = action.options
+                const project = self.projectStore.getProject()
+                if (!project) {
+                    self.log('warn', 'Page navigation: no project loaded')
+                    return
+                }
+
+                const target = computeTargetPage(options.mode, options.pageNumber, self.pageNavigationStore.getActivePage(), project.pages.length)
+                if (target === undefined) {
+                    self.log('warn', `Page navigation: no target page for options ${JSON.stringify(options)}`)
+                    return
+                }
+
+                self.updateActivePage(target)
+                if (self.config.pageSyncMode === 'sync') {
+                    self.connection?.showPage(target)
                 }
             },
         },

@@ -237,7 +237,7 @@ public class MainViewController extends ViewControllerBase
 
 		projectLoadedListener = new ProjectLoadedListener(this, settingsController);
 		eventHandler.registerListener(projectLoadedListener);
-		projectListener = new ProjectListener(projectMapper, this);
+		projectListener = new ProjectListener(projectMapper, projectController, this);
 		eventHandler.registerListener(projectListener);
 		pageAddListener = new PageListener(projectController, this, pageMapper, pageSettingsMapper);
 		eventHandler.registerListener(pageAddListener);
@@ -656,6 +656,25 @@ public class MainViewController extends ViewControllerBase
 
 	public void showPage(Page page)
 	{
+		renderPage(page);
+
+		try
+		{
+			client.currentProject().showPage(page.getPosition());
+		}
+		catch(PlayWallApiException e)
+		{
+			log.warn("Cannot notify server about the currently shown page", e);
+		}
+	}
+
+	void applyPageShownByServer(int position)
+	{
+		renderPage(projectController.getProject().getPage(position));
+	}
+
+	private void renderPage(Page page)
+	{
 		projectController.setCurrentPageIndex(page.getPosition());
 		final ProjectMetadata projectMetadata = projectController.getProject().getMetadata();
 		final int padNumberPerPage = projectMetadata.getNumberOfPadsPerPage();
@@ -674,15 +693,6 @@ public class MainViewController extends ViewControllerBase
 		styleable.renderStylesheets(getStage(), page, projectMetadata);
 
 		eventHandler.fireEvent(new ProjectPageShownUpdate(page.getPosition()));
-
-		try
-		{
-			client.currentProject().showPage(page.getPosition());
-		}
-		catch(PlayWallApiException e)
-		{
-			log.warn("Cannot notify server about the currently shown page", e);
-		}
 	}
 
 	public void updateStyle()

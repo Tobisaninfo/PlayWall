@@ -5,6 +5,7 @@ import {
     buildPadPlayRequest,
     buildPadStopRequest,
     buildProjectGetRequest,
+    buildProjectPageShowRequest,
     ERROR_MESSAGE,
     ERROR_MESSAGE_CLASS,
     PAD_REPLACE_UPDATE,
@@ -13,6 +14,7 @@ import {
     PAD_STATUS_UPDATE_CLASS,
     PAD_SWAP_UPDATE,
     PAD_SWAP_UPDATE_CLASS,
+    PAGE_CRUD_UPDATE_CLASSES,
     parseEnvelope,
     PROJECT_GET_RESPONSE,
     PROJECT_LOADED_UPDATE,
@@ -24,6 +26,8 @@ import {
 } from './protocol.js'
 
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected'
+
+const PAGE_CRUD_UPDATE_CLASS_SET: ReadonlySet<string> = new Set(PAGE_CRUD_UPDATE_CLASSES)
 
 export interface ClientWebSocketHandlerOptions {
     host: string
@@ -40,6 +44,12 @@ export interface ClientWebSocketHandlerOptions {
     onPadReplaced: (newPad: PadDto, targetPadId: string) => void
     /** Two pads swapped places via drag & drop on the desktop client. */
     onPadsSwapped: (padId1: string, padId2: string) => void
+    /**
+     * A page was added, deleted, inserted, reordered, replaced, or had its settings (name/color)
+     * changed on the desktop client. Carries the freshly re-fetched project — unlike
+     * `onProjectLoaded`, this must not reset any playback/navigation state, just the project data.
+     */
+    onPagesChanged: (project: ProjectDto) => void
     log: (level: 'debug' | 'warn', message: string) => void
 }
 
@@ -177,6 +187,24 @@ export class ClientWebSocketHandler {
         })
     }
 
+    /** Tells the server to show the given (0-based) page. Errors are logged, not thrown. */
+    showPage(index: number): void {
+        this.sendRequest(buildProjectPageShowRequest(index), GENERIC_RESPONSE).catch((error: unknown) => {
+            this.options.log('warn', `Failed to show page ${index}: ${String(error)}`)
+        })
+    }
+
+    /** Re-fetches the project after a page was added/removed/reordered/renamed, via `onPagesChanged`. */
+    private refetchProject(): void {
+        this.sendRequest(buildProjectGetRequest(), PROJECT_GET_RESPONSE)
+            .then((response) => {
+                this.options.onPagesChanged(response.project)
+            })
+            .catch((error: unknown) => {
+                this.options.log('warn', `Failed to refresh the project after a page change: ${String(error)}`)
+            })
+    }
+
     private sendRequest<Schema extends z.ZodType>(message: {
         messageId: string
     }, schema: Schema): Promise<z.infer<Schema>> {
@@ -217,6 +245,11 @@ export class ClientWebSocketHandler {
             this.pendingRequests.delete(envelope.messageId)
             clearTimeout(pending.timer)
             this.resolvePendingRequest(pending, envelope)
+            return
+        }
+
+        if (PAGE_CRUD_UPDATE_CLASS_SET.has(envelope['@class'])) {
+            this.refetchProject()
             return
         }
 

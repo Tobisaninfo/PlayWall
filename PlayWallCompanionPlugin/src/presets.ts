@@ -1,11 +1,20 @@
 import {combineRgb} from '@companion-module/base'
 import type {CompanionPresetDefinitions, CompanionPresetSection} from '@companion-module/base'
 import type {PadSelectorOptions} from './domain/padSelector.js'
-import {PAD_CURRENT_COLOR_FEEDBACK_ID, PAD_PLAY_STOP_ACTION_ID} from './ids.js'
+import type {PageActionOptions, PageFeedbackOptions} from './domain/pageSelector.js'
+import {
+    PAD_CURRENT_COLOR_FEEDBACK_ID,
+    PAD_PLAY_STOP_ACTION_ID,
+    PAGE_CURRENT_COLOR_FEEDBACK_ID,
+    PAGE_NAVIGATE_ACTION_ID
+} from './ids.js'
 import type {ModuleSchema} from './main.js'
 
 /** PlayWall projects can have up to a 10x10 pad grid per page. */
 const MAX_PAD_POSITION = 100
+
+/** Matches the "jump to page" number field's range (`domain/pageSelector.ts`). */
+const MAX_PAGE_POSITION = 20
 
 function presetId(position: number): string {
     return `pad_${position}`
@@ -13,6 +22,14 @@ function presetId(position: number): string {
 
 function padOptions(position: number): PadSelectorOptions {
     return {mode: 'index', padName: '', padPosition: position}
+}
+
+function pagePresetId(position: number): string {
+    return `page_${position}`
+}
+
+function pageFeedbackOptions(position: number): PageFeedbackOptions {
+    return {pageNumber: position}
 }
 
 /**
@@ -59,6 +76,66 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
         }
     }
 
+    for (let position = 1; position <= MAX_PAGE_POSITION; position++) {
+        presets[pagePresetId(position)] = {
+            type: 'simple',
+            name: `Page ${position}`,
+            style: {
+                text: `$(label:page_name_${position})`,
+                size: 'auto',
+                color: combineRgb(255, 255, 255),
+                bgcolor: combineRgb(0, 0, 0),
+            },
+            previewStyle: {
+                text: `Page ${position}`,
+                color: combineRgb(255, 255, 255),
+                bgcolor: combineRgb(0, 0, 0),
+            },
+            steps: [
+                {
+                    down: [
+                        {
+                            actionId: PAGE_NAVIGATE_ACTION_ID,
+                            options: {mode: 'jump', pageNumber: position} satisfies PageActionOptions,
+                        },
+                    ],
+                    up: [],
+                },
+            ],
+            feedbacks: [
+                {
+                    feedbackId: PAGE_CURRENT_COLOR_FEEDBACK_ID,
+                    options: pageFeedbackOptions(position),
+                },
+            ],
+        }
+    }
+
+    presets['page_previous'] = {
+        type: 'simple',
+        name: 'Previous page',
+        style: {text: 'Page ◀', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        steps: [{
+            down: [{
+                actionId: PAGE_NAVIGATE_ACTION_ID,
+                options: {mode: 'previous', pageNumber: 1} satisfies PageActionOptions
+            }], up: []
+        }],
+        feedbacks: [],
+    }
+    presets['page_next'] = {
+        type: 'simple',
+        name: 'Next page',
+        style: {text: 'Page ▶', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        steps: [{
+            down: [{
+                actionId: PAGE_NAVIGATE_ACTION_ID,
+                options: {mode: 'next', pageNumber: 1} satisfies PageActionOptions
+            }], up: []
+        }],
+        feedbacks: [],
+    }
+
     return presets
 }
 
@@ -68,6 +145,15 @@ export function GetPresetSections(): CompanionPresetSection<ModuleSchema>[] {
             id: 'pads',
             name: 'Pads (position 1-100 on the current page)',
             definitions: Array.from({length: MAX_PAD_POSITION}, (_, index) => presetId(index + 1)),
+        },
+        {
+            id: 'pages',
+            name: 'Pages (position 1-20)',
+            definitions: [
+                ...Array.from({length: MAX_PAGE_POSITION}, (_, index) => pagePresetId(index + 1)),
+                'page_previous',
+                'page_next',
+            ],
         },
     ]
 }

@@ -9,21 +9,12 @@ export function isPlayingStatus(status: string | undefined): boolean {
 }
 
 /**
- * Holds the live, transient PlayWall runtime state Companion needs for the Play/Stop action and its
- * feedback: which page is currently shown, and each pad's last known playback status. Distinct from
- * `ProjectStore`, which holds the project's static content.
+ * Holds each pad's last known playback status — the live, transient runtime state Companion needs
+ * for the Play/Stop action and its feedback. Distinct from `ProjectStore` (the project's static
+ * content) and `PageNavigationStore` (which page is active).
  */
 export class PlaybackStore {
-    private currentPageIndex = 0
     private readonly padStatuses = new Map<string, string>()
-
-    setCurrentPageIndex(index: number): void {
-        this.currentPageIndex = index
-    }
-
-    getCurrentPageIndex(): number {
-        return this.currentPageIndex
-    }
 
     setPadStatus(padId: string, status: string): void {
         this.padStatuses.set(padId, status)
@@ -41,20 +32,8 @@ export class PlaybackStore {
         return this.padStatuses.get(padId)
     }
 
-    /**
-     * Called when a (new) project is loaded: resets to page 0. Deliberately keeps known pad
-     * statuses — pad ids are never reused across projects, so old entries are simply inert, and
-     * dropping them here would lose statuses that can legitimately already have arrived: the server
-     * broadcasts each pad's initial PadStatusUpdate *while* loading, before the final
-     * ProjectLoadedUpdate that triggers this call.
-     */
-    resetPage(): void {
-        this.currentPageIndex = 0
-    }
-
     /** Called when no project is loaded at all: nothing is relevant anymore. */
     clear(): void {
-        this.currentPageIndex = 0
         this.padStatuses.clear()
     }
 }

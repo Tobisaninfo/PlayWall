@@ -21,6 +21,7 @@ export const PROJECT_GET_REQUEST_CLASS = 'de.tobias.playwall.common.api.project.
 export const PROJECT_GET_RESPONSE_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectGetResponse'
 export const PROJECT_LOADED_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate'
 export const PROJECT_PAGE_SHOWN_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectPageShownUpdate'
+export const PROJECT_PAGE_SHOW_REQUEST_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectPageShowRequest'
 export const PAD_STATUS_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadStatusUpdate'
 export const PAD_REPLACE_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadReplaceUpdate'
 export const PAD_SWAP_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadSwapUpdate'
@@ -28,6 +29,21 @@ export const PAD_PLAY_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request
 export const PAD_STOP_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.PadStopRequest'
 export const ERROR_MESSAGE_CLASS = 'de.tobias.playwall.common.net.ErrorMessage'
 export const PROJECT_NOT_LOADED_ERROR_CLASS = 'de.tobias.playwall.common.api.project.ProjectNotLoadedError'
+
+/**
+ * Broadcast whenever the set of pages, their order, or a page's own settings (name/color) change.
+ * Their payload shapes differ (some carry a full page, some a page-id → new-position renumbering
+ * map) — Companion doesn't model them individually, it just re-fetches the whole project when any of
+ * these arrive (see ClientWebSocketHandler's `onPagesChanged`).
+ */
+export const PAGE_CRUD_UPDATE_CLASSES = [
+    'de.tobias.playwall.common.api.page.update.PageAddUpdate',
+    'de.tobias.playwall.common.api.page.update.PageDeleteUpdate',
+    'de.tobias.playwall.common.api.page.update.PageInsertUpdate',
+    'de.tobias.playwall.common.api.page.update.PageReorderUpdate',
+    'de.tobias.playwall.common.api.page.update.PageReplaceUpdate',
+    'de.tobias.playwall.common.api.page.update.PageSettingsUpdate',
+] as const
 
 /**
  * Mirrors PlayWallCommon's `Color` enum names (RED1..GRAY6). Kept as a bare string here; the actual
@@ -60,9 +76,15 @@ const PAD_DTO = z.looseObject({
 
 export type PadDto = z.infer<typeof PAD_DTO>
 
+const PAGE_SETTINGS_DTO = z.looseObject({
+    name: z.string().nullish(),
+    color: z.string().nullish(),
+})
+
 const PAGE_DTO = z.looseObject({
     id: z.string(),
     position: z.number(),
+    settings: PAGE_SETTINGS_DTO.nullish(),
     pads: z.array(PAD_DTO),
 })
 
@@ -124,6 +146,14 @@ export function buildProjectGetRequest(): { '@class': string; messageId: string;
         '@class': PROJECT_GET_REQUEST_CLASS,
         messageId: randomUUID(),
         projectId: null,
+    }
+}
+
+export function buildProjectPageShowRequest(index: number): { '@class': string; messageId: string; index: number } {
+    return {
+        '@class': PROJECT_PAGE_SHOW_REQUEST_CLASS,
+        messageId: randomUUID(),
+        index,
     }
 }
 
