@@ -115,7 +115,41 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 		verify(audioHandler, never()).stop();
 	}
 
+	@Test
+	void testPadPlayHandlerInSoloModeDoesNotStopPadsWithIgnoreSoloMode() throws Exception
+	{
+		loadProjectWithTwoPads(true, true);
+
+		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_ID));
+
+		verify(audioHandler, times(2)).play();
+		verify(audioHandler, never()).stop();
+
+		assertThat(projectController.getPlayingPadControllers())
+				.extracting(PadController::getPad)
+				.extracting(Pad::getId)
+				.containsExactlyInAnyOrder(PAD_ID, SECOND_PAD_ID);
+	}
+
+	@Test
+	void testPadPlayHandlerInSoloModeDoesNotStopRetriggeredPadWithIgnoreSoloMode() throws Exception
+	{
+		loadProjectWithTwoPads(true, true);
+
+		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
+		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
+
+		verify(audioHandler, times(2)).play();
+		verify(audioHandler, never()).stop();
+	}
+
 	private void loadProjectWithTwoPads(boolean isSoloMode) throws URISyntaxException, ExecutionException, InterruptedException
+	{
+		loadProjectWithTwoPads(isSoloMode, false);
+	}
+
+	private void loadProjectWithTwoPads(boolean isSoloMode, boolean secondPadIgnoresSoloMode) throws URISyntaxException, ExecutionException, InterruptedException
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		project.getMetadata().setIsSoloMode(isSoloMode);
@@ -127,7 +161,7 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 				.id(SECOND_PAD_ID)
 				.name("Second Pad")
 				.position(1)
-				.content(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build())
+				.content(AudioPadContent.builder().mediaPath(mediaPath).loop(false).ignoreSoloMode(secondPadIgnoresSoloMode).build())
 				.build();
 		project.getPageByPad(PAD_ID).getPads().add(secondPad);
 

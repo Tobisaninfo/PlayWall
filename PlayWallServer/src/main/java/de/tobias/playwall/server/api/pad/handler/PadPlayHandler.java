@@ -1,6 +1,7 @@
 package de.tobias.playwall.server.api.pad.handler;
 
 import de.tobias.playwall.common.api.pad.request.PadPlayRequest;
+import de.tobias.playwall.server.common.model.pad.AudioPadContent;
 import de.tobias.playwall.server.net.RequestHandlerTyped;
 import de.tobias.playwall.server.project.PadController;
 import de.tobias.playwall.server.project.ProjectController;
@@ -26,7 +27,9 @@ class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 		{
 			if(Boolean.TRUE.equals(isSoloMode))
 			{
-				projectController.getPlayingPadControllers().forEach(PadController::stop);
+				projectController.getPlayingPadControllers().stream()
+						.filter(PadPlayHandler::isAffectedBySoloMode)
+						.forEach(PadController::stop);
 			}
 
 			controller.play();
@@ -35,5 +38,15 @@ class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 		{
 			throw new UncheckedIOException(e);
 		}
+	}
+
+	private static boolean isAffectedBySoloMode(PadController controller)
+	{
+		if(controller.getPad().getContent() instanceof AudioPadContent audioPadContent)
+		{
+			return !audioPadContent.isIgnoreSoloMode();
+		}
+
+		return true;
 	}
 }
