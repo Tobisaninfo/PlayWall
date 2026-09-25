@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.project.handler;
 import de.tobias.playwall.common.api.project.request.ProjectPageShowRequest;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
+import de.tobias.playwall.server.api.project.PageIndexOutOfRangeException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.project.ProjectController;
@@ -36,7 +37,7 @@ class ProjectPageShowHandlerTest extends AbstractRequestHandlerTest
 	@Test
 	void testProjectPageShowRequestUpdatesCurrentPageIndex() throws Exception
 	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
 		projectController.loadProject(project).get();
 
 		handler.handleRequest(new ProjectPageShowRequest(1));
@@ -50,5 +51,29 @@ class ProjectPageShowHandlerTest extends AbstractRequestHandlerTest
 		final ProjectPageShowRequest request = new ProjectPageShowRequest(1);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotLoadedException.class);
+	}
+
+	@Test
+	void testProjectPageShowRequestWithIndexBeyondPageCount() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		projectController.loadProject(project).get();
+
+		final ProjectPageShowRequest request = new ProjectPageShowRequest(1);
+		assertThatThrownBy(() -> handler.handleRequest(request))
+				.isInstanceOf(PageIndexOutOfRangeException.class);
+
+		assertThat(projectController.getCurrentPageIndex()).isEqualTo(0);
+	}
+
+	@Test
+	void testProjectPageShowRequestWithNegativeIndex() throws Exception
+	{
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
+		projectController.loadProject(project).get();
+
+		final ProjectPageShowRequest request = new ProjectPageShowRequest(-1);
+		assertThatThrownBy(() -> handler.handleRequest(request))
+				.isInstanceOf(PageIndexOutOfRangeException.class);
 	}
 }

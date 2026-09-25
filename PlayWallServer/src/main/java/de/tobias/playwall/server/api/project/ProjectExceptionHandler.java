@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.project;
 
+import de.tobias.playwall.common.api.project.PageIndexOutOfRangeError;
 import de.tobias.playwall.common.api.project.ProjectNameAlreadyExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotExistsError;
 import de.tobias.playwall.common.api.project.ProjectNotLoadedError;
@@ -35,6 +36,13 @@ public class ProjectExceptionHandler
 	ErrorMessage handleProjectNotLoadedException(RequestMessage requestMessage, ProjectNotLoadedException e)
 	{
 		final ProjectNotLoadedError error = new ProjectNotLoadedError();
+		return new ErrorMessage(requestMessage.getMessageId(), messageSource.getMessage(error.getLocalizationKey(), error.getMessageArguments(), LocaleContextHolder.getLocale()), error);
+	}
+
+	@WsExceptionHandler(PageIndexOutOfRangeException.class)
+	ErrorMessage handlePageIndexOutOfRangeException(RequestMessage requestMessage, PageIndexOutOfRangeException e)
+	{
+		final PageIndexOutOfRangeError error = new PageIndexOutOfRangeError(e.getIndex(), e.getPageCount());
 		return new ErrorMessage(requestMessage.getMessageId(), messageSource.getMessage(error.getLocalizationKey(), error.getMessageArguments(), LocaleContextHolder.getLocale()), error);
 	}
 }

@@ -670,7 +670,14 @@ public class MainViewController extends ViewControllerBase
 
 	void applyPageShownByServer(int position)
 	{
-		renderPage(projectController.getProject().getPage(position));
+		final Page page = projectController.getProject().getPage(position);
+		if(page == null)
+		{
+			log.warn("Cannot apply page shown by server: no page at position {}", position);
+			return;
+		}
+
+		renderPage(page);
 	}
 
 	private void renderPage(Page page)
