@@ -50,6 +50,17 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>npm-version-set</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>version ${revision} --no-git-tag-version --allow-same-version</arguments>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>npm-package</id>
                         <phase>package</phase>
@@ -58,6 +69,16 @@
                         </goals>
                         <configuration>
                             <arguments>run package</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-version-reset</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>version 0.0.0 --no-git-tag-version --allow-same-version</arguments>
                         </configuration>
                     </execution>
                 </executions>
