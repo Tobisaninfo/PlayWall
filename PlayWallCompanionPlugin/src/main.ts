@@ -136,9 +136,13 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
     }
 
     /**
-     * Any project setting changed on the desktop client (renamed, colors, global volume, ...) —
-     * `ProjectSettingsUpdate` always carries the full metadata, so it's simplest to just replace the
-     * cached copy wholesale rather than tracking volume separately; refreshes `current_volume` to match.
+     * Any project setting changed on the desktop client (renamed, colors, global volume, pad grid
+     * size, ...) — `ProjectSettingsUpdate` always carries the full metadata, so it's simplest to just
+     * replace the cached copy wholesale rather than tracking individual fields separately. Besides
+     * `current_volume`/`current_volume_percent`, this also re-sizes the pad variable definitions (the
+     * grid dimensions live on metadata too) and re-checks the pad/page color feedbacks, since
+     * `defaultColor`/`playColor`/`introColor` may have changed — mirrors `handlePagesChanged`'s full
+     * refresh, just without touching playback/navigation state (this isn't a new project either).
      */
     private handleProjectSettingsChanged(metadata: ProjectMetadata): void {
         const project = this.projectStore.getProject()
@@ -148,6 +152,10 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
 
         this.projectStore.setProject({...project, metadata})
         this.setVariableValues(volumeVariableValues(metadata.volume))
+        this.updateVariableDefinitions()
+        this.refreshPadVariableValues()
+        this.refreshPageVariableValues()
+        this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID, PAGE_CURRENT_COLOR_FEEDBACK_ID)
     }
 
     /**
