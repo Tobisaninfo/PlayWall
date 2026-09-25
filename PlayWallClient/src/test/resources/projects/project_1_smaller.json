@@ -1,5 +1,6 @@
 {
     "metadata": {
+        "VERSION": 2,
         "id": "a09d1f3c-2384-4ee5-b13d-07f428efe35c",
         "name": "Project 1",
         "numberOfHorizontalPads": 3,
@@ -22,7 +23,8 @@
         "mappings": {
             "b9a0949e-1006-4a91-a755-c2b2e5539013": []
         },
-        "selectedMapping": "b9a0949e-1006-4a91-a755-c2b2e5539013"
+        "selectedMapping": "b9a0949e-1006-4a91-a755-c2b2e5539013",
+        "isSoloMode": false
     },
     "pages": [
         {
