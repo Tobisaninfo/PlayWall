@@ -6,6 +6,7 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.pad.PadContent;
 import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.view.components.PlayWallButton;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import javafx.scene.control.Separator;
@@ -17,9 +18,9 @@ import java.util.UUID;
  */
 public class FallbackPadContentSettingsContainer extends BasePadContentSettingsContainer<PadContent>
 {
-	public FallbackPadContentSettingsContainer(UUID padId, PadSettingsViewController parentDialog)
+	public FallbackPadContentSettingsContainer(UUID padId, PadSettingsViewController parentDialog, ProjectMetadata projectMetadata)
 	{
-		super(null, padId, parentDialog);
+		super(null, padId, parentDialog, projectMetadata);
 
 		getChildren().addAll(createFileSettings(), new Separator());
 

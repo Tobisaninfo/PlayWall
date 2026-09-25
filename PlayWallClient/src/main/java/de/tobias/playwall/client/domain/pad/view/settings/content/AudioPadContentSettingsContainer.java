@@ -8,6 +8,7 @@ import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.pad.AudioPadContent;
 import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.PlayWallButton;
@@ -22,6 +23,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Paths;
@@ -31,10 +33,12 @@ import java.util.UUID;
  * Settings related to {@link AudioPadContent}
  */
 @Slf4j
+@Getter
 public class AudioPadContentSettingsContainer extends BasePadContentSettingsContainer<AudioPadContent>
 {
 	private CheckBox checkboxPlaybackLoop;
 	private CheckBox checkboxPlaybackIgnoreSoloMode;
+	private Label labelIgnoreSoloModeDescription;
 	private VolumeSlider volumeSlider;
 	private Slider speedSlider;
 
@@ -42,9 +46,9 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 
 	private final double initialVolume;
 
-	public AudioPadContentSettingsContainer(AudioPadContent padContent, UUID padId, FluentClient fluentClient, PadSettingsViewController parentDialog)
+	public AudioPadContentSettingsContainer(AudioPadContent padContent, UUID padId, FluentClient fluentClient, PadSettingsViewController parentDialog, ProjectMetadata projectMetadata)
 	{
-		super(padContent, padId, parentDialog);
+		super(padContent, padId, parentDialog, projectMetadata);
 		this.fluentClient = fluentClient;
 
 		this.initialVolume = padContent.getVolume();
@@ -100,14 +104,22 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		checkboxPlaybackIgnoreSoloMode.setGraphic(new FontIcon(FontAwesomeType.LAYER_GROUP_SOLID));
 		checkboxPlaybackIgnoreSoloMode.setSelected(padContent.isIgnoreSoloMode());
 
-		final Label description = new Label(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_IGNORE_SOLO_MODE_DESCRIPTION));
-		description.setWrapText(true);
+		labelIgnoreSoloModeDescription = new Label(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_IGNORE_SOLO_MODE_DESCRIPTION));
+		labelIgnoreSoloModeDescription.setWrapText(true);
 
-		final VBox box = new VBox(checkboxPlaybackLoop, checkboxPlaybackIgnoreSoloMode, description);
+		checkboxPlaybackIgnoreSoloMode.setDisable(!isSoloMode());
+		labelIgnoreSoloModeDescription.setDisable(!isSoloMode());
+
+		final VBox box = new VBox(checkboxPlaybackLoop, checkboxPlaybackIgnoreSoloMode, labelIgnoreSoloModeDescription);
 		box.setSpacing(ViewConstants.DEFAULT_SPACING);
 		settingsRowPlayback.add(box, 1, 0);
 
 		return settingsRowPlayback;
+	}
+
+	private boolean isSoloMode()
+	{
+		return projectMetadata != null && Boolean.TRUE.equals(projectMetadata.getIsSoloMode());
 	}
 
 	private SettingsRow createSpeedSettings()

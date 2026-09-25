@@ -4,6 +4,7 @@ import de.tobias.playwall.client.domain.pad.PadContent;
 import de.tobias.playwall.client.domain.pad.view.settings.BasePadSettingsViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsGeneralViewController;
 import de.tobias.playwall.client.domain.pad.view.settings.PadSettingsViewController;
+import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.view.components.ViewConstants;
 import de.tobias.playwall.client.view.settings.Configurable;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -26,12 +27,14 @@ public abstract class BasePadContentSettingsContainer<T extends PadContent> exte
 	protected final T padContent;
 	protected final UUID padId;
 	protected final PadSettingsViewController parentDialog;
+	protected final ProjectMetadata projectMetadata;
 
-	protected BasePadContentSettingsContainer(T padContent, UUID padId, PadSettingsViewController parentDialog)
+	protected BasePadContentSettingsContainer(T padContent, UUID padId, PadSettingsViewController parentDialog, ProjectMetadata projectMetadata)
 	{
 		this.padContent = padContent;
 		this.padId = padId;
 		this.parentDialog = parentDialog;
+		this.projectMetadata = projectMetadata;
 
 		setAlignment(Pos.TOP_LEFT);
 		setSpacing(ViewConstants.DEFAULT_SPACING);

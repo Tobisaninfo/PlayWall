@@ -12,6 +12,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 
 /**
  * Viewcontroller for the general page in the pad settings dialog.
@@ -36,6 +37,7 @@ public class PadSettingsGeneralViewController extends BasePadSettingsViewControl
 	@FXML
 	private Spinner<Double> spinnerIntroDuration;
 
+	@Getter
 	private BasePadContentSettingsContainer<? extends PadContent> padContentSettingsContainer;
 
 	private final PadContentSettingsContainerFactory padContentSettingsContainerFactory;
