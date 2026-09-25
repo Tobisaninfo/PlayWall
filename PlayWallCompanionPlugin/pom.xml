@@ -13,6 +13,15 @@
     <artifactId>PlayWallCompanionPlugin</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <!-- This module has "pom" packaging (no src/main/java), so the Sonar Maven Plugin needs to be
+             told explicitly where its (TypeScript) sources live to include it in the reactor-wide
+             "mvn sonar:sonar" analysis run from the root pom. Generated/build output is excluded since
+             it's not checked in and not meaningful to analyze. -->
+        <sonar.sources>src</sonar.sources>
+        <sonar.exclusions>src/domain/modernColorPalette.generated.ts,dist/**,node_modules/**,pkg/**</sonar.exclusions>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
