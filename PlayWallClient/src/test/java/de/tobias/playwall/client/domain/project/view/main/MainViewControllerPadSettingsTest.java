@@ -93,6 +93,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 						.isLoop(false)
 						.speed(1.0)
 						.volume(1.0)
+						.isIgnoreSoloMode(false)
 						.build())
 				.build());
 	}
@@ -135,6 +136,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 						.isLoop(false)
 						.speed(1.0)
 						.volume(1.0)
+						.isIgnoreSoloMode(false)
 						.build())
 				.build());
 	}
@@ -221,6 +223,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 						.isLoop(false)
 						.speed(1.0)
 						.volume(1.0)
+						.isIgnoreSoloMode(false)
 						.build())
 				.build());
 	}
@@ -273,6 +276,7 @@ class MainViewControllerPadSettingsTest extends AbstractViewControllerTest
 						.isLoop(false)
 						.speed(1.0)
 						.volume(1.0)
+						.isIgnoreSoloMode(false)
 						.build())
 				.build());
 	}

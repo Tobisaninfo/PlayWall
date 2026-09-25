@@ -53,6 +53,7 @@ class ClientProjectControllerTest extends AbstractTest
 						.mediaPath("abc.mp3")
 						.isLoop(false)
 						.volume(1.0)
+						.isIgnoreSoloMode(false)
 						.build())
 				.build());
 
@@ -79,6 +80,7 @@ class ClientProjectControllerTest extends AbstractTest
 						.mediaPath("abc.mp3")
 						.isLoop(false)
 						.volume(1.0)
+						.isIgnoreSoloMode(false)
 						.build())
 				.build());
 

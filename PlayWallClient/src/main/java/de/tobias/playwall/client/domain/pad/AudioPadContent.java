@@ -18,6 +18,7 @@ public final class AudioPadContent extends PadContent implements Loopable
 	private boolean isLoop;
 	private double volume;
 	private double speed;
+	private boolean isIgnoreSoloMode;
 
 	@Override
 	public AudioPadContent copy()
@@ -27,6 +28,7 @@ public final class AudioPadContent extends PadContent implements Loopable
 				.isLoop(isLoop)
 				.volume(volume)
 				.speed(speed)
+				.isIgnoreSoloMode(isIgnoreSoloMode)
 				.build();
 	}
 }

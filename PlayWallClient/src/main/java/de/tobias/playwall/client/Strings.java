@@ -89,6 +89,8 @@ public class Strings
 	public static final String UI_SETTINGS_PAD_GENERAL_TITLE  = "ui.settings.pad.general.title";
 	public static final String UI_SETTINGS_PAD_PLAYBACK = "ui.settings.pad.general.playback";
 	public static final String UI_SETTINGS_PAD_PLAYBACK_LOOP = "ui.settings.pad.general.playback.loop";
+	public static final String UI_SETTINGS_PAD_PLAYBACK_IGNORE_SOLO_MODE = "ui.settings.pad.general.playback.ignore.solo.mode";
+	public static final String UI_SETTINGS_PAD_PLAYBACK_IGNORE_SOLO_MODE_DESCRIPTION = "ui.settings.pad.general.playback.ignore.solo.mode.description";
 	public static final String UI_SETTINGS_PAD_PLAYBACK_SPEED = "ui.settings.pad.general.playback.speed";
 	public static final String UI_SETTINGS_PAD_FILE = "ui.settings.pad.general.file";
 	public static final String UI_SETTINGS_PAD_FILE_CHOOSE_PATH = "ui.settings.pad.general.file.choose.path";

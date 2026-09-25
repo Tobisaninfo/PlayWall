@@ -24,6 +24,7 @@ public class PadContentMapper
 					.isLoop(audioPadDto.isLoop())
 					.volume(audioPadDto.getVolume())
 					.speed(audioPadDto.getSpeed())
+					.isIgnoreSoloMode(audioPadDto.isIgnoreSoloMode())
 					.build();
 		};
 	}
@@ -42,6 +43,7 @@ public class PadContentMapper
 					.loop(audioPad.isLoop())
 					.volume(audioPad.getVolume())
 					.speed(audioPad.getSpeed())
+					.ignoreSoloMode(audioPad.isIgnoreSoloMode())
 					.build();
 			default -> throw new IllegalStateException("Unexpected value: " + padContent);
 		};

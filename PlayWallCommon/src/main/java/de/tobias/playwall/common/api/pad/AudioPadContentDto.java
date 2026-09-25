@@ -16,4 +16,5 @@ public final class AudioPadContentDto extends PadContentDto
 	private boolean loop;
 	private double volume;
 	private double speed;
+	private boolean ignoreSoloMode;
 }

@@ -16,11 +16,11 @@ import de.tobias.playwall.client.view.components.VolumeSlider;
 import de.tobias.playwall.client.view.components.settings.SettingsRow;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +34,7 @@ import java.util.UUID;
 public class AudioPadContentSettingsContainer extends BasePadContentSettingsContainer<AudioPadContent>
 {
 	private CheckBox checkboxPlaybackLoop;
+	private CheckBox checkboxPlaybackIgnoreSoloMode;
 	private VolumeSlider volumeSlider;
 	private Slider speedSlider;
 
@@ -94,7 +95,17 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 		checkboxPlaybackLoop = new CheckBox(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_LOOP));
 		checkboxPlaybackLoop.setGraphic(new FontIcon(FontAwesomeType.REPEAT_SOLID));
 		checkboxPlaybackLoop.setSelected(padContent.isLoop());
-		settingsRowPlayback.add(checkboxPlaybackLoop, 1, 0);
+
+		checkboxPlaybackIgnoreSoloMode = new CheckBox(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_IGNORE_SOLO_MODE));
+		checkboxPlaybackIgnoreSoloMode.setGraphic(new FontIcon(FontAwesomeType.LAYER_GROUP_SOLID));
+		checkboxPlaybackIgnoreSoloMode.setSelected(padContent.isIgnoreSoloMode());
+
+		final Label description = new Label(Localization.getString(Strings.UI_SETTINGS_PAD_PLAYBACK_IGNORE_SOLO_MODE_DESCRIPTION));
+		description.setWrapText(true);
+
+		final VBox box = new VBox(checkboxPlaybackLoop, checkboxPlaybackIgnoreSoloMode, description);
+		box.setSpacing(ViewConstants.DEFAULT_SPACING);
+		settingsRowPlayback.add(box, 1, 0);
 
 		return settingsRowPlayback;
 	}
@@ -164,6 +175,7 @@ public class AudioPadContentSettingsContainer extends BasePadContentSettingsCont
 			audioPadContent.setLoop(checkboxPlaybackLoop.isSelected());
 			audioPadContent.setVolume(volumeSlider.getValue() / 100.0);
 			audioPadContent.setSpeed(speedSlider.getValue());
+			audioPadContent.setIgnoreSoloMode(checkboxPlaybackIgnoreSoloMode.isSelected());
 		}
 	}
 
