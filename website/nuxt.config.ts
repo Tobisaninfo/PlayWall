@@ -60,9 +60,6 @@ export default defineNuxtConfig({
 
     i18n: {
         baseUrl: SITE_URL,
-        bundle: {
-            optimizeTranslationDirective: false,
-        },
         locales: [
             {code: 'de', language: 'de-DE', name: 'Deutsch', file: 'de.json'},
             {code: 'en', language: 'en-US', name: 'English', file: 'en.json'},
