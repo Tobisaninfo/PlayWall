@@ -142,7 +142,12 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
     presets['volume_up'] = {
         type: 'simple',
         name: 'Volume up (5%)',
-        style: {text: 'Vol\\n+5%', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        style: {
+            text: String.raw`Vol\n+5%`,
+            size: 'auto',
+            color: combineRgb(255, 255, 255),
+            bgcolor: combineRgb(0, 0, 0)
+        },
         steps: [{
             down: [{
                 actionId: VOLUME_CHANGE_ACTION_ID,
@@ -154,7 +159,12 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
     presets['volume_down'] = {
         type: 'simple',
         name: 'Volume down (5%)',
-        style: {text: 'Vol\\n-5%', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        style: {
+            text: String.raw`Vol\n-5%`,
+            size: 'auto',
+            color: combineRgb(255, 255, 255),
+            bgcolor: combineRgb(0, 0, 0)
+        },
         steps: [{
             down: [{
                 actionId: VOLUME_CHANGE_ACTION_ID,
@@ -178,7 +188,12 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
     presets['stop_all'] = {
         type: 'simple',
         name: 'Stop all pads',
-        style: {text: 'Stop\\nAll', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        style: {
+            text: String.raw`Stop\nAll`,
+            size: 'auto',
+            color: combineRgb(255, 255, 255),
+            bgcolor: combineRgb(0, 0, 0)
+        },
         steps: [{
             down: [{actionId: STOP_ALL_ACTION_ID, options: {}}],
             up: []

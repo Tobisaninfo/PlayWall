@@ -32,6 +32,16 @@ import {
 
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected'
 
+function rawDataToString(data: Buffer | ArrayBuffer | Buffer[]): string {
+    if (Array.isArray(data)) {
+        return Buffer.concat(data).toString('utf8')
+    }
+    if (data instanceof ArrayBuffer) {
+        return Buffer.from(data).toString('utf8')
+    }
+    return data.toString('utf8')
+}
+
 const PAGE_CRUD_UPDATE_CLASS_SET: ReadonlySet<string> = new Set(PAGE_CRUD_UPDATE_CLASSES)
 
 export interface ClientWebSocketHandlerOptions {
@@ -136,7 +146,7 @@ export class ClientWebSocketHandler {
         })
 
         socket.on('message', (data) => {
-            this.handleMessage(data.toString())
+            this.handleMessage(rawDataToString(data))
         })
 
         socket.on('close', () => {

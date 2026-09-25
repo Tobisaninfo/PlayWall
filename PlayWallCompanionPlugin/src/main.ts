@@ -9,7 +9,6 @@ import {
     UpdateVariableDefinitions,
     type VariablesSchema
 } from './variables.js'
-import {UpgradeScripts} from './upgrades.js'
 import {ClientWebSocketHandler, type ConnectionStatus} from './connection/ClientWebSocketHandler.js'
 import type {PadDto, ProjectDto, ProjectMetadata} from './connection/protocol.js'
 import type {PadSelectorOptions} from './domain/padSelector.js'
@@ -45,7 +44,7 @@ export type ModuleSchema = {
     variables: VariablesSchema
 }
 
-export {UpgradeScripts}
+export {UpgradeScripts} from './upgrades.js'
 
 export default class ModuleInstance extends InstanceBase<ModuleSchema> {
     config!: ModuleConfig

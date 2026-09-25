@@ -63,7 +63,7 @@ class ProjectPageShowHandlerTest extends AbstractRequestHandlerTest
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PageIndexOutOfRangeException.class);
 
-		assertThat(projectController.getCurrentPageIndex()).isEqualTo(0);
+		assertThat(projectController.getCurrentPageIndex()).isZero();
 	}
 
 	@Test
