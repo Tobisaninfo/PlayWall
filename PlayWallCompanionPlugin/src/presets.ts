@@ -162,6 +162,18 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
         }],
         feedbacks: [],
     }
+    presets['volume_display'] = {
+        type: 'simple',
+        name: 'Current volume',
+        style: {
+            text: '$(label:current_volume_percent)',
+            size: 'auto',
+            color: combineRgb(255, 255, 255),
+            bgcolor: combineRgb(0, 0, 0),
+        },
+        steps: [{down: [], up: []}],
+        feedbacks: [],
+    }
 
     return presets
 }
@@ -185,7 +197,7 @@ export function GetPresetSections(): CompanionPresetSection<ModuleSchema>[] {
         {
             id: 'volume',
             name: 'Volume',
-            definitions: ['volume_up', 'volume_down'],
+            definitions: ['volume_up', 'volume_down', 'volume_display'],
         },
     ]
 }

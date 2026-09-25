@@ -61,3 +61,16 @@ export function computeTargetVolume(mode: VolumeChangeMode, delta: number, curre
 export function formatVolume(volume: number | null | undefined): string {
     return String(volume ?? DEFAULT_VOLUME)
 }
+
+/** Formats a volume value (0-1) as a percentage (e.g. 0.75 -> "75%") for the `current_volume_percent` variable. */
+export function formatVolumePercent(volume: number | null | undefined): string {
+    return `${Math.round((volume ?? DEFAULT_VOLUME) * 100)}%`
+}
+
+/** The `current_volume`/`current_volume_percent` variable values for a given volume (0-1), in one call. */
+export function volumeVariableValues(volume: number | null | undefined): {
+    current_volume: string;
+    current_volume_percent: string
+} {
+    return {current_volume: formatVolume(volume), current_volume_percent: formatVolumePercent(volume)}
+}

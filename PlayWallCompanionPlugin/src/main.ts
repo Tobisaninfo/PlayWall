@@ -18,7 +18,7 @@ import {replacePadInProject, swapPadsInProject} from './domain/projectMutations.
 import {PageNavigationStore} from './domain/pageNavigationStore.js'
 import {PlaybackStore} from './domain/playbackStore.js'
 import {ProjectStore} from './domain/projectStore.js'
-import {formatVolume} from './domain/volumeControl.js'
+import {volumeVariableValues} from './domain/volumeControl.js'
 import type {VolumeActionOptions} from './domain/volumeControl.js'
 import {
     PAD_CURRENT_COLOR_FEEDBACK_ID,
@@ -116,7 +116,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         this.pageNavigationStore.resetPage()
         this.setVariableValues({
             project_name: project.metadata.name,
-            current_volume: formatVolume(project.metadata.volume)
+            ...volumeVariableValues(project.metadata.volume)
         })
         this.updateVariableDefinitions()
         this.refreshPadVariableValues()
@@ -128,7 +128,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         this.projectStore.clear()
         this.playbackStore.clear()
         this.pageNavigationStore.resetPage()
-        this.setVariableValues({project_name: '', current_volume: ''})
+        this.setVariableValues({project_name: '', current_volume: '', current_volume_percent: ''})
         this.updateVariableDefinitions()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID, PAGE_CURRENT_COLOR_FEEDBACK_ID)
     }
@@ -145,7 +145,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         }
 
         this.projectStore.setProject({...project, metadata})
-        this.setVariableValues({current_volume: formatVolume(metadata.volume)})
+        this.setVariableValues(volumeVariableValues(metadata.volume))
     }
 
     /**
