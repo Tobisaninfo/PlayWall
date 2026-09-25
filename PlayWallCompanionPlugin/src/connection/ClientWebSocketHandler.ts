@@ -278,69 +278,61 @@ export class ClientWebSocketHandler {
             return
         }
 
+        this.dispatchBroadcast(envelope)
+    }
+
+    /**
+     * Parses and dispatches a broadcast (non-response, non-page-CRUD) message by its `@class`. Kept
+     * separate from `handleMessage` so each case is a single straight-line statement — the actual
+     * parse-or-warn branching lives once, in `parseUpdate`, instead of being repeated (and adding to
+     * `handleMessage`'s cognitive complexity) for every message type.
+     */
+    private dispatchBroadcast(envelope: Record<string, unknown>): void {
         switch (envelope['@class']) {
-            case PROJECT_LOADED_UPDATE_CLASS: {
-                const update = PROJECT_LOADED_UPDATE.safeParse(envelope)
-                if (update.success) {
-                    this.options.onProjectLoaded(update.data.project)
-                } else {
-                    this.options.log('warn', `Received malformed ProjectLoadedUpdate: ${String(update.error)}`)
-                }
+            case PROJECT_LOADED_UPDATE_CLASS:
+                this.parseUpdate(envelope, PROJECT_LOADED_UPDATE, 'ProjectLoadedUpdate', (data) => this.options.onProjectLoaded(data.project))
                 break
-            }
-            case PROJECT_PAGE_SHOWN_UPDATE_CLASS: {
-                const update = PROJECT_PAGE_SHOWN_UPDATE.safeParse(envelope)
-                if (update.success) {
-                    this.options.onPageShown(update.data.index)
-                } else {
-                    this.options.log('warn', `Received malformed ProjectPageShownUpdate: ${String(update.error)}`)
-                }
+            case PROJECT_PAGE_SHOWN_UPDATE_CLASS:
+                this.parseUpdate(envelope, PROJECT_PAGE_SHOWN_UPDATE, 'ProjectPageShownUpdate', (data) => this.options.onPageShown(data.index))
                 break
-            }
-            case PROJECT_SETTINGS_UPDATE_CLASS: {
-                const update = PROJECT_SETTINGS_UPDATE.safeParse(envelope)
-                if (update.success) {
-                    this.options.onProjectSettingsChanged(update.data.projectMetadata)
-                } else {
-                    this.options.log('warn', `Received malformed ProjectSettingsUpdate: ${String(update.error)}`)
-                }
+            case PROJECT_SETTINGS_UPDATE_CLASS:
+                this.parseUpdate(envelope, PROJECT_SETTINGS_UPDATE, 'ProjectSettingsUpdate', (data) => this.options.onProjectSettingsChanged(data.projectMetadata))
                 break
-            }
-            case PAD_STATUS_UPDATE_CLASS: {
-                const update = PAD_STATUS_UPDATE.safeParse(envelope)
-                if (update.success) {
-                    this.options.onPadStatus(update.data.padId, update.data.status)
-                } else {
-                    this.options.log('warn', `Received malformed PadStatusUpdate: ${String(update.error)}`)
-                }
+            case PAD_STATUS_UPDATE_CLASS:
+                this.parseUpdate(envelope, PAD_STATUS_UPDATE, 'PadStatusUpdate', (data) => this.options.onPadStatus(data.padId, data.status))
                 break
-            }
-            case PAD_REPLACE_UPDATE_CLASS: {
-                const update = PAD_REPLACE_UPDATE.safeParse(envelope)
-                if (update.success) {
-                    this.options.onPadReplaced(update.data.sourcePad, update.data.targetPadId)
-                } else {
-                    this.options.log('warn', `Received malformed PadReplaceUpdate: ${String(update.error)}`)
-                }
+            case PAD_REPLACE_UPDATE_CLASS:
+                this.parseUpdate(envelope, PAD_REPLACE_UPDATE, 'PadReplaceUpdate', (data) => this.options.onPadReplaced(data.sourcePad, data.targetPadId))
                 break
-            }
-            case PAD_SWAP_UPDATE_CLASS: {
-                const update = PAD_SWAP_UPDATE.safeParse(envelope)
-                if (update.success) {
-                    this.options.onPadsSwapped(update.data.pad1, update.data.pad2)
-                } else {
-                    this.options.log('warn', `Received malformed PadSwapUpdate: ${String(update.error)}`)
-                }
+            case PAD_SWAP_UPDATE_CLASS:
+                this.parseUpdate(envelope, PAD_SWAP_UPDATE, 'PadSwapUpdate', (data) => this.options.onPadsSwapped(data.pad1, data.pad2))
                 break
-            }
-            case ERROR_MESSAGE_CLASS: {
-                const error = ERROR_MESSAGE.safeParse(envelope)
-                this.options.log('warn', error.success
-                    ? `Received an unsolicited error from the PlayWall server: ${error.data.message}`
-                    : `Received a malformed ErrorMessage: ${String(error.error)}`)
+            case ERROR_MESSAGE_CLASS:
+                this.logUnsolicitedError(envelope)
                 break
-            }
         }
+    }
+
+    /** Parses `envelope` against `schema`; calls `onSuccess` if it matches, otherwise logs a warning naming `messageName`. */
+    private parseUpdate<Schema extends z.ZodType>(
+        envelope: Record<string, unknown>,
+        schema: Schema,
+        messageName: string,
+        onSuccess: (data: z.infer<Schema>) => void,
+    ): void {
+        const result = schema.safeParse(envelope)
+        if (result.success) {
+            onSuccess(result.data)
+        } else {
+            this.options.log('warn', `Received malformed ${messageName}: ${String(result.error)}`)
+        }
+    }
+
+    private logUnsolicitedError(envelope: Record<string, unknown>): void {
+        const error = ERROR_MESSAGE.safeParse(envelope)
+        this.options.log('warn', error.success
+            ? `Received an unsolicited error from the PlayWall server: ${error.data.message}`
+            : `Received a malformed ErrorMessage: ${String(error.error)}`)
     }
 
     private resolvePendingRequest(pending: PendingRequest, envelope: Record<string, unknown>): void {
