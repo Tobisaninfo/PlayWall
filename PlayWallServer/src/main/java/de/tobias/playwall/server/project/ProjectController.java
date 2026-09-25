@@ -13,9 +13,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
-@Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @RequiredArgsConstructor
 public class ProjectController
 {
@@ -43,11 +40,16 @@ public class ProjectController
 
 	private final Map<UUID, PadController> padControllers = new HashMap<>();
 
-	@Async
 	public CompletableFuture<Void> loadProject(Project project)
 	{
 		unloadProject();
 		loadedProject = project;
+		return context.getBean(ProjectController.class).loadPadsAsync();
+	}
+
+	@Async
+	public CompletableFuture<Void> loadPadsAsync()
+	{
 		loadPads();
 		return CompletableFuture.completedFuture(null);
 	}
