@@ -3,7 +3,7 @@ import {isPlayingStatus} from './domain/playbackStore.js'
 import {PAD_SELECTOR_OPTIONS, resolvePad} from './domain/padSelector.js'
 import {computeTargetPage, PAGE_ACTION_OPTIONS} from './domain/pageSelector.js'
 import {computeTargetVolume, DEFAULT_VOLUME, resolveDelta, VOLUME_ACTION_OPTIONS} from './domain/volumeControl.js'
-import {PAD_PLAY_STOP_ACTION_ID, PAGE_NAVIGATE_ACTION_ID, VOLUME_CHANGE_ACTION_ID} from './ids.js'
+import {PAD_PLAY_STOP_ACTION_ID, PAGE_NAVIGATE_ACTION_ID, STOP_ALL_ACTION_ID, VOLUME_CHANGE_ACTION_ID} from './ids.js'
 import type ModuleInstance from './main.js'
 import type {ModuleSchema} from './main.js'
 
@@ -71,6 +71,14 @@ export function GetActionDefinitions(self: ModuleInstance): CompanionActionDefin
                 }
 
                 self.connection?.changeGlobalVolume(target)
+            },
+        },
+        [STOP_ALL_ACTION_ID]: {
+            name: 'Stop all pads',
+            description: 'Immediately stops every currently playing pad.',
+            options: [],
+            callback: () => {
+                self.connection?.stopAllPads()
             },
         },
     }

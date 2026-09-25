@@ -29,6 +29,7 @@ export const PAD_REPLACE_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.updat
 export const PAD_SWAP_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadSwapUpdate'
 export const PAD_PLAY_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.PadPlayRequest'
 export const PAD_STOP_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.PadStopRequest'
+export const ALL_PADS_STOP_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.AllPadsStopRequest'
 export const ERROR_MESSAGE_CLASS = 'de.tobias.playwall.common.net.ErrorMessage'
 export const PROJECT_NOT_LOADED_ERROR_CLASS = 'de.tobias.playwall.common.api.project.ProjectNotLoadedError'
 
@@ -196,5 +197,12 @@ export function buildPadStopRequest(padId: string): {
         messageId: randomUUID(),
         padId,
         isImmediately: false,
+    }
+}
+
+export function buildAllPadsStopRequest(): { '@class': string; messageId: string } {
+    return {
+        '@class': ALL_PADS_STOP_REQUEST_CLASS,
+        messageId: randomUUID(),
     }
 }

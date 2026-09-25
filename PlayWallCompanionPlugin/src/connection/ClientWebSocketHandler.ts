@@ -2,6 +2,7 @@ import {randomUUID} from 'node:crypto'
 import {WebSocket} from 'ws'
 import {z} from 'zod'
 import {
+    buildAllPadsStopRequest,
     buildGlobalChangeVolumeRequest,
     buildPadPlayRequest,
     buildPadStopRequest,
@@ -190,6 +191,17 @@ export class ClientWebSocketHandler {
     stopPad(padId: string): void {
         this.sendRequest(buildPadStopRequest(padId), GENERIC_RESPONSE).catch((error: unknown) => {
             this.options.log('warn', `Failed to stop pad ${padId}: ${String(error)}`)
+        })
+    }
+
+    /**
+     * Immediately stops every currently playing pad. Errors are logged, not thrown; no local state
+     * needs updating here — each stopped pad's own `PadStatusUpdate` broadcast (already handled via
+     * `onPadStatus`) drives its variable/feedback update, same as a single `stopPad`.
+     */
+    stopAllPads(): void {
+        this.sendRequest(buildAllPadsStopRequest(), GENERIC_RESPONSE).catch((error: unknown) => {
+            this.options.log('warn', `Failed to stop all pads: ${String(error)}`)
         })
     }
 

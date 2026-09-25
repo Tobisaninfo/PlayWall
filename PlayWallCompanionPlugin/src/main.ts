@@ -25,6 +25,7 @@ import {
     PAD_PLAY_STOP_ACTION_ID,
     PAGE_CURRENT_COLOR_FEEDBACK_ID,
     PAGE_NAVIGATE_ACTION_ID,
+    STOP_ALL_ACTION_ID,
     VOLUME_CHANGE_ACTION_ID
 } from './ids.js'
 
@@ -35,6 +36,7 @@ export type ModuleSchema = {
         [PAD_PLAY_STOP_ACTION_ID]: { options: PadSelectorOptions }
         [PAGE_NAVIGATE_ACTION_ID]: { options: PageActionOptions }
         [VOLUME_CHANGE_ACTION_ID]: { options: VolumeActionOptions }
+        [STOP_ALL_ACTION_ID]: { options: Record<string, never> }
     }
     feedbacks: {
         [PAD_CURRENT_COLOR_FEEDBACK_ID]: { type: 'advanced'; options: PadSelectorOptions }

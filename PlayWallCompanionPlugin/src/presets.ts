@@ -8,6 +8,7 @@ import {
     PAD_PLAY_STOP_ACTION_ID,
     PAGE_CURRENT_COLOR_FEEDBACK_ID,
     PAGE_NAVIGATE_ACTION_ID,
+    STOP_ALL_ACTION_ID,
     VOLUME_CHANGE_ACTION_ID
 } from './ids.js'
 import type {ModuleSchema} from './main.js'
@@ -174,6 +175,16 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
         steps: [{down: [], up: []}],
         feedbacks: [],
     }
+    presets['stop_all'] = {
+        type: 'simple',
+        name: 'Stop all pads',
+        style: {text: 'Stop\\nAll', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        steps: [{
+            down: [{actionId: STOP_ALL_ACTION_ID, options: {}}],
+            up: []
+        }],
+        feedbacks: [],
+    }
 
     return presets
 }
@@ -195,9 +206,9 @@ export function GetPresetSections(): CompanionPresetSection<ModuleSchema>[] {
             ],
         },
         {
-            id: 'volume',
-            name: 'Volume',
-            definitions: ['volume_up', 'volume_down', 'volume_display'],
+            id: 'global',
+            name: 'Global',
+            definitions: ['volume_up', 'volume_down', 'volume_display', 'stop_all'],
         },
     ]
 }
