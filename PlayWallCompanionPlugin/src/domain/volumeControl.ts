@@ -23,6 +23,10 @@ export function resolveDelta(delta: VolumeChangeDelta): number {
     return DELTA_VALUES[delta]
 }
 
+function roundVolume(volume: number): number {
+    return Math.round(volume * 100) / 100
+}
+
 export const VOLUME_ACTION_OPTIONS: CompanionInputFieldDropdown<keyof VolumeActionOptions>[] = [
     {
         id: 'mode',
@@ -54,12 +58,12 @@ export const VOLUME_ACTION_OPTIONS: CompanionInputFieldDropdown<keyof VolumeActi
  */
 export function computeTargetVolume(mode: VolumeChangeMode, delta: number, currentVolume: number): number {
     const target = mode === 'increase' ? Math.min(currentVolume + delta, MAX_VOLUME) : Math.max(currentVolume - delta, MIN_VOLUME)
-    return Math.round(target * 100) / 100
+    return roundVolume(target)
 }
 
 /** Formats a volume value (0-1) for display in the `current_volume` variable. */
 export function formatVolume(volume: number | null | undefined): string {
-    return String(volume ?? DEFAULT_VOLUME)
+    return String(roundVolume(volume ?? DEFAULT_VOLUME))
 }
 
 /** Formats a volume value (0-1) as a percentage (e.g. 0.75 -> "75%") for the `current_volume_percent` variable. */
