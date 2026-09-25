@@ -9,7 +9,7 @@
         "sync-colors": "node scripts/generate-modern-color-palette.mjs",
         "build": "npm run sync-colors && rimraf dist && tsc -p tsconfig.build.json",
         "dev": "npm run sync-colors && tsc -p tsconfig.build.json --watch",
-        "package": "npm run build && companion-module-build"
+        "package": "npm run build && companion-module-build --output target/playwall"
     },
     "license": "MIT",
     "engines": {
