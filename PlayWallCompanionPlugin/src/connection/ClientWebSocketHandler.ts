@@ -2,6 +2,7 @@ import {randomUUID} from 'node:crypto'
 import {WebSocket} from 'ws'
 import {z} from 'zod'
 import {
+    buildGlobalChangeVolumeRequest,
     buildPadPlayRequest,
     buildPadStopRequest,
     buildProjectGetRequest,
@@ -21,8 +22,11 @@ import {
     PROJECT_LOADED_UPDATE_CLASS,
     PROJECT_PAGE_SHOWN_UPDATE,
     PROJECT_PAGE_SHOWN_UPDATE_CLASS,
+    PROJECT_SETTINGS_UPDATE,
+    PROJECT_SETTINGS_UPDATE_CLASS,
     type PadDto,
     type ProjectDto,
+    type ProjectMetadata,
 } from './protocol.js'
 
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected'
@@ -38,6 +42,8 @@ export interface ClientWebSocketHandlerOptions {
     onProjectLoaded: (project: ProjectDto) => void
     onProjectCleared: () => void
     onPageShown: (index: number) => void
+    /** Any project setting (incl. global volume) changed on the desktop client. */
+    onProjectSettingsChanged: (metadata: ProjectMetadata) => void
     onPadStatus: (padId: string, status: string) => void
     onPadStatuses: (statuses: Record<string, string>) => void
     /** A pad was moved or duplicated onto another pad's slot via drag & drop on the desktop client. */
@@ -194,6 +200,13 @@ export class ClientWebSocketHandler {
         })
     }
 
+    /** Sets PlayWall's global volume to the given absolute value (0-1). Errors are logged, not thrown. */
+    changeGlobalVolume(volume: number): void {
+        this.sendRequest(buildGlobalChangeVolumeRequest(volume), GENERIC_RESPONSE).catch((error: unknown) => {
+            this.options.log('warn', `Failed to change the global volume to ${volume}: ${String(error)}`)
+        })
+    }
+
     /** Re-fetches the project after a page was added/removed/reordered/renamed, via `onPagesChanged`. */
     private refetchProject(): void {
         this.sendRequest(buildProjectGetRequest(), PROJECT_GET_RESPONSE)
@@ -269,6 +282,15 @@ export class ClientWebSocketHandler {
                     this.options.onPageShown(update.data.index)
                 } else {
                     this.options.log('warn', `Received malformed ProjectPageShownUpdate: ${String(update.error)}`)
+                }
+                break
+            }
+            case PROJECT_SETTINGS_UPDATE_CLASS: {
+                const update = PROJECT_SETTINGS_UPDATE.safeParse(envelope)
+                if (update.success) {
+                    this.options.onProjectSettingsChanged(update.data.projectMetadata)
+                } else {
+                    this.options.log('warn', `Received malformed ProjectSettingsUpdate: ${String(update.error)}`)
                 }
                 break
             }

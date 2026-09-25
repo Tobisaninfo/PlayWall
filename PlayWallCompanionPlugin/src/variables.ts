@@ -18,6 +18,7 @@ export function UpdateVariableDefinitions(self: ModuleInstance, padsPerPage = 0,
         connection_status: {name: 'Connection status to the PlayWall server'},
         project_name: {name: 'Name of the project currently open in PlayWall'},
         page_active: {name: 'Position of the currently active page'},
+        current_volume: {name: "PlayWall's current global volume (0-1)"},
     }
 
     for (let position = 1; position <= padsPerPage; position++) {

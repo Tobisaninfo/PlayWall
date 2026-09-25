@@ -2,11 +2,13 @@ import {combineRgb} from '@companion-module/base'
 import type {CompanionPresetDefinitions, CompanionPresetSection} from '@companion-module/base'
 import type {PadSelectorOptions} from './domain/padSelector.js'
 import type {PageActionOptions, PageFeedbackOptions} from './domain/pageSelector.js'
+import type {VolumeActionOptions} from './domain/volumeControl.js'
 import {
     PAD_CURRENT_COLOR_FEEDBACK_ID,
     PAD_PLAY_STOP_ACTION_ID,
     PAGE_CURRENT_COLOR_FEEDBACK_ID,
-    PAGE_NAVIGATE_ACTION_ID
+    PAGE_NAVIGATE_ACTION_ID,
+    VOLUME_CHANGE_ACTION_ID
 } from './ids.js'
 import type {ModuleSchema} from './main.js'
 
@@ -136,6 +138,31 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
         feedbacks: [],
     }
 
+    presets['volume_up'] = {
+        type: 'simple',
+        name: 'Volume up (5%)',
+        style: {text: 'Vol\\n+5%', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        steps: [{
+            down: [{
+                actionId: VOLUME_CHANGE_ACTION_ID,
+                options: {mode: 'increase', delta: '5'} satisfies VolumeActionOptions
+            }], up: []
+        }],
+        feedbacks: [],
+    }
+    presets['volume_down'] = {
+        type: 'simple',
+        name: 'Volume down (5%)',
+        style: {text: 'Vol\\n-5%', size: 'auto', color: combineRgb(255, 255, 255), bgcolor: combineRgb(0, 0, 0)},
+        steps: [{
+            down: [{
+                actionId: VOLUME_CHANGE_ACTION_ID,
+                options: {mode: 'decrease', delta: '5'} satisfies VolumeActionOptions
+            }], up: []
+        }],
+        feedbacks: [],
+    }
+
     return presets
 }
 
@@ -154,6 +181,11 @@ export function GetPresetSections(): CompanionPresetSection<ModuleSchema>[] {
                 'page_previous',
                 'page_next',
             ],
+        },
+        {
+            id: 'volume',
+            name: 'Volume',
+            definitions: ['volume_up', 'volume_down'],
         },
     ]
 }

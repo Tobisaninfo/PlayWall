@@ -11,18 +11,21 @@ import {
 } from './variables.js'
 import {UpgradeScripts} from './upgrades.js'
 import {ClientWebSocketHandler, type ConnectionStatus} from './connection/ClientWebSocketHandler.js'
-import type {PadDto, ProjectDto} from './connection/protocol.js'
+import type {PadDto, ProjectDto, ProjectMetadata} from './connection/protocol.js'
 import type {PadSelectorOptions} from './domain/padSelector.js'
 import type {PageActionOptions, PageFeedbackOptions} from './domain/pageSelector.js'
 import {replacePadInProject, swapPadsInProject} from './domain/projectMutations.js'
 import {PageNavigationStore} from './domain/pageNavigationStore.js'
 import {PlaybackStore} from './domain/playbackStore.js'
 import {ProjectStore} from './domain/projectStore.js'
+import {formatVolume} from './domain/volumeControl.js'
+import type {VolumeActionOptions} from './domain/volumeControl.js'
 import {
     PAD_CURRENT_COLOR_FEEDBACK_ID,
     PAD_PLAY_STOP_ACTION_ID,
     PAGE_CURRENT_COLOR_FEEDBACK_ID,
-    PAGE_NAVIGATE_ACTION_ID
+    PAGE_NAVIGATE_ACTION_ID,
+    VOLUME_CHANGE_ACTION_ID
 } from './ids.js'
 
 export type ModuleSchema = {
@@ -31,6 +34,7 @@ export type ModuleSchema = {
     actions: {
         [PAD_PLAY_STOP_ACTION_ID]: { options: PadSelectorOptions }
         [PAGE_NAVIGATE_ACTION_ID]: { options: PageActionOptions }
+        [VOLUME_CHANGE_ACTION_ID]: { options: VolumeActionOptions }
     }
     feedbacks: {
         [PAD_CURRENT_COLOR_FEEDBACK_ID]: { type: 'advanced'; options: PadSelectorOptions }
@@ -96,6 +100,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
             onProjectLoaded: (project) => this.handleProjectLoaded(project),
             onProjectCleared: () => this.handleProjectCleared(),
             onPageShown: (index) => this.handlePageShown(index),
+            onProjectSettingsChanged: (metadata) => this.handleProjectSettingsChanged(metadata),
             onPadStatus: (padId, status) => this.handlePadStatus(padId, status),
             onPadStatuses: (statuses) => this.handlePadStatuses(statuses),
             onPadReplaced: (newPad, targetPadId) => this.handlePadReplaced(newPad, targetPadId),
@@ -109,7 +114,10 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
     private handleProjectLoaded(project: ProjectDto): void {
         this.projectStore.setProject(project)
         this.pageNavigationStore.resetPage()
-        this.setVariableValues({project_name: project.metadata.name})
+        this.setVariableValues({
+            project_name: project.metadata.name,
+            current_volume: formatVolume(project.metadata.volume)
+        })
         this.updateVariableDefinitions()
         this.refreshPadVariableValues()
         this.refreshPageVariableValues()
@@ -120,9 +128,24 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         this.projectStore.clear()
         this.playbackStore.clear()
         this.pageNavigationStore.resetPage()
-        this.setVariableValues({project_name: ''})
+        this.setVariableValues({project_name: '', current_volume: ''})
         this.updateVariableDefinitions()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID, PAGE_CURRENT_COLOR_FEEDBACK_ID)
+    }
+
+    /**
+     * Any project setting changed on the desktop client (renamed, colors, global volume, ...) —
+     * `ProjectSettingsUpdate` always carries the full metadata, so it's simplest to just replace the
+     * cached copy wholesale rather than tracking volume separately; refreshes `current_volume` to match.
+     */
+    private handleProjectSettingsChanged(metadata: ProjectMetadata): void {
+        const project = this.projectStore.getProject()
+        if (!project) {
+            return
+        }
+
+        this.projectStore.setProject({...project, metadata})
+        this.setVariableValues({current_volume: formatVolume(metadata.volume)})
     }
 
     /**

@@ -22,6 +22,8 @@ export const PROJECT_GET_RESPONSE_CLASS = 'de.tobias.playwall.common.api.project
 export const PROJECT_LOADED_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate'
 export const PROJECT_PAGE_SHOWN_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectPageShownUpdate'
 export const PROJECT_PAGE_SHOW_REQUEST_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectPageShowRequest'
+export const GLOBAL_CHANGE_VOLUME_REQUEST_CLASS = 'de.tobias.playwall.common.api.project.request.GlobalChangeVolumeRequest'
+export const PROJECT_SETTINGS_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate'
 export const PAD_STATUS_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadStatusUpdate'
 export const PAD_REPLACE_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadReplaceUpdate'
 export const PAD_SWAP_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadSwapUpdate'
@@ -57,6 +59,7 @@ const PROJECT_METADATA = z.looseObject({
     introColor: z.string().nullish(),
     numberOfHorizontalPads: z.number(),
     numberOfVerticalPads: z.number(),
+    volume: z.number().nullish(),
 })
 
 export type ProjectMetadata = z.infer<typeof PROJECT_METADATA>
@@ -113,6 +116,11 @@ export const PROJECT_PAGE_SHOWN_UPDATE = BASE_ENVELOPE.extend({
     index: z.number(),
 })
 
+/** Broadcast whenever any project setting (incl. global volume) changes; carries the full metadata. */
+export const PROJECT_SETTINGS_UPDATE = BASE_ENVELOPE.extend({
+    projectMetadata: PROJECT_METADATA,
+})
+
 export const PAD_STATUS_UPDATE = BASE_ENVELOPE.extend({
     padId: z.string(),
     status: z.string(),
@@ -154,6 +162,18 @@ export function buildProjectPageShowRequest(index: number): { '@class': string; 
         '@class': PROJECT_PAGE_SHOW_REQUEST_CLASS,
         messageId: randomUUID(),
         index,
+    }
+}
+
+export function buildGlobalChangeVolumeRequest(volume: number): {
+    '@class': string;
+    messageId: string;
+    volume: number
+} {
+    return {
+        '@class': GLOBAL_CHANGE_VOLUME_REQUEST_CLASS,
+        messageId: randomUUID(),
+        volume,
     }
 }
 
