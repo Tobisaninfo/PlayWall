@@ -1,9 +1,17 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest'
 import {
     ALL_PADS_STOP_REQUEST_CLASS,
+    ERROR_MESSAGE_CLASS,
     GLOBAL_CHANGE_VOLUME_REQUEST_CLASS,
+    PAD_PLAY_REQUEST_CLASS,
+    PAD_REPLACE_UPDATE_CLASS,
+    PAD_STATUS_UPDATE_CLASS,
+    PAD_STOP_REQUEST_CLASS,
+    PAD_SWAP_UPDATE_CLASS,
     PROJECT_GET_REQUEST_CLASS,
     PROJECT_GET_RESPONSE_CLASS,
+    PROJECT_LOADED_UPDATE_CLASS,
+    PROJECT_NOT_LOADED_ERROR_CLASS,
     PROJECT_PAGE_SHOW_REQUEST_CLASS,
     PROJECT_PAGE_SHOWN_UPDATE_CLASS,
     PROJECT_SETTINGS_UPDATE_CLASS
@@ -311,6 +319,321 @@ describe('ClientWebSocketHandler page-CRUD refetch', () => {
 
         expect(onPagesChanged).toHaveBeenCalledTimes(1)
         expect(onPagesChanged.mock.calls[0]?.[0]).toMatchObject({metadata: {id: 'project-1'}})
+
+        handler.destroy()
+    })
+})
+
+describe('ClientWebSocketHandler connect() -> fetchCurrentProject on open', () => {
+    it('reports the currently loaded project, its pad statuses, and its shown page after connecting', async () => {
+        const onProjectLoaded = vi.fn()
+        const onPadStatuses = vi.fn()
+        const onPageShown = vi.fn()
+        const handler = createHandler({onProjectLoaded, onPadStatuses, onPageShown})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+        socket!.readyState = FakeWebSocket.OPEN
+
+        socket!.emit('open')
+
+        expect(socket!.sent).toHaveLength(1)
+        const request = JSON.parse(socket!.sent[0]) as { messageId: string; '@class': string }
+        expect(request['@class']).toBe(PROJECT_GET_REQUEST_CLASS)
+
+        const project = {
+            metadata: {id: 'project-1', name: 'Test project', numberOfHorizontalPads: 5, numberOfVerticalPads: 4},
+            pages: [],
+        }
+        socket!.emit(
+            'message',
+            JSON.stringify({
+                '@class': PROJECT_GET_RESPONSE_CLASS,
+                messageId: request.messageId,
+                project,
+                currentPageIndex: 2,
+                padStatuses: {'pad-1': 'PLAYING'},
+            }),
+        )
+        await Promise.resolve()
+
+        expect(onProjectLoaded).toHaveBeenCalledWith(project)
+        expect(onPadStatuses).toHaveBeenCalledWith({'pad-1': 'PLAYING'})
+        expect(onPageShown).toHaveBeenCalledWith(2)
+
+        handler.destroy()
+    })
+
+    it('defaults to page 0 when the response carries no current page (e.g. a freshly created project)', async () => {
+        const onPageShown = vi.fn()
+        const handler = createHandler({onPageShown})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+        socket!.readyState = FakeWebSocket.OPEN
+
+        socket!.emit('open')
+        const request = JSON.parse(socket!.sent[0]) as { messageId: string }
+        socket!.emit(
+            'message',
+            JSON.stringify({
+                '@class': PROJECT_GET_RESPONSE_CLASS,
+                messageId: request.messageId,
+                project: {
+                    metadata: {
+                        id: 'project-1',
+                        name: 'Test project',
+                        numberOfHorizontalPads: 1,
+                        numberOfVerticalPads: 1
+                    },
+                    pages: [],
+                },
+            }),
+        )
+        await Promise.resolve()
+
+        expect(onPageShown).toHaveBeenCalledWith(0)
+
+        handler.destroy()
+    })
+
+    it('reports that no project is loaded when the server responds with an error', async () => {
+        const onProjectCleared = vi.fn()
+        const onProjectLoaded = vi.fn()
+        const handler = createHandler({onProjectCleared, onProjectLoaded})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+        socket!.readyState = FakeWebSocket.OPEN
+
+        socket!.emit('open')
+        const request = JSON.parse(socket!.sent[0]) as { messageId: string }
+        socket!.emit(
+            'message',
+            JSON.stringify({
+                '@class': ERROR_MESSAGE_CLASS,
+                messageId: request.messageId,
+                message: 'Es ist kein Projekt geladen.',
+                error: {'@class': PROJECT_NOT_LOADED_ERROR_CLASS},
+            }),
+        )
+        // fetchCurrentProject() chains .then().catch() off sendRequest()'s promise, so the rejection
+        // needs to propagate through an extra microtask hop compared to a plain single .catch(); a
+        // macrotask flush is a simpler, more robust wait than counting exact microtask hops.
+        await new Promise((resolve) => setTimeout(resolve, 0))
+
+        expect(onProjectCleared).toHaveBeenCalledTimes(1)
+        expect(onProjectLoaded).not.toHaveBeenCalled()
+
+        handler.destroy()
+    })
+
+    it('just logs a warning (without clearing/loading anything) if the request fails for another reason', async () => {
+        const onProjectCleared = vi.fn()
+        const onProjectLoaded = vi.fn()
+        const log = vi.fn()
+        const handler = createHandler({onProjectCleared, onProjectLoaded, log})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+        socket!.readyState = FakeWebSocket.OPEN
+
+        socket!.emit('open')
+        // Simulate the connection dropping before a response ever arrives.
+        socket!.emit('close')
+        await new Promise((resolve) => setTimeout(resolve, 0))
+
+        expect(onProjectCleared).not.toHaveBeenCalled()
+        expect(onProjectLoaded).not.toHaveBeenCalled()
+        expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Failed to fetch the currently loaded project'))
+
+        handler.destroy()
+    })
+})
+
+describe('ClientWebSocketHandler ProjectLoadedUpdate handling', () => {
+    it('forwards a broadcast "a new project was opened" to onProjectLoaded', () => {
+        const onProjectLoaded = vi.fn()
+        const handler = createHandler({onProjectLoaded})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        const project = {
+            metadata: {
+                id: 'project-2',
+                name: 'Newly opened project',
+                numberOfHorizontalPads: 3,
+                numberOfVerticalPads: 3
+            },
+            pages: [],
+        }
+        socket!.emit('message', JSON.stringify({'@class': PROJECT_LOADED_UPDATE_CLASS, messageId: 'm', project}))
+
+        expect(onProjectLoaded).toHaveBeenCalledWith(project)
+
+        handler.destroy()
+    })
+
+    it('logs a warning instead of calling onProjectLoaded for a malformed broadcast', () => {
+        const onProjectLoaded = vi.fn()
+        const log = vi.fn()
+        const handler = createHandler({onProjectLoaded, log})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        socket!.emit('message', JSON.stringify({'@class': PROJECT_LOADED_UPDATE_CLASS, messageId: 'm'}))
+
+        expect(onProjectLoaded).not.toHaveBeenCalled()
+        expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Received malformed ProjectLoadedUpdate'))
+
+        handler.destroy()
+    })
+})
+
+describe('ClientWebSocketHandler.playPad / stopPad', () => {
+    it('sends a PadPlayRequest with the given padId once the socket is open', () => {
+        const handler = createHandler()
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+        socket!.readyState = FakeWebSocket.OPEN
+
+        handler.playPad('pad-1')
+
+        expect(socket!.sent).toHaveLength(1)
+        const message = JSON.parse(socket!.sent[0]) as Record<string, unknown>
+        expect(message['@class']).toBe(PAD_PLAY_REQUEST_CLASS)
+        expect(message.padId).toBe('pad-1')
+
+        handler.destroy()
+    })
+
+    it('sends a (graceful, non-immediate) PadStopRequest with the given padId once the socket is open', () => {
+        const handler = createHandler()
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+        socket!.readyState = FakeWebSocket.OPEN
+
+        handler.stopPad('pad-1')
+
+        expect(socket!.sent).toHaveLength(1)
+        const message = JSON.parse(socket!.sent[0]) as Record<string, unknown>
+        expect(message['@class']).toBe(PAD_STOP_REQUEST_CLASS)
+        expect(message.padId).toBe('pad-1')
+        expect(message.isImmediately).toBe(false)
+
+        handler.destroy()
+    })
+
+    it('logs a warning instead of throwing when there is no open connection', async () => {
+        const log = vi.fn()
+        const handler = createHandler({log})
+
+        expect(() => handler.playPad('pad-1')).not.toThrow()
+        expect(() => handler.stopPad('pad-1')).not.toThrow()
+        await Promise.resolve()
+        await Promise.resolve()
+
+        expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Failed to play pad pad-1'))
+        expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Failed to stop pad pad-1'))
+
+        handler.destroy()
+    })
+})
+
+describe('ClientWebSocketHandler PadStatusUpdate handling', () => {
+    it('forwards a broadcast pad status change to onPadStatus', () => {
+        const onPadStatus = vi.fn()
+        const handler = createHandler({onPadStatus})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        socket!.emit(
+            'message',
+            JSON.stringify({'@class': PAD_STATUS_UPDATE_CLASS, messageId: 'm', padId: 'pad-1', status: 'PLAYING'}),
+        )
+
+        expect(onPadStatus).toHaveBeenCalledWith('pad-1', 'PLAYING')
+
+        handler.destroy()
+    })
+
+    it('logs a warning instead of calling onPadStatus for a malformed broadcast', () => {
+        const onPadStatus = vi.fn()
+        const log = vi.fn()
+        const handler = createHandler({onPadStatus, log})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        socket!.emit('message', JSON.stringify({'@class': PAD_STATUS_UPDATE_CLASS, messageId: 'm', padId: 'pad-1'}))
+
+        expect(onPadStatus).not.toHaveBeenCalled()
+        expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Received malformed PadStatusUpdate'))
+
+        handler.destroy()
+    })
+})
+
+describe('ClientWebSocketHandler PadReplaceUpdate / PadSwapUpdate handling', () => {
+    it('forwards a broadcast pad replace to onPadReplaced', () => {
+        const onPadReplaced = vi.fn()
+        const handler = createHandler({onPadReplaced})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        const sourcePad = {
+            id: 'pad-2',
+            position: 1,
+            name: 'New pad',
+            defaultColor: null,
+            playColor: null,
+            introColor: null
+        }
+        socket!.emit(
+            'message',
+            JSON.stringify({'@class': PAD_REPLACE_UPDATE_CLASS, messageId: 'm', sourcePad, targetPadId: 'pad-1'}),
+        )
+
+        expect(onPadReplaced).toHaveBeenCalledWith(sourcePad, 'pad-1')
+
+        handler.destroy()
+    })
+
+    it('forwards a broadcast pad swap to onPadsSwapped', () => {
+        const onPadsSwapped = vi.fn()
+        const handler = createHandler({onPadsSwapped})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        socket!.emit(
+            'message',
+            JSON.stringify({'@class': PAD_SWAP_UPDATE_CLASS, messageId: 'm', pad1: 'pad-1', pad2: 'pad-2'}),
+        )
+
+        expect(onPadsSwapped).toHaveBeenCalledWith('pad-1', 'pad-2')
+
+        handler.destroy()
+    })
+
+    it('logs a warning instead of calling onPadReplaced for a malformed broadcast', () => {
+        const onPadReplaced = vi.fn()
+        const log = vi.fn()
+        const handler = createHandler({onPadReplaced, log})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        socket!.emit('message', JSON.stringify({'@class': PAD_REPLACE_UPDATE_CLASS, messageId: 'm'}))
+
+        expect(onPadReplaced).not.toHaveBeenCalled()
+        expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Received malformed PadReplaceUpdate'))
 
         handler.destroy()
     })

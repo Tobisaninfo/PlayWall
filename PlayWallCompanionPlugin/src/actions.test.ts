@@ -1,10 +1,11 @@
 import type {CompanionActionCallbackContext, CompanionActionEvent} from '@companion-module/base'
 import {describe, expect, it, vi} from 'vitest'
 import {GetActionDefinitions} from './actions.js'
-import {PAGE_NAVIGATE_ACTION_ID, STOP_ALL_ACTION_ID, VOLUME_CHANGE_ACTION_ID} from './ids.js'
+import {PAD_PLAY_STOP_ACTION_ID, PAGE_NAVIGATE_ACTION_ID, STOP_ALL_ACTION_ID, VOLUME_CHANGE_ACTION_ID} from './ids.js'
+import type {PadSelectorOptions} from './domain/padSelector.js'
 import type {PageActionOptions} from './domain/pageSelector.js'
 import type {VolumeActionOptions} from './domain/volumeControl.js'
-import type {ProjectDto} from './connection/protocol.js'
+import type {PadDto, PageDto, ProjectDto} from './connection/protocol.js'
 import type ModuleInstance from './main.js'
 
 const ACTION_CONTEXT = {} as CompanionActionCallbackContext
@@ -13,6 +14,8 @@ interface StubConnection {
     stopAllPads?: () => void
     changeGlobalVolume?: (volume: number) => void
     showPage?: (index: number) => void
+    playPad?: (padId: string) => void
+    stopPad?: (padId: string) => void
 }
 
 function stubModuleInstance(
@@ -22,12 +25,14 @@ function stubModuleInstance(
         activePage?: number
         pageSyncMode?: 'sync' | 'async'
         updateActivePage?: (index: number) => void
+        padStatus?: string
     } = {},
 ): ModuleInstance {
     return {
         connection: options.connection,
         projectStore: {getProject: () => options.project},
         pageNavigationStore: {getActivePage: () => options.activePage ?? 0},
+        playbackStore: {getPadStatus: () => options.padStatus},
         config: {pageSyncMode: options.pageSyncMode ?? 'sync'},
         updateActivePage: options.updateActivePage ?? vi.fn(),
         log: vi.fn(),
@@ -64,6 +69,16 @@ function fakeProjectWithPages(pageCount: number): ProjectDto {
     }
 }
 
+/** A single-page project containing just the given pad, at position 0. */
+function fakeProjectWithPad(pad: PadDto): ProjectDto {
+    const page: PageDto = {id: 'page-0', position: 0, settings: null, pads: [pad]}
+    return {...fakeProject(1), pages: [page]}
+}
+
+function fakePad(overrides: Partial<PadDto> = {}): PadDto {
+    return {id: 'pad-1', position: 0, name: 'Pad', defaultColor: null, playColor: null, introColor: null, ...overrides}
+}
+
 /** `CompanionActionDefinitions` types each entry as possibly `false`/`undefined`; it never actually is here. */
 function getStopAllAction(self: ModuleInstance) {
     const action = GetActionDefinitions(self)[STOP_ALL_ACTION_ID]
@@ -89,6 +104,14 @@ function getPageNavigateAction(self: ModuleInstance) {
     return action
 }
 
+function getPadPlayStopAction(self: ModuleInstance) {
+    const action = GetActionDefinitions(self)[PAD_PLAY_STOP_ACTION_ID]
+    if (!action) {
+        throw new Error('pad_play_stop action definition is missing')
+    }
+    return action
+}
+
 function volumeActionEvent(options: VolumeActionOptions): CompanionActionEvent<VolumeActionOptions> {
     return {options} as CompanionActionEvent<VolumeActionOptions>
 }
@@ -96,6 +119,12 @@ function volumeActionEvent(options: VolumeActionOptions): CompanionActionEvent<V
 function pageActionEvent(options: PageActionOptions): CompanionActionEvent<PageActionOptions> {
     return {options} as CompanionActionEvent<PageActionOptions>
 }
+
+function padActionEvent(options: PadSelectorOptions): CompanionActionEvent<PadSelectorOptions> {
+    return {options} as CompanionActionEvent<PadSelectorOptions>
+}
+
+const PAD_BY_NAME_OPTIONS: PadSelectorOptions = {mode: 'name', padName: 'Pad', padPosition: 1}
 
 describe('stop_all action', () => {
     const STOP_ALL_EVENT = {} as CompanionActionEvent<Record<string, never>>
@@ -254,5 +283,72 @@ describe('page_navigate action', () => {
 
         expect(updateActivePage).toHaveBeenCalledWith(2)
         expect(showPage).toHaveBeenCalledWith(2)
+    })
+})
+
+describe('pad_play_stop action', () => {
+    it('offers a "select pad by" dropdown plus a name field and a position field', () => {
+        const action = getPadPlayStopAction(stubModuleInstance())
+
+        expect(action.options.map((option) => option.id)).toEqual(['mode', 'padName', 'padPosition'])
+    })
+
+    it('warns and never touches the connection when the pad cannot be resolved', () => {
+        const playPad = vi.fn()
+        const stopPad = vi.fn()
+        const action = getPadPlayStopAction(stubModuleInstance({connection: {playPad, stopPad}}))
+
+        action.callback(padActionEvent(PAD_BY_NAME_OPTIONS), ACTION_CONTEXT)
+
+        expect(playPad).not.toHaveBeenCalled()
+        expect(stopPad).not.toHaveBeenCalled()
+    })
+
+    it('plays the pad when it is not currently playing', () => {
+        const playPad = vi.fn()
+        const stopPad = vi.fn()
+        const pad = fakePad({id: 'pad-1'})
+        const action = getPadPlayStopAction(
+            stubModuleInstance({
+                connection: {playPad, stopPad},
+                project: fakeProjectWithPad(pad),
+                padStatus: 'STOPPED'
+            }),
+        )
+
+        action.callback(padActionEvent(PAD_BY_NAME_OPTIONS), ACTION_CONTEXT)
+
+        expect(playPad).toHaveBeenCalledWith('pad-1')
+        expect(stopPad).not.toHaveBeenCalled()
+    })
+
+    it('stops the pad when it is currently playing', () => {
+        const playPad = vi.fn()
+        const stopPad = vi.fn()
+        const pad = fakePad({id: 'pad-1'})
+        const action = getPadPlayStopAction(
+            stubModuleInstance({
+                connection: {playPad, stopPad},
+                project: fakeProjectWithPad(pad),
+                padStatus: 'PLAYING'
+            }),
+        )
+
+        action.callback(padActionEvent(PAD_BY_NAME_OPTIONS), ACTION_CONTEXT)
+
+        expect(stopPad).toHaveBeenCalledWith('pad-1')
+        expect(playPad).not.toHaveBeenCalled()
+    })
+
+    it('treats a pad with no observed status yet as not playing', () => {
+        const playPad = vi.fn()
+        const pad = fakePad({id: 'pad-1'})
+        const action = getPadPlayStopAction(
+            stubModuleInstance({connection: {playPad}, project: fakeProjectWithPad(pad), padStatus: undefined}),
+        )
+
+        action.callback(padActionEvent(PAD_BY_NAME_OPTIONS), ACTION_CONTEXT)
+
+        expect(playPad).toHaveBeenCalledWith('pad-1')
     })
 })
