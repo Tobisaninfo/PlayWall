@@ -59,7 +59,7 @@ class PadNameUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<PadUpd
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
 
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		final String oldMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString();
+		final String oldMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString().replace("\\", "/");
 		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(oldMediaPath).loop(true).build());
 		projectController.loadProject(project).get();
 		applicationEvents.clear();

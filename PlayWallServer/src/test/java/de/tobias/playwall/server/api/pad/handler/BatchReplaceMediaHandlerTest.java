@@ -92,7 +92,7 @@ class BatchReplaceMediaHandlerTest extends AbstractUndoableRequestHandlerTest<Ba
 
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_7.json");
 		final Path existingMedia = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI());
-		project.getPad(padId2).setContent(AudioPadContent.builder().mediaPath(existingMedia.toAbsolutePath().toString()).loop(false).build());
+		project.getPad(padId2).setContent(AudioPadContent.builder().mediaPath(existingMedia.toAbsolutePath().toString().replace("\\", "/")).loop(false).build());
 		project.getPad(padId2).setName("example_2");
 		projectController.loadProject(project).get();
 		applicationEvents.clear();

@@ -155,7 +155,7 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 	void testUndoOperationForDeletingSomePage() throws Exception
 	{
 		final UUID padId = UUID.fromString("535e5130-2e46-4865-bb24-e2a55ac793f7");
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString().replace("\\", "/");
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
 		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 
@@ -172,7 +172,7 @@ class PageDeleteHandlerTest extends AbstractUndoableRequestHandlerTest<PageDelet
 	void testUndoOperationForDeletingLastPage() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString().replace("\\", "/");
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
 		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 

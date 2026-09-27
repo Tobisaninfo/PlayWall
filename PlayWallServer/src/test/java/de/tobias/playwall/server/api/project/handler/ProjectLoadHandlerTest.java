@@ -102,7 +102,7 @@ class ProjectLoadHandlerTest extends AbstractRequestHandlerTest
 	void testProjectLoadRequestSuccessful() throws Exception
 	{
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString().replace("\\", "/");
 		project.getPad(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616")).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 
 		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");

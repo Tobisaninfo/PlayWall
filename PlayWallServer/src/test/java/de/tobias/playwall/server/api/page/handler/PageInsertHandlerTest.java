@@ -117,7 +117,7 @@ class PageInsertHandlerTest extends AbstractRequestHandlerTest
 				)
 				.build();
 		// Set content to first new pad
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString().replace("\\", "/");
 		final PadDto padDto = pageDto.pads().getFirst();
 		padDto.setContent(AudioPadContentDto.builder().mediaPath(mediaPath).loop(false).build());
 

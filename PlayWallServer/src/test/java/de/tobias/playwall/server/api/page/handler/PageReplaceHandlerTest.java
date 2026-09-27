@@ -72,7 +72,7 @@ class PageReplaceHandlerTest extends AbstractRequestHandlerTest
 	void testReplacePage() throws Exception
 	{
 		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString().replace("\\", "/");
 		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
 		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 		projectController.loadProject(project).get();

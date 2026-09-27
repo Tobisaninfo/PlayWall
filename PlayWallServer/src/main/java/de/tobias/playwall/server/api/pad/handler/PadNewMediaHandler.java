@@ -62,14 +62,16 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 		{
 			case AUDIO ->
 			{
+				final String mediaPath = path.toString().replace('\\', '/');
+
 				if(pad.getContent() != null && pad.getContent() instanceof AudioPadContent audioPadContent)
 				{
-					audioPadContent.setMediaPath(path.toString());
+					audioPadContent.setMediaPath(mediaPath);
 					yield audioPadContent;
 				}
 				else
 				{
-					yield AudioPadContent.builder().mediaPath(path.toString()).build();
+					yield AudioPadContent.builder().mediaPath(mediaPath).build();
 				}
 			}
 		};
