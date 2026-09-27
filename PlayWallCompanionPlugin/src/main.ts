@@ -103,7 +103,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
             onPageShown: (index) => this.handlePageShown(index),
             onProjectSettingsChanged: (metadata) => this.handleProjectSettingsChanged(metadata),
             onPadStatus: (padId, status) => this.handlePadStatus(padId, status),
-            onPadStatuses: (statuses) => this.handlePadStatuses(statuses),
+            onPadStatusById: (statusById) => this.handlePadStatusById(statusById),
             onPadReplaced: (newPad, targetPadId) => this.handlePadReplaced(newPad, targetPadId),
             onPadsSwapped: (padId1, padId2) => this.handlePadsSwapped(padId1, padId2),
             onPadUpdated: (pad) => this.handlePadUpdated(pad),
@@ -201,8 +201,8 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
     }
 
-    private handlePadStatuses(statuses: Record<string, string>): void {
-        this.playbackStore.setPadStatuses(statuses)
+    private handlePadStatusById(statuses: Record<string, string>): void {
+        this.playbackStore.setPadStatusById(statuses)
         this.refreshPadVariableValues()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
     }

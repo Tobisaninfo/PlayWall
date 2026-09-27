@@ -92,11 +92,11 @@ function applyPadStatus(instance: ModuleInstance, padId: string, status: string)
     }).handlePadStatus(padId, status)
 }
 
-/** `handlePadStatuses` is private; the restriction is compile-time only. */
-function applyPadStatuses(instance: ModuleInstance, statuses: Record<string, string>): void {
+/** `handlePadStatusById` is private; the restriction is compile-time only. */
+function applyPadStatusById(instance: ModuleInstance, statuses: Record<string, string>): void {
     ;(
-        instance as unknown as { handlePadStatuses: (statuses: Record<string, string>) => void }
-    ).handlePadStatuses(statuses)
+        instance as unknown as { handlePadStatusById: (statuses: Record<string, string>) => void }
+    ).handlePadStatusById(statuses)
 }
 
 /** `handlePadReplaced` is private; the restriction is compile-time only. */
@@ -334,11 +334,11 @@ describe('ModuleInstance.handlePadStatus (private, invoked via the connection ca
     })
 })
 
-describe('ModuleInstance.handlePadStatuses (private, invoked via the connection callback)', () => {
+describe('ModuleInstance.handlePadStatusById (private, invoked via the connection callback)', () => {
     it('bulk-seeds every pad status at once, e.g. right after (re)connecting', () => {
         const {instance} = createModuleInstance()
 
-        applyPadStatuses(instance, {'pad-1': 'PLAYING', 'pad-2': 'STOPPED'})
+        applyPadStatusById(instance, {'pad-1': 'PLAYING', 'pad-2': 'STOPPED'})
 
         expect(instance.playbackStore.getPadStatus('pad-1')).toBe('PLAYING')
         expect(instance.playbackStore.getPadStatus('pad-2')).toBe('STOPPED')
@@ -347,7 +347,7 @@ describe('ModuleInstance.handlePadStatuses (private, invoked via the connection 
     it('re-checks the pad color feedback for the freshly seeded statuses', () => {
         const {instance, checkFeedbacks} = createModuleInstance()
 
-        applyPadStatuses(instance, {'pad-1': 'PLAYING'})
+        applyPadStatusById(instance, {'pad-1': 'PLAYING'})
 
         expect(checkFeedbacks).toHaveBeenCalledWith([PAD_CURRENT_COLOR_FEEDBACK_ID])
     })

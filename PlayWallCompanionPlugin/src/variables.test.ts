@@ -13,11 +13,11 @@ function stubModuleInstanceForValues(setVariableValues: (values: unknown) => voi
 
 function stubModuleInstanceForPadValues(
     setVariableValues: (values: unknown) => void,
-    padStatuses: Record<string, string> = {},
+    padStatusById: Record<string, string> = {},
 ): ModuleInstance {
     return {
         setVariableValues,
-        playbackStore: {getPadStatus: (padId: string) => padStatuses[padId]},
+        playbackStore: {getPadStatus: (padId: string) => padStatusById[padId]},
     } as unknown as ModuleInstance
 }
 

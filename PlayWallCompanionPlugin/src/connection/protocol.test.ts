@@ -179,26 +179,26 @@ describe('PROJECT_GET_RESPONSE schema', () => {
         pages: [],
     }
 
-    it('parses a response for the currently loaded project, including currentPageIndex/padStatuses', () => {
+    it('parses a response for the currently loaded project, including currentPageIndex/padStatusById', () => {
         const result = PROJECT_GET_RESPONSE.safeParse({
             '@class': 'x',
             messageId: 'm',
             project,
             currentPageIndex: 2,
-            padStatuses: {'pad-1': 'PLAYING'},
+            padStatusById: {'pad-1': 'PLAYING'},
         })
 
         expect(result.success).toBe(true)
         expect(result.success && result.data.currentPageIndex).toBe(2)
-        expect(result.success && result.data.padStatuses).toEqual({'pad-1': 'PLAYING'})
+        expect(result.success && result.data.padStatusById).toEqual({'pad-1': 'PLAYING'})
     })
 
-    it('accepts a response for a project fetched by id, with no currentPageIndex/padStatuses', () => {
+    it('accepts a response for a project fetched by id, with no currentPageIndex/padStatusById', () => {
         const result = PROJECT_GET_RESPONSE.safeParse({'@class': 'x', messageId: 'm', project})
 
         expect(result.success).toBe(true)
         expect(result.success && result.data.currentPageIndex).toBeUndefined()
-        expect(result.success && result.data.padStatuses).toBeUndefined()
+        expect(result.success && result.data.padStatusById).toBeUndefined()
     })
 })
 

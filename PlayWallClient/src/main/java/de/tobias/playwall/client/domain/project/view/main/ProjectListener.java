@@ -38,8 +38,7 @@ public class ProjectListener
 	 * Reacts to the page shown elsewhere (server-broadcast, e.g. by the Companion plugin in "sync"
 	 * mode) changing. {@code ProjectPageShownUpdate} is also fired locally by {@code showPage()}
 	 * itself (for MIDI feedback) and echoed back by the server, so this only acts when the index
-	 * actually differs from what's already shown — otherwise every local page change would loop
-	 * forever (render → notify server → broadcast → apply → render → ...).
+	 * actually differs from what's already shown.
 	 */
 	@EventListener(ProjectPageShownUpdate.class)
 	void onPageShownElsewhere(ProjectPageShownUpdate update)

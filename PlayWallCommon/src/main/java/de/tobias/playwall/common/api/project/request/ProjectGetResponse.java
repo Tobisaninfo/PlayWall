@@ -27,9 +27,9 @@ public class ProjectGetResponse extends ResponseMessage
 	 * The current playback status of every pad that has content, keyed by pad id. Only populated
 	 * together with {@link #currentPageIndex}, for the same reason: a fresh (or reconnecting) client
 	 * would otherwise only learn a pad's status from the next {@code PadStatusUpdate} broadcast, which
-	 * may never come if nothing changes after it connects.
+	 * may never come if nothing changes after the client connects.
 	 */
-	private Map<UUID, PadControllerStatus> padStatuses;
+	private Map<UUID, PadControllerStatus> padStatusById;
 
 	public ProjectGetResponse(UUID messageId, ProjectDto project)
 	{
@@ -37,11 +37,11 @@ public class ProjectGetResponse extends ResponseMessage
 		this.project = project;
 	}
 
-	public ProjectGetResponse(UUID messageId, ProjectDto project, Integer currentPageIndex, Map<UUID, PadControllerStatus> padStatuses)
+	public ProjectGetResponse(UUID messageId, ProjectDto project, Integer currentPageIndex, Map<UUID, PadControllerStatus> padStatusById)
 	{
 		super(messageId);
 		this.project = project;
 		this.currentPageIndex = currentPageIndex;
-		this.padStatuses = padStatuses;
+		this.padStatusById = padStatusById;
 	}
 }

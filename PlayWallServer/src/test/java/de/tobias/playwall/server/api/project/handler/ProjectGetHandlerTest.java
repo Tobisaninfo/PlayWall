@@ -117,7 +117,7 @@ class ProjectGetHandlerTest extends AbstractRequestHandlerTest
 		assertThat(response).isNotEmpty();
 		final ProjectGetResponse projectGetResponse = (ProjectGetResponse) response.get();
 		assertThat(projectGetResponse.getCurrentPageIndex()).isNull();
-		assertThat(projectGetResponse.getPadStatuses()).isNull();
+		assertThat(projectGetResponse.getPadStatusById()).isNull();
 	}
 
 	@Test
@@ -129,7 +129,7 @@ class ProjectGetHandlerTest extends AbstractRequestHandlerTest
 		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(null));
 
 		assertThat(response).isNotEmpty();
-		assertThat(((ProjectGetResponse) response.get()).getPadStatuses()).isEqualTo(projectController.getPadStatuses());
+		assertThat(((ProjectGetResponse) response.get()).getPadStatusById()).isEqualTo(projectController.getAllPadStatusById());
 	}
 
 	@Test

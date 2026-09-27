@@ -14,26 +14,26 @@ export function isPlayingStatus(status: string | undefined): boolean {
  * content) and `PageNavigationStore` (which page is active).
  */
 export class PlaybackStore {
-    private readonly padStatuses = new Map<string, string>()
+    private readonly padStatusById = new Map<string, string>()
 
     setPadStatus(padId: string, status: string): void {
-        this.padStatuses.set(padId, status)
+        this.padStatusById.set(padId, status)
     }
 
     /** Bulk-seeds statuses, e.g. from the initial "currently loaded project" fetch on (re)connect. */
-    setPadStatuses(statuses: Record<string, string>): void {
+    setPadStatusById(statuses: Record<string, string>): void {
         for (const [padId, status] of Object.entries(statuses)) {
-            this.padStatuses.set(padId, status)
+            this.padStatusById.set(padId, status)
         }
     }
 
     /** `undefined` means no status has been observed yet for this pad — treat as not playing. */
     getPadStatus(padId: string): string | undefined {
-        return this.padStatuses.get(padId)
+        return this.padStatusById.get(padId)
     }
 
     /** Called when no project is loaded at all: nothing is relevant anymore. */
     clear(): void {
-        this.padStatuses.clear()
+        this.padStatusById.clear()
     }
 }

@@ -130,7 +130,7 @@ public class ProjectController
 		return padControllers.get(padId);
 	}
 
-	public Map<UUID, PadControllerStatus> getPadStatuses()
+	public Map<UUID, PadControllerStatus> getAllPadStatusById()
 	{
 		return padControllers.entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getStatus()));

@@ -45,7 +45,7 @@ describe('PlaybackStore', () => {
         const store = new PlaybackStore()
         store.setPadStatus('pad-1', 'PLAYING')
 
-        store.setPadStatuses({'pad-2': 'STOPPED', 'pad-3': 'PAUSED'})
+        store.setPadStatusById({'pad-2': 'STOPPED', 'pad-3': 'PAUSED'})
 
         expect(store.getPadStatus('pad-1')).toBe('PLAYING')
         expect(store.getPadStatus('pad-2')).toBe('STOPPED')

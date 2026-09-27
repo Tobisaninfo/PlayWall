@@ -85,7 +85,7 @@ function createHandler(overrides: Partial<ClientWebSocketHandlerOptionsType> = {
         onPageShown: vi.fn(),
         onProjectSettingsChanged: vi.fn(),
         onPadStatus: vi.fn(),
-        onPadStatuses: vi.fn(),
+        onPadStatusById: vi.fn(),
         onPadReplaced: vi.fn(),
         onPadsSwapped: vi.fn(),
         onPadUpdated: vi.fn(),
@@ -329,9 +329,9 @@ describe('ClientWebSocketHandler page-CRUD refetch', () => {
 describe('ClientWebSocketHandler connect() -> fetchCurrentProject on open', () => {
     it('reports the currently loaded project, its pad statuses, and its shown page after connecting', async () => {
         const onProjectLoaded = vi.fn()
-        const onPadStatuses = vi.fn()
+        const onPadStatusById = vi.fn()
         const onPageShown = vi.fn()
-        const handler = createHandler({onProjectLoaded, onPadStatuses, onPageShown})
+        const handler = createHandler({onProjectLoaded, onPadStatusById: onPadStatusById, onPageShown})
         handler.connect()
         const socket = FakeWebSocket.instances.at(-1)
         expect(socket).toBeDefined()
@@ -354,13 +354,13 @@ describe('ClientWebSocketHandler connect() -> fetchCurrentProject on open', () =
                 messageId: request.messageId,
                 project,
                 currentPageIndex: 2,
-                padStatuses: {'pad-1': 'PLAYING'},
+                padStatusById: {'pad-1': 'PLAYING'},
             }),
         )
         await Promise.resolve()
 
         expect(onProjectLoaded).toHaveBeenCalledWith(project)
-        expect(onPadStatuses).toHaveBeenCalledWith({'pad-1': 'PLAYING'})
+        expect(onPadStatusById).toHaveBeenCalledWith({'pad-1': 'PLAYING'})
         expect(onPageShown).toHaveBeenCalledWith(2)
 
         handler.destroy()

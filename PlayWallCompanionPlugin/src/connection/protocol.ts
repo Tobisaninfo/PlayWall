@@ -107,7 +107,7 @@ export const PROJECT_GET_RESPONSE = BASE_ENVELOPE.extend({
     currentPageIndex: z.number().nullish(),
     // Keyed by pad id (UUID string). Only populated together with `currentPageIndex` — see
     // ProjectGetResponse.java.
-    padStatuses: z.record(z.string(), z.string()).nullish(),
+    padStatusById: z.record(z.string(), z.string()).nullish(),
 })
 
 export const PROJECT_LOADED_UPDATE = BASE_ENVELOPE.extend({

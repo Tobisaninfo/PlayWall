@@ -58,7 +58,7 @@ export interface ClientWebSocketHandlerOptions {
     /** Any project setting (incl. global volume) changed on the desktop client. */
     onProjectSettingsChanged: (metadata: ProjectMetadata) => void
     onPadStatus: (padId: string, status: string) => void
-    onPadStatuses: (statuses: Record<string, string>) => void
+    onPadStatusById: (statuses: Record<string, string>) => void
     /** A pad was moved or duplicated onto another pad's slot via drag & drop on the desktop client. */
     onPadReplaced: (newPad: PadDto, targetPadId: string) => void
     /** Two pads swapped places via drag & drop on the desktop client. */
@@ -178,8 +178,8 @@ export class ClientWebSocketHandler {
         this.sendRequest(buildProjectGetRequest(), PROJECT_GET_RESPONSE)
             .then((response) => {
                 this.options.onProjectLoaded(response.project)
-                if (response.padStatuses) {
-                    this.options.onPadStatuses(response.padStatuses)
+                if (response.padStatusById) {
+                    this.options.onPadStatusById(response.padStatusById)
                 }
                 this.options.onPageShown(response.currentPageIndex ?? 0)
             })
