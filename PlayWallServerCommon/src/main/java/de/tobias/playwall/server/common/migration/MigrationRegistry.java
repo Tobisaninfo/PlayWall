@@ -135,7 +135,25 @@ public final class MigrationRegistry
 				JsonPathOperations.add(root, moveStep.to(), value);
 			}
 			case JsonMigrationStepForEach forEachStep -> applyToEach(root, forEachStep);
+			case JsonMigrationStepAddToTypedObject typedObjectStep -> addToTypedObject(root, typedObjectStep);
 		}
+	}
+
+	private static void addToTypedObject(JsonNode root, JsonMigrationStepAddToTypedObject step)
+	{
+		final JsonNode object = root.at(JsonPointer.compile(step.objectPath()));
+		if(!object.isObject())
+		{
+			return;
+		}
+
+		final JsonNode type = object.at(JsonPointer.compile(step.typeProperty()));
+		if(!step.typeValue().equals(type.asString("")))
+		{
+			return;
+		}
+
+		JsonPathOperations.add(object, step.path(), step.value());
 	}
 
 	private static void applyToEach(JsonNode root, JsonMigrationStepForEach step)

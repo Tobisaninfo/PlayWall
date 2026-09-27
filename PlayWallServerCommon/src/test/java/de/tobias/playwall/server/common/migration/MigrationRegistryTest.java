@@ -392,6 +392,126 @@ class MigrationRegistryTest
 				"""));
 	}
 
+	@Test
+	void testAddToTypedObjectAddsValueToObjectOfMatchingType()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepAddToTypedObject.of("/content", "/@name", "AudioPadContent", "/ignoreSoloMode", false))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{
+					"VERSION": 1,
+					"content": {"@name": "AudioPadContent", "mediaPath": "abc.mp3"}
+				}""")).node())
+				.isEqualTo(json("""
+						{
+							"VERSION": 2,
+							"content": {"@name": "AudioPadContent", "mediaPath": "abc.mp3", "ignoreSoloMode": false}
+						}"""));
+	}
+
+	@Test
+	void testAddToTypedObjectSkipsNullObject()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepAddToTypedObject.of("/content", "/@name", "AudioPadContent", "/ignoreSoloMode", false))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{"VERSION": 1, "content": null}""")).node())
+				.isEqualTo(json("""
+						{"VERSION": 2, "content": null}"""));
+	}
+
+	@Test
+	void testAddToTypedObjectSkipsMissingObject()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepAddToTypedObject.of("/content", "/@name", "AudioPadContent", "/ignoreSoloMode", false))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{"VERSION": 1, "name": "Pad 1"}""")).node())
+				.isEqualTo(json("""
+						{"VERSION": 2, "name": "Pad 1"}"""));
+	}
+
+	@Test
+	void testAddToTypedObjectSkipsObjectOfOtherType()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepAddToTypedObject.of("/content", "/@name", "AudioPadContent", "/ignoreSoloMode", false))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{
+					"VERSION": 1,
+					"content": {"@name": "VideoPadContent", "uri": "abc.mp4"}
+				}""")).node())
+				.isEqualTo(json("""
+						{
+							"VERSION": 2,
+							"content": {"@name": "VideoPadContent", "uri": "abc.mp4"}
+						}"""));
+	}
+
+	@Test
+	void testAddToTypedObjectSkipsObjectWithoutTypeProperty()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepAddToTypedObject.of("/content", "/@name", "AudioPadContent", "/ignoreSoloMode", false))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{"VERSION": 1, "content": {"mediaPath": "abc.mp3"}}""")).node())
+				.isEqualTo(json("""
+						{"VERSION": 2, "content": {"mediaPath": "abc.mp3"}}"""));
+	}
+
+	@Test
+	void testAddToTypedObjectRejectsInvalidPaths()
+	{
+		assertThatThrownBy(() -> JsonMigrationStepAddToTypedObject.of("content", "/@name", "AudioPadContent", "/ignoreSoloMode", false))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("starting with '/'");
+		assertThatThrownBy(() -> JsonMigrationStepAddToTypedObject.of("/content", "@name", "AudioPadContent", "/ignoreSoloMode", false))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("starting with '/'");
+		assertThatThrownBy(() -> JsonMigrationStepAddToTypedObject.of("/content", "/@name", "AudioPadContent", "ignoreSoloMode", false))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("starting with '/'");
+	}
+
+	@Test
+	void testAddToTypedObjectRejectsBlankTypeValue()
+	{
+		assertThatThrownBy(() -> JsonMigrationStepAddToTypedObject.of("/content", "/@name", " ", "/ignoreSoloMode", false))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("Type value must not be blank");
+	}
+
+	@Test
+	void testAddToTypedObjectConvertsNullValueToNullNode()
+	{
+		final JsonMigrationStepAddToTypedObject step = new JsonMigrationStepAddToTypedObject("/content", "/@name", "AudioPadContent", "/ignoreSoloMode", null);
+
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, step)
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{
+					"VERSION": 1,
+					"content": {"@name": "AudioPadContent"}
+				}""")).node())
+				.isEqualTo(json("""
+						{
+							"VERSION": 2,
+							"content": {"@name": "AudioPadContent", "ignoreSoloMode": null}
+						}"""));
+	}
+
 	private static MigrationRegistry registry()
 	{
 		return MigrationRegistry.builder(4, "/VERSION")
