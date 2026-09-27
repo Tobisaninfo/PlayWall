@@ -174,7 +174,8 @@ public class ReplaceMediaViewController extends ViewControllerBase
 				continue;
 			}
 
-			final Path foundFile = filesByFileName.get(Path.of(oldMediaPath).getFileName().toString().toLowerCase());
+			final String oldMediPathCleaned = Path.of(oldMediaPath.replace("\\", "/")).getFileName().toString().toLowerCase();
+			final Path foundFile = filesByFileName.get(oldMediPathCleaned);
 			if(foundFile != null)
 			{
 				entry.setMissingMediaSolutionType(MissingMediaSolutionType.REPLACE);

@@ -122,4 +122,30 @@ class ReplaceMediaViewControllerTest
 		assertThat(entry1.getNewMediaPath()).isEqualTo(foundFile.toString());
 		assertThat(entry2.getNewMediaPath()).isEqualTo(foundFile.toString());
 	}
+
+	@Test
+	void testWindowsMediaPathIsMatchedByFileName() throws IOException
+	{
+		final Path foundFile = Files.createFile(tempDir.resolve("123.mp3"));
+		final MissingMediaEntry entry = entry("C:\\My\\Path\\123.mp3");
+		final List<MissingMediaEntry> entries = new ArrayList<>(List.of(entry));
+
+		controller.matchMediaFiles(tempDir, entries);
+
+		assertThat(entry.getMissingMediaSolutionType()).isEqualTo(MissingMediaSolutionType.REPLACE);
+		assertThat(entry.getNewMediaPath()).isEqualTo(foundFile.toString());
+	}
+
+	@Test
+	void testWindowsMediaPathWithSpacesIsMatchedByFileName() throws IOException
+	{
+		final Path foundFile = Files.createFile(tempDir.resolve("My Song.mp3"));
+		final MissingMediaEntry entry = entry("C:\\My\\Path With Spaces\\My Song.mp3");
+		final List<MissingMediaEntry> entries = new ArrayList<>(List.of(entry));
+
+		controller.matchMediaFiles(tempDir, entries);
+
+		assertThat(entry.getMissingMediaSolutionType()).isEqualTo(MissingMediaSolutionType.REPLACE);
+		assertThat(entry.getNewMediaPath()).isEqualTo(foundFile.toString());
+	}
 }
