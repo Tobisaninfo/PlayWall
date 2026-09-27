@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.project.view.media;
 
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
@@ -17,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -147,11 +149,18 @@ public class ReplaceMediaViewController extends ViewControllerBase
 
 	void applyAutoSearch(Path folder)
 	{
-		matchMediaFiles(folder, entries);
+		final int matchedFileCount = matchMediaFiles(folder, entries);
 		table.refresh();
+
+		Alerts.getInstance().createAlert(Alert.AlertType.INFORMATION,
+						Localization.getString(Strings.UI_NOTIFICATION_INFO),
+						Localization.getString(Strings.UI_REPLACE_MEDIA_AUTO_SEARCH_RESULT, matchedFileCount),
+						Localization.getString(Strings.UI_REPLACE_MEDIA_AUTO_SEARCH_RESULT_DESCRIPTION, matchedFileCount),
+						getContainingWindow())
+				.showAndWait();
 	}
 
-	void matchMediaFiles(Path folder, List<MissingMediaEntry> entries)
+	int matchMediaFiles(Path folder, List<MissingMediaEntry> entries)
 	{
 		Map<String, Path> filesByFileName = new HashMap<>();
 		try(Stream<Path> stream = Files.walk(folder))
@@ -166,6 +175,7 @@ public class ReplaceMediaViewController extends ViewControllerBase
 			log.error("Cannot scan folder for media files", e);
 		}
 
+		int matchedFileCount = 0;
 		for(MissingMediaEntry entry : entries)
 		{
 			final String oldMediaPath = entry.getOldMediaPath();
@@ -176,11 +186,13 @@ public class ReplaceMediaViewController extends ViewControllerBase
 
 			final String oldMediPathCleaned = Path.of(oldMediaPath.replace("\\", "/")).getFileName().toString().toLowerCase();
 			final Path foundFile = filesByFileName.get(oldMediPathCleaned);
-			if(foundFile != null)
+			if(foundFile != null && entry.getMissingMediaSolutionType() != MissingMediaSolutionType.REPLACE)
 			{
 				entry.setMissingMediaSolutionType(MissingMediaSolutionType.REPLACE);
 				entry.setNewMediaPath(foundFile.toString());
+				matchedFileCount++;
 			}
 		}
+		return matchedFileCount;
 	}
 }

@@ -71,6 +71,8 @@ public class Strings
 	public static final String UI_MENU_INFO_UPDATES = "ui.menu.info.updates";
 
 	public static final String UI_REPLACE_MEDIA_PLACEHOLDER = "ui.replace.media.placeholder";
+	public static final String UI_REPLACE_MEDIA_AUTO_SEARCH_RESULT = "ui.replace.media.auto_search.result";
+	public static final String UI_REPLACE_MEDIA_AUTO_SEARCH_RESULT_DESCRIPTION = "ui.replace.media.auto_search.result.description";
 
 	// ui - dialog - about
 	public static final String UI_DIALOG_ABOUT_GRAPHICS = "ui.dialog.about.graphics";

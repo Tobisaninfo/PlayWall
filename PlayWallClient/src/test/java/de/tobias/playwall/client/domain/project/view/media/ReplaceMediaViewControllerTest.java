@@ -148,4 +148,39 @@ class ReplaceMediaViewControllerTest
 		assertThat(entry.getMissingMediaSolutionType()).isEqualTo(MissingMediaSolutionType.REPLACE);
 		assertThat(entry.getNewMediaPath()).isEqualTo(foundFile.toString());
 	}
+
+	@Test
+	void testMatchedFileCountIsZeroWhenNothingMatches() throws IOException
+	{
+		Files.createFile(tempDir.resolve("other.mp3"));
+		final List<MissingMediaEntry> entries = new ArrayList<>(List.of(entry("/old/missing.mp3")));
+
+		assertThat(controller.matchMediaFiles(tempDir, entries)).isZero();
+	}
+
+	@Test
+	void testMatchedFileCountCountsNewlyResolvedEntries() throws IOException
+	{
+		Files.createFile(tempDir.resolve("song.mp3"));
+		Files.createFile(tempDir.resolve("clip.wav"));
+		final List<MissingMediaEntry> entries = new ArrayList<>(List.of(entry("/old/song.mp3"), entry("/old/clip.wav"), entry("/old/missing.mp3")));
+
+		assertThat(controller.matchMediaFiles(tempDir, entries)).isEqualTo(2);
+	}
+
+	@Test
+	void testSecondSearchOnlyCountsNewlyResolvedEntries() throws IOException
+	{
+		final Path firstFolder = Files.createDirectories(tempDir.resolve("first"));
+		Files.createFile(firstFolder.resolve("song.mp3"));
+		final List<MissingMediaEntry> entries = new ArrayList<>(List.of(entry("/old/song.mp3"), entry("/old/clip.wav")));
+
+		assertThat(controller.matchMediaFiles(firstFolder, entries)).isEqualTo(1);
+
+		final Path secondFolder = Files.createDirectories(tempDir.resolve("second"));
+		Files.createFile(secondFolder.resolve("clip.wav"));
+
+		assertThat(controller.matchMediaFiles(secondFolder, entries)).isEqualTo(1);
+		assertThat(entries).allSatisfy(e -> assertThat(e.getMissingMediaSolutionType()).isEqualTo(MissingMediaSolutionType.REPLACE));
+	}
 }
