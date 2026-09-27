@@ -1,7 +1,8 @@
 import type {CompanionActionCallbackContext, CompanionActionEvent} from '@companion-module/base'
 import {describe, expect, it, vi} from 'vitest'
 import {GetActionDefinitions} from './actions.js'
-import {STOP_ALL_ACTION_ID, VOLUME_CHANGE_ACTION_ID} from './ids.js'
+import {PAGE_NAVIGATE_ACTION_ID, STOP_ALL_ACTION_ID, VOLUME_CHANGE_ACTION_ID} from './ids.js'
+import type {PageActionOptions} from './domain/pageSelector.js'
 import type {VolumeActionOptions} from './domain/volumeControl.js'
 import type {ProjectDto} from './connection/protocol.js'
 import type ModuleInstance from './main.js'
@@ -11,12 +12,24 @@ const ACTION_CONTEXT = {} as CompanionActionCallbackContext
 interface StubConnection {
     stopAllPads?: () => void
     changeGlobalVolume?: (volume: number) => void
+    showPage?: (index: number) => void
 }
 
-function stubModuleInstance(options: { connection?: StubConnection; project?: ProjectDto } = {}): ModuleInstance {
+function stubModuleInstance(
+    options: {
+        connection?: StubConnection
+        project?: ProjectDto
+        activePage?: number
+        pageSyncMode?: 'sync' | 'async'
+        updateActivePage?: (index: number) => void
+    } = {},
+): ModuleInstance {
     return {
         connection: options.connection,
         projectStore: {getProject: () => options.project},
+        pageNavigationStore: {getActivePage: () => options.activePage ?? 0},
+        config: {pageSyncMode: options.pageSyncMode ?? 'sync'},
+        updateActivePage: options.updateActivePage ?? vi.fn(),
         log: vi.fn(),
     } as unknown as ModuleInstance
 }
@@ -38,6 +51,19 @@ function fakeProject(volume: number | null | undefined): ProjectDto {
     }
 }
 
+/** A project with `pageCount` pages (positions 0..pageCount-1) — volume/pad grid size are irrelevant here. */
+function fakeProjectWithPages(pageCount: number): ProjectDto {
+    return {
+        ...fakeProject(1),
+        pages: Array.from({length: pageCount}, (_, position) => ({
+            id: `page-${position}`,
+            position,
+            settings: null,
+            pads: [],
+        })),
+    }
+}
+
 /** `CompanionActionDefinitions` types each entry as possibly `false`/`undefined`; it never actually is here. */
 function getStopAllAction(self: ModuleInstance) {
     const action = GetActionDefinitions(self)[STOP_ALL_ACTION_ID]
@@ -55,8 +81,20 @@ function getVolumeChangeAction(self: ModuleInstance) {
     return action
 }
 
+function getPageNavigateAction(self: ModuleInstance) {
+    const action = GetActionDefinitions(self)[PAGE_NAVIGATE_ACTION_ID]
+    if (!action) {
+        throw new Error('page_navigate action definition is missing')
+    }
+    return action
+}
+
 function volumeActionEvent(options: VolumeActionOptions): CompanionActionEvent<VolumeActionOptions> {
     return {options} as CompanionActionEvent<VolumeActionOptions>
+}
+
+function pageActionEvent(options: PageActionOptions): CompanionActionEvent<PageActionOptions> {
+    return {options} as CompanionActionEvent<PageActionOptions>
 }
 
 describe('stop_all action', () => {
@@ -143,5 +181,78 @@ describe('volume_change action', () => {
         action.callback(volumeActionEvent({mode: 'increase', delta: '10'}), ACTION_CONTEXT)
 
         expect(changeGlobalVolume).not.toHaveBeenCalled()
+    })
+})
+
+describe('page_navigate action', () => {
+    it('offers a mode dropdown and a page-number field', () => {
+        const action = getPageNavigateAction(stubModuleInstance())
+
+        expect(action.options.map((option) => option.id)).toEqual(['mode', 'pageNumber'])
+    })
+
+    it('warns and does nothing when no project is loaded', () => {
+        const updateActivePage = vi.fn()
+        const action = getPageNavigateAction(stubModuleInstance({updateActivePage}))
+
+        action.callback(pageActionEvent({mode: 'next', pageNumber: 1}), ACTION_CONTEXT)
+
+        expect(updateActivePage).not.toHaveBeenCalled()
+    })
+
+    it('warns and does nothing when there is no valid target (e.g. "next" from the last page)', () => {
+        const updateActivePage = vi.fn()
+        const showPage = vi.fn()
+        const action = getPageNavigateAction(
+            stubModuleInstance({
+                project: fakeProjectWithPages(3),
+                activePage: 2,
+                updateActivePage,
+                connection: {showPage},
+            }),
+        )
+
+        action.callback(pageActionEvent({mode: 'next', pageNumber: 1}), ACTION_CONTEXT)
+
+        expect(updateActivePage).not.toHaveBeenCalled()
+        expect(showPage).not.toHaveBeenCalled()
+    })
+
+    it('updates the active page locally but does not notify the server in "async" mode', () => {
+        const updateActivePage = vi.fn()
+        const showPage = vi.fn()
+        const action = getPageNavigateAction(
+            stubModuleInstance({
+                project: fakeProjectWithPages(3),
+                activePage: 0,
+                updateActivePage,
+                connection: {showPage},
+                pageSyncMode: 'async',
+            }),
+        )
+
+        action.callback(pageActionEvent({mode: 'next', pageNumber: 1}), ACTION_CONTEXT)
+
+        expect(updateActivePage).toHaveBeenCalledWith(1)
+        expect(showPage).not.toHaveBeenCalled()
+    })
+
+    it('updates the active page and notifies the server in "sync" mode', () => {
+        const updateActivePage = vi.fn()
+        const showPage = vi.fn()
+        const action = getPageNavigateAction(
+            stubModuleInstance({
+                project: fakeProjectWithPages(3),
+                activePage: 0,
+                updateActivePage,
+                connection: {showPage},
+                pageSyncMode: 'sync',
+            }),
+        )
+
+        action.callback(pageActionEvent({mode: 'jump', pageNumber: 3}), ACTION_CONTEXT)
+
+        expect(updateActivePage).toHaveBeenCalledWith(2)
+        expect(showPage).toHaveBeenCalledWith(2)
     })
 })
