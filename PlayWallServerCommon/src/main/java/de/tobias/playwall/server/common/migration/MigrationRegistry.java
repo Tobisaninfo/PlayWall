@@ -127,12 +127,12 @@ public final class MigrationRegistry
 	{
 		switch(step)
 		{
-			case JsonMigrationStepAdd addStep -> JsonPathOperations.add(root, addStep.path(), addStep.value());
-			case JsonMigrationStepDelete deleteStep -> JsonPathOperations.remove(root, deleteStep.path());
-			case JsonMigrationStepMove moveStep ->
+			case JsonMigrationStepAdd(String path, JsonNode value) -> JsonPathOperations.add(root, path, value);
+			case JsonMigrationStepDelete(String path) -> JsonPathOperations.remove(root, path);
+			case JsonMigrationStepMove(String from, String to) ->
 			{
-				final JsonNode value = JsonPathOperations.remove(root, moveStep.from());
-				JsonPathOperations.add(root, moveStep.to(), value);
+				final JsonNode value = JsonPathOperations.remove(root, from);
+				JsonPathOperations.add(root, to, value);
 			}
 			case JsonMigrationStepForEach forEachStep -> applyToEach(root, forEachStep);
 			case JsonMigrationStepAddToTypedObject typedObjectStep -> addToTypedObject(root, typedObjectStep);

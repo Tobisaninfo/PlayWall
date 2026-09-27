@@ -94,6 +94,8 @@ public class AllProjectsInfoRepository
 	/**
 	 * Temporary helper: Adds the VERSION marker for legacy projects.json files that predate format versioning.
 	 * Can be removed once all legacy files have been migrated to a versioned format.
+	 *
+	 * @deprecated since 8.3.0
 	 */
 	@Deprecated(since="8.3.0", forRemoval = true)
 	private void addVersionIfMissing(ObjectNode root)

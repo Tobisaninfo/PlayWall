@@ -27,6 +27,8 @@ import java.util.*;
 @Slf4j
 public class ProjectService
 {
+	private static final String PROJECT_IMPORT_ERROR_PARSE_VERSION = "project.import.error.parse_version";
+
 	private final AllProjectsInfoRepository allProjectsInfoRepository;
 	private final ProjectRepository projectRepository;
 	private final MessageSource messageSource;
@@ -137,7 +139,7 @@ public class ProjectService
 		}
 		catch(MigrationException e)
 		{
-			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()), e);
+			throw new IllegalArgumentException(messageSource.getMessage(PROJECT_IMPORT_ERROR_PARSE_VERSION, new Object[]{}, LocaleContextHolder.getLocale()), e);
 		}
 
 		if(version < projectMigrationRegistry.getMinSupportedVersion())
@@ -147,7 +149,7 @@ public class ProjectService
 
 		if(version > projectMigrationRegistry.currentVersion())
 		{
-			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()));
+			throw new IllegalArgumentException(messageSource.getMessage(PROJECT_IMPORT_ERROR_PARSE_VERSION, new Object[]{}, LocaleContextHolder.getLocale()));
 		}
 
 		final Project project = jsonMapper.treeToValue(projectMigrationRegistry.migrate(root).node(), Project.class);
@@ -167,7 +169,7 @@ public class ProjectService
 		catch(Exception e)
 		{
 			log.debug("Error parsing project file", e);
-			throw new IllegalArgumentException(messageSource.getMessage("project.import.error.parse_version", new Object[]{}, LocaleContextHolder.getLocale()), e);
+			throw new IllegalArgumentException(messageSource.getMessage(PROJECT_IMPORT_ERROR_PARSE_VERSION, new Object[]{}, LocaleContextHolder.getLocale()), e);
 		}
 	}
 
