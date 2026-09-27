@@ -10,7 +10,8 @@
         "build": "npm run sync-colors && rimraf dist && tsc -p tsconfig.build.json",
         "dev": "npm run sync-colors && tsc -p tsconfig.build.json --watch",
         "package": "npm run build && companion-module-build --output target/playwall",
-        "test": "vitest run"
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage"
     },
     "license": "MIT",
     "engines": {
@@ -25,6 +26,7 @@
         "@companion-module/tools": "3.1.0",
         "@types/node": "22.20.1",
         "@types/ws": "8.18.1",
+        "@vitest/coverage-v8": "5.0.2",
         "rimraf": "6.1.3",
         "typescript": "~6.0.3",
         "vitest": "5.0.2"

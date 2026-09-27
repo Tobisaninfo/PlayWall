@@ -14,17 +14,13 @@
     <packaging>pom</packaging>
 
     <properties>
-        <!-- This module has "pom" packaging (no src/main/java), so the Sonar Maven Plugin needs to be
-             told explicitly where its (TypeScript) sources live to include it in the reactor-wide
-             "mvn sonar:sonar" analysis run from the root pom. Generated/build output is excluded since
-             it's not checked in and not meaningful to analyze. *.test.ts files are classified as tests
-             (sonar.tests/sonar.test.inclusions) rather than main sources, so they get test-appropriate
-             rules and aren't double-counted as production code. -->
         <sonar.sources>src</sonar.sources>
         <sonar.exclusions>src/domain/modernColorPalette.generated.ts,dist/**,node_modules/**,pkg/**,**/*.test.ts
         </sonar.exclusions>
         <sonar.tests>src</sonar.tests>
         <sonar.test.inclusions>**/*.test.ts</sonar.test.inclusions>
+        <sonar.javascript.lcov.reportPaths>${project.build.directory}/coverage/lcov.info
+        </sonar.javascript.lcov.reportPaths>
     </properties>
 
     <build>
@@ -62,7 +58,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>test</arguments>
+                            <arguments>run test:coverage</arguments>
                         </configuration>
                     </execution>
 
