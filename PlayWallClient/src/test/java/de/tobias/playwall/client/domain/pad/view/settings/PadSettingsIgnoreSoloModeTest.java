@@ -111,7 +111,7 @@ class PadSettingsIgnoreSoloModeTest extends AbstractViewControllerTest
 		Platform.runLater(() -> {
 			context.registerLazy(Stage.class, _ -> new Stage());
 			PadSettingsViewController padSettingsViewController = context.get(PadSettingsViewController.class);
-			padSettingsGeneralViewController = (PadSettingsGeneralViewController) padSettingsViewController.selectCategory(0);
+			padSettingsGeneralViewController = (PadSettingsGeneralViewController) padSettingsViewController.selectCategory(1);
 			padSettingsViewController.showAndWait(new BasePadSettingsViewController.Param(pad, padSettingsViewController), stage);
 		});
 

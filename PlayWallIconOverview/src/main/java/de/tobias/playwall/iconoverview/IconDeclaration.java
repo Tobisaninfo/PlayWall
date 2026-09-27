@@ -56,6 +56,8 @@ public class IconDeclaration
 				new IconUsage(IconUsageCategory.PAD, "Kachel abspielen (Play)"),
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Wiedergabe - Loop")
 		)));
+		data.add(new IconEntry(FontAwesomeType.LAYER_GROUP_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Wiedergabe - Solomodus ignorieren"),
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Wiedergabe - Widergabemodus"))));
 		data.add(new IconEntry(FontAwesomeType.PAUSE_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel pausieren (Pause)"))));
 		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel stoppen (Stop)"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_OPEN_SOLID, List.of(

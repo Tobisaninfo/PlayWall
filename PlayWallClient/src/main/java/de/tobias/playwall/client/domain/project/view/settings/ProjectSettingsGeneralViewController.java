@@ -70,8 +70,10 @@ public class ProjectSettingsGeneralViewController extends BaseProjectSettingsVie
 		spinnerNumberOfHorizontalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfHorizontalPads());
 		spinnerNumberOfVerticalPads.getValueFactory().setValue(param.getProjectMetadata().getNumberOfVerticalPads());
 		eofWarningTimeSlider.setValue(param.getProjectMetadata().getEofWarningTime());
-		toggleButtonPlaybackModeSolo.setSelected(param.getProjectMetadata().getIsSoloMode());
-		toggleButtonPlaybackModeMulti.setSelected(!param.getProjectMetadata().getIsSoloMode());
+
+		final boolean isSoloMode = Boolean.TRUE.equals(param.getProjectMetadata().getIsSoloMode());
+		toggleButtonPlaybackModeSolo.setSelected(isSoloMode);
+		toggleButtonPlaybackModeMulti.setSelected(!isSoloMode);
 
 		this.isValidProperty.bind(textFieldName.textProperty().isNotEmpty()
 				.and(spinnerNumberOfHorizontalPads.valueProperty().isNotNull()

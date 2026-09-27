@@ -102,6 +102,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.fadeSettings(new FadeSettings())
 				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
 				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
+				.isSoloMode(false)
 				.build());
 	}
 
@@ -138,6 +139,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.fadeSettings(new FadeSettings())
 				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
 				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
+				.isSoloMode(false)
 				.build());
 	}
 
@@ -176,6 +178,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.fadeSettings(new FadeSettings())
 				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
 				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
+				.isSoloMode(false)
 				.build());
 	}
 
@@ -249,6 +252,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.fadeSettings(new FadeSettings())
 				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
 				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
+				.isSoloMode(false)
 				.build());
 	}
 
@@ -291,6 +295,7 @@ class MainViewControllerProjectSettingsTest extends AbstractViewControllerTest
 				.fadeSettings(new FadeSettings())
 				.mappings(Map.of(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"), new Mapping()))
 				.selectedMapping(UUID.fromString("b9a0949e-1006-4a91-a755-c2b2e5539013"))
+				.isSoloMode(false)
 				.build());
 	}
 }
