@@ -118,6 +118,11 @@ function applyPagesChanged(instance: ModuleInstance, project: ProjectDto): void 
     ;(instance as unknown as { handlePagesChanged: (project: ProjectDto) => void }).handlePagesChanged(project)
 }
 
+/** `handlePadUpdated` is private; the restriction is compile-time only. */
+function applyPadUpdated(instance: ModuleInstance, pad: PadDto): void {
+    ;(instance as unknown as { handlePadUpdated: (pad: PadDto) => void }).handlePadUpdated(pad)
+}
+
 describe('ModuleInstance.handleProjectSettingsChanged', () => {
     it('updates current_volume/current_volume_percent from the broadcast metadata', () => {
         const {instance, setVariableValues} = createModuleInstance()
@@ -433,5 +438,51 @@ describe('ModuleInstance.handlePagesChanged (private, invoked via the connection
         applyPagesChanged(instance, fakeProject(0.5))
 
         expect(checkFeedbacks).toHaveBeenCalledWith([PAD_CURRENT_COLOR_FEEDBACK_ID, PAGE_CURRENT_COLOR_FEEDBACK_ID])
+    })
+})
+
+describe('ModuleInstance.handlePadUpdated (private, invoked via the connection callback)', () => {
+    it('replaces the pad\'s cached data (e.g. its newly edited colors) in the project', () => {
+        const {instance} = createModuleInstance()
+        instance.projectStore.setProject(fakeProjectWithPads([fakePad('pad-1', 0, 'Old name')]))
+        const updatedPad: PadDto = {
+            id: 'pad-1',
+            position: 0,
+            name: 'New name',
+            defaultColor: 'RED1',
+            playColor: 'BLUE1',
+            introColor: null,
+        }
+
+        applyPadUpdated(instance, updatedPad)
+
+        expect(instance.projectStore.getProject()?.pages[0]?.pads[0]).toEqual(updatedPad)
+    })
+
+    it('re-checks the pad color feedback, so the edited pad\'s button repaints with its new colors', () => {
+        const {instance, checkFeedbacks} = createModuleInstance()
+        instance.projectStore.setProject(fakeProjectWithPads([fakePad('pad-1', 0)]))
+
+        applyPadUpdated(instance, {...fakePad('pad-1', 0), defaultColor: 'RED1'})
+
+        expect(checkFeedbacks).toHaveBeenCalledWith([PAD_CURRENT_COLOR_FEEDBACK_ID])
+    })
+
+    it('refreshes pad_name_<n>, in case the pad was renamed too', () => {
+        const {instance, setVariableValues} = createModuleInstance()
+        instance.projectStore.setProject(fakeProjectWithPads([fakePad('pad-1', 0, 'Old name')]))
+
+        applyPadUpdated(instance, {...fakePad('pad-1', 0, 'New name')})
+
+        expect(setVariableValues).toHaveBeenCalledWith(expect.objectContaining({pad_name_1: 'New name'}))
+    })
+
+    it('does nothing when no project is loaded yet', () => {
+        const {instance, setVariableValues, checkFeedbacks} = createModuleInstance()
+
+        applyPadUpdated(instance, {...fakePad('pad-1', 0), defaultColor: 'RED1'})
+
+        expect(setVariableValues).not.toHaveBeenCalled()
+        expect(checkFeedbacks).not.toHaveBeenCalled()
     })
 })

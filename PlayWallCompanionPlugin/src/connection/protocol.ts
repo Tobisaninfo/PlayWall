@@ -27,6 +27,7 @@ export const PROJECT_SETTINGS_UPDATE_CLASS = 'de.tobias.playwall.common.api.proj
 export const PAD_STATUS_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadStatusUpdate'
 export const PAD_REPLACE_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadReplaceUpdate'
 export const PAD_SWAP_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadSwapUpdate'
+export const PAD_UPDATE_CLASS = 'de.tobias.playwall.common.api.pad.update.PadUpdate'
 export const PAD_PLAY_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.PadPlayRequest'
 export const PAD_STOP_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.PadStopRequest'
 export const ALL_PADS_STOP_REQUEST_CLASS = 'de.tobias.playwall.common.api.pad.request.AllPadsStopRequest'
@@ -141,6 +142,15 @@ export const PAD_REPLACE_UPDATE = BASE_ENVELOPE.extend({
 export const PAD_SWAP_UPDATE = BASE_ENVELOPE.extend({
     pad1: z.string(),
     pad2: z.string(),
+})
+
+/**
+ * Broadcast whenever a pad's own settings (name, colors, fade settings, content, ...) are edited via
+ * PlayWall's Pad Settings dialog — carries the pad's full, freshly saved state, keyed by its (unchanged)
+ * id.
+ */
+export const PAD_UPDATE = BASE_ENVELOPE.extend({
+    pad: PAD_DTO,
 })
 
 export const ERROR_MESSAGE = BASE_ENVELOPE.extend({

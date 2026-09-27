@@ -38,6 +38,18 @@ export function replacePadInProject(project: ProjectDto, newPad: PadDto, targetP
 }
 
 /**
+ * Updates the pad with `updatedPad.id` (wherever it currently is) in place with its fresh data —
+ * mirrors the server's `PadUpdate` broadcast, fired whenever a pad's own settings (name, colors, ...)
+ * are edited via PlayWall's Pad Settings dialog. The id (and therefore position/page) never changes for
+ * this broadcast, unlike `PadReplaceUpdate`, so this is really just `replacePadInProject` with the
+ * pad replacing itself — kept as its own named function since the two broadcasts mean different things.
+ * Returns a new `ProjectDto`; if the pad can't be found, the project is returned unchanged.
+ */
+export function updatePadInProject(project: ProjectDto, updatedPad: PadDto): ProjectDto {
+    return replacePadInProject(project, updatedPad, updatedPad.id)
+}
+
+/**
  * Swaps the positions — and, if they were on different pages, the page membership too — of the two
  * given pads. Mirrors the server's `PadSwapUpdate` broadcast / `ProjectController.swapPad()`. Returns
  * a new `ProjectDto`; if either pad can't be found, the project is returned unchanged.

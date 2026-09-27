@@ -16,6 +16,8 @@ import {
     PAD_STATUS_UPDATE_CLASS,
     PAD_SWAP_UPDATE,
     PAD_SWAP_UPDATE_CLASS,
+    PAD_UPDATE,
+    PAD_UPDATE_CLASS,
     PAGE_CRUD_UPDATE_CLASSES,
     parseEnvelope,
     PROJECT_GET_RESPONSE,
@@ -61,6 +63,8 @@ export interface ClientWebSocketHandlerOptions {
     onPadReplaced: (newPad: PadDto, targetPadId: string) => void
     /** Two pads swapped places via drag & drop on the desktop client. */
     onPadsSwapped: (padId1: string, padId2: string) => void
+    /** A pad's own settings (name, colors, ...) were edited via PlayWall's Pad Settings dialog. */
+    onPadUpdated: (pad: PadDto) => void
     /**
      * A page was added, deleted, inserted, reordered, replaced, or had its settings (name/color)
      * changed on the desktop client. Carries the freshly re-fetched project — unlike
@@ -316,6 +320,9 @@ export class ClientWebSocketHandler {
                 break
             case PAD_SWAP_UPDATE_CLASS:
                 this.parseUpdate(envelope, PAD_SWAP_UPDATE, 'PadSwapUpdate', (data) => this.options.onPadsSwapped(data.pad1, data.pad2))
+                break
+            case PAD_UPDATE_CLASS:
+                this.parseUpdate(envelope, PAD_UPDATE, 'PadUpdate', (data) => this.options.onPadUpdated(data.pad))
                 break
             case ERROR_MESSAGE_CLASS:
                 this.logUnsolicitedError(envelope)

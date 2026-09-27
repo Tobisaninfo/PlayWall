@@ -13,6 +13,7 @@ import {
     PAD_STATUS_UPDATE,
     PAD_STOP_REQUEST_CLASS,
     PAD_SWAP_UPDATE,
+    PAD_UPDATE,
     PROJECT_GET_REQUEST_CLASS,
     PROJECT_GET_RESPONSE,
     PROJECT_LOADED_UPDATE,
@@ -128,6 +129,30 @@ describe('PAD_SWAP_UPDATE schema', () => {
 
         expect(result.success).toBe(true)
         expect(result.success && result.data).toMatchObject({pad1: 'pad-1', pad2: 'pad-2'})
+    })
+})
+
+describe('PAD_UPDATE schema', () => {
+    it('parses a broadcast carrying the pad\'s freshly edited settings, e.g. changed colors', () => {
+        const pad = {
+            id: 'pad-1',
+            position: 0,
+            name: 'Renamed',
+            defaultColor: 'RED1',
+            playColor: 'BLUE1',
+            introColor: null
+        }
+
+        const result = PAD_UPDATE.safeParse({'@class': 'x', messageId: 'm', pad})
+
+        expect(result.success).toBe(true)
+        expect(result.success && result.data.pad).toMatchObject({id: 'pad-1', defaultColor: 'RED1', playColor: 'BLUE1'})
+    })
+
+    it('rejects a broadcast with no pad', () => {
+        const result = PAD_UPDATE.safeParse({'@class': 'x', messageId: 'm'})
+
+        expect(result.success).toBe(false)
     })
 })
 

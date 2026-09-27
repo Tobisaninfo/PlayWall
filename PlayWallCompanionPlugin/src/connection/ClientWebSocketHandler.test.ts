@@ -8,6 +8,7 @@ import {
     PAD_STATUS_UPDATE_CLASS,
     PAD_STOP_REQUEST_CLASS,
     PAD_SWAP_UPDATE_CLASS,
+    PAD_UPDATE_CLASS,
     PROJECT_GET_REQUEST_CLASS,
     PROJECT_GET_RESPONSE_CLASS,
     PROJECT_LOADED_UPDATE_CLASS,
@@ -87,6 +88,7 @@ function createHandler(overrides: Partial<ClientWebSocketHandlerOptionsType> = {
         onPadStatuses: vi.fn(),
         onPadReplaced: vi.fn(),
         onPadsSwapped: vi.fn(),
+        onPadUpdated: vi.fn(),
         onPagesChanged: vi.fn(),
         log: vi.fn(),
         ...overrides,
@@ -634,6 +636,46 @@ describe('ClientWebSocketHandler PadReplaceUpdate / PadSwapUpdate handling', () 
 
         expect(onPadReplaced).not.toHaveBeenCalled()
         expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Received malformed PadReplaceUpdate'))
+
+        handler.destroy()
+    })
+})
+
+describe('ClientWebSocketHandler PadUpdate handling', () => {
+    it('forwards a broadcast pad settings change (e.g. edited colors) to onPadUpdated', () => {
+        const onPadUpdated = vi.fn()
+        const handler = createHandler({onPadUpdated})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        const pad = {
+            id: 'pad-1',
+            position: 0,
+            name: 'Renamed',
+            defaultColor: 'RED1',
+            playColor: 'BLUE1',
+            introColor: null,
+        }
+        socket!.emit('message', JSON.stringify({'@class': PAD_UPDATE_CLASS, messageId: 'm', pad}))
+
+        expect(onPadUpdated).toHaveBeenCalledWith(pad)
+
+        handler.destroy()
+    })
+
+    it('logs a warning instead of calling onPadUpdated for a malformed broadcast', () => {
+        const onPadUpdated = vi.fn()
+        const log = vi.fn()
+        const handler = createHandler({onPadUpdated, log})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        expect(socket).toBeDefined()
+
+        socket!.emit('message', JSON.stringify({'@class': PAD_UPDATE_CLASS, messageId: 'm'}))
+
+        expect(onPadUpdated).not.toHaveBeenCalled()
+        expect(log).toHaveBeenCalledWith('warn', expect.stringContaining('Received malformed PadUpdate'))
 
         handler.destroy()
     })

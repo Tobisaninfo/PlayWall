@@ -13,7 +13,7 @@ import {ClientWebSocketHandler, type ConnectionStatus} from './connection/Client
 import type {PadDto, ProjectDto, ProjectMetadata} from './connection/protocol.js'
 import type {PadSelectorOptions} from './domain/padSelector.js'
 import type {PageActionOptions, PageFeedbackOptions} from './domain/pageSelector.js'
-import {replacePadInProject, swapPadsInProject} from './domain/projectMutations.js'
+import {replacePadInProject, swapPadsInProject, updatePadInProject} from './domain/projectMutations.js'
 import {PageNavigationStore} from './domain/pageNavigationStore.js'
 import {PlaybackStore} from './domain/playbackStore.js'
 import {ProjectStore} from './domain/projectStore.js'
@@ -106,6 +106,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
             onPadStatuses: (statuses) => this.handlePadStatuses(statuses),
             onPadReplaced: (newPad, targetPadId) => this.handlePadReplaced(newPad, targetPadId),
             onPadsSwapped: (padId1, padId2) => this.handlePadsSwapped(padId1, padId2),
+            onPadUpdated: (pad) => this.handlePadUpdated(pad),
             onPagesChanged: (project) => this.handlePagesChanged(project),
             log: (level, message) => this.log(level, message),
         })
@@ -224,6 +225,23 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         }
 
         this.projectStore.setProject(swapPadsInProject(project, padId1, padId2))
+        this.refreshPadVariableValues()
+        this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
+    }
+
+    /**
+     * A pad's own settings (name, colors, ...) were edited via PlayWall's Pad Settings dialog. Without
+     * this, an edited pad's `defaultColor`/`playColor` change would never reach Companion's cached
+     * project, so `pad_current_color` would keep showing the pad's old color until something unrelated
+     * (e.g. a page switch) happened to re-fetch the whole project.
+     */
+    private handlePadUpdated(pad: PadDto): void {
+        const project = this.projectStore.getProject()
+        if (!project) {
+            return
+        }
+
+        this.projectStore.setProject(updatePadInProject(project, pad))
         this.refreshPadVariableValues()
         this.checkFeedbacks(PAD_CURRENT_COLOR_FEEDBACK_ID)
     }

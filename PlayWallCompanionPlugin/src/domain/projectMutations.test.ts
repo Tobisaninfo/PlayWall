@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {replacePadInProject, swapPadsInProject} from './projectMutations.js'
+import {replacePadInProject, swapPadsInProject, updatePadInProject} from './projectMutations.js'
 import type {PadDto, PageDto, ProjectDto} from '../connection/protocol.js'
 
 function fakePad(id: string, position: number): PadDto {
@@ -78,5 +78,39 @@ describe('swapPadsInProject', () => {
         const project = fakeProject([fakePage(0, [fakePad('pad-1', 0)])])
 
         expect(swapPadsInProject(project, 'pad-1', 'missing-id')).toBe(project)
+    })
+})
+
+describe('updatePadInProject', () => {
+    it('replaces the pad with the given id with its updated data, in place (same position/page)', () => {
+        const project = fakeProject([fakePage(0, [fakePad('pad-1', 0), fakePad('pad-2', 1)])])
+        const updatedPad: PadDto = {
+            id: 'pad-1',
+            position: 0,
+            name: 'Renamed',
+            defaultColor: 'RED1',
+            playColor: 'BLUE1',
+            introColor: null,
+        }
+
+        const result = updatePadInProject(project, updatedPad)
+
+        expect(result.pages[0]?.pads.map((pad) => pad.id)).toEqual(['pad-1', 'pad-2'])
+        expect(result.pages[0]?.pads[0]).toEqual(updatedPad)
+    })
+
+    it('leaves every other page untouched (same array reference)', () => {
+        const otherPage = fakePage(1, [fakePad('pad-9', 0)])
+        const project = fakeProject([fakePage(0, [fakePad('pad-1', 0)]), otherPage])
+
+        const result = updatePadInProject(project, {...fakePad('pad-1', 0), defaultColor: 'RED1'})
+
+        expect(result.pages[1]).toBe(otherPage)
+    })
+
+    it('returns the project unchanged when the pad id does not exist', () => {
+        const project = fakeProject([fakePage(0, [fakePad('pad-1', 0)])])
+
+        expect(updatePadInProject(project, {...fakePad('missing-id', 0), defaultColor: 'RED1'})).toBe(project)
     })
 })
