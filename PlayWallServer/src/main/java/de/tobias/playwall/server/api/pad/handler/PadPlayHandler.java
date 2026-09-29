@@ -25,7 +25,7 @@ class PadPlayHandler extends PadPlaybackHandler<PadPlayRequest>
 
 		try
 		{
-			if(Boolean.TRUE.equals(isSoloMode))
+			if(Boolean.TRUE.equals(isSoloMode) && isAffectedBySoloMode(controller))
 			{
 				projectController.getPlayingPadControllers().stream()
 						.filter(PadPlayHandler::isAffectedBySoloMode)

@@ -20,6 +20,7 @@ import tools.jackson.databind.json.JsonMapper;
 
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -46,8 +47,10 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 
 	private final AudioHandler audioHandler = mock(AudioHandler.class);
 
-	private static final UUID PAD_ID = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
-	private static final UUID SECOND_PAD_ID = UUID.fromString("fc427184-2e55-4734-8148-5fb657963617");
+	private static final UUID PAD_0_ID = UUID.fromString("3a9edcfd-c4a0-48c5-a34b-d2b9cdc12225");
+	private static final UUID PAD_1_ID = UUID.fromString("895082d5-3655-4aca-96db-818fef99e9ef");
+	private static final UUID PAD_2_ID = UUID.fromString("f55f7691-2842-4d3f-9b64-08ddb0161398");
+	private static final UUID PAD_3_ID = UUID.fromString("c37d6bb6-49a7-4b72-964d-dc9a8571507a");
 
 	@BeforeEach
 	void init()
@@ -91,8 +94,8 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 	{
 		loadProjectWithTwoPads(true);
 
-		handler.handleRequest(new PadPlayRequest(PAD_ID));
-		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_0_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_1_ID));
 
 		verify(audioHandler, times(2)).play();
 		verify(audioHandler).stop();
@@ -100,7 +103,7 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 		assertThat(projectController.getPlayingPadControllers())
 				.extracting(PadController::getPad)
 				.extracting(Pad::getId)
-				.containsExactly(SECOND_PAD_ID);
+				.containsExactly(PAD_1_ID);
 	}
 
 	@Test
@@ -108,8 +111,8 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 	{
 		loadProjectWithTwoPads(false);
 
-		handler.handleRequest(new PadPlayRequest(PAD_ID));
-		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_0_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_1_ID));
 
 		verify(audioHandler, times(2)).play();
 		verify(audioHandler, never()).stop();
@@ -118,53 +121,34 @@ class PadPlayHandlerTest extends AbstractRequestHandlerTest
 	@Test
 	void testPadPlayHandlerInSoloModeDoesNotStopPadsWithIgnoreSoloMode() throws Exception
 	{
-		loadProjectWithTwoPads(true, true);
+		loadProjectWithTwoPads(true);
+		((AudioPadContent) projectController.getPad(PAD_2_ID).getContent()).setIgnoreSoloMode(true);
+		((AudioPadContent) projectController.getPad(PAD_3_ID).getContent()).setIgnoreSoloMode(true);
 
-		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
-		handler.handleRequest(new PadPlayRequest(PAD_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_0_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_1_ID));
+		handler.handleRequest(new PadPlayRequest(PAD_2_ID)); // ignore solo mode
+		handler.handleRequest(new PadPlayRequest(PAD_3_ID)); // ignore solo mode
 
-		verify(audioHandler, times(2)).play();
-		verify(audioHandler, never()).stop();
+		verify(audioHandler, times(4)).play();
+		verify(audioHandler, times(1)).stop();
 
 		assertThat(projectController.getPlayingPadControllers())
 				.extracting(PadController::getPad)
 				.extracting(Pad::getId)
-				.containsExactlyInAnyOrder(PAD_ID, SECOND_PAD_ID);
-	}
-
-	@Test
-	void testPadPlayHandlerInSoloModeDoesNotStopRetriggeredPadWithIgnoreSoloMode() throws Exception
-	{
-		loadProjectWithTwoPads(true, true);
-
-		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
-		handler.handleRequest(new PadPlayRequest(SECOND_PAD_ID));
-
-		verify(audioHandler, times(2)).play();
-		verify(audioHandler, never()).stop();
+				.containsExactlyInAnyOrder(PAD_1_ID, PAD_2_ID, PAD_3_ID);
 	}
 
 	private void loadProjectWithTwoPads(boolean isSoloMode) throws URISyntaxException, ExecutionException, InterruptedException
 	{
-		loadProjectWithTwoPads(isSoloMode, false);
-	}
-
-	private void loadProjectWithTwoPads(boolean isSoloMode, boolean secondPadIgnoresSoloMode) throws URISyntaxException, ExecutionException, InterruptedException
-	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_5.json");
 		project.getMetadata().setIsSoloMode(isSoloMode);
 
-		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString();
-		project.getPad(PAD_ID).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
-
-		final Pad secondPad = Pad.builder()
-				.id(SECOND_PAD_ID)
-				.name("Second Pad")
-				.position(1)
-				.content(AudioPadContent.builder().mediaPath(mediaPath).loop(false).ignoreSoloMode(secondPadIgnoresSoloMode).build())
-				.build();
-		project.getPageByPad(PAD_ID).getPads().add(secondPad);
-
+		final String mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI()).toAbsolutePath().toString().replace("\\", "/");
+		for(UUID id : List.of(PAD_0_ID, PAD_1_ID, PAD_2_ID, PAD_3_ID))
+		{
+			project.getPad(id).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
+		}
 		projectController.loadProject(project).get();
 	}
 
