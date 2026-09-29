@@ -6,7 +6,7 @@ import {
     buildGlobalChangeVolumeRequest,
     buildPadPlayRequest,
     buildPadStopRequest,
-    buildProjectGetRequest,
+    buildProjectGetCurrentRequest,
     buildProjectPageShowRequest,
     ERROR_MESSAGE,
     ERROR_MESSAGE_CLASS,
@@ -20,7 +20,7 @@ import {
     PAD_UPDATE_CLASS,
     PAGE_CRUD_UPDATE_CLASSES,
     parseEnvelope,
-    PROJECT_GET_RESPONSE,
+    PROJECT_GET_CURRENT_RESPONSE,
     PROJECT_LOADED_UPDATE,
     PROJECT_LOADED_UPDATE_CLASS,
     PROJECT_PAGE_SHOWN_UPDATE,
@@ -175,7 +175,7 @@ export class ClientWebSocketHandler {
      * connecting would otherwise never be known.
      */
     private fetchCurrentProject(): void {
-        this.sendRequest(buildProjectGetRequest(), PROJECT_GET_RESPONSE)
+        this.sendRequest(buildProjectGetCurrentRequest(), PROJECT_GET_CURRENT_RESPONSE)
             .then((response) => {
                 this.options.onProjectLoaded(response.project)
                 if (response.padStatusById) {
@@ -235,7 +235,7 @@ export class ClientWebSocketHandler {
 
     /** Re-fetches the project after a page was added/removed/reordered/renamed, via `onPagesChanged`. */
     private refetchProject(): void {
-        this.sendRequest(buildProjectGetRequest(), PROJECT_GET_RESPONSE)
+        this.sendRequest(buildProjectGetCurrentRequest(), PROJECT_GET_CURRENT_RESPONSE)
             .then((response) => {
                 this.options.onPagesChanged(response.project)
             })

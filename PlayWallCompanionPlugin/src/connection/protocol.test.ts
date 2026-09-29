@@ -5,7 +5,7 @@ import {
     buildGlobalChangeVolumeRequest,
     buildPadPlayRequest,
     buildPadStopRequest,
-    buildProjectGetRequest,
+    buildProjectGetCurrentRequest,
     buildProjectPageShowRequest,
     GLOBAL_CHANGE_VOLUME_REQUEST_CLASS,
     PAD_PLAY_REQUEST_CLASS,
@@ -14,8 +14,8 @@ import {
     PAD_STOP_REQUEST_CLASS,
     PAD_SWAP_UPDATE,
     PAD_UPDATE,
-    PROJECT_GET_REQUEST_CLASS,
-    PROJECT_GET_RESPONSE,
+    PROJECT_GET_CURRENT_REQUEST_CLASS,
+    PROJECT_GET_CURRENT_RESPONSE,
     PROJECT_LOADED_UPDATE,
     PROJECT_PAGE_SHOW_REQUEST_CLASS,
     PROJECT_PAGE_SHOWN_UPDATE,
@@ -156,31 +156,30 @@ describe('PAD_UPDATE schema', () => {
     })
 })
 
-describe('buildProjectGetRequest', () => {
-    it('uses the ProjectGetRequest class with a null projectId (the "currently loaded project" query)', () => {
-        const request = buildProjectGetRequest()
+describe('buildProjectGetCurrentRequest', () => {
+    it('uses the ProjectGetCurrentRequest class and carries no extra fields', () => {
+        const request = buildProjectGetCurrentRequest()
 
-        expect(request['@class']).toBe(PROJECT_GET_REQUEST_CLASS)
-        expect(request.projectId).toBeNull()
-        expect(Object.keys(request).sort()).toEqual(['@class', 'messageId', 'projectId'])
+        expect(request['@class']).toBe(PROJECT_GET_CURRENT_REQUEST_CLASS)
+        expect(Object.keys(request).sort()).toEqual(['@class', 'messageId'])
     })
 
     it('generates a fresh messageId on every call', () => {
-        const first = buildProjectGetRequest()
-        const second = buildProjectGetRequest()
+        const first = buildProjectGetCurrentRequest()
+        const second = buildProjectGetCurrentRequest()
 
         expect(first.messageId).not.toBe(second.messageId)
     })
 })
 
-describe('PROJECT_GET_RESPONSE schema', () => {
+describe('PROJECT_GET_CURRENT_RESPONSE schema', () => {
     const project = {
         metadata: {id: 'project-1', name: 'Test project', numberOfHorizontalPads: 5, numberOfVerticalPads: 4},
         pages: [],
     }
 
     it('parses a response for the currently loaded project, including currentPageIndex/padStatusById', () => {
-        const result = PROJECT_GET_RESPONSE.safeParse({
+        const result = PROJECT_GET_CURRENT_RESPONSE.safeParse({
             '@class': 'x',
             messageId: 'm',
             project,
@@ -193,8 +192,8 @@ describe('PROJECT_GET_RESPONSE schema', () => {
         expect(result.success && result.data.padStatusById).toEqual({'pad-1': 'PLAYING'})
     })
 
-    it('accepts a response for a project fetched by id, with no currentPageIndex/padStatusById', () => {
-        const result = PROJECT_GET_RESPONSE.safeParse({'@class': 'x', messageId: 'm', project})
+    it('accepts a response with no currentPageIndex/padStatusById', () => {
+        const result = PROJECT_GET_CURRENT_RESPONSE.safeParse({'@class': 'x', messageId: 'm', project})
 
         expect(result.success).toBe(true)
         expect(result.success && result.data.currentPageIndex).toBeUndefined()

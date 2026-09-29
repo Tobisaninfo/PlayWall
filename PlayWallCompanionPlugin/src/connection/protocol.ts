@@ -17,8 +17,8 @@ export function parseEnvelope(raw: unknown): BaseEnvelope {
 }
 
 // Fully qualified Java class names used as "@class" discriminators, see PlayWallCommon.
-export const PROJECT_GET_REQUEST_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectGetRequest'
-export const PROJECT_GET_RESPONSE_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectGetResponse'
+export const PROJECT_GET_CURRENT_REQUEST_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectGetCurrentRequest'
+export const PROJECT_GET_CURRENT_RESPONSE_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectGetCurrentResponse'
 export const PROJECT_LOADED_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectLoadedUpdate'
 export const PROJECT_PAGE_SHOWN_UPDATE_CLASS = 'de.tobias.playwall.common.api.project.update.ProjectPageShownUpdate'
 export const PROJECT_PAGE_SHOW_REQUEST_CLASS = 'de.tobias.playwall.common.api.project.request.ProjectPageShowRequest'
@@ -102,11 +102,10 @@ const PROJECT_DTO = z.looseObject({
 
 export type ProjectDto = z.infer<typeof PROJECT_DTO>
 
-export const PROJECT_GET_RESPONSE = BASE_ENVELOPE.extend({
+export const PROJECT_GET_CURRENT_RESPONSE = BASE_ENVELOPE.extend({
     project: PROJECT_DTO,
     currentPageIndex: z.number().nullish(),
-    // Keyed by pad id (UUID string). Only populated together with `currentPageIndex` — see
-    // ProjectGetResponse.java.
+    // Keyed by pad id (UUID string).
     padStatusById: z.record(z.string(), z.string()).nullish(),
 })
 
@@ -160,11 +159,10 @@ export const ERROR_MESSAGE = BASE_ENVELOPE.extend({
 
 export type ErrorMessageEnvelope = z.infer<typeof ERROR_MESSAGE>
 
-export function buildProjectGetRequest(): { '@class': string; messageId: string; projectId: null } {
+export function buildProjectGetCurrentRequest(): { '@class': string; messageId: string } {
     return {
-        '@class': PROJECT_GET_REQUEST_CLASS,
+        '@class': PROJECT_GET_CURRENT_REQUEST_CLASS,
         messageId: randomUUID(),
-        projectId: null,
     }
 }
 

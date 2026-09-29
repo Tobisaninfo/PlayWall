@@ -6,7 +6,6 @@ import de.tobias.playwall.common.net.ResponseMessage;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.api.project.ProjectNotExistsException;
-import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectRepository;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.storage.PathProvider;
@@ -85,58 +84,5 @@ class ProjectGetHandlerTest extends AbstractRequestHandlerTest
 		final ProjectGetRequest request = new ProjectGetRequest(projectId);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(ProjectNotExistsException.class);
-	}
-
-	@Test
-	void testProjectGetRequestWithoutIdReturnsLoadedProject() throws Exception
-	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
-		projectController.loadProject(project).get();
-		projectController.setCurrentPageIndex(2);
-
-		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(null));
-
-		assertThat(response).isNotEmpty();
-		final ProjectGetResponse projectGetResponse = (ProjectGetResponse) response.get();
-		assertThat(projectGetResponse.getProject().metadata().id()).isEqualTo(projectId);
-		assertThat(projectGetResponse.getCurrentPageIndex()).isEqualTo(2);
-	}
-
-	@Test
-	void testProjectGetRequestByIdDoesNotReturnCurrentPageIndex() throws Exception
-	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		final UUID projectId = UUID.fromString("a09d1f3c-2384-4ee5-b13d-07f428efe35c");
-		when(projectRepository.loadProject(projectId)).thenReturn(project);
-		projectController.loadProject(project).get();
-		projectController.setCurrentPageIndex(2);
-
-		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(projectId));
-
-		assertThat(response).isNotEmpty();
-		final ProjectGetResponse projectGetResponse = (ProjectGetResponse) response.get();
-		assertThat(projectGetResponse.getCurrentPageIndex()).isNull();
-		assertThat(projectGetResponse.getPadStatusById()).isNull();
-	}
-
-	@Test
-	void testProjectGetRequestWithoutIdReturnsPadStatuses() throws Exception
-	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
-		projectController.loadProject(project).get();
-
-		final Optional<ResponseMessage> response = handler.handleRequest(new ProjectGetRequest(null));
-
-		assertThat(response).isNotEmpty();
-		assertThat(((ProjectGetResponse) response.get()).getPadStatusById()).isEqualTo(projectController.getAllPadStatusById());
-	}
-
-	@Test
-	void testProjectGetRequestWithoutIdAndNoProjectLoaded()
-	{
-		final ProjectGetRequest request = new ProjectGetRequest(null);
-		assertThatThrownBy(() -> handler.handleRequest(request))
-				.isInstanceOf(ProjectNotLoadedException.class);
 	}
 }

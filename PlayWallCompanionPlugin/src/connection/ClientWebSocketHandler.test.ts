@@ -9,8 +9,8 @@ import {
     PAD_STOP_REQUEST_CLASS,
     PAD_SWAP_UPDATE_CLASS,
     PAD_UPDATE_CLASS,
-    PROJECT_GET_REQUEST_CLASS,
-    PROJECT_GET_RESPONSE_CLASS,
+    PROJECT_GET_CURRENT_REQUEST_CLASS,
+    PROJECT_GET_CURRENT_RESPONSE_CLASS,
     PROJECT_LOADED_UPDATE_CLASS,
     PROJECT_NOT_LOADED_ERROR_CLASS,
     PROJECT_PAGE_SHOW_REQUEST_CLASS,
@@ -305,7 +305,7 @@ describe('ClientWebSocketHandler page-CRUD refetch', () => {
 
         expect(socket!.sent).toHaveLength(1)
         const refetchRequest = JSON.parse(socket!.sent[0]) as { messageId: string; '@class': string }
-        expect(refetchRequest['@class']).toBe(PROJECT_GET_REQUEST_CLASS)
+        expect(refetchRequest['@class']).toBe(PROJECT_GET_CURRENT_REQUEST_CLASS)
 
         const project = {
             metadata: {id: 'project-1', name: 'Test project', numberOfHorizontalPads: 5, numberOfVerticalPads: 4},
@@ -313,7 +313,11 @@ describe('ClientWebSocketHandler page-CRUD refetch', () => {
         }
         socket!.emit(
             'message',
-            JSON.stringify({'@class': PROJECT_GET_RESPONSE_CLASS, messageId: refetchRequest.messageId, project}),
+            JSON.stringify({
+                '@class': PROJECT_GET_CURRENT_RESPONSE_CLASS,
+                messageId: refetchRequest.messageId,
+                project
+            }),
         )
         // sendRequest()'s Promise resolves synchronously, but the .then() handler that calls
         // onPagesChanged only runs on a later microtask.
@@ -341,7 +345,7 @@ describe('ClientWebSocketHandler connect() -> fetchCurrentProject on open', () =
 
         expect(socket!.sent).toHaveLength(1)
         const request = JSON.parse(socket!.sent[0]) as { messageId: string; '@class': string }
-        expect(request['@class']).toBe(PROJECT_GET_REQUEST_CLASS)
+        expect(request['@class']).toBe(PROJECT_GET_CURRENT_REQUEST_CLASS)
 
         const project = {
             metadata: {id: 'project-1', name: 'Test project', numberOfHorizontalPads: 5, numberOfVerticalPads: 4},
@@ -350,7 +354,7 @@ describe('ClientWebSocketHandler connect() -> fetchCurrentProject on open', () =
         socket!.emit(
             'message',
             JSON.stringify({
-                '@class': PROJECT_GET_RESPONSE_CLASS,
+                '@class': PROJECT_GET_CURRENT_RESPONSE_CLASS,
                 messageId: request.messageId,
                 project,
                 currentPageIndex: 2,
@@ -379,7 +383,7 @@ describe('ClientWebSocketHandler connect() -> fetchCurrentProject on open', () =
         socket!.emit(
             'message',
             JSON.stringify({
-                '@class': PROJECT_GET_RESPONSE_CLASS,
+                '@class': PROJECT_GET_CURRENT_RESPONSE_CLASS,
                 messageId: request.messageId,
                 project: {
                     metadata: {
