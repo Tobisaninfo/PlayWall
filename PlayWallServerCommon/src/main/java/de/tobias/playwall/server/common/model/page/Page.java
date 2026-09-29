@@ -59,6 +59,13 @@ public class Page
 
 	public void insertPad(Pad pad)
 	{
-		pads.add(pad.getPosition(), pad);
+		if(pad.getPosition() > pads.size())
+		{
+			pads.add(pad);
+		}
+		else
+		{
+			pads.add(pad.getPosition(), pad);
+		}
 	}
 }

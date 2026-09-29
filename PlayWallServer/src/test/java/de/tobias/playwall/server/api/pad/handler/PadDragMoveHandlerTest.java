@@ -76,6 +76,7 @@ class PadDragMoveHandlerTest extends AbstractUndoableRequestHandlerTest<PadDragM
 	{
 		return Stream.of(
 				of(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"), UUID.fromString("efb30a6f-593b-4a15-94db-faa2d4117e4f")),
+				of(UUID.fromString("efb30a6f-593b-4a15-94db-faa2d4117e4f"), UUID.fromString("fc427184-2e55-4734-8148-5fb657963616")),
 				of(UUID.fromString("fc427184-2e55-4734-8148-5fb657963616"), UUID.fromString("eff6cf01-20a3-4690-a6dd-395f0daf04de"))
 		);
 	}
