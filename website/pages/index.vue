@@ -6,7 +6,7 @@ usePageSeo('home.title', 'home.subtitle')
 </script>
 
 <template>
-  <section class="relative isolate flex min-h-[92vh] flex-col overflow-hidden">
+  <section class="relative isolate flex min-h-full flex-col overflow-hidden">
     <img
         src="/screenshots/pad-grid.png"
         :alt="t('home.heroAlt')"

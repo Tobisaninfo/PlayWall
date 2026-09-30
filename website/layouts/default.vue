@@ -1,7 +1,17 @@
+<script setup lang="ts">
+const localePath = useLocalePath()
+const route = useRoute()
+
+const isHome = computed(() => route.path === localePath('index'))
+</script>
+
 <template>
-  <div class="flex min-h-screen flex-col bg-pw-bg text-pw-text">
+  <div
+      class="flex flex-col bg-pw-bg text-pw-text"
+      :class="isHome ? 'h-screen' : 'min-h-screen'"
+  >
     <AppNav/>
-    <main class="flex-1">
+    <main class="min-h-0 flex-1">
       <slot/>
     </main>
     <AppFooter/>
