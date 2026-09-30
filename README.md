@@ -234,6 +234,37 @@ SASS is compiled automatically during the build via the Maven dart-sass plugin (
 
 ![scenebuilder_3.jpg](doc/scenebuilder_3.jpg)
 
+## Debugging
+
+### Client
+
+Start the client with the `--debug` flag to enable two additional keyboard shortcuts:
+
+```bash
+mvn javafx:run -pl PlayWallClient -Dexec.args="--debug"
+```
+
+| Shortcut (Win/Linux) | Shortcut (macOS) | Action                                                                                                                                    |
+|----------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `Ctrl+Shift+F12`     | `Cmd+Shift+F12`  | Open [ScenicView](https://github.com/JonathanGiles/scenic-view), a live inspector for the JavaFX scene graph (node tree, CSS, properties) |
+| `Ctrl+Shift+F11`     | `Cmd+Shift+F11`  | Copy the currently loaded project as JSON to the system clipboard                                                                         |
+
+The "Debug" checkbox in the program settings is unrelated to the shortcuts above — it only raises the log level
+to `DEBUG` on the next launch (via a flag file in the config directory), which can also be filtered live in the
+in-app log viewer.
+
+### Server
+
+The server exposes a debug-only REST endpoint that dumps the currently loaded project:
+
+```
+GET http://localhost:10023/debug/current-project
+```
+
+It returns the server-side `Project` domain model as JSON (no authentication, no parameters). There is no
+`server.servlet.context-path` configured, so the endpoint is reachable directly under the server's root, alongside
+port `10023` from [Run](#run).
+
 ## MacOS Signing
 
 ### Prerequisites
