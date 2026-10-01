@@ -56,7 +56,7 @@
         <testfx-core.version>4.0.18</testfx-core.version>
         <openjfx-monocle.version>21.0.2</openjfx-monocle.version>
         <awaitility.version>4.3.0</awaitility.version>
-        <instancio-core.version>6.0.1</instancio-core.version>
+        <instancio-core.version>6.1.0</instancio-core.version>
 
         <!-- Companion plugin (Node.js/TypeScript, wrapped for the Maven reactor) -->
         <frontend-maven-plugin.version>1.15.4</frontend-maven-plugin.version>
