@@ -59,7 +59,7 @@
         <instancio-core.version>6.1.0</instancio-core.version>
 
         <!-- Companion plugin (Node.js/TypeScript, wrapped for the Maven reactor) -->
-        <frontend-maven-plugin.version>1.15.4</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>2.0.2</frontend-maven-plugin.version>
         <companion-plugin.node.version>v22.23.2</companion-plugin.node.version>
 
         <maven-compiler.version>3.16.0</maven-compiler.version>
