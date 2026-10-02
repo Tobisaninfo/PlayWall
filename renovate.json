@@ -39,6 +39,19 @@
                 "major"
             ],
             "enabled": false
+        },
+        {
+            "description": "typescript 7 not supported jet",
+            "matchFileNames": [
+                "website"
+            ],
+            "matchPackageNames": [
+                "typescript"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "enabled": false
         }
     ]
 }
