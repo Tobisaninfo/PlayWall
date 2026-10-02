@@ -13,6 +13,11 @@
     <artifactId>PlayWallNativeAudioRust</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <sonar.sources>src</sonar.sources>
+        <sonar.exclusions>target/**</sonar.exclusions>
+    </properties>
+
     <profiles>
         <profile>
             <id>build-rust</id>
