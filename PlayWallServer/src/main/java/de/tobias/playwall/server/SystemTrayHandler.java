@@ -6,12 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.context.MessageSource;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
-import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @Component
@@ -23,6 +24,7 @@ public class SystemTrayHandler
 	private Menu clientMenu;
 
 	private final BuildProperties buildProperties;
+	private final MessageSource messageSource;
 
 	@EventListener(ApplicationStartedEvent.class)
 	public void onApplicationStarted(ApplicationStartedEvent event)
@@ -39,17 +41,17 @@ public class SystemTrayHandler
 
 		final PopupMenu popup = new PopupMenu();
 
-		final MenuItem aboutItem = new MenuItem(MessageFormat.format("PlayWall Server v{0}", buildProperties.getVersion()));
+		final MenuItem aboutItem = new MenuItem(getMessage("system.tray.about", buildProperties.getVersion()));
 		popup.add(aboutItem);
 
 		popup.addSeparator();
 
-		clientMenu = new Menu("0 Verbundene Clients");
+		clientMenu = new Menu(getMessage("system.tray.clients", 0));
 		popup.add(clientMenu);
 
 		popup.addSeparator();
 
-		final MenuItem exitItem = new MenuItem("Beenden");
+		final MenuItem exitItem = new MenuItem(getMessage("system.tray.exit"));
 		exitItem.addActionListener(e -> System.exit(0));
 		popup.add(exitItem);
 
@@ -76,12 +78,17 @@ public class SystemTrayHandler
 			return;
 		}
 
-		clientMenu.setLabel(MessageFormat.format("{0} Verbundene Clients", clientAddresses.size()));
+		clientMenu.setLabel(getMessage("system.tray.clients", clientAddresses.size()));
 		clientMenu.removeAll();
 
 		for(String clientAddress : clientAddresses)
 		{
 			clientMenu.add(new MenuItem(clientAddress));
 		}
+	}
+
+	private String getMessage(String key, Object... args)
+	{
+		return messageSource.getMessage(key, args, Locale.getDefault());
 	}
 }
