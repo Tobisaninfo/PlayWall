@@ -15,8 +15,7 @@
 
     <properties>
         <sonar.sources>src</sonar.sources>
-        <sonar.exclusions>src/domain/modernColorPalette.generated.ts,dist/**,node_modules/**,pkg/**,**/*.test.ts
-        </sonar.exclusions>
+        <sonar.exclusions>**/*.generated.ts,dist/**,node_modules/**,pkg/**,**/*.test.ts</sonar.exclusions>
         <sonar.tests>src</sonar.tests>
         <sonar.test.inclusions>**/*.test.ts</sonar.test.inclusions>
         <sonar.javascript.lcov.reportPaths>${project.build.directory}/coverage/lcov.info

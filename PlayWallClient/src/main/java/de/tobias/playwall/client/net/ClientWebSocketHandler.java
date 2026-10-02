@@ -14,15 +14,20 @@ import tools.jackson.databind.json.JsonMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
 import java.net.http.WebSocket;
+import java.net.http.WebSocketHandshakeException;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 
 @Service
 @Slf4j
 class ClientWebSocketHandler implements WebSocket.Listener
 {
+	private static final String REJECT_REASON_HEADER = "X-Reject-Reason";
+
 	private final JsonMapper objectMapper;
 	private final ResponseQueue responseQueue;
 
@@ -57,9 +62,25 @@ class ClientWebSocketHandler implements WebSocket.Listener
 			webSocketBuilder = webSocketBuilder.header(entry.getKey(), entry.getValue());
 		}
 
-		this.ws = webSocketBuilder
-				.buildAsync(URI.create(url), this)
-				.join();
+		try
+		{
+			this.ws = webSocketBuilder
+					.buildAsync(URI.create(url), this)
+					.join();
+		}
+		catch(CompletionException e)
+		{
+			if(e.getCause() instanceof WebSocketHandshakeException handshakeException)
+			{
+				final HttpResponse<?> response = handshakeException.getResponse();
+				final String reason = response.headers().firstValue(REJECT_REASON_HEADER).orElse(null);
+				if(response.statusCode() == 400 && reason != null)
+				{
+					throw new ServerRejectedException(reason);
+				}
+			}
+			throw e;
+		}
 	}
 
 	public void disconnect()

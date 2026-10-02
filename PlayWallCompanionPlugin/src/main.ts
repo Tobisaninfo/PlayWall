@@ -97,7 +97,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
             port: this.config.port,
             useTls: this.config.useTls,
             reconnectDelaySeconds: this.config.reconnectDelaySeconds,
-            onStatusChange: (status) => this.handleStatusChange(status),
+            onStatusChange: (status, message) => this.handleStatusChange(status, message),
             onProjectLoaded: (project) => this.handleProjectLoaded(project),
             onProjectCleared: () => this.handleProjectCleared(),
             onPageShown: (index) => this.handlePageShown(index),
@@ -254,7 +254,7 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
         UpdatePageVariableValues(this, this.projectStore.getProject(), this.pageNavigationStore.getActivePage())
     }
 
-    private handleStatusChange(status: ConnectionStatus): void {
+    private handleStatusChange(status: ConnectionStatus, message?: string): void {
         switch (status) {
             case 'connecting':
                 this.updateStatus(InstanceStatus.Connecting)
@@ -264,6 +264,9 @@ export default class ModuleInstance extends InstanceBase<ModuleSchema> {
                 break
             case 'disconnected':
                 this.updateStatus(InstanceStatus.ConnectionFailure)
+                break
+            case 'rejected':
+                this.updateStatus(InstanceStatus.UnknownWarning, message)
                 break
         }
 

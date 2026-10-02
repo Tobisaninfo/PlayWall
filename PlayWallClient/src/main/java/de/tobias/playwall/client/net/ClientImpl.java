@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.net;
 
+import de.thecodelabs.utils.application.App;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
 import de.tobias.playwall.client.domain.pad.Pad;
@@ -47,6 +48,7 @@ class ClientImpl implements Client
 	private final ColorMapper colorMapper;
 
 	private final ClientWebSocketHandler clientWebSocketHandler;
+	private final App app;
 
 	@Override
 	public ReadOnlyObjectProperty<ConnectionState> connectionStateProperty()
@@ -60,7 +62,10 @@ class ClientImpl implements Client
 		final String clientId = UUID.randomUUID().toString();
 		log.info("Connect to server with client id {}", clientId);
 
-		clientWebSocketHandler.connect(MapUtils.create(entry("clientId", clientId)));
+		clientWebSocketHandler.connect(MapUtils.create(
+				entry("clientId", clientId),
+				entry("X-Protocol-Version", app.getInfo().getVersion()))
+		);
 		log.info("Connected");
 	}
 
@@ -75,6 +80,12 @@ class ClientImpl implements Client
 			{
 				connect();
 				return;
+			}
+			catch(ServerRejectedException e)
+			{
+				log.error("Server rejected the connection: {}", e.getMessage());
+				clientWebSocketHandler.setConnectionState(ConnectionState.DISCONNECTED);
+				throw e;
 			}
 			catch(Exception e)
 			{

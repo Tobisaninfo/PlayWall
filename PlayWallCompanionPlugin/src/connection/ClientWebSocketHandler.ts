@@ -1,4 +1,5 @@
 import {randomUUID} from 'node:crypto'
+import type {ClientRequest, IncomingMessage} from 'node:http'
 import {WebSocket} from 'ws'
 import {z} from 'zod'
 import {
@@ -31,8 +32,9 @@ import {
     type ProjectDto,
     type ProjectMetadata,
 } from './protocol.js'
+import {MODULE_VERSION} from '../version.generated.js'
 
-export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected'
+export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected' | 'rejected'
 
 function rawDataToString(data: Buffer | ArrayBuffer | Buffer[]): string {
     if (Array.isArray(data)) {
@@ -51,7 +53,7 @@ export interface ClientWebSocketHandlerOptions {
     port: number
     useTls: boolean
     reconnectDelaySeconds: number
-    onStatusChange: (status: ConnectionStatus) => void
+    onStatusChange: (status: ConnectionStatus, message?: string) => void
     onProjectLoaded: (project: ProjectDto) => void
     onProjectCleared: () => void
     onPageShown: (index: number) => void
@@ -140,7 +142,7 @@ export class ClientWebSocketHandler {
         const protocol = this.options.useTls ? 'wss' : 'ws'
         const url = `${protocol}://${this.options.host}:${this.options.port}/websocket`
 
-        const socket = new WebSocket(url, {headers: {clientId: this.clientId}})
+        const socket = new WebSocket(url, {headers: {clientId: this.clientId, 'X-Protocol-Version': MODULE_VERSION}})
         this.socket = socket
 
         socket.on('open', () => {
@@ -153,11 +155,24 @@ export class ClientWebSocketHandler {
             this.handleMessage(rawDataToString(data))
         })
 
+        let rejected = false
+        socket.on('unexpected-response', (request: ClientRequest, response: IncomingMessage) => {
+            rejected = true
+            const header = response.headers['x-reject-reason']
+            const reason = (Array.isArray(header) ? header[0] : header)
+                ?? `Server responded with HTTP ${response.statusCode}`
+            this.options.log('warn', `Connection rejected by the PlayWall server: ${reason}`)
+            this.options.onStatusChange('rejected', reason)
+            request.destroy()
+        })
+
         socket.on('close', () => {
             this.rejectAllPendingRequests(new Error('WebSocket connection was closed'))
 
             if (!this.destroyed) {
-                this.options.onStatusChange('disconnected')
+                if (!rejected) {
+                    this.options.onStatusChange('disconnected')
+                }
                 this.scheduleReconnect()
             }
         })

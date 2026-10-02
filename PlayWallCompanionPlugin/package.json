@@ -7,8 +7,9 @@
     "type": "module",
     "scripts": {
         "sync-colors": "node scripts/generate-modern-color-palette.mjs",
-        "build": "npm run sync-colors && rimraf dist && tsc -p tsconfig.build.json",
-        "dev": "npm run sync-colors && tsc -p tsconfig.build.json --watch",
+        "sync-version": "node scripts/generate-version.mjs",
+        "build": "npm run sync-colors && npm run sync-version && rimraf dist && tsc -p tsconfig.build.json",
+        "dev": "npm run sync-colors && npm run sync-version && tsc -p tsconfig.build.json --watch",
         "package": "npm run build && companion-module-build --output target/playwall",
         "test": "npm run build && vitest run",
         "test:coverage": "npm run build && vitest run --coverage"

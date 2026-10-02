@@ -684,3 +684,37 @@ describe('ClientWebSocketHandler PadUpdate handling', () => {
         handler.destroy()
     })
 })
+
+describe('ClientWebSocketHandler handshake rejection', () => {
+    it('reports the server-provided reason as a rejected status and does not overwrite it with disconnected', () => {
+        const onStatusChange = vi.fn()
+        const handler = createHandler({onStatusChange})
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)!
+        const request = {destroy: vi.fn()}
+
+        socket.emit('unexpected-response', request, {
+            statusCode: 400,
+            headers: {'x-reject-reason': 'Version mismatch: client 1, server 2'},
+        })
+        socket.emit('close')
+
+        expect(onStatusChange).toHaveBeenCalledWith('rejected', 'Version mismatch: client 1, server 2')
+        expect(onStatusChange).not.toHaveBeenCalledWith('disconnected')
+        expect(request.destroy).toHaveBeenCalled()
+
+        handler.destroy()
+    })
+
+    it('falls back to the HTTP status when the server gives no reason', () => {
+        const onStatusChange = vi.fn()
+        const handler = createHandler({onStatusChange})
+        handler.connect()
+
+        FakeWebSocket.instances.at(-1)!.emit('unexpected-response', {destroy: vi.fn()}, {statusCode: 502, headers: {}})
+
+        expect(onStatusChange).toHaveBeenCalledWith('rejected', 'Server responded with HTTP 502')
+
+        handler.destroy()
+    })
+})
