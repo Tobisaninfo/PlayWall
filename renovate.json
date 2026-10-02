@@ -16,6 +16,29 @@
             ],
             "matchCurrentVersion": "!/^0/",
             "automerge": true
+        },
+        {
+            "description": "Node.js version for the Companion plugin is pinned manually",
+            "matchDatasources": [
+                "node-version"
+            ],
+            "matchDepNames": [
+                "node"
+            ],
+            "enabled": false
+        },
+        {
+            "description": "@types/node must match the pinned Node.js major version of the Companion plugin",
+            "matchFileNames": [
+                "PlayWallCompanionPlugin/package.json"
+            ],
+            "matchPackageNames": [
+                "@types/node"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "enabled": false
         }
     ]
 }
