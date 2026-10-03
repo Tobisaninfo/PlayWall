@@ -7,6 +7,7 @@
         "features": "Features",
         "download": "Download",
         "changelog": "Changelog",
+        "companion": "Companion",
         "github": "GitHub",
         "languageSwitch": "English",
         "menuToggle": "Menü öffnen"
@@ -60,6 +61,25 @@
                 "requirements": "glibc 2.38 oder neuer\nz.B. Debian 13+ oder Ubuntu 24.04+"
             }
         }
+    },
+    "companion": {
+        "title": "Companion Plugin",
+        "subtitle": "PlayWall über Bitfocus Companion steuern, z.B. mit einem Stream Deck.",
+        "downloadHeading": "Download",
+        "downloadCta": "Plugin herunterladen",
+        "downloadFile": "playwall.tgz, Version {version}",
+        "unavailable": "Für die aktuelle Version {version} ist noch kein Plugin verfügbar.",
+        "versionNote": "Die Version des Companion Plugins muss mit der PlayWall Version übereinstimmen. Bei unterschiedlichen Versionen wird keine Verbindung hergestellt.",
+        "featuresHeading": "Funktionen",
+        "features": "Kacheln steuern (Play / Stop)\nSeiten in PlayWall wechseln. Per Einstellung kann die Seitenauswahl auch unabhängig von PlayWall erfolgen.\nLautstärke in 5%- oder 10%-Schritten ändern\nAlle Kacheln mit einer Taste sofort stoppen\nButton-Presets und Variablen für flexible Nutzung",
+        "setupHeading": "Einrichtung",
+        "steps": "Companion Plugin herunterladen.\nIn Companion im Bereich „Modules“ das PlayWall Plugin über „Import module package“ hinzufügen.\nUnter „Connections“ die Anbindung zu PlayWall hinzufügen. Laufen PlayWall und Companion auf demselben Computer, können die Standardeinstellungen übernommen werden.",
+        "connectionHeading": "Einstellungen der Connection",
+        "connection": "IP-Adresse und Port des PlayWall Servers\nAutomatisch neu verbinden bei Verbindungsabbruch\nSeitenwechsel synchron oder unabhängig vom PlayWall Client",
+        "presetsHeading": "Presets",
+        "presets": "Kacheln: Presets für die Positionen 1 bis 100\nSeiten: Presets für die Seiten 1 bis 20 sowie „Seite zurück“ und „Seite vor“\nLautstärke: lauter und leiser in 5%-Schritten\nAlle Kacheln stoppen",
+        "variablesHeading": "Variablen",
+        "variables": "$(playwall:pad_name_1), $(playwall:pad_name_2) … Name der Kachel an dieser Position auf der aktiven Seite\n$(playwall:pad_status_1), $(playwall:pad_status_2) … Status der Kachel an dieser Position\n$(playwall:page_name_1), $(playwall:page_name_2) … Name der jeweiligen Seite\n$(playwall:page_active) … Position der aktiven Seite\n$(playwall:current_volume) … aktuelle Lautstärke"
     },
     "changelog": {
         "title": "Changelog",

@@ -7,6 +7,7 @@
         "features": "Features",
         "download": "Download",
         "changelog": "Changelog",
+        "companion": "Companion",
         "github": "GitHub",
         "languageSwitch": "Deutsch",
         "menuToggle": "Open menu"
@@ -60,6 +61,25 @@
                 "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+"
             }
         }
+    },
+    "companion": {
+        "title": "Companion Plugin",
+        "subtitle": "Control PlayWall from Bitfocus Companion, e.g. with a Stream Deck.",
+        "downloadHeading": "Download",
+        "downloadCta": "Download plugin",
+        "downloadFile": "playwall.tgz, version {version}",
+        "unavailable": "No plugin is available yet for the current version {version}.",
+        "versionNote": "The Companion plugin version must always match the PlayWall version. If the versions differ, no connection is established.",
+        "featuresHeading": "Features",
+        "features": "Control pads (play / stop)\nSwitch pages in PlayWall. A setting lets page selection work independently of PlayWall.\nChange the volume in steps of 5% or 10%\nStop all pads instantly with one button\nButton presets and variables for flexible use",
+        "setupHeading": "Setup",
+        "steps": "Download the Companion plugin.\nIn Companion, open \"Modules\" and add the PlayWall plugin via \"Import module package\".\nUnder \"Connections\", add the connection to PlayWall. If PlayWall and Companion run on the same computer, the default settings can be kept.",
+        "connectionHeading": "Connection settings",
+        "connection": "IP address and port of the PlayWall server\nReconnect automatically when the connection drops\nPage changes synchronous with, or independent of, the PlayWall client",
+        "presetsHeading": "Presets",
+        "presets": "Pad: presets for positions 1 to 100\nPages: presets for pages 1 to 20, plus \"previous page\" and \"next page\"\nVolume: louder and quieter in 5% steps\nStop all pads",
+        "variablesHeading": "Variables",
+        "variables": "$(playwall:pad_name_1), $(playwall:pad_name_2) … name of the pad at that position on the active page\n$(playwall:pad_status_1), $(playwall:pad_status_2) … status of the pad at that position\n$(playwall:page_name_1), $(playwall:page_name_2) … name of the respective page\n$(playwall:page_active) … position of the active page\n$(playwall:current_volume) … current volume"
     },
     "changelog": {
         "title": "Changelog",

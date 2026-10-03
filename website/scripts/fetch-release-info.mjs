@@ -5,6 +5,8 @@ import {fileURLToPath} from 'node:url'
 const ARTIFACT_BASE = 'https://maven.thecodelabs.de/artifactory/TheCodeLabs-release/de/tobias/playwall/PlayWallClient'
 const METADATA_URL = `${ARTIFACT_BASE}/maven-metadata.xml`
 const DOWNLOAD_PROXY_BASE = '/downloads'
+const COMPANION_ARTIFACT_BASE = 'https://maven.thecodelabs.de/artifactory/TheCodeLabs-release/de/tobias/playwall/PlayWallCompanionPlugin'
+const COMPANION_PROXY_BASE = '/downloads-companion'
 
 const PLATFORM_SUFFIXES = {
     'windows-amd64': 'installer.exe',
@@ -33,6 +35,16 @@ async function assertReachable(url) {
     }
 }
 
+async function resolveCompanionUrl(version) {
+    const artifactPath = `${version}/PlayWallCompanionPlugin-${version}.tgz`
+    const response = await fetch(`${COMPANION_ARTIFACT_BASE}/${artifactPath}`, {method: 'HEAD'})
+    if (!response.ok) {
+        console.warn(`Companion Plugin für ${version} nicht gefunden (${response.status}), Download wird ausgeblendet`)
+        return null
+    }
+    return `${COMPANION_PROXY_BASE}/${artifactPath}`
+}
+
 async function main() {
     console.log(`Lese ${METADATA_URL} ...`)
     const metadataXml = await fetchText(METADATA_URL)
@@ -53,9 +65,11 @@ async function main() {
         platforms[platformId] = `${DOWNLOAD_PROXY_BASE}/${artifactPath}`
     }
 
+    const companion = await resolveCompanionUrl(version)
+
     const outFile = fileURLToPath(new URL('../assets/release.json', import.meta.url))
     await mkdir(new URL('../assets/', import.meta.url), {recursive: true})
-    await writeFile(outFile, `${JSON.stringify({version, platforms}, null, 2)}\n`)
+    await writeFile(outFile, `${JSON.stringify({version, platforms, companion}, null, 2)}\n`)
 
     console.log(`\n✔ release.json geschrieben: ${outFile}`)
 }

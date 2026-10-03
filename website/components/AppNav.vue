@@ -10,6 +10,7 @@ const navLinks = computed(() => [
   {to: localePath('index'), label: t('nav.home')},
   {to: localePath('features'), label: t('nav.features')},
   {to: localePath('download'), label: t('nav.download')},
+  {to: localePath('companion'), label: t('nav.companion')},
   {to: localePath('changelog'), label: t('nav.changelog')},
 ])
 

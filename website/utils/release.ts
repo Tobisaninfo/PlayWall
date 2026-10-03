@@ -5,6 +5,7 @@ export type PlatformId = 'windows-amd64' | 'macos-arm64' | 'linux-amd64' | 'linu
 export interface ReleaseInfo {
     version: string
     platforms: Record<PlatformId, string>
+    companion: string | null
 }
 
 export const release: ReleaseInfo = releaseData as ReleaseInfo

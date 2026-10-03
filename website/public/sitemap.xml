@@ -38,6 +38,18 @@
         <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/download"/>
     </url>
     <url>
+        <loc>https://playwall.thecodelabs.de/de/companion</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/companion"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/companion"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/companion"/>
+    </url>
+    <url>
+        <loc>https://playwall.thecodelabs.de/en/companion</loc>
+        <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/companion"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/companion"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://playwall.thecodelabs.de/de/companion"/>
+    </url>
+    <url>
         <loc>https://playwall.thecodelabs.de/de/changelog</loc>
         <xhtml:link rel="alternate" hreflang="de" href="https://playwall.thecodelabs.de/de/changelog"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://playwall.thecodelabs.de/en/changelog"/>
