@@ -6,7 +6,6 @@ import de.tobias.playwall.common.api.page.request.PageSettingsUpdateRequest;
 import de.tobias.playwall.common.api.page.update.PageSettingsUpdate;
 import de.tobias.playwall.server.TestUtils;
 import de.tobias.playwall.server.api.AbstractUndoableRequestHandlerTest;
-import de.tobias.playwall.server.api.page.PageNameAlreadyExistsException;
 import de.tobias.playwall.server.api.page.PageNotExistsException;
 import de.tobias.playwall.server.api.project.ProjectNotLoadedException;
 import de.tobias.playwall.server.api.project.ProjectService;
@@ -73,18 +72,6 @@ class PageSettingsUpdateHandlerTest extends AbstractUndoableRequestHandlerTest<P
 				});
 
 		assertThat(project.getPageById(pageId).orElseThrow().getSettings().getName()).isEqualTo("Renamed Page");
-	}
-
-	@Test
-	void testRenamePagePageDuplicatedName() throws Exception
-	{
-		final Project project = TestUtils.loadProject(objectMapper, "projects/project_4.json");
-		projectController.loadProject(project).get();
-
-		final UUID pageId = UUID.fromString("5eee891b-7e4e-451a-b4be-116770f73677");
-		final PageSettingsUpdateRequest request = new PageSettingsUpdateRequest(pageId, new PageSettingsDto("Seite 3", Color.GRAY1));
-		assertThatThrownBy(() -> handler.handleRequest(request))
-				.isInstanceOf(PageNameAlreadyExistsException.class);
 	}
 
 	@Test

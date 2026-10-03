@@ -236,28 +236,6 @@ class MainViewControllerPageTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testPageRenameDuplicateName(FxRobot robot) throws PlayWallApiException
-	{
-		showMainView();
-		context.registerLazy(Stage.class, _ -> new Stage());
-
-		final ContextMenu contextMenu = ((Button) mainViewController.getPageButtons().getChildren().getFirst()).getContextMenu();
-		final MenuItem menuItem = contextMenu.getItems().getFirst();
-		Platform.runLater(() -> robot.interact(menuItem::fire));
-		WaitForAsyncUtils.waitForFxEvents();
-
-		final TextInputControl textInputControl = robot.lookup(".text-input").queryTextInputControl();
-		Platform.runLater(() -> textInputControl.setText("Page 2"));
-		WaitForAsyncUtils.waitForFxEvents();
-		robot.clickOn(robot.lookup("Speichern").queryButton());
-		WaitForAsyncUtils.waitForFxEvents();
-
-		assertThat(robot.lookup(".error-label").queryLabeled()).hasText("Es existiert bereits eine Seite mit diesem Namen.");
-
-		verify(client, never()).updatePageSettings(any(), any());
-	}
-
-	@Test
 	void testPageExport(FxRobot robot) throws PlayWallApiException, IOException
 	{
 		showMainView();
