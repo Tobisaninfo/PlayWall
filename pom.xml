@@ -15,9 +15,9 @@
         <module>PlayWallNativeAudioRust</module>
         <module>PlayWallNativeAudio</module>
         <module>PlayWallServer</module>
+        <module>PlayWallCompanionPlugin</module>
         <module>PlayWallClient</module>
         <module>PlayWallIconOverview</module>
-        <module>PlayWallCompanionPlugin</module>
         <module>coverage</module>
     </modules>
 

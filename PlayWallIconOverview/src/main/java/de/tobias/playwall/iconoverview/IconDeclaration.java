@@ -82,6 +82,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.CIRCLE_ARROW_DOWN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Anzeige - Farbe - Colorpicker"))));
 		data.add(new IconEntry(FontAwesomeType.SLIDERS_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Fade-In/Out"))));
 		data.add(new IconEntry(FontAwesomeType.KEYBOARD_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Mapping"))));
+		data.add(new IconEntry(FontAwesomeType.TABLE_CELLS_LARGE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Companion"))));
 		data.add(new IconEntry(FontAwesomeType.ARROW_TREND_UP_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Fade-In"))));
 		data.add(new IconEntry(FontAwesomeType.ARROW_TREND_DOWN_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Fade-Out"))));
 		data.add(new IconEntry(FontAwesomeType.PEN_SOLID, List.of(new IconUsage(IconUsageCategory.PROJECT_MANAGEMENT, "Projekt löschen"))));

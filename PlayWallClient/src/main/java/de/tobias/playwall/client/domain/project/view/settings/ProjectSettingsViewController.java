@@ -56,6 +56,7 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 		createSettingsCategory(ProjectSettingsDisplayViewController.class, Strings.UI_SETTINGS_PROJECT_VIEW_TITLE, FontAwesomeType.IMAGE_SOLID);
 		createSettingsCategory(ProjectSettingsFadeViewController.class, Strings.UI_SETTINGS_PROJECT_FADE_TITLE, FontAwesomeType.SLIDERS_SOLID);
 		createSettingsCategory(ProjectSettingsMappingViewController.class, Strings.UI_SETTINGS_PROJECT_MAPPING_TITLE, FontAwesomeType.KEYBOARD_SOLID);
+		createSettingsCategory(ProjectSettingsCompanionViewController.class, Strings.UI_SETTINGS_PROJECT_COMPANION_TITLE, FontAwesomeType.TABLE_CELLS_LARGE_SOLID);
 
 		initButtons();
 

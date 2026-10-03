@@ -112,6 +112,10 @@ public class Strings
 	public static final String UI_SETTINGS_PROJECT_VIEW_TITLE = "ui.settings.project.view.title";
 	public static final String UI_SETTINGS_PROJECT_FADE_TITLE = "ui.settings.project.fade.title";
 	public static final String UI_SETTINGS_PROJECT_MAPPING_TITLE = "ui.settings.project.mapping.title";
+	public static final String UI_SETTINGS_PROJECT_COMPANION_TITLE = "ui.settings.project.companion.title";
+	public static final String UI_SETTINGS_PROJECT_COMPANION_UNAVAILABLE = "ui.settings.project.companion.unavailable";
+	public static final String UI_SETTINGS_PROJECT_COMPANION_EXPORT_SUCCESS = "ui.settings.project.companion.export.success";
+	public static final String UI_SETTINGS_PROJECT_COMPANION_EXPORT_ERROR = "ui.settings.project.companion.export.error";
 	public static final String UI_SETTINGS_PROJECT_WARNING_EOF_SEC = "ui.settings.project.warning.eof.sec";
 
 	public static final String UI_SETTINGS_PROJECT_MAPPING_MIDI_DEVICE_DISABLED = "ui.settings.project.mapping.midi.device.disabled";

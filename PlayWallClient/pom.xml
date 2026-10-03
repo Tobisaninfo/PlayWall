@@ -265,6 +265,20 @@
                 </dependencies>
                 <executions>
                     <execution>
+                        <id>copy-companion-plugin</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <copy file="${project.basedir}/../PlayWallCompanionPlugin/target/playwall.tgz"
+                                      tofile="${project.build.outputDirectory}/companion/playwall.tgz"
+                                      failonerror="false"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>generate-scss-colors</id>
                         <phase>generate-resources</phase>
                         <goals>

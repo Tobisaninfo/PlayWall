@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.tobias.playwall.client.view.components.settings.SettingsPage?>
+<?import de.tobias.playwall.client.view.components.settings.SettingsRow?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<SettingsPage fx:id="settingsPage" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS"
+              xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <Label text="%ui.settings.project.companion.description" wrapText="true"/>
+
+    <Separator/>
+
+    <SettingsRow icon="FOLDER_OPEN_SOLID" title="%ui.settings.project.companion.step1.title">
+        <VBox spacing="14">
+            <Label text="%ui.settings.project.companion.step1.description" wrapText="true" prefWidth="400"/>
+            <Button fx:id="buttonExport" mnemonicParsing="false" onAction="#onButtonExport"
+                    text="%ui.settings.project.companion.step1.button"/>
+            <Label fx:id="labelExportResult" wrapText="true" prefWidth="400"/>
+        </VBox>
+    </SettingsRow>
+
+    <Separator/>
+
+    <SettingsRow icon="FILE_IMPORT_SOLID" title="%ui.settings.project.companion.step2.title">
+        <Label text="%ui.settings.project.companion.step2.description" wrapText="true" prefWidth="400"/>
+    </SettingsRow>
+
+    <Separator/>
+
+    <SettingsRow icon="LINK_SOLID" title="%ui.settings.project.companion.step3.title">
+        <Label text="%ui.settings.project.companion.step3.description" wrapText="true" prefWidth="400"/>
+    </SettingsRow>
+
+    <Separator/>
+
+    <Label text="%ui.settings.project.companion.version.note" wrapText="true"/>
+</SettingsPage>
