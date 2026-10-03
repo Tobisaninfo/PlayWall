@@ -11,7 +11,6 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.icon.FontIconType;
 import de.thecodelabs.utils.util.Localization;
-import de.thecodelabs.utils.util.OS;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -456,8 +455,7 @@ public class MainViewController extends ViewControllerBase
 			minWidth = 500;
 		}
 
-		final int menuAndToolbarHeight = OS.isMacOS() ? 100 : 150;
-		return new Size(minWidth, minHeight + menuAndToolbarHeight);
+		return new Size(minWidth, minHeight + toolbar.getHeight());
 	}
 
 	private void updateWindowProperties(Project project)
