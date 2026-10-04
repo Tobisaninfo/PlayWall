@@ -1,5 +1,21 @@
 # Changelog
 
+## 8.3.0 - 2026-10-04
+
+### Features
+
+- PW-159 - Automatic migration of PlayWall artifacts
+- PW-200 - Companion plugin
+- PW-203 - PlayWall website
+- PW-205 - Add license
+- PW-206 - Playback mode for pads
+- PW-214 - Allow pages with the same name
+
+### Bugfixes
+
+- PW-204 - Media replace automatic matching for paths from different operating systems
+- PW-213 - Pad drag & drop swap throws an error
+
 ## 8.2.0 - 2026-09-14
 
 ### Features

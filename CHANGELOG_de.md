@@ -1,5 +1,21 @@
 # Changelog
 
+## 8.3.0 - 2026-10-04
+
+### Features
+
+- PW-159 - Automatische Migration von PlayWall-Artefakten
+- PW-200 - Companion Plugin
+- PW-203 - PlayWall Webseite
+- PW-205 - Lizenz hinzufügen
+- PW-206 - Wiedergabemodus für Kacheln
+- PW-214 - Seiten mit gleichen Namen erlauben
+
+### Bugfixes
+
+- PW-204 - Media Replace automatische Zuordnung bei Pfaden von verschiedenen Betriebssystemen
+- PW-213 - Kachel Drag & Drop Tauschen wirft Fehler
+
 ## 8.2.0 - 2026-09-14
 
 ### Features
