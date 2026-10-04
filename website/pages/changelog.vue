@@ -11,7 +11,7 @@ function formatDate(dateStr: string | null): string | null {
 }
 
 const entries = computed(() =>
-    changelogVersions.map((entry) => ({...entry, formattedDate: formatDate(entry.date)})),
+    getChangelogVersions(locale.value).map((entry) => ({...entry, formattedDate: formatDate(entry.date)})),
 )
 </script>
 

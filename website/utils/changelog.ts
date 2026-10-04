@@ -1,4 +1,5 @@
-import changelogMarkdown from '../../CHANGELOG.md?raw'
+import changelogMarkdownEn from '../../CHANGELOG.md?raw'
+import changelogMarkdownDe from '../../CHANGELOG_de.md?raw'
 
 export interface ChangelogVersion {
     version: string
@@ -48,4 +49,10 @@ export function parseChangelog(markdown: string): ChangelogVersion[] {
     return versions
 }
 
-export const changelogVersions: ChangelogVersion[] = parseChangelog(changelogMarkdown)
+export const changelogVersions: ChangelogVersion[] = parseChangelog(changelogMarkdownEn)
+
+export const changelogVersionsDe: ChangelogVersion[] = parseChangelog(changelogMarkdownDe)
+
+export function getChangelogVersions(locale: string): ChangelogVersion[] {
+    return locale === 'de' ? changelogVersionsDe : changelogVersions
+}

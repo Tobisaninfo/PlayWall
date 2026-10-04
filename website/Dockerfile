@@ -5,7 +5,7 @@ COPY website/package.json website/package-lock.json website/
 RUN cd website && npm ci
 
 COPY doc/ doc/
-COPY CHANGELOG.md .
+COPY CHANGELOG.md CHANGELOG_de.md ./
 COPY website/ website/
 
 WORKDIR /repo/website

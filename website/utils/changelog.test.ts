@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest'
-import {changelogVersions, parseChangelog} from './changelog'
+import {changelogVersions, changelogVersionsDe, getChangelogVersions, parseChangelog} from './changelog'
 
 describe('changelogVersions', () => {
     it('parses every version block in CHANGELOG.md', () => {
@@ -9,7 +9,7 @@ describe('changelogVersions', () => {
 
     it('strips the "PW-<id> - " ticket prefix but keeps the rest of the line intact', () => {
         const entry = changelogVersions.find((v) => v.version === '8.2.0')
-        expect(entry?.features).toContain('Seiteneinstellungen - Farbe')
+        expect(entry?.features).toContain('Page settings - color')
         expect(entry?.features.every((f) => !f.startsWith('PW-'))).toBe(true)
     })
 
@@ -37,5 +37,14 @@ describe('changelogVersions', () => {
     it('still parses a version heading without a date as null (backward-compatible)', () => {
         const versions = parseChangelog('# Changelog\n\n## 9.0.0\n\n### Features\n\n- PW-1 - Test\n')
         expect(versions[0]).toEqual({version: '9.0.0', date: null, features: ['Test'], bugfixes: []})
+    })
+})
+
+describe('getChangelogVersions', () => {
+    it('returns the German changelog for "de" and the English one otherwise', () => {
+        expect(getChangelogVersions('de')).toBe(changelogVersionsDe)
+        expect(getChangelogVersions('en')).toBe(changelogVersions)
+        expect(changelogVersionsDe.find((v) => v.version === '8.2.0')?.features).toContain('Seiteneinstellungen - Farbe')
+        expect(changelogVersionsDe.map((v) => v.version)).toEqual(changelogVersions.map((v) => v.version))
     })
 })
