@@ -2,7 +2,8 @@
   <configuration default="false" name="PlayWallIconOverviewMain" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="de.tobias.playwall.iconoverview.PlayWallIconOverviewMain" />
     <module name="PlayWallIconOverview" />
-    <option name="VM_PARAMETERS" value="--enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx -Djavafx.enablePreview=true -Djavafx.suppressPreviewWarning=true" />
+      <option name="VM_PARAMETERS"
+              value="--enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx"/>
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="de.tobias.playwall.iconoverview.*" />
