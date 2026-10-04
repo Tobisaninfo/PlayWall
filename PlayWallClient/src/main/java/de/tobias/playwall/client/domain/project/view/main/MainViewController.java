@@ -196,7 +196,6 @@ public class MainViewController extends ViewControllerBase
 	private ProgramSettingsViewController programSettingsViewController;
 
 	@Override
-	@SuppressWarnings({"java:S1874", "deprecation"})
 	protected void init()
 	{
 		padGridPane.getStyleClass().add("pad-grid");
@@ -215,11 +214,11 @@ public class MainViewController extends ViewControllerBase
 		HeaderBar.setDragType(projectTitleLabel, HeaderDragType.DRAGGABLE_SUBTREE);
 		HeaderBar.setDragType(logoImageView, HeaderDragType.DRAGGABLE_SUBTREE);
 
-		headerBar.setLeading(headerBox);
+		headerBar.setLeft(headerBox);
 
 		connectionStatusLabel = new Label();
 		connectionStatusLabel.getStyleClass().add("connection-status");
-		headerBar.setTrailing(connectionStatusLabel);
+		headerBar.setRight(connectionStatusLabel);
 
 		loadingOverlay = new LoadingView();
 		loadingOverlay.visibleProperty().addListener((_, _, newValue) -> pageButtons.setLoading(newValue));

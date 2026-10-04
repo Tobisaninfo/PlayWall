@@ -3,8 +3,8 @@
     <option name="MAIN_CLASS_NAME" value="de.tobias.playwall.client.PlayWallMain" />
     <module name="PlayWallClient" />
     <option name="PROGRAM_PARAMETERS" value="--debug --server-path=$ProjectFileDir$/PlayWallClient/target/build/server" />
-    <option name="VM_PARAMETERS"
-            value="--enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx -Djavafx.enablePreview=true -Djavafx.suppressPreviewWarning=true"/>
+      <option name="VM_PARAMETERS"
+              value="--enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx"/>
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="de.tobias.playwall.client.launch.*" />
