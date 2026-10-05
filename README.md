@@ -10,24 +10,24 @@ This project is licensed under GPLv3.
 
 ## Features
 
-### Tiles (Pads)
+### Pads
 
 ![pads.png](doc/screenshots/pad-grid.png)
 
-- Start, pause, and stop playback via the tile
+- Start, pause, and stop playback via the pad
 - Select a media file via file dialog or drag & drop
-- Set a title per tile
-- Set an individual color per tile
-- Show playback progress as a bar on the tile
-- Stop all running tiles with a single action
+- Set a title per pad
+- Set an individual color per pad
+- Show playback progress as a bar on the pad
+- Stop all running pads with a single action
 
 ### Playback & Volume
 
 ![pads.png](doc/screenshots/pad-grid.png)
 
 - Adjust playback speed per track
-- Set global volume for all tiles
-- Set volume per tile
+- Set global volume for all pads
+- Set volume per pad
 - Loop playback of a track
 - Select a sound card as output device
 - Show a warning shortly before a track ends
@@ -47,7 +47,7 @@ This project is licensed under GPLv3.
 
 - Define grid layout in rows and columns
 - Configure project display options
-- Set a default color for tiles in the project
+- Set a default color for pads in the project
 
 ### Page Management
 
@@ -62,8 +62,8 @@ This project is licensed under GPLv3.
 
 ![pad-drag.png](doc/screenshots/pad-drag.png)
 
-- Move or duplicate tiles via drag & drop
-- Swap two tiles via drag & drop
+- Move or duplicate pads via drag & drop
+- Swap two pads via drag & drop
 - Add media files via drag & drop from the file system
 
 ### Fading
@@ -71,7 +71,7 @@ This project is licensed under GPLv3.
 ![fading.png](doc/screenshots/fading.png)
 
 - Global fading settings at the project level
-- Individual fading settings at the tile level
+- Individual fading settings at the pad level
 - Fade in on start and fade out on stop
 
 ### Keyboard & MIDI Control
@@ -82,8 +82,13 @@ This project is licensed under GPLv3.
 - Record a key combination instead of entering it manually
 - Select a MIDI device
 - Learn MIDI keys and assign them to an action
-- Trigger tiles, page switching, global volume, and stop-all via keyboard or MIDI
-- Show the status of tiles, pages, and volume via LED feedback on the MIDI controller
+- Trigger pads, page switching, global volume, and stop-all via keyboard or MIDI
+- Show the status of pads, pages, and volume via LED feedback on the MIDI controller
+
+### Companion Plugin
+
+- Control PlayWall using Bitfocus Companion Plugin
+- Trigger pads, page switching, global volume, and stop-all
 
 ### Handling Missing Media Files
 

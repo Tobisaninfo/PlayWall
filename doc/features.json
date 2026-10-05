@@ -38,6 +38,7 @@
                     "Globale Lautstärke für alle Kacheln",
                     "Lautstärke pro Kachel einstellen",
                     "Titel in Dauerschleife (Loop) abspielen",
+                    "Zwei verschiedene Wiedergabemodi (Solo und Parallel)",
                     "Soundkarte als Ausgabegerät auswählen",
                     "Warnung kurz vor Ende eines Titels anzeigen",
                     "Dauer der Ramp-In-Phase einstellen"
@@ -51,6 +52,7 @@
                     "Set global volume for all pads",
                     "Set volume per pad",
                     "Loop playback of a track",
+                    "Two different playback modes (solo and parallel)",
                     "Select a sound card as output device",
                     "Show a warning shortly before a track ends",
                     "Set the duration of the ramp-in phase"
@@ -129,7 +131,7 @@
             "id": "keyboard-midi-control",
             "screenshot": "mapping.png",
             "de": {
-                "title": "Steuerung per Tastatur & MIDI",
+                "title": "Steuerung per Tastatur & MIDI und Companion Plugin",
                 "description": "Bedienung von PlayWall über Tastatur oder ein angeschlossenes MIDI-Gerät.",
                 "features": [
                     "Einstellungsbereich zum Verwalten der Tastatur- und MIDI-Zuordnungen",
@@ -137,11 +139,12 @@
                     "MIDI-Gerät auswählen",
                     "MIDI-Tasten aufzeichnen und einer Aktion zuordnen",
                     "Kacheln, Seitenwechsel, globale Lautstärke und Stop-All lassen sich per Tastatur oder MIDI auslösen",
-                    "Status von Kacheln, Seiten und Lautstärke wird per LED-Feedback am MIDI-Controller angezeigt (bei unterstützten Geräten)"
+                    "Status von Kacheln, Seiten und Lautstärke wird per LED-Feedback am MIDI-Controller angezeigt (bei unterstützten Geräten)",
+                    "Steuerung von PlayWall über Bitfocus Companion Plugin"
                 ]
             },
             "en": {
-                "title": "Keyboard & MIDI Control",
+                "title": "Keyboard & MIDI Control and Companion Plugin",
                 "description": "Operate PlayWall via keyboard or a connected MIDI device.",
                 "features": [
                     "Settings area for managing keyboard and MIDI mappings",
@@ -149,7 +152,8 @@
                     "Select a MIDI device",
                     "Record MIDI keys and assign them to an action",
                     "Trigger pads, page switching, global volume, and stop-all via keyboard or MIDI",
-                    "Show the status of pads, pages, and volume via LED feedback on the MIDI controller (for supported devices)r"
+                    "Show the status of pads, pages, and volume via LED feedback on the MIDI controller (for supported devices)",
+                    "Control PlayWall via Bitfocus Companion Plugin"
                 ]
             }
         },
