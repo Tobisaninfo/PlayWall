@@ -112,6 +112,14 @@ Standard Spring Boot layering:
 - `net/` — WebSocket configuration and message handlers
 - `config/` — Spring beans and configuration
 
+**Network viewer:** `http://localhost:10023/network-viewer` shows every request/response/update message the server
+sees, with client `ip:port`, execution time (request → response, correlated via `messageId`) and the JSON payload.
+`AnnotatedExceptionTextWebSocketHandler` feeds `NetworkLogService` (`net/inspector/`, in-memory ring buffer);
+`NetworkViewerStreamHandler` pushes new entries to the page (`/network-viewer/stream`), `NetworkLogController` serves
+the history (`/api/network-log`). Only reachable from loopback (`LocalhostOnlyFilter`). Properties:
+`de.tobias.playwall.network-inspector.enabled` (default `true`) and `...max-entries` (default `5000`). Payloads over
+256 KB are truncated.
+
 Projects are stored as files in `{appdata}/PlayWall/de.tobias.playwall.server.v8/` — there is no database.
 
 ### Companion Plugin Architecture

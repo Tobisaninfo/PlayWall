@@ -2,6 +2,7 @@ package de.tobias.playwall.server.config;
 
 import de.tobias.playwall.server.net.ProtocolVersionHandshakeInterceptor;
 import de.tobias.playwall.server.net.ServerWebSocketHandler;
+import de.tobias.playwall.server.net.inspector.NetworkViewerStreamHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ public class WebSocketConfig implements WebSocketConfigurer
 {
 	private final ServerWebSocketHandler serverWebSocketHandler;
 	private final ProtocolVersionHandshakeInterceptor protocolVersionHandshakeInterceptor;
+	private final NetworkViewerStreamHandler networkViewerStreamHandler;
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry)
@@ -25,6 +27,8 @@ public class WebSocketConfig implements WebSocketConfigurer
 		registry.addHandler(serverWebSocketHandler, "/websocket")
 				.addInterceptors(protocolVersionHandshakeInterceptor)
 				.setAllowedOrigins("*");
+
+		registry.addHandler(networkViewerStreamHandler, "/network-viewer/stream");
 	}
 
 	@Bean

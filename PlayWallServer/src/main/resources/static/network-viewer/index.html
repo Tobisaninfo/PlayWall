@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>PlayWall Network Viewer</title>
+        <style>
+            :root {
+                --bg: #fff;
+                --fg: #1d1d1f;
+                --muted: #6e6e73;
+                --line: #e2e2e7;
+                --panel: #f6f6f8;
+                --sel: #dbe8ff;
+                --req: #0a6cff;
+                --res: #1a8a3a;
+                --upd: #b26a00;
+                --err: #d12f2f
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --bg: #1c1c1e;
+                    --fg: #f2f2f7;
+                    --muted: #98989f;
+                    --line: #38383a;
+                    --panel: #2a2a2d;
+                    --sel: #26385c;
+                    --req: #5aa2ff;
+                    --res: #4cc46b;
+                    --upd: #f0a63a;
+                    --err: #ff6b6b
+                }
+            }
+
+            * {
+                box-sizing: border-box
+            }
+
+            body {
+                margin: 0;
+                background: var(--bg);
+                color: var(--fg);
+                font: 13px system-ui, sans-serif;
+                display: flex;
+                flex-direction: column;
+                height: 100vh
+            }
+
+            header {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px 12px;
+                align-items: center;
+                padding: 8px 12px;
+                border-bottom: 1px solid var(--line);
+                background: var(--panel)
+            }
+
+            header label {
+                display: inline-flex;
+                gap: 4px;
+                align-items: center
+            }
+
+            input, select, button {
+                font: inherit;
+                color: inherit;
+                background: var(--bg);
+                border: 1px solid var(--line);
+                border-radius: 6px;
+                padding: 4px 8px
+            }
+
+            button {
+                cursor: pointer
+            }
+
+            #status {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--err)
+            }
+
+            #status.on {
+                background: var(--res)
+            }
+
+            #count {
+                color: var(--muted);
+                margin-left: auto
+            }
+
+            main {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                min-height: 0;
+                min-width: 0
+            }
+
+            #list {
+                flex: 1 1 0;
+                overflow: auto;
+                min-width: 0
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%
+            }
+
+            th {
+                position: sticky;
+                top: 0;
+                background: var(--panel);
+                text-align: left;
+                padding: 4px 8px;
+                border-bottom: 1px solid var(--line);
+                font-weight: 600
+            }
+
+            td {
+                padding: 3px 8px;
+                border-bottom: 1px solid var(--line);
+                white-space: nowrap;
+                font-variant-numeric: tabular-nums
+            }
+
+            tr.row {
+                cursor: pointer
+            }
+
+            tr.row.sel {
+                background: var(--sel)
+            }
+
+            tr.row.resp td.type {
+                padding-left: 24px
+            }
+
+            .kind {
+                font-weight: 600
+            }
+
+            .REQUEST {
+                color: var(--req)
+            }
+
+            .RESPONSE {
+                color: var(--res)
+            }
+
+            .UPDATE {
+                color: var(--upd)
+            }
+
+            .ERROR {
+                color: var(--err)
+            }
+
+            .pending {
+                color: var(--muted);
+                font-style: italic
+            }
+
+            #detail {
+                flex: 0 0 40%;
+                min-width: 280px;
+                max-width: 80%;
+                overflow: auto;
+                padding: 10px 12px
+            }
+
+            #resizer {
+                flex: 0 0 5px;
+                cursor: col-resize;
+                background: var(--line);
+                touch-action: none
+            }
+
+            #resizer:hover, #resizer.drag {
+                background: var(--req)
+            }
+
+            #detail .meta {
+                display: grid;
+                grid-template-columns:max-content 1fr;
+                gap: 2px 12px;
+                margin-bottom: 8px
+            }
+
+            #detail .meta dt {
+                color: var(--muted)
+            }
+
+            #detail .meta dd {
+                margin: 0;
+                word-break: break-all
+            }
+
+            #detail .actions {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 8px
+            }
+
+            .tree {
+                font: 12px ui-monospace, Menlo, Consolas, monospace;
+                line-height: 1.5
+            }
+
+            .tree details {
+                margin-left: 16px
+            }
+
+            .tree summary {
+                cursor: pointer;
+                list-style: revert
+            }
+
+            .tree .leaf {
+                margin-left: 16px
+            }
+
+            .k {
+                color: var(--req)
+            }
+
+            .s {
+                color: var(--res)
+            }
+
+            .n {
+                color: var(--upd)
+            }
+
+            .b {
+                color: var(--err)
+            }
+
+            .warn {
+                color: var(--err);
+                margin-bottom: 6px
+            }
+
+            .empty {
+                color: var(--muted);
+                padding: 12px
+            }
+
+            @media (max-width: 800px) {
+                main {
+                    flex-direction: column
+                }
+
+                #detail {
+                    flex: 0 0 40% !important;
+                    max-width: none;
+                    border-top: 2px solid var(--line)
+                }
+
+                #resizer {
+                    display: none
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <span id="status" title="Verbindung zum Server"></span>
+            <label>Client <select id="client">
+                <option value="">Alle</option>
+            </select></label>
+            <label><input type="checkbox" class="kind-filter" value="REQUEST" checked>Request</label>
+            <label><input type="checkbox" class="kind-filter" value="RESPONSE" checked>Response</label>
+            <label><input type="checkbox" class="kind-filter" value="UPDATE" checked>Update</label>
+            <label><input type="checkbox" class="kind-filter" value="ERROR" checked>Error</label>
+            <input id="text" type="search" placeholder="Filter (Typ, Payload, ID)">
+            <button id="pause">Pause</button>
+            <button id="clear">Clear</button>
+            <label><input type="checkbox" id="autoscroll" checked>Auto-Scroll</label>
+            <span id="count"></span>
+        </header>
+        <main>
+            <div id="list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Zeit</th>
+                            <th></th>
+                            <th>Art</th>
+                            <th>Typ</th>
+                            <th>Client</th>
+                            <th>Dauer</th>
+                            <th>Größe</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rows"></tbody>
+                </table>
+            </div>
+            <div id="resizer" title="Breite ziehen"></div>
+            <div id="detail">
+                <div class="empty">Message auswählen, um den Payload zu inspizieren.</div>
+            </div>
+        </main>
+        <script>
+            (() => {
+                const MAX_KEPT = 20000, MAX_RENDERED = 5000;
+                const $ = id => document.getElementById(id);
+                const byId = new Map();          // id -> entry
+                const responseOf = new Map();    // request id -> response/error entry
+                let entries = [];                // sorted by id
+                let selectedId = null, paused = false, pausedQueue = [];
+
+                function addEntry(e) {
+                    if (byId.has(e.id)) return false;
+                    byId.set(e.id, e);
+                    if (e.correlatedId != null) responseOf.set(e.correlatedId, e);
+                    entries.push(e);
+                    if (entries.length > MAX_KEPT) {
+                        const old = entries.shift();
+                        byId.delete(old.id);
+                        responseOf.delete(old.id);
+                    }
+                    return true;
+                }
+
+                const fmtTime = ts => {
+                    const d = new Date(ts), p = (n, l = 2) => String(n).padStart(l, '0');
+                    return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}.${p(d.getMilliseconds(), 3)}`;
+                };
+                const fmtSize = n => n < 1024 ? n + ' B' : (n / 1024).toFixed(1) + ' KB';
+
+                function matches(e) {
+                    const kinds = [...document.querySelectorAll('.kind-filter:checked')].map(c => c.value);
+                    if (!kinds.includes(e.kind)) return false;
+                    const client = $('client').value;
+                    if (client && e.clientAddress !== client) return false;
+                    const t = $('text').value.trim().toLowerCase();
+                    return !t || e.messageType.toLowerCase().includes(t) || e.messageId.toLowerCase().includes(t) || e.payload.toLowerCase().includes(t);
+                }
+
+                function durationOf(e) {
+                    if (e.kind === 'REQUEST') {
+                        const r = responseOf.get(e.id);
+                        return r ? r.durationMs + ' ms' : null;
+                    }
+                    return e.durationMs != null ? e.durationMs + ' ms' : '';
+                }
+
+                function cell(tr, text, cls) {
+                    const td = document.createElement('td');
+                    td.textContent = text;
+                    if (cls) td.className = cls;
+                    tr.appendChild(td);
+                    return td;
+                }
+
+                function buildRow(e) {
+                    const tr = document.createElement('tr');
+                    tr.className = 'row' + (e.kind === 'RESPONSE' || e.kind === 'ERROR' ? ' resp' : '') + (e.id === selectedId ? ' sel' : '');
+                    tr.dataset.id = e.id;
+                    cell(tr, e.id);
+                    cell(tr, fmtTime(e.timestamp));
+                    cell(tr, e.direction === 'IN' ? '→' : '←');
+                    cell(tr, e.kind, 'kind ' + e.kind);
+                    cell(tr, e.messageType, 'type');
+                    cell(tr, e.clientAddress);
+                    const d = durationOf(e);
+                    if (d === null) cell(tr, 'pending…', 'pending'); else cell(tr, d);
+                    cell(tr, fmtSize(e.sizeBytes));
+                    return tr;
+                }
+
+                function renderAll() {
+                    const rows = $('rows');
+                    rows.replaceChildren();
+                    const visible = entries.filter(matches).slice(-MAX_RENDERED);
+                    const frag = document.createDocumentFragment();
+                    visible.forEach(e => frag.appendChild(buildRow(e)));
+                    rows.appendChild(frag);
+                    updateCount();
+                    scrollToEnd();
+                }
+
+                function refreshRow(id) {
+                    const e = byId.get(id), old = $('rows').querySelector(`tr[data-id="${id}"]`);
+                    if (e && old) old.replaceWith(buildRow(e));
+                }
+
+                function appendLive(e) {
+                    if (e.correlatedId != null) refreshRow(e.correlatedId);   // request gets its duration
+                    if (!matches(e)) return;
+                    const rows = $('rows');
+                    rows.appendChild(buildRow(e));
+                    while (rows.childElementCount > MAX_RENDERED) rows.firstElementChild.remove();
+                    updateCount();
+                    scrollToEnd();
+                }
+
+                function updateCount() {
+                    $('count').textContent = `${$('rows').childElementCount} / ${entries.length} Messages`;
+                }
+
+                function scrollToEnd() {
+                    if ($('autoscroll').checked) {
+                        const l = $('list');
+                        l.scrollTop = l.scrollHeight;
+                    }
+                }
+
+                function receive(e) {
+                    if (paused) {
+                        pausedQueue.push(e);
+                        return;
+                    }
+                    const last = entries.length ? entries[entries.length - 1].id : 0;
+                    if (!addEntry(e)) return;
+                    if (e.id < last) {
+                        entries.sort((a, b) => a.id - b.id);
+                        renderAll();
+                    } else appendLive(e);
+                    if (e.clientAddress && ![...$('client').options].some(o => o.value === e.clientAddress)) addClientOption(e.clientAddress);
+                }
+
+                function addClientOption(c) {
+                    const o = document.createElement('option');
+                    o.value = o.textContent = c;
+                    $('client').appendChild(o);
+                }
+
+                // ---- detail ----
+                function select(id) {
+                    selectedId = id;
+                    $('rows').querySelectorAll('tr.sel').forEach(r => r.classList.remove('sel'));
+                    const row = $('rows').querySelector(`tr[data-id="${id}"]`);
+                    if (row) row.classList.add('sel');
+                    showDetail(byId.get(id));
+                }
+
+                function showDetail(e) {
+                    const d = $('detail');
+                    d.replaceChildren();
+                    if (!e) return;
+
+                    const actions = document.createElement('div');
+                    actions.className = 'actions';
+                    const copy = document.createElement('button');
+                    copy.textContent = 'Payload kopieren';
+                    copy.onclick = () => navigator.clipboard?.writeText(prettyOrRaw(e.payload));
+                    actions.appendChild(copy);
+                    const other = e.kind === 'REQUEST' ? responseOf.get(e.id) : byId.get(e.correlatedId);
+                    if (other) {
+                        const b = document.createElement('button');
+                        b.textContent = e.kind === 'REQUEST' ? 'Zur Response springen' : 'Zum Request springen';
+                        b.onclick = () => {
+                            select(other.id);
+                            $('rows').querySelector(`tr[data-id="${other.id}"]`)?.scrollIntoView({block: 'center'});
+                        };
+                        actions.appendChild(b);
+                    }
+                    d.appendChild(actions);
+
+                    const meta = document.createElement('dl');
+                    meta.className = 'meta';
+                    const add = (k, v) => {
+                        const dt = document.createElement('dt'), dd = document.createElement('dd');
+                        dt.textContent = k;
+                        dd.textContent = v;
+                        meta.append(dt, dd);
+                    };
+                    add('Typ', e.messageType);
+                    add('Art', `${e.kind} (${e.direction === 'IN' ? 'Client → Server' : 'Server → Client'})`);
+                    add('Zeit', new Date(e.timestamp).toISOString());
+                    add('Client', e.clientAddress);
+                    add('Message-ID', e.messageId);
+                    const dur = durationOf(e);
+                    if (dur) add('Ausführungszeit', dur);
+                    add('Größe', fmtSize(e.sizeBytes));
+                    d.appendChild(meta);
+
+                    if (e.truncated) {
+                        const w = document.createElement('div');
+                        w.className = 'warn';
+                        w.textContent = 'Payload wurde gekürzt (> 256 KB), nur Rohtext verfügbar.';
+                        d.appendChild(w);
+                    }
+                    const tree = document.createElement('div');
+                    tree.className = 'tree';
+                    try {
+                        if (e.truncated) throw new Error('truncated');
+                        tree.appendChild(renderValue(JSON.parse(e.payload), null, true));
+                    } catch {
+                        const pre = document.createElement('pre');
+                        pre.textContent = e.payload;
+                        tree.appendChild(pre);
+                    }
+                    d.appendChild(tree);
+                }
+
+                function prettyOrRaw(p) {
+                    try {
+                        return JSON.stringify(JSON.parse(p), null, 2);
+                    } catch {
+                        return p;
+                    }
+                }
+
+                function span(text, cls) {
+                    const s = document.createElement('span');
+                    s.textContent = text;
+                    if (cls) s.className = cls;
+                    return s;
+                }
+
+                function renderValue(v, key, open) {
+                    const label = key === null ? [] : [span(key, 'k'), span(': ')];
+                    if (v !== null && typeof v === 'object') {
+                        const isArr = Array.isArray(v), keys = Object.keys(v);
+                        const det = document.createElement('details');
+                        det.open = open || keys.length <= 3;
+                        const sum = document.createElement('summary');
+                        sum.append(...label, span(isArr ? `[${keys.length}]` : `{${keys.length}}`));
+                        det.appendChild(sum);
+                        keys.forEach(k => det.appendChild(renderValue(v[k], isArr ? `[${k}]` : k, false)));
+                        return det;
+                    }
+                    const div = document.createElement('div');
+                    div.className = 'leaf';
+                    const cls = typeof v === 'string' ? 's' : typeof v === 'number' ? 'n' : 'b';
+                    div.append(...label, span(typeof v === 'string' ? JSON.stringify(v) : String(v), cls));
+                    return div;
+                }
+
+                // ---- resizable detail panel ----
+                const MIN_DETAIL = 280, WIDTH_KEY = 'networkViewer.detailWidth';
+                const detail = $('detail'), resizer = $('resizer');
+                const clampWidth = w => Math.max(MIN_DETAIL, Math.min(w, resizer.parentElement.clientWidth * 0.8));
+                try {
+                    const saved = Number(localStorage.getItem(WIDTH_KEY));
+                    if (saved) detail.style.flexBasis = clampWidth(saved) + 'px';
+                } catch {
+                }
+                resizer.addEventListener('pointerdown', ev => {
+                    resizer.setPointerCapture(ev.pointerId);
+                    resizer.classList.add('drag');
+                    document.body.style.userSelect = 'none';
+                });
+                resizer.addEventListener('pointermove', ev => {
+                    if (!resizer.hasPointerCapture(ev.pointerId)) return;
+                    detail.style.flexBasis = clampWidth(resizer.parentElement.getBoundingClientRect().right - ev.clientX) + 'px';
+                });
+                const endDrag = ev => {
+                    if (!resizer.hasPointerCapture(ev.pointerId)) return;
+                    resizer.releasePointerCapture(ev.pointerId);
+                    resizer.classList.remove('drag');
+                    document.body.style.userSelect = '';
+                    try {
+                        localStorage.setItem(WIDTH_KEY, String(Math.round(detail.getBoundingClientRect().width)));
+                    } catch {
+                    }
+                };
+                resizer.addEventListener('pointerup', endDrag);
+                resizer.addEventListener('pointercancel', endDrag);
+
+                // ---- wiring ----
+                $('rows').addEventListener('click', ev => {
+                    const tr = ev.target.closest('tr.row');
+                    if (tr) select(Number(tr.dataset.id));
+                });
+                document.querySelectorAll('.kind-filter').forEach(c => c.addEventListener('change', renderAll));
+                $('client').addEventListener('change', renderAll);
+                $('text').addEventListener('input', renderAll);
+                $('pause').addEventListener('click', () => {
+                    paused = !paused;
+                    $('pause').textContent = paused ? `Weiter (${pausedQueue.length})` : 'Pause';
+                    if (!paused) {
+                        const q = pausedQueue;
+                        pausedQueue = [];
+                        q.forEach(receive);
+                    }
+                });
+                $('clear').addEventListener('click', async () => {
+                    await fetch('/api/network-log', {method: 'DELETE'});
+                    entries = [];
+                    byId.clear();
+                    responseOf.clear();
+                    pausedQueue = [];
+                    selectedId = null;
+                    $('client').replaceChildren(new Option('Alle', ''));
+                    $('detail').innerHTML = '<div class="empty">Message auswählen, um den Payload zu inspizieren.</div>';
+                    renderAll();
+                });
+                setInterval(() => {
+                    if (paused) $('pause').textContent = `Weiter (${pausedQueue.length})`;
+                }, 500);
+
+                async function loadBacklog() {
+                    const [list, clients] = await Promise.all([
+                        fetch('/api/network-log').then(r => r.json()),
+                        fetch('/api/network-log/clients').then(r => r.json())
+                    ]);
+                    clients.forEach(c => {
+                        if (![...$('client').options].some(o => o.value === c)) addClientOption(c);
+                    });
+                    list.forEach(addEntry);
+                    entries.sort((a, b) => a.id - b.id);
+                    renderAll();
+                }
+
+                function connect() {
+                    const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/network-viewer/stream');
+                    ws.onopen = () => {
+                        $('status').classList.add('on');
+                        loadBacklog().catch(console.error);
+                    };
+                    ws.onmessage = ev => receive(JSON.parse(ev.data));
+                    ws.onclose = () => {
+                        $('status').classList.remove('on');
+                        setTimeout(connect, 2000);
+                    };
+                }
+
+                connect();
+            })();
+        </script>
+    </body>
+</html>

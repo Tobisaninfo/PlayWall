@@ -4,6 +4,7 @@ import de.tobias.playwall.common.api.StackTraceError;
 import de.tobias.playwall.common.net.BaseMessage;
 import de.tobias.playwall.common.net.ErrorMessage;
 import de.tobias.playwall.common.net.RequestMessage;
+import de.tobias.playwall.server.net.inspector.NetworkLogService;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -31,6 +32,9 @@ public abstract class AnnotatedExceptionTextWebSocketHandler extends TextWebSock
 
 	@Autowired
 	private ApplicationContext context;
+
+	@Autowired
+	private NetworkLogService networkLogService;
 
 	private final Map<Class<? extends Throwable>, ExceptionHandlerMethod> mappings = new HashMap<>();
 
@@ -60,6 +64,7 @@ public abstract class AnnotatedExceptionTextWebSocketHandler extends TextWebSock
 	{
 		log.debug("Received: {}", message.getPayload());
 		final RequestMessage requestMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
+		networkLogService.logIncoming(NetworkLogService.clientOf(session), requestMessage, message.getPayload());
 		try
 		{
 			doHandleTextMessage(session, requestMessage);
@@ -120,6 +125,7 @@ public abstract class AnnotatedExceptionTextWebSocketHandler extends TextWebSock
 				try
 				{
 					webSocketSession.sendMessage(textResponse);
+					networkLogService.logOutgoing(NetworkLogService.clientOf(webSocketSession), message, textResponse.getPayload());
 				}
 				catch(Exception e)
 				{
