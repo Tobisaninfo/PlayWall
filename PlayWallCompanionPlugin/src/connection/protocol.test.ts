@@ -24,15 +24,16 @@ import {
 
 describe('buildAllPadsStopRequest', () => {
     it('uses the AllPadsStopRequest class and carries no extra fields', () => {
-        const request = buildAllPadsStopRequest()
+        const request = buildAllPadsStopRequest(false)
 
         expect(request['@class']).toBe(ALL_PADS_STOP_REQUEST_CLASS)
-        expect(Object.keys(request).sort()).toEqual(['@class', 'messageId'])
+        expect(request.isImmediately).toBe(false)
+        expect(Object.keys(request).sort()).toEqual(['@class', 'isImmediately', 'messageId'])
     })
 
     it('generates a fresh messageId on every call', () => {
-        const first = buildAllPadsStopRequest()
-        const second = buildAllPadsStopRequest()
+        const first = buildAllPadsStopRequest(false)
+        const second = buildAllPadsStopRequest(false)
 
         expect(first.messageId).not.toBe(second.messageId)
     })

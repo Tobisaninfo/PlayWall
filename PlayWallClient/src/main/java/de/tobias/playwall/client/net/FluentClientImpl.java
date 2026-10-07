@@ -210,6 +210,12 @@ class FluentClientImpl implements FluentClient
 		}
 
 		@Override
+		public void stopAllPadsImmediately() throws PlayWallApiException
+		{
+			delegate.stopAllPadsImmediately();
+		}
+
+		@Override
 		public void showPage(int index) throws PlayWallApiException
 		{
 			delegate.showPage(index);

@@ -164,9 +164,18 @@ public class ProjectController
 				.toList();
 	}
 
-	public void stopAll()
+	public void stopAll(boolean isImmediately)
 	{
-		getPlayingPadControllers().forEach(PadController::stopImmediately);
+		getPlayingPadControllers().forEach(padController -> {
+			if(isImmediately)
+			{
+				padController.stopImmediately();
+			}
+			else
+			{
+				padController.stop();
+			}
+		});
 	}
 
 	public void setOutputDeviceForAll(String outputDeviceName)

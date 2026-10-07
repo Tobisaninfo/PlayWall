@@ -113,7 +113,7 @@ describe('ClientWebSocketHandler.stopAllPads', () => {
         expect(socket!.sent).toHaveLength(1)
         const message = JSON.parse(socket!.sent[0]) as Record<string, unknown>
         expect(message['@class']).toBe(ALL_PADS_STOP_REQUEST_CLASS)
-        expect(Object.keys(message).sort()).toEqual(['@class', 'messageId'])
+        expect(Object.keys(message).sort()).toEqual(['@class', 'isImmediately', 'messageId'])
 
         handler.destroy()
     })

@@ -17,6 +17,6 @@ class AllPadsStopHandler implements OneTimeActionRequestHandler<AllPadsStopReque
 	@Override
 	public void handleRequest(AllPadsStopRequest requestMessage) throws IOException
 	{
-		projectController.stopAll();
+		projectController.stopAll(requestMessage.isImmediately());
 	}
 }

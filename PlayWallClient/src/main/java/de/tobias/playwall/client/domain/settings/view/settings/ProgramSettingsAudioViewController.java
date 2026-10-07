@@ -132,7 +132,7 @@ public class ProgramSettingsAudioViewController extends BaseProgramSettingsViewC
 		{
 			try
 			{
-				client.currentProject().stopAllPads();
+				client.currentProject().stopAllPadsImmediately();
 			}
 			catch(PlayWallApiException e)
 			{

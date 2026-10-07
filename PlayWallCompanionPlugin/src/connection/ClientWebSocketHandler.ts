@@ -229,7 +229,7 @@ export class ClientWebSocketHandler {
      * `onPadStatus`) drives its variable/feedback update, same as a single `stopPad`.
      */
     stopAllPads(): void {
-        this.sendRequest(buildAllPadsStopRequest(), GENERIC_RESPONSE).catch((error: unknown) => {
+        this.sendRequest(buildAllPadsStopRequest(false), GENERIC_RESPONSE).catch((error: unknown) => {
             this.options.log('warn', `Failed to stop all pads: ${String(error)}`)
         })
     }

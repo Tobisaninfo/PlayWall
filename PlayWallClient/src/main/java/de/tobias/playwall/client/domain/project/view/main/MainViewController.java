@@ -371,7 +371,7 @@ public class MainViewController extends ViewControllerBase
 
 		try
 		{
-			client.currentProject().stopAllPads();
+			client.currentProject().stopAllPadsImmediately();
 		}
 		catch(PlayWallApiException e)
 		{

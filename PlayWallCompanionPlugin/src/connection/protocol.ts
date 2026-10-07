@@ -208,9 +208,14 @@ export function buildPadStopRequest(padId: string): {
     }
 }
 
-export function buildAllPadsStopRequest(): { '@class': string; messageId: string } {
+export function buildAllPadsStopRequest(isImmediately: boolean): {
+    '@class': string;
+    messageId: string,
+    isImmediately: boolean
+} {
     return {
         '@class': ALL_PADS_STOP_REQUEST_CLASS,
         messageId: randomUUID(),
+        isImmediately
     }
 }

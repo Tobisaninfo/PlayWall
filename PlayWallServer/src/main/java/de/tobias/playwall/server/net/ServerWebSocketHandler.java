@@ -70,7 +70,7 @@ public class ServerWebSocketHandler extends AnnotatedExceptionTextWebSocketHandl
 
 		if(SESSIONS.isEmpty())
 		{
-			controller.stopAll();
+			controller.stopAll(true);
 		}
 	}
 
