@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.3.1 - 2026-10-08
+
+### Features
+
+- PW-216 - Stop All action should respect fade out settings
+
 ## 8.3.0 - 2026-10-04
 
 ### Features
