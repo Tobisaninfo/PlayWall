@@ -41,7 +41,7 @@
             "enabled": false
         },
         {
-            "description": "typescript 7 not supported jet",
+            "description": "typescript 7 not supported yet",
             "matchFileNames": [
                 "website"
             ],
