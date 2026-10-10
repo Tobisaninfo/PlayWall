@@ -2,6 +2,7 @@ package de.tobias.playwall.client.domain.midi.device;
 
 import de.tobias.playwall.client.appcontext.PostConstruct;
 import de.tobias.playwall.client.appcontext.Service;
+import de.tobias.playwall.client.domain.midi.device.launchpad.LPMK2;
 import de.tobias.playwall.client.domain.midi.device.launchpad.LPMiniMK3;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class CustomMidiDeviceRegistry
 	private void init()
 	{
 		midiListeners.put("LPMiniMK3 MIDI", new LPMiniMK3());
+		midiListeners.put("Launchpad MK2", new LPMK2());
 	}
 
 	public Optional<CustomMidiDevice> lookup(String name)
