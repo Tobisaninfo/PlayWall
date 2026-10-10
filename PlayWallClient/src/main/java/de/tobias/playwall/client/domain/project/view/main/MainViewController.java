@@ -95,7 +95,7 @@ import static de.tobias.playwall.client.appcontext.AppContext.Environment.GUI_TE
 import static de.tobias.playwall.client.view.components.ViewConstants.DEFAULT_CONTEXT_MANU_GAP;
 
 @ViewController(path = "de/tobias/playwall/client/view/main", view = "MainView")
-@RequiredArgsConstructor(onConstructor = @__({@InjectConstructor}))
+@RequiredArgsConstructor(onConstructor_ = @InjectConstructor)
 @Getter(AccessLevel.PACKAGE)
 @Slf4j
 public class MainViewController extends ViewControllerBase

@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__({@InjectConstructor}))
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @InjectConstructor)
 public class PadContentSettingsContainerFactory
 {
 	private final FluentClient fluentClient;
