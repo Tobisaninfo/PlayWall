@@ -1,0 +1,130 @@
+pipeline {
+    agent {
+        dockerfile {
+            filename 'src/jenkins/commit/Dockerfile'
+            dir '.'
+            label 'docker'
+        }
+    }
+
+    options {
+        gitLabConnection('TheCodelabs')
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+    }
+
+    stages {
+        stage('Configure triggers') {
+            steps {
+                script {
+                    properties([
+                        pipelineTriggers([
+                            gitlab(triggerOnPush: true,
+                                   triggerOnMergeRequest: false,
+                                   branchFilterType: 'All',
+                                   secretToken: System.getenv('WEBHOOK_TOKEN_PLAYWALL'))
+                        ])
+                    ])
+                }
+            }
+        }
+
+        stage('Clone') {
+            steps {
+                git branch: '$BRANCH_NAME',
+                    credentialsId: 'jenkins-gitlab',
+                    url: 'https://thecodelabs.de/PlayWall/PlayWall.git'
+            }
+        }
+
+        stage("Build") {
+            steps {
+                updateGitlabCommitStatus name: 'Build', state: 'running'
+                configFileProvider([configFile(fileId: '5309241a-b0c0-4d60-a26f-e2fac56ae167', variable: 'MAVEN_SETTINGS')]) {
+                    sh "mvn -B -U -P build-rust clean compile --settings $MAVEN_SETTINGS"
+                }
+            }
+            post {
+                failure {
+                    updateGitlabCommitStatus name: 'Build', state: 'failed'
+                }
+                success {
+                    updateGitlabCommitStatus name: 'Build', state: 'success'
+                }
+            }
+        }
+        stage("Test") {
+            steps {
+                updateGitlabCommitStatus name: 'Test', state: 'running'
+                configFileProvider([configFile(fileId: '5309241a-b0c0-4d60-a26f-e2fac56ae167', variable: 'MAVEN_SETTINGS')]) {
+                    sh "mvn -B -P headless-ui-tests,code-coverage,custom-jdk,audio-tests verify -fae --settings $MAVEN_SETTINGS"
+                }
+            }
+            post {
+                always {
+                    junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
+                    junit testResults: '**/target/failsafe-reports/*.xml', allowEmptyResults: true
+                }
+                unsuccessful {
+                    updateGitlabCommitStatus name: 'Test', state: 'failed'
+                }
+                success {
+                    updateGitlabCommitStatus name: 'Test', state: 'success'
+                }
+            }
+        }
+        stage ('Sonar') {
+            steps {
+                withSonarQubeEnv('TheCodeLabs') {
+                    configFileProvider([configFile(fileId: '5309241a-b0c0-4d60-a26f-e2fac56ae167', variable: 'MAVEN_SETTINGS')]) {
+                        script {
+                            CWD = sh(script: 'pwd', returnStdout: true)
+                        }
+                        sh "mvn -B sonar:sonar -Dsonar.projectKey=PlayWall -Dcwd=" + CWD
+                    }
+                }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    script {
+                        def qualityGate = waitForQualityGate()
+                        if (qualityGate.status != "OK") {
+                            unstable("Pipeline aborted due to quality gate coverage failure: ${qualityGate.status}")
+                        }
+                    }
+                    recordIssues(tools: [sonarQube()], trendChartType: 'TOOLS_ONLY')
+                }
+            }
+        }
+        stage ('Push Github') {
+            steps {
+                script {
+                    def codeBranch = sh(script: "git rev-parse --abbrev-ref HEAD", returnStdout: true).trim()
+
+                    if (codeBranch == 'master') {
+                        echo "Pushing to GitHub because code repo is on ${codeBranch}"
+                        sh('git remote | grep github || git remote add github git@github.com:Tobisaninfo/PlayWall.git')
+                        withCredentials([sshUserPrivateKey(credentialsId: 'github.playwall.key', keyFileVariable: 'SSH_KEY')]) {
+                            sh 'echo ssh -i $SSH_KEY -l git -o StrictHostKeyChecking=no \\"\\$@\\" > local_ssh.sh'
+                            sh 'chmod +x local_ssh.sh'
+                            withEnv(['GIT_SSH=./local_ssh.sh']) {
+                                sh 'git push github master'
+                            }
+                            sh 'rm local_ssh.sh'
+                        }
+                    } else {
+                        echo "Skipping GitHub push because code repo is on ${codeBranch}"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        unsuccessful {
+            emailext body: '''${SCRIPT, template="groovy-html.template"}''', mimeType: 'text/html',
+                            recipientProviders: [[$class: 'CulpritsRecipientProvider']],
+                            subject: "[Jenkins] ${currentBuild.fullDisplayName}"
+        }
+    }
+}
