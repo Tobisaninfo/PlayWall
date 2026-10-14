@@ -138,6 +138,7 @@ public class MainViewController extends ViewControllerBase
 
 	private MenuItem undoMenuItem;
 	private MenuItem redoMenuItem;
+	private MenuItem menuItemFullscreen;
 
 	@Getter(AccessLevel.PROTECTED)
 	private Menu menuRecentProjects;
@@ -944,7 +945,7 @@ public class MainViewController extends ViewControllerBase
 	private Menu createMenuView()
 	{
 		final MenuItem menuItemForeground = createMenuItem(Strings.UI_MENU_VIEW_FOREGROUND, FontAwesomeType.THUMBTACK_SOLID, Optional.empty());
-		final MenuItem menuItemFullscreen = createMenuItem(Strings.UI_MENU_VIEW_FULLSCREEN, FontAwesomeType.EXPAND_SOLID, Optional.empty());
+		menuItemFullscreen = createMenuItem(Strings.UI_MENU_VIEW_FULLSCREEN, FontAwesomeType.EXPAND_SOLID, Optional.of(this::onMenuItemFullscreen));
 		final MenuItem menuItemTouchMode = createMenuItem(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE, FontAwesomeType.HAND_POINTER_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_VIEW));
@@ -1112,6 +1113,24 @@ public class MainViewController extends ViewControllerBase
 		}
 
 		programSettingsViewController.showAndWait(new BaseProgramSettingsViewController.Param(settingsController.getSettings(), settingsController.getOutputDevices()), getContainingWindow());
+	}
+
+	public void onMenuItemFullscreen(ActionEvent event)
+	{
+		final boolean isFullscreen = getStage().isFullScreen();
+		final boolean newValue = !isFullscreen;
+		getStage().setFullScreen(newValue);
+
+		if(newValue)
+		{
+			menuItemFullscreen.setText(Localization.getString(Strings.UI_MENU_VIEW_FULLSCREEN_EXIT));
+			menuItemFullscreen.setGraphic(createFontIcon(FontAwesomeType.COMPRESS_SOLID));
+		}
+		else
+		{
+			menuItemFullscreen.setText(Localization.getString(Strings.UI_MENU_VIEW_FULLSCREEN));
+			menuItemFullscreen.setGraphic(createFontIcon(FontAwesomeType.EXPAND_SOLID));
+		}
 	}
 
 	private void onColorChange(Pad pad, ModernColor color)

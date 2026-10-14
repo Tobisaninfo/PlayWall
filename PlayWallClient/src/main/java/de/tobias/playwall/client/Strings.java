@@ -62,6 +62,7 @@ public class Strings
 	public static final String UI_MENU_VIEW = "ui.menu.view";
 	public static final String UI_MENU_VIEW_FOREGROUND = "ui.menu.view.foreground";
 	public static final String UI_MENU_VIEW_FULLSCREEN = "ui.menu.view.fullscreen";
+	public static final String UI_MENU_VIEW_FULLSCREEN_EXIT = "ui.menu.view.fullscreen.exit";
 	public static final String UI_MENU_VIEW_TOUCH_MODE_ENABLE = "ui.menu.view.touch.mode.enable";
 	public static final String UI_MENU_VIEW_TOUCH_MODE_DISABLE = "ui.menu.view.touch.mode.disable";
 

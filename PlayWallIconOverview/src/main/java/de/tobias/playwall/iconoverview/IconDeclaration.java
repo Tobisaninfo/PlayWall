@@ -95,6 +95,7 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.INBOX_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Logs"))));
 		data.add(new IconEntry(FontAwesomeType.CLOCK_ROTATE_LEFT_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Zuletzt verwendete Projekte"))));
 		data.add(new IconEntry(FontAwesomeType.EXPAND_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Vollbild"))));
+		data.add(new IconEntry(FontAwesomeType.COMPRESS_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Vollbild verlassen"))));
 		data.add(new IconEntry(FontAwesomeType.FILE_AUDIO_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Medienverwaltung"))));
 		data.add(new IconEntry(FontAwesomeType.FILE_PEN_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Projekteinstellungen"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_PLUS_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "Neues Projekt"))));
