@@ -138,6 +138,7 @@ public class MainViewController extends ViewControllerBase
 
 	private MenuItem undoMenuItem;
 	private MenuItem redoMenuItem;
+	private MenuItem menuItemAlwaysOnTop;
 	private MenuItem menuItemFullscreen;
 
 	@Getter(AccessLevel.PROTECTED)
@@ -944,13 +945,13 @@ public class MainViewController extends ViewControllerBase
 
 	private Menu createMenuView()
 	{
-		final MenuItem menuItemForeground = createMenuItem(Strings.UI_MENU_VIEW_FOREGROUND, FontAwesomeType.THUMBTACK_SOLID, Optional.empty());
+		menuItemAlwaysOnTop = createMenuItem(Strings.UI_MENU_VIEW_ALWAYS_ON_TOP, FontAwesomeType.THUMBTACK_SOLID, Optional.of(this::onMenuItemAlwaysOnTop));
 		menuItemFullscreen = createMenuItem(Strings.UI_MENU_VIEW_FULLSCREEN, FontAwesomeType.EXPAND_SOLID, Optional.of(this::onMenuItemFullscreen));
 		final MenuItem menuItemTouchMode = createMenuItem(Strings.UI_MENU_VIEW_TOUCH_MODE_ENABLE, FontAwesomeType.HAND_POINTER_SOLID, Optional.empty());
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_VIEW));
 		menu.getItems().addAll(
-				menuItemForeground,
+				menuItemAlwaysOnTop,
 				menuItemFullscreen,
 				new SeparatorMenuItem(),
 				menuItemTouchMode
@@ -1130,6 +1131,24 @@ public class MainViewController extends ViewControllerBase
 		{
 			menuItemFullscreen.setText(Localization.getString(Strings.UI_MENU_VIEW_FULLSCREEN));
 			menuItemFullscreen.setGraphic(createFontIcon(FontAwesomeType.EXPAND_SOLID));
+		}
+	}
+
+	public void onMenuItemAlwaysOnTop(ActionEvent event)
+	{
+		final boolean isAlwaysOnTop = getStage().isAlwaysOnTop();
+		final boolean newValue = !isAlwaysOnTop;
+		getStage().setAlwaysOnTop(newValue);
+
+		if(newValue)
+		{
+			menuItemAlwaysOnTop.setText(Localization.getString(Strings.UI_MENU_VIEW_ALWAYS_ON_TOP_EXIT));
+			menuItemAlwaysOnTop.setGraphic(createFontIcon(FontAwesomeType.THUMBTACK_SLASH_SOLID));
+		}
+		else
+		{
+			menuItemAlwaysOnTop.setText(Localization.getString(Strings.UI_MENU_VIEW_ALWAYS_ON_TOP));
+			menuItemAlwaysOnTop.setGraphic(createFontIcon(FontAwesomeType.THUMBTACK_SOLID));
 		}
 	}
 

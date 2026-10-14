@@ -60,7 +60,8 @@ public class Strings
 	public static final String UI_MENU_EDIT_REPLACE_MEDIA = "ui.menu.edit.replace.media";
 
 	public static final String UI_MENU_VIEW = "ui.menu.view";
-	public static final String UI_MENU_VIEW_FOREGROUND = "ui.menu.view.foreground";
+	public static final String UI_MENU_VIEW_ALWAYS_ON_TOP = "ui.menu.view.always_on_top";
+	public static final String UI_MENU_VIEW_ALWAYS_ON_TOP_EXIT = "ui.menu.view.always_on_top.exit";
 	public static final String UI_MENU_VIEW_FULLSCREEN = "ui.menu.view.fullscreen";
 	public static final String UI_MENU_VIEW_FULLSCREEN_EXIT = "ui.menu.view.fullscreen.exit";
 	public static final String UI_MENU_VIEW_TOUCH_MODE_ENABLE = "ui.menu.view.touch.mode.enable";

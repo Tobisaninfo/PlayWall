@@ -110,6 +110,7 @@ public class IconDeclaration
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen"),
 				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein"))));
 		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "im Vordergrund behalten"))));
+		data.add(new IconEntry(FontAwesomeType.THUMBTACK_SLASH_SOLID, List.of(new IconUsage(IconUsageCategory.MENU, "nicht mehr im Vordergrund behalten"))));
 
 		// settings
 		data.add(new IconEntry(FontAwesomeType.PEN_TO_SQUARE_SOLID, List.of(new IconUsage(IconUsageCategory.SETTINGS, "Name"))));
