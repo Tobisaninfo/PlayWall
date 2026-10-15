@@ -29,9 +29,21 @@ public class StopAllActionHandler implements ActionHandler
 			return;
 		}
 
+		if(!(action instanceof StopAllAction stopAllAction))
+		{
+			throw new IllegalArgumentException("Action is not a StopAllAction");
+		}
+
 		try
 		{
-			client.currentProject().stopAllPads();
+			if(stopAllAction.isShouldFadeOut())
+			{
+				client.currentProject().stopAllPads();
+			}
+			else
+			{
+				client.currentProject().stopAllPadsImmediately();
+			}
 		}
 		catch(PlayWallApiException e)
 		{

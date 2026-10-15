@@ -58,12 +58,12 @@ class StopAllActionHandlerTest extends AbstractViewControllerTest
 	}
 
 	@Test
-	void testStopAllAction(FxRobot robot) throws PlayWallApiException
+	void testStopAllActionWithFadeout(FxRobot robot) throws PlayWallApiException
 	{
 		showMainView();
 		project.getMetadata().getActiveMapping().addInputKeyWithAction(
 				new KeyboardInputKey(KeyCode.A, "A"),
-				new StopAllAction()
+				new StopAllAction(true)
 		);
 
 		robot.press(KeyCode.A);
@@ -73,6 +73,26 @@ class StopAllActionHandlerTest extends AbstractViewControllerTest
 		robot.release(KeyCode.A);
 		WaitForAsyncUtils.waitForFxEvents();
 		verify(client).stopAllPads();
+		verify(client, never()).stopAllPadsImmediately();
+	}
+
+	@Test
+	void testStopAllActionWithoutFadeout(FxRobot robot) throws PlayWallApiException
+	{
+		showMainView();
+		project.getMetadata().getActiveMapping().addInputKeyWithAction(
+				new KeyboardInputKey(KeyCode.A, "A"),
+				new StopAllAction(false)
+		);
+
+		robot.press(KeyCode.A);
+		WaitForAsyncUtils.waitForFxEvents();
+		verify(client, never()).stopAllPadsImmediately();
+
+		robot.release(KeyCode.A);
+		WaitForAsyncUtils.waitForFxEvents();
+		verify(client).stopAllPadsImmediately();
+		verify(client, never()).stopAllPads();
 	}
 
 	// Feedback

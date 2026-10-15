@@ -22,7 +22,7 @@ public class StopAllAction implements Action
 	@Override
 	public Action copy()
 	{
-		return new StopAllAction();
+		return new StopAllAction(shouldFadeOut);
 	}
 
 	@Override
