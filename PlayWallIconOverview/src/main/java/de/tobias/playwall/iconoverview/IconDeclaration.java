@@ -46,7 +46,10 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.CIRCLE_ARROW_RIGHT_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Kachel ersetzen"))));
 		data.add(new IconEntry(FontAwesomeType.LEFT_RIGHT_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Kachel tauschen"))));
 		data.add(new IconEntry(FontAwesomeType.PAINTBRUSH_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Farbmodus (globaler Colorpicker"))));
-		data.add(new IconEntry(FontAwesomeType.FILE_IMPORT_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt importieren"))));
+		data.add(new IconEntry(FontAwesomeType.FILE_IMPORT_SOLID, List.of(
+				new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt importieren"),
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Companion - 2. Schritt")
+		)));
 		data.add(new IconEntry(FontAwesomeType.UP_RIGHT_FROM_SQUARE_SOLID, List.of(new IconUsage(IconUsageCategory.MAIN_WINDOW, "Projekt öffnen"))));
 
 		// pad
@@ -62,9 +65,13 @@ public class IconDeclaration
 		data.add(new IconEntry(FontAwesomeType.STOP_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Kachel stoppen (Stop)"))));
 		data.add(new IconEntry(FontAwesomeType.FOLDER_OPEN_SOLID, List.of(
 				new IconUsage(IconUsageCategory.PAD, "Filechooser öffnen"),
-				new IconUsage(IconUsageCategory.PAD, "Einstellungen - Allgemein - Datei")
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Datei"),
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Companion - 1. Schritt")
 		)));
-		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"))));
+		data.add(new IconEntry(FontAwesomeType.LINK_SOLID, List.of(
+				new IconUsage(IconUsageCategory.PAD, "Trigger für diese Kachel aktiv"),
+				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Companion - 3. Schritt")
+		)));
 		data.add(new IconEntry(FontAwesomeType.FILE_SOLID, List.of(
 				new IconUsage(IconUsageCategory.SETTINGS, "Einstellungen - Allgemein - Datei"),
 				new IconUsage(IconUsageCategory.MAPPING, "Mapping - PageAction")
