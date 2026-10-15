@@ -331,6 +331,46 @@ class MigrationRegistryTest
 	}
 
 	@Test
+	void testForEachValueAppliesStepToEveryElementOfEveryKey()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepForEachValue.of("/mappings", JsonMigrationStepForEach.of("/items", JsonMigrationStepAdd.of("/x", 1))))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{"VERSION": 1, "mappings": {"a-1": {"items": [{"id": 1}]}, "b-2": {"items": [{"id": 2}, {"id": 3}]}}}""")).node())
+				.isEqualTo(json("""
+						{"VERSION": 2, "mappings": {"a-1": {"items": [{"id": 1, "x": 1}]}, "b-2": {"items": [{"id": 2, "x": 1}, {"id": 3, "x": 1}]}}}"""));
+	}
+
+	@Test
+	void testForEachValueIteratesArrayValues()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepForEachValue.of("/mappings", JsonMigrationStepAdd.of("/enabled", true)))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{"VERSION": 1, "mappings": {"u1": [{"action": {}}, {"action": {}}], "u2": []}}""")).node())
+				.isEqualTo(json("""
+						{"VERSION": 2, "mappings": {"u1": [{"action": {}, "enabled": true}, {"action": {}, "enabled": true}], "u2": []}}"""));
+	}
+
+	@Test
+	void testForEachValueRejectsMissingObject()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepForEachValue.of("/mappings", JsonMigrationStepAdd.of("/enabled", true)))
+				.build();
+		final JsonNode node = json("""
+				{"VERSION": 1}""");
+
+		assertThatThrownBy(() -> registry.migrate(node))
+				.isInstanceOf(MigrationException.class)
+				.hasMessageContaining("not an object");
+	}
+
+	@Test
 	void testDecodesEscapedTokens()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")

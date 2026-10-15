@@ -1,7 +1,7 @@
 package de.tobias.playwall.server.common.migration;
 
 
-public sealed interface JsonMigrationStep permits JsonMigrationStepAdd, JsonMigrationStepAddToTypedObject, JsonMigrationStepDelete, JsonMigrationStepForEach, JsonMigrationStepMove
+public sealed interface JsonMigrationStep permits JsonMigrationStepAdd, JsonMigrationStepAddToTypedObject, JsonMigrationStepDelete, JsonMigrationStepForEach, JsonMigrationStepForEachValue, JsonMigrationStepMove
 {
 	static void validatePath(String path)
 	{

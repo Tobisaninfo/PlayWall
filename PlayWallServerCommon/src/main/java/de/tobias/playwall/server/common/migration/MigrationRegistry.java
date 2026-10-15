@@ -135,6 +135,7 @@ public final class MigrationRegistry
 				JsonPathOperations.add(root, to, value);
 			}
 			case JsonMigrationStepForEach forEachStep -> applyToEach(root, forEachStep);
+			case JsonMigrationStepForEachValue forEachValueStep -> applyToEachValue(root, forEachValueStep);
 			case JsonMigrationStepAddToTypedObject typedObjectStep -> addToTypedObject(root, typedObjectStep);
 		}
 	}
@@ -173,6 +174,40 @@ public final class MigrationRegistry
 
 			apply(element, step.step());
 		}
+	}
+
+	private static void applyToEachValue(JsonNode root, JsonMigrationStepForEachValue step)
+	{
+		final JsonNode object = root.at(JsonPointer.compile(step.objectPath()));
+		if(!object.isObject())
+		{
+			throw new MigrationException("Cannot apply for-each-value at '" + step.objectPath() + "': target is not an object");
+		}
+
+		for(final JsonNode value : object.values())
+		{
+			if(value.isArray())
+			{
+				for(final JsonNode element : value)
+				{
+					applyToObject(step, element);
+				}
+			}
+			else
+			{
+				applyToObject(step, value);
+			}
+		}
+	}
+
+	private static void applyToObject(JsonMigrationStepForEachValue step, JsonNode node)
+	{
+		if(!node.isObject())
+		{
+			throw new MigrationException("Cannot apply for-each-value at '" + step.objectPath() + "': value is not an object or an array of objects");
+		}
+
+		apply(node, step.step());
 	}
 
 	public static final class Builder
