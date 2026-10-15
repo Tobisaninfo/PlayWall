@@ -1,4 +1,4 @@
-package de.tobias.playwall.client.domain.project.view.settings;
+package de.tobias.playwall.client.domain.settings.view.settings;
 
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.Strings;
@@ -23,8 +23,8 @@ import java.nio.file.Path;
  */
 @Slf4j
 @SuppressWarnings("java:S110")
-@ViewController(path = "de/tobias/playwall/client/view/settings/project", view = "ProjectSettingsCompanionPageView", applyToStage = false)
-public class ProjectSettingsCompanionViewController extends BaseProjectSettingsViewController
+@ViewController(path = "de/tobias/playwall/client/view/settings/program", view = "ProgramSettingsCompanionPageView", applyToStage = false)
+public class ProgramSettingsCompanionViewController extends BaseProgramSettingsViewController
 {
 	@FXML
 	private Button buttonExport;
@@ -37,7 +37,7 @@ public class ProjectSettingsCompanionViewController extends BaseProjectSettingsV
 	private final CompanionPluginExporter exporter = new CompanionPluginExporter();
 
 	@InjectConstructor
-	ProjectSettingsCompanionViewController(FluentClient client, FileChooserWrapper fileChooserWrapper, ErrorAlertBuilder errorAlertBuilder)
+	ProgramSettingsCompanionViewController(FluentClient client, FileChooserWrapper fileChooserWrapper, ErrorAlertBuilder errorAlertBuilder)
 	{
 		super(client);
 		this.fileChooserWrapper = fileChooserWrapper;
@@ -59,7 +59,7 @@ public class ProjectSettingsCompanionViewController extends BaseProjectSettingsV
 	}
 
 	@Override
-	public void initParameter(Param param)
+	public void initParameter(Param parameter)
 	{
 		this.isValidProperty.set(true);
 	}

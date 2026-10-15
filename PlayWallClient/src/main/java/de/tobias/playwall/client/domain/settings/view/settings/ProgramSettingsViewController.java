@@ -53,6 +53,7 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 
 		final SettingsCategory categoryGeneral = createSettingsCategory(ProgramSettingsGeneralViewController.class, Strings.UI_SETTINGS_PROGRAM_GENERAL_TITLE, FontAwesomeType.GEAR_SOLID);
 		createSettingsCategory(ProgramSettingsAudioViewController.class, Strings.UI_SETTINGS_PROGRAM_AUDIO_TITLE, FontAwesomeType.VOLUME_HIGH_SOLID);
+		createSettingsCategory(ProgramSettingsCompanionViewController.class, Strings.UI_SETTINGS_PROJECT_COMPANION_TITLE, FontAwesomeType.TABLE_CELLS_LARGE_SOLID);
 
 		initButtons();
 
@@ -64,8 +65,8 @@ public class ProgramSettingsViewController extends BaseSettingsDialogController<
 	{
 		super.initStage(stageContainer, stage);
 
-		stage.setWidth(875);
-		stage.setMinWidth(875);
+		stage.setWidth(900);
+		stage.setMinWidth(900);
 	}
 
 	@Override

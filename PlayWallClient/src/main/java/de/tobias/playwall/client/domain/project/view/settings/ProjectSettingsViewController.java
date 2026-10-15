@@ -9,6 +9,7 @@ import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.domain.project.ProjectMetadata;
 import de.tobias.playwall.client.domain.mapping.PadActionPositionRemapper;
 import de.tobias.playwall.client.domain.project.view.settings.mapping.ProjectSettingsMappingViewController;
+import de.tobias.playwall.client.domain.settings.view.settings.ProgramSettingsCompanionViewController;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
 import de.tobias.playwall.client.view.components.ErrorAlertBuilder;
@@ -56,7 +57,6 @@ public class ProjectSettingsViewController extends BaseSettingsDialogController<
 		createSettingsCategory(ProjectSettingsDisplayViewController.class, Strings.UI_SETTINGS_PROJECT_VIEW_TITLE, FontAwesomeType.IMAGE_SOLID);
 		createSettingsCategory(ProjectSettingsFadeViewController.class, Strings.UI_SETTINGS_PROJECT_FADE_TITLE, FontAwesomeType.SLIDERS_SOLID);
 		createSettingsCategory(ProjectSettingsMappingViewController.class, Strings.UI_SETTINGS_PROJECT_MAPPING_TITLE, FontAwesomeType.KEYBOARD_SOLID);
-		createSettingsCategory(ProjectSettingsCompanionViewController.class, Strings.UI_SETTINGS_PROJECT_COMPANION_TITLE, FontAwesomeType.TABLE_CELLS_LARGE_SOLID);
 
 		initButtons();
 

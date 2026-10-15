@@ -32,6 +32,7 @@ import static de.tobias.playwall.client.PlayWallMain.UI_SCALE_FILE_NAME;
  * Viewcontroller for the general page in the program settings dialog.
  */
 @Slf4j
+@SuppressWarnings("java:S110")
 @ViewController(path = "de/tobias/playwall/client/view/settings/program", view = "ProgramSettingsGeneralPageView", applyToStage = false)
 public class ProgramSettingsGeneralViewController extends BaseProgramSettingsViewController
 {
