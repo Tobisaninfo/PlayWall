@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 /**
- * Viewcontroller for the companion page in the project settings dialog.
+ * Viewcontroller for the companion page in the program settings dialog.
  * Shows the setup instructions for the Bitfocus Companion plugin and exports the bundled plugin file.
  */
 @Slf4j
