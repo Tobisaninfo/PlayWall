@@ -41,7 +41,8 @@ Maven reactor via `frontend-maven-plugin`, but usually worked on directly with `
 ```bash
 cd PlayWallCompanionPlugin
 
-npm install               # first-time setup
+npm install               # first-time setup (run after dependency changes to update package-lock.json)
+npm ci                    # reproducible install from package-lock.json (what the Maven build uses)
 npm run build              # sync-colors + tsc -> dist/
 npm run dev                 # sync-colors + tsc --watch
 npm test                    # vitest run (fast, no coverage)
