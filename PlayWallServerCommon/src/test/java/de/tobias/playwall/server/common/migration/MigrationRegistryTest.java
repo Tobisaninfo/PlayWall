@@ -357,13 +357,26 @@ class MigrationRegistryTest
 	}
 
 	@Test
-	void testForEachValueRejectsMissingObject()
+	void testForEachValueSkipsMissingObject()
+	{
+		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
+				.migrateTo(2, JsonMigrationStepForEachValue.of("/mappings", JsonMigrationStepAdd.of("/enabled", true)))
+				.build();
+
+		assertThat(registry.migrate(json("""
+				{"VERSION": 1}""")).node())
+				.isEqualTo(json("""
+						{"VERSION": 2}"""));
+	}
+
+	@Test
+	void testForEachValueRejectsNonObjectTarget()
 	{
 		final MigrationRegistry registry = MigrationRegistry.builder(2, "/VERSION")
 				.migrateTo(2, JsonMigrationStepForEachValue.of("/mappings", JsonMigrationStepAdd.of("/enabled", true)))
 				.build();
 		final JsonNode node = json("""
-				{"VERSION": 1}""");
+				{"VERSION": 1, "mappings": []}""");
 
 		assertThatThrownBy(() -> registry.migrate(node))
 				.isInstanceOf(MigrationException.class)

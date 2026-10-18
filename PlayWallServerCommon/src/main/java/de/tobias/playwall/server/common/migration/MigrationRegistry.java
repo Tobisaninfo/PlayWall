@@ -179,6 +179,12 @@ public final class MigrationRegistry
 	private static void applyToEachValue(JsonNode root, JsonMigrationStepForEachValue step)
 	{
 		final JsonNode object = root.at(JsonPointer.compile(step.objectPath()));
+		if(object.isMissingNode())
+		{
+			log.debug("Cannot apply for-each-value at '" + step.objectPath() + "': target is missing");
+			return;
+		}
+
 		if(!object.isObject())
 		{
 			throw new MigrationException("Cannot apply for-each-value at '" + step.objectPath() + "': target is not an object");
