@@ -10,5 +10,5 @@ import lombok.*;
 @ToString(callSuper = true)
 public class AllPadsStopRequest extends RequestMessage
 {
-	private boolean isImmediately;
+	private boolean immediately;
 }
