@@ -113,7 +113,25 @@ describe('ClientWebSocketHandler.stopAllPads', () => {
         expect(socket!.sent).toHaveLength(1)
         const message = JSON.parse(socket!.sent[0]) as Record<string, unknown>
         expect(message['@class']).toBe(ALL_PADS_STOP_REQUEST_CLASS)
-        expect(Object.keys(message).sort()).toEqual(['@class', 'isImmediately', 'messageId'])
+        expect(Object.keys(message).sort()).toEqual(['@class', 'immediately', 'messageId'])
+
+        handler.destroy()
+    })
+
+    it.each([
+        [undefined, false],
+        [true, false],
+        [false, true],
+    ])('sends immediately for shouldFadeOut=%s as %s', (shouldFadeOut, immediately) => {
+        const handler = createHandler()
+        handler.connect()
+        const socket = FakeWebSocket.instances.at(-1)
+        socket!.readyState = FakeWebSocket.OPEN
+
+        handler.stopAllPads(shouldFadeOut)
+
+        const message = JSON.parse(socket!.sent[0]) as Record<string, unknown>
+        expect(message['immediately']).toBe(immediately)
 
         handler.destroy()
     })
@@ -529,7 +547,7 @@ describe('ClientWebSocketHandler.playPad / stopPad', () => {
         const message = JSON.parse(socket!.sent[0]) as Record<string, unknown>
         expect(message['@class']).toBe(PAD_STOP_REQUEST_CLASS)
         expect(message.padId).toBe('pad-1')
-        expect(message.isImmediately).toBe(false)
+        expect(message.immediately).toBe(false)
 
         handler.destroy()
     })

@@ -17,6 +17,7 @@ import {replacePadInProject, swapPadsInProject, updatePadInProject} from './doma
 import {PageNavigationStore} from './domain/pageNavigationStore.js'
 import {PlaybackStore} from './domain/playbackStore.js'
 import {ProjectStore} from './domain/projectStore.js'
+import type {StopAllActionOptions} from './domain/stopAll.js'
 import {volumeVariableValues} from './domain/volumeControl.js'
 import type {VolumeActionOptions} from './domain/volumeControl.js'
 import {
@@ -35,7 +36,7 @@ export type ModuleSchema = {
         [PAD_PLAY_STOP_ACTION_ID]: { options: PadSelectorOptions }
         [PAGE_NAVIGATE_ACTION_ID]: { options: PageActionOptions }
         [VOLUME_CHANGE_ACTION_ID]: { options: VolumeActionOptions }
-        [STOP_ALL_ACTION_ID]: { options: Record<string, never> }
+        [STOP_ALL_ACTION_ID]: { options: StopAllActionOptions }
     }
     feedbacks: {
         [PAD_CURRENT_COLOR_FEEDBACK_ID]: { type: 'advanced'; options: PadSelectorOptions }

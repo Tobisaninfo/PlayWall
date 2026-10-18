@@ -224,12 +224,12 @@ export class ClientWebSocketHandler {
     }
 
     /**
-     * Immediately stops every currently playing pad. Errors are logged, not thrown; no local state
+     * Stops every currently playing pad, fading them out unless `shouldFadeOut` is false. Errors are logged, not thrown; no local state
      * needs updating here — each stopped pad's own `PadStatusUpdate` broadcast (already handled via
      * `onPadStatus`) drives its variable/feedback update, same as a single `stopPad`.
      */
-    stopAllPads(): void {
-        this.sendRequest(buildAllPadsStopRequest(false), GENERIC_RESPONSE).catch((error: unknown) => {
+    stopAllPads(shouldFadeOut = true): void {
+        this.sendRequest(buildAllPadsStopRequest(!shouldFadeOut), GENERIC_RESPONSE).catch((error: unknown) => {
             this.options.log('warn', `Failed to stop all pads: ${String(error)}`)
         })
     }

@@ -27,8 +27,8 @@ describe('buildAllPadsStopRequest', () => {
         const request = buildAllPadsStopRequest(false)
 
         expect(request['@class']).toBe(ALL_PADS_STOP_REQUEST_CLASS)
-        expect(request.isImmediately).toBe(false)
-        expect(Object.keys(request).sort()).toEqual(['@class', 'isImmediately', 'messageId'])
+        expect(request.immediately).toBe(false)
+        expect(Object.keys(request).sort()).toEqual(['@class', 'immediately', 'messageId'])
     })
 
     it('generates a fresh messageId on every call', () => {
@@ -79,7 +79,7 @@ describe('buildPadStopRequest', () => {
 
         expect(request['@class']).toBe(PAD_STOP_REQUEST_CLASS)
         expect(request.padId).toBe('pad-1')
-        expect(request.isImmediately).toBe(false)
+        expect(request.immediately).toBe(false)
     })
 
     it('generates a fresh messageId on every call', () => {

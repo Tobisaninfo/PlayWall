@@ -127,22 +127,29 @@ function padActionEvent(options: PadSelectorOptions): CompanionActionEvent<PadSe
 const PAD_BY_NAME_OPTIONS: PadSelectorOptions = {mode: 'name', padName: 'Pad', padPosition: 1}
 
 describe('stop_all action', () => {
-    const STOP_ALL_EVENT = {} as CompanionActionEvent<Record<string, never>>
+    const stopAllEvent = (shouldFadeOut: boolean) => ({options: {shouldFadeOut}}) as CompanionActionEvent<{
+        shouldFadeOut: boolean
+    }>
+    const STOP_ALL_EVENT = stopAllEvent(true)
 
-    it('has no configurable options', () => {
+    it('offers a "Respect fade out" checkbox that is enabled by default', () => {
         const action = getStopAllAction(stubModuleInstance())
 
-        expect(action.options).toEqual([])
+        expect(action.options).toEqual([expect.objectContaining({
+            type: 'checkbox',
+            id: 'shouldFadeOut',
+            default: true
+        })])
     })
 
-    it('stops all pads through the connection when pressed', () => {
+    it.each([true, false])('stops all pads through the connection with shouldFadeOut=%s', (shouldFadeOut) => {
         const stopAllPads = vi.fn()
 
         const action = getStopAllAction(stubModuleInstance({connection: {stopAllPads}}))
-        action.callback(STOP_ALL_EVENT, ACTION_CONTEXT)
+        action.callback(stopAllEvent(shouldFadeOut), ACTION_CONTEXT)
 
         expect(stopAllPads).toHaveBeenCalledTimes(1)
-        expect(stopAllPads).toHaveBeenCalledWith()
+        expect(stopAllPads).toHaveBeenCalledWith(shouldFadeOut)
     })
 
     it('does not throw when there is no active connection yet', () => {

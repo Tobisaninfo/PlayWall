@@ -195,7 +195,7 @@ export function GetPresetDefinitions(): CompanionPresetDefinitions<ModuleSchema>
             bgcolor: combineRgb(0, 0, 0)
         },
         steps: [{
-            down: [{actionId: STOP_ALL_ACTION_ID, options: {}}],
+            down: [{actionId: STOP_ALL_ACTION_ID, options: {shouldFadeOut: true}}],
             up: []
         }],
         feedbacks: [],
