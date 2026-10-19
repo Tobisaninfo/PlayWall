@@ -52,6 +52,13 @@
                 "major"
             ],
             "enabled": false
+        },
+        {
+            "groupName": "vitest",
+            "matchPackageNames": [
+                "vitest",
+                "@vitest/**"
+            ]
         }
     ]
 }
