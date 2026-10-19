@@ -34,7 +34,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <spring-boot-dependencies.version>4.1.1</spring-boot-dependencies.version>
-        <jackson.version>3.2.3</jackson.version>
+        <jackson.version>3.2.4</jackson.version>
         <lombok.version>1.18.48</lombok.version>
 
         <slf4j-api.version>2.0.20</slf4j-api.version>
