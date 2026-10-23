@@ -29,7 +29,7 @@ public class PadDropSwapOption implements DropOption
 	public void handleDrag(DesktopPadView padView, DragEvent event)
 	{
 		final Dragboard dragboard = event.getDragboard();
-		final PadIndex sourcePadIndex = (PadIndex) dragboard.getContent(PadDragListener.DATA_FORMAT);
+		final PadIndex sourcePadIndex = PadDragListener.readPadIndex(dragboard);
 		final Pad sourcePad = projectController.getProject().getPad(sourcePadIndex);
 
 		final Pad targetPad = padView.getPadController().getPad();

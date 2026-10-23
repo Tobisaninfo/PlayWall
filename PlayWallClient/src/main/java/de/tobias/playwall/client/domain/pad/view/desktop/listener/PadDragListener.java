@@ -1,6 +1,7 @@
 package de.tobias.playwall.client.domain.pad.view.desktop.listener;
 
 import de.tobias.playwall.client.domain.pad.ClientPadController;
+import de.tobias.playwall.client.domain.pad.PadIndex;
 import de.tobias.playwall.client.domain.pad.view.desktop.DesktopPadView;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.PadDropDuplicateOption;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.drop.PadDropMoveOption;
@@ -26,6 +27,17 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 {
 	private static final String PAD_INDEX_DATATYPE = "de.tobias.playwall.pad_index";
 	public static final DataFormat DATA_FORMAT = new DataFormat(PAD_INDEX_DATATYPE);
+
+	public static PadIndex readPadIndex(Dragboard dragboard)
+	{
+		final String[] parts = ((String) dragboard.getContent(DATA_FORMAT)).split(";");
+		return new PadIndex(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+	}
+
+	private static String writePadIndex(PadIndex index)
+	{
+		return index.padPosition() + ";" + index.pagePosition();
+	}
 
 	private final FluentClient client;
 	private final ClientProjectController projectController;
@@ -61,7 +73,7 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 		dragboard.setDragView(snapshot);
 
 		final ClipboardContent content = new ClipboardContent();
-		content.put(DATA_FORMAT, padView.getCurrentPadIndex());
+		content.put(DATA_FORMAT, writePadIndex(padView.getCurrentPadIndex()));
 		dragboard.setContent(content);
 
 		event.consume();
@@ -89,7 +101,7 @@ public class PadDragListener implements PadInputListener, PageButtonInputListene
 
 		if(event.getDragboard().hasContent(DATA_FORMAT))
 		{
-			if(padView.getCurrentPadIndex().equals(event.getDragboard().getContent(DATA_FORMAT)))
+			if(padView.getCurrentPadIndex().equals(readPadIndex(event.getDragboard())))
 			{
 				return;
 			}
