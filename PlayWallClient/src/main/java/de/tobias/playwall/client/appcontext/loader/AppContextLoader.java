@@ -31,7 +31,10 @@ public final class AppContextLoader
 		final AppContext appContext = request.getAppContext();
 
 		try(ScanResult scanResult = new ClassGraph()
+				.enableClassInfo()
 				.enableAnnotationInfo()
+				.enableClasspath()
+				.enableNonSystemModules()
 				.ignoreClassVisibility()
 				.acceptPackages(request.getBasePackages())
 				.rejectPackages(request.getRejectPackages())
@@ -50,7 +53,7 @@ public final class AppContextLoader
 
 		for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
 		{
-			final Class configurationClass = classInfo.loadClass();
+			final Class configurationClass = loadClass(classInfo.getName());
 
 			final Constructor injectConstructor = getInjectConstructor(configurationClass);
 			injectConstructor.setAccessible(true);
@@ -91,12 +94,12 @@ public final class AppContextLoader
 
 		for(ClassInfo classInfo : scanResult.getClassesWithAnyAnnotation(annotations.toArray(Class[]::new)))
 		{
-			final Class loadedClass = classInfo.loadClass();
+			final Class loadedClass = loadClass(classInfo.getName());
 
-			final AnnotationInfo annotationInfo = annotations.stream().filter(classInfo::hasAnnotation).map(classInfo::getAnnotationInfo).findFirst().orElseThrow();
+			final AnnotationInfo annotationInfo = annotations.stream().filter(classInfo::hasAnnotation).map(classInfo::getAllAnnotationInfo).findFirst().orElseThrow();
 			final AnnotationParameterValueList annotationValues = annotationInfo.getParameterValues();
 
-			Class superclass = ((AnnotationClassRef) annotationValues.get("superclass").getValue()).loadClass();
+			Class superclass = loadClass(((AnnotationClassRef) annotationValues.get("superclass").getValue()).getName());
 			if(superclass.equals(Object.class))
 			{
 				superclass = loadedClass;
@@ -118,6 +121,18 @@ public final class AppContextLoader
 				appContext.registerLazy(superclass, loadFunction);
 				log.debug("Registering component {}", superclass);
 			}
+		}
+	}
+
+	private static Class<?> loadClass(String className)
+	{
+		try
+		{
+			return Class.forName(className, false, PlayWallMain.class.getClassLoader());
+		}
+		catch(ClassNotFoundException e)
+		{
+			throw new ComponentInitializationException("Cannot load class " + className, e);
 		}
 	}
 
