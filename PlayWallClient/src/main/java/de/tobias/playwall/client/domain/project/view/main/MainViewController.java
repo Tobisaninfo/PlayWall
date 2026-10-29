@@ -524,7 +524,7 @@ public class MainViewController extends ViewControllerBase
 
 			if(project.getMetadata().getMidiDevice() != null)
 			{
-				openMidiDevice(project);
+				openMidiDevice(project.getMetadata().getMidiDevice());
 			}
 
 			registerMappingListener();
@@ -538,11 +538,11 @@ public class MainViewController extends ViewControllerBase
 		}
 	}
 
-	private void openMidiDevice(Project project)
+	private void openMidiDevice(String midiDevice)
 	{
 		try
 		{
-			eventHandler.fireEvent(new MidiDeviceSelected(project.getMetadata().getMidiDevice()));
+			eventHandler.fireEvent(new MidiDeviceSelected(midiDevice));
 		}
 		catch(RuntimeException e)
 		{

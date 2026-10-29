@@ -1,5 +1,6 @@
 package de.tobias.playwall.client.domain.project.view.main;
 
+import de.tobias.playwall.client.domain.midi.MidiDeviceNotFoundException;
 import de.tobias.playwall.client.domain.midi.event.MidiDeviceSelected;
 import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.project.ClientProjectController;
@@ -10,8 +11,10 @@ import de.tobias.playwall.client.event.UpdateMessageEventListener;
 import de.tobias.playwall.common.api.project.update.ProjectSettingsUpdate;
 import javafx.application.Platform;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
+@Slf4j
 class ProjectSettingsUpdateListener implements UpdateMessageEventListener<ProjectSettingsUpdate>
 {
 	private final ClientProjectController projectController;
@@ -34,7 +37,14 @@ class ProjectSettingsUpdateListener implements UpdateMessageEventListener<Projec
 			mainViewController.updateTitle();
 			mainViewController.updateStyle();
 
-			eventHandler.fireEvent(new MidiDeviceSelected(projectMetadata.getMidiDevice()));
+			try
+			{
+				eventHandler.fireEvent(new MidiDeviceSelected(projectMetadata.getMidiDevice()));
+			}
+			catch(Exception e)
+			{
+				log.error("Midi device not found", e);
+			}
 			mainViewController.registerMappingListener();
 
 			mainViewController.updateGlobalVolume(projectMetadata.getVolume());
