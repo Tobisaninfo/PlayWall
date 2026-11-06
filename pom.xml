@@ -82,7 +82,7 @@
         <sonar.coverage.jacoco.xmlReportPaths>
             ${cwd}/coverage/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
-        <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
+        <license-maven-plugin.version>2.8.0</license-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
