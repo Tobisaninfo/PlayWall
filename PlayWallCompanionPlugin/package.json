@@ -19,7 +19,7 @@
         "node": ">=22.20"
     },
     "dependencies": {
-        "@companion-module/base": "2.2.1",
+        "@companion-module/base": "2.2.2",
         "ws": "8.22.0",
         "zod": "4.6.7"
     },
