@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="true" type="JUnit" factoryName="JUnit">
+    <option name="TEST_OBJECT" value="class" />
+    <option name="VM_PARAMETERS" value="--add-reads de.tobias.playwall.client=ALL-UNNAMED,org.junit.jupiter.api,org.junit.jupiter.params,org.junit.jupiter.engine,org.junit.platform.commons,org.junit.platform.engine,org.opentest4j,org.testfx,org.testfx.junit5,org.mockito,org.awaitility,org.instancio.core,org.assertj.core --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --add-exports=javafx.graphics/com.sun.glass.ui.delegate=ALL-UNNAMED --enable-native-access=javafx.graphics --enable-native-access=de.thecodelabs.libJfx --enable-native-access=de.thecodelabs.libMidi -Duser.language=de -Duser.country=DE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
