@@ -20,7 +20,7 @@
     },
     "dependencies": {
         "@companion-module/base": "2.2.2",
-        "ws": "8.22.0",
+        "ws": "8.22.1",
         "zod": "4.6.7"
     },
     "devDependencies": {
