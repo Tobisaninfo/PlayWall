@@ -92,6 +92,8 @@ in the response header `X-Reject-Reason` if the header is missing/blank or diffe
 accepted. The JavaFX client sends `app.getInfo().getVersion()`; on rejection `ClientWebSocketHandler.connect()` throws
 `ServerRejectedException`, which `ClientImpl.connectWithRetries` does not retry. The Companion plugin shows the reason
 as `InstanceStatus.UnknownWarning`. Any new client must send the header, or the server refuses it.
+Clients should additionally send `X-Client-Type` (`JAVAFX` / `COMPANION`); the network viewer shows it per message
+(`UNKNOWN` if absent).
 
 ### Client Architecture
 

@@ -64,7 +64,9 @@ public abstract class AnnotatedExceptionTextWebSocketHandler extends TextWebSock
 	{
 		log.debug("Received: {}", message.getPayload());
 		final RequestMessage requestMessage = objectMapper.readValue(message.getPayload(), RequestMessage.class);
-		networkLogService.logIncoming(NetworkLogService.clientOf(session), requestMessage, message.getPayload());
+		final String client = NetworkLogService.clientOf(session);
+		networkLogService.registerClientType(client, NetworkLogService.clientTypeOf(session));
+		networkLogService.logIncoming(client, requestMessage, message.getPayload());
 		try
 		{
 			doHandleTextMessage(session, requestMessage);

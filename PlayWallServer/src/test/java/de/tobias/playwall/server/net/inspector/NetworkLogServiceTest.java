@@ -53,6 +53,22 @@ class NetworkLogServiceTest
 	}
 
 	@Test
+	void entriesCarryTheRegisteredClientType()
+	{
+		service.registerClientType(CLIENT_A, "COMPANION");
+		service.logOutgoing(CLIENT_A, new UpdateMessage()
+		{
+		}, "{}");
+		service.logOutgoing(CLIENT_B, new UpdateMessage()
+		{
+		}, "{}");
+
+		final List<NetworkLogEntry> entries = service.query(null, null, 0);
+		assertEquals("COMPANION", entries.get(0).clientType());
+		assertEquals(NetworkLogService.UNKNOWN_CLIENT_TYPE, entries.get(1).clientType());
+	}
+
+	@Test
 	void errorIsCorrelatedWithRequest()
 	{
 		final RequestMessage request = new RequestMessage()

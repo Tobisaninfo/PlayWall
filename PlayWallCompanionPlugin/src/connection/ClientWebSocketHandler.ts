@@ -142,7 +142,13 @@ export class ClientWebSocketHandler {
         const protocol = this.options.useTls ? 'wss' : 'ws'
         const url = `${protocol}://${this.options.host}:${this.options.port}/websocket`
 
-        const socket = new WebSocket(url, {headers: {clientId: this.clientId, 'X-Protocol-Version': MODULE_VERSION}})
+        const socket = new WebSocket(url, {
+            headers: {
+                clientId: this.clientId,
+                'X-Protocol-Version': MODULE_VERSION,
+                'X-Client-Type': 'COMPANION'
+            }
+        })
         this.socket = socket
 
         socket.on('open', () => {

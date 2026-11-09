@@ -26,6 +26,8 @@ public class NetworkLogService
 	static final int MAX_PAYLOAD_CHARS = 256 * 1024;
 	private static final long MAX_STORED_BYTES = 64L * 1024 * 1024;
 	private static final int MAX_PENDING_REQUESTS = 1000;
+	static final String UNKNOWN_CLIENT_TYPE = "UNKNOWN";
+	static final String CLIENT_TYPE_HEADER = "X-Client-Type";
 	private static final String UNKNOWN_CLIENT = "unknown";
 
 	private record PendingRequest(long entryId, long startNanos)
@@ -38,6 +40,7 @@ public class NetworkLogService
 
 	private final Deque<NetworkLogEntry> entries = new ArrayDeque<>();
 	private final Set<String> clients = new LinkedHashSet<>();
+	private final Map<String, String> clientTypes = new HashMap<>();
 	private final Map<String, PendingRequest> pendingRequests = new LinkedHashMap<>()
 	{
 		@Override
@@ -74,6 +77,20 @@ public class NetworkLogService
 		}
 		final String host = address.getAddress().getHostAddress();
 		return (host.contains(":") ? "[" + host + "]" : host) + ":" + address.getPort();
+	}
+
+	public static String clientTypeOf(WebSocketSession session)
+	{
+		final String type = session.getHandshakeHeaders().getFirst(CLIENT_TYPE_HEADER);
+		return type == null || type.isBlank() ? UNKNOWN_CLIENT_TYPE : type.trim().toUpperCase(Locale.ROOT);
+	}
+
+	public synchronized void registerClientType(String client, String clientType)
+	{
+		if(enabled)
+		{
+			clientTypes.put(client, clientType);
+		}
 	}
 
 	public void logIncoming(String client, RequestMessage message, String payload)
@@ -143,6 +160,7 @@ public class NetworkLogService
 	{
 		entries.clear();
 		clients.clear();
+		clientTypes.clear();
 		pendingRequests.clear();
 		storedBytes = 0;
 	}
@@ -159,7 +177,7 @@ public class NetworkLogService
 		final String storedPayload = truncated ? payload.substring(0, MAX_PAYLOAD_CHARS) : payload;
 
 		final NetworkLogEntry entry = new NetworkLogEntry(nextId++, System.currentTimeMillis(), direction, kind,
-				message.getClass().getSimpleName(), message.getMessageId(), client, storedPayload, sizeBytes, truncated, correlatedId, durationMs);
+				message.getClass().getSimpleName(), message.getMessageId(), client, clientTypes.getOrDefault(client, UNKNOWN_CLIENT_TYPE), storedPayload, sizeBytes, truncated, correlatedId, durationMs);
 
 		entries.addLast(entry);
 		clients.add(client);

@@ -64,7 +64,8 @@ class ClientImpl implements Client
 
 		clientWebSocketHandler.connect(MapUtils.create(
 				entry("clientId", clientId),
-				entry("X-Protocol-Version", app.getInfo().getVersion()))
+				entry("X-Protocol-Version", app.getInfo().getVersion()),
+				entry("X-Client-Type", "JAVAFX"))
 		);
 		log.info("Connected");
 	}

@@ -8,6 +8,7 @@ import java.util.UUID;
  * @param id            monotonically increasing sequence number
  * @param timestamp     epoch milliseconds
  * @param clientAddress {@code ip:port} of the client the message was received from / sent to
+ * @param clientType    type of the client as announced in the handshake header {@code X-Client-Type} (e.g. {@code JAVAFX}, {@code COMPANION}), {@link NetworkLogService#UNKNOWN_CLIENT_TYPE} if absent
  * @param payload       raw JSON, cut to {@link NetworkLogService#MAX_PAYLOAD_CHARS} characters if too large
  * @param sizeBytes     size of the complete, untruncated payload
  * @param correlatedId  response/error only: id of the entry of the matching request (if still known)
@@ -20,6 +21,7 @@ public record NetworkLogEntry(long id,
 							  String messageType,
 							  UUID messageId,
 							  String clientAddress,
+							  String clientType,
 							  String payload,
 							  int sizeBytes,
 							  boolean truncated,

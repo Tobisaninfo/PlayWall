@@ -270,6 +270,12 @@
     <body>
         <header>
             <span id="status" title="Verbindung zum Server"></span>
+            <label>App <select id="client-type">
+                <option value="">Alle</option>
+                <option value="JAVAFX">JavaFX</option>
+                <option value="COMPANION">Companion</option>
+                <option value="UNKNOWN">Unbekannt</option>
+            </select></label>
             <label>Client <select id="client">
                 <option value="">Alle</option>
             </select></label>
@@ -293,6 +299,7 @@
                             <th></th>
                             <th>Art</th>
                             <th>Typ</th>
+                            <th>App</th>
                             <th>Client</th>
                             <th>Dauer</th>
                             <th>Größe</th>
@@ -334,9 +341,14 @@
                 };
                 const fmtSize = n => n < 1024 ? n + ' B' : (n / 1024).toFixed(1) + ' KB';
 
+                const CLIENT_TYPE_LABELS = {JAVAFX: 'JavaFX', COMPANION: 'Companion', UNKNOWN: 'Unbekannt'};
+                const clientTypeLabel = t => CLIENT_TYPE_LABELS[t] || t || 'Unbekannt';
+
                 function matches(e) {
                     const kinds = [...document.querySelectorAll('.kind-filter:checked')].map(c => c.value);
                     if (!kinds.includes(e.kind)) return false;
+                    const clientType = $('client-type').value;
+                    if (clientType && e.clientType !== clientType) return false;
                     const client = $('client').value;
                     if (client && e.clientAddress !== client) return false;
                     const t = $('text').value.trim().toLowerCase();
@@ -368,6 +380,7 @@
                     cell(tr, e.direction === 'IN' ? '→' : '←');
                     cell(tr, e.kind, 'kind ' + e.kind);
                     cell(tr, e.messageType, 'type');
+                    cell(tr, clientTypeLabel(e.clientType), 'app ' + e.clientType);
                     cell(tr, e.clientAddress);
                     const d = durationOf(e);
                     if (d === null) cell(tr, 'pending…', 'pending'); else cell(tr, d);
@@ -475,6 +488,7 @@
                     add('Typ', e.messageType);
                     add('Art', `${e.kind} (${e.direction === 'IN' ? 'Client → Server' : 'Server → Client'})`);
                     add('Zeit', new Date(e.timestamp).toISOString());
+                    add('App', clientTypeLabel(e.clientType));
                     add('Client', e.clientAddress);
                     add('Message-ID', e.messageId);
                     const dur = durationOf(e);
@@ -573,6 +587,7 @@
                 });
                 document.querySelectorAll('.kind-filter').forEach(c => c.addEventListener('change', renderAll));
                 $('client').addEventListener('change', renderAll);
+                $('client-type').addEventListener('change', renderAll);
                 $('text').addEventListener('input', renderAll);
                 $('pause').addEventListener('click', () => {
                     paused = !paused;
