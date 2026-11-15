@@ -24,8 +24,8 @@ public class LoadingView extends StackPane
 	private int numberOfLoadedPads;
 	private int padCount;
 
-	private FadeTransition fadeIn;
-	private FadeTransition fadeOut;
+	private final FadeTransition fadeIn;
+	private final FadeTransition fadeOut;
 
 	public LoadingView()
 	{

@@ -61,7 +61,7 @@ public class PageButtons extends FlowPane
 	@Setter
 	private boolean isLoading = false;
 
-	private PageButtonsEventDispatcher pageEventDispatcher;
+	private final PageButtonsEventDispatcher pageEventDispatcher;
 
 	public PageButtons()
 	{

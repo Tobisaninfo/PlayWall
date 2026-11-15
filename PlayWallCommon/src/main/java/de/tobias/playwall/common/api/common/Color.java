@@ -47,5 +47,5 @@ public enum Color
 	GRAY3,
 	GRAY4,
 	GRAY5,
-	GRAY6;
+	GRAY6
 }

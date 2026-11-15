@@ -1,13 +1,12 @@
 package de.tobias.playwall.client.view.about;
 
-import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.Strings;
-import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
+import de.tobias.playwall.client.appcontext.ViewController;
 import de.tobias.playwall.client.view.ModalDialogBase;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;

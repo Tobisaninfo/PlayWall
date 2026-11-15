@@ -18,7 +18,7 @@ import javafx.util.Duration;
 public class IconCell extends ListCell<IconEntry>
 {
 	private IconEntry ref;
-	private Label labelName = new Label();
+	private final Label labelName = new Label();
 
 	@Override
 	protected void updateItem(IconEntry ref, boolean empty)
