@@ -2,6 +2,8 @@ package de.tobias.playwall.client.view.components;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.domain.pad.view.desktop.PadEventDispatcher;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalDeleteListener;
 import javafx.geometry.Pos;
@@ -9,8 +11,10 @@ import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 public class GlobalDeleteButton extends ToggleButton
 {
@@ -47,6 +51,11 @@ public class GlobalDeleteButton extends ToggleButton
 		imageCursor = new ImageCursor(CURSOR_IMAGE, 0, 0);
 
 		this.selectedProperty().addListener((_, _, newValue) -> onSelected(newValue));
+
+		final Tooltip tooltip = new Tooltip();
+		tooltip.setText(Localization.getString(Strings.UI_GLOBAL_DELETE_MODE_TOOLTIP));
+		tooltip.setShowDelay(Duration.millis(300));
+		setTooltip(tooltip);
 	}
 
 	private void onSelected(boolean newValue)
@@ -54,6 +63,7 @@ public class GlobalDeleteButton extends ToggleButton
 		if(newValue)
 		{
 			nodeThatShouldUseImageCursor.setCursor(imageCursor);
+			getStyleClass().add("danger");
 			eventDispatcher.addFirstPadInputListener(listener);
 		}
 		else
@@ -63,6 +73,7 @@ public class GlobalDeleteButton extends ToggleButton
 				nodeThatShouldUseImageCursor.setCursor(Cursor.DEFAULT);
 			}
 
+			getStyleClass().remove("danger");
 			eventDispatcher.removePadInputListener(listener);
 		}
 	}

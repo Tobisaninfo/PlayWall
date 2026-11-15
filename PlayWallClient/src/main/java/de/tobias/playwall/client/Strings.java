@@ -76,6 +76,8 @@ public class Strings
 	public static final String UI_REPLACE_MEDIA_AUTO_SEARCH_RESULT = "ui.replace.media.auto_search.result";
 	public static final String UI_REPLACE_MEDIA_AUTO_SEARCH_RESULT_DESCRIPTION = "ui.replace.media.auto_search.result.description";
 
+	public static final String UI_GLOBAL_DELETE_MODE_TOOLTIP = "ui.global.delete.mode.tooltip";
+
 	// ui - dialog - about
 	public static final String UI_DIALOG_ABOUT_GRAPHICS = "ui.dialog.about.graphics";
 	public static final String UI_DIALOG_ABOUT_LIBRARIES_LINK = "ui.dialog.about.libraries.link";

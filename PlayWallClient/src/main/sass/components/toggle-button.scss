@@ -7,6 +7,14 @@
     -fx-font-size: variables.$component-text-size;
     -fx-padding: 6 16 6 16;
 
+    &.danger {
+        -fx-background-color: variables.$danger-color;
+
+        .icon {
+            -fx-fill: white;
+        }
+    }
+
     &:hover, &:focused {
         -fx-background-color: variables.$component-background-color-hover;
     }
