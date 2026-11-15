@@ -45,6 +45,7 @@ import de.tobias.playwall.client.domain.project.view.settings.BaseProjectSetting
 import de.tobias.playwall.client.domain.project.view.settings.ProjectSettingsViewController;
 import de.tobias.playwall.client.domain.project.view.settings.mapping.ProjectSettingsMappingViewController;
 import de.tobias.playwall.client.domain.settings.ClientSettingsController;
+import de.tobias.playwall.client.domain.settings.Settings;
 import de.tobias.playwall.client.domain.settings.SettingsMapper;
 import de.tobias.playwall.client.domain.settings.view.main.SettingsListener;
 import de.tobias.playwall.client.domain.settings.view.settings.BaseProgramSettingsViewController;
@@ -1110,6 +1111,20 @@ public class MainViewController extends ViewControllerBase
 
 	private void onMenuItemUpdates(ActionEvent event)
 	{
+		checkForUpdates(true);
+	}
+
+	void checkForUpdatesOnProjectLoad()
+	{
+		final Settings settings = settingsController.getSettings();
+		if(settings.isAutomaticUpdateSearch())
+		{
+			checkForUpdates(false);
+		}
+	}
+
+	private void checkForUpdates(boolean isManualCheck)
+	{
 		Worker.runLater(() -> {
 			try
 			{
@@ -1118,22 +1133,28 @@ public class MainViewController extends ViewControllerBase
 
 				if(latestVersion.equals(currentVersion))
 				{
-					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_UP_TO_DATE, currentVersion),ToastType.SUCCESS));
+					if(isManualCheck)
+					{
+						Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_UP_TO_DATE, currentVersion), ToastType.SUCCESS));
+					}
 				}
 				else
 				{
-					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_AVAILABLE, currentVersion, latestVersion),ToastType.INFO));
+					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_AVAILABLE, currentVersion, latestVersion), ToastType.INFO));
 				}
 			}
 			catch(UpdateCheckException e)
 			{
-				log.error("Cannot check for updates", e);
-				Platform.runLater(() -> errorAlertBuilder.createErrorAlert(
-						null,
-						Localization.getString(Strings.UI_ERRORS_UPDATE_CHECK),
-						e.getMessage(),
-						e,
-						getContainingWindow()).showAndWait());
+				log.error("Error during check for updates", e);
+				if(isManualCheck)
+				{
+					Platform.runLater(() -> errorAlertBuilder.createErrorAlert(
+							null,
+							Localization.getString(Strings.UI_ERRORS_UPDATE_CHECK),
+							e.getMessage(),
+							e,
+							getContainingWindow()).showAndWait());
+				}
 			}
 		});
 	}

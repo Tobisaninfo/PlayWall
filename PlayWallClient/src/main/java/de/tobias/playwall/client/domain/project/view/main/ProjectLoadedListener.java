@@ -41,6 +41,8 @@ public class ProjectLoadedListener implements UpdateMessageEventListener<Project
 							ToastType.ERROR,
 							new ToastAction(Localization.getString(Strings.UI_ERRORS_AUDIO_DEVICE_ERRORS_LINK), () -> mainViewController.onMenuItemSettings(null))));
 		}
+
+		mainViewController.checkForUpdatesOnProjectLoad();
 	}
 
 	@Override
