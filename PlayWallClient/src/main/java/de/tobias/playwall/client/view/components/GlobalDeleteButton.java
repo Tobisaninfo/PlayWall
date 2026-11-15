@@ -15,6 +15,15 @@ import javafx.scene.layout.HBox;
 public class GlobalDeleteButton extends ToggleButton
 {
 	private static final double CURSOR_SIZE_PX = 24.0;
+	private static final Image CURSOR_IMAGE = new Image(
+			"de/tobias/playwall/client/icon/trash-solid-full.png",
+			CURSOR_SIZE_PX,
+			CURSOR_SIZE_PX,
+			true,
+			true
+	);
+
+	private final ImageCursor imageCursor;
 
 	private PadEventDispatcher eventDispatcher;
 	private GlobalDeleteListener listener;
@@ -35,21 +44,12 @@ public class GlobalDeleteButton extends ToggleButton
 
 		this.setSelected(false);
 
-		this.selectedProperty().addListener((_, _, newValue) -> {
-			final Image cursorImage = new Image(
-					"de/tobias/playwall/client/icon/trash-solid-full.png",
-					CURSOR_SIZE_PX,
-					CURSOR_SIZE_PX,
-					true,
-					true
-			);
-			final ImageCursor imageCursor = new ImageCursor(cursorImage, 0, 0);
+		imageCursor = new ImageCursor(CURSOR_IMAGE, 0, 0);
 
-			onSelected(newValue, imageCursor);
-		});
+		this.selectedProperty().addListener((_, _, newValue) -> onSelected(newValue));
 	}
 
-	private void onSelected(boolean newValue, ImageCursor imageCursor)
+	private void onSelected(boolean newValue)
 	{
 		if(newValue)
 		{
@@ -58,7 +58,11 @@ public class GlobalDeleteButton extends ToggleButton
 		}
 		else
 		{
-			nodeThatShouldUseImageCursor.setCursor(Cursor.DEFAULT);
+			if(nodeThatShouldUseImageCursor.getCursor() == imageCursor)
+			{
+				nodeThatShouldUseImageCursor.setCursor(Cursor.DEFAULT);
+			}
+
 			eventDispatcher.removePadInputListener(listener);
 		}
 	}

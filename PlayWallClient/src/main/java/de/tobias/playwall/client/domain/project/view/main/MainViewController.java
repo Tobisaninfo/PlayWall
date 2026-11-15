@@ -273,6 +273,19 @@ public class MainViewController extends ViewControllerBase
 		globalDeleteButton.init(padEventDispatcher, padGridPane, new GlobalDeleteListener(this::onPadDeleted));
 		globalColorPicker.init(padEventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, this::onColorChange, this::onColorSubmit));
 
+		globalDeleteButton.selectedProperty().addListener((_, _, newValue) -> {
+			if(Boolean.TRUE.equals(newValue))
+			{
+				globalColorPicker.setSelected(false);
+			}
+		});
+		globalColorPicker.selectedProperty().addListener((_, _, newValue) -> {
+			if(Boolean.TRUE.equals(newValue))
+			{
+				globalDeleteButton.setSelected(false);
+			}
+		});
+
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
 			if(isSuppressVolumeUpdate)
 			{
