@@ -2,6 +2,7 @@
 
 <?import de.tobias.playwall.client.domain.page.view.PageButtons?>
 <?import de.tobias.playwall.client.view.components.GlobalColorPicker?>
+<?import de.tobias.playwall.client.view.components.GlobalDeleteButton?>
 <?import de.tobias.playwall.client.view.components.VolumeSlider?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.*?>
@@ -27,6 +28,7 @@
                                                 focusTraversable="false"/>
                                     </children>
                                 </PageButtons>
+                                <GlobalDeleteButton fx:id="globalDeleteButton" mnemonicParsing="false"/>
                                 <GlobalColorPicker fx:id="globalColorPicker" mnemonicParsing="false"/>
                                 <VolumeSlider fx:id="volumeSlider" maxValue="100" minWidth="200"/>
                             </children>

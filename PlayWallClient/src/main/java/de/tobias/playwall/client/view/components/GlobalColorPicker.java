@@ -98,7 +98,7 @@ public class GlobalColorPicker extends ToggleButton
 		}
 	}
 
-	public void init(PadEventDispatcher eventDispatcher,  Node nodeThatShouldUseImageCursor, GlobalPickerColorListener listener)
+	public void init(PadEventDispatcher eventDispatcher, Node nodeThatShouldUseImageCursor, GlobalPickerColorListener listener)
 	{
 		this.eventDispatcher = eventDispatcher;
 		this.nodeThatShouldUseImageCursor = nodeThatShouldUseImageCursor;

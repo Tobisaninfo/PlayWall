@@ -27,6 +27,7 @@ import de.tobias.playwall.client.domain.pad.view.PadView;
 import de.tobias.playwall.client.domain.pad.view.PadViewProvider;
 import de.tobias.playwall.client.domain.pad.view.desktop.PadEventDispatcher;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.FileDragListener;
+import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalDeleteListener;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.GlobalPickerColorListener;
 import de.tobias.playwall.client.domain.pad.view.desktop.listener.PadDragListener;
 import de.tobias.playwall.client.domain.page.Page;
@@ -123,6 +124,8 @@ public class MainViewController extends ViewControllerBase
 	@FXML
 	private Button pageAddButton;
 	private ContextMenu pageAddButtonContextMenu;
+	@FXML
+	private GlobalDeleteButton globalDeleteButton;
 	@FXML
 	private GlobalColorPicker globalColorPicker;
 	@FXML
@@ -267,6 +270,7 @@ public class MainViewController extends ViewControllerBase
 
 		pageViewActions = new PageViewActions(projectController, client, errorAlertBuilder, fileChooserWrapper, this);
 
+		globalDeleteButton.init(padEventDispatcher, padGridPane, new GlobalDeleteListener(this::onPadDeleted));
 		globalColorPicker.init(padEventDispatcher, padGridPane, new GlobalPickerColorListener(globalColorPicker, this::onColorChange, this::onColorSubmit));
 
 		volumeSlider.valueProperty().addListener((_, oldValue, newValue) -> {
@@ -1146,6 +1150,19 @@ public class MainViewController extends ViewControllerBase
 		{
 			menuItemAlwaysOnTop.setText(Localization.getString(Strings.UI_MENU_VIEW_ALWAYS_ON_TOP));
 			menuItemAlwaysOnTop.setGraphic(createFontIcon(FontAwesomeType.THUMBTACK_SOLID));
+		}
+	}
+
+	private void onPadDeleted(Pad pad)
+	{
+		try
+		{
+			client.pad(pad.getId()).delete();
+		}
+		catch(PlayWallApiException e)
+		{
+			log.error("Cannot delete pad {}", pad.getId(), e);
+			errorAlertBuilder.createErrorAlert(null, Localization.getString(Strings.UI_ERRORS_PAD_COLOR_UPDATE), e.getMessage(), e.getError(), getContainingWindow()).showAndWait();
 		}
 	}
 
