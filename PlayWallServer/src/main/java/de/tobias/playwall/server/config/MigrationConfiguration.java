@@ -32,6 +32,7 @@ class MigrationConfiguration
 	public MigrationRegistry settingsMigrationRegistry()
 	{
 		return MigrationRegistry.builder(3, "/VERSION")
+				.migrateTo(2)
 				.migrateTo(3, JsonMigrationStepAdd.of("/automaticUpdateSearch", true))
 				.build();
 	}

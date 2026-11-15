@@ -1,5 +1,6 @@
 package de.tobias.playwall.server.api.settings;
 
+import de.tobias.playwall.common.api.settings.model.UnsavedChangesMode;
 import de.tobias.playwall.server.api.AbstractRequestHandlerTest;
 import de.tobias.playwall.server.common.audio.AudioHandlerFactory;
 import de.tobias.playwall.server.common.migration.MigrationException;
@@ -22,13 +23,14 @@ import static org.mockito.Mockito.when;
 
 class SettingsRepositoryMigrationTest extends AbstractRequestHandlerTest
 {
-	private static final String V2_SETTINGS = """
+	private static final String V3_SETTINGS = """
 			{
-				"VERSION": 2,
+				"VERSION": 3,
 				"autoLoadLatestProjectOnStart": false,
 				"autosave": false,
 				"unsavedChangesMode": "ASK",
-				"selectedAudioDevice": null
+				"selectedAudioDevice": null,
+				"automaticUpdateSearch": true
 			}
 			""";
 
@@ -64,12 +66,18 @@ class SettingsRepositoryMigrationTest extends AbstractRequestHandlerTest
 	void testLoadSettings_currentVersionIsLoadedAndNotRewritten() throws IOException
 	{
 		final Path file = tempDir.resolve("settings.json");
-		Files.writeString(file, V2_SETTINGS);
+		Files.writeString(file, V3_SETTINGS);
 
 		final Settings settings = settingsRepository.loadSettings();
 
-		assertThat(settings).isEqualTo(Settings.builder().build());
-		assertThat(Files.readString(file)).isEqualTo(V2_SETTINGS);
+		assertThat(settings).isEqualTo(Settings.builder()
+				.autoLoadLatestProjectOnStart(false)
+				.autosave(false)
+				.unsavedChangesMode(UnsavedChangesMode.ASK)
+				.selectedAudioDevice(null)
+				.automaticUpdateSearch(true)
+				.build());
+		assertThat(Files.readString(file)).isEqualTo(V3_SETTINGS);
 	}
 
 	@Test
@@ -80,8 +88,14 @@ class SettingsRepositoryMigrationTest extends AbstractRequestHandlerTest
 
 		final Settings settings = settingsRepository.loadSettings();
 
-		assertThat(settings).isEqualTo(Settings.builder().build());
-		assertThat(Files.readString(file)).contains("\"VERSION\":2");
+		assertThat(settings).isEqualTo(Settings.builder()
+				.autoLoadLatestProjectOnStart(false)
+				.autosave(false)
+				.unsavedChangesMode(UnsavedChangesMode.ASK)
+				.selectedAudioDevice(null)
+				.automaticUpdateSearch(true)
+				.build());
+		assertThat(Files.readString(file)).contains("\"VERSION\":3");
 	}
 
 	@Test
