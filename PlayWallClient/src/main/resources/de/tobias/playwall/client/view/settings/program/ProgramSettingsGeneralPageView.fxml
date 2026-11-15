@@ -11,6 +11,8 @@
               xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <SettingsRow icon="POWER_OFF_SOLID" title="%ui.settings.program.start.title">
         <CheckBox fx:id="checkboxStartAutoLoadLatestProject" text="%ui.settings.program.start.autoLoadLatestProject"/>
+        <CheckBox fx:id="checkboxIsAutomaticUpdateSearch" text="%ui.settings.program.update_search.checkbox"/>
+        <Label text="%ui.settings.program.update_search.info" wrapText="true"/>
     </SettingsRow>
     <Separator/>
     <SettingsRow icon="ARROW_RIGHT_FROM_BRACKET_SOLID" title="%ui.settings.program.exit.title">

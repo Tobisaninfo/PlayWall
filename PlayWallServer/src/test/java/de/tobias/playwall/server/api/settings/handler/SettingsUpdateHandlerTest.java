@@ -76,6 +76,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 				.autoLoadLatestProjectOnStart(true)
 				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.autosave(true)
+				.automaticUpdateSearch(false)
 				.build());
 
 		handler.handleRequest(request);
@@ -87,6 +88,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 						.autoLoadLatestProjectOnStart(true)
 						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 						.autosave(true)
+						.automaticUpdateSearch(false)
 						.build()));
 
 	}
@@ -99,6 +101,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 				.autoLoadLatestProjectOnStart(true)
 				.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 				.autosave(true)
+				.automaticUpdateSearch(false)
 				.build());
 
 		requestExecutor.execute(request);
@@ -110,6 +113,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 						.autoLoadLatestProjectOnStart(true)
 						.unsavedChangesMode(UnsavedChangesMode.DISCARD)
 						.autosave(true)
+						.automaticUpdateSearch(false)
 						.build()));
 
 		applicationEvents.clear();
@@ -124,6 +128,7 @@ class SettingsUpdateHandlerTest extends AbstractRequestHandlerTest
 						.autoLoadLatestProjectOnStart(false)
 						.unsavedChangesMode(UnsavedChangesMode.ASK)
 						.autosave(false)
+						.automaticUpdateSearch(true)
 						.build()));
 	}
 }

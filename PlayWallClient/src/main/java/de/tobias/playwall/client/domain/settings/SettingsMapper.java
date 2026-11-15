@@ -17,6 +17,7 @@ public class SettingsMapper
 				.unsavedChangesMode(settingsDto.unsavedChangesMode())
 				.autosave(settingsDto.autosave())
 				.selectedAudioDevice(settingsDto.selectedAudioDevice())
+				.automaticUpdateSearch(settingsDto.automaticUpdateSearch())
 				.build();
 	}
 
@@ -27,6 +28,7 @@ public class SettingsMapper
 				.unsavedChangesMode(settings.getUnsavedChangesMode())
 				.autosave(settings.isAutosave())
 				.selectedAudioDevice(settings.getSelectedAudioDevice())
+				.automaticUpdateSearch(settings.isAutomaticUpdateSearch())
 				.build();
 	}
 }

@@ -15,4 +15,5 @@ public final class Settings
 	private UnsavedChangesMode unsavedChangesMode;
 	private boolean autosave;
 	private String selectedAudioDevice;
+	private boolean automaticUpdateSearch;
 }

@@ -17,6 +17,7 @@ public class Settings
 			.autosave(false)
 			.unsavedChangesMode(UnsavedChangesMode.ASK)
 			.selectedAudioDevice(null)
+			.automaticUpdateSearch(true)
 			.build();
 
 	@SuppressWarnings({"java:S116", "java:S1170"})
@@ -30,4 +31,6 @@ public class Settings
 	private boolean autosave;
 
 	private String selectedAudioDevice;
+
+	private boolean automaticUpdateSearch;
 }
