@@ -4,6 +4,8 @@ import de.thecodelabs.utils.application.App;
 import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
+import org.semver4j.Semver;
+import org.semver4j.SemverException;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -78,8 +80,8 @@ public class UpdateService
 		}
 	}
 
-	public boolean isNewerThanCurrent(UpdateInfo updateInfo)
+	public static boolean isVersionNewer(String currentVersion, String latestVersion) throws SemverException
 	{
-		return !updateInfo.version().equals(app.getInfo().getVersion());
+		return new Semver(latestVersion).isGreaterThan(new Semver(currentVersion));
 	}
 }

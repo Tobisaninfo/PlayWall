@@ -89,6 +89,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.semver4j.SemverException;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.util.*;
@@ -1131,19 +1132,19 @@ public class MainViewController extends ViewControllerBase
 				final String latestVersion = updateService.fetchLatestVersion();
 				final String currentVersion = updateService.getCurrentVersion();
 
-				if(latestVersion.equals(currentVersion))
+				if(UpdateService.isVersionNewer(currentVersion, latestVersion))
+				{
+					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_AVAILABLE, currentVersion, latestVersion), ToastType.INFO));
+				}
+				else
 				{
 					if(isManualCheck)
 					{
 						Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_UP_TO_DATE, currentVersion), ToastType.SUCCESS));
 					}
 				}
-				else
-				{
-					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_AVAILABLE, currentVersion, latestVersion), ToastType.INFO));
-				}
 			}
-			catch(UpdateCheckException e)
+			catch(UpdateCheckException | SemverException e)
 			{
 				log.error("Error during check for updates", e);
 				if(isManualCheck)
