@@ -10,6 +10,8 @@ public class Strings
 	public static final String UI_NOTIFICATION_INFO = "ui.notification.info";
 	public static final String UI_NOTIFICATION_WARNING = "ui.notification.warning";
 	public static final String UI_NOTIFICATION_ERROR = "ui.notification.error";
+	public static final String UI_NOTIFICATION_UPDATE_AVAILABLE = "ui.notification.update.available";
+	public static final String UI_NOTIFICATION_UPDATE_UP_TO_DATE = "ui.notification.update.up.to.date";
 
 	public static final String UI_DIALOG_LAUNCH_TITLE = "ui.dialog.launch.title";
 	public static final String UI_DIALOG_NEW_PROJECT_TITLE = "ui.dialog.project.create.title";
@@ -179,6 +181,7 @@ public class Strings
 	public static final String UI_ERRORS_SAVE  = "ui.errors.save";
 	public static final String UI_ERRORS_UNDO  = "ui.errors.undo";
 	public static final String UI_ERRORS_REDO  = "ui.errors.redo";
+	public static final String UI_ERRORS_UPDATE_CHECK = "ui.errors.update.check";
 	public static final String UI_DIALOG_PROJECT_CREATE_NAME_EMPTY = "ui.dialog.project.create.name.empty";
 	public static final String UI_DIALOG_PROJECT_CREATE_NAME_ALREADY_EXISTS = "ui.dialog.project.create.name.already.exists";
 

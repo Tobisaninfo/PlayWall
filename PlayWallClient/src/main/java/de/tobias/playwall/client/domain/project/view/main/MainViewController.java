@@ -54,6 +54,8 @@ import de.tobias.playwall.client.log.LogViewer;
 import de.tobias.playwall.client.net.ConnectionState;
 import de.tobias.playwall.client.net.FluentClient;
 import de.tobias.playwall.client.net.PlayWallApiException;
+import de.tobias.playwall.client.update.UpdateCheckException;
+import de.tobias.playwall.client.update.UpdateService;
 import de.tobias.playwall.client.utils.Size;
 import de.tobias.playwall.client.view.FileChooserWrapper;
 import de.tobias.playwall.client.view.ViewControllerBase;
@@ -149,6 +151,7 @@ public class MainViewController extends ViewControllerBase
 	private final ErrorAlertBuilder errorAlertBuilder;
 
 	private final FluentClient client;
+	private final UpdateService updateService;
 	private final FileChooserWrapper fileChooserWrapper;
 	private final PadViewProvider padViewProvider;
 	private final PageMapper pageMapper;
@@ -978,7 +981,7 @@ public class MainViewController extends ViewControllerBase
 	{
 		final MenuItem menuItemAbout = createMenuItem(Strings.UI_MENU_INFO_ABOUT, FontAwesomeType.CIRCLE_INFO_SOLID, Optional.of(this::onMenuItemAbout));
 		final MenuItem menuItemLog = createMenuItem(Strings.UI_MENU_INFO_LOG, FontAwesomeType.INBOX_SOLID, Optional.of(this::onMenuItemLog), true);
-		final MenuItem menuItemUpdates = createMenuItem(Strings.UI_MENU_INFO_UPDATES, FontAwesomeType.ARROWS_ROTATE_SOLID, Optional.empty());
+		final MenuItem menuItemUpdates = createMenuItem(Strings.UI_MENU_INFO_UPDATES, FontAwesomeType.ARROWS_ROTATE_SOLID, Optional.of(this::onMenuItemUpdates));
 
 		final Menu menu = new Menu(Localization.getString(Strings.UI_MENU_INFO));
 		menu.getItems().addAll(
@@ -1103,6 +1106,36 @@ public class MainViewController extends ViewControllerBase
 	{
 		final AboutDialog aboutDialog = AppContextHolder.getInstance().get(AboutDialog.class);
 		aboutDialog.showAndWait(getContainingWindow());
+	}
+
+	private void onMenuItemUpdates(ActionEvent event)
+	{
+		Worker.runLater(() -> {
+			try
+			{
+				final String latestVersion = updateService.fetchLatestVersion();
+				final String currentVersion = updateService.getCurrentVersion();
+
+				if(latestVersion.equals(currentVersion))
+				{
+					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_UP_TO_DATE, currentVersion),ToastType.SUCCESS));
+				}
+				else
+				{
+					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_AVAILABLE, currentVersion, latestVersion),ToastType.INFO));
+				}
+			}
+			catch(UpdateCheckException e)
+			{
+				log.error("Cannot check for updates", e);
+				Platform.runLater(() -> errorAlertBuilder.createErrorAlert(
+						null,
+						Localization.getString(Strings.UI_ERRORS_UPDATE_CHECK),
+						e.getMessage(),
+						e,
+						getContainingWindow()).showAndWait());
+			}
+		});
 	}
 
 	private void onMenuItemProjectSettings(ActionEvent event)

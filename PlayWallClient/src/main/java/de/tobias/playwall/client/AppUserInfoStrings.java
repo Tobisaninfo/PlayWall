@@ -7,4 +7,6 @@ public interface AppUserInfoStrings extends ApplicationInfo.CustomUserInfo
 	String website();
 
 	String repository();
+
+	String versionApiUrl();
 }
