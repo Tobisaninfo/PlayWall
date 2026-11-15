@@ -31,6 +31,8 @@ class MigrationConfiguration
 	@Bean
 	public MigrationRegistry settingsMigrationRegistry()
 	{
-		return MigrationRegistry.builder(2, "/VERSION").migrateTo(2).build();
+		return MigrationRegistry.builder(3, "/VERSION")
+				.migrateTo(3, JsonMigrationStepAdd.of("/automaticUpdateSearch", true))
+				.build();
 	}
 }

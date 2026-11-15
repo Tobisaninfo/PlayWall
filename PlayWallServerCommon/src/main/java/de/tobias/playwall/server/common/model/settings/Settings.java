@@ -21,7 +21,7 @@ public class Settings
 			.build();
 
 	@SuppressWarnings({"java:S116", "java:S1170"})
-	private final int VERSION = 2;
+	private final int VERSION = 3;
 
 	private boolean autoLoadLatestProjectOnStart;
 
