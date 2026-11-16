@@ -27,7 +27,7 @@ public class UpdateService
 	@InjectConstructor
 	UpdateService(App app)
 	{
-		this(app, HttpClient.newBuilder().connectTimeout(REQUEST_TIMEOUT).build(),
+		this(app, HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(REQUEST_TIMEOUT).build(),
 				JsonMapper.builder().findAndAddModules().build());
 	}
 
