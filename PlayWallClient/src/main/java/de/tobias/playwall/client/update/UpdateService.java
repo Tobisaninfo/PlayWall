@@ -4,8 +4,8 @@ import de.thecodelabs.utils.application.App;
 import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.appcontext.InjectConstructor;
 import de.tobias.playwall.client.appcontext.Service;
-import org.semver4j.Semver;
-import org.semver4j.SemverException;
+import tools.jackson.core.Version;
+import tools.jackson.core.util.VersionUtil;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -80,8 +80,27 @@ public class UpdateService
 		}
 	}
 
-	public static boolean isVersionNewer(String currentVersion, String latestVersion) throws SemverException
+	public static boolean isVersionNewer(String currentVersion, String latestVersion) throws UpdateCheckException
 	{
-		return new Semver(latestVersion).isGreaterThan(new Semver(currentVersion));
+		final Version current = VersionUtil.parseVersion(currentVersion, null, null);
+		if(current.isUnknownVersion() || isZeroVersion(current))
+		{
+			throw new UpdateCheckException("Cannot parse current version: " + currentVersion);
+		}
+
+		final Version latest = VersionUtil.parseVersion(latestVersion, null, null);
+		if(latest.isUnknownVersion() || isZeroVersion(latest))
+		{
+			throw new UpdateCheckException("Cannot parse latest version: " + latestVersion);
+		}
+
+		return current.compareTo(latest) < 0;
+	}
+
+	private static boolean isZeroVersion(Version version)
+	{
+		return version.getMajorVersion() == 0
+				&& version.getMinorVersion() == 0
+				&& version.getPatchLevel() == 0;
 	}
 }

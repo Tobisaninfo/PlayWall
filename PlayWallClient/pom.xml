@@ -157,13 +157,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.semver4j</groupId>
-            <artifactId>semver4j</artifactId>
-            <version>${semver4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

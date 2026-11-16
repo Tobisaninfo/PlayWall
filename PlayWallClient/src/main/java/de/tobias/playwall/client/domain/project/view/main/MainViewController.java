@@ -89,7 +89,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.semver4j.SemverException;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.util.*;
@@ -1144,7 +1143,7 @@ public class MainViewController extends ViewControllerBase
 					}
 				}
 			}
-			catch(UpdateCheckException | SemverException e)
+			catch(UpdateCheckException e)
 			{
 				log.error("Error during check for updates", e);
 				if(isManualCheck)
