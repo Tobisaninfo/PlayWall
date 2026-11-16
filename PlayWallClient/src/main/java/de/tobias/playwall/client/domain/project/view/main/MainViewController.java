@@ -11,6 +11,7 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.icon.FontIconType;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playwall.client.AppUserInfoStrings;
 import de.tobias.playwall.client.Strings;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -79,6 +80,11 @@ import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -91,7 +97,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.awt.*;
+import java.net.URI;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static de.thecodelabs.utils.util.Localization.getString;
@@ -1133,7 +1142,13 @@ public class MainViewController extends ViewControllerBase
 
 				if(UpdateService.isVersionNewer(currentVersion, latestVersion))
 				{
-					Platform.runLater(() -> showNotification(Localization.getString(Strings.UI_NOTIFICATION_UPDATE_AVAILABLE, currentVersion, latestVersion), ToastType.INFO));
+					final String website = app.getUserInfo(AppUserInfoStrings.class).website() + "download";
+
+					Platform.runLater(() -> materialToastManager.showPermanent(
+							Localization.getString(Strings.UI_NOTIFICATION_INFO),
+							Localization.getString(Strings.UI_NOTIFICATION_UPDATE_AVAILABLE, currentVersion, latestVersion),
+							ToastType.INFO,
+							new ToastAction(Localization.getString(Strings.UI_DIALOG_ABOUT_WEBSITE), () -> openWebsite(website))));
 				}
 				else
 				{
@@ -1157,6 +1172,21 @@ public class MainViewController extends ViewControllerBase
 				}
 			}
 		});
+	}
+
+	private void openWebsite(String url)
+	{
+		if(Desktop.isDesktopSupported())
+		{
+			try
+			{
+				Desktop.getDesktop().browse(new URI(url));
+			}
+			catch(Exception e)
+			{
+				log.error("Error trying to open link in browser: {}", url, e);
+			}
+		}
 	}
 
 	private void onMenuItemProjectSettings(ActionEvent event)
