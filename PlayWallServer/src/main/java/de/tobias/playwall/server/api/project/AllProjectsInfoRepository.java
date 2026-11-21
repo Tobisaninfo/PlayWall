@@ -5,6 +5,7 @@ import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.project.AllProjectsInfo;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
+import de.tobias.playwall.server.common.storage.AtomicFileWriter;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -87,8 +88,8 @@ public class AllProjectsInfoRepository
 	public void saveAllProjectsInfo() throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(PROJECTS_FILENAME);
-		Files.createDirectories(path.getParent());
-		mapper.writeValue(Files.newBufferedWriter(path), getAllProjectsInfo());
+		final AllProjectsInfo info = getAllProjectsInfo();
+		AtomicFileWriter.write(path, out -> mapper.writeValue(out, info));
 	}
 
 	/**

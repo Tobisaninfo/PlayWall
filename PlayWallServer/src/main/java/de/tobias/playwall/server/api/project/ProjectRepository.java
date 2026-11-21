@@ -5,6 +5,7 @@ import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.project.Project;
 import de.tobias.playwall.server.common.model.project.ProjectMetadata;
 import de.tobias.playwall.server.common.model.project.Views;
+import de.tobias.playwall.server.common.storage.AtomicFileWriter;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -74,8 +75,7 @@ public class ProjectRepository
 	public void saveProject(Project project) throws IOException
 	{
 		final Path path = getProjectPath(project.getMetadata().getId());
-		Files.createDirectories(path.getParent());
-		mapper.writeValue(Files.newBufferedWriter(path), project);
+		AtomicFileWriter.write(path, out -> mapper.writeValue(out, project));
 	}
 
 	public boolean deleteProject(UUID id) throws IOException

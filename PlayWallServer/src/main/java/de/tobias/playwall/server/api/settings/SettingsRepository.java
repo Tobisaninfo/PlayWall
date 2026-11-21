@@ -3,6 +3,7 @@ package de.tobias.playwall.server.api.settings;
 import de.tobias.playwall.server.common.migration.JsonMigrationResult;
 import de.tobias.playwall.server.common.migration.MigrationRegistry;
 import de.tobias.playwall.server.common.model.settings.Settings;
+import de.tobias.playwall.server.common.storage.AtomicFileWriter;
 import de.tobias.playwall.server.common.storage.PathProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -56,7 +57,6 @@ public class SettingsRepository
 	public void saveSettings(Settings settings) throws IOException
 	{
 		final Path path = pathProvider.getPathForConfig(SETTINGS_FILENAME);
-		Files.createDirectories(path.getParent());
-		mapper.writeValue(Files.newBufferedWriter(path), settings);
+		AtomicFileWriter.write(path, out -> mapper.writeValue(out, settings));
 	}
 }
