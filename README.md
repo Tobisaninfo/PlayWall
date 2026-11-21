@@ -131,6 +131,12 @@ minimum glibc version, which differs by CPU architecture:
 | x86_64       | 2.17                 | virtually anything (Debian 8+, Ubuntu 14.04+)                                  |
 | aarch64      | 2.38 (JavaFX 25.0.4) | Debian 13+, Ubuntu 23.10+ / 24.04+, Arch-based rolling releases (e.g. CachyOS) |
 
+**AppImage (x86_64, e.g. CachyOS):** CI also publishes `PlayWallClient-<version>-installer.x86_64.AppImage`. It only
+wraps the jlinked app image; system libraries are **not** bundled and must come from the host (GTK 3, Mesa, ALSA with
+`pipewire-alsa`, X11 libs, freetype/fontconfig). On Arch/CachyOS:
+`sudo pacman -S gtk3 alsa-lib pipewire-alsa freetype2 fontconfig mesa libxtst`. Build it locally on Linux with
+`packaging/appimage/build-appimage.sh <PlayWall-x.y.z.amd64.tar.gz> <out.AppImage>`.
+
 **Not supported on aarch64:** Debian 12 (glibc 2.36) and Ubuntu 22.04 (glibc 2.35) — the app fails to start with
 `UnsatisfiedLinkError: ... libglassgtk3.so: ... version 'GLIBC_2.38' not found`.
 

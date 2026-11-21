@@ -67,3 +67,166 @@ jobs:
       - name: Build with Maven (Linux)
         if: startsWith(matrix.os, 'ubuntu')
         run: mvn -e --no-transfer-progress -P build-rust,custom-jdk,build-aot-cache,package-executables -DskipTests deploy
+
+      # Only the x86_64 build feeds the AppImage (CachyOS is x86_64-only).
+      - name: Collect Linux x86_64 tarball for AppImage
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          mkdir -p linux-input
+          cp PlayWallClient/target/installer/PlayWall-*.amd64.tar.gz linux-input/
+          mvn -q -N --no-transfer-progress help:evaluate -Dexpression=project.version -DforceStdout > linux-input/version.txt
+          cat linux-input/version.txt; echo
+          ls -l linux-input
+
+      - name: Upload Linux x86_64 tarball
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-amd64-tarball
+          path: linux-input/
+          if-no-files-found: error
+
+  appimage:
+    name: Build AppImage (x86_64)
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Download Linux x86_64 tarball
+        uses: actions/download-artifact@v8
+        with:
+          name: linux-amd64-tarball
+          path: linux-input
+
+      - name: Build AppImage
+        run: |
+          mkdir -p appimage-output
+          cp linux-input/version.txt appimage-output/version.txt
+          packaging/appimage/build-appimage.sh \
+            "$(ls linux-input/PlayWall-*.amd64.tar.gz)" \
+            appimage-output/PlayWall-x86_64.AppImage
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v7
+        with:
+          name: appimage
+          path: appimage-output/
+          if-no-files-found: error
+
+  verify-appimage:
+    name: Verify AppImage on Arch Linux
+    needs: appimage
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+
+    steps:
+      - name: Install host runtime libraries (what CachyOS provides)
+        # Mirrors what a desktop CachyOS has: system libraries are NOT bundled in the AppImage.
+        run: |
+          pacman -Syu --noconfirm --needed \
+            gtk3 alsa-lib pipewire-alsa freetype2 fontconfig mesa \
+            libx11 libxext libxi libxrender libxtst \
+            xorg-server-xvfb desktop-file-utils
+
+      - name: Download AppImage
+        uses: actions/download-artifact@v8
+        with:
+          name: appimage
+          path: appimage-output
+
+      - name: Verify contents and library resolution
+        run: |
+          cd appimage-output
+          chmod +x PlayWall-x86_64.AppImage
+
+          # --appimage-extract needs no FUSE (not available in the container).
+          ./PlayWall-x86_64.AppImage --appimage-extract > /dev/null
+          test -x squashfs-root/AppRun
+          test -x squashfs-root/usr/PlayWall/bin/PlayWall
+          desktop-file-validate squashfs-root/playwall.desktop
+
+          # Every bundled shared library must resolve against the host libraries installed above.
+          # libjvm.so is excluded: the JDK libs reference it, but the java launcher finds it at runtime
+          # via lib/server/, so a standalone ldd always reports it as missing.
+          missing=0
+          while IFS= read -r lib; do
+            out="$(ldd "$lib" 2>&1 | grep 'not found' | grep -v 'libjvm\.so' || true)"
+            if [ -n "$out" ]; then
+              echo "::error::Unresolved libraries in $lib"
+              echo "$out"
+              missing=1
+            fi
+          done < <(find squashfs-root/usr/PlayWall -name '*.so*' -type f)
+          exit "$missing"
+
+      - name: Smoke test (start under Xvfb)
+        # Not blocking: headless CI has no GPU or audio device, so a failure here is a hint, not proof of a broken build.
+        continue-on-error: true
+        run: |
+          cd appimage-output
+          # No FUSE in the container -> let the AppImage runtime extract itself.
+          set +e
+          APPIMAGE_EXTRACT_AND_RUN=1 timeout 30 xvfb-run -a ./PlayWall-x86_64.AppImage
+          code=$?
+          set -e
+          # 124 = still running when the timeout hit, i.e. it started and did not crash.
+          if [ "$code" -ne 124 ]; then
+            echo "::warning::AppImage exited early with code $code"
+            exit 1
+          fi
+
+  publish-appimage:
+    name: Publish AppImage to Artifactory
+    needs: verify-appimage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: 25
+
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Prepare Maven settings
+        run: |
+          mkdir -p "$HOME/.m2"
+          sed -e "s|\${MAVEN_USERNAME}|${{ secrets.MAVEN_USERNAME }}|g" \
+              -e "s|\${MAVEN_PASSWORD}|${{ secrets.MAVEN_PASSWORD }}|g" \
+              .github/maven/settings.xml > "$HOME/.m2/settings.xml"
+
+      - name: Download AppImage
+        uses: actions/download-artifact@v8
+        with:
+          name: appimage
+          path: appimage-output
+
+      - name: Deploy to Artifactory
+        run: |
+          # Same coordinates and naming scheme as the other installers:
+          # de.tobias.playwall:PlayWallClient:<version>:installer.<ext>
+          VERSION="$(cat appimage-output/version.txt)"
+
+          if [[ "$VERSION" == *-SNAPSHOT ]]; then
+            REPO_ID=snapshots
+            REPO_URL=https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots/
+          else
+            REPO_ID=release
+            REPO_URL=https://maven.thecodelabs.de/artifactory/TheCodeLabs-release/
+          fi
+
+          mvn -e --no-transfer-progress org.apache.maven.plugins:maven-deploy-plugin:3.1.4:deploy-file \
+            -Dfile=appimage-output/PlayWall-x86_64.AppImage \
+            -DgroupId=de.tobias.playwall \
+            -DartifactId=PlayWallClient \
+            -Dversion="$VERSION" \
+            -Dclassifier=installer \
+            -Dpackaging=x86_64.AppImage \
+            -DgeneratePom=false \
+            -DrepositoryId="$REPO_ID" \
+            -Durl="$REPO_URL"

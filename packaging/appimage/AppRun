@@ -1,0 +1,5 @@
+#!/bin/sh
+# AppImage entry point. The jpackage launcher resolves its runtime and app libs relative to its own
+# location, so it works unchanged from inside the read-only AppImage mount.
+HERE="$(dirname "$(readlink -f "$0")")"
+exec "$HERE/usr/PlayWall/bin/PlayWall" "$@"

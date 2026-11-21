@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=PlayWall
+GenericName=Soundboard
+Comment=Interactive audio-visual presentations and soundboard
+Exec=AppRun
+Icon=playwall
+Terminal=false
+Categories=AudioVideo;Audio;Player;
+Keywords=audio;playback;presentation;
+StartupWMClass=de.tobias.playwall.client.PlayWallMain
