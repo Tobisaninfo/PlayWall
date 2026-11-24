@@ -18,6 +18,8 @@ import java.nio.file.StandardCopyOption;
 @Slf4j
 public final class AtomicFileWriter
 {
+	private static final String SUFFIX = ".tmp";
+
 	@FunctionalInterface
 	public interface OutputStreamWriter
 	{
@@ -33,7 +35,7 @@ public final class AtomicFileWriter
 		final Path directory = target.toAbsolutePath().getParent();
 		Files.createDirectories(directory);
 
-		final Path tempFile = Files.createTempFile(directory, target.getFileName().toString(), ".tmp");
+		final Path tempFile = Files.createTempFile(directory, target.getFileName().toString(), SUFFIX);
 		try
 		{
 			try(FileOutputStream outputStream = new FileOutputStream(tempFile.toFile()))
@@ -72,7 +74,7 @@ public final class AtomicFileWriter
 		{
 			Files.move(source, target, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
 		}
-		catch(AtomicMoveNotSupportedException e)
+		catch(AtomicMoveNotSupportedException _)
 		{
 			Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
 		}
