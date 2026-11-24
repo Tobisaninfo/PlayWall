@@ -79,7 +79,10 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 
 		final PadController newPadController = projectController.createNewPadController(pad);
 
-		pad.setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
+		if(!requestMessage.isKeepName())
+		{
+			pad.setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
+		}
 		context.publishEvent(new PadUpdate(padMapper.padToPadDto(pad)));
 
 		// Load pad async
@@ -113,7 +116,7 @@ class PadNewMediaHandler extends UndoableRequestHandler<PadNewMediaRequest>
 
 		final RequestMessage reloadOldMediaRequest = switch(pad.getContent())
 		{
-			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
+			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath(), request.isKeepName());
 		};
 		return new UndoItem(shortDescription, longDescription, request, new CompoundRequest(
 				reloadOldMediaRequest,

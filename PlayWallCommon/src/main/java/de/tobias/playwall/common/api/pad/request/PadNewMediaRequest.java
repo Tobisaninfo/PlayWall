@@ -14,4 +14,5 @@ public class PadNewMediaRequest extends RequestMessage
 {
 	private UUID padId;
 	private String path;
+	private boolean keepName;
 }

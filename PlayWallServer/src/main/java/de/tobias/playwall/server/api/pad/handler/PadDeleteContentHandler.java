@@ -63,7 +63,7 @@ class PadDeleteContentHandler extends UndoableRequestHandler<PadDeleteContentReq
 
 		final RequestMessage newMediaRequest = switch(pad.getContent())
 		{
-			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath());
+			case AudioPadContent audioPadContent -> new PadNewMediaRequest(pad.getId(), audioPadContent.getMediaPath(), false);
 		};
 
 		final String shortDescription = messageSource.getMessage("undo.description.short.pad.delete", new Object[]{}, LocaleContextHolder.getLocale());

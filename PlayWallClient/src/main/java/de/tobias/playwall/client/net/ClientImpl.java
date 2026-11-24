@@ -279,7 +279,7 @@ class ClientImpl implements Client
 	@Override
 	public void newMedia(UUID padId, Path file) throws PlayWallApiException
 	{
-		clientWebSocketHandler.send(new PadNewMediaRequest(padId, file.toAbsolutePath().toString()));
+		clientWebSocketHandler.send(new PadNewMediaRequest(padId, file.toAbsolutePath().toString(), false));
 	}
 
 	@Override

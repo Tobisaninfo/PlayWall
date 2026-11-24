@@ -56,7 +56,7 @@ class UndoManagerTest
 	@Test
 	void testUndoWithOneItemInHistory()
 	{
-		manager.addUndoOperation(new UndoItem("Demo", "Demo", new PadNewMediaRequest(null, null), new PadDeleteContentRequest(null)));
+		manager.addUndoOperation(new UndoItem("Demo", "Demo", new PadNewMediaRequest(null, null, false), new PadDeleteContentRequest(null)));
 		applicationEvents.clear();
 
 		final RequestMessage undoOperation1 = manager.getUndoOperation();
@@ -79,7 +79,7 @@ class UndoManagerTest
 	@Test
 	void testUndoWithTwoItemInHistory()
 	{
-		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null), new PadDeleteContentRequest(null)));
+		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null, false), new PadDeleteContentRequest(null)));
 		manager.addUndoOperation(new UndoItem("Demo 2", "Demo 2", new PadSettingsUpdateRequest(null, null), new PadSettingsUpdateRequest(null, null)));
 		applicationEvents.clear();
 
@@ -121,7 +121,7 @@ class UndoManagerTest
 	@Test
 	void testRedoWithItemsInHistoryWithoutAnyUndoFirst()
 	{
-		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null), new PadDeleteContentRequest(null)));
+		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null, false), new PadDeleteContentRequest(null)));
 		manager.addUndoOperation(new UndoItem("Demo 2", "Demo 2", new PadSettingsUpdateRequest(null, null), new PadSettingsUpdateRequest(null, null)));
 
 		final RequestMessage redoOperation = manager.getRedoOperation();
@@ -135,7 +135,7 @@ class UndoManagerTest
 	@Test
 	void testRedoWithTwoItemInHistory()
 	{
-		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null), new PadDeleteContentRequest(null)));
+		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null, false), new PadDeleteContentRequest(null)));
 		manager.addUndoOperation(new UndoItem("Demo 2", "Demo 2", new PadSettingsUpdateRequest(null, null), new PadSettingsUpdateRequest(null, null)));
 		applicationEvents.clear();
 
@@ -169,7 +169,7 @@ class UndoManagerTest
 	@Test
 	void testRedoWithAddNewItemInStackFirst()
 	{
-		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null), new PadDeleteContentRequest(null)));
+		manager.addUndoOperation(new UndoItem("Demo 1", "Demo 1", new PadNewMediaRequest(null, null, false), new PadDeleteContentRequest(null)));
 		manager.addUndoOperation(new UndoItem("Demo 2", "Demo 2", new PadSettingsUpdateRequest(null, null), new PadSettingsUpdateRequest(null, null)));
 		applicationEvents.clear();
 

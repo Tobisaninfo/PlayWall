@@ -65,7 +65,7 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 		applicationEvents.clear();
 
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
-		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString(), false);
 		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getName()).isEqualTo("example_1");
@@ -94,7 +94,7 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 		applicationEvents.clear();
 
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
-		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString(), false);
 		handler.handleRequest(request);
 
 		assertThat(project.getPad(padId).getName()).isEqualTo("example_1");
@@ -121,7 +121,7 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 		applicationEvents.clear();
 
 		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
-		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString());
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString(), false);
 		assertThatThrownBy(() -> handler.handleRequest(request))
 				.isInstanceOf(PadNotExistsException.class);
 
@@ -138,8 +138,24 @@ class PadNewMediaHandlerTest extends AbstractUndoableRequestHandlerTest<PadNewMe
 		project.getPad(padId).setContent(AudioPadContent.builder().mediaPath(mediaPath).loop(false).build());
 
 		final String newMediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_2.mp3")).toURI()).toAbsolutePath().toString();
-		final PadNewMediaRequest request = new PadNewMediaRequest(padId, newMediaPath);
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, newMediaPath, false);
 
 		testInverseOperation(project, request);
+	}
+
+	@Test
+	void testPadNewMediaHandlerKeepName() throws Exception
+	{
+		final UUID padId = UUID.fromString("fc427184-2e55-4734-8148-5fb657963616");
+
+		final Project project = TestUtils.loadProject(objectMapper, "projects/project_1.json");
+		projectController.loadProject(project).get();
+		applicationEvents.clear();
+
+		final Path mediaPath = Paths.get(requireNonNull(getClass().getClassLoader().getResource("audio/example_1.mp3")).toURI());
+		final PadNewMediaRequest request = new PadNewMediaRequest(padId, mediaPath.toAbsolutePath().toString(), true);
+		handler.handleRequest(request);
+
+		assertThat(project.getPad(padId).getName()).isEqualTo("Test Pad");
 	}
 }

@@ -36,7 +36,7 @@ class BatchReplaceMediaHandler extends UndoableRequestHandler<BatchReplaceMediaR
 
 		for(Map.Entry<UUID, String> entry : requestMessage.getNewMediaPathsByPadId().entrySet())
 		{
-			final Optional<UndoItem> undoItem = padNewMediaHandler.handleRequest(new PadNewMediaRequest(entry.getKey(), entry.getValue()));
+			final Optional<UndoItem> undoItem = padNewMediaHandler.handleRequest(new PadNewMediaRequest(entry.getKey(), entry.getValue(), true));
 			undoItem.ifPresent(item -> inverseOperations.add(item.inverseRequest()));
 		}
 		log.debug("Update media paths for {} pads", requestMessage.getNewMediaPathsByPadId().size());
