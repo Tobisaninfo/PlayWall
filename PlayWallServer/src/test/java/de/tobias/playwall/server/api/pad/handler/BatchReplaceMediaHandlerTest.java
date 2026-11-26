@@ -73,11 +73,11 @@ class BatchReplaceMediaHandlerTest extends AbstractUndoableRequestHandlerTest<Ba
 				Set.of());
 		handler.handleRequest(request);
 
-		assertThat(project.getPad(padId1).getName()).isEqualTo("example_1");
+		assertThat(project.getPad(padId1).getName()).isEqualTo("Test Pad 1");
 		assertThat(project.getPad(padId1).getContent()).isInstanceOf(AudioPadContent.class);
 		assertThat(((AudioPadContent) project.getPad(padId1).getContent()).getMediaPath()).endsWith("example_1.mp3");
 
-		assertThat(project.getPad(padId2).getName()).isEqualTo("example_2");
+		assertThat(project.getPad(padId2).getName()).isEqualTo("Test Pad 2");
 		assertThat(project.getPad(padId2).getContent()).isInstanceOf(AudioPadContent.class);
 		assertThat(((AudioPadContent) project.getPad(padId2).getContent()).getMediaPath()).endsWith("example_2.mp3");
 
@@ -105,7 +105,7 @@ class BatchReplaceMediaHandlerTest extends AbstractUndoableRequestHandlerTest<Ba
 		);
 		handler.handleRequest(request);
 
-		assertThat(project.getPad(padId1).getName()).isEqualTo("example_1");
+		assertThat(project.getPad(padId1).getName()).isEqualTo("Test Pad 1");
 		assertThat(project.getPad(padId1).getContent()).isInstanceOf(AudioPadContent.class);
 
 		assertThat(project.getPad(padId2).getContent()).isNull();
