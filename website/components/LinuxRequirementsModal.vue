@@ -103,16 +103,15 @@ defineExpose({open})
         </li>
       </ol>
 
-      <div
-          v-if="kind === 'appimage' || isArm"
-          class="flex flex-col gap-3 border-t border-white/40 pt-4"
-      >
+      <div class="flex flex-col gap-3 border-t border-white/40 pt-4">
         <h3 class="text-sm font-semibold text-pw-text">{{ t('download.guide.troubleshooting') }}</h3>
         <div v-if="kind === 'appimage'" class="flex flex-col gap-2">
           <p class="text-sm text-pw-text-hint">{{ t('download.guide.noFuse') }}</p>
           <CodeBlock :code="noFuseCommand"/>
         </div>
-        <p v-if="isArm" class="text-sm text-pw-text-hint">{{ t('download.guide.armGlibc') }}</p>
+        <p class="text-sm text-pw-text-hint">
+          {{ t(isArm ? 'download.guide.glibcArm64' : 'download.guide.glibcAmd64') }}
+        </p>
       </div>
     </div>
   </dialog>

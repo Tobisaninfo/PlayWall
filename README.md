@@ -123,19 +123,27 @@ integrated via JNI.
 
 ### Linux
 
-The Linux build ships a jlinked JavaFX runtime. JavaFX's prebuilt native libraries (`libglassgtk3.so` etc.) have a
-minimum glibc version, which differs by CPU architecture:
+The Linux build ships a jlinked JavaFX runtime and a Rust audio library. The minimum glibc is the highest of three
+requirements, and differs by CPU architecture:
 
-| Architecture | Minimum glibc        | Supported distros (examples)                                                   |
-|--------------|----------------------|--------------------------------------------------------------------------------|
-| x86_64       | 2.17                 | virtually anything (Debian 8+, Ubuntu 14.04+)                                  |
-| aarch64      | 2.38 (JavaFX 25.0.4) | Debian 13+, Ubuntu 23.10+ / 24.04+, Arch-based rolling releases (e.g. CachyOS) |
+- JavaFX's prebuilt native libraries (`libglassgtk3.so` etc.): x86_64 2.17, aarch64 2.38 (JavaFX 25.0.4).
+- The bundled JDK: 2.17.
+- The Rust audio library (`libPlayWallNativeAudioRust.so`): 2.34 on both architectures. Measured on the
+  8.4.0-SNAPSHOT builds by reading the highest `GLIBC_x.y` symbol version it references.
+
+| Architecture | Minimum glibc | Determined by               | Supported distros (examples)                                          |
+|--------------|---------------|-----------------------------|-----------------------------------------------------------------------|
+| x86_64       | 2.34          | Rust audio library          | Debian 12+, Ubuntu 22.04+, Arch-based rolling releases (e.g. CachyOS) |
+| aarch64      | 2.38          | JavaFX 25.0.4 (Gluon build) | Debian 13+, Ubuntu 23.10+ / 24.04+, Arch-based rolling releases       |
+
+All four downloads (AppImage and `tar.gz`, x86_64 and aarch64) have the same requirements per architecture. System
+libraries are **not** bundled: GTK 3, Mesa/OpenGL, ALSA (plus the PipeWire ALSA plugin on PipeWire systems), X11
+libraries, freetype and fontconfig must come from the host.
 
 **AppImage (x86_64 and aarch64, any distribution):** CI also publishes
 `PlayWallClient-<version>-installer.<arch>.AppImage` with `<arch>` being `x86_64` or `aarch64`. It only wraps the
-jlinked app image, so the glibc requirements above apply. System libraries are **not** bundled and must come from the
-host: GTK 3, Mesa/OpenGL, ALSA (plus the PipeWire ALSA plugin on PipeWire systems), X11 libraries, freetype and
-fontconfig. Typical packages (names vary between releases):
+jlinked app image, so the same glibc and system library requirements as above apply. Typical packages (names vary
+between releases; the website's installation guide shows the same commands):
 
 | Distribution family       | Packages                                                                                                                       |
 |---------------------------|--------------------------------------------------------------------------------------------------------------------------------|
@@ -146,12 +154,18 @@ fontconfig. Typical packages (names vary between releases):
 Build it locally on a Linux machine of the target architecture with
 `packaging/appimage/build-appimage.sh <PlayWall-x.y.z.<arch>.tar.gz> <out.AppImage> [x86_64|aarch64]`.
 
-**Not supported on aarch64:** Debian 12 (glibc 2.36) and Ubuntu 22.04 (glibc 2.35) — the app fails to start with
-`UnsatisfiedLinkError: ... libglassgtk3.so: ... version 'GLIBC_2.38' not found`.
+**Not supported:**
 
-This requirement comes from Gluon's aarch64 build infrastructure, not from our build config, and can change with future
-JavaFX patch releases (unrelated to the JavaFX major version). If this becomes a blocker, re-check the required glibc
-version for the pinned `javafx.version` before assuming it's fixed.
+- x86_64 on Debian 11 and Ubuntu 20.04 (glibc 2.31), and anything older than glibc 2.34. The audio library fails to
+  load with `version 'GLIBC_2.34' not found`.
+- aarch64 on Debian 12 (glibc 2.36) and Ubuntu 22.04 (glibc 2.35). The app fails to start with
+  `UnsatisfiedLinkError: ... libglassgtk3.so: ... version 'GLIBC_2.38' not found`.
+
+The aarch64 requirement comes from Gluon's aarch64 build infrastructure, not from our build config, and can change with
+future JavaFX patch releases (unrelated to the JavaFX major version). The x86_64 requirement comes from the Rust
+toolchain and dependencies and can change when they are updated. If this becomes a blocker, re-check both, e.g. with
+`objdump -T libPlayWallNativeAudioRust.so | grep GLIBC_ | sort -V | tail`, and the required glibc of the pinned
+`javafx.version`, before assuming it is fixed.
 
 ### Windows
 

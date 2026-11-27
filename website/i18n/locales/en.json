@@ -52,28 +52,28 @@
                 "name": "Linux",
                 "arch": "AMD64",
                 "extension": ".AppImage",
-                "requirements": "Any distribution with GTK 3, ALSA and Mesa installed",
+                "requirements": "glibc 2.34 or later\ne.g. Debian 12+, Ubuntu 22.04+ or a current Arch-based distribution\nGTK 3, ALSA and Mesa from the system, see the installation guide",
                 "instructions": "Make the file executable (chmod +x) and run it."
             },
             "linux-amd64": {
                 "name": "Linux",
                 "arch": "AMD64",
                 "extension": ".tar.gz",
-                "requirements": "glibc 2.17 or later\nVirtually any distribution",
+                "requirements": "glibc 2.34 or later\ne.g. Debian 12+, Ubuntu 22.04+ or a current Arch-based distribution\nGTK 3, ALSA and Mesa from the system, see the installation guide",
                 "instructions": "Extract the archive and run PlayWall/bin/PlayWall."
             },
             "linux-arm64-appimage": {
                 "name": "Linux",
                 "arch": "ARM64",
                 "extension": ".AppImage",
-                "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+\nGTK 3, ALSA and Mesa from the system",
+                "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+\nGTK 3, ALSA and Mesa from the system, see the installation guide",
                 "instructions": "Make the file executable (chmod +x) and run it."
             },
             "linux-arm64": {
                 "name": "Linux",
                 "arch": "ARM64",
                 "extension": ".tar.gz",
-                "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+",
+                "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+\nGTK 3, ALSA and Mesa from the system, see the installation guide",
                 "instructions": "Extract the archive and run PlayWall/bin/PlayWall."
             }
         },
@@ -104,7 +104,8 @@
             "copied": "Copied",
             "troubleshooting": "Troubleshooting",
             "noFuse": "If the AppImage does not start because FUSE is missing, run it without FUSE:",
-            "armGlibc": "ARM64 builds need glibc 2.38 or later, e.g. Debian 13+ or Ubuntu 24.04+."
+            "glibcAmd64": "PlayWall needs glibc 2.34 or later, e.g. Debian 12+ or Ubuntu 22.04+. Older systems such as Debian 11 or Ubuntu 20.04 are not supported.",
+            "glibcArm64": "ARM64 builds need glibc 2.38 or later, e.g. Debian 13+ or Ubuntu 24.04+. Older systems such as Debian 12 or Ubuntu 22.04 are not supported."
         }
     },
     "companion": {
