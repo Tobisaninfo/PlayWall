@@ -30,6 +30,7 @@ const rows = computed(() =>
 )
 
 const selectedId = ref<PlatformId | null>(null)
+const guideModal = ref<{ open: () => void } | null>(null)
 const selectId = `download-variant-${props.systemId}`
 
 // Explicit choice wins, then the detected variant, then the first available download.
@@ -127,6 +128,21 @@ const selectedRow = computed(
         </li>
       </ul>
       <p v-if="selectedRow.instructions" class="text-xs text-pw-text-muted">{{ selectedRow.instructions }}</p>
+      <template v-if="systemId === 'linux'">
+        <button
+            type="button"
+            class="self-start text-sm text-pw-blue underline underline-offset-2 transition-opacity hover:opacity-80"
+            @click="guideModal?.open()"
+        >
+          {{ t('download.guide.button') }}
+        </button>
+        <LinuxRequirementsModal
+            ref="guideModal"
+            :platform-id="selectedRow.id"
+            :url="selectedRow.url"
+            :arch="selectedRow.arch"
+        />
+      </template>
       <a
           :href="selectedRow.url"
           download

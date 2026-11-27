@@ -52,7 +52,7 @@
                 "name": "Linux",
                 "arch": "AMD64",
                 "extension": ".AppImage",
-                "requirements": "Any distribution with GTK 3, ALSA and Mesa installed\nSystem libraries are not included, e.g. Arch-based: sudo pacman -S gtk3 alsa-lib pipewire-alsa freetype2 fontconfig mesa libxtst",
+                "requirements": "Any distribution with GTK 3, ALSA and Mesa installed",
                 "instructions": "Make the file executable (chmod +x) and run it."
             },
             "linux-amd64": {
@@ -66,7 +66,7 @@
                 "name": "Linux",
                 "arch": "ARM64",
                 "extension": ".AppImage",
-                "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+\nSystem libraries (GTK 3, ALSA, Mesa) are not included",
+                "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+\nGTK 3, ALSA and Mesa from the system",
                 "instructions": "Make the file executable (chmod +x) and run it."
             },
             "linux-arm64": {
@@ -76,6 +76,35 @@
                 "requirements": "glibc 2.38 or later\ne.g. Debian 13+ or Ubuntu 24.04+",
                 "instructions": "Extract the archive and run PlayWall/bin/PlayWall."
             }
+        },
+        "guide": {
+            "button": "Installation guide",
+            "title": "Install PlayWall on Linux",
+            "intro": "PlayWall needs a few system libraries that are not included in the download. The steps depend on your distribution.",
+            "distroLabel": "Distribution",
+            "distros": {
+                "arch": {
+                    "label": "Arch-based",
+                    "note": "Covers Arch Linux, CachyOS, Manjaro and EndeavourOS. pipewire-alsa routes ALSA audio through PipeWire, the default on most of these systems."
+                },
+                "apt": {
+                    "label": "Debian / Ubuntu (apt)",
+                    "note": "On Debian 12 and Ubuntu 22.04 or older, use libgtk-3-0 and libasound2 instead of the t64 packages. On PipeWire systems also install pipewire-alsa."
+                },
+                "fedora": {
+                    "label": "Fedora (dnf)",
+                    "note": "On PipeWire systems also make sure pipewire-alsa is installed."
+                }
+            },
+            "stepLibraries": "1. Install the system libraries",
+            "librariesHint": "GTK 3, OpenGL (Mesa), ALSA, X11 libraries, freetype and fontconfig come from your distribution.",
+            "stepRunAppImage": "2. Make the AppImage executable and start it",
+            "stepRunArchive": "2. Extract the archive and start PlayWall",
+            "copy": "Copy",
+            "copied": "Copied",
+            "troubleshooting": "Troubleshooting",
+            "noFuse": "If the AppImage does not start because FUSE is missing, run it without FUSE:",
+            "armGlibc": "ARM64 builds need glibc 2.38 or later, e.g. Debian 13+ or Ubuntu 24.04+."
         }
     },
     "companion": {
