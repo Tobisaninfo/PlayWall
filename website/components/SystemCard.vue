@@ -2,23 +2,29 @@
 const props = defineProps<{
   systemId: SystemId
   highlighted: boolean
-  note?: string
 }>()
 
-const {t} = useI18n()
+const {t, te} = useI18n()
 
 const platformIds = SYSTEM_PLATFORMS[props.systemId]
 
 const systemName = computed(() => t(`download.platforms.${platformIds[0]}.name`))
 
 const rows = computed(() =>
-    platformIds.map((id) => ({
-      id,
-      url: release.platforms[id],
-      arch: t(`download.platforms.${id}.arch`),
-      extension: t(`download.platforms.${id}.extension`),
-      requirements: t(`download.platforms.${id}.requirements`).split('\n'),
-    })),
+    platformIds.flatMap((id) => {
+      const url = release.platforms[id]
+      if (!url) {
+        return []
+      }
+      return [{
+        id,
+        url,
+        arch: t(`download.platforms.${id}.arch`),
+        extension: t(`download.platforms.${id}.extension`),
+        requirements: t(`download.platforms.${id}.requirements`).split('\n'),
+        instructions: te(`download.platforms.${id}.instructions`) ? t(`download.platforms.${id}.instructions`) : undefined,
+      }]
+    }),
 )
 </script>
 
@@ -58,6 +64,7 @@ const rows = computed(() =>
           </li>
         </ul>
       </div>
+      <p v-if="rows[0].instructions" class="text-xs text-pw-text-muted">{{ rows[0].instructions }}</p>
       <a
           :href="rows[0].url"
           download
@@ -88,7 +95,7 @@ const rows = computed(() =>
             <span>{{ requirement }}</span>
           </li>
         </ul>
-        <p v-if="note" class="mt-3 text-xs text-pw-text-muted">{{ note }}</p>
+        <p v-if="row.instructions" class="mt-3 text-xs text-pw-text-muted">{{ row.instructions }}</p>
         <a
             :href="row.url"
             download

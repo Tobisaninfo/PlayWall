@@ -15,6 +15,11 @@ const PLATFORM_SUFFIXES = {
     'linux-arm64': 'installer.aarch64.tar.gz',
 }
 
+// Not available for older releases: hidden on the download page instead of failing the build.
+const OPTIONAL_PLATFORM_SUFFIXES = {
+    'linux-amd64-appimage': 'installer.x86_64.AppImage',
+}
+
 function fail(message) {
     console.error(`\n✖ fetch-release-info: ${message}\n`)
     process.exit(1)
@@ -63,6 +68,18 @@ async function main() {
         console.log(`Prüfe ${platformId}: ${url}`)
         await assertReachable(url)
         platforms[platformId] = `${DOWNLOAD_PROXY_BASE}/${artifactPath}`
+    }
+
+    for (const [platformId, suffix] of Object.entries(OPTIONAL_PLATFORM_SUFFIXES)) {
+        const artifactPath = `${version}/PlayWallClient-${version}-${suffix}`
+        const url = `${ARTIFACT_BASE}/${artifactPath}`
+        console.log(`Prüfe optional ${platformId}: ${url}`)
+        const response = await fetch(url, {method: 'HEAD'})
+        if (response.ok) {
+            platforms[platformId] = `${DOWNLOAD_PROXY_BASE}/${artifactPath}`
+        } else {
+            console.warn(`${platformId} für ${version} nicht gefunden (${response.status}), Download wird ausgeblendet`)
+        }
     }
 
     const companion = await resolveCompanionUrl(version)

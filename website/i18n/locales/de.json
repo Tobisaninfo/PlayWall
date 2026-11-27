@@ -34,7 +34,6 @@
         "currentVersion": "Aktuelle Version",
         "recommended": "Empfohlen",
         "downloadCta": "Herunterladen",
-        "linuxInstructions": "Archiv entpacken und PlayWall/bin/PlayWall ausführen.",
         "platforms": {
             "windows-amd64": {
                 "name": "Windows",
@@ -52,13 +51,22 @@
                 "name": "Linux",
                 "arch": "AMD64",
                 "extension": ".tar.gz",
-                "requirements": "glibc 2.17 oder neuer\nPraktisch jede Distribution"
+                "requirements": "glibc 2.17 oder neuer\nPraktisch jede Distribution",
+                "instructions": "Archiv entpacken und PlayWall/bin/PlayWall ausführen."
+            },
+            "linux-amd64-appimage": {
+                "name": "Linux",
+                "arch": "AMD64 · Arch-basiert",
+                "extension": ".AppImage",
+                "requirements": "Arch-basierte Distributionen, z.B. CachyOS oder Arch Linux\nNutzt Systembibliotheken: sudo pacman -S gtk3 alsa-lib pipewire-alsa freetype2 fontconfig mesa libxtst",
+                "instructions": "Datei ausführbar machen (chmod +x) und starten."
             },
             "linux-arm64": {
                 "name": "Linux",
                 "arch": "ARM64",
                 "extension": ".tar.gz",
-                "requirements": "glibc 2.38 oder neuer\nz.B. Debian 13+ oder Ubuntu 24.04+"
+                "requirements": "glibc 2.38 oder neuer\nz.B. Debian 13+ oder Ubuntu 24.04+",
+                "instructions": "Archiv entpacken und PlayWall/bin/PlayWall ausführen."
             }
         }
     },

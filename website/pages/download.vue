@@ -22,7 +22,6 @@ const detected = useDetectedPlatform()
             :key="systemId"
             :system-id="systemId"
             :highlighted="detected === systemId"
-            :note="systemId === 'linux' ? t('download.linuxInstructions') : undefined"
         />
       </div>
     </section>
