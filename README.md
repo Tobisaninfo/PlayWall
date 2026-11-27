@@ -131,11 +131,20 @@ minimum glibc version, which differs by CPU architecture:
 | x86_64       | 2.17                 | virtually anything (Debian 8+, Ubuntu 14.04+)                                  |
 | aarch64      | 2.38 (JavaFX 25.0.4) | Debian 13+, Ubuntu 23.10+ / 24.04+, Arch-based rolling releases (e.g. CachyOS) |
 
-**AppImage (x86_64, e.g. CachyOS):** CI also publishes `PlayWallClient-<version>-installer.x86_64.AppImage`. It only
-wraps the jlinked app image; system libraries are **not** bundled and must come from the host (GTK 3, Mesa, ALSA with
-`pipewire-alsa`, X11 libs, freetype/fontconfig). On Arch/CachyOS:
-`sudo pacman -S gtk3 alsa-lib pipewire-alsa freetype2 fontconfig mesa libxtst`. Build it locally on Linux with
-`packaging/appimage/build-appimage.sh <PlayWall-x.y.z.amd64.tar.gz> <out.AppImage>`.
+**AppImage (x86_64 and aarch64, any distribution):** CI also publishes
+`PlayWallClient-<version>-installer.<arch>.AppImage` with `<arch>` being `x86_64` or `aarch64`. It only wraps the
+jlinked app image, so the glibc requirements above apply. System libraries are **not** bundled and must come from the
+host: GTK 3, Mesa/OpenGL, ALSA (plus the PipeWire ALSA plugin on PipeWire systems), X11 libraries, freetype and
+fontconfig. Typical packages (names vary between releases):
+
+| Distribution family       | Packages                                                                                                                       |
+|---------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| Arch-based (e.g. CachyOS) | `gtk3 alsa-lib pipewire-alsa freetype2 fontconfig mesa libxtst`                                                                |
+| Debian / Ubuntu           | `libgtk-3-0t64 libasound2t64 libfreetype6 libfontconfig1 libgl1 libxtst6 libxi6 libxrender1` (`t64` suffix on 24.04 and newer) |
+| Fedora                    | `gtk3 alsa-lib freetype fontconfig mesa-libGL libXtst libXi libXrender`                                                        |
+
+Build it locally on a Linux machine of the target architecture with
+`packaging/appimage/build-appimage.sh <PlayWall-x.y.z.<arch>.tar.gz> <out.AppImage> [x86_64|aarch64]`.
 
 **Not supported on aarch64:** Debian 12 (glibc 2.36) and Ubuntu 22.04 (glibc 2.35) — the app fails to start with
 `UnsatisfiedLinkError: ... libglassgtk3.so: ... version 'GLIBC_2.38' not found`.
@@ -170,22 +179,26 @@ them.
 | Distribution format | No native installer. jpackage builds an `APP_IMAGE`, which the `linux` profile in `PlayWallClient/pom.xml` archives to `PlayWall-<version>.<arch>.tar.gz`. A PNG is used as the icon. | `.exe` / `.dmg` installer   |
 | CPU architectures   | Built on x86_64 (`amd64`) and aarch64 (`ubuntu-latest`, `ubuntu-24.04-arm`).                                                                                                          | Windows x86_64, macOS arm64 |
 | Native build deps   | The Rust audio engine needs `pkg-config` and `libasound2-dev` (ALSA headers) at build time. CI installs them before the Maven build.                                                  | None                        |
-| AppImage            | CI additionally wraps the x86_64 app image into an AppImage (see below).                                                                                                              | n/a                         |
+| AppImage            | CI additionally wraps each architecture's app image into an AppImage (see below).                                                                                                     | n/a                         |
 
 #### AppImage
 
 The `appimage`, `verify-appimage` and `publish-appimage` jobs in `.github/workflows/build.yaml` build, check and publish
-`PlayWallClient-<version>-installer.x86_64.AppImage` (Artifactory coordinates like the other installers).
+`PlayWallClient-<version>-installer.<arch>.AppImage` for `x86_64` and `aarch64` (Artifactory coordinates like the other
+installers). The package is not tied to a distribution.
 
 - **What is packaged:** only the self-contained jpackage app image (own JDK, JavaFX, Rust audio library). System
-  libraries are *not* bundled; the host must provide GTK 3, Mesa, ALSA (`pipewire-alsa` on PipeWire systems), X11
-  libraries, freetype and fontconfig. See [System Requirements](#linux) for the `pacman` line.
+  libraries are *not* bundled; the host must provide them, see [System Requirements](#linux) for the package names.
+- **Per architecture:** the Linux tarball of each architecture is uploaded by the `build` job and wrapped on a runner of
+  the same architecture (`ubuntu-latest` for x86_64, `ubuntu-24.04-arm` for aarch64), because `appimagetool` is a
+  native binary.
 - **Files:** `packaging/appimage/` holds `AppRun` (entry point), `playwall.desktop` and `build-appimage.sh`. The
-  script downloads `appimagetool` and the Type-2 runtime in pinned versions and verifies their SHA-256 checksums.
-  Run it locally on Linux with `packaging/appimage/build-appimage.sh <PlayWall-x.y.z.amd64.tar.gz> <out.AppImage>`.
-- **CI verification:** `verify-appimage` runs in an `archlinux` container with the host libraries installed. It
-  validates the `.desktop` file and runs `ldd` on every bundled `.so`; `libjvm.so` is ignored because the java launcher
-  resolves it itself at runtime. A 30 s start under Xvfb is a non-blocking smoke test (no GPU/audio in CI).
+  script downloads `appimagetool` and the Type-2 runtime in pinned versions for the target architecture and verifies
+  their SHA-256 checksums. See the usage line in [System Requirements](#linux).
+- **CI verification:** `verify-appimage` extracts the AppImage on Arch Linux (x86_64, container) and Ubuntu 24.04
+  (x86_64 and aarch64) with that distribution's host libraries installed. It validates the `.desktop` file and runs
+  `ldd` on every bundled `.so`, which also reveals a glibc that is too old; `libjvm.so` is ignored because the java
+  launcher resolves it itself at runtime. A 30 s start under Xvfb is a non-blocking smoke test (no GPU/audio in CI).
 - **No FUSE needed to build:** `appimagetool` runs with `APPIMAGE_EXTRACT_AND_RUN=1`.
 
 ### Runtime
