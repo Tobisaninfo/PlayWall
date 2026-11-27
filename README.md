@@ -158,6 +158,70 @@ version for the pinned `javafx.version` before assuming it's fixed.
   `LC_BUILD_VERSION` load command embedded in JavaFX 25.0.4's native libraries (`libglass.dylib` etc.). Unlike Linux,
   this has been stable across recent JavaFX versions and both architectures.
 
+## Linux-Specific Handling
+
+Besides the requirements above, a few things in PlayWall only exist because of Linux. Windows and macOS did not need
+them.
+
+### Packaging & CI
+
+| Topic               | Linux                                                                                                                                                                                 | Windows / macOS             |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
+| Distribution format | No native installer. jpackage builds an `APP_IMAGE`, which the `linux` profile in `PlayWallClient/pom.xml` archives to `PlayWall-<version>.<arch>.tar.gz`. A PNG is used as the icon. | `.exe` / `.dmg` installer   |
+| CPU architectures   | Built on x86_64 (`amd64`) and aarch64 (`ubuntu-latest`, `ubuntu-24.04-arm`).                                                                                                          | Windows x86_64, macOS arm64 |
+| Native build deps   | The Rust audio engine needs `pkg-config` and `libasound2-dev` (ALSA headers) at build time. CI installs them before the Maven build.                                                  | None                        |
+| AppImage            | CI additionally wraps the x86_64 app image into an AppImage (see below).                                                                                                              | n/a                         |
+
+#### AppImage
+
+The `appimage`, `verify-appimage` and `publish-appimage` jobs in `.github/workflows/build.yaml` build, check and publish
+`PlayWallClient-<version>-installer.x86_64.AppImage` (Artifactory coordinates like the other installers).
+
+- **What is packaged:** only the self-contained jpackage app image (own JDK, JavaFX, Rust audio library). System
+  libraries are *not* bundled; the host must provide GTK 3, Mesa, ALSA (`pipewire-alsa` on PipeWire systems), X11
+  libraries, freetype and fontconfig. See [System Requirements](#linux) for the `pacman` line.
+- **Files:** `packaging/appimage/` holds `AppRun` (entry point), `playwall.desktop` and `build-appimage.sh`. The
+  script downloads `appimagetool` and the Type-2 runtime in pinned versions and verifies their SHA-256 checksums.
+  Run it locally on Linux with `packaging/appimage/build-appimage.sh <PlayWall-x.y.z.amd64.tar.gz> <out.AppImage>`.
+- **CI verification:** `verify-appimage` runs in an `archlinux` container with the host libraries installed. It
+  validates the `.desktop` file and runs `ldd` on every bundled `.so`; `libjvm.so` is ignored because the java launcher
+  resolves it itself at runtime. A 30 s start under Xvfb is a non-blocking smoke test (no GPU/audio in CI).
+- **No FUSE needed to build:** `appimagetool` runs with `APPIMAGE_EXTRACT_AND_RUN=1`.
+
+### Runtime
+
+#### UI scale (`glass.gtk.uiScale`)
+
+The *UI scale* option in the program settings is only shown on Linux. JavaFX's GTK backend only honours
+`glass.gtk.uiScale` when it is a real JVM argument at process start; setting it from inside the running JVM has no
+effect. macOS and Windows read the display scale natively, so they have no such option.
+`LinuxUiScaleService` therefore stores the value (`ui-scale` in the config folder) and makes it reach the next start:
+
+| Install type                 | How the value reaches the JVM                                                                                                                                                                                                             |
+|------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| jpackage app image (tarball) | The `java-options=-Dglass.gtk.uiScale=<n>%` line in the launcher's `lib/app/PlayWall.cfg` is rewritten. If the file is not writable (e.g. root-owned install), a warning is logged and the scale is not applied.                          |
+| AppImage                     | The `.cfg` sits on a read-only squashfs mount, so the client writes `${XDG_CONFIG_HOME:-~/.config}/PlayWall/appimage-ui-scale` instead. `AppRun` reads it and exports `JAVA_TOOL_OPTIONS=-Dglass.gtk.uiScale=<n>%` before the app starts. |
+
+The AppImage is detected via the `APPIMAGE` environment variable. File path and format must stay in sync between
+`LinuxUiScaleService` and `AppRun`. Side effect: the embedded server process inherits `JAVA_TOOL_OPTIONS`, so its
+output contains a harmless `Picked up JAVA_TOOL_OPTIONS: ...` line.
+
+#### Embedded server
+
+`ServerLauncher` only calls `setExecutable(true)` on the bundled server JDK's `bin/java` if it is not executable
+already. Inside an AppImage the installation is read-only, so `chmod` fails even though the file is already executable.
+
+#### Audio
+
+- The Rust audio engine uses cpal's ALSA host. On PipeWire systems (e.g. CachyOS) this works through `pipewire-alsa`.
+- ALSA/PipeWire can expose stale or disconnected device nodes that report no name or default config. The device
+  enumeration in `output_devices.rs` skips them with a warning instead of failing (this once caused a panic).
+
+#### Server system tray
+
+`PlayWallServerMain` only sets `java.awt.headless=false` on Windows and macOS. On Linux Spring Boot's default headless
+mode stays active, so the server shows no system tray icon there. The macOS-only Dock handling does not apply either.
+
 ## Getting Started
 
 ### Prerequisites
