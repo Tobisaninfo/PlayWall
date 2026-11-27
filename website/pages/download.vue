@@ -3,6 +3,7 @@ const {t} = useI18n()
 usePageSeo('download.title', 'download.subtitle')
 
 const detected = useDetectedPlatform()
+const detectedLinuxVariant = useDetectedLinuxVariant()
 </script>
 
 <template>
@@ -22,6 +23,7 @@ const detected = useDetectedPlatform()
             :key="systemId"
             :system-id="systemId"
             :highlighted="detected === systemId"
+            :preselected-id="systemId === 'linux' ? detectedLinuxVariant : undefined"
         />
       </div>
     </section>

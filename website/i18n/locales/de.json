@@ -33,6 +33,7 @@
         "subtitle": "PlayWall für Windows, macOS und Linux.",
         "currentVersion": "Aktuelle Version",
         "recommended": "Empfohlen",
+        "variantLabel": "Variante",
         "downloadCta": "Herunterladen",
         "platforms": {
             "windows-amd64": {

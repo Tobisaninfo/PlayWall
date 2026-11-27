@@ -2,6 +2,8 @@
 const props = defineProps<{
   systemId: SystemId
   highlighted: boolean
+  /** Variant to preselect in the dropdown (only used when the system offers several downloads). */
+  preselectedId?: PlatformId | null
 }>()
 
 const {t, te} = useI18n()
@@ -25,6 +27,16 @@ const rows = computed(() =>
         instructions: te(`download.platforms.${id}.instructions`) ? t(`download.platforms.${id}.instructions`) : undefined,
       }]
     }),
+)
+
+const selectedId = ref<PlatformId | null>(null)
+const selectId = `download-variant-${props.systemId}`
+
+// Explicit choice wins, then the detected variant, then the first available download.
+const selectedRow = computed(
+    () => rows.value.find((row) => row.id === selectedId.value)
+        ?? rows.value.find((row) => row.id === props.preselectedId)
+        ?? rows.value[0],
 )
 </script>
 
@@ -78,36 +90,54 @@ const rows = computed(() =>
       </a>
     </template>
 
-    <div v-else class="flex flex-1 flex-col gap-4">
-      <div
-          v-for="row in rows"
-          :key="row.id"
-          class="flex flex-col gap-1.5 border-t border-white/40 pt-4 first:border-none first:pt-0"
-      >
-        <p class="font-mono text-xs uppercase tracking-wide text-pw-text-muted">{{ row.arch }}</p>
-        <ul class="flex flex-col gap-1.5">
-          <li
-              v-for="requirement in row.requirements"
-              :key="requirement"
-              class="flex items-start gap-2 text-sm text-pw-text-hint"
+    <div v-else-if="selectedRow" class="flex flex-1 flex-col gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label :for="selectId" class="font-mono text-xs uppercase tracking-wide text-pw-text-muted">
+          {{ t('download.variantLabel') }}
+        </label>
+        <div class="relative">
+          <select
+              :id="selectId"
+              :value="selectedRow.id"
+              class="w-full appearance-none rounded-md border border-white/40 bg-pw-panel-dark py-2 pl-3 pr-10 text-sm text-pw-text focus:border-pw-blue focus:outline-none"
+              @change="selectedId = ($event.target as HTMLSelectElement).value as PlatformId"
           >
-            <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-pw-blue"/>
-            <span>{{ requirement }}</span>
-          </li>
-        </ul>
-        <p v-if="row.instructions" class="mt-3 text-xs text-pw-text-muted">{{ row.instructions }}</p>
-        <a
-            :href="row.url"
-            download
-            class="flex items-center gap-2.5 rounded-md bg-pw-blue-strong px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
-        >
-          <DownloadIcon class="h-5 w-5 flex-none"/>
-          <span class="flex flex-1 flex-col items-start justify-center">
-            <span>{{ t('download.downloadCta') }} ({{ row.extension }})</span>
-            <span class="text-xs font-normal text-white/75">{{ row.arch }}</span>
-          </span>
-        </a>
+            <option v-for="row in rows" :key="row.id" :value="row.id">
+              {{ row.arch }} ({{ row.extension }})
+            </option>
+          </select>
+          <svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"
+              class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-pw-text-muted"
+          >
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </div>
       </div>
+
+      <ul class="flex flex-1 flex-col gap-1.5">
+        <li
+            v-for="requirement in selectedRow.requirements"
+            :key="requirement"
+            class="flex items-start gap-2 text-sm text-pw-text-hint"
+        >
+          <span class="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-pw-blue"/>
+          <span>{{ requirement }}</span>
+        </li>
+      </ul>
+      <p v-if="selectedRow.instructions" class="text-xs text-pw-text-muted">{{ selectedRow.instructions }}</p>
+      <a
+          :href="selectedRow.url"
+          download
+          class="flex items-center gap-2.5 rounded-md bg-pw-blue-strong px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+      >
+        <DownloadIcon class="h-5 w-5 flex-none"/>
+        <span class="flex flex-1 flex-col items-start justify-center">
+          <span>{{ t('download.downloadCta') }} ({{ selectedRow.extension }})</span>
+          <span class="text-xs font-normal text-white/75">{{ selectedRow.arch }}</span>
+        </span>
+      </a>
     </div>
   </div>
 </template>
