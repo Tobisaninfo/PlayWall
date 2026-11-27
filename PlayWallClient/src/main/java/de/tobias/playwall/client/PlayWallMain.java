@@ -9,7 +9,6 @@ import de.thecodelabs.utils.logger.Slf4JBridge;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
-import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playwall.client.appcontext.AppContext;
 import de.tobias.playwall.client.appcontext.AppContextHolder;
@@ -26,7 +25,6 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -81,33 +79,6 @@ public class PlayWallMain extends Application
 		LoggerBridge.setImplementation(new Slf4JBridge());
 		log = LoggerFactory.getLogger(PlayWallMain.class);
 		log.info("Logging initialized (Running in LogLevel: {})", level);
-
-		applyUiScaleOverride(app);
-	}
-
-	private static void applyUiScaleOverride(App app)
-	{
-		if(!OS.isLinux())
-		{
-			return;
-		}
-
-		try
-		{
-			final Path uiScaleFile = app.getPath(PathType.CONFIGURATION, UI_SCALE_FILE_NAME);
-			if(Files.exists(uiScaleFile))
-			{
-				final String value = Files.readString(uiScaleFile).trim();
-				if(!value.isEmpty())
-				{
-					System.setProperty("glass.gtk.uiScale", value + "%");
-				}
-			}
-		}
-		catch(IOException | UncheckedIOException _)
-		{
-			// Nothing to handle
-		}
 	}
 
 	@Override

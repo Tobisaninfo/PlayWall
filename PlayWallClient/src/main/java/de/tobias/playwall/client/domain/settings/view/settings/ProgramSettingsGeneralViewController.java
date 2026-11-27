@@ -180,10 +180,42 @@ public class ProgramSettingsGeneralViewController extends BaseProgramSettingsVie
 		return Files.isRegularFile(cfgFile) ? Optional.of(cfgFile) : Optional.empty();
 	}
 
+	/**
+	 * Inside an AppImage the launcher {@code .cfg} lives on a read-only squashfs mount, so it cannot be edited.
+	 * Instead the scale is stored in a small file that {@code packaging/appimage/AppRun} reads before the JVM
+	 * starts, and which it turns into {@code -Dglass.gtk.uiScale}. Path and format must match AppRun.
+	 */
+	private static Path appImageScaleFile()
+	{
+		final String xdgConfigHome = System.getenv("XDG_CONFIG_HOME");
+		final Path configHome = xdgConfigHome != null && !xdgConfigHome.isBlank()
+				? Path.of(xdgConfigHome)
+				: Path.of(System.getProperty("user.home"), ".config");
+		return configHome.resolve("PlayWall").resolve("appimage-ui-scale");
+	}
+
+	private static void updateAppImageScale(Integer selectedScale) throws IOException
+	{
+		final Path scaleFile = appImageScaleFile();
+		if(selectedScale == null || selectedScale == UI_SCALE_AUTO)
+		{
+			Files.deleteIfExists(scaleFile);
+			return;
+		}
+		Files.createDirectories(scaleFile.getParent());
+		Files.writeString(scaleFile, String.valueOf(selectedScale));
+	}
+
 	private void updateLauncherConfig(Integer selectedScale) throws IOException
 	{
+		if(System.getenv("APPIMAGE") != null)
+		{
+			updateAppImageScale(selectedScale);
+			return;
+		}
+
 		final Optional<Path> cfgFile = findLauncherConfigFile();
-		if(cfgFile.isEmpty())
+		if(cfgFile.isEmpty() || !Files.isWritable(cfgFile.get()))
 		{
 			return;
 		}
