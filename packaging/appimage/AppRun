@@ -5,7 +5,7 @@ HERE="$(dirname "$(readlink -f "$0")")"
 
 # UI scale: glass.gtk.uiScale only takes effect as a real JVM argument at process start. Normally the
 # client writes it into lib/app/PlayWall.cfg, but that file is read-only inside an AppImage. The client
-# therefore stores the percentage in this file (see ProgramSettingsGeneralViewController.appImageScaleFile),
+# therefore stores the percentage in this file (see LinuxUiScaleService.getAppImageScaleFilePath),
 # and we pass it to the JVM via JAVA_TOOL_OPTIONS. Path and format must match the client.
 SCALE_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/PlayWall/appimage-ui-scale"
 if [ -r "$SCALE_FILE" ]; then
