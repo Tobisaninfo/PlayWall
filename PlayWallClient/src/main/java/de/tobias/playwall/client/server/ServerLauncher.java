@@ -69,11 +69,18 @@ public class ServerLauncher
 				throw new ServerLaunchException.NotFoundException(serverJar);
 			}
 
-			if(!javaExecutable.toFile().setExecutable(true))
+			if(!Files.isExecutable(javaExecutable))
 			{
-				throw new ServerLaunchException.PermissionException();
+				if(!javaExecutable.toFile().setExecutable(true))
+				{
+					throw new ServerLaunchException.PermissionException();
+				}
+				log.debug("Set execute permission for: {}", javaExecutable.toAbsolutePath());
 			}
-			log.debug("Set execute permission for: {}", javaExecutable.toAbsolutePath());
+			else
+			{
+				log.debug("Java command already has execute permission for: {}", javaExecutable.toAbsolutePath());
+			}
 
 			final Path loggingPath = app.getPath(PathType.LOG);
 
